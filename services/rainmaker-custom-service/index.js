@@ -27,7 +27,7 @@ async function getFireCessConfig(tenantId) {
                 "authToken": null
             },
             "MdmsCriteria": {
-                "tenantId": "pb.amritsar",
+                "tenantId": tenantId,
                 "moduleDetails": [{
                     "moduleName": "PropertyTax",
                     "masterDetails": [{
