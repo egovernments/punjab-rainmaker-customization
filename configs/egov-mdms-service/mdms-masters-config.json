@@ -427,7 +427,7 @@
     },
     "FireCess": {
       "masterName": "FireCess",
-      "isStateLevel": true,
+      "isStateLevel": false,
       "uniqueKeys": [
       ]
     },
