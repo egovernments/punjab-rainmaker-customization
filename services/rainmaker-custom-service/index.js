@@ -436,7 +436,7 @@ async function _createAndUpdateRequestHandler(req, res) {
 
     let fireCessConfig = getFireCessConfig(tenantId)
 
-    if (true || fireCessConfig && fireCessConfig.dynamicFirecess && fireCessConfig.dynamicFirecess == true) {
+    if (fireCessConfig && fireCessConfig.dynamicFirecess && fireCessConfig.dynamicFirecess == true) {
         console.log("----------------- inside _createAndUpdateRequestHandler --------------")
         console.log("Existing Request is", JSON.stringify(request, null, 2))
         console.log("Existing Response is", JSON.stringify(response, null, 2))
@@ -475,7 +475,7 @@ router.post('/protected/punjab-pt/pt-calculator-v2/_estimate',asyncMiddleware(as
 
     let fireCessConfig = await getFireCessConfig(tenantId)
 
-    if (true || fireCessConfig && fireCessConfig.dynamicFirecess && fireCessConfig.dynamicFirecess == true) 
+    if (fireCessConfig && fireCessConfig.dynamicFirecess && fireCessConfig.dynamicFirecess == true) 
     {
         console.log("----------------- inside _estimate --------------")
         console.log("Existing Request is", JSON.stringify(request, null, 2))
