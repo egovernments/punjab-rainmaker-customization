@@ -1,0 +1,7 @@
+{
+    "env": {
+        "PT_DEMAND_HOST": "https://egov-micro-dev.egovernments.org",
+        "PT_DEBUG_MODE": "true",
+        "EGOV_MDMS_HOST": "https://egov-micro-dev.egovernments.org/"
+    }
+}

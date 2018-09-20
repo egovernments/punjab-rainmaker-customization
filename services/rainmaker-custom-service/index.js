@@ -10,7 +10,37 @@ const {
 var app = express();
 const PT_DEBUG_MODE = Boolean(process.env.PT_DEBUG_MODE) || false;
 const PT_DEMAND_HOST = process.env.PT_DEMAND_HOST
-const MDMS_HOST = process.env.MDMS_HOST
+const EGOV_MDMS_HOST = process.env.EGOV_MDMS_HOST
+
+async function getFireCessConfig(tenantId) {
+    let fireCessConfig = await request.post({
+        url: EGOV_MDMS_HOST + "egov-mdms-service/v1/_search?tenantId=" + tenantId,
+        body: {
+            RequestInfo: {
+                "apiId": "Rainmaker-custom-service",
+                "ver": ".01",
+                "ts": "",
+                "action": "_search",
+                "did": "1",
+                "key": "",
+                "msgId": "20170310130900|en_IN",
+                "authToken": null
+            },
+            "MdmsCriteria": {
+                "tenantId": "pb.amritsar",
+                "moduleDetails": [{
+                    "moduleName": "PropertyTax",
+                    "masterDetails": [{
+                        "name": "FireCess"
+                    }]
+                }]
+            }
+        },
+        json: true
+    })
+
+    return fireCessConfig["MdmsRes"]["PropertyTax"]["FireCess"][0];
+}
 
 const TAX_TYPE = {
     PT_TAX: false,
@@ -28,7 +58,7 @@ const TAX_TYPE = {
 }
 
 if (PT_DEMAND_HOST === undefined) {
-    throw Error("PT_HOST environment variable needs to be configured to run this")
+    throw Error("PT_DEMAND_HOST environment variable needs to be configured to run this")
 }
 
 function round(num, digits) {
@@ -270,11 +300,9 @@ function getUpdateTaxSummary(calculation, newTaxAmount, taxHeadCodeField, taxAmo
 
     let totalAmount = taxAmount + penalty - rebate - exemption
 
-
     totalAmount = round(totalAmount, 2)
     let fractionAmount = totalAmount - Math.trunc(totalAmount)
     let newCeilingTax = false
-
 
     if (ceilingTaxHead == null && fractionAmount == 0) {
 
@@ -283,7 +311,9 @@ function getUpdateTaxSummary(calculation, newTaxAmount, taxHeadCodeField, taxAmo
 
         if (ceilingTaxHead == null) {
             ceilingTaxHead = {
-                taxHeadCode: "", estimateAmount:0, category: null
+                taxHeadCode: "",
+                estimateAmount: 0,
+                category: null
             }
             newCeilingTax = true
             taxHeads.push(ceilingTaxHead)
@@ -306,7 +336,13 @@ function getUpdateTaxSummary(calculation, newTaxAmount, taxHeadCodeField, taxAmo
     }
 
     console.log({
-        taxAmount, penalty, rebate, exemption, totalAmount, fractionAmount, ceilingTaxHead
+        taxAmount,
+        penalty,
+        rebate,
+        exemption,
+        totalAmount,
+        fractionAmount,
+        ceilingTaxHead
     })
 
     return {
@@ -363,7 +399,8 @@ async function _createAndUpdateTaxProcessor(request, response) {
         for (demandDetail of demandSearchResponse["Demands"][0]["demandDetails"]) {
             if (demandDetail.taxHeadMasterCode == "PT_FIRE_CESS") {
                 demandDetail.taxAmount = taxes.firecessTaxHead.estimateAmount
-            } if (demandDetail.taxHeadMasterCode == "PT_DECIMAL_CEILING_DEBIT" || demandDetail.taxHeadMasterCode == "PT_DECIMAL_CEILING_DEBIT") {
+            }
+            if (demandDetail.taxHeadMasterCode == "PT_DECIMAL_CEILING_DEBIT" || demandDetail.taxHeadMasterCode == "PT_DECIMAL_CEILING_DEBIT") {
                 demandDetail.taxHeadMasterCode = taxes.ceilingTaxHead.taxHeadCode
                 demandDetail.taxAmount = taxes.ceilingTaxHead.estimateAmount
             }
@@ -393,36 +430,66 @@ async function _createAndUpdateTaxProcessor(request, response) {
 }
 
 async function _createAndUpdateRequestHandler(req, res) {
-    let request = JSON.parse(req.body.request)
-    let response = JSON.parse(req.body.response)
-    // let request = req.body.request
-    // let response = req.body.response
-    console.log("----------------- inside _createAndUpdateRequestHandler --------------")
-    console.log("Existing Request is", JSON.stringify(request, null, 2))
-    console.log("Existing Response is", JSON.stringify(response, null, 2))
-    let updatedResponse = await _createAndUpdateTaxProcessor(request, response)
-    console.log("Updated Response is", JSON.stringify(updatedResponse, null, 2))
-    res.json(updatedResponse);
-    console.log("----------------- finished _createAndUpdateRequestHandler --------------")
+    let { request, response } = getRequestResponse(req)
+    
+    let tenantId = request["Properties"][0]["tenantId"]
+
+    let fireCessConfig = getFireCessConfig(tenantId)
+
+    if (true || fireCessConfig && fireCessConfig.dynamicFirecess && fireCessConfig.dynamicFirecess == true) {
+        console.log("----------------- inside _createAndUpdateRequestHandler --------------")
+        console.log("Existing Request is", JSON.stringify(request, null, 2))
+        console.log("Existing Response is", JSON.stringify(response, null, 2))
+        let updatedResponse = await _createAndUpdateTaxProcessor(request, response)
+        console.log("Updated Response is", JSON.stringify(updatedResponse, null, 2))
+        res.json(updatedResponse);
+        console.log("----------------- finished _createAndUpdateRequestHandler --------------")
+    } else {
+        console.log("Dynamic firecess not applicable for -", tenantId)
+        res.json(response)
+    }
+}
+
+function getRequestResponse(req) {
+    let request, response
+
+    if (typeof req.body.request === "string" ) {
+        request = JSON.parse(req.body.request)
+        response = JSON.parse(req.body.response)
+    } else {
+        request = req.body.request
+        response = req.body.response
+    }
+    return {request, response}
 }
 
 router.post('/protected/punjab-pt/property/_create', asyncMiddleware(_createAndUpdateRequestHandler))
 
 router.post('/protected/punjab-pt/property/_update', asyncMiddleware(_createAndUpdateRequestHandler))
 
-router.post('/protected/punjab-pt/pt-calculator-v2/_estimate', function (req, res) {
-    let request = JSON.parse(req.body.request)
-    let response = JSON.parse(req.body.response)
+router.post('/protected/punjab-pt/pt-calculator-v2/_estimate',asyncMiddleware(async function (req, res) {
+    
+    let { request, response } = getRequestResponse(req)
 
-    console.log("----------------- inside _estimate --------------")
-    console.log("Existing Request is", JSON.stringify(request, null, 2))
-    console.log("Existing Response is", JSON.stringify(response, null, 2))
+    let tenantId = request["CalculationCriteria"][0]["tenantId"]
 
-    let updatedResponse = _estimateTaxProcessor(request, response)
-    console.log("Updated Response is", JSON.stringify(updatedResponse, null, 2))
-    res.json(updatedResponse);
-    console.log("----------------- finished _estimate --------------")
-})
+    let fireCessConfig = await getFireCessConfig(tenantId)
+
+    if (true || fireCessConfig && fireCessConfig.dynamicFirecess && fireCessConfig.dynamicFirecess == true) 
+    {
+        console.log("----------------- inside _estimate --------------")
+        console.log("Existing Request is", JSON.stringify(request, null, 2))
+        console.log("Existing Response is", JSON.stringify(response, null, 2))
+
+        let updatedResponse = _estimateTaxProcessor(request, response)
+        console.log("Updated Response is", JSON.stringify(updatedResponse, null, 2))
+        res.json(updatedResponse);
+        console.log("----------------- finished _estimate --------------")
+    } else {
+        console.log("Dynamic firecess not applicable for -", tenantId)
+        res.json(response);
+    }
+}))
 
 app.listen(8000, () => {
     console.log("Listening on port 8000")
