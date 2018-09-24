@@ -436,7 +436,7 @@ async function _createAndUpdateRequestHandler(req, res) {
     let tenantId = request["Properties"][0]["tenantId"]
 
     let fireCessConfig = getFireCessConfig(tenantId)
-
+    console.log("Got fireCessConfig as", JSON.stringify(fireCessConfig, null, 2), tenantId)
     if (fireCessConfig && fireCessConfig.dynamicFirecess && fireCessConfig.dynamicFirecess == true) {
         console.log("----------------- inside _createAndUpdateRequestHandler --------------")
         console.log("Existing Request is", JSON.stringify(request, null, 2))
