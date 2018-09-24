@@ -39,7 +39,7 @@ async function getFireCessConfig(tenantId) {
         json: true
     })
 
-    console.log("Got firecess config", tenantId, fireCessConfig)
+    console.log("Got firecess config", tenantId, JSON.stringify(fireCessConfig, null, 2))
     return fireCessConfig["MdmsRes"]["PropertyTax"]["FireCess"][0];
 }
 
