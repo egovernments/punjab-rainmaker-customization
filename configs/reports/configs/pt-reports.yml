@@ -112,7 +112,7 @@ ReportDefinitions:
     label: reports.pt.totalassessments
     type: string
     source: pt
-    total: false
+    total: true
   - name: totalamountpaid
     label: reports.pt.totalamountpaid
     type: string
