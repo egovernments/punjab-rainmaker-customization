@@ -1,12 +1,9 @@
-FROM egovio/ci-react:v8.4.0
-RUN npm install yarn
+FROM node:8.12-alpine
+RUN npm install -g yarn
 RUN mkdir /opt/app
-COPY index.js  package.json yarn.lock /opt/app/ 
-COPY ./templates /opt/app/templates
-COPY ./utils /opt/app/utils
+COPY package.json yarn.lock /opt/app/ 
 WORKDIR /opt/app
-RUN apt-get purge -y wget subversion ca-certificates bzip2 geoip-bin mercurial mysql-common  x11-common
-RUN yarn -y init
-RUN yarn add express  pg-promise
+RUN yarn install
+COPY . /opt/app
 CMD ["node", "index.js"]
 
