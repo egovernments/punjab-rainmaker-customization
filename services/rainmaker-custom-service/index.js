@@ -11,6 +11,8 @@ var app = express();
 const PT_DEBUG_MODE = Boolean(process.env.PT_DEBUG_MODE) || false;
 const PT_DEMAND_HOST = process.env.PT_DEMAND_HOST
 const EGOV_MDMS_HOST = process.env.EGOV_MDMS_HOST
+const EGOV_BND_LOGIN_URL = "http://13.126.198.70/eDistServices/ModuleCommon/serAuth.asmx/serAuthExternalUser"
+const EGOV_BND_REDIRECT_URL = "http://13.126.198.70/Redirect?data="
 
 async function getFireCessConfig(tenantId) {
     let fireCessConfig = await request.post({
