@@ -9,10 +9,14 @@ const {
 
 var app = express();
 var mustache = require('mustache-express')
+const Cryptr = require('cryptr');
+
 app.engine('html', mustache())
 app.set('view engine', 'html')
 app.set('views', __dirname + '/templates')
 app.disable('view cache');
+
+// https://codepen.io/graphicfreedom/pen/evaBXm
 
 const PT_DEBUG_MODE = Boolean(process.env.PT_DEBUG_MODE) || false;
 const PT_DEMAND_HOST = process.env.PT_DEMAND_HOST
@@ -20,6 +24,17 @@ const EGOV_MDMS_HOST = process.env.EGOV_MDMS_HOST
 const EGOV_BND_LOGIN_URL = process.env.EGOV_BND_LOGIN_URL
 const EGOV_BND_REDIRECT_URL = process.env.EGOV_BND_REDIRECT_URL
 const EGOV_BND_API_KEY = process.env.EGOV_BND_API_KEY
+const EGOV_BND_ENCRYPTION_KEY = process.env.EGOV_BND_ENCRYPTION_KEY || "Vol0otuji0X03wSuZGI3zySUzxj7bReQ"
+
+const cryptr = new Cryptr(EGOV_BND_ENCRYPTION_KEY);
+
+function getUserUUID(data) {
+    return data.RequestInfo.userInfo.uuid;
+}
+
+function getUserID(data) {
+    return data.RequestInfo.userInfo.id;
+}
 
 async function getFireCessConfig(tenantId) {
     let fireCessConfig = await request.post({
@@ -136,9 +151,10 @@ router.get('/open/bndlogin', function (req, res) {
 
 router.post('/protected/bndlogin/update', asyncMiddleware(async function (req, res) {
     let username = req.body.username
-    let password = req.body.password
+    let password = cryptr.encrypt(req.body.password)
+    let uuid = getUserUUID(req.body);
 
-    data = await db.any("select value from custom_eg_user_metatdata where user_id = $1 and key = $2", ['123456', 'BND_CREDENTIALS']);
+    data = await db.any("select value from custom_eg_user_metatdata where user_id = $1 and key = $2", [uuid, 'BND_CREDENTIALS']);
     value = {
         username,
         password
@@ -146,16 +162,18 @@ router.post('/protected/bndlogin/update', asyncMiddleware(async function (req, r
 
     if (data.length == 0) {
         await db.any("insert into custom_eg_user_metatdata(key, user_id, value) values ($1, $2, $3:json)",
-            ['BND_CREDENTIALS', '123456', value])
+            ['BND_CREDENTIALS', uuid, value])
     } else {
         await db.any("update custom_eg_user_metatdata set value = $3:json where key = $1 and user_id = $2",
-            ['BND_CREDENTIALS', '123456', value])
+            ['BND_CREDENTIALS', uuid, value])
     }
+    res.json({code: "SUCCESS"})
 }));
 
 router.post('/protected/bndlogin', asyncMiddleware(async function (req, res) {
     try {
-        data = await db.any("select value from custom_eg_user_metatdata where user_id = $1 and key = $2", ['123456', 'BND_CREDENTIALS']);
+        let uuid = getUserUUID(req.body);
+        data = await db.any("select value from custom_eg_user_metatdata where user_id = $1 and key = $2", [uuid, 'BND_CREDENTIALS']);
 
         if (data.length == 0) {
             res.json({
@@ -166,7 +184,7 @@ router.post('/protected/bndlogin', asyncMiddleware(async function (req, res) {
         }
 
         let username = data[0]["value"]["username"]
-        let password = data[0]["value"]["password"]
+        let password = cryptr.decrypt(data[0]["value"]["password"])
 
         let response = await request.post(EGOV_BND_LOGIN_URL, {
             form: {
@@ -178,7 +196,7 @@ router.post('/protected/bndlogin', asyncMiddleware(async function (req, res) {
             }
         })
 
-        let login_response = JSON.parse(response);
+        let login_response = JSON.parse(response)[0];
 
         if (login_response.response == "0") {
             if (login_response.reason == "INVALID_CREDENTIALS") {
@@ -199,8 +217,10 @@ router.post('/protected/bndlogin', asyncMiddleware(async function (req, res) {
 
         res.json({
             code: "SUCCESS",
-            redirect: EGOV_BND_REDIRECT_URL + JSON.stringify(["data"])
+            redirect: EGOV_BND_REDIRECT_URL + JSON.stringify([login_response])
         })
+        console.log(EGOV_BND_REDIRECT_URL + JSON.stringify([login_response]))
+
     } catch (ex) {
         console.log("Exception occured while login", ex)
         res.json({
