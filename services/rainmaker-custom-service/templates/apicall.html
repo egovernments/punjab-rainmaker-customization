@@ -1,9 +1,4 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-    </head>
-    <body>
+{{>common/header}}
         <div id='report'>No report available for your user type</div>
         <script>
             var access_token = localStorage.getItem("token");
@@ -47,5 +42,4 @@
                   });
             }
         </script>
-    </body>
-</html>
+{{>common/body}}

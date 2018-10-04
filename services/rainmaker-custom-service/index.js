@@ -8,11 +8,18 @@ const {
 } = require('./utils/asyncMiddleware');
 
 var app = express();
+var mustache = require('mustache-express')
+app.engine('html', mustache())
+app.set('view engine', 'html')
+app.set('views', __dirname + '/templates')
+app.disable('view cache');
+
 const PT_DEBUG_MODE = Boolean(process.env.PT_DEBUG_MODE) || false;
 const PT_DEMAND_HOST = process.env.PT_DEMAND_HOST
 const EGOV_MDMS_HOST = process.env.EGOV_MDMS_HOST
-const EGOV_BND_LOGIN_URL = "http://13.126.198.70/eDistServices/ModuleCommon/serAuth.asmx/serAuthExternalUser"
-const EGOV_BND_REDIRECT_URL = "http://13.126.198.70/Redirect?data="
+const EGOV_BND_LOGIN_URL = process.env.EGOV_BND_LOGIN_URL
+const EGOV_BND_REDIRECT_URL = process.env.EGOV_BND_REDIRECT_URL
+const EGOV_BND_API_KEY = process.env.EGOV_BND_API_KEY
 
 async function getFireCessConfig(tenantId) {
     let fireCessConfig = await request.post({
@@ -85,6 +92,8 @@ var router = express.Router({
     strict: app.get('strict routing')
 });
 
+router.use("/static", express.static("static"))
+
 // Add the `slash()` middleware after your app's `router`, optionally specify
 // an HTTP status code to use when redirecting (defaults to 301).
 app.use('/customization', router);
@@ -103,9 +112,9 @@ var pgp = require('pg-promise')(options);
 const connectionString = {
     host: process.env.DB_HOST || 'localhost',
     port: 5432,
-    database: process.env.DB_NAME || 'db',
-    user: process.env.DB_USER || 'pg_user',
-    password: process.env.DB_PASSWORD || 'password'
+    database: process.env.DB_NAME || 'postgres',
+    user: process.env.DB_USER || 'postgres',
+    password: process.env.DB_PASSWORD || 'postgres'
 };
 
 // var connectionString = 'postgres://localhost:5432/egov_prod_db';
@@ -118,10 +127,92 @@ WHERE eg_pgr_service.status = 'assigned' AND servicerequestid IN (select DISTINC
 IN (select max("when") from eg_pgr_action where assignee NOTNULL group by businesskey) AND assignee = $1);`
 
 router.get('/open/reports/*', function (req, res) {
-    res.sendFile(path.join(__dirname + '/templates/apicall.html'));
+    res.render('apicall.html');
 });
 
+router.get('/open/bndlogin', function (req, res) {
+    res.render('bndlogin.html');
+});
+
+router.post('/protected/bndlogin/update', asyncMiddleware(async function (req, res) {
+    let username = req.body.username
+    let password = req.body.password
+
+    data = await db.any("select value from custom_eg_user_metatdata where user_id = $1 and key = $2", ['123456', 'BND_CREDENTIALS']);
+    value = {
+        username,
+        password
+    }
+
+    if (data.length == 0) {
+        await db.any("insert into custom_eg_user_metatdata(key, user_id, value) values ($1, $2, $3:json)",
+            ['BND_CREDENTIALS', '123456', value])
+    } else {
+        await db.any("update custom_eg_user_metatdata set value = $3:json where key = $1 and user_id = $2",
+            ['BND_CREDENTIALS', '123456', value])
+    }
+}));
+
+router.post('/protected/bndlogin', asyncMiddleware(async function (req, res) {
+    try {
+        data = await db.any("select value from custom_eg_user_metatdata where user_id = $1 and key = $2", ['123456', 'BND_CREDENTIALS']);
+
+        if (data.length == 0) {
+            res.json({
+                "code": "NO_CREDENTIAL_MAPPING",
+                "message": "Your B&D Integration Credentials are missing"
+            })
+            return
+        }
+
+        let username = data[0]["value"]["username"]
+        let password = data[0]["value"]["password"]
+
+        let response = await request.post(EGOV_BND_LOGIN_URL, {
+            form: {
+                username: username,
+                password: password
+            },
+            headers: {
+                "x-api-key": EGOV_BND_API_KEY
+            }
+        })
+
+        let login_response = JSON.parse(response);
+
+        if (login_response.response == "0") {
+            if (login_response.reason == "INVALID_CREDENTIALS") {
+                res.json({
+                    code: "INVALID_CREDENTIALS",
+                    username: username,
+                    message: login_response.sys_message +". Kindly update your credentials"
+                })
+            } else {
+                res.json({
+                    code: "INTEGRATION_ERROR",
+                    username: username,
+                    message: login_response.sys_message
+                })
+            }
+            return;
+        }
+
+        res.json({
+            code: "SUCCESS",
+            redirect: EGOV_BND_REDIRECT_URL + JSON.stringify(["data"])
+        })
+    } catch (ex) {
+        console.log("Exception occured while login", ex)
+        res.json({
+            "code": "ERROR",
+            "message": "Failed to login to BND - " + ex.toString()
+        })
+    }
+
+}));
+
 router.post('/protected/reports/lmereport', function (req, res) {
+    console.log(req.body)
     let userId = String(req.body.RequestInfo.userInfo.id);
 
     console.log("User id is", userId);
@@ -433,8 +524,11 @@ async function _createAndUpdateTaxProcessor(request, response) {
 }
 
 async function _createAndUpdateRequestHandler(req, res) {
-    let { request, response } = getRequestResponse(req)
-    
+    let {
+        request,
+        response
+    } = getRequestResponse(req)
+
     let tenantId = request["Properties"][0]["tenantId"]
 
     let fireCessConfig = await getFireCessConfig(tenantId)
@@ -456,30 +550,35 @@ async function _createAndUpdateRequestHandler(req, res) {
 function getRequestResponse(req) {
     let request, response
 
-    if (typeof req.body.request === "string" ) {
+    if (typeof req.body.request === "string") {
         request = JSON.parse(req.body.request)
         response = JSON.parse(req.body.response)
     } else {
         request = req.body.request
         response = req.body.response
     }
-    return {request, response}
+    return {
+        request,
+        response
+    }
 }
 
 router.post('/protected/punjab-pt/property/_create', asyncMiddleware(_createAndUpdateRequestHandler))
 
 router.post('/protected/punjab-pt/property/_update', asyncMiddleware(_createAndUpdateRequestHandler))
 
-router.post('/protected/punjab-pt/pt-calculator-v2/_estimate',asyncMiddleware(async function (req, res) {
-    
-    let { request, response } = getRequestResponse(req)
+router.post('/protected/punjab-pt/pt-calculator-v2/_estimate', asyncMiddleware(async function (req, res) {
+
+    let {
+        request,
+        response
+    } = getRequestResponse(req)
 
     let tenantId = request["CalculationCriteria"][0]["tenantId"]
 
     let fireCessConfig = await getFireCessConfig(tenantId)
 
-    if (fireCessConfig && fireCessConfig.dynamicFirecess && fireCessConfig.dynamicFirecess == true) 
-    {
+    if (fireCessConfig && fireCessConfig.dynamicFirecess && fireCessConfig.dynamicFirecess == true) {
         console.log("----------------- inside _estimate --------------")
         console.log("Existing Request is", JSON.stringify(request, null, 2))
         console.log("Existing Response is", JSON.stringify(response, null, 2))
