@@ -197,7 +197,8 @@ router.post('/protected/bndlogin', asyncMiddleware(async function (req, res) {
         })
 
         let login_response = JSON.parse(response)[0];
-
+        console.log(response)
+        
         if (login_response.response == "0") {
             if (login_response.reason == "INVALID_CREDENTIALS") {
                 res.json({

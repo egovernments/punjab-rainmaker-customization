@@ -28,7 +28,9 @@ function updatePassword() {
             }
 
         }
-    }).then((response) => {});
+    }).then((response) => {
+        window.location.reload();
+    });
 }
 
 function getAuthToken() {
@@ -67,7 +69,7 @@ function loginToBND() {
                     $('#msg').text(response.data.message || "Some error occcured while processing your request")
                     break
             }
-
+            hideLoader();
         }).catch((err) => {
             hideLoader();
         });
