@@ -212,7 +212,7 @@ router.post('/protected/bndlogin', asyncMiddleware(async function (req, res) {
                 res.json({
                     code: "MAX_ATTEMPTS",
                     username: username,
-                    message: "You exceeded attempts allowed to login. The user is - " + username +" is locked"
+                    message: "You exceeded attempts allowed to login. The user  '" + username +"' is locked"
                 })
             } else {
                 res.json({

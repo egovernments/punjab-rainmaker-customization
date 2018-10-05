@@ -1,7 +1,7 @@
 $(document).ready(() => {
     $("#updatePassword").on('click', updatePassword)
     if (getAuthToken() !== null) {
-        loginToBND();
+        setTimeout(loginToBND, 10);
     } else {
         $(".form-signin *").hide()
         $("#noaccess").html("<strong>You need to be logged in to access this page</strong>")
