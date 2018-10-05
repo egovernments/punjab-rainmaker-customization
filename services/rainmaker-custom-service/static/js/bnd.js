@@ -57,7 +57,7 @@ function loginToBND() {
             hideLoader()
             switch (response.data.code) {
                 case "NO_CREDENTIAL_MAPPING":
-                case "LOGIN_PASSWORD_ERROR":
+                case "INVALID_CREDENTIALS":
                     $('#msg').text(response.data.message)
                     $('#inputEmail').val(response.data.username || "")
                     $("#form").show()

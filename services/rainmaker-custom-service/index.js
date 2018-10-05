@@ -208,6 +208,12 @@ router.post('/protected/bndlogin', asyncMiddleware(async function (req, res) {
                     username: username,
                     message: login_response.sys_message +". Kindly update your credentials"
                 })
+            } else if (login_response.reason == "MAX_ATTEMPTS") {
+                res.json({
+                    code: "MAX_ATTEMPTS",
+                    username: username,
+                    message: "You exceeded attempts allowed to login. The user is - " + username +" is locked"
+                })
             } else {
                 res.json({
                     code: "INTEGRATION_ERROR",
