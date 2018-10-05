@@ -69,7 +69,6 @@ function loginToBND() {
                     $('#msg').text(response.data.message || "Some error occcured while processing your request")
                     break
             }
-            hideLoader();
         }).catch((err) => {
             hideLoader();
         });
@@ -87,5 +86,5 @@ function showLoader() {
 }
 
 function hideLoader() {
-    $("#loadMe").modal("hide")
+    setTimeout(() => $("#loadMe").modal("hide"), 20)
 }
