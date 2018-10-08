@@ -86,6 +86,8 @@ function showLoader() {
 }
 
 function hideLoader() {
-    setTimeout(() => $("#loadMe").modal("hide"), 20)
-    setTimeout(() => $("#loadMe").modal("hide"), 100)
+    $("#loadMe").modal("hide")
+    $('#loadMe').on('shown.bs.modal', function (e) {
+        $("#loadMe").modal('hide');
+    })
 }
