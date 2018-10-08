@@ -87,4 +87,5 @@ function showLoader() {
 
 function hideLoader() {
     setTimeout(() => $("#loadMe").modal("hide"), 20)
+    setTimeout(() => $("#loadMe").modal("hide"), 100)
 }
