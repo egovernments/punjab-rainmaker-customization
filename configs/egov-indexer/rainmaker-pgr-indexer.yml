@@ -84,4 +84,12 @@ ServiceMaps:
           uriResponseMapping:
           - inJsonPath: $.Employee[0].name
             outJsonPath: $.PGRIndex.assignee
-           
+            
+            
+  - topic: save-pgr-service-reindex-test
+    indexes:
+    - name: pgrreindextest
+      type: reindexedcomplaints
+      id: $.services.servicerequestid, $.services.tenantid
+      isBulk: true
+      jsonPath: $.serviceRequests
