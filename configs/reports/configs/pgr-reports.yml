@@ -44,6 +44,10 @@ ReportDefinitions:
     apiURL: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?moduleName=RAINMAKER-PGR&masterName=ServiceDefs&tenantId=$tenantId
     keyOrder: serviceCode,department,slaHours
     tableName: tbl_dept
+  - entity: $.MdmsRes.common-masters.Department
+    apiURL: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?moduleName=common-masters&masterName=Department&tenantId=$tenantId
+    keyOrder: name,code
+    tableName: tbl_def_dept
   sourceColumns:
   - name: department
     label: reports.rainmaker-pgr.department
@@ -118,7 +122,62 @@ ReportDefinitions:
     source: eg_pgr_service
     isMandatory: false
     searchClause: AND createdtime <= $toDate
-  query: SELECT (SELECT name from eg_user eas where eas.id::varchar in (select assignee from eg_pgr_action epa1 where epa1.businesskey = eg_pgr_service.servicerequestid and epa1.action in ('assign','reassign') and "when" = (select max("when") from eg_pgr_action epa where epa.businesskey = eg_pgr_service.servicerequestid and action in ('assign','reassign') group by epa.businesskey) and epa1.businesskey = eg_pgr_service.servicerequestid)) as lastassignedto, (SELECT deptmap.department FROM (VALUES tbl_dept) AS deptmap(serviceCode, department, slaHours) WHERE deptmap.serviceCode = eg_pgr_service.servicecode) AS department, eg_pgr_service.servicecode AS servicecode, servicerequestid AS complaintNo, to_char(to_timestamp(TRUNC(CAST(createdtime AS bigint) / 1000)), 'DD/MM/YYYY') AS date, eg_user.name, phone, landmark, address, description, (SELECT (CASE WHEN (((SELECT deptmap.slaHours FROM (VALUES tbl_dept) AS deptmap(serviceCode, department, slaHours) WHERE deptmap.serviceCode = eg_pgr_service.servicecode)::integer / 24) - ((((select extract(epoch from now())) * 1000) - eg_pgr_service.createdtime)::bigint/86400000)) < 1 THEN CONCAT('Overdue by ', ((((select extract(epoch from now())) * 1000) - eg_pgr_service.createdtime)::bigint/86400000) - ((SELECT deptmap.slaHours FROM (VALUES tbl_dept) AS deptmap(serviceCode, department, slaHours) WHERE deptmap.serviceCode = eg_pgr_service.servicecode)::integer / 24), ' days') ELSE CONCAT(((SELECT deptmap.slaHours FROM (VALUES tbl_dept) AS deptmap(serviceCode, department, slaHours) WHERE deptmap.serviceCode = eg_pgr_service.servicecode)::integer / 24) - ((((select extract(epoch from now())) * 1000) - eg_pgr_service.createdtime)::bigint/86400000), ' days remaining') END) as slaHours), status FROM eg_pgr_service, eg_user WHERE eg_pgr_service.accountid = eg_user.id::VARCHAR AND eg_pgr_service.tenantid LIKE $tenantid AND status IN ('open','assigned','reassigrequested','rejected')
+  query: SELECT (SELECT name from eg_user eas where eas.id::varchar in (select assignee from eg_pgr_action epa1 where epa1.businesskey = eg_pgr_service.servicerequestid and epa1.action in ('assign','reassign') and "when" = (select max("when") from eg_pgr_action epa where epa.businesskey = eg_pgr_service.servicerequestid and action in ('assign','reassign') group by epa.businesskey) and epa1.businesskey = eg_pgr_service.servicerequestid)) as lastassignedto, (SELECT deptmap_def.name FROM (VALUES tbl_def_dept) AS deptmap_def(name,code) INNER JOIN (VALUES tbl_dept) AS deptmap(serviceCode, department, slaHours) on deptmap.serviceCode = eg_pgr_service.servicecode and deptmap_def.code = deptmap.department) AS department, eg_pgr_service.servicecode AS servicecode, servicerequestid AS complaintNo, to_char(to_timestamp(TRUNC(CAST(createdtime AS bigint) / 1000)), 'DD/MM/YYYY') AS date, eg_user.name, phone, landmark, address, description, (SELECT (CASE WHEN (((SELECT deptmap.slaHours FROM (VALUES tbl_dept) AS deptmap(serviceCode, department, slaHours) WHERE deptmap.serviceCode = eg_pgr_service.servicecode)::integer / 24) - ((((select extract(epoch from now())) * 1000) - eg_pgr_service.createdtime)::bigint/86400000)) < 1 THEN CONCAT('Overdue by ', ((((select extract(epoch from now())) * 1000) - eg_pgr_service.createdtime)::bigint/86400000) - ((SELECT deptmap.slaHours FROM (VALUES tbl_dept) AS deptmap(serviceCode, department, slaHours) WHERE deptmap.serviceCode = eg_pgr_service.servicecode)::integer / 24), ' days') ELSE CONCAT(((SELECT deptmap.slaHours FROM (VALUES tbl_dept) AS deptmap(serviceCode, department, slaHours) WHERE deptmap.serviceCode = eg_pgr_service.servicecode)::integer / 24) - ((((select extract(epoch from now())) * 1000) - eg_pgr_service.createdtime)::bigint/86400000), ' days remaining') END) as slaHours), status FROM eg_pgr_service, eg_user WHERE eg_pgr_service.accountid = eg_user.id::VARCHAR AND eg_pgr_service.tenantid LIKE $tenantid AND status IN ('open','assigned','reassigrequested','rejected')
+
+- reportName: StateSourceReport
+  summary: Source of complaints across tenants
+  version: 1.0.0
+  moduleName: rainmaker-pgr
+  sourceColumns:
+  - name: tenantid
+    label: reports.rainmaker-pgr.tenantid
+    type: string
+    source: eg_pgr_service
+    total: false
+  - name: ivr
+    label: reports.rainmaker-pgr.source.ivr
+    type: string
+    source: eg_pgr_service
+    total: true
+  - name: mobileapp
+    label: reports.rainmaker-pgr.source.mobileapp
+    type: string
+    source: eg_pgr_service
+    total: true
+  - name: web
+    label: reports.rainmaker-pgr.source.web
+    type: string
+    source: eg_pgr_service
+    total: true
+  - name: unknown
+    label: reports.rainmaker-pgr.source.unknown
+    type: string
+    source: eg_pgr_service
+    total: true
+  searchParams:
+  - name: fromDate
+    label: reports.rainmaker-pgr.datefrom
+    type: epoch
+    source: eg_pgr_service
+    isMandatory: false
+    searchClause: AND createdtime >= $fromDate
+  - name: toDate
+    label: reports.rainmaker-pgr.dateto
+    type: epoch
+    source: eg_pgr_service
+    isMandatory: false
+    searchClause: AND createdtime <= $toDate
+  query: |
+    select initcap(split_part(tenantid, '.', 2)) as tenantid,
+    SUM(CASE WHEN source ='ivr' THEN 1 ELSE 0 END) as ivr,
+    SUM(CASE WHEN source ='mobileapp' THEN 1 ELSE 0 END) as mobileapp,
+    SUM(CASE WHEN source ='web' THEN 1 ELSE 0 END) as web,
+    SUM(CASE WHEN source NOT IN ('web', 'ivr', 'mobileapp')  OR source is NULL THEN 1 ELSE 0 END) as unknown
+    from eg_pgr_service
+    WHERE tenantid != 'pb.testing'
+
+  groupby: GROUP BY tenantid
+  orderby: ORDER BY tenantid
 
 - reportName: EmployeeReport
   summary: Fetches complaints for employees
@@ -199,3 +258,238 @@ ReportDefinitions:
     isMandatory: false
     searchClause: AND createdtime <= $toDate
   query: SELECT (SELECT deptmap.department FROM (VALUES tbl_dept) AS deptmap(serviceCode, department, slaHours) WHERE deptmap.serviceCode = eg_pgr_service.servicecode) AS department, eg_pgr_service.servicecode AS servicecode, servicerequestid AS complaintNo, to_char(to_timestamp(TRUNC(CAST(createdtime AS bigint) / 1000)), 'DD/MM/YYYY') AS date, eg_user.name, phone, landmark, address, description, (SELECT (CASE WHEN (((SELECT deptmap.slaHours FROM (VALUES tbl_dept) AS deptmap(serviceCode, department, slaHours) WHERE deptmap.serviceCode = eg_pgr_service.servicecode)::integer / 24) - ((((select extract(epoch from now())) * 1000) - eg_pgr_service.createdtime)::bigint/86400000)) < 1 THEN CONCAT('Overdue by ', ((((select extract(epoch from now())) * 1000) - eg_pgr_service.createdtime)::bigint/86400000) - ((SELECT deptmap.slaHours FROM (VALUES tbl_dept) AS deptmap(serviceCode, department, slaHours) WHERE deptmap.serviceCode = eg_pgr_service.servicecode)::integer / 24), ' days') ELSE CONCAT(((SELECT deptmap.slaHours FROM (VALUES tbl_dept) AS deptmap(serviceCode, department, slaHours) WHERE deptmap.serviceCode = eg_pgr_service.servicecode)::integer / 24) - ((((select extract(epoch from now())) * 1000) - eg_pgr_service.createdtime)::bigint/86400000), ' days remaining') END) as slaHours), status FROM eg_pgr_service INNER JOIN eg_user ON eg_pgr_service.accountid = eg_user.id::VARCHAR WHERE eg_pgr_service.status = 'assigned' AND servicerequestid IN (SELECT DISTINCT businesskey FROM eg_pgr_action WHERE status = 'assigned' AND "when" IN (select max("when") FROM eg_pgr_action WHERE assignee NOTNULL GROUP BY businesskey) AND assignee = $userid) 
+
+
+- reportName: StateULBReport
+  summary: Fetches complaints stats for all ULBs in state
+  version: 1.0.0
+  moduleName: rainmaker-pgr
+  sourceColumns:
+  - name: tenantid
+    label: reports.rainmaker-pgr.tenantid
+    type: string
+    source: eg_pgr_service
+    total: false
+  - name: open
+    label: reports.rainmaker-pgr.status.open
+    type: string
+    source: eg_pgr_service
+    total: true
+  - name: assigned
+    label: reports.rainmaker-pgr.status.assigned
+    type: string
+    source: eg_pgr_service
+    total: true
+  - name: closed
+    label: reports.rainmaker-pgr.status.closed
+    type: string
+    source: eg_pgr_service
+    total: true
+  - name: reassignrequested
+    label: reports.rainmaker-pgr.status.reassignrequested
+    type: string
+    source: eg_pgr_service
+    total: true
+  - name: rejected
+    label: reports.rainmaker-pgr.status.rejected
+    type: string
+    source: eg_pgr_service
+    total: true
+  - name: total
+    label: reports.rainmaker-pgr.total
+    type: string
+    source: eg_pgr_service
+    total: true
+  searchParams:
+  - name: fromDate
+    label: reports.rainmaker-pgr.datefrom
+    type: epoch
+    source: eg_pgr_service
+    isMandatory: false
+    searchClause: AND createdtime >= $fromDate
+  - name: toDate
+    label: reports.rainmaker-pgr.dateto
+    type: epoch
+    source: eg_pgr_service
+    isMandatory: false
+    searchClause: AND createdtime <= $toDate
+  query: |
+    select initcap(split_part(tenantid, '.', 2)) as tenantid,
+    SUM(CASE WHEN status ='open' THEN 1 ELSE 0 END) as open,
+    SUM(CASE WHEN status ='assigned' THEN 1 ELSE 0 END) as assigned,
+    SUM(CASE WHEN status in ('closed', 'resolved') THEN 1 ELSE 0 END) as closed,
+    SUM(CASE WHEN status ='reassignrequested' THEN 1 ELSE 0 END) as reassignrequested,
+    SUM(CASE WHEN status ='rejected' THEN 1 ELSE 0 END) as rejected,
+    COUNT(status) as total
+    from eg_pgr_service 
+    WHERE tenantid != 'pb.testing'
+  groupby: GROUP BY tenantid
+  orderby: ORDER BY tenantid
+
+- reportName: ComplaintTypesReport
+  summary: Fetches complaint stats based on complaint types for a ULB
+  version: 1.0.0
+  moduleName: rainmaker-pgr
+  sourceColumns:
+  - name: tenantid
+    label: reports.rainmaker-pgr.tenantid
+    type: string
+    source: eg_pgr_service
+    total: false
+  - name: complainttype
+    label: reports.rainmaker-pgr.complainttype
+    type: string
+    source: eg_pgr_service
+    total: false
+  - name: open
+    label: reports.rainmaker-pgr.status.open
+    type: string
+    source: eg_pgr_service
+    total: true
+  - name: assigned
+    label: reports.rainmaker-pgr.status.assigned
+    type: string
+    source: eg_pgr_service
+    total: true
+  - name: closed
+    label: reports.rainmaker-pgr.status.closed
+    type: string
+    source: eg_pgr_service
+    total: true
+  - name: reassignrequested
+    label: reports.rainmaker-pgr.status.reassignrequested
+    type: string
+    source: eg_pgr_service
+    total: true
+  - name: rejected
+    label: reports.rainmaker-pgr.status.rejected
+    type: string
+    source: eg_pgr_service
+    total: true
+  - name: total
+    label: reports.rainmaker-pgr.total
+    type: string
+    source: eg_pgr_service
+    total: true
+  searchParams:
+  - name: ulb
+    label: ULB
+    type: singlevaluelist
+    pattern: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?tenantId=$tenantid&moduleName=tenant&masterName=tenants|$.MdmsRes.tenant.tenants.*.code|$.MdmsRes.tenant.tenants.*.name
+    source: pt
+    wrapper: true
+    isMandatory: false
+    searchClause: AND tenantid = $ulb
+  - name: fromDate
+    label: reports.rainmaker-pgr.datefrom
+    type: epoch
+    source: eg_pgr_service
+    isMandatory: false
+    searchClause: AND createdtime >= $fromDate
+  - name: toDate
+    label: reports.rainmaker-pgr.dateto
+    type: epoch
+    source: eg_pgr_service
+    isMandatory: false
+    searchClause: AND createdtime <= $toDate
+  query: |
+    select 
+    initcap(split_part(tenantid, '.', 2)) as tenantid,
+    regexp_replace(servicecode, '([a-z])([A-Z])', '\1 \2','g') as complainttype,
+    SUM(CASE WHEN status ='open' THEN 1 ELSE 0 END) as open,
+    SUM(CASE WHEN status ='assigned' THEN 1 ELSE 0 END) as assigned,
+    SUM(CASE WHEN status in ('closed', 'resolved') THEN 1 ELSE 0 END) as closed,
+    SUM(CASE WHEN status ='reassignrequested' THEN 1 ELSE 0 END) as reassignrequested,
+    SUM(CASE WHEN status ='rejected' THEN 1 ELSE 0 END) as rejected,
+    count(status) as total
+    from eg_pgr_service
+    WHERE tenantid != 'pb.testing'
+  groupby: GROUP BY tenantid,servicecode
+  orderby: ORDER BY tenantid,servicecode
+
+- reportName: DepartmentReport
+  summary: Fetches complaint stats based on complaint types for a ULB
+  version: 1.0.0
+  moduleName: rainmaker-pgr
+  externalService:
+  - entity: $.MdmsRes.RAINMAKER-PGR.ServiceDefs
+    apiURL: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?moduleName=RAINMAKER-PGR&masterName=ServiceDefs&tenantId=$tenantId
+    keyOrder: serviceCode,department,slaHours
+    tableName: tbl_dept
+  - entity: $.MdmsRes.common-masters.Department
+    apiURL: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?moduleName=common-masters&masterName=Department&tenantId=$tenantId
+    keyOrder: name,code
+    tableName: tbl_def_dept
+  sourceColumns:    
+  - name: tenantid
+    label: reports.rainmaker-pgr.tenantid
+    type: string
+    source: eg_pgr_service
+    total: false
+  - name: department
+    label: reports.rainmaker-pgr.department
+    type: string
+    source: eg_pgr_service
+    total: false
+  - name: open
+    label: reports.rainmaker-pgr.status.open
+    type: string
+    source: eg_pgr_service
+    total: true
+  - name: assigned
+    label: reports.rainmaker-pgr.status.assigned
+    type: string
+    source: eg_pgr_service
+    total: true
+  - name: closed
+    label: reports.rainmaker-pgr.status.closed
+    type: string
+    source: eg_pgr_service
+    total: true
+  - name: reassignrequested
+    label: reports.rainmaker-pgr.status.reassignrequested
+    type: string
+    source: eg_pgr_service
+    total: true
+  - name: rejected
+    label: reports.rainmaker-pgr.status.rejected
+    type: string
+    source: eg_pgr_service
+    total: true
+  searchParams:
+  - name: ulb
+    label: ULB
+    type: singlevaluelist
+    pattern: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?tenantId=$tenantid&moduleName=tenant&masterName=tenants|$.MdmsRes.tenant.tenants.*.code|$.MdmsRes.tenant.tenants.*.name
+    source: pt
+    wrapper: true
+    isMandatory: false
+    searchClause: AND tenantid = $ulb
+  - name: fromDate
+    label: reports.rainmaker-pgr.datefrom
+    type: epoch
+    source: eg_pgr_service
+    isMandatory: false
+    searchClause: AND createdtime >= $fromDate
+  - name: toDate
+    label: reports.rainmaker-pgr.dateto
+    type: epoch
+    source: eg_pgr_service
+    isMandatory: false
+    searchClause: AND createdtime <= $toDate
+  query: |
+    select 
+    initcap(split_part(tenantid, '.', 2)) as tenantid,
+    deptmap_def.name as department,
+    SUM(CASE WHEN status ='open' THEN 1 ELSE 0 END) as open,
+    SUM(CASE WHEN status ='assigned' THEN 1 ELSE 0 END) as assigned,
+    SUM(CASE WHEN status in ('closed', 'resolved') THEN 1 ELSE 0 END) as closed,
+    SUM(CASE WHEN status ='reassignrequested' THEN 1 ELSE 0 END) as reassignrequested,
+    SUM(CASE WHEN status ='rejected' THEN 1 ELSE 0 END) as rejected,
+    count(status) as total
+    from eg_pgr_service
+    INNER JOIN (VALUES tbl_dept) AS deptmap(serviceCode, department, slaHours) ON deptmap.serviceCode = eg_pgr_service.servicecode
+    INNER JOIN (VALUES tbl_def_dept) AS deptmap_def(name,code) ON deptmap.department = deptmap_def.code
+    WHERE tenantid != 'pb.testing'
+  groupby: GROUP BY tenantid,deptmap_def.name
+  orderby: ORDER BY tenantid,deptmap_def.name
