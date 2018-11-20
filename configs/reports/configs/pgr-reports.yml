@@ -389,5 +389,5 @@ ReportDefinitions:
     SUM(CASE WHEN status ='rejected' THEN 1 ELSE 0 END) as rejected,
     count(status) as total
     from eg_pgr_service
-  groupby: GROUP BY tenantid
-  orderby: ORDER BY tenantid
+  groupby: GROUP BY tenantid,servicecode
+  orderby: ORDER BY tenantid,servicecode
