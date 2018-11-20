@@ -162,7 +162,7 @@ ReportDefinitions:
     searchClause: AND usagecategorymajor = $usage
   query: SELECT tenantid, COUNT(*) AS totalassessments, SUM(totalamount) AS totalamount, SUM(amount) AS totalamountpaid, (SUM(totalamount) - SUM(amount)) AS totalamountdue FROM eg_pt_propertydetail_v2 AS a LEFT OUTER JOIN (SELECT consumercode, totalamount, amount FROM egcl_receiptheader AS aa LEFT OUTER JOIN egcl_receiptinstrument AS bb ON aa.id = bb.receiptheader LEFT OUTER JOIN egcl_instrumentheader AS cc ON bb.instrumentheader = cc.id) AS b ON CONCAT(a.property, ':', a.assessmentnumber) = b.consumercode WHERE tenantid = $tenantid
   groupby: GROUP BY tenantid
-  orderby: ORDER BY totalamountpaid DESC NULLS LAST
+  orderby: ORDER BY tenantid, totalamountpaid DESC NULLS LAST
 
 - reportName: StateWidePtCollection
   summary: State Wide PT Collection
@@ -216,4 +216,4 @@ ReportDefinitions:
     searchClause: AND usagecategorymajor = $usage
   query: SELECT initcap(split_part(tenantid, '.', 2)) as tenantid, COUNT(*) AS totalassessments, SUM(totalamount) AS totalamount, SUM(amount) AS totalamountpaid, (SUM(totalamount) - SUM(amount)) AS totalamountdue FROM eg_pt_propertydetail_v2 AS a LEFT OUTER JOIN (SELECT consumercode, totalamount, amount FROM egcl_receiptheader AS aa LEFT OUTER JOIN egcl_receiptinstrument AS bb ON aa.id = bb.receiptheader LEFT OUTER JOIN egcl_instrumentheader AS cc ON bb.instrumentheader = cc.id) AS b ON CONCAT(a.property, ':', a.assessmentnumber) = b.consumercode WHERE tenantid LIKE CONCAT(SPLIT_PART($tenantid, '.', 1), '%') and tenantid != 'pb.testing'
   groupby: GROUP BY tenantid
-  orderby: ORDER BY totalamountpaid DESC NULLS LAST
+  orderby: ORDER BY tenantid, totalamountpaid DESC NULLS LAST
