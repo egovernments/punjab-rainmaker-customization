@@ -134,6 +134,11 @@ ReportDefinitions:
     type: string
     source: eg_pgr_service
     total: false
+  - name: ivr
+    label: reports.rainmaker-pgr.source.ivr
+    type: string
+    source: eg_pgr_service
+    total: true
   - name: mobileapp
     label: reports.rainmaker-pgr.source.mobileapp
     type: string
