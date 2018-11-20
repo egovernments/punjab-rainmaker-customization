@@ -486,5 +486,5 @@ ReportDefinitions:
     from eg_pgr_service
     INNER JOIN (VALUES tbl_dept) AS deptmap(serviceCode, department, slaHours) ON deptmap.serviceCode = eg_pgr_service.servicecode
     INNER JOIN (VALUES tbl_def_dept) AS deptmap_def(name,code) ON deptmap.department = deptmap_def.code
-  groupby: GROUP BY tenantid,deptmap.servicecode
+  groupby: GROUP BY tenantid,deptmap_def.name
   orderby: ORDER BY tenantid,deptmap_def.name
