@@ -169,7 +169,7 @@ ReportDefinitions:
     SUM(CASE WHEN source ='web' THEN 1 ELSE 0 END) as web,
     SUM(CASE WHEN source NOT IN ('web', 'ivr', 'mobileapp')  OR source is NULL THEN 1 ELSE 0 END) as unknown
     from eg_pgr_service
-  groupby: GROUP BY tenantid, source
+  groupby: GROUP BY tenantid
   orderby: ORDER BY tenantid
 
 - reportName: EmployeeReport
