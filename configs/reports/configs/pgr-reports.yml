@@ -422,8 +422,8 @@ ReportDefinitions:
     type: string
     source: eg_pgr_service
     total: false
-  - name: complainttype
-    label: reports.rainmaker-pgr.complainttype
+  - name: department
+    label: reports.rainmaker-pgr.department
     type: string
     source: eg_pgr_service
     total: false
@@ -476,6 +476,7 @@ ReportDefinitions:
   query: |
     select 
     initcap(split_part(tenantid, '.', 2)) as tenantid,
+    deptmap_def.name as department,
     SUM(CASE WHEN status ='open' THEN 1 ELSE 0 END) as open,
     SUM(CASE WHEN status ='assigned' THEN 1 ELSE 0 END) as assigned,
     SUM(CASE WHEN status in ('closed', 'resolved') THEN 1 ELSE 0 END) as closed,
@@ -483,7 +484,7 @@ ReportDefinitions:
     SUM(CASE WHEN status ='rejected' THEN 1 ELSE 0 END) as rejected,
     count(status) as total
     from eg_pgr_service
-    INNER JOIN (VALUES tbl_dept) AS deptmap(serviceCode, department, slaHours) ON deptmap.servicecode = eg_pgr_service.servicecode
-    INNER JOIN (VALUES tbl_def_dept) AS deptmap_def(name,code) ON deptmap.department = deptmap_def.name
+    INNER JOIN (VALUES tbl_dept) AS deptmap(serviceCode, department, slaHours) ON deptmap.serviceCode = eg_pgr_service.servicecode
+    INNER JOIN (VALUES tbl_def_dept) AS deptmap_def(name,code) ON deptmap.department = deptmap_def.code
   groupby: GROUP BY tenantid,deptmap.servicecode
   orderby: ORDER BY tenantid,deptmap_def.name
