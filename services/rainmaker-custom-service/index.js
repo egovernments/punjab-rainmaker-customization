@@ -178,7 +178,7 @@ router.post('/protected/bndlogin', asyncMiddleware(async function (req, res) {
         if (data.length == 0) {
             res.json({
                 "code": "NO_CREDENTIAL_MAPPING",
-                "message": "Your B&D Integration Credentials are missing"
+                "message": "Please update your Birth and Death credentials"
             })
             return
         }
