@@ -317,3 +317,77 @@ ReportDefinitions:
   groupby: GROUP BY tenantid
   orderby: ORDER BY tenantid
 
+- reportName: ComplaintTypesReport
+  summary: Fetches complaint stats based on complaint types for a ULB
+  version: 1.0.0
+  moduleName: rainmaker-pgr
+  sourceColumns:
+  - name: tenantid
+    label: reports.rainmaker-pgr.tenantid
+    type: string
+    source: eg_pgr_service
+    total: false
+  - name: complainttype
+    label: reports.rainmaker-pgr.complainttype
+    type: string
+    source: eg_pgr_service
+    total: false
+  - name: open
+    label: reports.rainmaker-pgr.status.open
+    type: string
+    source: eg_pgr_service
+    total: true
+  - name: assigned
+    label: reports.rainmaker-pgr.status.assigned
+    type: string
+    source: eg_pgr_service
+    total: true
+  - name: closed
+    label: reports.rainmaker-pgr.status.closed
+    type: string
+    source: eg_pgr_service
+    total: true
+  - name: reassignrequested
+    label: reports.rainmaker-pgr.status.reassignrequested
+    type: string
+    source: eg_pgr_service
+    total: true
+  - name: rejected
+    label: reports.rainmaker-pgr.status.rejected
+    type: string
+    source: eg_pgr_service
+    total: true
+  searchParams:
+  - name: ulb
+    label: ULB
+    type: singlevaluelist
+    pattern: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?tenantId=$tenantid&moduleName=tenant&masterName=tenants|$.MdmsRes.tenant.tenants.*.code|$.MdmsRes.tenant.tenants.*.name
+    source: pt
+    wrapper: true
+    isMandatory: false
+    searchClause: AND tenantid = $ulb
+  - name: fromDate
+    label: reports.rainmaker-pgr.datefrom
+    type: epoch
+    source: eg_pgr_service
+    isMandatory: false
+    searchClause: AND createdtime >= $fromDate
+  - name: toDate
+    label: reports.rainmaker-pgr.dateto
+    type: epoch
+    source: eg_pgr_service
+    isMandatory: false
+    searchClause: AND createdtime <= $toDate
+  query: |
+    select 
+    initcap(split_part(tenantid, '.', 2)) as tenantid,
+    regexp_replace(servicecode, '([a-z])([A-Z])', '\1 \2','g') as complainttype,
+    SUM(CASE WHEN status ='open' THEN 1 ELSE 0 END) as open,
+    SUM(CASE WHEN status ='assigned' THEN 1 ELSE 0 END) as assigned,
+    SUM(CASE WHEN status in ('closed', 'resolved') THEN 1 ELSE 0 END) as closed,
+    SUM(CASE WHEN status ='reassignrequested' THEN 1 ELSE 0 END) as reassignrequested,
+    SUM(CASE WHEN status ='rejected' THEN 1 ELSE 0 END) as rejected,
+    count(status) as total
+    from eg_pgr_service
+  groupby: GROUP BY tenantid
+  orderby: ORDER BY tenantid
