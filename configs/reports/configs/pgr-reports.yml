@@ -141,6 +141,7 @@ ReportDefinitions:
     AND eg_pgr_service.tenantid LIKE $tenantid 
     AND eg_pgr_address.uuid = eg_pgr_service.addressid
     AND status IN ('open','assigned','reassigrequested','rejected')
+  orderby: ORDER BY eg_pgr_service.createdtime asc
 
 - reportName: StateSourceReport
   summary: Source of complaints across tenants
@@ -291,7 +292,7 @@ ReportDefinitions:
     INNER JOIN eg_pgr_address ON eg_pgr_service.addressid = eg_pgr_address.uuid
     WHERE eg_pgr_service.status = 'assigned' 
     AND servicerequestid IN (SELECT DISTINCT businesskey FROM eg_pgr_action WHERE status = 'assigned' AND "when" IN (select max("when") FROM eg_pgr_action WHERE assignee NOTNULL GROUP BY businesskey) AND assignee = $userid) 
-
+  orderby: ORDER BY eg_pgr_service.createdtime asc
 
 - reportName: StateULBReport
   summary: Fetches complaints stats for all ULBs in state
