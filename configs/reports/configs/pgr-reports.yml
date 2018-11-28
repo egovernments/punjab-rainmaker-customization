@@ -278,7 +278,7 @@ ReportDefinitions:
     searchClause: AND eg_pgr_service.createdtime <= $toDate
   query: |
     SELECT (SELECT deptmap.department FROM (VALUES tbl_dept) AS deptmap(serviceCode, department, slaHours) WHERE deptmap.serviceCode = eg_pgr_service.servicecode) AS department, 
-    eg_pgr_service.regexp_replace(servicecode, '([a-z])([A-Z])', '\1 \2','g') AS servicecode, 
+    regexp_replace(eg_pgr_service.servicecode, '([a-z])([A-Z])', '\1 \2','g') AS servicecode, 
     servicerequestid AS complaintNo, 
     to_char(to_timestamp(TRUNC(CAST(eg_pgr_service.createdtime AS bigint) / 1000)), 'DD/MM/YYYY') AS date, 
     eg_user.name, 
