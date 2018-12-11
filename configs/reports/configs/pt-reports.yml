@@ -55,6 +55,11 @@ ReportDefinitions:
     type: string
     source: pt
     total: true
+  - name: adjusment
+    label: reports.pt.roundoff
+    type: string
+    source: pt
+    total: true
   - name: propertyid
     label: reports.pt.propertyId
     type: string
@@ -91,13 +96,13 @@ ReportDefinitions:
     type: epoch
     source: pt
     isMandatory: false
-    searchClause: AND tbl_rcpt.createddate >= $fromDate
+    searchClause: AND rh.receiptdate >= $fromDate
   - name: toDate
     label: reports.pt.toDate
     type: epoch
     source: pt
     isMandatory: false
-    searchClause: AND tbl_rcpt.createddate <= $toDate
+    searchClause: AND rh.receiptdate <= $toDate
   - name: paymentMode
     label: Payment Mode
     type: singlevaluelist
@@ -118,9 +123,23 @@ ReportDefinitions:
     type: boundarylist
     source: pt
     isMandatory: false
-    searchClause: AND locality IN ($localityArray)
-  query: SELECT * FROM (SELECT * FROM (SELECT a.tenantid AS tenantid, a.id, Substring(a.consumercode, '(.*):') AS propertyid, Substring(a.consumercode, ':(.*)') AS assessmentnumber, a.consumercode, a.createddate, To_char(To_timestamp(a.createddate / 1000), 'DD/MM/YYYY') AS transactiondate, bankid AS bankname, receiptnumber, amount, instrumenttype, transactionnumber FROM egcl_receiptheader AS a LEFT OUTER JOIN egcl_receiptinstrument AS c ON a.id = c.receiptheader LEFT OUTER JOIN egcl_instrumentheader AS b ON b.id = c.instrumentheader) AS aa LEFT OUTER JOIN (SELECT receiptheader, SUM(CASE WHEN description LIKE 'PT_FIRE_CESS%' THEN cramount ELSE 0 END) as firecess, SUM(CASE WHEN description LIKE 'PT_CANCER_CESS%' THEN cramount ELSE 0 END) as cancercess, SUM(CASE WHEN description LIKE 'PT_TIME_INTEREST%' THEN cramount ELSE 0 END) as interest, SUM(CASE WHEN description LIKE 'PT_TIME_PENALTY%' THEN cramount ELSE 0 END) as penalty, SUM(CASE WHEN description LIKE 'PT_TIME_REBATE%' THEN -dramount ELSE 0 END) as rebate, SUM(CASE WHEN description LIKE 'PT_TAX%' THEN cramount ELSE 0 END) as propertytax, SUM(CASE WHEN description LIKE 'PT_UNIT_USAGE_EXEMPTION%' THEN -dramount ELSE 0 END) as exemption, (SUM(CASE WHEN description LIKE 'PT_DECIMAL_CEILING_CREDIT%' THEN cramount ELSE 0 END) - SUM(CASE WHEN description LIKE 'PT_DECIMAL_CEILING_DEBIT%' THEN dramount ELSE 0 END)) as adjusment FROM egcl_receiptdetails group by receiptheader) AS bb ON aa.id = bb.receiptheader) AS tbl_rcpt LEFT OUTER JOIN (SELECT financialyear, locality, Concat(aa.property, ':', bb.assessmentnumber) AS consumercode FROM eg_pt_address_v2 AS aa RIGHT OUTER JOIN eg_pt_propertydetail_v2 AS bb ON aa.property = bb.property) AS tbl_lclty ON tbl_rcpt.consumercode = tbl_lclty.consumercode WHERE tenantid LIKE $tenantid
-  orderby: ORDER BY tbl_rcpt.createddate DESC
+    searchClause: AND pt_addr.locality IN ($localityArray)
+  query: | 
+      -- Use CTE to force query plan, compute & use CTE later
+      WITH receipt_breakup AS (
+                  SELECT receiptheader, SUM(CASE WHEN description LIKE 'PT_FIRE_CESS%' THEN cramount ELSE 0 END) as firecess, SUM(CASE WHEN description LIKE 'PT_CANCER_CESS%' THEN cramount ELSE 0 END) as cancercess, SUM(CASE WHEN description LIKE 'PT_TIME_INTEREST%' THEN cramount ELSE 0 END) as interest, SUM(CASE WHEN description LIKE 'PT_TIME_PENALTY%' THEN cramount ELSE 0 END) as penalty, SUM(CASE WHEN description LIKE 'PT_TIME_REBATE%' THEN -dramount ELSE 0 END) as rebate, SUM(CASE WHEN description LIKE 'PT_TAX%' THEN cramount ELSE 0 END) as propertytax, SUM(CASE WHEN description LIKE 'PT_UNIT_USAGE_EXEMPTION%' THEN -dramount ELSE 0 END) as exemption, (SUM(CASE WHEN description LIKE 'PT_DECIMAL_CEILING_CREDIT%' THEN cramount ELSE 0 END) - SUM(CASE WHEN description LIKE 'PT_DECIMAL_CEILING_DEBIT%' THEN dramount ELSE 0 END)) as adjusment 
+                  FROM egcl_receiptdetails
+                  GROUP BY receiptheader
+      )
+      SELECT rh.tenantid AS tenantid, rh.id, Substring(rh.consumercode, '(.*):') AS propertyid, Substring(rh.consumercode, ':(.*)') AS assessmentnumber, rh.consumercode, rh.receiptdate, To_char(To_timestamp(rh.receiptdate / 1000), 'DD/MM/YYYY') AS transactiondate, bankid AS bankname, receiptnumber, amount, instrumenttype, transactionnumber, receipt_breakup.*
+      FROM egcl_receiptheader AS rh 
+      JOIN egcl_receiptinstrument AS ri ON rh.id = ri.receiptheader 
+      JOIN egcl_instrumentheader AS ih ON ih.id = ri.instrumentheader 
+      JOIN receipt_breakup ON rh.id = receipt_breakup.receiptheader 
+      JOIN eg_pt_propertydetail_v2 pt_detail ON CONCAT(pt_detail.property, ':', pt_detail.assessmentnumber) = rh.consumercode 
+      JOIN eg_pt_address_v2 pt_addr ON pt_detail.property = pt_addr.property 
+      WHERE rh.tenantid LIKE $tenantid
+  orderby: ORDER BY rh.receiptdate DESC
 
 
 - reportName: UlbWisePtCollection
