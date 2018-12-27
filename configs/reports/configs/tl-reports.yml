@@ -193,6 +193,11 @@ ReportDefinitions:
   version: 1.0.0
   moduleName: rainmaker-tl
   sourceColumns:
+  - name: tenantId
+    label: report.tl.tenantid
+    type: string
+    source: tl
+    total: false
   - name: tradeSubType
     label: report.tl.tradeType
     type: string
@@ -202,7 +207,7 @@ ReportDefinitions:
     label: report.tl.totalTransaction
     type: string
     source: tl
-    total: false
+    total: true
   - name: online
     label: report.tl.online.collection
     type: string
@@ -239,7 +244,7 @@ ReportDefinitions:
     wrapper: true
     isMandatory: false
     searchClause: AND tl.tenantId = $ulb
-  query:   SELECT COUNT(applicationNumber) as transactionNumber,tradeSubType,SUM(onl.totalAmount) as online,SUM(offl.totalAmount) as offline, COALESCE(SUM(onl.totalAmount),0)+ COALESCE(SUM(offl.totalAmount),0) as total,tl.tenantId as tenantId FROM eg_tl_tradelicense tl INNER JOIN eg_tl_tradelicensedetail tld ON tld.tradelicenseid = tl.id INNER JOIN (SELECT tradelicensedetailid,message.message as tradeSubType FROM eg_tl_tradeunit LEFT OUTER JOIN message ON CONCAT('TL_',split_part(tradeType, '.', 2)) = message.code AND message.locale='en_IN') tlunit ON tlunit.tradelicensedetailid = tld.id LEFT OUTER JOIN (SELECT * FROM egcl_receiptheader WHERE collectiontype = 'ONLINE') AS onl ON onl.consumercode = tl.applicationnumber LEFT OUTER JOIN (SELECT * FROM egcl_receiptheader WHERE collectiontype = 'COUNTER') AS offl ON offl.consumercode = tl.applicationnumber WHERE tl.status IN ('APPROVED','PAID','REJECTED')
+  query:   SELECT COUNT(applicationNumber) as transactionNumber,tradeSubType,SUM(onl.totalAmount) as online,SUM(offl.totalAmount) as offline, COALESCE(SUM(onl.totalAmount),0)+ COALESCE(SUM(offl.totalAmount),0) as total,initcap(split_part(tl.tenantId, '.', 2)) as tenantId as tenantId FROM eg_tl_tradelicense tl INNER JOIN eg_tl_tradelicensedetail tld ON tld.tradelicenseid = tl.id INNER JOIN (SELECT tradelicensedetailid,message.message as tradeSubType FROM eg_tl_tradeunit LEFT OUTER JOIN message ON CONCAT('TL_',split_part(tradeType, '.', 2)) = message.code AND message.locale='en_IN') tlunit ON tlunit.tradelicensedetailid = tld.id LEFT OUTER JOIN (SELECT * FROM egcl_receiptheader WHERE collectiontype = 'ONLINE') AS onl ON onl.consumercode = tl.applicationnumber LEFT OUTER JOIN (SELECT * FROM egcl_receiptheader WHERE collectiontype = 'COUNTER') AS offl ON offl.consumercode = tl.applicationnumber WHERE tl.status IN ('APPROVED','PAID','REJECTED')
   groupby: GROUP BY tl.tenantId,tradeSubType
   orderby: ORDER BY tl.tenantId asc
 
