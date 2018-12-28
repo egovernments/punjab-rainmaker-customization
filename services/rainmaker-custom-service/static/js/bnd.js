@@ -1,20 +1,40 @@
 $(document).ready(() => {
-    $("#updatePassword").on('click', updatePassword)
+    $("#linkAccount").on('click', linkAccount)
     if (getAuthToken() !== null) {
-        setTimeout(loginToBND, 10);
+        let params = (new URL(document.location)).searchParams;
+        if (params.get("unlink") !== null)
+        {
+            unlinkAccount();
+        } else {
+            setTimeout(loginToBND, 10);
+        }
     } else {
-        $(".form-signin *").hide()
-        $("#noaccess").html("<strong>You need to be logged in to access this page</strong>")
-        $("#noaccess").show()
+        $("#msg").html("<strong>You need to be logged in to access this page</strong>")
+        $("#form").hide()
     }
 });
 
-function updatePassword() {
+function unlinkAccount() {
+    axios({
+        url: location.pathname.replace("/open/", "/protected/") + "/unlinkAccount",
+        method: 'POST',
+        json: true, // important
+        headers: {
+            'Accept': 'application/json'
+        },
+        data: {
+        }
+    }).then((response) => {
+        window.location.assign(window.location.href.replace("unlink", ""))
+    });
+}
+
+function linkAccount() {
     username = $("#username").val();
     password = $("#password").val()
 
     axios({
-        url: location.pathname.replace("/open/", "/protected/") + "/update",
+        url: location.pathname.replace("/open/", "/protected/") + "/linkAccount",
         method: 'POST',
         json: true, // important
         headers: {
@@ -29,7 +49,15 @@ function updatePassword() {
 
         }
     }).then((response) => {
-        window.location.reload();
+        let res = response.data;
+        if (res && res.code && res.code == "SUCCESS" && res.redirect) {
+            var urlInfo = decodeURI(window.location.href).split('?');
+            var path = urlInfo[0];
+            $("#msg").html("The application has been opened in new window. If you want to unlink your account click <a href='" + path + "?unlink'>here</a>")
+            window.open(res.redirect,"bnd", "", true)
+        } else {
+            $("#msg").text(res.message).css("color", "red");
+        }
     });
 }
 
@@ -57,14 +85,19 @@ function loginToBND() {
             hideLoader()
             switch (response.data.code) {
                 case "NO_CREDENTIAL_MAPPING":
+                    $('#msg').text("Please enter your eSewa Health application Username & Password to link your account")
+                    $('#inputEmail').val(response.data.username || "")
+                    $("#form").show()
+                    break
                 case "INVALID_CREDENTIALS":
                     $('#msg').text(response.data.message)
                     $('#inputEmail').val(response.data.username || "")
                     $("#form").show()
                     break
                 case "SUCCESS":
-                    $('#msg').text("Redirecting to login URL");
-                    document.location.href = response.data.redirect;
+                    $("#msg").html("The application has been opened in new window. If you want to unlink your account click <a href='" + location.href + "?unlink'>here</a>")
+                    window.open(response.data.redirect,"bnd", "", true)
+                    break;
                 default:
                     $('#msg').text(response.data.message || "Some error occcured while processing your request")
                     break

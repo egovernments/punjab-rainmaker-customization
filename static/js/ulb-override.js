@@ -26,11 +26,14 @@ var appOverrides = (function() {
 
         inflammable.checked = state.pbFireCess.inflammable;
         heightAbove36Feet.checked = state.pbFireCess.heightAbove36Feet;
-        var tab = document.getElementsByClassName("form-tab-index").item(0)
-        if (tab.textContent == "4") {
+        var tab = document.getElementsByClassName("form-tab-index")
+        if (
+            (tab.length > 0 && tab.item(0).textContent == "4") ||
+            document.getElementsByClassName("active-step-3").length > 0
+         ) {
           inflammable.disabled = 'disabled'
           heightAbove36Feet.disabled = 'disabled'
-        }
+        } 
 
         inflammable.addEventListener("change", pbFireCess.fireCessOnChange);
         heightAbove36Feet.addEventListener("change", pbFireCess.fireCessOnChange);
