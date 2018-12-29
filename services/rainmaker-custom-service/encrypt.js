@@ -2,6 +2,16 @@ const ENCRYPTION_KEY = process.env.ENCRYPTION_KEY
 const ENCRYPTION_IV = process.env.ENCRYPTION_IV
 const JWT_KEY = process.env.JWT_KEY
 const JWT_EXPIRY = process.env.JWT_EXPIRY || '5min'
+const DEBUG_MODE = Boolean(process.env.DEBUG_MODE) || false;
+
+function log(val) {
+    if (DEBUG_MODE) {
+        console.log(val)
+    }
+}
+
+log ("EK=" + ENCRYPTION_KEY)
+log ("EI=" + ENCRYPTION_IV)
 
 var encrypt = function (pass) {
     // Include Library

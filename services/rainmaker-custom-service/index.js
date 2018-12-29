@@ -19,7 +19,7 @@ app.disable('view cache');
 
 // https://codepen.io/graphicfreedom/pen/evaBXm
 
-const PT_DEBUG_MODE = Boolean(process.env.PT_DEBUG_MODE) || false;
+const DEBUG_MODE = Boolean(process.env.DEBUG_MODE) || false;
 const PT_DEMAND_HOST = process.env.PT_DEMAND_HOST
 const EGOV_MDMS_HOST = process.env.EGOV_MDMS_HOST
 const EGOV_BND_LOGIN_URL = process.env.EGOV_BND_LOGIN_URL
@@ -27,7 +27,16 @@ const EGOV_BND_REDIRECT_URL = process.env.EGOV_BND_REDIRECT_URL
 // const EGOV_BND_API_KEY = process.env.EGOV_BND_API_KEY
 const EGOV_BND_ENCRYPTION_KEY = process.env.EGOV_BND_ENCRYPTION_KEY || "Vol0otuji0X03wSuZGI3zySUzxj7bReQ"
 
+function log(val) {
+    if (DEBUG_MODE) {
+        console.log(val)
+    }
+}
+
+log ("ENCKEY=" + EGOV_BND_ENCRYPTION_KEY)
+
 const cryptr = new Cryptr(EGOV_BND_ENCRYPTION_KEY);
+
 
 function getUserUUID(data) {
     return data.RequestInfo.userInfo.uuid;
@@ -160,13 +169,19 @@ router.post('/protected/bndlogin/linkAccount', asyncMiddleware(async function (r
     let username = req.body.username
     let password = req.body.password
     let uuid = getUserUUID(req.body);
+    let payload = {
+        Username: username,
+        Password: encrypt(password)
+    }
+
+    log("inside linkAccount")
+    log(payload)
 
     let response = await request.post(EGOV_BND_LOGIN_URL, {
-        json: {
-            Username: username,
-            Password: encrypt(password)
-        }
+        json: payload
     })
+
+    log(response)
 
     if (response.sys_message && response.sys_message == 'Invalid User and Password') {
         res.status(200).send({ code: "INVALID_CREDENTIALS", message: "Invalid User and Password"} )
