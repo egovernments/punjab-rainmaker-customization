@@ -357,7 +357,7 @@ function getUpdateTaxSummary(calculation, newTaxAmount, taxHeadCodeField, taxAmo
             taxHead[taxAmountField] = newTaxAmount
             firecessTaxHead = taxHead
             taxAmount += newTaxAmount
-            if (PT_DEBUG_MODE) {
+            if (DEBUG_MODE) {
                 taxHead.oldEstimateAmount = existingTaxAmount
             }
         } else {
