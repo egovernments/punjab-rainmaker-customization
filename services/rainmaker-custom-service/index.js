@@ -462,7 +462,7 @@ async function _createAndUpdateTaxProcessor(request, response) {
 
         let fireCessPercentage = getFireCessPercentage(reqProperty["propertyDetails"][0])
 
-        if (PT_DEBUG_MODE) {
+        if (DEBUG_MODE) {
             demandSearchResponse["Demands"][0]["firecess"] = fireCessPercentage
         }
         let calc = response["Properties"][index]["propertyDetails"][0]["calculation"]
