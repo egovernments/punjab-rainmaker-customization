@@ -23,6 +23,9 @@ function unlinkAccount() {
             'Accept': 'application/json'
         },
         data: {
+            RequestInfo: {
+                "authToken": getAuthToken(),
+            }
         }
     }).then((response) => {
         window.location.assign(window.location.href.replace("unlink", ""))
@@ -46,7 +49,6 @@ function linkAccount() {
             RequestInfo: {
                 "authToken": getAuthToken(),
             }
-
         }
     }).then((response) => {
         let res = response.data;
