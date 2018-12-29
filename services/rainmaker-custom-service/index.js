@@ -8,9 +8,43 @@ const {
 } = require('./utils/asyncMiddleware');
 
 var app = express();
-const PT_DEBUG_MODE = Boolean(process.env.PT_DEBUG_MODE) || false;
+var mustache = require('mustache-express')
+const Cryptr = require('cryptr');
+var {encrypt, jwt_sign } = require('./encrypt')
+
+app.engine('html', mustache())
+app.set('view engine', 'html')
+app.set('views', __dirname + '/templates')
+app.disable('view cache');
+
+// https://codepen.io/graphicfreedom/pen/evaBXm
+
+const DEBUG_MODE = Boolean(process.env.DEBUG_MODE) || false;
 const PT_DEMAND_HOST = process.env.PT_DEMAND_HOST
 const EGOV_MDMS_HOST = process.env.EGOV_MDMS_HOST
+const EGOV_BND_LOGIN_URL = process.env.EGOV_BND_LOGIN_URL
+const EGOV_BND_REDIRECT_URL = process.env.EGOV_BND_REDIRECT_URL
+// const EGOV_BND_API_KEY = process.env.EGOV_BND_API_KEY
+const EGOV_BND_ENCRYPTION_KEY = process.env.EGOV_BND_ENCRYPTION_KEY || "Vol0otuji0X03wSuZGI3zySUzxj7bReQ"
+
+function log(val) {
+    if (DEBUG_MODE) {
+        console.log(val)
+    }
+}
+
+log ("ENCKEY=" + EGOV_BND_ENCRYPTION_KEY)
+
+const cryptr = new Cryptr(EGOV_BND_ENCRYPTION_KEY);
+
+
+function getUserUUID(data) {
+    return data.RequestInfo.userInfo.uuid;
+}
+
+function getUserID(data) {
+    return data.RequestInfo.userInfo.id;
+}
 
 async function getFireCessConfig(tenantId) {
     let fireCessConfig = await request.post({
@@ -39,7 +73,6 @@ async function getFireCessConfig(tenantId) {
         json: true
     })
 
-    console.log("Got firecess config", tenantId, JSON.stringify(fireCessConfig, null, 2))
     return fireCessConfig["MdmsRes"]["PropertyTax"]["FireCess"][0];
 }
 
@@ -83,6 +116,8 @@ var router = express.Router({
     strict: app.get('strict routing')
 });
 
+router.use("/static", express.static("static"))
+
 // Add the `slash()` middleware after your app's `router`, optionally specify
 // an HTTP status code to use when redirecting (defaults to 301).
 app.use('/customization', router);
@@ -101,9 +136,9 @@ var pgp = require('pg-promise')(options);
 const connectionString = {
     host: process.env.DB_HOST || 'localhost',
     port: 5432,
-    database: process.env.DB_NAME || 'db',
-    user: process.env.DB_USER || 'pg_user',
-    password: process.env.DB_PASSWORD || 'password'
+    database: process.env.DB_NAME || 'postgres',
+    user: process.env.DB_USER || 'postgres',
+    password: process.env.DB_PASSWORD || 'postgres'
 };
 
 // var connectionString = 'postgres://localhost:5432/egov_prod_db';
@@ -116,29 +151,92 @@ WHERE eg_pgr_service.status = 'assigned' AND servicerequestid IN (select DISTINC
 IN (select max("when") from eg_pgr_action where assignee NOTNULL group by businesskey) AND assignee = $1);`
 
 router.get('/open/reports/*', function (req, res) {
-    res.sendFile(path.join(__dirname + '/templates/apicall.html'));
+    res.render('apicall.html');
 });
 
-router.post('/protected/reports/lmereport', function (req, res) {
-    let userId = String(req.body.RequestInfo.userInfo.id);
+router.get('/open/bndlogin', function (req, res) {
+    res.render('bndlogin.html');
+});
 
-    console.log("User id is", userId);
-    db.any(query, userId).then(function (data) {
-        console.log(data)
+router.post('/protected/bndlogin/unlinkAccount', asyncMiddleware(async function (req, res) {
+    let uuid = getUserUUID(req.body);
+
+    data = await db.any("DELETE FROM custom_eg_user_metatdata where user_id = $1 and key = $2", [uuid, 'BND_CREDENTIALS']);
+    res.status(200).send({})
+}));
+
+router.post('/protected/bndlogin/linkAccount', asyncMiddleware(async function (req, res) {
+    let username = req.body.username
+    let password = req.body.password
+    let uuid = getUserUUID(req.body);
+    let payload = {
+        Username: username,
+        Password: encrypt(password)
+    }
+
+    log("inside linkAccount")
+    log(payload)
+
+    let response = await request.post(EGOV_BND_LOGIN_URL, {
+        json: payload
     })
 
-    var excel = require('excel4node');
+    log(response)
 
-    var workbook = new excel.Workbook();
+    if (response.sys_message && response.sys_message == 'Invalid User and Password') {
+        res.status(200).send({ code: "INVALID_CREDENTIALS", message: "Invalid User and Password"} )
+        return
+    } else if (response.sys_message && response.sys_message == 'INTERNAL APPLICATION ERROR') {
+        res.status(200).send({ code: "ERROR", message: "Something went wrong"} )
+        return
+    }
 
-    var worksheet = workbook.addWorksheet('Sheet 1');
+    loginID = response["data"][0]["loginID"];
+    data = await db.any("select value from custom_eg_user_metatdata where user_id = $1 and key = $2", [uuid, 'BND_CREDENTIALS']);
+    value = {
+        username,
+        GUID: cryptr.encrypt(loginID)
+    }
 
-    worksheet.cell(1, 1).string('content for display');
+    if (data.length == 0) {
+        await db.any("insert into custom_eg_user_metatdata(key, user_id, value) values ($1, $2, $3:json)",
+            ['BND_CREDENTIALS', uuid, value])
+    } else {
+        await db.any("update custom_eg_user_metatdata set value = $3:json where key = $1 and user_id = $2",
+            ['BND_CREDENTIALS', uuid, value])
+    }
+    res.json({code: "SUCCESS", redirect: EGOV_BND_REDIRECT_URL + jwt_sign({loginID: encrypt(loginID)})})
+}));
 
-    workbook.write('report.xlsx', res);
-});
+router.post('/protected/bndlogin', asyncMiddleware(async function (req, res) {
+    try {
+        let uuid = getUserUUID(req.body);
+        data = await db.any("select value from custom_eg_user_metatdata where user_id = $1 and key = $2", [uuid, 'BND_CREDENTIALS']);
 
-// data = require('./sampleRequest')
+        if (data.length == 0) {
+            res.json({
+                "code": "NO_CREDENTIAL_MAPPING",
+                "message": "Please update your Birth and Death credentials"
+            })
+            return
+        }
+
+        let loginID = cryptr.decrypt(data[0]["value"]["GUID"])
+
+        res.json({
+            code: "SUCCESS",
+            redirect: EGOV_BND_REDIRECT_URL + jwt_sign({loginID: encrypt(loginID)})
+        })
+
+    } catch (ex) {
+        console.log("Exception occured while login", ex)
+        res.json({
+            "code": "ERROR",
+            "message": "Failed to login to BND - " + ex.toString()
+        })
+    }
+
+}));
 
 function getFireCessPercentage(propertyDetails) {
     // let propertyDetails = request["CalculationCriteria"][0]["propertyDetails"][0]
@@ -259,7 +357,7 @@ function getUpdateTaxSummary(calculation, newTaxAmount, taxHeadCodeField, taxAmo
             taxHead[taxAmountField] = newTaxAmount
             firecessTaxHead = taxHead
             taxAmount += newTaxAmount
-            if (PT_DEBUG_MODE) {
+            if (DEBUG_MODE) {
                 taxHead.oldEstimateAmount = existingTaxAmount
             }
         } else {
@@ -336,16 +434,6 @@ function getUpdateTaxSummary(calculation, newTaxAmount, taxHeadCodeField, taxAmo
         }
     }
 
-    console.log({
-        taxAmount,
-        penalty,
-        rebate,
-        exemption,
-        totalAmount,
-        fractionAmount,
-        ceilingTaxHead
-    })
-
     return {
         taxHeads,
         rebate,
@@ -371,11 +459,10 @@ async function _createAndUpdateTaxProcessor(request, response) {
         let tenantId = reqProperty["tenantId"]
 
         let demandSearchResponse = await findDemandForConsumerCode(consumerCode, tenantId, service, request["RequestInfo"])
-        console.log("Existing demand is ", JSON.stringify(demandSearchResponse["Demands"], null, 2))
 
         let fireCessPercentage = getFireCessPercentage(reqProperty["propertyDetails"][0])
 
-        if (PT_DEBUG_MODE) {
+        if (DEBUG_MODE) {
             demandSearchResponse["Demands"][0]["firecess"] = fireCessPercentage
         }
         let calc = response["Properties"][index]["propertyDetails"][0]["calculation"]
@@ -407,7 +494,6 @@ async function _createAndUpdateTaxProcessor(request, response) {
             }
         }
 
-        console.log("Updating demand to ", JSON.stringify(demandSearchResponse["Demands"], null, 2))
         let demandUpdateResponse = await updateDemand(demandSearchResponse["Demands"], request["RequestInfo"])
 
         // let updateTaxHeads = []
@@ -431,22 +517,18 @@ async function _createAndUpdateTaxProcessor(request, response) {
 }
 
 async function _createAndUpdateRequestHandler(req, res) {
-    let { request, response } = getRequestResponse(req)
-    
+    let {
+        request,
+        response
+    } = getRequestResponse(req)
+
     let tenantId = request["Properties"][0]["tenantId"]
 
     let fireCessConfig = await getFireCessConfig(tenantId)
-    console.log("Got fireCessConfig as", JSON.stringify(fireCessConfig, null, 2), tenantId)
     if (fireCessConfig && fireCessConfig.dynamicFirecess && fireCessConfig.dynamicFirecess == true) {
-        console.log("----------------- inside _createAndUpdateRequestHandler --------------")
-        console.log("Existing Request is", JSON.stringify(request, null, 2))
-        console.log("Existing Response is", JSON.stringify(response, null, 2))
         let updatedResponse = await _createAndUpdateTaxProcessor(request, response)
-        console.log("Updated Response is", JSON.stringify(updatedResponse, null, 2))
         res.json(updatedResponse);
-        console.log("----------------- finished _createAndUpdateRequestHandler --------------")
     } else {
-        console.log("Dynamic firecess not applicable for -", tenantId)
         res.json(response)
     }
 }
@@ -454,40 +536,38 @@ async function _createAndUpdateRequestHandler(req, res) {
 function getRequestResponse(req) {
     let request, response
 
-    if (typeof req.body.request === "string" ) {
+    if (typeof req.body.request === "string") {
         request = JSON.parse(req.body.request)
         response = JSON.parse(req.body.response)
     } else {
         request = req.body.request
         response = req.body.response
     }
-    return {request, response}
+    return {
+        request,
+        response
+    }
 }
 
 router.post('/protected/punjab-pt/property/_create', asyncMiddleware(_createAndUpdateRequestHandler))
 
 router.post('/protected/punjab-pt/property/_update', asyncMiddleware(_createAndUpdateRequestHandler))
 
-router.post('/protected/punjab-pt/pt-calculator-v2/_estimate',asyncMiddleware(async function (req, res) {
-    
-    let { request, response } = getRequestResponse(req)
+router.post('/protected/punjab-pt/pt-calculator-v2/_estimate', asyncMiddleware(async function (req, res) {
+
+    let {
+        request,
+        response
+    } = getRequestResponse(req)
 
     let tenantId = request["CalculationCriteria"][0]["tenantId"]
 
     let fireCessConfig = await getFireCessConfig(tenantId)
 
-    if (fireCessConfig && fireCessConfig.dynamicFirecess && fireCessConfig.dynamicFirecess == true) 
-    {
-        console.log("----------------- inside _estimate --------------")
-        console.log("Existing Request is", JSON.stringify(request, null, 2))
-        console.log("Existing Response is", JSON.stringify(response, null, 2))
-
+    if (fireCessConfig && fireCessConfig.dynamicFirecess && fireCessConfig.dynamicFirecess == true) {
         let updatedResponse = _estimateTaxProcessor(request, response)
-        console.log("Updated Response is", JSON.stringify(updatedResponse, null, 2))
         res.json(updatedResponse);
-        console.log("----------------- finished _estimate --------------")
     } else {
-        console.log("Dynamic firecess not applicable for -", tenantId)
         res.json(response);
     }
 }))
