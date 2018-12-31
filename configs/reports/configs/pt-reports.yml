@@ -131,7 +131,7 @@ ReportDefinitions:
                   FROM egcl_receiptdetails
                   GROUP BY receiptheader
       )
-      SELECT rh.tenantid AS tenantid, rh.id, Substring(rh.consumercode, '(.*):') AS propertyid, Substring(rh.consumercode, ':(.*)') AS assessmentnumber, rh.consumercode, rh.receiptdate, To_char(To_timestamp(rh.receiptdate / 1000), 'DD/MM/YYYY') AS transactiondate, bankid AS bankname, receiptnumber, amount, instrumenttype, transactionnumber, receipt_breakup.*
+      SELECT rh.tenantid AS tenantid, rh.id, Substring(rh.consumercode, '(.*):') AS propertyid, Substring(rh.consumercode, ':(.*)') AS assessmentnumber, rh.consumercode, rh.receiptdate, To_char(To_timestamp(rh.receiptdate / 1000), 'DD/MM/YYYY') AS transactiondate, bankid AS bankname, receiptnumber, amount, instrumenttype, transactionnumber, receipt_breakup.*, pt_detail.financialyear
       FROM egcl_receiptheader AS rh
       JOIN egcl_receiptinstrument AS ri ON rh.id = ri.receiptheader
       JOIN egcl_instrumentheader AS ih ON ih.id = ri.instrumentheader
