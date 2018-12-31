@@ -124,20 +124,20 @@ ReportDefinitions:
     source: pt
     isMandatory: false
     searchClause: AND pt_addr.locality IN ($localityArray)
-  query: | 
+  query: |
       -- Use CTE to force query plan, compute & use CTE later
       WITH receipt_breakup AS (
-                  SELECT receiptheader, SUM(CASE WHEN description LIKE 'PT_FIRE_CESS%' THEN cramount ELSE 0 END) as firecess, SUM(CASE WHEN description LIKE 'PT_CANCER_CESS%' THEN cramount ELSE 0 END) as cancercess, SUM(CASE WHEN description LIKE 'PT_TIME_INTEREST%' THEN cramount ELSE 0 END) as interest, SUM(CASE WHEN description LIKE 'PT_TIME_PENALTY%' THEN cramount ELSE 0 END) as penalty, SUM(CASE WHEN description LIKE 'PT_TIME_REBATE%' THEN -dramount ELSE 0 END) as rebate, SUM(CASE WHEN description LIKE 'PT_TAX%' THEN cramount ELSE 0 END) as propertytax, SUM(CASE WHEN description LIKE 'PT_UNIT_USAGE_EXEMPTION%' THEN -dramount ELSE 0 END) as exemption, (SUM(CASE WHEN description LIKE 'PT_DECIMAL_CEILING_CREDIT%' THEN cramount ELSE 0 END) - SUM(CASE WHEN description LIKE 'PT_DECIMAL_CEILING_DEBIT%' THEN dramount ELSE 0 END)) as adjusment 
+                  SELECT receiptheader, SUM(CASE WHEN description LIKE 'PT_FIRE_CESS%' THEN cramount ELSE 0 END) as firecess, SUM(CASE WHEN description LIKE 'PT_CANCER_CESS%' THEN cramount ELSE 0 END) as cancercess, SUM(CASE WHEN description LIKE 'PT_TIME_INTEREST%' THEN cramount ELSE 0 END) as interest, SUM(CASE WHEN description LIKE 'PT_TIME_PENALTY%' THEN cramount ELSE 0 END) as penalty, SUM(CASE WHEN description LIKE 'PT_TIME_REBATE%' THEN -dramount ELSE 0 END) as rebate, SUM(CASE WHEN description LIKE 'PT_TAX%' THEN cramount ELSE 0 END) as propertytax, SUM(CASE WHEN description LIKE 'PT_UNIT_USAGE_EXEMPTION%' THEN -dramount ELSE 0 END) as exemption, (SUM(CASE WHEN description LIKE 'PT_DECIMAL_CEILING_CREDIT%' THEN cramount ELSE 0 END) - SUM(CASE WHEN description LIKE 'PT_DECIMAL_CEILING_DEBIT%' THEN dramount ELSE 0 END)) as adjusment
                   FROM egcl_receiptdetails
                   GROUP BY receiptheader
       )
       SELECT rh.tenantid AS tenantid, rh.id, Substring(rh.consumercode, '(.*):') AS propertyid, Substring(rh.consumercode, ':(.*)') AS assessmentnumber, rh.consumercode, rh.receiptdate, To_char(To_timestamp(rh.receiptdate / 1000), 'DD/MM/YYYY') AS transactiondate, bankid AS bankname, receiptnumber, amount, instrumenttype, transactionnumber, receipt_breakup.*
-      FROM egcl_receiptheader AS rh 
-      JOIN egcl_receiptinstrument AS ri ON rh.id = ri.receiptheader 
-      JOIN egcl_instrumentheader AS ih ON ih.id = ri.instrumentheader 
-      JOIN receipt_breakup ON rh.id = receipt_breakup.receiptheader 
-      JOIN eg_pt_propertydetail_v2 pt_detail ON CONCAT(pt_detail.property, ':', pt_detail.assessmentnumber) = rh.consumercode 
-      JOIN eg_pt_address_v2 pt_addr ON pt_detail.property = pt_addr.property 
+      FROM egcl_receiptheader AS rh
+      JOIN egcl_receiptinstrument AS ri ON rh.id = ri.receiptheader
+      JOIN egcl_instrumentheader AS ih ON ih.id = ri.instrumentheader
+      JOIN receipt_breakup ON rh.id = receipt_breakup.receiptheader
+      JOIN eg_pt_propertydetail_v2 pt_detail ON CONCAT(pt_detail.property, ':', pt_detail.assessmentnumber) = rh.consumercode
+      JOIN eg_pt_address_v2 pt_addr ON pt_detail.property = pt_addr.property
       WHERE rh.tenantid LIKE $tenantid
   orderby: ORDER BY rh.receiptdate DESC
 
@@ -243,19 +243,19 @@ ReportDefinitions:
     wrapper: true
     isMandatory: false
     searchClause: AND usagecategorymajor = $usage
-  query: | 
-    SELECT 
-    initcap(split_part(tenantid, '.', 2)) as tenantid, 
-    COUNT(*) AS totalassessments, 
-    SUM(totalamount) AS totalamount, 
-    SUM(amount) AS totalamountpaid, 
-    SUM(CASE WHEN collectiontype LIKE 'ONLINE' THEN amount ELSE 0 END) AS totalonline, 
-    SUM(CASE WHEN collectiontype LIKE 'COUNTER' THEN amount ELSE 0 END) AS totaloffline, 
-    (SUM(totalamount) - SUM(amount)) AS totalamountdue 
-    FROM eg_pt_propertydetail_v2 AS pd 
-    LEFT OUTER JOIN (SELECT consumercode, totalamount, amount, collectiontype FROM egcl_receiptheader AS rh 
-    LEFT OUTER JOIN egcl_receiptinstrument AS ri ON rh.id = ri.receiptheader 
-    LEFT OUTER JOIN egcl_instrumentheader AS ih ON ri.instrumentheader = ih.id) AS tbl_amounts ON CONCAT(pd.property, ':', pd.assessmentnumber) = tbl_amounts.consumercode 
-    WHERE tenantid LIKE CONCAT(SPLIT_PART('$tenantid', '.', 1), '%') and tenantid != 'pb.testing'
+  query: |
+    SELECT
+    initcap(split_part(tenantid, '.', 2)) as tenantid,
+    COUNT(*) AS totalassessments,
+    SUM(totalamount) AS totalamount,
+    SUM(amount) AS totalamountpaid,
+    SUM(CASE WHEN collectiontype LIKE 'ONLINE' THEN amount ELSE 0 END) AS totalonline,
+    SUM(CASE WHEN collectiontype LIKE 'COUNTER' THEN amount ELSE 0 END) AS totaloffline,
+    (SUM(totalamount) - SUM(amount)) AS totalamountdue
+    FROM eg_pt_propertydetail_v2 AS pd
+    LEFT OUTER JOIN (SELECT consumercode, totalamount, amount, collectiontype FROM egcl_receiptheader AS rh
+    LEFT OUTER JOIN egcl_receiptinstrument AS ri ON rh.id = ri.receiptheader
+    LEFT OUTER JOIN egcl_instrumentheader AS ih ON ri.instrumentheader = ih.id) AS tbl_amounts ON CONCAT(pd.property, ':', pd.assessmentnumber) = tbl_amounts.consumercode
+    WHERE tenantid LIKE CONCAT(SPLIT_PART($tenantid, '.', 1), '%') and tenantid != 'pb.testing'
   groupby: GROUP BY tenantid
   orderby: ORDER BY tenantid, totalamountpaid DESC NULLS LAST
