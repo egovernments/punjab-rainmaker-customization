@@ -203,6 +203,16 @@ ReportDefinitions:
     type: string
     source: pt
     total: true
+  - name: totaloffline
+    label: reports.pt.totaloffline
+    type: string
+    source: pt
+    total: true
+  - name: totalonline
+    label: reports.pt.totalonline
+    type: string
+    source: pt
+    total: true
   - name: totalamountdue
     label: reports.pt.totalamountdue
     type: string
@@ -233,6 +243,19 @@ ReportDefinitions:
     wrapper: true
     isMandatory: false
     searchClause: AND usagecategorymajor = $usage
-  query: SELECT initcap(split_part(tenantid, '.', 2)) as tenantid, COUNT(*) AS totalassessments, SUM(totalamount) AS totalamount, SUM(amount) AS totalamountpaid, (SUM(totalamount) - SUM(amount)) AS totalamountdue FROM eg_pt_propertydetail_v2 AS a LEFT OUTER JOIN (SELECT consumercode, totalamount, amount FROM egcl_receiptheader AS aa LEFT OUTER JOIN egcl_receiptinstrument AS bb ON aa.id = bb.receiptheader LEFT OUTER JOIN egcl_instrumentheader AS cc ON bb.instrumentheader = cc.id) AS b ON CONCAT(a.property, ':', a.assessmentnumber) = b.consumercode WHERE tenantid LIKE CONCAT(SPLIT_PART($tenantid, '.', 1), '%') and tenantid != 'pb.testing'
+  query: | 
+    SELECT 
+    initcap(split_part(tenantid, '.', 2)) as tenantid, 
+    COUNT(*) AS totalassessments, 
+    SUM(totalamount) AS totalamount, 
+    SUM(amount) AS totalamountpaid, 
+    SUM(CASE WHEN collectiontype LIKE 'ONLINE' THEN amount ELSE 0 END) AS totalonline, 
+    SUM(CASE WHEN collectiontype LIKE 'COUNTER' THEN amount ELSE 0 END) AS totaloffline, 
+    (SUM(totalamount) - SUM(amount)) AS totalamountdue 
+    FROM eg_pt_propertydetail_v2 AS pd 
+    LEFT OUTER JOIN (SELECT consumercode, totalamount, amount, collectiontype FROM egcl_receiptheader AS rh 
+    LEFT OUTER JOIN egcl_receiptinstrument AS ri ON rh.id = ri.receiptheader 
+    LEFT OUTER JOIN egcl_instrumentheader AS ih ON ri.instrumentheader = ih.id) AS tbl_amounts ON CONCAT(pd.property, ':', pd.assessmentnumber) = tbl_amounts.consumercode 
+    WHERE tenantid LIKE CONCAT(SPLIT_PART('$tenantid', '.', 1), '%') and tenantid != 'pb.testing'
   groupby: GROUP BY tenantid
   orderby: ORDER BY tenantid, totalamountpaid DESC NULLS LAST
