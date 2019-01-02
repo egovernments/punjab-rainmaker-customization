@@ -219,6 +219,18 @@ ReportDefinitions:
     source: pt
     total: true
   searchParams:
+  - name: fromDate
+    label: reports.pt.fromDate
+    type: epoch
+    source: pt
+    isMandatory: false
+    searchClause: AND receiptdate >= $fromDate
+  - name: toDate
+    label: reports.pt.toDate
+    type: epoch
+    source: pt
+    isMandatory: false
+    searchClause: AND receiptdate <= $toDate
   - name: ulb
     label: ULB
     type: singlevaluelist
@@ -243,18 +255,6 @@ ReportDefinitions:
     wrapper: true
     isMandatory: false
     searchClause: AND usagecategorymajor = $usage
-  - name: fromDate
-    label: reports.pt.fromDate
-    type: epoch
-    source: pt
-    isMandatory: false
-    searchClause: AND receiptdate >= $fromDate
-  - name: toDate
-    label: reports.pt.toDate
-    type: epoch
-    source: pt
-    isMandatory: false
-    searchClause: AND receiptdate <= $toDate
   query: |
       SELECT 
       initcap(split_part(tenantid, '.', 2)) as tenantid, 
