@@ -219,6 +219,18 @@ ReportDefinitions:
     source: pt
     total: true
   searchParams:
+  - name: fromDate
+    label: reports.pt.fromDate
+    type: epoch
+    source: pt
+    isMandatory: false
+    searchClause: AND receiptdate >= $fromDate
+  - name: toDate
+    label: reports.pt.toDate
+    type: epoch
+    source: pt
+    isMandatory: false
+    searchClause: AND receiptdate <= $toDate
   - name: ulb
     label: ULB
     type: singlevaluelist
@@ -244,18 +256,18 @@ ReportDefinitions:
     isMandatory: false
     searchClause: AND usagecategorymajor = $usage
   query: |
-    SELECT
-    initcap(split_part(tenantid, '.', 2)) as tenantid,
-    COUNT(*) AS totalassessments,
-    SUM(totalamount) AS totalamount,
-    SUM(amount) AS totalamountpaid,
-    SUM(CASE WHEN collectiontype LIKE 'ONLINE' THEN amount ELSE 0 END) AS totalonline,
-    SUM(CASE WHEN collectiontype LIKE 'COUNTER' THEN amount ELSE 0 END) AS totaloffline,
-    (SUM(totalamount) - SUM(amount)) AS totalamountdue
-    FROM eg_pt_propertydetail_v2 AS pd
-    LEFT OUTER JOIN (SELECT consumercode, totalamount, amount, collectiontype FROM egcl_receiptheader AS rh
-    LEFT OUTER JOIN egcl_receiptinstrument AS ri ON rh.id = ri.receiptheader
-    LEFT OUTER JOIN egcl_instrumentheader AS ih ON ri.instrumentheader = ih.id) AS tbl_amounts ON CONCAT(pd.property, ':', pd.assessmentnumber) = tbl_amounts.consumercode
-    WHERE tenantid LIKE CONCAT(SPLIT_PART($tenantid, '.', 1), '%') and tenantid != 'pb.testing'
+      SELECT 
+      initcap(split_part(tenantid, '.', 2)) as tenantid, 
+      COUNT(*) AS totalassessments, 
+      SUM(totalamount) AS totalamount, 
+      SUM(amount) AS totalamountpaid, 
+      SUM(CASE WHEN collectiontype LIKE 'ONLINE' THEN amount ELSE 0 END) AS totalonline, 
+      SUM(CASE WHEN collectiontype LIKE 'COUNTER' THEN amount ELSE 0 END) AS totaloffline, 
+      (SUM(totalamount) - SUM(amount)) AS totalamountdue 
+      FROM eg_pt_propertydetail_v2 AS pd 
+      LEFT OUTER JOIN (SELECT consumercode, totalamount, amount, collectiontype, receiptdate FROM egcl_receiptheader AS rh 
+      LEFT OUTER JOIN egcl_receiptinstrument AS ri ON rh.id = ri.receiptheader 
+      LEFT OUTER JOIN egcl_instrumentheader AS ih ON ri.instrumentheader = ih.id) AS tbl_amounts ON CONCAT(pd.property, ':', pd.assessmentnumber) = tbl_amounts.consumercode 
+      WHERE tenantid LIKE CONCAT(SPLIT_PART($tenantid, '.', 1), '%') and tenantid != 'pb.testing'
   groupby: GROUP BY tenantid
   orderby: ORDER BY tenantid, totalamountpaid DESC NULLS LAST
