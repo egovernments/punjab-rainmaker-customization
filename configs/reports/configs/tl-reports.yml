@@ -79,7 +79,7 @@ ReportDefinitions:
     label: report.tl.receipt.totalamount
     type: string
     source: tl
-    total: false
+    total: true
   searchParams:
   - name: fromDate
     label: reports.tl.fromDate
@@ -362,7 +362,7 @@ ReportDefinitions:
     label: report.tl.receipt.totalamount
     type: string
     source: tl
-    total: false
+    total: true
   searchParams:
   - name: fromDate
     label: reports.tl.fromDate
