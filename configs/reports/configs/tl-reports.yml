@@ -114,9 +114,10 @@ ReportDefinitions:
     INNER JOIN eg_tl_tradelicensedetail tld ON tld.tradelicenseid = tl.id 
     INNER JOIN eg_tl_owner tlowner ON tlowner.tradelicensedetailid = tld.id 
     INNER JOIN (
-      SELECT tradelicensedetailid,message.message as tradeTypeName FROM eg_tl_tradeunit 
-      INNER JOIN message ON split_part(message.code,'_',2) = tradeType) tlunit ON tlunit.tradelicensedetailid = tld.id 
-    INNER JOIN eg_user tluser ON tluser.uuid = tlowner.id 
+      SELECT tradelicensedetailid,array_to_string(array_agg(message.message),', ') as tradeTypeName FROM eg_tl_tradeunit
+      INNER JOIN message ON split_part(message.code,'_',2) = tradeType AND message.locale = 'en_IN' GROUP BY 1) tlunit ON tlunit.tradelicensedetailid = tld.id
+
+    INNER JOIN eg_user tluser ON tluser.uuid = tlowner.id
     LEFT OUTER JOIN egcl_receiptheader receipt ON receipt.consumercode = tl.applicationnumber 
     LEFT OUTER JOIN egcl_receiptinstrument as ri ON ri.receiptheader = receipt.id
     LEFT OUTER JOIN egcl_instrumentheader as ih ON ih.id = ri.instrumentheader
