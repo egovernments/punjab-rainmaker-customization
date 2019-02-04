@@ -182,7 +182,7 @@ ReportDefinitions:
         receipt_breakup.*, 
         pt_detail.financialyear,
         To_char(To_timestamp(rh.manualreceiptdate / 1000), 'DD/MM/YYYY') AS g8issuedate,
-        COALESCE(pt_detail.usagecategoryminor, pt_detail.usagecategorymajor) as usagetype,
+        Initcap(COALESCE(pt_detail.usagecategoryminor, pt_detail.usagecategorymajor)) as usagetype,
         manualreceiptnumber as g8receiptno
       FROM egcl_receiptheader AS rh
       JOIN egcl_receiptinstrument AS ri ON rh.id = ri.receiptheader
