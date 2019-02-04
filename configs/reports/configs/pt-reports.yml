@@ -50,8 +50,18 @@ ReportDefinitions:
     type: string
     source: pt
     total: true
+  - name: adhocrebate
+    label: reports.pt.adhocrebate
+    type: string
+    source: pt
+    total: true
   - name: penalty
     label: reports.pt.penalty
+    type: string
+    source: pt
+    total: true
+  - name: adhocpenalty
+    label: reports.pt.adhocpenalty
     type: string
     source: pt
     total: true
@@ -72,6 +82,11 @@ ReportDefinitions:
     total: true
   - name: propertyid
     label: reports.pt.propertyId
+    type: string
+    source: pt
+    total: false
+  - name: usagetype
+    label: reports.pt.usagetype
     type: string
     source: pt
     total: false
@@ -137,13 +152,38 @@ ReportDefinitions:
   query: |
       -- Use CTE to force query plan, compute & use CTE later
       WITH receipt_breakup AS (
-                  SELECT receiptheader, SUM(CASE WHEN description LIKE 'PT_FIRE_CESS%' THEN cramount ELSE 0 END) as firecess, SUM(CASE WHEN description LIKE 'PT_CANCER_CESS%' THEN cramount ELSE 0 END) as cancercess, SUM(CASE WHEN description LIKE 'PT_TIME_INTEREST%' THEN cramount ELSE 0 END) as interest, SUM(CASE WHEN description LIKE 'PT_TIME_PENALTY%' THEN cramount ELSE 0 END) as penalty, SUM(CASE WHEN description LIKE 'PT_TIME_REBATE%' THEN -dramount ELSE 0 END) as rebate, SUM(CASE WHEN description LIKE 'PT_TAX%' THEN cramount ELSE 0 END) as propertytax, SUM(CASE WHEN description LIKE 'PT_UNIT_USAGE_EXEMPTION%' THEN -dramount ELSE 0 END) as exemption, (SUM(CASE WHEN description LIKE 'PT_DECIMAL_CEILING_CREDIT%' THEN cramount ELSE 0 END) - SUM(CASE WHEN description LIKE 'PT_DECIMAL_CEILING_DEBIT%' THEN dramount ELSE 0 END)) as adjusment
+                  SELECT 
+                    receiptheader, 
+                    SUM(CASE WHEN description LIKE 'PT_ADHOC_PENALTY%' THEN cramount ELSE 0 END) as adhocpenalty, 
+                    SUM(CASE WHEN description LIKE 'PT_ADHOC_PENALTY%' THEN -dramount ELSE 0 END) as adhocrebate, 
+                    SUM(CASE WHEN description LIKE 'PT_FIRE_CESS%' THEN cramount ELSE 0 END) as firecess, 
+                    SUM(CASE WHEN description LIKE 'PT_FIRE_CESS%' THEN cramount ELSE 0 END) as firecess, 
+                    SUM(CASE WHEN description LIKE 'PT_CANCER_CESS%' THEN cramount ELSE 0 END) as cancercess, SUM(CASE WHEN description LIKE 'PT_TIME_INTEREST%' THEN cramount ELSE 0 END) as interest, SUM(CASE WHEN description LIKE 'PT_TIME_PENALTY%' THEN cramount ELSE 0 END) as penalty, 
+                    SUM(CASE WHEN description LIKE 'PT_TIME_REBATE%' THEN -dramount ELSE 0 END) as rebate, 
+                    SUM(CASE WHEN description LIKE 'PT_TAX%' THEN cramount ELSE 0 END) as propertytax, 
+                    SUM(CASE WHEN description LIKE 'PT_UNIT_USAGE_EXEMPTION%' THEN -dramount ELSE 0 END) as exemption, 
+                    (SUM(CASE WHEN description LIKE 'PT_DECIMAL_CEILING_CREDIT%' THEN cramount ELSE 0 END) - SUM(CASE WHEN description LIKE 'PT_DECIMAL_CEILING_DEBIT%' THEN dramount ELSE 0 END)) as adjusment
                   FROM egcl_receiptdetails
                   GROUP BY receiptheader
       )
-      SELECT rh.tenantid AS tenantid, rh.id, Substring(rh.consumercode, '(.*):') AS propertyid, Substring(rh.consumercode, ':(.*)') AS assessmentnumber, rh.consumercode, rh.receiptdate, To_char(To_timestamp(rh.receiptdate / 1000), 'DD/MM/YYYY') AS transactiondate, bankid AS bankname, receiptnumber, amount, instrumenttype, transactionnumber, receipt_breakup.*, pt_detail.financialyear,
-      To_char(To_timestamp(rh.manualreceiptdate / 1000), 'DD/MM/YYYY') AS g8issuedate,
-      manualreceiptnumber as g8receiptno
+      SELECT 
+        rh.tenantid AS tenantid, 
+        rh.id, 
+        Substring(rh.consumercode, '(.*):') AS propertyid, 
+        Substring(rh.consumercode, ':(.*)') AS assessmentnumber, 
+        rh.consumercode, 
+        rh.receiptdate, 
+        To_char(To_timestamp(rh.receiptdate / 1000), 'DD/MM/YYYY') AS transactiondate, 
+        bankid AS bankname, 
+        receiptnumber, 
+        amount, 
+        instrumenttype, 
+        transactionnumber, 
+        receipt_breakup.*, 
+        pt_detail.financialyear,
+        To_char(To_timestamp(rh.manualreceiptdate / 1000), 'DD/MM/YYYY') AS g8issuedate,
+        Initcap(COALESCE(pt_detail.usagecategoryminor, pt_detail.usagecategorymajor)) as usagetype,
+        manualreceiptnumber as g8receiptno
       FROM egcl_receiptheader AS rh
       JOIN egcl_receiptinstrument AS ri ON rh.id = ri.receiptheader
       JOIN egcl_instrumentheader AS ih ON ih.id = ri.instrumentheader
