@@ -165,7 +165,7 @@ ReportDefinitions:
                     as propertytax, 
                     SUM(CASE WHEN description LIKE 'PT_UNIT_USAGE_EXEMPTION%' THEN -dramount ELSE 0 END) as exemption, 
                     (SUM(CASE WHEN description LIKE 'PT_DECIMAL_CEILING_CREDIT%' THEN cramount ELSE 0 END)
-                    - (SUM(CASE WHEN description LIKE 'PT_DECIMAL_CEILING_DEBIT%' THEN dramount ELSE 0 END)  as adjusment
+                    - SUM(CASE WHEN description LIKE 'PT_DECIMAL_CEILING_DEBIT%' THEN dramount ELSE 0 END))  as adjusment
                   FROM egcl_receiptdetails
                   WHERE tenantid LIKE $tenantid
                   GROUP BY receiptheader
