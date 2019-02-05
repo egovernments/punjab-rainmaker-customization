@@ -160,10 +160,14 @@ ReportDefinitions:
                     SUM(CASE WHEN description LIKE 'PT_FIRE_CESS%' THEN cramount ELSE 0 END) as firecess, 
                     SUM(CASE WHEN description LIKE 'PT_CANCER_CESS%' THEN cramount ELSE 0 END) as cancercess, SUM(CASE WHEN description LIKE 'PT_TIME_INTEREST%' THEN cramount ELSE 0 END) as interest, SUM(CASE WHEN description LIKE 'PT_TIME_PENALTY%' THEN cramount ELSE 0 END) as penalty, 
                     SUM(CASE WHEN description LIKE 'PT_TIME_REBATE%' THEN -dramount ELSE 0 END) as rebate, 
-                    SUM(CASE WHEN description LIKE 'PT_TAX%' THEN cramount ELSE 0 END) as propertytax, 
+                    (SUM(CASE WHEN description LIKE 'PT_TAX%' THEN cramount ELSE 0 END) 
+                    + SUM(CASE WHEN description LIKE 'PT_DECIMAL_CEILING_DEBIT%' THEN dramount ELSE 0 END)) 
+                    as propertytax, 
                     SUM(CASE WHEN description LIKE 'PT_UNIT_USAGE_EXEMPTION%' THEN -dramount ELSE 0 END) as exemption, 
-                    (SUM(CASE WHEN description LIKE 'PT_DECIMAL_CEILING_CREDIT%' THEN cramount ELSE 0 END) - SUM(CASE WHEN description LIKE 'PT_DECIMAL_CEILING_DEBIT%' THEN dramount ELSE 0 END)) as adjusment
+                    (SUM(CASE WHEN description LIKE 'PT_DECIMAL_CEILING_CREDIT%' THEN cramount ELSE 0 END)
+                    - SUM(CASE WHEN description LIKE 'PT_DECIMAL_CEILING_DEBIT%' THEN dramount ELSE 0 END))  as adjusment
                   FROM egcl_receiptdetails
+                  WHERE tenantid LIKE $tenantid
                   GROUP BY receiptheader
       )
       SELECT 
