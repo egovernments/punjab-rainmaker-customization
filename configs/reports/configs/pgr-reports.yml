@@ -606,7 +606,7 @@ ReportDefinitions:
       SUM (CASE WHEN status in ('closed', 'resolved') and (resolvedtime - opentime) >= 14 * 86400 * 1000 THEN 1 ELSE 0 END) as resolvedoutsidesla,
       SUM (CASE WHEN status in ('assigned', 'reassignrequested') THEN 1 ELSE 0 END) as assigned,
       SUM (CASE WHEN status in ('open') THEN 1 ELSE 0 END) as open,
-      SUM (CASE WHEN status in ('assigned', 'reassignrequested', 'open') and (resolvedtime - opentime) >= 14 * 86400 * 1000 THEN 1 ELSE 0 END) as outsidesla
+      SUM (CASE WHEN status in ('assigned', 'reassignrequested', 'open') and (extract(epoch from now()) * 1000 - opentime) >= 14 * 86400 * 1000 THEN 1 ELSE 0 END) as outsidesla
       from pgr_data
       WHERE 1=1
   orderby: ORDER BY assignee NULLS FIRST
