@@ -82,13 +82,13 @@ ReportDefinitions:
     total: true
   searchParams:
   - name: fromReceiptDate
-    label: reports.tl.fromReceiptDate
+    label: reports.tl.fromDate
     type: epoch
     source: tl
     isMandatory: false
     searchClause: AND receipt.createddate >= $fromReceiptDate
   - name: toReceiptDate
-    label: reports.tl.toReceiptDate
+    label: reports.tl.toDate
     type: epoch
     source: tl
     isMandatory: false
