@@ -81,18 +81,18 @@ ReportDefinitions:
     source: tl
     total: true
   searchParams:
-  - name: fromReceiptDate
+  - name: fromDate
     label: reports.tl.fromDate
     type: epoch
     source: tl
     isMandatory: false
-    searchClause: AND receipt.createddate >= $fromReceiptDate
-  - name: toReceiptDate
+    searchClause: AND receipt.createddate >= $fromDate
+  - name: toDate
     label: reports.tl.toDate
     type: epoch
     source: tl
     isMandatory: false
-    searchClause: AND receipt.createddate  <= $toReceiptDate 
+    searchClause: AND receipt.createddate  <= $toDate 
   query: |
     SELECT 
       licensenumber,
