@@ -5,6 +5,16 @@ ReportDefinitions:
   version: 1.0.0
   moduleName: rainmaker-tl
   sourceColumns:
+  - name: receiptnumber
+    label: report.tl.receiptnumber
+    type: string
+    source: tl
+    total: false
+  - name: receiptIssueDate
+    label: report.tl.receiptissuedate
+    type: string
+    source: tl
+    total: false
   - name: licensenumber
     label: report.tl.licensenumber
     type: string
@@ -22,6 +32,31 @@ ReportDefinitions:
     total: false
   - name: mobilenumber
     label: report.tl.user.mobilenumber
+    type: string
+    source: tl
+    total: false
+  - name: bankid
+    label: report.tl.bankid
+    type: string
+    source: tl
+    total: false
+  - name: branchname
+    label: report.tl.branchname
+    type: string
+    source: tl
+    total: false
+  - name: transactionumber
+    label: report.tl.transactionumber
+    type: string
+    source: tl
+    total: false
+  - name: instrumenttype
+    label: report.tl.instrumenttype
+    type: string
+    source: tl
+    total: false
+  - name: status
+    label: report.tl.status
     type: string
     source: tl
     total: false
@@ -44,23 +79,51 @@ ReportDefinitions:
     label: report.tl.receipt.totalamount
     type: string
     source: tl
-    total: false
+    total: true
   searchParams:
-  - name: fromDate
-    label: reports.tl.fromDate
+  - name: fromReceiptDate
+    label: reports.tl.fromReceiptDate
     type: epoch
     source: tl
     isMandatory: false
-    searchClause: AND issueddate >= $fromDate
-  - name: toDate
-    label: reports.tl.toDate
+    searchClause: AND receipt.createddate >= $fromReceiptDate
+  - name: toReceiptDate
+    label: reports.tl.toReceiptDate
     type: epoch
     source: tl
     isMandatory: false
-    searchClause: AND issueddate <= $toDate
-  query: SELECT licensenumber,to_char(To_timestamp(issueddate / 1000), 'DD/MM/YYYY') as formattedIssuedDate,tl.tradeName,tradeTypeName,acc, name,mobilenumber,totalamount FROM eg_tl_tradelicense tl INNER JOIN eg_tl_tradelicensedetail tld ON tld.tradelicenseid = tl.id INNER JOIN eg_tl_owner tlowner ON tlowner.tradelicensedetailid = tld.id INNER JOIN (SELECT tradelicensedetailid,message.message as tradeTypeName FROM eg_tl_tradeunit INNER JOIN message ON split_part(message.code,'_',2) = tradeType) tlunit ON tlunit.tradelicensedetailid = tld.id INNER JOIN eg_user tluser ON tluser.uuid = tlowner.id LEFT OUTER JOIN egcl_receiptheader receipt ON receipt.consumercode = tl.applicationnumber LEFT OUTER JOIN (SELECT tradelicensedetailid,array_to_string(array_agg(message.message),',') AS acc FROM eg_tl_accessory LEFT OUTER JOIN message ON split_part(message.code,'_',2) = accessorycategory AND message.locale = 'en_IN' GROUP BY 1 ) tlacc ON tlacc.tradelicensedetailid = tld.id WHERE tl.Status = 'APPROVED' AND tl.tenantId LIKE $tenantid
+    searchClause: AND receipt.createddate  <= $toReceiptDate 
+  query: |
+    SELECT 
+      licensenumber,
+      to_char(To_timestamp(issueddate / 1000), 'DD/MM/YYYY') as formattedIssuedDate,
+      tl.tradeName,
+      initcap(tl.status) as status,
+      to_char(To_timestamp(receipt.receiptdate / 1000), 'DD/MM/YYYY') as receiptIssueDate , 
+      receipt.receiptnumber,
+      tradeTypeName,
+      acc, 
+      name,
+      mobilenumber,
+      ih.bankid,
+      ih.branchname,
+      ih.transactionnumber,
+      ih.instrumenttype,
+      totalamount 
+    FROM eg_tl_tradelicense tl 
+    INNER JOIN eg_tl_tradelicensedetail tld ON tld.tradelicenseid = tl.id 
+    INNER JOIN eg_tl_owner tlowner ON tlowner.tradelicensedetailid = tld.id 
+    INNER JOIN (
+      SELECT tradelicensedetailid,array_to_string(array_agg(message.message),', ') as tradeTypeName FROM eg_tl_tradeunit
+      INNER JOIN message ON split_part(message.code,'_',2) = tradeType AND message.locale = 'en_IN' GROUP BY 1) tlunit ON tlunit.tradelicensedetailid = tld.id
 
-
+    INNER JOIN eg_user tluser ON tluser.uuid = tlowner.id
+    LEFT OUTER JOIN egcl_receiptheader receipt ON receipt.consumercode = tl.applicationnumber 
+    LEFT OUTER JOIN egcl_receiptinstrument as ri ON ri.receiptheader = receipt.id
+    LEFT OUTER JOIN egcl_instrumentheader as ih ON ih.id = ri.instrumentheader
+    LEFT OUTER JOIN (SELECT tradelicensedetailid,array_to_string(array_agg(message.message),',') AS acc FROM eg_tl_accessory 
+    LEFT OUTER JOIN message ON split_part(message.code,'_',2) = accessorycategory AND message.locale = 'en_IN' GROUP BY 1 ) tlacc ON tlacc.tradelicensedetailid = tld.id 
+    WHERE tl.Status in ('APPROVED', 'PAID', 'CANCELLED') AND tl.tenantId LIKE $tenantid
 
 - reportName: TradeWiseCollectionReport
   summary: Collection according to tradeTypes
@@ -105,7 +168,7 @@ ReportDefinitions:
     source: tl
     isMandatory: false
     searchClause: AND issueddate <= $toDate
-  query:  SELECT COUNT(applicationNumber) as transactionNumber,tradeSubType,SUM(onl.totalAmount) as online,SUM(offl.totalAmount) as offline, COALESCE(SUM(onl.totalAmount),0)+ COALESCE(SUM(offl.totalAmount),0) as total FROM eg_tl_tradelicense tl INNER JOIN eg_tl_tradelicensedetail tld ON tld.tradelicenseid = tl.id INNER JOIN (SELECT tradelicensedetailid,message.message as tradeSubType FROM eg_tl_tradeunit LEFT OUTER JOIN message ON CONCAT('TL_',split_part(tradeType, '.', 2)) = message.code AND message.locale='en_IN') tlunit ON tlunit.tradelicensedetailid = tld.id LEFT OUTER JOIN (SELECT * FROM egcl_receiptheader WHERE collectiontype = 'ONLINE') AS onl ON onl.consumercode = tl.applicationnumber LEFT OUTER JOIN (SELECT * FROM egcl_receiptheader WHERE collectiontype = 'COUNTER') AS offl ON offl.consumercode = tl.applicationnumber WHERE tl.status IN ('APPROVED','PAID','REJECTED') AND tl.tenantId LIKE $tenantid
+  query:  SELECT COUNT(applicationNumber) as transactionNumber,tradeSubType,SUM(onl.totalAmount) as online,SUM(offl.totalAmount) as offline, COALESCE(SUM(onl.totalAmount),0)+ COALESCE(SUM(offl.totalAmount),0) as total FROM eg_tl_tradelicense tl INNER JOIN eg_tl_tradelicensedetail tld ON tld.tradelicenseid = tl.id INNER JOIN (SELECT tradelicensedetailid,message.message as tradeSubType FROM eg_tl_tradeunit LEFT OUTER JOIN message ON CONCAT('TL_',split_part(tradeType, '.', 2)) = message.code AND message.locale='en_IN') tlunit ON tlunit.tradelicensedetailid = tld.id LEFT OUTER JOIN (SELECT * FROM egcl_receiptheader WHERE collectiontype = 'ONLINE') AS onl ON onl.consumercode = tl.applicationnumber LEFT OUTER JOIN (SELECT * FROM egcl_receiptheader WHERE collectiontype = 'COUNTER') AS offl ON offl.consumercode = tl.applicationnumber WHERE tl.status IN ('APPROVED','PAID','REJECTED', 'CANCELLED') AND tl.tenantId LIKE $tenantid
   groupby: GROUP BY tradeSubType
 
 
@@ -244,7 +307,7 @@ ReportDefinitions:
     wrapper: true
     isMandatory: false
     searchClause: AND tl.tenantId = $ulb
-  query:   SELECT COUNT(applicationNumber) as transactionNumber,tradeSubType,SUM(onl.totalAmount) as online,SUM(offl.totalAmount) as offline, COALESCE(SUM(onl.totalAmount),0)+ COALESCE(SUM(offl.totalAmount),0) as total,initcap(split_part(tl.tenantId, '.', 2)) as tenantId FROM eg_tl_tradelicense tl INNER JOIN eg_tl_tradelicensedetail tld ON tld.tradelicenseid = tl.id INNER JOIN (SELECT tradelicensedetailid,message.message as tradeSubType FROM eg_tl_tradeunit LEFT OUTER JOIN message ON CONCAT('TL_',split_part(tradeType, '.', 2)) = message.code AND message.locale='en_IN') tlunit ON tlunit.tradelicensedetailid = tld.id LEFT OUTER JOIN (SELECT * FROM egcl_receiptheader WHERE collectiontype = 'ONLINE') AS onl ON onl.consumercode = tl.applicationnumber LEFT OUTER JOIN (SELECT * FROM egcl_receiptheader WHERE collectiontype = 'COUNTER') AS offl ON offl.consumercode = tl.applicationnumber WHERE tl.status IN ('APPROVED','PAID','REJECTED')
+  query:   SELECT COUNT(applicationNumber) as transactionNumber,tradeSubType,SUM(onl.totalAmount) as online,SUM(offl.totalAmount) as offline, COALESCE(SUM(onl.totalAmount),0)+ COALESCE(SUM(offl.totalAmount),0) as total,initcap(split_part(tl.tenantId, '.', 2)) as tenantId FROM eg_tl_tradelicense tl INNER JOIN eg_tl_tradelicensedetail tld ON tld.tradelicenseid = tl.id INNER JOIN (SELECT tradelicensedetailid,message.message as tradeSubType FROM eg_tl_tradeunit LEFT OUTER JOIN message ON CONCAT('TL_',split_part(tradeType, '.', 2)) = message.code AND message.locale='en_IN') tlunit ON tlunit.tradelicensedetailid = tld.id LEFT OUTER JOIN (SELECT * FROM egcl_receiptheader WHERE collectiontype = 'ONLINE') AS onl ON onl.consumercode = tl.applicationnumber LEFT OUTER JOIN (SELECT * FROM egcl_receiptheader WHERE collectiontype = 'COUNTER') AS offl ON offl.consumercode = tl.applicationnumber WHERE tl.status IN ('APPROVED','PAID','REJECTED', 'CANCELLED')
   groupby: GROUP BY tl.tenantId,tradeSubType
   orderby: ORDER BY tl.tenantId asc
 
@@ -298,7 +361,7 @@ ReportDefinitions:
     label: report.tl.receipt.totalamount
     type: string
     source: tl
-    total: false
+    total: true
   searchParams:
   - name: fromDate
     label: reports.tl.fromDate
