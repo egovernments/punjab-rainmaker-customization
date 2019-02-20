@@ -217,6 +217,10 @@ ReportDefinitions:
     apiURL: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?moduleName=RAINMAKER-PGR&masterName=ServiceDefs&tenantId=$tenantId
     keyOrder: serviceCode,department,slaHours
     tableName: tbl_dept
+  - entity: $.TenantBoundary[0].boundary
+    apiURL: http://egov-location.egov:8080/egov-location/location/v11/boundarys/_search?hierarchyTypeCode=ADMIN&boundaryType=Locality&tenantId=$tenantId
+    keyOrder: name,code
+    tableName: tbl_boundary
   sourceColumns:
   - name: department
     label: reports.rainmaker-pgr.department
@@ -245,6 +249,11 @@ ReportDefinitions:
     total: false
   - name: phone
     label: reports.rainmaker-pgr.phone
+    type: string
+    source: eg_pgr_service
+    total: false
+  - name: locality
+    label: reports.rainmaker-pgr.locality
     type: string
     source: eg_pgr_service
     total: false
@@ -291,6 +300,7 @@ ReportDefinitions:
     regexp_replace(eg_pgr_service.servicecode, '([a-z])([A-Z])', '\1 \2','g') AS servicecode, 
     servicerequestid AS complaintNo, 
     to_char(to_timestamp(TRUNC(CAST(eg_pgr_service.createdtime AS bigint) / 1000)), 'DD/MM/YYYY') AS date, 
+    (SELECT boundary_def.name FROM (VALUES tbl_boundary) AS boundary_def(name,code) where code=eg_pgr_address.mohalla) as locality, 
     eg_user.name, 
     phone, 
     eg_pgr_service.landmark, 
