@@ -131,7 +131,7 @@ ReportDefinitions:
     (SELECT name from eg_user eas where eas.id::varchar in (select assignee from eg_pgr_action epa1 where epa1.businesskey = eg_pgr_service.servicerequestid and epa1.action in ('assign','reassign') and "when" = (select max("when") from eg_pgr_action epa where epa.businesskey = eg_pgr_service.servicerequestid and action in ('assign','reassign') group by epa.businesskey) and epa1.businesskey = eg_pgr_service.servicerequestid)) as lastassignedto, 
     (SELECT deptmap_def.name FROM (VALUES tbl_def_dept) AS deptmap_def(name,code) INNER JOIN (VALUES tbl_dept) AS deptmap(serviceCode, department, slaHours) on deptmap.serviceCode = eg_pgr_service.servicecode and deptmap_def.code = deptmap.department) AS department, 
     regexp_replace(servicecode, '([a-z])([A-Z])', '\1 \2','g') AS servicecode, 
-    (SELECT boundary_def.name FROM (VALUES tbl_boundary) AS boundary_def(name,tbl_boundary) where code=eg_pgr_address.mohalla) as locality, 
+    (SELECT boundary_def.name FROM (VALUES tbl_boundary) AS boundary_def(name,code) where code=eg_pgr_address.mohalla) as locality, 
     servicerequestid AS complaintNo, 
     to_char(to_timestamp(TRUNC(CAST(eg_pgr_service.createdtime AS bigint) / 1000)), 'DD/MM/YYYY') AS date, 
     eg_user.name, 
