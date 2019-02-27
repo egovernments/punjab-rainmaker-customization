@@ -1,0 +1,24 @@
+SearchDefinitions:
+ moduleName: rainmaker-pt-customsearch-punjab
+ summary: Vasika number search for punjab
+ version: 1.0.0
+ definitions:
+ - name: searchPropertyIDByVasikaNo
+   query: 
+    baseQuery: select propertyid from eg_pt_property_v2 where additionaldetails is not null and additionaldetails !='null'; 
+    groupBy:    
+    orderBy: 
+   searchParams:
+    condition: AND
+    params:
+    - name: tenantid
+      isMandatory: true
+      jsonPath: $.searchCriteria.tenantId
+    - name: additionaldetails->>'vasikano'
+      isMandatory: true
+      jsonPath: $.searchCriteria.vasikano
+
+   output:
+    jsonFormat: {"ResponseInfo": {}}
+    outJsonPath: $.services
+    responseInfoPath: $.ResponseInfo
