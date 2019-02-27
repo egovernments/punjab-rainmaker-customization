@@ -8,7 +8,7 @@ SearchDefinitions:
     baseQuery: |
       select 
         array_to_json(array_agg(row_to_json(vasika_results))) 
-      from (select property as propertyid from eg_pt_property_v2
+      from (select propertyid from eg_pt_property_v2
       $where and
         additionaldetails is not null and additionaldetails !='null'
       ) vasika_results
