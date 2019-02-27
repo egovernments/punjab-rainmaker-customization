@@ -7,7 +7,7 @@ SearchDefinitions:
    query: 
     baseQuery: |
         select 
-          propertyid 
+          array_to_json(array_agg(row_to_json(propertyid)))
         from eg_pt_property_v2 
         where 
           additionaldetails is not null and additionaldetails !='null' 
