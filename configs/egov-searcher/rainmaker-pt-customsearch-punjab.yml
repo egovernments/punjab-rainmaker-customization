@@ -5,7 +5,13 @@ SearchDefinitions:
  definitions:
  - name: searchPropertyIDByVasikaNo
    query: 
-    baseQuery: select propertyid from eg_pt_property_v2 where additionaldetails is not null and additionaldetails !='null'; 
+    baseQuery: |
+        select 
+          propertyid 
+        from eg_pt_property_v2 
+        where 
+          additionaldetails is not null and additionaldetails !='null' 
+          and $where
     groupBy:    
     orderBy: 
    searchParams:
