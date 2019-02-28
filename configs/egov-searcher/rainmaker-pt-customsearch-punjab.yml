@@ -23,6 +23,9 @@ SearchDefinitions:
     - name: additionaldetails->>'vasikaNo'
       isMandatory: true
       jsonPath: $.searchCriteria.vasikaNo
+    - name: propertyid
+      isMandatory: false
+      jsonPath: $.searchCriteria.propertyId
 
    output:
     jsonFormat: {"ResponseInfo": {}}
