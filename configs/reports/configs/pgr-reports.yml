@@ -548,6 +548,94 @@ ReportDefinitions:
   groupby: GROUP BY tenantid,deptmap_def.name
   orderby: ORDER BY tenantid,deptmap_def.name
 
+- reportName: ULBDepartmentReport
+  summary: Fetches complaint stats based on department types for a ULB
+  version: 1.0.0
+  moduleName: rainmaker-pgr
+  externalService:
+  - entity: $.MdmsRes.RAINMAKER-PGR.ServiceDefs
+    apiURL: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?moduleName=RAINMAKER-PGR&masterName=ServiceDefs&tenantId=$tenantId
+    keyOrder: serviceCode,department,slaHours
+    tableName: tbl_dept
+  - entity: $.MdmsRes.common-masters.Department
+    apiURL: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?moduleName=common-masters&masterName=Department&tenantId=$tenantId
+    keyOrder: name,code
+    tableName: tbl_def_dept
+  sourceColumns:    
+  - name: department
+    label: reports.rainmaker-pgr.department
+    type: string
+    source: eg_pgr_service
+    total: false
+  - name: rejected
+    label: reports.rainmaker-pgr.rejected
+    type: string
+    source: pgr_data
+    total: true
+  - name: resolved
+    label: reports.rainmaker-pgr.resolved
+    type: string
+    source: pgr_data
+    total: true
+  - name: resolvedoutsidesla
+    label: reports.rainmaker-pgr.resolvedoutsidesla
+    type: string
+    source: pgr_data
+    total: true
+  - name: open
+    label: reports.rainmaker-pgr.open
+    type: string
+    source: pgr_data
+    total: true
+  - name: assigned
+    label: reports.rainmaker-pgr.assigned
+    type: string
+    source: pgr_data
+    total: true
+  - name: outsidesla
+    label: reports.rainmaker-pgr.outsidesla
+    type: string
+    source: pgr_data
+    total: true
+  searchParams:
+  - name: fromDate
+    label: reports.rainmaker-pgr.datefrom
+    type: epoch
+    source: eg_pgr_service
+    isMandatory: false
+    searchClause: AND pgr_data.createdtime >= $fromDate
+  - name: toDate
+    label: reports.rainmaker-pgr.dateto
+    type: epoch
+    source: eg_pgr_service
+    isMandatory: false
+    searchClause: AND pgr_data.createdtime <= $toDate
+  query: |
+    with pgr_data as (select  
+      servicerequestid, 
+      servicecode,
+      createdtime, 
+      status,
+      (select max("when") from eg_pgr_action where action='resolve' and businesskey = servicerequestid) as resolvedtime,
+      (select min("when") from eg_pgr_action where action='open' and businesskey = servicerequestid) as opentime
+    from eg_pgr_service as ps
+    where 
+    tenantid = $tenantid)
+
+    select 
+      deptmap_def.name,
+      count(*) as total,
+      SUM (CASE WHEN status in ('rejected') THEN 1 ELSE 0 END) as rejected,
+      SUM (CASE WHEN status in ('closed', 'resolved') THEN 1 ELSE 0 END) as resolved,
+      SUM (CASE WHEN status in ('closed', 'resolved') and (resolvedtime - opentime) >= 14 * 86400 * 1000 THEN 1 ELSE 0 END) as resolvedoutsidesla,
+      SUM (CASE WHEN status in ('assigned', 'reassignrequested') THEN 1 ELSE 0 END) as assigned,
+      SUM (CASE WHEN status in ('open') THEN 1 ELSE 0 END) as open,
+      SUM (CASE WHEN status in ('assigned', 'reassignrequested', 'open') and (extract(epoch from now()) * 1000 - opentime) >= 14 * 86400 * 1000 THEN 1 ELSE 0 END) as outsidesla
+      from pgr_data
+      INNER JOIN (VALUES tbl_dept) AS deptmap(serviceCode, department, slaHours) ON deptmap.serviceCode = pgr_data.servicecode
+      INNER JOIN (VALUES tbl_def_dept) AS deptmap_def(name,code) ON deptmap.department = deptmap_def.code
+  groupby: GROUP BY deptmap_def.name
+  orderby: ORDER BY deptmap_def.name
 
 - reportName: ULBEmployeeWiseReport
   summary: Fetches employee wise assignment report
