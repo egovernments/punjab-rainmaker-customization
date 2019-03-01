@@ -623,7 +623,7 @@ ReportDefinitions:
     tenantid = $tenantid)
 
     select 
-      deptmap_def.name,
+      deptmap_def.name as department,
       count(*) as total,
       SUM (CASE WHEN status in ('rejected') THEN 1 ELSE 0 END) as rejected,
       SUM (CASE WHEN status in ('closed', 'resolved') THEN 1 ELSE 0 END) as resolved,
