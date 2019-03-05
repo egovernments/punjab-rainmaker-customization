@@ -582,6 +582,13 @@
     }
   },
   "TradeLicense": {
+    "ApplicationType": {
+      "masterName": "ApplicationType",
+      "isStateLevel": true,
+      "uniqueKeys": [
+        "$.code"
+      ]
+    },
     "TradeType": {
       "masterName": "TradeType",
       "isStateLevel": true,
