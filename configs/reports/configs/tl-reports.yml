@@ -127,8 +127,7 @@ ReportDefinitions:
     LEFT OUTER JOIN (SELECT tradelicensedetailid,array_to_string(array_agg(message.message),',') AS acc FROM eg_tl_accessory 
     LEFT OUTER JOIN message ON split_part(message.code,'_',2) = accessorycategory AND message.locale = 'en_IN' GROUP BY 1 ) tlacc ON tlacc.tradelicensedetailid = tld.id 
     WHERE tl.Status in ('APPROVED', 'PAID', 'CANCELLED') AND tl.tenantId LIKE $tenantid
-
-ReportDefinitions:
+    
 - reportName: TradeLicenseCancelledRegistryReport
   summary: TL Cancelled Receipt Register Report
   version: 1.0.0
