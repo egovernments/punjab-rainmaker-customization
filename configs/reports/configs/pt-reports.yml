@@ -405,6 +405,11 @@ ReportDefinitions:
   version: 1.0.0
   moduleName: rainmaker-pt
   sourceColumns:
+  - name: tenantid
+    label: reports.pt.ulbName
+    type: string
+    source: pt
+    total: false
   - name: receiptnumber
     label: reports.pt.receiptNo
     type: string
@@ -570,7 +575,7 @@ ReportDefinitions:
                   GROUP BY receiptheader
       )
       SELECT 
-        rh.tenantid AS tenantid, 
+        initcap(split_part(rh.tenantid, '.', 2)) as tenantid,
         rh.id, 
         Substring(rh.consumercode, '(.*):') AS propertyid, 
         Substring(rh.consumercode, ':(.*)') AS assessmentnumber, 
