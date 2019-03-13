@@ -639,7 +639,22 @@ ReportDefinitions:
     wrapper: true
     isMandatory: false
     searchClause: AND usagecategorymajor = $usage
-  query: SELECT tenantid, COUNT(*) AS totalassessments, SUM(totalamount) AS totalamount, SUM(amount) AS totalamountpaid, (SUM(totalamount) - SUM(amount)) AS totalamountdue FROM eg_pt_propertydetail_v2 AS a LEFT OUTER JOIN (SELECT consumercode, totalamount, amount FROM egcl_receiptheader AS aa LEFT OUTER JOIN egcl_receiptinstrument AS bb ON aa.id = bb.receiptheader LEFT OUTER JOIN egcl_instrumentheader AS cc ON bb.instrumentheader = cc.id) AS b ON CONCAT(a.property, ':', a.assessmentnumber) = b.consumercode WHERE tenantid = $tenantid
+  query: |
+    SELECT 
+      tenantid, 
+      COUNT(*) AS totalassessments, 
+      SUM(totalamount) AS totalamount, 
+      SUM(amount) AS totalamountpaid, 
+      (SUM(totalamount) - SUM(amount)) AS totalamountdue 
+    FROM eg_pt_propertydetail_v2 AS pd 
+    LEFT OUTER JOIN 
+      (SELECT consumercode, totalamount, amount FROM egcl_receiptheader AS rh 
+      LEFT OUTER JOIN egcl_receiptinstrument AS ri ON rh.id = ri.receiptheader 
+      LEFT OUTER JOIN egcl_instrumentheader AS ih ON ri.instrumentheader = ih.id 
+      and ih.instrumentstatus	 != 'CANCELLED' 
+      where rh.status != 'Cancelled'
+      ) AS instrument_data ON CONCAT(pd.property, ':', pd.assessmentnumber) = instrument_data.consumercode 
+    WHERE tenantid = $tenantid
   groupby: GROUP BY tenantid
   orderby: ORDER BY tenantid, totalamountpaid DESC NULLS LAST
 
@@ -727,7 +742,9 @@ ReportDefinitions:
       FROM eg_pt_propertydetail_v2 AS pd 
       LEFT OUTER JOIN (SELECT consumercode, totalamount, amount, collectiontype, receiptdate FROM egcl_receiptheader AS rh 
       LEFT OUTER JOIN egcl_receiptinstrument AS ri ON rh.id = ri.receiptheader 
-      LEFT OUTER JOIN egcl_instrumentheader AS ih ON ri.instrumentheader = ih.id) AS tbl_amounts ON CONCAT(pd.property, ':', pd.assessmentnumber) = tbl_amounts.consumercode 
+      LEFT OUTER JOIN egcl_instrumentheader AS ih ON ri.instrumentheader = ih.id and ih.instrumentstatus	 != 'CANCELLED' 
+	    where rh.status != 'Cancelled'
+	    ) AS tbl_amounts ON CONCAT(pd.property, ':', pd.assessmentnumber) = tbl_amounts.consumercode 
       WHERE tenantid LIKE CONCAT(SPLIT_PART($tenantid, '.', 1), '%') and tenantid != 'pb.testing'
   groupby: GROUP BY tenantid
   orderby: ORDER BY tenantid, totalamountpaid DESC NULLS LAST
