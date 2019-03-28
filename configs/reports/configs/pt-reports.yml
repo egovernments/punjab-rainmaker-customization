@@ -27,57 +27,57 @@ ReportDefinitions:
     total: false
   - name: amount
     label: reports.pt.amount
-    type: string
+    type: currency
     source: pt
     total: true
   - name: propertytax
     label: reports.pt.propertyTax
-    type: string
+    type: currency
     source: pt
     total: true
   - name: firecess
     label: reports.pt.fireCess
-    type: string
+    type: currency
     source: pt
     total: true
   - name: cancercess
     label: reports.pt.cancerCess
-    type: string
+    type: currency
     source: pt
     total: true
   - name: rebate
     label: reports.pt.rebate
-    type: string
+    type: currency
     source: pt
     total: true
   - name: adhocrebate
     label: reports.pt.adhocrebate
-    type: string
+    type: currency
     source: pt
     total: true
   - name: penalty
     label: reports.pt.penalty
-    type: string
+    type: currency
     source: pt
     total: true
   - name: adhocpenalty
     label: reports.pt.adhocpenalty
-    type: string
+    type: currency
     source: pt
     total: true
   - name: interest
     label: reports.pt.interest
-    type: string
+    type: currency
     source: pt
     total: true
   - name: exemption
     label: reports.pt.exemption
-    type: string
+    type: currency
     source: pt
     total: true
   - name: adjusment
     label: reports.pt.roundoff
-    type: string
+    type: currency
     source: pt
     total: true
   - name: propertyid
@@ -229,57 +229,57 @@ ReportDefinitions:
     total: false
   - name: amount
     label: reports.pt.amount
-    type: string
+    type: currency
     source: pt
     total: true
   - name: propertytax
     label: reports.pt.propertyTax
-    type: string
+    type: currency
     source: pt
     total: true
   - name: firecess
     label: reports.pt.fireCess
-    type: string
+    type: currency
     source: pt
     total: true
   - name: cancercess
     label: reports.pt.cancerCess
-    type: string
+    type: currency
     source: pt
     total: true
   - name: rebate
     label: reports.pt.rebate
-    type: string
+    type: currency
     source: pt
     total: true
   - name: adhocrebate
     label: reports.pt.adhocrebate
-    type: string
+    type: currency
     source: pt
     total: true
   - name: penalty
     label: reports.pt.penalty
-    type: string
+    type: currency
     source: pt
     total: true
   - name: adhocpenalty
     label: reports.pt.adhocpenalty
-    type: string
+    type: currency
     source: pt
     total: true
   - name: interest
     label: reports.pt.interest
-    type: string
+    type: currency
     source: pt
     total: true
   - name: exemption
     label: reports.pt.exemption
-    type: string
+    type: currency
     source: pt
     total: true
   - name: adjusment
     label: reports.pt.roundoff
-    type: string
+    type: currency
     source: pt
     total: true
   - name: propertyid
@@ -412,12 +412,12 @@ ReportDefinitions:
     total: true
   - name: totalamountpaid
     label: reports.pt.totalamountpaid
-    type: string
+    type: currency
     source: pt
     total: true
   - name: totalamountdue
     label: reports.pt.totalamountdue
-    type: string
+    type: currency
     source: pt
     total: true
   searchParams:
@@ -493,57 +493,57 @@ ReportDefinitions:
     total: false
   - name: amount
     label: reports.pt.amount
-    type: string
+    type: currency
     source: pt
     total: true
   - name: propertytax
     label: reports.pt.propertyTax
-    type: string
+    type: currency
     source: pt
     total: true
   - name: firecess
     label: reports.pt.fireCess
-    type: string
+    type: currency
     source: pt
     total: true
   - name: cancercess
     label: reports.pt.cancerCess
-    type: string
+    type: currency
     source: pt
     total: true
   - name: rebate
     label: reports.pt.rebate
-    type: string
+    type: currency
     source: pt
     total: true
   - name: adhocrebate
     label: reports.pt.adhocrebate
-    type: string
+    type: currency
     source: pt
     total: true
   - name: penalty
     label: reports.pt.penalty
-    type: string
+    type: currency
     source: pt
     total: true
   - name: adhocpenalty
     label: reports.pt.adhocpenalty
-    type: string
+    type: currency
     source: pt
     total: true
   - name: interest
     label: reports.pt.interest
-    type: string
+    type: currency
     source: pt
     total: true
   - name: exemption
     label: reports.pt.exemption
-    type: string
+    type: currency
     source: pt
     total: true
   - name: adjusment
     label: reports.pt.roundoff
-    type: string
+    type: currency
     source: pt
     total: true
   - name: propertyid
@@ -670,27 +670,27 @@ ReportDefinitions:
     total: false
   - name: totalassessments
     label: reports.pt.totalassessments
-    type: string
+    type: currency
     source: pt
     total: true
   - name: totalamountpaid
     label: reports.pt.totalamountpaid
-    type: string
+    type: currency
     source: pt
     total: true
   - name: totaloffline
     label: reports.pt.totaloffline
-    type: string
+    type: currency
     source: pt
     total: true
   - name: totalonline
     label: reports.pt.totalonline
-    type: string
+    type: currency
     source: pt
     total: true
   - name: totalamountdue
     label: reports.pt.totalamountdue
-    type: string
+    type: currency
     source: pt
     total: true
   searchParams:
@@ -761,22 +761,22 @@ ReportDefinitions:
     total: true
   - name: totalamountpaid
     label: reports.pt.totalamountpaid
-    type: string
+    type: currency
     source: pt
     total: true
   - name: totaloffline
     label: reports.pt.totaloffline
-    type: string
+    type: currency
     source: pt
     total: true
   - name: totalonline
     label: reports.pt.totalonline
-    type: string
+    type: currency
     source: pt
     total: true
   - name: totalamountdue
     label: reports.pt.totalamountdue
-    type: string
+    type: currency
     source: pt
     total: true
   searchParams:

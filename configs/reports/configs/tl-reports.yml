@@ -197,7 +197,7 @@ ReportDefinitions:
     label: report.tl.tradetype
     type: string
     source: tl
-    total: true
+    total: false
   - name: acc
     label: report.tl.accessorycategories
     type: string
@@ -210,7 +210,7 @@ ReportDefinitions:
     total: false
   - name: totalamount
     label: report.tl.receipt.totalamount
-    type: string
+    type: currency
     source: tl
     total: true
   searchParams:
@@ -326,7 +326,7 @@ ReportDefinitions:
     label: report.tl.tradetype
     type: string
     source: tl
-    total: true
+    total: false
   - name: acc
     label: report.tl.accessorycategories
     type: string
@@ -339,7 +339,7 @@ ReportDefinitions:
     total: false
   - name: totalamount
     label: report.tl.receipt.totalamount
-    type: string
+    type: currency
     source: tl
     total: true
   searchParams:
@@ -408,17 +408,17 @@ ReportDefinitions:
     total: false
   - name: online
     label: report.tl.online.collection
-    type: string
+    type: currency
     source: tl
     total: true
   - name: offline
     label: report.tl.offline.collection
-    type: string
+    type: currency
     source: tl
     total: true
   - name: total
     label: report.tl.totalCollection
-    type: string
+    type: currency
     source: tl
     total: true
   searchParams:
@@ -470,7 +470,7 @@ ReportDefinitions:
     total: false
   - name: total
     label: report.tl.total
-    type: string
+    type: currency
     source: tl
     total: true
   searchParams:
@@ -502,7 +502,7 @@ ReportDefinitions:
     total: false
   - name: total
     label: report.tl.total
-    type: string
+    type: currency
     source: tl
     total: true
   searchParams:
@@ -554,17 +554,17 @@ ReportDefinitions:
     total: true
   - name: online
     label: report.tl.online.collection
-    type: string
+    type: currency
     source: tl
     total: true
   - name: offline
     label: report.tl.offline.collection
-    type: string
+    type: currency
     source: tl
     total: true
   - name: total
     label: report.tl.totalCollection
-    type: string
+    type: currency
     source: tl
     total: true
   searchParams:
@@ -642,7 +642,7 @@ ReportDefinitions:
     label: report.tl.tradetype
     type: string
     source: tl
-    total: true
+    total: false
   - name: acc
     label: report.tl.accessorycategories
     type: string
@@ -655,7 +655,7 @@ ReportDefinitions:
     total: false
   - name: totalamount
     label: report.tl.receipt.totalamount
-    type: string
+    type: currency
     source: tl
     total: true
   searchParams:
