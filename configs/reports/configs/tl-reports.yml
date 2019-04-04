@@ -553,6 +553,7 @@ ReportDefinitions:
         SUM(CASE status when 'APPLIED' then 1 else 0 end) as applied,
         SUM(CASE status when 'CANCELLED' then 1 else 0 end) as cancelled
       FROM eg_tl_tradelicense as tl
+      WHERE tl.tenantid != 'pb.testing'
   groupby: GROUP BY tenantid
   orderby: ORDER BY tenantid
 
