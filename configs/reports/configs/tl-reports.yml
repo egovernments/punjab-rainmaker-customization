@@ -210,7 +210,7 @@ ReportDefinitions:
     total: false
   - name: totalamount
     label: report.tl.receipt.totalamount
-    type: currency
+    type: number
     source: tl
     total: true
   searchParams:
@@ -339,7 +339,7 @@ ReportDefinitions:
     total: false
   - name: totalamount
     label: report.tl.receipt.totalamount
-    type: currency
+    type: number
     source: tl
     total: true
   searchParams:
@@ -408,17 +408,17 @@ ReportDefinitions:
     total: false
   - name: online
     label: report.tl.online.collection
-    type: currency
+    type: number
     source: tl
     total: true
   - name: offline
     label: report.tl.offline.collection
-    type: currency
+    type: number
     source: tl
     total: true
   - name: total
     label: report.tl.totalCollection
-    type: currency
+    type: number
     source: tl
     total: true
   searchParams:
@@ -470,7 +470,7 @@ ReportDefinitions:
     total: false
   - name: total
     label: report.tl.total
-    type: currency
+    type: number
     source: tl
     total: true
   searchParams:
@@ -502,32 +502,32 @@ ReportDefinitions:
     total: false
   - name: initiated
     label: TL_INITIATED
-    type: currency
+    type: number
     source: tl
     total: true
   - name: applied
     label: TL_APPLIED
-    type: currency
+    type: number
     source: tl
     total: true
   - name: paid
     label: TL_PAID
-    type: currency
+    type: number
     source: tl
     total: true
   - name: approved
     label: TL_APPROVED
-    type: currency
+    type: number
     source: tl
     total: true
   - name: rejected
     label: TL_REJECTED
-    type: currency
+    type: number
     source: tl
     total: true
   - name: cancelled
     label: TL_CANCELLED
-    type: currency
+    type: number
     source: tl
     total: true
   searchParams:
@@ -569,7 +569,7 @@ ReportDefinitions:
     total: false
   - name: total
     label: report.tl.total
-    type: currency
+    type: number
     source: tl
     total: true
   searchParams:
@@ -621,17 +621,17 @@ ReportDefinitions:
     total: true
   - name: online
     label: report.tl.online.collection
-    type: currency
+    type: number
     source: tl
     total: true
   - name: offline
     label: report.tl.offline.collection
-    type: currency
+    type: number
     source: tl
     total: true
   - name: total
     label: report.tl.totalCollection
-    type: currency
+    type: number
     source: tl
     total: true
   searchParams:
@@ -722,7 +722,7 @@ ReportDefinitions:
     total: false
   - name: totalamount
     label: report.tl.receipt.totalamount
-    type: currency
+    type: number
     source: tl
     total: true
   searchParams:
