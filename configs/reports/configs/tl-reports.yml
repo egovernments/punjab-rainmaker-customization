@@ -501,6 +501,11 @@ ReportDefinitions:
     type: string
     source: tl
     total: false
+  - name: total
+    label: report.tl.total
+    type: string
+    source: tl
+    total: false
   - name: initiated
     label: TL_INITIATED
     type: number
@@ -547,6 +552,7 @@ ReportDefinitions:
   query: |
      SELECT 
         initcap(split_part(tenantId, '.', 2)) as tenantId, 
+        count(*) as total,
         SUM(CASE status when 'REJECTED' then 1 else 0 end) as rejected,
         SUM(CASE status when 'INITIATED' then 1 else 0 end) as initiated,
         SUM(CASE status when 'PAID' then 1 else 0 end) as paid,
