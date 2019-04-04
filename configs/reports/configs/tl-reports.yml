@@ -490,6 +490,7 @@ ReportDefinitions:
   groupby: GROUP BY message.message
   orderby: ORDER BY case message.message when 'Pending Application' then 1 when 'Pending Payment' then 2 when 'Pending Approval' then 3 when 'Approved' then 4 when 'Rejected' then 5 when 'Cancelled' then 6 else 7 end
 
+
 - reportName: TradeLicenseULBWiseApplicationStatusReport
   summary: Nummber of applications by there status
   version: 1.0.0
@@ -502,32 +503,32 @@ ReportDefinitions:
     total: false
   - name: initiated
     label: TL_INITIATED
-    type: currency
+    type: number
     source: tl
     total: true
   - name: applied
     label: TL_APPLIED
-    type: currency
+    type: number
     source: tl
     total: true
   - name: paid
     label: TL_PAID
-    type: currency
+    type: number
     source: tl
     total: true
   - name: approved
     label: TL_APPROVED
-    type: currency
+    type: number
     source: tl
     total: true
   - name: rejected
     label: TL_REJECTED
-    type: currency
+    type: number
     source: tl
     total: true
   - name: cancelled
     label: TL_CANCELLED
-    type: currency
+    type: number
     source: tl
     total: true
   searchParams:
@@ -553,6 +554,7 @@ ReportDefinitions:
         SUM(CASE status when 'APPLIED' then 1 else 0 end) as applied,
         SUM(CASE status when 'CANCELLED' then 1 else 0 end) as cancelled
       FROM eg_tl_tradelicense as tl
+      WHERE tl.tenantid != 'pb.testing'
   groupby: GROUP BY tenantid
   orderby: ORDER BY tenantid
 
