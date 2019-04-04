@@ -490,6 +490,73 @@ ReportDefinitions:
   groupby: GROUP BY message.message
   orderby: ORDER BY case message.message when 'Pending Application' then 1 when 'Pending Payment' then 2 when 'Pending Approval' then 3 when 'Approved' then 4 when 'Rejected' then 5 when 'Cancelled' then 6 else 7 end
 
+- reportName: TradeLicenseULBWiseApplicationStatusReport
+  summary: Nummber of applications by there status
+  version: 1.0.0
+  moduleName: rainmaker-tl
+  sourceColumns:
+  - name: tenantId
+    label: report.tl.tenantid
+    type: string
+    source: tl
+    total: false
+  - name: initiated
+    label: TL_INITIATED
+    type: currency
+    source: tl
+    total: true
+  - name: applied
+    label: TL_APPLIED
+    type: currency
+    source: tl
+    total: true
+  - name: paid
+    label: TL_PAID
+    type: currency
+    source: tl
+    total: true
+  - name: approved
+    label: TL_APPROVED
+    type: currency
+    source: tl
+    total: true
+  - name: rejected
+    label: TL_REJECTED
+    type: currency
+    source: tl
+    total: true
+  - name: cancelled
+    label: TL_CANCELLED
+    type: currency
+    source: tl
+    total: true
+  searchParams:
+  - name: fromDate
+    label: reports.tl.fromDate
+    type: epoch
+    source: tl
+    isMandatory: false
+    searchClause: AND tl.lastmodifiedtime >= $fromDate
+  - name: toDate
+    label: reports.tl.toDate
+    type: epoch
+    source: tl
+    isMandatory: false
+    searchClause: AND tl.lastmodifiedtime <= $toDate
+  query: |
+     SELECT 
+        initcap(split_part(tenantId, '.', 2)) as tenantId, 
+        SUM(CASE status when 'REJECTED' then 1 else 0 end) as rejected,
+        SUM(CASE status when 'INITIATED' then 1 else 0 end) as initiated,
+        SUM(CASE status when 'PAID' then 1 else 0 end) as paid,
+        SUM(CASE status when 'APPROVED' then 1 else 0 end) as approved,
+        SUM(CASE status when 'APPLIED' then 1 else 0 end) as applied,
+        SUM(CASE status when 'CANCELLED' then 1 else 0 end) as cancelled
+      FROM eg_tl_tradelicense as tl
+  groupby: GROUP BY tenantid
+  orderby: ORDER BY tenantid
+
+
 - reportName: StateLevelStatus
   summary: Nummber of applications by there status state level
   version: 1.0.0
