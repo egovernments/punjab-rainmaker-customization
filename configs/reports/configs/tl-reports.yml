@@ -15,6 +15,16 @@ ReportDefinitions:
     type: string
     source: tl
     total: false
+  - name: g8issuedate
+    label: report.tl.g8issuedate
+    type: string
+    source: pt
+    total: false
+  - name: g8receiptno
+    label: report.tl.g8receiptno
+    type: string
+    source: pt
+    total: false
   - name: licensenumber
     label: report.tl.licensenumber
     type: string
@@ -109,7 +119,10 @@ ReportDefinitions:
       ih.branchname,
       ih.transactionnumber,
       ih.instrumenttype,
-      totalamount 
+      totalamount,
+      To_char(To_timestamp(receipt.manualreceiptdate / 1000), 'DD/MM/YYYY') AS g8issuedate,
+      receipt.manualreceiptnumber as g8receiptno
+
     FROM eg_tl_tradelicense tl 
     INNER JOIN eg_tl_tradelicensedetail tld ON tld.tradelicenseid = tl.id 
     INNER JOIN (
