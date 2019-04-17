@@ -6,7 +6,21 @@ SearchDefinitions:
 
  - name: searchNewTaxPayments
    query:
-    baseQuery: select array_to_json(array_agg(row_to_json(data))) from (select pt.propertyid as propertyid, pt.oldpropertyid as oldpropertyid, rh.receiptnumber as receiptnumber, pt.tenantid as tenantid from egcl_receiptheader AS rh INNER JOIN eg_pt_property_v2 AS pt ON pt.propertyid = split_part(rh.consumercode, ':', 1) AND pt.oldpropertyid IS NOT NULL AND pt.oldpropertyid != '' $where) data
+    baseQuery: |
+      select array_to_json(array_agg(row_to_json(data))) from (
+        select
+          pt.propertyid as propertyid,
+          pt.oldpropertyid as oldpropertyid,
+          rh.receiptnumber as receiptnumber,
+          pt.tenantid as tenantid
+        from
+        egcl_receiptheader AS rh
+        INNER JOIN eg_pt_property_v2 AS pt
+        ON pt.propertyid = split_part(rh.consumercode, ':', 1)
+        AND
+        pt.oldpropertyid IS NOT NULL
+        AND
+        pt.oldpropertyid != '' $where) data
     groupBy:
     orderBy:
    searchParams:
@@ -21,9 +35,9 @@ SearchDefinitions:
       jsonPath: $.searchCriteria.toDate
       operator: LE
     - name: pt.tenantid
-      isMandatory: false
+      isMandatory: true
       jsonPath: $.searchCriteria.tenantId
-      operator: LIKE
+      operator: =
 
 
    output:
