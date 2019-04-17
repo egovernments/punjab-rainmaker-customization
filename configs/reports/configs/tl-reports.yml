@@ -509,7 +509,7 @@ ReportDefinitions:
     total: false
   - name: total
     label: report.tl.total
-    type: number
+    type: string
     source: tl
     total: true
   searchParams:
