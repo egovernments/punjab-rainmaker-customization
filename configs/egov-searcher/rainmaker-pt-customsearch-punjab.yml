@@ -31,3 +31,50 @@ SearchDefinitions:
     jsonFormat: {"ResponseInfo": {}}
     outJsonPath: $.services
     responseInfoPath: $.ResponseInfo
+ - name: searchLocalitiesUsedInRevenue
+   query: 
+    baseQuery: |
+      select 
+              array_to_json(array_agg(localities)) 
+            from (
+            select distinct locality from eg_tl_address $where
+      union
+      select distinct locality from eg_pt_address_v2 $where
+      ) as localities
+    groupBy:    
+    orderBy: 
+   searchParams:
+    condition: AND
+    params:
+    - name: tenantid
+      isMandatory: true
+      jsonPath: $.searchCriteria.tenantId
+
+   output:
+    jsonFormat: {"ResponseInfo": {}}
+    outJsonPath: $.services
+    responseInfoPath: $.ResponseInfo
+ - name: searchLocalitiesUsedInAdmin
+   query: 
+    baseQuery: |
+      select 
+        array_to_json(array_agg(localities)) 
+        from (
+            select distinct eg_pgr_address.mohalla from eg_pgr_address $where
+            ) as localities
+    groupBy:    
+    orderBy: 
+   searchParams:
+    condition: AND
+    params:
+    - name: tenantid
+      isMandatory: true
+      jsonPath: $.searchCriteria.tenantId
+
+   output:
+    jsonFormat: {"ResponseInfo": {}}
+    outJsonPath: $.services
+    responseInfoPath: $.ResponseInfo
+
+
+    
