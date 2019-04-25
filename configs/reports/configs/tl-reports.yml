@@ -435,11 +435,6 @@ ReportDefinitions:
   version: 1.0.0
   moduleName: rainmaker-tl
   sourceColumns:
-  - name: tradeSubType
-    label: report.tl.tradeType
-    type: string
-    source: tl
-    total: false
   - name: transactionNumber
     label: report.tl.totalTransaction
     type: string
@@ -466,30 +461,25 @@ ReportDefinitions:
     type: epoch
     source: tl
     isMandatory: false
-    searchClause: AND issueddate >= $fromDate
+    searchClause: AND rh.receiptdate >= $fromDate
   - name: toDate
     label: reports.tl.toDate
     type: epoch
     source: tl
     isMandatory: false
-    searchClause: AND issueddate <= $toDate
+    searchClause: AND rh.receiptdate <= $toDate
   query: |
-    SELECT 
-      COUNT(applicationNumber) as transactionNumber,
-      tradeSubType,
-      SUM(onl.totalAmount) as online,
-      SUM(offl.totalAmount) as offline, 
-      COALESCE(SUM(onl.totalAmount),0) + COALESCE(SUM(offl.totalAmount),0) as total 
-    FROM eg_tl_tradelicense tl 
-    INNER JOIN eg_tl_tradelicensedetail tld ON tld.tradelicenseid = tl.id 
-    INNER JOIN (
-      SELECT tradelicensedetailid,message.message as tradeSubType FROM eg_tl_tradeunit 
-      LEFT OUTER JOIN message ON CONCAT('TL_',split_part(tradeType, '.', 2)) = message.code AND message.locale='en_IN') tlunit ON tlunit.tradelicensedetailid = tld.id 
-      LEFT OUTER JOIN (SELECT * FROM egcl_receiptheader WHERE collectiontype = 'ONLINE' and status != 'Cancelled') AS onl ON onl.consumercode = tl.applicationnumber 
-      LEFT OUTER JOIN (SELECT * FROM egcl_receiptheader WHERE collectiontype = 'COUNTER' and status != 'Cancelled') AS offl ON offl.consumercode = tl.applicationnumber 
-    WHERE tl.status IN ('APPROVED','PAID','REJECTED', 'CANCELLED') 
-    AND tl.tenantId LIKE $tenantid
-  groupby: GROUP BY tradeSubType
+    select 
+      sum(ih.amount) as total,
+      count(*) as transactionNumber,
+      sum(case collectiontype when 'COUNTER' then amount else 0 end) as offline,
+      sum(case collectiontype when 'ONLINE' then amount else 0 end) as online
+      initcap(split_part(rh.tenantId, '.', 2)) as tenantId 
+      from egcl_receiptheader as rh
+    inner join egcl_receiptinstrument as ri on ri.receiptheader = rh.id
+    inner join egcl_instrumentheader as ih on ih.id = ri.instrumentheader
+    where rh.businessdetails = 'TL' and rh.status !='Cancelled' and rh.tenantid !='pb.testing'
+    AND rh.tenantId LIKE $tenantid
 
 
 - reportName: TradeLicenseApplicationStatusReport
@@ -649,11 +639,6 @@ ReportDefinitions:
     type: string
     source: tl
     total: false
-  - name: tradeSubType
-    label: report.tl.tradeType
-    type: string
-    source: tl
-    total: false
   - name: transactionNumber
     label: report.tl.totalTransaction
     type: string
@@ -680,13 +665,13 @@ ReportDefinitions:
     type: epoch
     source: tl
     isMandatory: false
-    searchClause: AND issueddate >= $fromDate
+    searchClause: AND rh.receiptdate >= $fromDate
   - name: toDate
     label: reports.tl.toDate
     type: epoch
     source: tl
     isMandatory: false
-    searchClause: AND issueddate <= $toDate
+    searchClause: AND rh.receiptdate <= $toDate
   - name: ulb
     label: ULB
     type: singlevaluelist
@@ -696,23 +681,18 @@ ReportDefinitions:
     isMandatory: false
     searchClause: AND tl.tenantId = $ulb
   query: |
-    SELECT 
-      COUNT(applicationNumber) as transactionNumber,
-      tradeSubType,
-      SUM(onl.totalAmount) as online,
-      SUM(offl.totalAmount) as offline, 
-      COALESCE(SUM(onl.totalAmount),0)+ COALESCE(SUM(offl.totalAmount),0) as total,
-      initcap(split_part(tl.tenantId, '.', 2)) as tenantId 
-    FROM eg_tl_tradelicense tl 
-    INNER JOIN eg_tl_tradelicensedetail tld ON tld.tradelicenseid = tl.id 
-    INNER JOIN 
-      (SELECT tradelicensedetailid,message.message as tradeSubType FROM eg_tl_tradeunit 
-      LEFT OUTER JOIN message ON CONCAT('TL_',split_part(tradeType, '.', 2)) = message.code AND message.locale='en_IN') tlunit ON tlunit.tradelicensedetailid = tld.id 
-      LEFT OUTER JOIN (SELECT * FROM egcl_receiptheader WHERE collectiontype = 'ONLINE' and status != 'Cancelled') AS onl ON onl.consumercode = tl.applicationnumber 
-      LEFT OUTER JOIN (SELECT * FROM egcl_receiptheader WHERE collectiontype = 'COUNTER' and status != 'Cancelled') AS offl ON offl.consumercode = tl.applicationnumber WHERE tl.status IN ('APPROVED','PAID','REJECTED', 'CANCELLED')
-
-  groupby: GROUP BY tl.tenantId,tradeSubType
-  orderby: ORDER BY tl.tenantId asc
+    select 
+      sum(ih.amount) as total,
+      count(*) as transactionNumber,
+      sum(case collectiontype when 'COUNTER' then amount else 0 end) as offline,
+      sum(case collectiontype when 'ONLINE' then amount else 0 end) as online
+      initcap(split_part(rh.tenantId, '.', 2)) as tenantId 
+      from egcl_receiptheader as rh
+    inner join egcl_receiptinstrument as ri on ri.receiptheader = rh.id
+    inner join egcl_instrumentheader as ih on ih.id = ri.instrumentheader
+    where rh.businessdetails = 'TL' and rh.status !='Cancelled' and rh.tenantid !='pb.testing'
+  groupby: GROUP BY rh.tenantId
+  orderby: ORDER BY rh.tenantId asc
 
 
 - reportName: StateLevelTradeLicenseRegistryReport
