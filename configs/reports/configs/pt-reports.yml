@@ -80,6 +80,11 @@ ReportDefinitions:
     type: string
     source: pt
     total: true
+  - name: pendingamount
+    label: reports.pt.pendingamount
+    type: currency
+    source: pt
+    total: true
   - name: propertyid
     label: reports.pt.propertyId
     type: string
