@@ -366,8 +366,9 @@ ReportDefinitions:
                     SUM(CASE WHEN description LIKE 'PT_ADHOC_PENALTY%' THEN cramount ELSE 0 END) as adhocpenalty, 
                     SUM(CASE WHEN description LIKE 'PT_ADHOC_PENALTY%' THEN -dramount ELSE 0 END) as adhocrebate, 
                     SUM(CASE WHEN description LIKE 'PT_FIRE_CESS%' THEN cramount ELSE 0 END) as firecess, 
-                    SUM(CASE WHEN description LIKE 'PT_FIRE_CESS%' THEN cramount ELSE 0 END) as firecess, 
-                    SUM(CASE WHEN description LIKE 'PT_CANCER_CESS%' THEN cramount ELSE 0 END) as cancercess, SUM(CASE WHEN description LIKE 'PT_TIME_INTEREST%' THEN cramount ELSE 0 END) as interest, SUM(CASE WHEN description LIKE 'PT_TIME_PENALTY%' THEN cramount ELSE 0 END) as penalty, 
+                    SUM(CASE WHEN description LIKE 'PT_CANCER_CESS%' THEN cramount ELSE 0 END) as cancercess, 
+                    SUM(CASE WHEN description LIKE 'PT_TIME_INTEREST%' THEN cramount ELSE 0 END) as interest, 
+                    SUM(CASE WHEN description LIKE 'PT_TIME_PENALTY%' THEN cramount ELSE 0 END) as penalty, 
                     SUM(CASE WHEN description LIKE 'PT_TIME_REBATE%' THEN -dramount ELSE 0 END) as rebate, 
                     (SUM(CASE WHEN description LIKE 'PT_TAX%' THEN cramount ELSE 0 END) 
                     + SUM(CASE WHEN description LIKE 'PT_DECIMAL_CEILING_DEBIT%' THEN dramount ELSE 0 END)) 
@@ -394,6 +395,7 @@ ReportDefinitions:
         instrumenttype, 
         transactionnumber, 
         receipt_breakup.*, 
+        rh.totalamount - ih.amount AS pendingamount,
         pt_detail.financialyear,
         To_char(To_timestamp(rh.manualreceiptdate / 1000), 'DD/MM/YYYY') AS g8issuedate,
         Initcap(COALESCE(pt_detail.usagecategoryminor, pt_detail.usagecategorymajor)) as usagetype,
