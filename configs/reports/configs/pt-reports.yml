@@ -835,7 +835,7 @@ ReportDefinitions:
   orderby: ORDER BY tenantid, totalamountpaid DESC NULLS LAST
 
 
-- reportName: ulbLevelReport
+- reportName: ULBPTDataDumpReport
   summary: ULB level report
   version: 1.0.0
   moduleName: rainmaker-pt
@@ -943,27 +943,6 @@ ReportDefinitions:
     source: pt
     isMandatory: false
     searchClause: AND rh.receiptdate <= $toDate
-  - name: paymentMode
-    label: Payment Mode
-    type: singlevaluelist
-    pattern: 'list://Cash:Cash,Online:Online,Card:Card,DD:DD,Cheque:Cheque'
-    source: pt
-    isMandatory: false
-    searchClause: AND instrumenttype = $paymentMode
-  - name: financialyear
-    label: Financial Year
-    type: singlevaluelist
-    pattern: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?tenantId=$tenantid&moduleName=egf-master&masterName=FinancialYear|$.MdmsRes.egf-master.FinancialYear.[?(@.module=='PT')].code|$.MdmsRes.egf-master.FinancialYear.[?(@.module=='PT')].name
-    source: pt
-    wrapper: true
-    isMandatory: false
-    searchClause: AND financialyear = $financialyear
-  - name: localityArray
-    label: reports.pt.zoneList
-    type: boundarylist
-    source: pt
-    isMandatory: false
-    searchClause: AND pt_addr.locality IN ($localityArray)
   query: |
     --S.no    Service Name	ULB    Property Tax Unique ID    Date Of Transcation    Receipt Number	Existing Property ID    Owner Name    Guardian Name    Total Area (SQ.YARD)    Covered  Area/Built Area (SQ.FEET)    Floors    Occupancy (Rented,Self /Unoccupied)    Type Of Property	Mobile Number    Transcation Mode of Payment    Payment Amount    Payment Date    Email Id	Address
     with eg_pt_unit_v2_ot as (
