@@ -1,7 +1,7 @@
 var express = require('express'),
     slash = require('express-slash');
 var bodyParser = require('body-parser')
-
+var url = require("url");
 var request = require('request-promise');
 const {
     asyncMiddleware
@@ -21,6 +21,10 @@ app.disable('view cache');
 
 const DEBUG_MODE = Boolean(process.env.DEBUG_MODE) || false;
 const PT_DEMAND_HOST = process.env.PT_DEMAND_HOST
+
+const PT_ZERO_ASSESSMENTYEAR = process.env.PT_ZERO_ASSESSMENTYEAR || "2013-14";
+const PT_ZERO_TENANTS = (process.env.PT_ZERO_TENANTS || "pb.testing").split(",");
+
 const EGOV_MDMS_HOST = process.env.EGOV_MDMS_HOST
 const EGOV_BND_LOGIN_URL = process.env.EGOV_BND_LOGIN_URL
 const EGOV_BND_REDIRECT_URL = process.env.EGOV_BND_REDIRECT_URL
@@ -48,7 +52,7 @@ function getUserID(data) {
 
 async function getFireCessConfig(tenantId) {
     let fireCessConfig = await request.post({
-        url: EGOV_MDMS_HOST + "egov-mdms-service/v1/_search?tenantId=" + tenantId,
+        url: url.resolve(EGOV_MDMS_HOST , "/egov-mdms-service/v1/_search?tenantId=" + tenantId),
         body: {
             RequestInfo: {
                 "apiId": "Rainmaker-custom-service",
@@ -300,8 +304,8 @@ function calculateNewFireCess(taxHeads, firecess_percent, taxField, taxHeadCodeF
 
 async function findDemandForConsumerCode(consumerCode, tenantId, service, RequestInfo) {
     let demandSearchResponse = await request.post({
-        url: PT_DEMAND_HOST + "/billing-service/demand/_search?tenantId=" + tenantId +
-            "&consumerCode=" + consumerCode + "&businessService=" + service,
+        url: url.resolve(PT_DEMAND_HOST , "/billing-service/demand/_search?tenantId=" + tenantId +
+            "&consumerCode=" + consumerCode + "&businessService=" + service),
         body: {
             RequestInfo
         },
@@ -313,7 +317,7 @@ async function findDemandForConsumerCode(consumerCode, tenantId, service, Reques
 
 async function updateDemand(demands, RequestInfo) {
     let demandUpdateResponse = await request.post({
-        url: PT_DEMAND_HOST + "/billing-service/demand/_update",
+        url: url.resolve(PT_DEMAND_HOST + "/billing-service/demand/_update"),
         body: {
             RequestInfo,
             "Demands": demands
@@ -325,6 +329,8 @@ async function updateDemand(demands, RequestInfo) {
 }
 
 function _estimateTaxProcessor(request, response) {
+    response = _estimateZeroTaxProcessor(request, response);
+    q
     let index = 0;
     for (let calc of request["CalculationCriteria"]) {
         let fireCessPercentage = getFireCessPercentage(calc["property"]["propertyDetails"][0])
@@ -341,6 +347,40 @@ function _estimateTaxProcessor(request, response) {
 
     return response;
 }
+
+function _estimateZeroTaxProcessor(request, response) {
+    let index = 0;
+    
+    for (let calc of response["Calculation"]) {
+        let assessmentYear = request["CalculationCriteria"][index]["assessmentYear"]
+        let tenantId = request["CalculationCriteria"][index]["tenantId"]
+        let newTotal = 0;
+
+        if (!(assessmentYear == PT_ZERO_ASSESSMENTYEAR && PT_ZERO_TENANTS.indexOf(tenantId) >= 0))
+            continue
+
+        let taxHeads = calc["taxHeadEstimates"];
+
+        for (taxHead of taxHeads) {
+            if (taxHead.taxHeadCode != "PT_ADHOC_PENALTY") {
+                taxHead.estimateAmount = 0
+            } else {
+                newTotal = taxHead.estimateAmount
+            }
+        }
+
+        calc["totalAmount"] = newTotal
+        calc["taxAmount"] = 0
+        calc["rebate"] = 0
+        calc["penalty"] = newTotal
+        calc["exemption"] = 0
+
+        index++
+    }
+
+    return response;
+}
+
 
 function getUpdateTaxSummary(calculation, newTaxAmount, taxHeadCodeField, taxAmountField) {
     let ceilingTaxHead = null;
@@ -445,7 +485,52 @@ function getUpdateTaxSummary(calculation, newTaxAmount, taxHeadCodeField, taxAmo
     }
 }
 
+async function _createAndUpdateZeroTaxProcessor(request, response) {
+    let index = 0
+    for (reqProperty of request["Properties"]) {
+
+        let resProperty = response["Properties"][index]
+        let propertyId = resProperty["propertyId"]
+
+        let assessmentNumber = resProperty["propertyDetails"][0]["assessmentNumber"]
+
+        let assessmentYear = resProperty["propertyDetails"][0]["financialYear"]
+        let tenantId = reqProperty["tenantId"]
+
+        if (!(assessmentYear == PT_ZERO_ASSESSMENTYEAR && PT_ZERO_TENANTS.indexOf(tenantId)>=0))
+            continue
+
+        let consumerCode = propertyId + ":" + assessmentNumber
+        let service = "PT"
+        let calc = response["Properties"][index]["propertyDetails"][0]["calculation"]
+
+        let newTotal = 0;
+
+        let demandSearchResponse = await findDemandForConsumerCode(consumerCode, tenantId, service, request["RequestInfo"])
+
+        for (demandDetail of demandSearchResponse["Demands"][0]["demandDetails"]) {
+            if (demandDetail.taxHeadMasterCode != "PT_ADHOC_PENALTY") {
+                demandDetail.taxAmount = 0
+            } else {
+                newTotal = demandDetail.taxAmount
+            }
+        }
+
+        //let demandUpdateResponse = await updateDemand(demandSearchResponse["Demands"], request["RequestInfo"])
+
+        calc["taxAmount"] = 0;
+        calc["exemption"] = 0;
+        calc["totalAmount"] = newTotal;
+        calc["rebate"] = 0
+        calc["penanlty"] = newTotal
+        index++
+    }
+
+    return response;
+}
+
 async function _createAndUpdateTaxProcessor(request, response) {
+
     let index = 0
     for (reqProperty of request["Properties"]) {
 
@@ -522,6 +607,7 @@ async function _createAndUpdateRequestHandler(req, res) {
         response
     } = getRequestResponse(req)
 
+    response = await _createAndUpdateZeroTaxProcessor(request, response)
     let tenantId = request["Properties"][0]["tenantId"]
 
     let fireCessConfig = await getFireCessConfig(tenantId)
@@ -559,6 +645,8 @@ router.post('/protected/punjab-pt/pt-calculator-v2/_estimate', asyncMiddleware(a
         request,
         response
     } = getRequestResponse(req)
+
+    response = _estimateZeroTaxProcessor(request, response)
 
     let tenantId = request["CalculationCriteria"][0]["tenantId"]
 
