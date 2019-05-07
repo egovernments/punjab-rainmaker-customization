@@ -317,7 +317,7 @@ async function findDemandForConsumerCode(consumerCode, tenantId, service, Reques
 
 async function updateDemand(demands, RequestInfo) {
     let demandUpdateResponse = await request.post({
-        url: url.resolve(PT_DEMAND_HOST + "/billing-service/demand/_update"),
+        url: url.resolve(PT_DEMAND_HOST, "/billing-service/demand/_update"),
         body: {
             RequestInfo,
             "Demands": demands
@@ -362,10 +362,12 @@ function _estimateZeroTaxProcessor(request, response) {
         let taxHeads = calc["taxHeadEstimates"];
 
         for (taxHead of taxHeads) {
-            if (taxHead.taxHeadCode != "PT_ADHOC_PENALTY") {
+            if (taxHead.taxHeadCode != "PT_ADHOC_PENALTY" && taxHead.taxHeadCode != 'PT_ADVANCE_CARRYFORWARD') {
                 taxHead.estimateAmount = 0
+            } else if (taxHead.taxHeadCode == 'PT_ADVANCE_CARRYFORWARD') {
+                newTotal -= taxHead.estimateAmount
             } else {
-                newTotal = taxHead.estimateAmount
+                newTotal += taxHead.estimateAmount
             }
         }
 
@@ -509,14 +511,23 @@ async function _createAndUpdateZeroTaxProcessor(request, response) {
         let demandSearchResponse = await findDemandForConsumerCode(consumerCode, tenantId, service, request["RequestInfo"])
 
         for (demandDetail of demandSearchResponse["Demands"][0]["demandDetails"]) {
-            if (demandDetail.taxHeadMasterCode != "PT_ADHOC_PENALTY") {
+            if (demandDetail.taxHeadMasterCode != "PT_ADHOC_PENALTY" && demandDetail.taxHeadMasterCode != 'PT_ADVANCE_CARRYFORWARD') {
                 demandDetail.taxAmount = 0
+            } else if (demandDetail.taxHeadMasterCode == 'PT_ADVANCE_CARRYFORWARD') {
+                newTotal -= demandDetail.taxAmount
             } else {
-                newTotal = demandDetail.taxAmount
+                newTotal += demandDetail.taxAmount
             }
         }
 
-        //let demandUpdateResponse = await updateDemand(demandSearchResponse["Demands"], request["RequestInfo"])
+        let taxHeads = calc["taxHeadEstimates"];
+
+        for (taxHead of taxHeads) {
+            if (taxHead.taxHeadCode != "PT_ADHOC_PENALTY" && taxHead.taxHeadCode == 'PT_ADVANCE_CARRYFORWARD') {
+                taxHead.estimateAmount = 0
+            }
+        }
+        let demandUpdateResponse = await updateDemand(demandSearchResponse["Demands"], request["RequestInfo"])
 
         calc["taxAmount"] = 0;
         calc["exemption"] = 0;
