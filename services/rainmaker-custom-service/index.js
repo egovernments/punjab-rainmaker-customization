@@ -330,7 +330,7 @@ async function updateDemand(demands, RequestInfo) {
 
 function _estimateTaxProcessor(request, response) {
     response = _estimateZeroTaxProcessor(request, response);
-    q
+    
     let index = 0;
     for (let calc of request["CalculationCriteria"]) {
         let fireCessPercentage = getFireCessPercentage(calc["property"]["propertyDetails"][0])
