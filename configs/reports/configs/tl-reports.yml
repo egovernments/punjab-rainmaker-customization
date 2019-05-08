@@ -686,7 +686,7 @@ ReportDefinitions:
       count(*) as transactionNumber,
       sum(case collectiontype when 'COUNTER' then amount else 0 end) as offline,
       sum(case collectiontype when 'ONLINE' then amount else 0 end) as online,
-      initcap(split_part(rh.tenantId, '.', 2)) as tenantId,
+      initcap(split_part(rh.tenantId, '.', 2)) as tenantId
       from egcl_receiptheader as rh
     inner join egcl_receiptinstrument as ri on ri.receiptheader = rh.id
     inner join egcl_instrumentheader as ih on ih.id = ri.instrumentheader
