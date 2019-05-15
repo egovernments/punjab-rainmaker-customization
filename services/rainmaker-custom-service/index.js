@@ -242,7 +242,7 @@ router.post('/protected/bndlogin', asyncMiddleware(async function (req, res) {
 
 }));
 
-function getFireCessPercentage(propertyDetails) {
+function getFireCessPercentage(propertyDetails, fireCessConfig) {
     // let propertyDetails = request["CalculationCriteria"][0]["propertyDetails"][0]
 
     let propertyUsageCategoryMajor = propertyDetails["usageCategoryMajor"]
@@ -261,21 +261,21 @@ function getFireCessPercentage(propertyDetails) {
         // There is no category major firecess applicable as it i
         firecess_category_major = 0
     } else {
-        firecess_category_major = 5.0
+        firecess_category_major = fireCessConfig.dynamicRates.firecess_category_major;
     }
 
     if (propertyAttributes &&
         propertyAttributes.heightAbove36Feet &&
         propertyAttributes.heightAbove36Feet.toString() == "true") {
         // height is above 36 feet
-        firecess_building_height = 2.0
+        firecess_building_height = fireCessConfig.dynamicRates.firecess_building_height;
     }
 
     if (propertyAttributes &&
         propertyAttributes.inflammable &&
         propertyAttributes.inflammable.toString() == "true") {
         // height is above 36 feet
-        firecess_inflammable = 10.0
+        firecess_inflammable = fireCessConfig.dynamicRates.firecess_inflammable;
     }
 
     return {
@@ -328,12 +328,12 @@ async function updateDemand(demands, RequestInfo) {
     return demandUpdateResponse;
 }
 
-function _estimateTaxProcessor(request, response) {
+function _estimateTaxProcessor(request, response, fireCessConfig) {
     response = _estimateZeroTaxProcessor(request, response);
     
     let index = 0;
     for (let calc of request["CalculationCriteria"]) {
-        let fireCessPercentage = getFireCessPercentage(calc["property"]["propertyDetails"][0])
+        let fireCessPercentage = getFireCessPercentage(calc["property"]["propertyDetails"][0], fireCessConfig)
 
         let updateFirecessAmount = calculateNewFireCess(response["Calculation"][0]["taxHeadEstimates"], fireCessPercentage.firecess, "estimateAmount", "taxHeadCode")
         let taxes = getUpdateTaxSummary(response["Calculation"][index], updateFirecessAmount, "taxHeadCode", "estimateAmount")
@@ -540,7 +540,7 @@ async function _createAndUpdateZeroTaxProcessor(request, response) {
     return response;
 }
 
-async function _createAndUpdateTaxProcessor(request, response) {
+async function _createAndUpdateTaxProcessor(request, response, fireCessConfig) {
 
     let index = 0
     for (reqProperty of request["Properties"]) {
@@ -556,7 +556,7 @@ async function _createAndUpdateTaxProcessor(request, response) {
 
         let demandSearchResponse = await findDemandForConsumerCode(consumerCode, tenantId, service, request["RequestInfo"])
 
-        let fireCessPercentage = getFireCessPercentage(reqProperty["propertyDetails"][0])
+        let fireCessPercentage = getFireCessPercentage(reqProperty["propertyDetails"][0], fireCessConfig)
 
         if (DEBUG_MODE) {
             demandSearchResponse["Demands"][0]["firecess"] = fireCessPercentage
@@ -623,7 +623,7 @@ async function _createAndUpdateRequestHandler(req, res) {
 
     let fireCessConfig = await getFireCessConfig(tenantId)
     if (fireCessConfig && fireCessConfig.dynamicFirecess && fireCessConfig.dynamicFirecess == true) {
-        let updatedResponse = await _createAndUpdateTaxProcessor(request, response)
+        let updatedResponse = await _createAndUpdateTaxProcessor(request, response, fireCessConfig)
         res.json(updatedResponse);
     } else {
         res.json(response)
@@ -664,7 +664,7 @@ router.post('/protected/punjab-pt/pt-calculator-v2/_estimate', asyncMiddleware(a
     let fireCessConfig = await getFireCessConfig(tenantId)
 
     if (fireCessConfig && fireCessConfig.dynamicFirecess && fireCessConfig.dynamicFirecess == true) {
-        let updatedResponse = _estimateTaxProcessor(request, response)
+        let updatedResponse = _estimateTaxProcessor(request, response, fireCessConfig)
         res.json(updatedResponse);
     } else {
         res.json(response);
