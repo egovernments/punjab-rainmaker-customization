@@ -647,5 +647,22 @@
         "$.code"
       ]
     }
+  },
+  "BillingService": {
+    "BusinessService": {
+      "masterName": "BusinessService",
+      "isStateLevel": true,
+      "uniqueKeys": []
+    },
+    "TaxHeadMaster": {
+      "masterName": "TaxHeadMaster",
+      "isStateLevel": true,
+      "uniqueKeys": []
+    },
+    "TaxPeriod": {
+      "masterName": "TaxPeriod",
+      "isStateLevel": true,
+      "uniqueKeys": []
+    }
   }
 }
