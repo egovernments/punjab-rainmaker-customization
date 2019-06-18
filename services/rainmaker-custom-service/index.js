@@ -24,7 +24,7 @@ const PT_DEMAND_HOST = process.env.PT_DEMAND_HOST
 
 const PT_ZERO_ASSESSMENTYEAR = process.env.PT_ZERO_ASSESSMENTYEAR || "2013-14";
 const PT_ZERO_TENANTS = (process.env.PT_ZERO_TENANTS || "pb.testing").split(",");
-
+const PT_ENABLE_FC_CALC = Boolean(process.env.PT_ENABLE_FC_CALC || false);
 const EGOV_MDMS_HOST = process.env.EGOV_MDMS_HOST
 const EGOV_BND_LOGIN_URL = process.env.EGOV_BND_LOGIN_URL
 const EGOV_BND_REDIRECT_URL = process.env.EGOV_BND_REDIRECT_URL
@@ -293,9 +293,9 @@ function calculateNewFireCess(taxHeads, firecess_percent, taxField, taxHeadCodeF
         if (taxHead[taxHeadCodeField] == "PT_TAX") {
             applicablePropertyTax += taxHead[taxField]
         } else if (taxHead[taxHeadCodeField] == "PT_UNIT_USAGE_EXEMPTION") {
-            applicablePropertyTax -= taxHead[taxField]
+            applicablePropertyTax += taxHead[taxField]
         } else if (taxHead[taxHeadCodeField] == "PT_OWNER_EXEMPTION") {
-            applicablePropertyTax -= taxHead[taxField]
+            applicablePropertyTax += taxHead[taxField]
         }
     }
 
@@ -365,7 +365,7 @@ function _estimateZeroTaxProcessor(request, response) {
             if (taxHead.taxHeadCode != "PT_ADHOC_PENALTY" && taxHead.taxHeadCode != 'PT_ADVANCE_CARRYFORWARD') {
                 taxHead.estimateAmount = 0
             } else if (taxHead.taxHeadCode == 'PT_ADVANCE_CARRYFORWARD') {
-                newTotal -= taxHead.estimateAmount
+                newTotal += taxHead.estimateAmount
             } else {
                 newTotal += taxHead.estimateAmount
             }
@@ -406,6 +406,7 @@ function getUpdateTaxSummary(calculation, newTaxAmount, taxHeadCodeField, taxAmo
             switch (taxHead[taxHeadCodeField]) {
                 case "PT_DECIMAL_CEILING_CREDIT":
                 case "PT_DECIMAL_CEILING_DEBIT":
+                case "PT_ROUNDOFF":
                     ceilingTaxHead = taxHead
                     break
                 case "PT_ADVANCE_CARRYFORWARD":
@@ -463,14 +464,14 @@ function getUpdateTaxSummary(calculation, newTaxAmount, taxHeadCodeField, taxAmo
         if (fractionAmount < 0.5) {
             ceilingDelta = parseFloat(fractionAmount.toFixed(2))
             totalAmount = Math.trunc(totalAmount)
-            ceilingTaxHead[taxHeadCodeField] = "PT_DECIMAL_CEILING_DEBIT"
-            ceilingTaxHead[taxAmountField] = ceilingDelta
+            ceilingTaxHead[taxHeadCodeField] = "PT_ROUNDOFF"
+            ceilingTaxHead[taxAmountField] = -ceilingDelta
             rebate += ceilingDelta
         } else {
             ceilingDelta = parseFloat((1 - fractionAmount).toFixed(2))
 
             totalAmount = Math.trunc(totalAmount) + 1
-            ceilingTaxHead[taxHeadCodeField] = "PT_DECIMAL_CEILING_CREDIT"
+            ceilingTaxHead[taxHeadCodeField] = "PT_ROUNDOFF"
             ceilingTaxHead[taxAmountField] = ceilingDelta
             taxAmount += ceilingDelta
         }
@@ -514,7 +515,7 @@ async function _createAndUpdateZeroTaxProcessor(request, response) {
             if (demandDetail.taxHeadMasterCode != "PT_ADHOC_PENALTY" && demandDetail.taxHeadMasterCode != 'PT_ADVANCE_CARRYFORWARD') {
                 demandDetail.taxAmount = 0
             } else if (demandDetail.taxHeadMasterCode == 'PT_ADVANCE_CARRYFORWARD') {
-                newTotal -= demandDetail.taxAmount
+                newTotal += demandDetail.taxAmount
             } else {
                 newTotal += demandDetail.taxAmount
             }
@@ -584,7 +585,7 @@ async function _createAndUpdateTaxProcessor(request, response, fireCessConfig) {
             if (demandDetail.taxHeadMasterCode == "PT_FIRE_CESS") {
                 demandDetail.taxAmount = taxes.firecessTaxHead.estimateAmount
             }
-            if (demandDetail.taxHeadMasterCode == "PT_DECIMAL_CEILING_DEBIT" || demandDetail.taxHeadMasterCode == "PT_DECIMAL_CEILING_DEBIT") {
+            if (demandDetail.taxHeadMasterCode == "PT_ROUNDOFF" && demandDetail.adjustedAmount == 0.0) {
                 demandDetail.taxHeadMasterCode = taxes.ceilingTaxHead.taxHeadCode
                 demandDetail.taxAmount = taxes.ceilingTaxHead.estimateAmount
             }
@@ -619,6 +620,11 @@ async function _createAndUpdateRequestHandler(req, res) {
     } = getRequestResponse(req)
 
     response = await _createAndUpdateZeroTaxProcessor(request, response)
+    
+    if (!PT_ENABLE_FC_CALC)
+        res.json(response);
+
+    // firecess logic is enabled, so execute it
     let tenantId = request["Properties"][0]["tenantId"]
 
     let fireCessConfig = await getFireCessConfig(tenantId)
@@ -658,6 +664,9 @@ router.post('/protected/punjab-pt/pt-calculator-v2/_estimate', asyncMiddleware(a
     } = getRequestResponse(req)
 
     response = _estimateZeroTaxProcessor(request, response)
+
+    if (!PT_ENABLE_FC_CALC)
+        res.json(response);
 
     let tenantId = request["CalculationCriteria"][0]["tenantId"]
 
