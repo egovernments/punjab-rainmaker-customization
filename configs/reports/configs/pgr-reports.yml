@@ -150,7 +150,7 @@ ReportDefinitions:
     WHERE eg_pgr_service.accountid = eg_user.id::VARCHAR 
     AND eg_pgr_service.tenantid LIKE $tenantid 
     AND eg_pgr_address.uuid = eg_pgr_service.addressid
-    AND status IN ('open','assigned','reassigrequested','rejected')
+    AND status IN ('open','assigned','reassigrequested','rejected','closed','resolved')
   orderby: ORDER BY eg_pgr_service.createdtime asc
 
 - reportName: StateSourceReport
