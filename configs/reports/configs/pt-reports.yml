@@ -175,8 +175,6 @@ ReportDefinitions:
                   FROM egcl_receiptdetails_v1 as rd
                   INNER JOIN egcl_receiptheader_v1 as rh on rh.id = rd.receiptheader
                   WHERE rd.tenantid LIKE $tenantid
-                  $_fromDate
-                  $_toDate
                   GROUP BY rd.receiptheader
       )
       SELECT 
