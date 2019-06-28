@@ -1,0 +1,32 @@
+---
+ReportDefinitions:
+- reportName: ReceinewRegister
+  summary: Test Receipt Register
+  version: 1.0.0
+  moduleName: rainmaker-pt
+  sourceColumns:
+  - name: receiptnumber
+    label: reports.pt.receiptNo
+    type: string
+    source: pt
+    total: false
+  - name: payeename
+    label: reports.pt.payeeName
+    type: string
+    source: pt
+    total: false
+  - name: payeeaddress
+    label: reports.pt.payeeAddress
+    type: string
+    source: pt
+    total: false
+
+  query: |
+      -- Use CTE to force query plan, compute & use CTE later
+      SELECT 
+        receiptnumber, 
+        payeename,
+        payeeaddress
+      FROM egcl_receiptheader AS rh
+      WHERE rh.tenantid LIKE $tenantid and rh.status != 'Cancelled'
+  orderby: ORDER BY rh.receiptdate DESC
