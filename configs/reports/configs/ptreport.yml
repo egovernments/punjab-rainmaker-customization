@@ -1,7 +1,7 @@
 ---
 ReportDefinitions:
-- reportName: ReceiptRegister
-  summary: Receipt Register
+- reportName: ReceiptRegisternew3
+  summary: Receipt Register New 3
   version: 1.0.0
   moduleName: rainmaker-pt
   sourceColumns:
