@@ -10,11 +10,6 @@ ReportDefinitions:
     type: string
     source: pt
     total: false
-  - name: receiptnumbernew
-    label: reports.pt.receiptNo
-    type: string
-    source: pt
-    total: false
   - name: transactiondate
     label: reports.pt.receiptDate
     type: string
@@ -192,7 +187,6 @@ ReportDefinitions:
         To_char(To_timestamp(rh.receiptdate / 1000), 'DD/MM/YYYY') AS transactiondate, 
         bankid AS bankname, 
         receiptnumber, 
-        receiptnumber as receiptnumbernew,
         amount, 
         instrumenttype, 
         transactionnumber, 
