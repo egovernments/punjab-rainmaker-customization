@@ -10,7 +10,7 @@ ReportDefinitions:
     type: string
     source: pt
     total: false
-  - name: payeeaddress
+  - name: payeraddress
     label: reports.pt.payeeaddress
     type: string
     source: pt
@@ -198,9 +198,9 @@ ReportDefinitions:
         Substring(rh.consumercode, '(.*):') AS propertyid, 
         Substring(rh.consumercode, ':(.*)') AS assessmentnumber, 
         rh.consumercode, 
-        rh.payeename as firstname,
-        rh.payeeemail as email, 
-        rh.payeeaddress, 
+        rh.payername as firstname,
+        rh.payeremail as email, 
+        rh.payeraddress, 
         rh.receiptdate, 
         To_char(To_timestamp(rh.receiptdate / 1000), 'DD/MM/YYYY') AS transactiondate, 
         bankid AS bankname, 
