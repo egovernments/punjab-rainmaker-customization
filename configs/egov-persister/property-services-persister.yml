@@ -726,3 +726,7 @@ serviceMaps:
            - jsonPath: $.Properties.*.propertyDetails.*.auditDetails.lastModifiedBy
 
            - jsonPath: $.Properties.*.propertyDetails.*.auditDetails.lastModifiedTime
+
+
+
+
