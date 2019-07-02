@@ -75,6 +75,34 @@ SearchDefinitions:
     jsonFormat: {"ResponseInfo": {}}
     outJsonPath: $.services
     responseInfoPath: $.ResponseInfo
+ - name: propertyidSearch
+   query:
+    baseQuery: |
+      select array_to_json(array_agg(row_to_json(data))) from (
+        select
+          property as propertyid,
+          assessmentnumber,
+          receiptnumber,
+          amount,
+          pt_detail.financialyear
+        from eg_pt_propertydetail_v2 as pt_detail
+        left outer join egcl_receiptheader rh ON CONCAT(pt_detail.property, ':', pt_detail.assessmentnumber) = rh.consumercode
+        left outer JOIN egcl_receiptinstrument_v1 AS ri ON rh.id = ri.receiptheader
+        left outer JOIN egcl_instrumentheader_v1 AS ih ON ih.id = ri.instrumentheader $where) data
+    groupBy:
+    orderBy:
+   searchParams:
+    condition: AND
+    params:
+    - name: pt_detail.property
+      isMandatory: true
+      jsonPath: $.searchCriteria.propertyid
+      operator: =
+
+   output:
+    jsonFormat: {"ResponseInfo": {}}
+    outJsonPath: $.data
+    responseInfoPath: $.ResponseInfo
 
 
     
