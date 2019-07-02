@@ -134,9 +134,9 @@ ReportDefinitions:
       INNER JOIN eg_user tluser ON tluser.uuid = tlowner.id
       group by tradelicensedetailid
     ) tlown ON tlown.tradelicensedetailid = tld.id
-    LEFT OUTER JOIN egcl_receiptheader receipt ON receipt.consumercode = tl.applicationnumber  and receipt.status != 'Cancelled'
-    LEFT OUTER JOIN egcl_receiptinstrument as ri ON ri.receiptheader = receipt.id
-    LEFT OUTER JOIN egcl_instrumentheader as ih ON ih.id = ri.instrumentheader and ih.instrumentstatus != 'CANCELLED'
+    LEFT OUTER JOIN egcl_receiptheader_v1 receipt ON receipt.consumercode = tl.applicationnumber  and receipt.status != 'Cancelled'
+    LEFT OUTER JOIN egcl_receiptinstrument_v1 as ri ON ri.receiptheader = receipt.id
+    LEFT OUTER JOIN egcl_instrumentheader_v1 as ih ON ih.id = ri.instrumentheader and ih.instrumentstatus != 'CANCELLED'
     LEFT OUTER JOIN (SELECT tradelicensedetailid,array_to_string(array_agg(message.message),',') AS acc FROM eg_tl_accessory 
     LEFT OUTER JOIN message ON split_part(message.code,'_',2) = accessorycategory AND message.locale = 'en_IN' GROUP BY 1 ) tlacc ON tlacc.tradelicensedetailid = tld.id 
     WHERE tl.Status in ('APPROVED', 'PAID', 'CANCELLED') AND tl.tenantId LIKE $tenantid
@@ -233,7 +233,7 @@ ReportDefinitions:
     total: false
   - name: totalamount
     label: report.tl.receipt.totalamount
-    type: number
+    type: string
     source: tl
     total: true
   searchParams:
@@ -281,9 +281,9 @@ ReportDefinitions:
       INNER JOIN eg_user tluser ON tluser.uuid = tlowner.id
       group by tradelicensedetailid
     ) tlown ON tlown.tradelicensedetailid = tld.id
-    INNER JOIN egcl_receiptheader receipt ON receipt.consumercode = tl.applicationnumber  and receipt.status = 'Cancelled'
-    INNER JOIN egcl_receiptinstrument as ri ON ri.receiptheader = receipt.id
-    INNER JOIN egcl_instrumentheader as ih ON ih.id = ri.instrumentheader
+    INNER JOIN egcl_receiptheader_v1 receipt ON receipt.consumercode = tl.applicationnumber  and receipt.status = 'Cancelled'
+    INNER JOIN egcl_receiptinstrument_v1 as ri ON ri.receiptheader = receipt.id
+    INNER JOIN egcl_instrumentheader_v1 as ih ON ih.id = ri.instrumentheader
     LEFT OUTER JOIN (SELECT tradelicensedetailid,array_to_string(array_agg(message.message),',') AS acc FROM eg_tl_accessory 
     LEFT OUTER JOIN message ON split_part(message.code,'_',2) = accessorycategory AND message.locale = 'en_IN' GROUP BY 1 ) tlacc ON tlacc.tradelicensedetailid = tld.id 
     WHERE tl.tenantId != 'pb.testing'
@@ -375,7 +375,7 @@ ReportDefinitions:
     total: false
   - name: totalamount
     label: report.tl.receipt.totalamount
-    type: number
+    type: string
     source: tl
     total: true
   searchParams:
@@ -422,9 +422,9 @@ ReportDefinitions:
       INNER JOIN eg_user tluser ON tluser.uuid = tlowner.id
       group by tradelicensedetailid
     ) tlown ON tlown.tradelicensedetailid = tld.id
-    INNER JOIN egcl_receiptheader receipt ON receipt.consumercode = tl.applicationnumber  and receipt.status = 'Cancelled'
-    INNER JOIN egcl_receiptinstrument as ri ON ri.receiptheader = receipt.id
-    INNER JOIN egcl_instrumentheader as ih ON ih.id = ri.instrumentheader
+    INNER JOIN egcl_receiptheader_v1 receipt ON receipt.consumercode = tl.applicationnumber  and receipt.status = 'Cancelled'
+    INNER JOIN egcl_receiptinstrument_v1 as ri ON ri.receiptheader = receipt.id
+    INNER JOIN egcl_instrumentheader_v1 as ih ON ih.id = ri.instrumentheader
     LEFT OUTER JOIN (SELECT tradelicensedetailid,array_to_string(array_agg(message.message),',') AS acc FROM eg_tl_accessory 
     LEFT OUTER JOIN message ON split_part(message.code,'_',2) = accessorycategory AND message.locale = 'en_IN' GROUP BY 1 ) tlacc ON tlacc.tradelicensedetailid = tld.id 
     WHERE tl.tenantId LIKE $tenantid
@@ -442,17 +442,17 @@ ReportDefinitions:
     total: false
   - name: online
     label: report.tl.online.collection
-    type: number
+    type: string
     source: tl
     total: true
   - name: offline
     label: report.tl.offline.collection
-    type: number
+    type: string
     source: tl
     total: true
   - name: total
     label: report.tl.totalCollection
-    type: number
+    type: string
     source: tl
     total: true
   searchParams:
@@ -475,12 +475,12 @@ ReportDefinitions:
       sum(case collectiontype when 'COUNTER' then amount else 0 end) as offline,
       sum(case collectiontype when 'ONLINE' then amount else 0 end) as online,
       initcap(split_part(rh.tenantId, '.', 2)) as tenantId 
-      from egcl_receiptheader as rh
-    inner join egcl_receiptinstrument as ri on ri.receiptheader = rh.id
-    inner join egcl_instrumentheader as ih on ih.id = ri.instrumentheader
+      from egcl_receiptheader_v1 as rh
+    inner join egcl_receiptinstrument_v1 as ri on ri.receiptheader = rh.id
+    inner join egcl_instrumentheader_v1 as ih on ih.id = ri.instrumentheader
     where rh.businessdetails = 'TL' and rh.status !='Cancelled' and rh.tenantid !='pb.testing'
     AND rh.tenantId LIKE $tenantid
-
+  groupby: GROUP BY rh.tenantId
 
 - reportName: TradeLicenseApplicationStatusReport
   summary: Nummber of applications by there status
@@ -499,7 +499,7 @@ ReportDefinitions:
     total: false
   - name: total
     label: report.tl.total
-    type: number
+    type: string
     source: tl
     total: true
   searchParams:
@@ -531,32 +531,32 @@ ReportDefinitions:
     total: false
   - name: initiated
     label: TL_INITIATED
-    type: number
+    type: string
     source: tl
     total: true
   - name: applied
     label: TL_APPLIED
-    type: number
+    type: string
     source: tl
     total: true
   - name: paid
     label: TL_PAID
-    type: number
+    type: string
     source: tl
     total: true
   - name: approved
     label: TL_APPROVED
-    type: number
+    type: string
     source: tl
     total: true
   - name: rejected
     label: TL_REJECTED
-    type: number
+    type: string
     source: tl
     total: true
   - name: cancelled
     label: TL_CANCELLED
-    type: number
+    type: string
     source: tl
     total: true
   searchParams:
@@ -599,7 +599,7 @@ ReportDefinitions:
     total: false
   - name: total
     label: report.tl.total
-    type: number
+    type: string
     source: tl
     total: true
   searchParams:
@@ -646,17 +646,17 @@ ReportDefinitions:
     total: true
   - name: online
     label: report.tl.online.collection
-    type: number
+    type: string
     source: tl
     total: true
   - name: offline
     label: report.tl.offline.collection
-    type: number
+    type: string
     source: tl
     total: true
   - name: total
     label: report.tl.totalCollection
-    type: number
+    type: string
     source: tl
     total: true
   searchParams:
@@ -687,9 +687,9 @@ ReportDefinitions:
       sum(case collectiontype when 'COUNTER' then amount else 0 end) as offline,
       sum(case collectiontype when 'ONLINE' then amount else 0 end) as online,
       initcap(split_part(rh.tenantId, '.', 2)) as tenantId
-      from egcl_receiptheader as rh
-    inner join egcl_receiptinstrument as ri on ri.receiptheader = rh.id
-    inner join egcl_instrumentheader as ih on ih.id = ri.instrumentheader
+      from egcl_receiptheader_v1 as rh
+    inner join egcl_receiptinstrument_v1 as ri on ri.receiptheader = rh.id
+    inner join egcl_instrumentheader_v1 as ih on ih.id = ri.instrumentheader
     where rh.businessdetails = 'TL' and rh.status !='Cancelled' and rh.tenantid !='pb.testing'
   groupby: GROUP BY rh.tenantId
   orderby: ORDER BY rh.tenantId asc
@@ -752,7 +752,7 @@ ReportDefinitions:
     total: false
   - name: totalamount
     label: report.tl.receipt.totalamount
-    type: number
+    type: string
     source: tl
     total: true
   searchParams:
@@ -776,5 +776,5 @@ ReportDefinitions:
     wrapper: true
     isMandatory: false
     searchClause: AND tl.tenantId = $ulb
-  query: SELECT tl.tenantId as tenantId,licensenumber,to_char(To_timestamp(issueddate / 1000), 'DD/MM/YYYY') as formattedIssuedDate,tl.tradeName,tradeTypeName,acc, name,mobilenumber,amount as totalamount,To_char(To_timestamp(receipt.manualreceiptdate / 1000), 'DD/MM/YYYY') AS g8issuedate,receipt.manualreceiptnumber as g8receiptno FROM eg_tl_tradelicense tl INNER JOIN eg_tl_tradelicensedetail tld ON tld.tradelicenseid = tl.id INNER JOIN eg_tl_owner tlowner ON tlowner.tradelicensedetailid = tld.id INNER JOIN (SELECT tradelicensedetailid,message.message as tradeTypeName FROM eg_tl_tradeunit INNER JOIN message ON split_part(message.code,'_',2) = tradeType) tlunit ON tlunit.tradelicensedetailid = tld.id INNER JOIN eg_user tluser ON tluser.uuid = tlowner.id LEFT OUTER JOIN egcl_receiptheader receipt ON receipt.consumercode = tl.applicationnumber LEFT JOIN egcl_receiptinstrument as ri ON ri.receiptheader = receipt.id LEFT JOIN egcl_instrumentheader as ih ON ih.id = ri.instrumentheader LEFT OUTER JOIN (SELECT tradelicensedetailid,array_to_string(array_agg(message.message),',') AS acc FROM eg_tl_accessory LEFT OUTER JOIN message ON split_part(message.code,'_',2) = accessorycategory AND message.locale = 'en_IN' GROUP BY 1 ) tlacc ON tlacc.tradelicensedetailid = tld.id WHERE tl.Status = 'APPROVED'
+  query: SELECT tl.tenantId as tenantId,licensenumber,to_char(To_timestamp(issueddate / 1000), 'DD/MM/YYYY') as formattedIssuedDate,tl.tradeName,tradeTypeName,acc, name,mobilenumber,amount as totalamount,To_char(To_timestamp(receipt.manualreceiptdate / 1000), 'DD/MM/YYYY') AS g8issuedate,receipt.manualreceiptnumber as g8receiptno FROM eg_tl_tradelicense tl INNER JOIN eg_tl_tradelicensedetail tld ON tld.tradelicenseid = tl.id INNER JOIN eg_tl_owner tlowner ON tlowner.tradelicensedetailid = tld.id INNER JOIN (SELECT tradelicensedetailid,message.message as tradeTypeName FROM eg_tl_tradeunit INNER JOIN message ON split_part(message.code,'_',2) = tradeType) tlunit ON tlunit.tradelicensedetailid = tld.id INNER JOIN eg_user tluser ON tluser.uuid = tlowner.id LEFT OUTER JOIN egcl_receiptheader_v1 receipt ON receipt.consumercode = tl.applicationnumber LEFT JOIN egcl_receiptinstrument_v1 as ri ON ri.receiptheader = receipt.id LEFT JOIN egcl_instrumentheader_v1 as ih ON ih.id = ri.instrumentheader LEFT OUTER JOIN (SELECT tradelicensedetailid,array_to_string(array_agg(message.message),',') AS acc FROM eg_tl_accessory LEFT OUTER JOIN message ON split_part(message.code,'_',2) = accessorycategory AND message.locale = 'en_IN' GROUP BY 1 ) tlacc ON tlacc.tradelicensedetailid = tld.id WHERE tl.Status = 'APPROVED'
   orderby: ORDER BY tl.tenantId asc
