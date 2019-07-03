@@ -242,65 +242,65 @@ router.post('/protected/bndlogin', asyncMiddleware(async function (req, res) {
 
 }));
 
-function getFireCessPercentage(propertyDetails, fireCessConfig) {
-    // let propertyDetails = request["CalculationCriteria"][0]["propertyDetails"][0]
+// function getFireCessPercentage(propertyDetails, fireCessConfig) {
+//     // let propertyDetails = request["CalculationCriteria"][0]["propertyDetails"][0]
 
-    let propertyUsageCategoryMajor = propertyDetails["usageCategoryMajor"]
-    let units = propertyDetails["units"]
-    let propertyAttributes = propertyDetails["additionalDetails"]
-    let unitSet = new Set()
+//     let propertyUsageCategoryMajor = propertyDetails["usageCategoryMajor"]
+//     let units = propertyDetails["units"]
+//     let propertyAttributes = propertyDetails["additionalDetails"]
+//     let unitSet = new Set()
 
-    for (unit of units) {
-        unitSet.add(unit["usageCategoryMajor"])
-    }
-    let firecess_category_major = 0;
-    let firecess_building_height = 0;
-    let firecess_inflammable = 0;
+//     for (unit of units) {
+//         unitSet.add(unit["usageCategoryMajor"])
+//     }
+//     let firecess_category_major = 0;
+//     let firecess_building_height = 0;
+//     let firecess_inflammable = 0;
 
-    if (propertyUsageCategoryMajor == "RESIDENTIAL" || (unitSet.size == 1 && unitSet.has("RESIDENTIAL"))) {
-        // There is no category major firecess applicable as it i
-        firecess_category_major = 0
-    } else {
-        firecess_category_major = fireCessConfig.dynamicRates.firecess_category_major;
-    }
+//     if (propertyUsageCategoryMajor == "RESIDENTIAL" || (unitSet.size == 1 && unitSet.has("RESIDENTIAL"))) {
+//         // There is no category major firecess applicable as it i
+//         firecess_category_major = 0
+//     } else {
+//         firecess_category_major = fireCessConfig.dynamicRates.firecess_category_major;
+//     }
 
-    if (propertyAttributes &&
-        propertyAttributes.heightAbove36Feet &&
-        propertyAttributes.heightAbove36Feet.toString() == "true") {
-        // height is above 36 feet
-        firecess_building_height = fireCessConfig.dynamicRates.firecess_building_height;
-    }
+//     if (propertyAttributes &&
+//         propertyAttributes.heightAbove36Feet &&
+//         propertyAttributes.heightAbove36Feet.toString() == "true") {
+//         // height is above 36 feet
+//         firecess_building_height = fireCessConfig.dynamicRates.firecess_building_height;
+//     }
 
-    if (propertyAttributes &&
-        propertyAttributes.inflammable &&
-        propertyAttributes.inflammable.toString() == "true") {
-        // height is above 36 feet
-        firecess_inflammable = fireCessConfig.dynamicRates.firecess_inflammable;
-    }
+//     if (propertyAttributes &&
+//         propertyAttributes.inflammable &&
+//         propertyAttributes.inflammable.toString() == "true") {
+//         // height is above 36 feet
+//         firecess_inflammable = fireCessConfig.dynamicRates.firecess_inflammable;
+//     }
 
-    return {
-        firecess_inflammable,
-        firecess_building_height,
-        firecess_category_major,
-        firecess: firecess_category_major + firecess_building_height + firecess_inflammable
-    }
-}
+//     return {
+//         firecess_inflammable,
+//         firecess_building_height,
+//         firecess_category_major,
+//         firecess: firecess_category_major + firecess_building_height + firecess_inflammable
+//     }
+// }
 
-function calculateNewFireCess(taxHeads, firecess_percent, taxField, taxHeadCodeField) {
+// function calculateNewFireCess(taxHeads, firecess_percent, taxField, taxHeadCodeField) {
 
-    let applicablePropertyTax = 0
-    for (taxHead of taxHeads) {
-        if (taxHead[taxHeadCodeField] == "PT_TAX") {
-            applicablePropertyTax += taxHead[taxField]
-        } else if (taxHead[taxHeadCodeField] == "PT_UNIT_USAGE_EXEMPTION") {
-            applicablePropertyTax += taxHead[taxField]
-        } else if (taxHead[taxHeadCodeField] == "PT_OWNER_EXEMPTION") {
-            applicablePropertyTax += taxHead[taxField]
-        }
-    }
+//     let applicablePropertyTax = 0
+//     for (taxHead of taxHeads) {
+//         if (taxHead[taxHeadCodeField] == "PT_TAX") {
+//             applicablePropertyTax += taxHead[taxField]
+//         } else if (taxHead[taxHeadCodeField] == "PT_UNIT_USAGE_EXEMPTION") {
+//             applicablePropertyTax += taxHead[taxField]
+//         } else if (taxHead[taxHeadCodeField] == "PT_OWNER_EXEMPTION") {
+//             applicablePropertyTax += taxHead[taxField]
+//         }
+//     }
 
-    return round(applicablePropertyTax * (firecess_percent / 100), 2);
-}
+//     return round(applicablePropertyTax * (firecess_percent / 100), 2);
+// }
 
 async function findDemandForConsumerCode(consumerCode, tenantId, service, RequestInfo) {
     let demandSearchResponse = await request.post({
@@ -328,25 +328,25 @@ async function updateDemand(demands, RequestInfo) {
     return demandUpdateResponse;
 }
 
-function _estimateTaxProcessor(request, response, fireCessConfig) {
-    response = _estimateZeroTaxProcessor(request, response);
+// function _estimateTaxProcessor(request, response, fireCessConfig) {
+//     response = _estimateZeroTaxProcessor(request, response);
     
-    let index = 0;
-    for (let calc of request["CalculationCriteria"]) {
-        let fireCessPercentage = getFireCessPercentage(calc["property"]["propertyDetails"][0], fireCessConfig)
+//     let index = 0;
+//     for (let calc of request["CalculationCriteria"]) {
+//         let fireCessPercentage = getFireCessPercentage(calc["property"]["propertyDetails"][0], fireCessConfig)
 
-        let updateFirecessAmount = calculateNewFireCess(response["Calculation"][0]["taxHeadEstimates"], fireCessPercentage.firecess, "estimateAmount", "taxHeadCode")
-        let taxes = getUpdateTaxSummary(response["Calculation"][index], updateFirecessAmount, "taxHeadCode", "estimateAmount")
+//         let updateFirecessAmount = calculateNewFireCess(response["Calculation"][0]["taxHeadEstimates"], fireCessPercentage.firecess, "estimateAmount", "taxHeadCode")
+//         let taxes = getUpdateTaxSummary(response["Calculation"][index], updateFirecessAmount, "taxHeadCode", "estimateAmount")
 
-        response["Calculation"][index]["totalAmount"] = taxes.totalAmount
-        response["Calculation"][index]["taxAmount"] = round(taxes.taxAmount, 2)
-        response["Calculation"][index]["rebate"] = taxes.rebate
+//         response["Calculation"][index]["totalAmount"] = taxes.totalAmount
+//         response["Calculation"][index]["taxAmount"] = round(taxes.taxAmount, 2)
+//         response["Calculation"][index]["rebate"] = taxes.rebate
 
-        index++
-    }
+//         index++
+//     }
 
-    return response;
-}
+//     return response;
+// }
 
 function _estimateZeroTaxProcessor(request, response) {
     let index = 0;
@@ -384,109 +384,109 @@ function _estimateZeroTaxProcessor(request, response) {
 }
 
 
-function getUpdateTaxSummary(calculation, newTaxAmount, taxHeadCodeField, taxAmountField) {
-    let ceilingTaxHead = null;
-    let firecessTaxHead = null;
+// function getUpdateTaxSummary(calculation, newTaxAmount, taxHeadCodeField, taxAmountField) {
+//     let ceilingTaxHead = null;
+//     let firecessTaxHead = null;
 
-    let taxAmount = 0,
-        penalty = 0,
-        rebate = 0,
-        exemption = 0
-    let taxHeads = calculation["taxHeadEstimates"]
-    for (taxHead of taxHeads) {
-        if (taxHead[taxHeadCodeField] == "PT_FIRE_CESS") {
-            let existingTaxAmount = taxHead[taxAmountField]
-            taxHead[taxAmountField] = newTaxAmount
-            firecessTaxHead = taxHead
-            taxAmount += newTaxAmount
-            if (DEBUG_MODE) {
-                taxHead.oldEstimateAmount = existingTaxAmount
-            }
-        } else {
-            switch (taxHead[taxHeadCodeField]) {
-                case "PT_DECIMAL_CEILING_CREDIT":
-                case "PT_DECIMAL_CEILING_DEBIT":
-                case "PT_ROUNDOFF":
-                    ceilingTaxHead = taxHead
-                    break
-                case "PT_ADVANCE_CARRYFORWARD":
-                    exemption += taxHead[taxAmountField]
-                    break
-                default:
-                    switch (taxHead.category) {
-                        case "PENALTY":
-                            penalty += taxHead[taxAmountField]
-                            break
-                        case "TAX":
-                            taxAmount += taxHead[taxAmountField]
-                            break
-                        case "REBATE":
-                            rebate += taxHead[taxAmountField]
-                            break
-                        case "EXEMPTION":
-                            exemption += taxHead[taxAmountField]
-                            break
-                        default:
-                            console.log("Going to default for taxHead", taxHead)
-                            taxAmount += taxHead[taxAmountField]
-                    }
+//     let taxAmount = 0,
+//         penalty = 0,
+//         rebate = 0,
+//         exemption = 0
+//     let taxHeads = calculation["taxHeadEstimates"]
+//     for (taxHead of taxHeads) {
+//         if (taxHead[taxHeadCodeField] == "PT_FIRE_CESS") {
+//             let existingTaxAmount = taxHead[taxAmountField]
+//             taxHead[taxAmountField] = newTaxAmount
+//             firecessTaxHead = taxHead
+//             taxAmount += newTaxAmount
+//             if (DEBUG_MODE) {
+//                 taxHead.oldEstimateAmount = existingTaxAmount
+//             }
+//         } else {
+//             switch (taxHead[taxHeadCodeField]) {
+//                 case "PT_DECIMAL_CEILING_CREDIT":
+//                 case "PT_DECIMAL_CEILING_DEBIT":
+//                 case "PT_ROUNDOFF":
+//                     ceilingTaxHead = taxHead
+//                     break
+//                 case "PT_ADVANCE_CARRYFORWARD":
+//                     exemption += taxHead[taxAmountField]
+//                     break
+//                 default:
+//                     switch (taxHead.category) {
+//                         case "PENALTY":
+//                             penalty += taxHead[taxAmountField]
+//                             break
+//                         case "TAX":
+//                             taxAmount += taxHead[taxAmountField]
+//                             break
+//                         case "REBATE":
+//                             rebate += taxHead[taxAmountField]
+//                             break
+//                         case "EXEMPTION":
+//                             exemption += taxHead[taxAmountField]
+//                             break
+//                         default:
+//                             console.log("Going to default for taxHead", taxHead)
+//                             taxAmount += taxHead[taxAmountField]
+//                     }
 
-            }
-        }
-    }
+//             }
+//         }
+//     }
 
-    taxAmount = round(taxAmount, 2)
-    penalty = round(penalty, 2)
-    exemption = round(exemption, 2)
-    rebate = round(rebate, 2)
+//     taxAmount = round(taxAmount, 2)
+//     penalty = round(penalty, 2)
+//     exemption = round(exemption, 2)
+//     rebate = round(rebate, 2)
 
-    let totalAmount = taxAmount + penalty - rebate - exemption
+//     let totalAmount = taxAmount + penalty - rebate - exemption
 
-    totalAmount = round(totalAmount, 2)
-    let fractionAmount = totalAmount - Math.trunc(totalAmount)
-    let newCeilingTax = false
+//     totalAmount = round(totalAmount, 2)
+//     let fractionAmount = totalAmount - Math.trunc(totalAmount)
+//     let newCeilingTax = false
 
-    if (ceilingTaxHead == null && fractionAmount == 0) {
+//     if (ceilingTaxHead == null && fractionAmount == 0) {
 
-    } else {
-        let ceilingDelta = 0.0;
+//     } else {
+//         let ceilingDelta = 0.0;
 
-        if (ceilingTaxHead == null) {
-            ceilingTaxHead = {
-                taxHeadCode: "",
-                estimateAmount: 0,
-                category: null
-            }
-            newCeilingTax = true
-            taxHeads.push(ceilingTaxHead)
-        }
+//         if (ceilingTaxHead == null) {
+//             ceilingTaxHead = {
+//                 taxHeadCode: "",
+//                 estimateAmount: 0,
+//                 category: null
+//             }
+//             newCeilingTax = true
+//             taxHeads.push(ceilingTaxHead)
+//         }
 
-        if (fractionAmount < 0.5) {
-            ceilingDelta = parseFloat(fractionAmount.toFixed(2))
-            totalAmount = Math.trunc(totalAmount)
-            ceilingTaxHead[taxHeadCodeField] = "PT_ROUNDOFF"
-            ceilingTaxHead[taxAmountField] = -ceilingDelta
-            rebate += ceilingDelta
-        } else {
-            ceilingDelta = parseFloat((1 - fractionAmount).toFixed(2))
+//         if (fractionAmount < 0.5) {
+//             ceilingDelta = parseFloat(fractionAmount.toFixed(2))
+//             totalAmount = Math.trunc(totalAmount)
+//             ceilingTaxHead[taxHeadCodeField] = "PT_ROUNDOFF"
+//             ceilingTaxHead[taxAmountField] = -ceilingDelta
+//             rebate += ceilingDelta
+//         } else {
+//             ceilingDelta = parseFloat((1 - fractionAmount).toFixed(2))
 
-            totalAmount = Math.trunc(totalAmount) + 1
-            ceilingTaxHead[taxHeadCodeField] = "PT_ROUNDOFF"
-            ceilingTaxHead[taxAmountField] = ceilingDelta
-            taxAmount += ceilingDelta
-        }
-    }
+//             totalAmount = Math.trunc(totalAmount) + 1
+//             ceilingTaxHead[taxHeadCodeField] = "PT_ROUNDOFF"
+//             ceilingTaxHead[taxAmountField] = ceilingDelta
+//             taxAmount += ceilingDelta
+//         }
+//     }
 
-    return {
-        taxHeads,
-        rebate,
-        totalAmount,
-        taxAmount,
-        newCeilingTax,
-        ceilingTaxHead,
-        firecessTaxHead
-    }
-}
+//     return {
+//         taxHeads,
+//         rebate,
+//         totalAmount,
+//         taxAmount,
+//         newCeilingTax,
+//         ceilingTaxHead,
+//         firecessTaxHead
+//     }
+// }
 
 async function _createAndUpdateZeroTaxProcessor(request, response) {
     let index = 0
@@ -541,77 +541,77 @@ async function _createAndUpdateZeroTaxProcessor(request, response) {
     return response;
 }
 
-async function _createAndUpdateTaxProcessor(request, response, fireCessConfig) {
+// async function _createAndUpdateTaxProcessor(request, response, fireCessConfig) {
 
-    let index = 0
-    for (reqProperty of request["Properties"]) {
+//     let index = 0
+//     for (reqProperty of request["Properties"]) {
 
-        let resProperty = response["Properties"][index]
-        let propertyId = resProperty["propertyId"]
+//         let resProperty = response["Properties"][index]
+//         let propertyId = resProperty["propertyId"]
 
-        let assessmentNumber = resProperty["propertyDetails"][0]["assessmentNumber"]
+//         let assessmentNumber = resProperty["propertyDetails"][0]["assessmentNumber"]
 
-        let consumerCode = propertyId + ":" + assessmentNumber
-        let service = "PT"
-        let tenantId = reqProperty["tenantId"]
+//         let consumerCode = propertyId + ":" + assessmentNumber
+//         let service = "PT"
+//         let tenantId = reqProperty["tenantId"]
 
-        let demandSearchResponse = await findDemandForConsumerCode(consumerCode, tenantId, service, request["RequestInfo"])
+//         let demandSearchResponse = await findDemandForConsumerCode(consumerCode, tenantId, service, request["RequestInfo"])
 
-        let fireCessPercentage = getFireCessPercentage(reqProperty["propertyDetails"][0], fireCessConfig)
+//         let fireCessPercentage = getFireCessPercentage(reqProperty["propertyDetails"][0], fireCessConfig)
 
-        if (DEBUG_MODE) {
-            demandSearchResponse["Demands"][0]["firecess"] = fireCessPercentage
-        }
-        let calc = response["Properties"][index]["propertyDetails"][0]["calculation"]
-        let updateFirecessTax = calculateNewFireCess(calc["taxHeadEstimates"], fireCessPercentage.firecess, "estimateAmount", "taxHeadCode")
+//         if (DEBUG_MODE) {
+//             demandSearchResponse["Demands"][0]["firecess"] = fireCessPercentage
+//         }
+//         let calc = response["Properties"][index]["propertyDetails"][0]["calculation"]
+//         let updateFirecessTax = calculateNewFireCess(calc["taxHeadEstimates"], fireCessPercentage.firecess, "estimateAmount", "taxHeadCode")
 
-        let taxes = getUpdateTaxSummary(calc,
-            updateFirecessTax, "taxHeadCode", "estimateAmount")
+//         let taxes = getUpdateTaxSummary(calc,
+//             updateFirecessTax, "taxHeadCode", "estimateAmount")
 
-        if (taxes.newCeilingTax) {
-            let firstDemand = demandSearchResponse["Demands"][0]["demandDetails"][0]
-            let newDemand = {
-                id: null,
-                demandId: firstDemand["demandId"],
-                taxHeadMasterCode: taxes.ceilingTaxHead.taxHeadCode,
-                taxAmount: taxes.ceilingTaxHead.estimateAmount,
-                tenantId: firstDemand["tenantId"],
-                collectionAmount: 0
-            }
-            demandSearchResponse["Demands"][0]["demandDetails"].push(newDemand)
-        }
+//         if (taxes.newCeilingTax) {
+//             let firstDemand = demandSearchResponse["Demands"][0]["demandDetails"][0]
+//             let newDemand = {
+//                 id: null,
+//                 demandId: firstDemand["demandId"],
+//                 taxHeadMasterCode: taxes.ceilingTaxHead.taxHeadCode,
+//                 taxAmount: taxes.ceilingTaxHead.estimateAmount,
+//                 tenantId: firstDemand["tenantId"],
+//                 collectionAmount: 0
+//             }
+//             demandSearchResponse["Demands"][0]["demandDetails"].push(newDemand)
+//         }
 
-        for (demandDetail of demandSearchResponse["Demands"][0]["demandDetails"]) {
-            if (demandDetail.taxHeadMasterCode == "PT_FIRE_CESS") {
-                demandDetail.taxAmount = taxes.firecessTaxHead.estimateAmount
-            }
-            if (demandDetail.taxHeadMasterCode == "PT_ROUNDOFF" && demandDetail.adjustedAmount == 0.0) {
-                demandDetail.taxHeadMasterCode = taxes.ceilingTaxHead.taxHeadCode
-                demandDetail.taxAmount = taxes.ceilingTaxHead.estimateAmount
-            }
-        }
+//         for (demandDetail of demandSearchResponse["Demands"][0]["demandDetails"]) {
+//             if (demandDetail.taxHeadMasterCode == "PT_FIRE_CESS") {
+//                 demandDetail.taxAmount = taxes.firecessTaxHead.estimateAmount
+//             }
+//             if (demandDetail.taxHeadMasterCode == "PT_ROUNDOFF" && demandDetail.adjustedAmount == 0.0) {
+//                 demandDetail.taxHeadMasterCode = taxes.ceilingTaxHead.taxHeadCode
+//                 demandDetail.taxAmount = taxes.ceilingTaxHead.estimateAmount
+//             }
+//         }
 
-        let demandUpdateResponse = await updateDemand(demandSearchResponse["Demands"], request["RequestInfo"])
+//         let demandUpdateResponse = await updateDemand(demandSearchResponse["Demands"], request["RequestInfo"])
 
-        // let updateTaxHeads = []
+//         // let updateTaxHeads = []
 
-        // for (taxHead of demandSearchResponse["Demands"]) {
-        //     updateTaxHeads.push({
-        //         taxHeadCode: taxHead.taxHeadMasterCode,
-        //         estimateAmount: taxHead.taxtAmount,
-        //         category: taxHead.category
-        //     })
-        // }
+//         // for (taxHead of demandSearchResponse["Demands"]) {
+//         //     updateTaxHeads.push({
+//         //         taxHeadCode: taxHead.taxHeadMasterCode,
+//         //         estimateAmount: taxHead.taxtAmount,
+//         //         category: taxHead.category
+//         //     })
+//         // }
 
-        calc["totalAmount"] = taxes.totalAmount
-        calc["taxAmount"] = taxes.taxAmount
-        calc["rebate"] = taxes.rebate
-        // calc["taxHeadEstimates"] = updateTaxHeads
-        index++
-    }
+//         calc["totalAmount"] = taxes.totalAmount
+//         calc["taxAmount"] = taxes.taxAmount
+//         calc["rebate"] = taxes.rebate
+//         // calc["taxHeadEstimates"] = updateTaxHeads
+//         index++
+//     }
 
-    return response
-}
+//     return response
+// }
 
 async function _createAndUpdateRequestHandler(req, res) {
     let {
@@ -621,19 +621,19 @@ async function _createAndUpdateRequestHandler(req, res) {
 
     response = await _createAndUpdateZeroTaxProcessor(request, response)
     
-    if (!PT_ENABLE_FC_CALC)
-        res.json(response);
+    // if (!PT_ENABLE_FC_CALC)
+    res.json(response);
 
     // firecess logic is enabled, so execute it
-    let tenantId = request["Properties"][0]["tenantId"]
+    // let tenantId = request["Properties"][0]["tenantId"]
 
-    let fireCessConfig = await getFireCessConfig(tenantId)
-    if (fireCessConfig && fireCessConfig.dynamicFirecess && fireCessConfig.dynamicFirecess == true) {
-        let updatedResponse = await _createAndUpdateTaxProcessor(request, response, fireCessConfig)
-        res.json(updatedResponse);
-    } else {
-        res.json(response)
-    }
+    // let fireCessConfig = await getFireCessConfig(tenantId)
+    // if (fireCessConfig && fireCessConfig.dynamicFirecess && fireCessConfig.dynamicFirecess == true) {
+    //     let updatedResponse = await _createAndUpdateTaxProcessor(request, response, fireCessConfig)
+    //     res.json(updatedResponse);
+    // } else {
+    //     res.json(response)
+    // }
 }
 
 function getRequestResponse(req) {
@@ -665,19 +665,19 @@ router.post('/protected/punjab-pt/pt-calculator-v2/_estimate', asyncMiddleware(a
 
     response = _estimateZeroTaxProcessor(request, response)
 
-    if (!PT_ENABLE_FC_CALC)
-        res.json(response);
+    // if (!PT_ENABLE_FC_CALC)
+    res.json(response);
 
-    let tenantId = request["CalculationCriteria"][0]["tenantId"]
+    // let tenantId = request["CalculationCriteria"][0]["tenantId"]
 
-    let fireCessConfig = await getFireCessConfig(tenantId)
+    // let fireCessConfig = await getFireCessConfig(tenantId)
 
-    if (fireCessConfig && fireCessConfig.dynamicFirecess && fireCessConfig.dynamicFirecess == true) {
-        let updatedResponse = _estimateTaxProcessor(request, response, fireCessConfig)
-        res.json(updatedResponse);
-    } else {
-        res.json(response);
-    }
+    // if (fireCessConfig && fireCessConfig.dynamicFirecess && fireCessConfig.dynamicFirecess == true) {
+    //     let updatedResponse = _estimateTaxProcessor(request, response, fireCessConfig)
+    //     res.json(updatedResponse);
+    // } else {
+    //     res.json(response);
+    // }
 }))
 
 app.listen(8000, () => {
