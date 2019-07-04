@@ -2,7 +2,7 @@ ReportDefinitions:
   - reportName: CollectionRegister
     summary: Collection Register
     version: 1.0.0
-    moduleName: rainmaker-common
+    moduleName: rainmaker-uc
     externalService:
     - entity: $.MdmsRes.BillingService.BusinessService[*] 
       apiURL: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?tenantId=pb&moduleName=BillingService&masterName=BusinessService&filter=[?(@.type=='Adhoc')]
