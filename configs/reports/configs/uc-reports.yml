@@ -21,57 +21,57 @@ ReportDefinitions:
         total: false
       - name: cash_count
         label: reports.common.CollectionRegister.transactions
-        type: number
+        type: string
         source: common
         total: false
       - name: cash_sum
         label: reports.common.CollectionRegister.cash
-        type: number
+        type: string
         source: common
         total: true
       - name: cheque_count
         label: reports.common.CollectionRegister.transactions
-        type: number
+        type: string
         source: common
         total: false
       - name: cheque_sum
         label: reports.common.CollectionRegister.cheque
-        type: number
+        type: string
         source: common
         total: true
       - name: dd_count
         label: reports.common.CollectionRegister.transactions
-        type: number
+        type: string
         source: common
         total: false
       - name: dd_sum
         label: reports.common.CollectionRegister.dd
-        type: number
+        type: string
         source: common
         total: true
       - name: online_count
         label: reports.common.CollectionRegister.transactions
-        type: number
+        type: string
         source: common
         total: false
       - name: online_sum
         label: reports.common.CollectionRegister.online
-        type: number
+        type: string
         source: common
         total: true
       - name: card_count
         label: reports.common.CollectionRegister.transactions
-        type: number
+        type: string
         source: common
         total: false
       - name: card_sum
         label: reports.common.CollectionRegister.card
-        type: number
+        type: string
         source: common
         total: true
       - name: total
         label: reports.common.CollectionRegister.total
-        type: number
+        type: string
         source: common
         total: true
 
