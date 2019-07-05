@@ -160,7 +160,7 @@ ReportDefinitions:
                   SELECT 
                     receiptheader, 
                     SUM(CASE WHEN taxheadcode LIKE 'PT_ADHOC_PENALTY' THEN adjustedamount ELSE 0 END) as adhocpenalty, 
-                    SUM(CASE WHEN taxheadcode LIKE 'PT_ADHOC_PENALTY' THEN adjustedamount ELSE 0 END) as adhocrebate, 
+                    SUM(CASE WHEN taxheadcode LIKE 'PT_ADHOC_REBATE' THEN adjustedamount ELSE 0 END) as adhocrebate, 
                     SUM(CASE WHEN taxheadcode LIKE 'PT_FIRE_CESS' THEN adjustedamount ELSE 0 END) as firecess, 
                     SUM(CASE WHEN taxheadcode LIKE 'PT_CANCER_CESS' THEN adjustedamount ELSE 0 END) as cancercess, 
                     SUM(CASE WHEN taxheadcode LIKE 'PT_TIME_INTEREST' THEN adjustedamount ELSE 0 END) as interest, 
@@ -365,7 +365,7 @@ ReportDefinitions:
                   SELECT 
                     receiptheader, 
                     SUM(CASE WHEN taxheadcode LIKE 'PT_ADHOC_PENALTY' THEN adjustedamount ELSE 0 END) as adhocpenalty, 
-                    SUM(CASE WHEN taxheadcode LIKE 'PT_ADHOC_PENALTY' THEN adjustedamount ELSE 0 END) as adhocrebate, 
+                    SUM(CASE WHEN taxheadcode LIKE 'PT_ADHOC_REBATE' THEN adjustedamount ELSE 0 END) as adhocrebate, 
                     SUM(CASE WHEN taxheadcode LIKE 'PT_FIRE_CESS' THEN adjustedamount ELSE 0 END) as firecess, 
                     SUM(CASE WHEN taxheadcode LIKE 'PT_CANCER_CESS' THEN adjustedamount ELSE 0 END) as cancercess, 
                     SUM(CASE WHEN taxheadcode LIKE 'PT_TIME_INTEREST' THEN adjustedamount ELSE 0 END) as interest, 
@@ -626,7 +626,7 @@ ReportDefinitions:
                   SELECT 
                     receiptheader, 
                     SUM(CASE WHEN taxheadcode LIKE 'PT_ADHOC_PENALTY' THEN adjustedamount ELSE 0 END) as adhocpenalty, 
-                    SUM(CASE WHEN taxheadcode LIKE 'PT_ADHOC_PENALTY' THEN adjustedamount ELSE 0 END) as adhocrebate, 
+                    SUM(CASE WHEN taxheadcode LIKE 'PT_ADHOC_REBATE' THEN adjustedamount ELSE 0 END) as adhocrebate, 
                     SUM(CASE WHEN taxheadcode LIKE 'PT_FIRE_CESS' THEN adjustedamount ELSE 0 END) as firecess, 
                     SUM(CASE WHEN taxheadcode LIKE 'PT_CANCER_CESS' THEN adjustedamount ELSE 0 END) as cancercess, 
                     SUM(CASE WHEN taxheadcode LIKE 'PT_TIME_INTEREST' THEN adjustedamount ELSE 0 END) as interest, 
