@@ -160,7 +160,7 @@ ReportDefinitions:
                   SELECT 
                     receiptheader, 
                     SUM(CASE WHEN taxheadcode LIKE 'PT_ADHOC_PENALTY' THEN adjustedamount ELSE 0 END) as adhocpenalty, 
-                    SUM(CASE WHEN taxheadcode LIKE 'PT_ADHOC_PENALTY' THEN adjustedamount ELSE 0 END) as adhocrebate, 
+                    SUM(CASE WHEN taxheadcode LIKE 'PT_ADHOC_REBATE' THEN adjustedamount ELSE 0 END) as adhocrebate, 
                     SUM(CASE WHEN taxheadcode LIKE 'PT_FIRE_CESS' THEN adjustedamount ELSE 0 END) as firecess, 
                     SUM(CASE WHEN taxheadcode LIKE 'PT_CANCER_CESS' THEN adjustedamount ELSE 0 END) as cancercess, 
                     SUM(CASE WHEN taxheadcode LIKE 'PT_TIME_INTEREST' THEN adjustedamount ELSE 0 END) as interest, 
@@ -365,7 +365,7 @@ ReportDefinitions:
                   SELECT 
                     receiptheader, 
                     SUM(CASE WHEN taxheadcode LIKE 'PT_ADHOC_PENALTY' THEN adjustedamount ELSE 0 END) as adhocpenalty, 
-                    SUM(CASE WHEN taxheadcode LIKE 'PT_ADHOC_PENALTY' THEN adjustedamount ELSE 0 END) as adhocrebate, 
+                    SUM(CASE WHEN taxheadcode LIKE 'PT_ADHOC_REBATE' THEN adjustedamount ELSE 0 END) as adhocrebate, 
                     SUM(CASE WHEN taxheadcode LIKE 'PT_FIRE_CESS' THEN adjustedamount ELSE 0 END) as firecess, 
                     SUM(CASE WHEN taxheadcode LIKE 'PT_CANCER_CESS' THEN adjustedamount ELSE 0 END) as cancercess, 
                     SUM(CASE WHEN taxheadcode LIKE 'PT_TIME_INTEREST' THEN adjustedamount ELSE 0 END) as interest, 
@@ -457,9 +457,9 @@ ReportDefinitions:
       (SUM(totalamount) - SUM(amount)) AS totalamountdue 
     FROM eg_pt_propertydetail_v2 AS pd 
     LEFT OUTER JOIN 
-      (SELECT consumercode, totalamount, amount FROM egcl_receiptheader AS rh 
-      LEFT OUTER JOIN egcl_receiptinstrument AS ri ON rh.id = ri.receiptheader 
-      LEFT OUTER JOIN egcl_instrumentheader AS ih ON ri.instrumentheader = ih.id 
+      (SELECT consumercode, totalamount, amount FROM egcl_receiptheader_v1 AS rh 
+      LEFT OUTER JOIN egcl_receiptinstrument_v1 AS ri ON rh.id = ri.receiptheader 
+      LEFT OUTER JOIN egcl_instrumentheader_v1 AS ih ON ri.instrumentheader = ih.id 
       and ih.instrumentstatus	 != 'CANCELLED' 
       where rh.status != 'Cancelled'
       ) AS instrument_data ON CONCAT(pd.property, ':', pd.assessmentnumber) = instrument_data.consumercode 
@@ -626,7 +626,7 @@ ReportDefinitions:
                   SELECT 
                     receiptheader, 
                     SUM(CASE WHEN taxheadcode LIKE 'PT_ADHOC_PENALTY' THEN adjustedamount ELSE 0 END) as adhocpenalty, 
-                    SUM(CASE WHEN taxheadcode LIKE 'PT_ADHOC_PENALTY' THEN adjustedamount ELSE 0 END) as adhocrebate, 
+                    SUM(CASE WHEN taxheadcode LIKE 'PT_ADHOC_REBATE' THEN adjustedamount ELSE 0 END) as adhocrebate, 
                     SUM(CASE WHEN taxheadcode LIKE 'PT_FIRE_CESS' THEN adjustedamount ELSE 0 END) as firecess, 
                     SUM(CASE WHEN taxheadcode LIKE 'PT_CANCER_CESS' THEN adjustedamount ELSE 0 END) as cancercess, 
                     SUM(CASE WHEN taxheadcode LIKE 'PT_TIME_INTEREST' THEN adjustedamount ELSE 0 END) as interest, 
@@ -755,9 +755,9 @@ ReportDefinitions:
       SUM(CASE WHEN collectiontype LIKE 'COUNTER' THEN amount ELSE 0 END) AS totaloffline, 
       (SUM(totalamount) - SUM(amount)) AS totalamountdue 
       FROM eg_pt_propertydetail_v2 AS pd 
-      LEFT OUTER JOIN (SELECT consumercode, totalamount, amount, collectiontype, receiptdate FROM egcl_receiptheader AS rh 
-      LEFT OUTER JOIN egcl_receiptinstrument AS ri ON rh.id = ri.receiptheader 
-      LEFT OUTER JOIN egcl_instrumentheader AS ih ON ri.instrumentheader = ih.id and ih.instrumentstatus	 != 'CANCELLED' 
+      LEFT OUTER JOIN (SELECT consumercode, totalamount, amount, collectiontype, receiptdate FROM egcl_receiptheader_v1 AS rh 
+      LEFT OUTER JOIN egcl_receiptinstrument_v1 AS ri ON rh.id = ri.receiptheader 
+      LEFT OUTER JOIN egcl_instrumentheader_v1 AS ih ON ri.instrumentheader = ih.id and ih.instrumentstatus	 != 'CANCELLED' 
       where rh.status != 'Cancelled'
       ) AS tbl_amounts ON CONCAT(pd.property, ':', pd.assessmentnumber) = tbl_amounts.consumercode 
       WHERE tenantid LIKE CONCAT(SPLIT_PART($tenantid, '.', 1), '%') and tenantid != 'pb.testing'
@@ -833,9 +833,9 @@ ReportDefinitions:
       SUM(CASE WHEN collectiontype LIKE 'COUNTER' THEN amount ELSE 0 END) AS totaloffline, 
       (SUM(totalamount) - SUM(amount)) AS totalamountdue 
       FROM eg_pt_propertydetail_v2 AS pd 
-      LEFT OUTER JOIN (SELECT consumercode, totalamount, amount, collectiontype, receiptdate FROM egcl_receiptheader AS rh 
-      LEFT OUTER JOIN egcl_receiptinstrument AS ri ON rh.id = ri.receiptheader 
-      LEFT OUTER JOIN egcl_instrumentheader AS ih ON ri.instrumentheader = ih.id and ih.instrumentstatus	 != 'CANCELLED' 
+      LEFT OUTER JOIN (SELECT consumercode, totalamount, amount, collectiontype, receiptdate FROM egcl_receiptheader_v1 AS rh 
+      LEFT OUTER JOIN egcl_receiptinstrument_v1 AS ri ON rh.id = ri.receiptheader 
+      LEFT OUTER JOIN egcl_instrumentheader_v1 AS ih ON ri.instrumentheader = ih.id and ih.instrumentstatus	 != 'CANCELLED' 
       where rh.status != 'Cancelled'
       ) AS tbl_amounts ON CONCAT(pd.property, ':', pd.assessmentnumber) = tbl_amounts.consumercode 
       WHERE tenantid LIKE CONCAT(SPLIT_PART($tenantid, '.', 1), '%') and tenantid = $tenantid
@@ -988,12 +988,13 @@ ReportDefinitions:
       to_char(to_timestamp(ih.transactiondate/1000), 'DD/MM/YYYY') as "paymentdate",
       eu.emailid     as "emailid"    ,
       REGEXP_REPLACE(REGEXP_REPLACE(CONCAT(pta.doorno, ',', pta.addressline1, ',', pta.addressline2, ',', pta.buildingname, ',', pta.pincode), ',+', ','), '^,|,$', '') as "address"
-    from egcl_receiptheader as rh
-    inner join egcl_receiptinstrument as ri on ri.receiptheader = rh.id    inner join egcl_instrumentheader     as ih on ih.id = ri.instrumentheader
+    from egcl_receiptheader_v1 as rh
+    inner join egcl_receiptinstrument_v1 as ri on ri.receiptheader = rh.id    
+    inner join egcl_instrumentheader_v1     as ih on ih.id = ri.instrumentheader
     inner join eg_pt_property_v2    as pt on pt.propertyid = split_part(consumercode, ':', 1)
     inner join eg_pt_propertydetail_v2    as pd on pd.assessmentnumber = split_part(consumercode, ':', 2)
     inner join eg_pt_owner_v2     as po on po.propertydetail = pd.assessmentnumber
     inner join eg_user as eu on eu.uuid     = po.userid
     inner join eg_pt_address_v2    as pta on pta.property = pt.propertyid
-    inner join eg_pt_unit_v2_ot as pot on pot.propertydetail = pd.assessmentnumber
+    left outer join eg_pt_unit_v2_ot as pot on pot.propertydetail = pd.assessmentnumber
     where rh.tenantid = $tenantid
