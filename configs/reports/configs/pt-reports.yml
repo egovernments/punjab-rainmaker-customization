@@ -989,11 +989,12 @@ ReportDefinitions:
       eu.emailid     as "emailid"    ,
       REGEXP_REPLACE(REGEXP_REPLACE(CONCAT(pta.doorno, ',', pta.addressline1, ',', pta.addressline2, ',', pta.buildingname, ',', pta.pincode), ',+', ','), '^,|,$', '') as "address"
     from egcl_receiptheader_v1 as rh
-    inner join egcl_receiptinstrument_v1 as ri on ri.receiptheader = rh.id    inner join egcl_instrumentheader_v1     as ih on ih.id = ri.instrumentheader
+    inner join egcl_receiptinstrument_v1 as ri on ri.receiptheader = rh.id    
+    inner join egcl_instrumentheader_v1     as ih on ih.id = ri.instrumentheader
     inner join eg_pt_property_v2    as pt on pt.propertyid = split_part(consumercode, ':', 1)
     inner join eg_pt_propertydetail_v2    as pd on pd.assessmentnumber = split_part(consumercode, ':', 2)
     inner join eg_pt_owner_v2     as po on po.propertydetail = pd.assessmentnumber
     inner join eg_user as eu on eu.uuid     = po.userid
     inner join eg_pt_address_v2    as pta on pta.property = pt.propertyid
-    inner join eg_pt_unit_v2_ot as pot on pot.propertydetail = pd.assessmentnumber
+    left outer join eg_pt_unit_v2_ot as pot on pot.propertydetail = pd.assessmentnumber
     where rh.tenantid = $tenantid
