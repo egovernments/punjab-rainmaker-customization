@@ -997,4 +997,4 @@ ReportDefinitions:
     inner join eg_user as eu on eu.uuid     = po.userid
     inner join eg_pt_address_v2    as pta on pta.property = pt.propertyid
     left outer join eg_pt_unit_v2_ot as pot on pot.propertydetail = pd.assessmentnumber
-    where rh.tenantid = $tenantid
+    where rh.tenantid = $tenantid and rh.status != 'Cancelled'
