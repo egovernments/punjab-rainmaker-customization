@@ -140,7 +140,7 @@ ReportDefinitions:
         type: string
         source: uc
         total: false
-      - name: redeiptdate
+      - name: receiptdate
         label: reports.uc.receiptdate
         type: string
         source: uc
