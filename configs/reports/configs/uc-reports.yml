@@ -186,7 +186,7 @@ ReportDefinitions:
         source: uc
         total: true
       - name: ddorchequenumber
-        label: reports.uc.ddorchecquenumber
+        label: reports.uc.ddorchequenumber
         type: string
         source: uc
         total: false
