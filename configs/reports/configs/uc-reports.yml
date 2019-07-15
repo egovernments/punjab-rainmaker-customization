@@ -131,7 +131,7 @@ ReportDefinitions:
     moduleName: rainmaker-uc
     sourceColumns:
       - name: ulb
-        label: reports.uc.ULB
+        label: reports.uc.ulb
         type: string
         source: uc
         total: false
@@ -145,22 +145,22 @@ ReportDefinitions:
         type: string
         source: uc
         total: false
-      - name: g8receiptdate
-        label: reports.uc.g8receiptdate
+      - name: g8issuedate
+        label: reports.uc.g8issuedate
         type: string
         source: uc
         total: false
-      - name: g8receiptnumber
-        label: reports.uc.g8receiptnumber
+      - name: g8receiptno
+        label: reports.uc.g8receiptno
         type: string
         source: uc
         total: false
-      - name: receiptstatus
+      - name: status
         label: reports.uc.receiptstatus
         type: string
         source: uc
         total: false
-      - name: businessdetails
+      - name: servicecategory
         label: reports.uc.businessdetails
         type: string
         source: uc
@@ -180,8 +180,13 @@ ReportDefinitions:
         type: string
         source: uc
         total: true
-      - name: chequenumber
-        label: reports.uc.checquenumber
+      - name: fee
+        label: reports.uc.fee
+        type: string
+        source: uc
+        total: true
+      - name: ddorchequenumber
+        label: reports.uc.ddorchecquenumber
         type: string
         source: uc
         total: false
@@ -192,6 +197,16 @@ ReportDefinitions:
         total: false
       - name: collectorname
         label: reports.uc.collectorname
+        type: string
+        source: uc
+        total: false
+      - name: totalamount
+        label: reports.uc.totalamount
+        type: string
+        source: uc
+        total: true
+      - name: paymentmode
+        label: reports.uc.paymentmode
         type: string
         source: uc
         total: false
@@ -209,7 +224,7 @@ ReportDefinitions:
         isMandatory: false
         searchClause: AND rh.receiptdate <= $toDate
       - name: ulb
-        label: ULB
+        label: reports.uc.ulb
         type: singlevaluelist
         pattern: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?tenantId=$tenantid&moduleName=tenant&masterName=tenants|$.MdmsRes.tenant.tenants.*.code|$.MdmsRes.tenant.tenants.*.name
         source: uc
@@ -221,28 +236,28 @@ ReportDefinitions:
         WITH receipt_breakup AS (
                     SELECT 
                       receiptheader, 
-                      SUM(CASE WHEN taxheadcode LIKE '%_CGST' THEN adjustedamount ELSE 0 END) as "GST (Rs.)", 
-                      SUM(CASE WHEN taxheadcode LIKE '%_TAX' THEN adjustedamount ELSE 0 END) as "TAX", 
-                      SUM(CASE WHEN taxheadcode LIKE '%_FIELD' THEN adjustedamount ELSE 0 END) as "Field Collection", 
-                      SUM(CASE WHEN taxheadcode LIKE '%_FEE' THEN adjustedamount ELSE 0 END) as "FEE"            
+                      SUM(CASE WHEN taxheadcode LIKE '%_CGST' THEN adjustedamount ELSE 0 END) as gst, 
+                      SUM(CASE WHEN taxheadcode LIKE '%_TAX' THEN adjustedamount ELSE 0 END) as tax, 
+                      SUM(CASE WHEN taxheadcode LIKE '%_FIELD' THEN adjustedamount ELSE 0 END) as fieldcollection, 
+                      SUM(CASE WHEN taxheadcode LIKE '%_FEE' THEN adjustedamount ELSE 0 END) as fee            
                     FROM egcl_receiptdetails_v1 as rd
                     INNER JOIN egcl_receiptheader_v1 as rh on rh.id = rd.receiptheader
                     GROUP BY rd.receiptheader
         )
         SELECT 
-          rh.tenantid AS ULB,
-          rh.receiptnumber as "Receipt Number",
-          To_char(To_timestamp(rh.receiptdate / 1000), 'DD/MM/YYYY') as "Receipt Date",
-          To_char(To_timestamp(rh.manualreceiptdate / 1000), 'DD/MM/YYYY') as "G8 Issue Date",
-          rh.manualreceiptnumber as "G8 receipt No",
-          rh.status as "Status of Receipt",
-          businessdetails as "Service Category",
+          rh.tenantid as ulb,
+          rh.receiptnumber as receiptnumber,
+          To_char(To_timestamp(rh.receiptdate / 1000), 'DD/MM/YYYY') as receiptdate,
+          To_char(To_timestamp(rh.manualreceiptdate / 1000), 'DD/MM/YYYY') as g8issuedate,
+          rh.manualreceiptnumber as g8receiptno,
+          rh.status as status,
+          businessdetails as servicecategory,
           receipt_breakup.*,  
-          amount as "Total Amount (Rs.)", 
-          instrumenttype as "Payment Mode",
-          (case when instrumenttype like 'Cash' then '' else  transactionnumber end) as "DD/Cheque Number",
-          'System' as "Collection type",
-          eg_user.name as "Collector name"
+          amount as totalamount, 
+          instrumenttype as paymentmode,
+          (case when instrumenttype like 'Cash' then '' else  transactionnumber end) as ddorchequenumber,
+          'System' as collectiontype,
+          eg_user.name as collectorname
         FROM egcl_receiptheader_v1 AS rh
         JOIN egcl_receiptinstrument_v1 AS ri ON rh.id = ri.receiptheader
         JOIN egcl_instrumentheader_v1 AS ih ON ih.id = ri.instrumentheader
