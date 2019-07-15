@@ -124,3 +124,130 @@ ReportDefinitions:
     query: select COALESCE(message,REGEXP_REPLACE(businessdetails,'\..*','')) service,collectiontype channel,sum(case when instrumenttype='Cash' then 1 else 0 end) as cash_count, sum(case when instrumenttype='Cash' then ins.amount else 0 end) as cash_sum, sum(case when instrumenttype='Cheque' then 1 else 0 end) as cheque_count, sum(case when instrumenttype='Cheque' then ins.amount else 0 end) as cheque_sum, sum(case when instrumenttype='DD' then 1 else 0 end) as dd_count, sum(case when instrumenttype='DD' then ins.amount else 0 end) as dd_sum, sum(case when instrumenttype='Online' then 1 else 0 end) as online_count, sum(case when instrumenttype='Online' then ins.amount else 0 end) as online_sum, sum(case when instrumenttype='Card' then 1 else 0 end) as card_count, sum(case when instrumenttype='Card' then amount else 0 end) as card_sum,sum(amount) total from egcl_receiptheader_v1 rt inner join egcl_receiptinstrument_v1 ihead on rt.id=receiptheader inner join egcl_instrumentheader_v1 ins on instrumentheader=ins.id left outer join message on LOWER(concat('BILLINGSERVICE_BUSINESSSERVICE_',REGEXP_REPLACE(businessdetails,'\..*','')))=LOWER(code)  AND module='rainmaker-uc' where businessdetails IN (select code from (VALUES tbl_businessserviceList) AS serv_list(code,servicename))
     groupby: group by service,collectiontype
     orderby: order by service,collectiontype
+
+  - reportName: MiscReceipt
+    summary: Receipt Register Miscellaneous
+    version: 1.0.0
+    moduleName: rainmaker-uc
+    sourceColumns:
+      - name: ulb
+        label: reports.uc.ULB
+        type: string
+        source: uc
+        total: false
+      - name: receiptnumber
+        label: reports.uc.receiptnumber
+        type: string
+        source: uc
+        total: false
+      - name: redeiptdate
+        label: reports.uc.receiptdate
+        type: string
+        source: uc
+        total: false
+      - name: g8receiptdate
+        label: reports.uc.g8receiptdate
+        type: string
+        source: uc
+        total: false
+      - name: g8receiptnumber
+        label: reports.uc.g8receiptnumber
+        type: string
+        source: uc
+        total: false
+      - name: receiptstatus
+        label: reports.uc.receiptstatus
+        type: string
+        source: uc
+        total: false
+      - name: businessdetails
+        label: reports.uc.businessdetails
+        type: string
+        source: uc
+        total: false
+      - name: gst
+        label: reports.uc.gst
+        type: string
+        source: uc
+        total: true
+      - name: tax
+        label: reports.uc.tax
+        type: string
+        source: uc
+        total: true
+      - name: fieldcollection
+        label: reports.uc.fieldcollection
+        type: string
+        source: uc
+        total: true
+      - name: chequenumber
+        label: reports.uc.checquenumber
+        type: string
+        source: uc
+        total: false
+      - name: collectiontype
+        label: reports.uc.collectiontype
+        type: string
+        source: uc
+        total: false
+      - name: collectorname
+        label: reports.uc.collectorname
+        type: string
+        source: uc
+        total: false
+    searchParams:
+      - name: fromDate
+        label: reports.uc.fromDate
+        type: epoch
+        source: uc
+        isMandatory: false
+        searchClause: AND rh.receiptdate >= $fromDate
+      - name: toDate
+        label: reports.uc.toDate
+        type: epoch
+        source: uc
+        isMandatory: false
+        searchClause: AND rh.receiptdate <= $toDate
+      - name: ulb
+        label: ULB
+        type: singlevaluelist
+        pattern: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?tenantId=$tenantid&moduleName=tenant&masterName=tenants|$.MdmsRes.tenant.tenants.*.code|$.MdmsRes.tenant.tenants.*.name
+        source: uc
+        wrapper: true
+        isMandatory: false
+        searchClause: AND rh.tenantid = $ulb
+    query: |
+        -- Use CTE to force query plan, compute & use CTE later
+        WITH receipt_breakup AS (
+                    SELECT 
+                      receiptheader, 
+                      SUM(CASE WHEN taxheadcode LIKE '%_CGST' THEN adjustedamount ELSE 0 END) as "GST (Rs.)", 
+                      SUM(CASE WHEN taxheadcode LIKE '%_TAX' THEN adjustedamount ELSE 0 END) as "TAX", 
+                      SUM(CASE WHEN taxheadcode LIKE '%_FIELD' THEN adjustedamount ELSE 0 END) as "Field Collection", 
+                      SUM(CASE WHEN taxheadcode LIKE '%_FEE' THEN adjustedamount ELSE 0 END) as "FEE"            
+                    FROM egcl_receiptdetails_v1 as rd
+                    INNER JOIN egcl_receiptheader_v1 as rh on rh.id = rd.receiptheader
+                    GROUP BY rd.receiptheader
+        )
+        SELECT 
+          rh.tenantid AS ULB,
+          rh.receiptnumber as "Receipt Number",
+          To_char(To_timestamp(rh.receiptdate / 1000), 'DD/MM/YYYY') as "Receipt Date",
+          To_char(To_timestamp(rh.manualreceiptdate / 1000), 'DD/MM/YYYY') as "G8 Issue Date",
+          rh.manualreceiptnumber as "G8 receipt No",
+          rh.status as "Status of Receipt",
+          businessdetails as "Service Category",
+          receipt_breakup.*,  
+          amount as "Total Amount (Rs.)", 
+          instrumenttype as "Payment Mode",
+          (case when instrumenttype like 'Cash' then '' else  transactionnumber end) as "DD/Cheque Number",
+          'System' as "Collection type",
+          eg_user.name as "Collector name"
+        FROM egcl_receiptheader_v1 AS rh
+        JOIN egcl_receiptinstrument_v1 AS ri ON rh.id = ri.receiptheader
+        JOIN egcl_instrumentheader_v1 AS ih ON ih.id = ri.instrumentheader
+        JOIN receipt_breakup ON rh.id = receipt_breakup.receiptheader
+        JOIN eg_user ON rh.createdby::INTEGER=eg_user.id
+        WHERE  rh.status != 'Cancelled'  AND receiptnumber like 'MP%'
+    orderby: ORDER BY rh.receiptdate DESC
+
