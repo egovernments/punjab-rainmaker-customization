@@ -39,8 +39,8 @@ ReportDefinitions:
         type: string
         source: uc
         total: false
-      - name: gst
-        label: reports.uc.gst
+      - name: cgst
+        label: reports.uc.cgst
         type: string
         source: uc
         total: true
@@ -54,13 +54,13 @@ ReportDefinitions:
         type: string
         source: uc
         total: true
-      - name: fee
-        label: reports.uc.fee
+      - name: sgst
+        label: reports.uc.sgst
         type: string
         source: uc
         total: true
       - name: ddorchequenumber
-        label: reports.uc.ddorchecquenumber
+        label: reports.uc.ddorchequenumber
         type: string
         source: uc
         total: false
@@ -110,10 +110,10 @@ ReportDefinitions:
         WITH receipt_breakup AS (
                     SELECT 
                       receiptheader, 
-                      SUM(CASE WHEN taxheadcode LIKE '%_CGST' THEN adjustedamount ELSE 0 END) as gst, 
+                      SUM(CASE WHEN taxheadcode LIKE '%_CGST' THEN adjustedamount ELSE 0 END) as cgst, 
                       SUM(CASE WHEN taxheadcode LIKE '%_TAX' THEN adjustedamount ELSE 0 END) as tax, 
-                      SUM(CASE WHEN taxheadcode LIKE '%_FIELD' THEN adjustedamount ELSE 0 END) as fieldcollection, 
-                      SUM(CASE WHEN taxheadcode LIKE '%_FEE' THEN adjustedamount ELSE 0 END) as fee            
+                      SUM(CASE WHEN taxheadcode LIKE '%_SGST' THEN adjustedamount ELSE 0 END) as sgst, 
+                      SUM(CASE WHEN taxheadcode LIKE '%_FIELD_FEE' THEN adjustedamount ELSE 0 END) as fieldcollection            
                     FROM egcl_receiptdetails_v1 as rd
                     INNER JOIN egcl_receiptheader_v1 as rh on rh.id = rd.receiptheader
                     GROUP BY rd.receiptheader
