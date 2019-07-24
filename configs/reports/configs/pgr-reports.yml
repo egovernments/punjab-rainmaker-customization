@@ -149,7 +149,7 @@ ReportDefinitions:
     Initcap(eg_pgr_service.status) as status
     FROM eg_pgr_service
     left outer join eg_pgr_address on eg_pgr_address.uuid = eg_pgr_service.addressid
-    left outer join eg_user on eg_user.id = eg_pgr_service.accountid::int,
+    left outer join eg_user on eg_user.id = eg_pgr_service.accountid::int
     left outer join eg_pgr_action as epa on epa.businesskey = eg_pgr_service.servicerequestid and epa.action in ('assign','reassign')
     left outer join eg_user as ua on ua.id = epa.assignee::int
     WHERE 
