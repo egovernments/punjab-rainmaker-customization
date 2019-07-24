@@ -140,7 +140,6 @@ ReportDefinitions:
         WHERE  rh.status != 'Cancelled'  AND receiptnumber like 'MP%'
     orderby: ORDER BY rh.receiptdate DESC
 
-ReportDefinitions:
   - reportName: MiscReceiptULB
     summary: Receipt Register Miscellaneous
     version: 1.0.0
