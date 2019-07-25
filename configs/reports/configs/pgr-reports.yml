@@ -155,7 +155,7 @@ ReportDefinitions:
     WHERE 
     eg_pgr_service.tenantid LIKE  $tenantid 
     AND eg_pgr_address.uuid = eg_pgr_service.addressid
-    AND eg_pgr_service.status IN ('open','assigned','reassigrequested','rejected')
+    AND eg_pgr_service.status IN ('open','assigned','reassigrequested','rejected','closed','resolved')
   orderby: ORDER BY servicerequestid, epa."when" desc
 
 - reportName: StateSourceReport
