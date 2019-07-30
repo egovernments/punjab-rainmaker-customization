@@ -656,6 +656,32 @@ router.post('/protected/punjab-pt/property/_create', asyncMiddleware(_createAndU
 
 router.post('/protected/punjab-pt/property/_update', asyncMiddleware(_createAndUpdateRequestHandler))
 
+router.post('/open/punjab-pt/payu/confirm', asyncMiddleware((async function (req, res) {
+    console.log(req.json());
+})))
+router.post('/protected/punjab-pt/pre-hook/pg-service/transaction/v1/_create', asyncMiddleware((async function (req, res) {
+    let {
+        request
+    } = getRequestResponse(req)
+
+    if (request['Transaction']['tenantId'] == 'pb.jalandhar' || request['Transaction']['tenantId'] == 'pb.testing') {
+        let original_callback = request['Transaction']['callbackUrl'];
+        request['Transaction']['gateway'] = 'PAYU'
+        url_callback = url.parse(original_callback)
+
+        url_callback.query = url_callback.query || {};
+
+        url_callback.query['original_callback'] = url_callback.path;
+
+        url_callback.path = '/open/punjab-pt/payu/confirm';
+        url_callback.pathname = '/open/punjab-pt/payu/confirm';
+
+        request['Transaction']['callbackUrl'] = url.format(url_callback);
+    }
+    
+    res.json(request);
+})));
+
 router.post('/protected/punjab-pt/pt-calculator-v2/_estimate', asyncMiddleware(async function (req, res) {
 
     let {
