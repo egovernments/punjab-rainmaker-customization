@@ -137,7 +137,7 @@ ReportDefinitions:
         JOIN egcl_instrumentheader_v1 AS ih ON ih.id = ri.instrumentheader
         JOIN receipt_breakup ON rh.id = receipt_breakup.receiptheader
         JOIN eg_user ON rh.createdby::INTEGER=eg_user.id
-        WHERE  rh.status != 'Cancelled'  AND receiptnumber like 'MP%'
+        WHERE  rh.status != 'Cancelled' AND tenantid != 'pb.testing' AND receiptnumber like 'MP%'
     orderby: ORDER BY rh.receiptdate DESC
 
   - reportName: MiscReceiptULB
