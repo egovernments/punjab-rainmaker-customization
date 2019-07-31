@@ -10,7 +10,10 @@ const {
 var app = express();
 var mustache = require('mustache-express')
 const Cryptr = require('cryptr');
-var {encrypt, jwt_sign } = require('./encrypt')
+var {
+    encrypt,
+    jwt_sign
+} = require('./encrypt')
 
 app.use(require('morgan')('dev'));
 
@@ -39,7 +42,7 @@ function log(val) {
     }
 }
 
-log ("ENCKEY=" + EGOV_BND_ENCRYPTION_KEY)
+log("ENCKEY=" + EGOV_BND_ENCRYPTION_KEY)
 
 const cryptr = new Cryptr(EGOV_BND_ENCRYPTION_KEY);
 
@@ -54,7 +57,7 @@ function getUserID(data) {
 
 async function getFireCessConfig(tenantId) {
     let fireCessConfig = await request.post({
-        url: url.resolve(EGOV_MDMS_HOST , "/egov-mdms-service/v1/_search?tenantId=" + tenantId),
+        url: url.resolve(EGOV_MDMS_HOST, "/egov-mdms-service/v1/_search?tenantId=" + tenantId),
         body: {
             RequestInfo: {
                 "apiId": "Rainmaker-custom-service",
@@ -190,10 +193,16 @@ router.post('/protected/bndlogin/linkAccount', asyncMiddleware(async function (r
     log(response)
 
     if (response.sys_message && response.sys_message == 'Invalid User and Password') {
-        res.status(200).send({ code: "INVALID_CREDENTIALS", message: "Invalid User and Password"} )
+        res.status(200).send({
+            code: "INVALID_CREDENTIALS",
+            message: "Invalid User and Password"
+        })
         return
     } else if (response.sys_message && response.sys_message == 'INTERNAL APPLICATION ERROR') {
-        res.status(200).send({ code: "ERROR", message: "Something went wrong"} )
+        res.status(200).send({
+            code: "ERROR",
+            message: "Something went wrong"
+        })
         return
     }
 
@@ -211,7 +220,12 @@ router.post('/protected/bndlogin/linkAccount', asyncMiddleware(async function (r
         await db.any("update custom_eg_user_metatdata set value = $3:json where key = $1 and user_id = $2",
             ['BND_CREDENTIALS', uuid, value])
     }
-    res.json({code: "SUCCESS", redirect: EGOV_BND_REDIRECT_URL + jwt_sign({loginID: encrypt(loginID)})})
+    res.json({
+        code: "SUCCESS",
+        redirect: EGOV_BND_REDIRECT_URL + jwt_sign({
+            loginID: encrypt(loginID)
+        })
+    })
 }));
 
 router.post('/protected/bndlogin', asyncMiddleware(async function (req, res) {
@@ -231,7 +245,9 @@ router.post('/protected/bndlogin', asyncMiddleware(async function (req, res) {
 
         res.json({
             code: "SUCCESS",
-            redirect: EGOV_BND_REDIRECT_URL + jwt_sign({loginID: encrypt(loginID)})
+            redirect: EGOV_BND_REDIRECT_URL + jwt_sign({
+                loginID: encrypt(loginID)
+            })
         })
 
     } catch (ex) {
@@ -306,7 +322,7 @@ router.post('/protected/bndlogin', asyncMiddleware(async function (req, res) {
 
 async function findDemandForConsumerCode(consumerCode, tenantId, service, RequestInfo) {
     let demandSearchResponse = await request.post({
-        url: url.resolve(PT_DEMAND_HOST , "/billing-service/demand/_search?tenantId=" + tenantId +
+        url: url.resolve(PT_DEMAND_HOST, "/billing-service/demand/_search?tenantId=" + tenantId +
             "&consumerCode=" + consumerCode + "&businessService=" + service),
         body: {
             RequestInfo
@@ -332,7 +348,7 @@ async function updateDemand(demands, RequestInfo) {
 
 // function _estimateTaxProcessor(request, response, fireCessConfig) {
 //     response = _estimateZeroTaxProcessor(request, response);
-    
+
 //     let index = 0;
 //     for (let calc of request["CalculationCriteria"]) {
 //         let fireCessPercentage = getFireCessPercentage(calc["property"]["propertyDetails"][0], fireCessConfig)
@@ -352,7 +368,7 @@ async function updateDemand(demands, RequestInfo) {
 
 function _estimateZeroTaxProcessor(request, response) {
     let index = 0;
-    
+
     for (let calc of response["Calculation"]) {
         let assessmentYear = request["CalculationCriteria"][index]["assessmentYear"]
         let tenantId = request["CalculationCriteria"][index]["tenantId"]
@@ -502,7 +518,7 @@ async function _createAndUpdateZeroTaxProcessor(request, response) {
         let assessmentYear = resProperty["propertyDetails"][0]["financialYear"]
         let tenantId = reqProperty["tenantId"]
 
-        if (!(assessmentYear == PT_ZERO_ASSESSMENTYEAR && PT_ZERO_TENANTS.indexOf(tenantId)>=0))
+        if (!(assessmentYear == PT_ZERO_ASSESSMENTYEAR && PT_ZERO_TENANTS.indexOf(tenantId) >= 0))
             continue
 
         let consumerCode = propertyId + ":" + assessmentNumber
@@ -622,7 +638,7 @@ async function _createAndUpdateRequestHandler(req, res) {
     } = getRequestResponse(req)
 
     response = await _createAndUpdateZeroTaxProcessor(request, response)
-    
+
     // if (!PT_ENABLE_FC_CALC)
     res.json(response);
 
@@ -639,15 +655,18 @@ async function _createAndUpdateRequestHandler(req, res) {
 }
 
 function getRequestResponse(req) {
-    let request, response
+    let request = null,
+        response = null
 
     if (typeof req.body.request === "string") {
         request = JSON.parse(req.body.request)
-        response = JSON.parse(req.body.response)
+        if (req.body.response)
+            response = JSON.parse(req.body.response)
     } else {
         request = req.body.request
         response = req.body.response
     }
+
     return {
         request,
         response
@@ -682,7 +701,7 @@ router.post('/protected/punjab-pt/pre-hook/pg-service/transaction/v1/_create', a
 
         request['Transaction']['callbackUrl'] = url.format(url_callback);
     }
-    
+
     res.json(request);
 })));
 
