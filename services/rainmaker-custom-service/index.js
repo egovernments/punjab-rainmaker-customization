@@ -12,6 +12,7 @@ var mustache = require('mustache-express')
 const Cryptr = require('cryptr');
 var {encrypt, jwt_sign } = require('./encrypt')
 
+app.use(express.logger())
 app.engine('html', mustache())
 app.set('view engine', 'html')
 app.set('views', __dirname + '/templates')
@@ -658,7 +659,9 @@ router.post('/protected/punjab-pt/property/_update', asyncMiddleware(_createAndU
 
 router.post('/open/punjab-pt/payu/confirm', asyncMiddleware((async function (req, res) {
     console.log(req.json());
+    res.json({});
 })))
+
 router.post('/protected/punjab-pt/pre-hook/pg-service/transaction/v1/_create', asyncMiddleware((async function (req, res) {
     let {
         request
