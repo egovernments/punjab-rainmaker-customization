@@ -678,8 +678,20 @@ router.post('/protected/punjab-pt/property/_create', asyncMiddleware(_createAndU
 router.post('/protected/punjab-pt/property/_update', asyncMiddleware(_createAndUpdateRequestHandler))
 
 router.post('/open/punjab-pt/payu/confirm', asyncMiddleware((async function (req, res) {
-    console.log(req.json());
-    res.json({});
+    let return_data = req.body;
+    original_callback = req.query.original_callback;
+    delete req.query['original_callback'];
+    new_query_params = Object.assign({}, return_data, req.query);
+    redirect_url = url.format(
+        {
+            protocol: req.protocol,
+            host: req.get('host'),
+            pathname: original_callback,
+            query: new_query_params
+        }
+    )
+    
+    res.redirect(redirect_url);
 })))
 
 router.post('/protected/punjab-pt/pre-hook/pg-service/transaction/v1/_create', asyncMiddleware((async function (req, res) {
