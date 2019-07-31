@@ -137,7 +137,7 @@ ReportDefinitions:
         JOIN egcl_instrumentheader_v1 AS ih ON ih.id = ri.instrumentheader
         JOIN receipt_breakup ON rh.id = receipt_breakup.receiptheader
         JOIN eg_user ON rh.createdby::INTEGER=eg_user.id
-        WHERE  rh.status != 'Cancelled'  AND receiptnumber like 'MP%'
+        WHERE  rh.status != 'Cancelled'  AND rh.tenantid!='pb.testing' AND receiptnumber like 'MP%'
     orderby: ORDER BY rh.receiptdate DESC
 
   - reportName: MiscReceiptULB
@@ -273,3 +273,78 @@ ReportDefinitions:
         WHERE  rh.status != 'Cancelled'  AND receiptnumber like 'MP%'
         and rh.tenantid=$tenantid
     orderby: ORDER BY rh.receiptdate DESC
+
+  - reportName: MiscReceiptStateWide
+    summary: State Receipt Register Miscellaneous
+    version: 1.0.0
+    moduleName: rainmaker-uc
+    sourceColumns:
+      - name: ulb
+        label: reports.uc.ulb
+        type: string
+        source: uc
+        total: false
+      - name: servicecategory
+        label: reports.uc.businessdetails
+        type: string
+        source: uc
+        total: false
+      - name: cgst
+        label: reports.uc.cgst
+        type: string
+        source: uc
+        total: true
+      - name: tax
+        label: reports.uc.tax
+        type: string
+        source: uc
+        total: true
+      - name: fieldcollection
+        label: reports.uc.fieldcollection
+        type: string
+        source: uc
+        total: true
+      - name: sgst
+        label: reports.uc.sgst
+        type: string
+        source: uc
+        total: true
+      - name: totalamount
+        label: reports.uc.totalamount
+        type: string
+        source: uc
+        total: true
+    searchParams:
+      - name: fromDate
+        label: reports.uc.fromDate
+        type: epoch
+        source: uc
+        isMandatory: false
+        searchClause: AND rh.receiptdate >= $fromDate
+      - name: toDate
+        label: reports.uc.toDate
+        type: epoch
+        source: uc
+        isMandatory: false
+        searchClause: AND rh.receiptdate <= $toDate
+      - name: ulb
+        label: reports.uc.ulb
+        type: singlevaluelist
+        pattern: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?tenantId=$tenantid&moduleName=tenant&masterName=tenants|$.MdmsRes.tenant.tenants.*.code|$.MdmsRes.tenant.tenants.*.name
+        source: uc
+        wrapper: true
+        isMandatory: false
+        searchClause: AND rh.tenantid = $ulb
+    query: |
+        -- Use CTE to force query plan, compute & use CTE later
+        SELECT
+          rh.tenantid as ulb,rh.businessdetails as servicecategory, count(*) as "Receipts",
+          SUM(CASE WHEN taxheadcode LIKE '%_FIELD_FEE' THEN adjustedamount ELSE 0 END) as fieldcollection,
+          SUM(CASE WHEN taxheadcode LIKE '%_TAX' THEN adjustedamount ELSE 0 END) as tax, 
+          SUM(CASE WHEN taxheadcode LIKE '%_CGST' THEN adjustedamount ELSE 0 END) as cgst, 
+          SUM(CASE WHEN taxheadcode LIKE '%_SGST' THEN adjustedamount ELSE 0 END) as sgst, 
+          sum(totalamount) as totalamount
+        from egcl_receiptheader_v1 rh, egcl_receiptdetails_v1 as rd
+        WHERE rh.id=rd.receiptheader and rh.status != 'Cancelled'  AND rh.tenantid!='pb.testing' AND receiptnumber like 'MP%' 
+    group by: group by rh.tenantid,rh.businessdetails
+    order by: order by rh.tenantid
