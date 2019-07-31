@@ -684,8 +684,6 @@ router.post('/open/punjab-pt/payu/confirm', asyncMiddleware((async function (req
     new_query_params = Object.assign({}, return_data, req.query);
     redirect_url = url.format(
         {
-            protocol: req.protocol,
-            host: req.get('host'),
             pathname: original_callback,
             query: new_query_params
         }
