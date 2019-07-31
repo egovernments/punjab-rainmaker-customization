@@ -14,7 +14,8 @@
     "nodemon": "^1.18.4",
     "pg-promise": "^8.4.5",
     "request": "^2.88.0",
-    "request-promise": "^4.2.2"
+    "request-promise": "^4.2.2",
+    "morgan": "*"
   },
   "scripts": {
     "debug": "nodemon --inspect index.js"

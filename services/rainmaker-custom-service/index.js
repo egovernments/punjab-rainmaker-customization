@@ -12,7 +12,8 @@ var mustache = require('mustache-express')
 const Cryptr = require('cryptr');
 var {encrypt, jwt_sign } = require('./encrypt')
 
-app.use(express.logger())
+app.use(require('morgan')('dev'));
+
 app.engine('html', mustache())
 app.set('view engine', 'html')
 app.set('views', __dirname + '/templates')
