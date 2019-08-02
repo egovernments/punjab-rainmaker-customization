@@ -379,8 +379,8 @@ function _estimateZeroTaxProcessor(request, response) {
         let newTotal = 0;
 
         if (isCitizen(request) && assessmentYear == PT_ZERO_ASSESSMENTYEAR) {
-            res.status(400);
-            return res.json(
+            
+            data =  
                 {
                     "ResponseInfo":null,
                     "Errors":[
@@ -392,7 +392,8 @@ function _estimateZeroTaxProcessor(request, response) {
                         }
                     ]
                 }
-            )
+            return data;
+            
         }
 
         if (!(assessmentYear == PT_ZERO_ASSESSMENTYEAR && PT_ZERO_TENANTS.indexOf(tenantId) >= 0))
@@ -539,9 +540,8 @@ async function _createAndUpdateZeroTaxProcessor(request, response) {
         let assessmentYear = resProperty["propertyDetails"][0]["financialYear"]
         let tenantId = reqProperty["tenantId"]
 
-        if (isCitizen(request) && assessmentYear == PT_ZERO_ASSESSMENTYEAR) {
-            res.status(400);
-            return res.json(
+        if (isCitizen(request) && assessmentYear === PT_ZERO_ASSESSMENTYEAR) {
+            data =  
                 {
                     "ResponseInfo":null,
                     "Errors":[
@@ -552,8 +552,8 @@ async function _createAndUpdateZeroTaxProcessor(request, response) {
                             "params":null
                         }
                     ]
-                }
-            )
+                };
+            return data;
         }
 
         if (!(assessmentYear == PT_ZERO_ASSESSMENTYEAR && PT_ZERO_TENANTS.indexOf(tenantId) >= 0))
@@ -680,6 +680,9 @@ async function _createAndUpdateRequestHandler(req, res) {
     response = await _createAndUpdateZeroTaxProcessor(request, response)
 
     // if (!PT_ENABLE_FC_CALC)
+    if ("Errors" in response)
+        res.status(400)
+    
     res.json(response);
 
     // firecess logic is enabled, so execute it
@@ -765,6 +768,9 @@ router.post('/protected/punjab-pt/pt-calculator-v2/_estimate', asyncMiddleware(a
     response = _estimateZeroTaxProcessor(request, response)
 
     // if (!PT_ENABLE_FC_CALC)
+    if ("Errors" in response)
+        res.status(400)
+
     res.json(response);
 
     // let tenantId = request["CalculationCriteria"][0]["tenantId"]
