@@ -378,9 +378,6 @@ function _estimateZeroTaxProcessor(request, response) {
         let tenantId = request["CalculationCriteria"][index]["tenantId"]
         let newTotal = 0;
 
-        if (!(assessmentYear == PT_ZERO_ASSESSMENTYEAR && PT_ZERO_TENANTS.indexOf(tenantId) >= 0))
-            continue
-
         if (isCitizen(request)) {
             res.status(400);
             return res.json(
@@ -397,6 +394,9 @@ function _estimateZeroTaxProcessor(request, response) {
                 }
             )
         }
+
+        if (!(assessmentYear == PT_ZERO_ASSESSMENTYEAR && PT_ZERO_TENANTS.indexOf(tenantId) >= 0))
+            continue
     
         let taxHeads = calc["taxHeadEstimates"];
 
@@ -539,9 +539,6 @@ async function _createAndUpdateZeroTaxProcessor(request, response) {
         let assessmentYear = resProperty["propertyDetails"][0]["financialYear"]
         let tenantId = reqProperty["tenantId"]
 
-        if (!(assessmentYear == PT_ZERO_ASSESSMENTYEAR && PT_ZERO_TENANTS.indexOf(tenantId) >= 0))
-            continue
-
         if (isCitizen(request)) {
             res.status(400);
             return res.json(
@@ -558,6 +555,9 @@ async function _createAndUpdateZeroTaxProcessor(request, response) {
                 }
             )
         }
+
+        if (!(assessmentYear == PT_ZERO_ASSESSMENTYEAR && PT_ZERO_TENANTS.indexOf(tenantId) >= 0))
+            continue
 
         request_info = request["RequestInfo"] || request["requestInfo"]
 
