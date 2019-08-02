@@ -681,7 +681,7 @@ async function _createAndUpdateRequestHandler(req, res) {
 
     // if (!PT_ENABLE_FC_CALC)
     if ("Errors" in response)
-        res.status(400)
+        res.status(400).json(response)
     
     res.json(response);
 
@@ -769,7 +769,7 @@ router.post('/protected/punjab-pt/pt-calculator-v2/_estimate', asyncMiddleware(a
 
     // if (!PT_ENABLE_FC_CALC)
     if ("Errors" in response)
-        res.status(400)
+        res.status(400).json(response)
 
     res.json(response);
 
