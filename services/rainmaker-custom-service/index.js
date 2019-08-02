@@ -378,7 +378,7 @@ function _estimateZeroTaxProcessor(request, response) {
         let tenantId = request["CalculationCriteria"][index]["tenantId"]
         let newTotal = 0;
 
-        if (isCitizen(request)) {
+        if (isCitizen(request) && assessmentYear == PT_ZERO_ASSESSMENTYEAR) {
             res.status(400);
             return res.json(
                 {
@@ -539,7 +539,7 @@ async function _createAndUpdateZeroTaxProcessor(request, response) {
         let assessmentYear = resProperty["propertyDetails"][0]["financialYear"]
         let tenantId = reqProperty["tenantId"]
 
-        if (isCitizen(request)) {
+        if (isCitizen(request) && assessmentYear == PT_ZERO_ASSESSMENTYEAR) {
             res.status(400);
             return res.json(
                 {
