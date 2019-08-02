@@ -682,8 +682,8 @@ async function _createAndUpdateRequestHandler(req, res) {
     // if (!PT_ENABLE_FC_CALC)
     if ("Errors" in response)
         res.status(400).json(response)
-    
-    res.json(response);
+    else
+        res.json(response);
 
     // firecess logic is enabled, so execute it
     // let tenantId = request["Properties"][0]["tenantId"]
@@ -770,8 +770,8 @@ router.post('/protected/punjab-pt/pt-calculator-v2/_estimate', asyncMiddleware(a
     // if (!PT_ENABLE_FC_CALC)
     if ("Errors" in response)
         res.status(400).json(response)
-
-    res.json(response);
+    else
+        res.json(response);
 
     // let tenantId = request["CalculationCriteria"][0]["tenantId"]
 
