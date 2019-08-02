@@ -51,6 +51,10 @@ function getUserUUID(data) {
     return data.RequestInfo.userInfo.uuid;
 }
 
+function isCitizen(data) {
+    return data.RequestInfo.userInfo.roles.filter(role => role.code.toUpperCase() == "CITIZEN").length > 0 
+}
+
 function getUserID(data) {
     return data.RequestInfo.userInfo.id;
 }
@@ -377,6 +381,23 @@ function _estimateZeroTaxProcessor(request, response) {
         if (!(assessmentYear == PT_ZERO_ASSESSMENTYEAR && PT_ZERO_TENANTS.indexOf(tenantId) >= 0))
             continue
 
+        if (isCitizen(request)) {
+            res.status(400);
+            return res.json(
+                {
+                    "ResponseInfo":null,
+                    "Errors":[
+                        {
+                            "code":"CitizenOnlineNotAllowed",
+                            "message":"Sorry but online assessment for " + PT_ZERO_ASSESSMENTYEAR + " is not allowed. Please make the payment at the counter",
+                            "description": "Sorry but online assessment for " + PT_ZERO_ASSESSMENTYEAR + " is not allowed. Please make the payment at the counter",
+                            "params":null
+                        }
+                    ]
+                }
+            )
+        }
+    
         let taxHeads = calc["taxHeadEstimates"];
 
         for (taxHead of taxHeads) {
@@ -520,6 +541,25 @@ async function _createAndUpdateZeroTaxProcessor(request, response) {
 
         if (!(assessmentYear == PT_ZERO_ASSESSMENTYEAR && PT_ZERO_TENANTS.indexOf(tenantId) >= 0))
             continue
+
+        if (isCitizen(request)) {
+            res.status(400);
+            return res.json(
+                {
+                    "ResponseInfo":null,
+                    "Errors":[
+                        {
+                            "code":"CitizenOnlineNotAllowed",
+                            "message":"Sorry but online assessment for " + PT_ZERO_ASSESSMENTYEAR + " is not allowed. Please make the payment at the counter",
+                            "description": "Sorry but online assessment for " + PT_ZERO_ASSESSMENTYEAR + " is not allowed. Please make the payment at the counter",
+                            "params":null
+                        }
+                    ]
+                }
+            )
+        }
+
+        request_info = request["RequestInfo"] || request["requestInfo"]
 
         let consumerCode = propertyId + ":" + assessmentNumber
         let service = "PT"
