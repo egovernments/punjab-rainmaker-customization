@@ -1,0 +1,5 @@
+{
+    "/pt-services-v2/property/_create":"http://rainmaker-custom-service:8000/customization/protected/punjab-pt/property/_create",
+    "/pt-services-v2/property/_update":"http://rainmaker-custom-service:8000/customization/protected/punjab-pt/property/_create",
+    "/pt-calculator-v2/propertytax/_estimate":"http://rainmaker-custom-service:8000/customization/protected/punjab-pt/pt-calculator-v2/_estimate"
+}
