@@ -1008,3 +1008,148 @@ ReportDefinitions:
     inner join eg_pt_address_v2    as pta on pta.property = pt.propertyid
     left outer join eg_pt_unit_v2_ot as pot on pot.propertydetail = pd.assessmentnumber
     where rh.tenantid = $tenantid and rh.status != 'Cancelled'
+
+- reportName: ReceiptRegisterShort
+  summary: Receipt Register
+  version: 1.0.0
+  moduleName: rainmaker-pt
+  additionalConfig:
+    print:
+      pdfPageSize: "A1"
+  sourceColumns:
+  - name: g8receiptno
+    label: reports.pt.g8book
+    type: string
+    source: pt
+    total: false
+  - name: g8issuedate
+    label: reports.pt.g8dated
+    type: string
+    source: pt
+    total: false
+  - name: propertyid
+    label: reports.pt.ptrId
+    type: string
+    source: pt
+    total: false
+  - name: financialyear
+    label: reports.pt.financialYear
+    type: string
+    source: pt
+    total: false
+  - name: instrumenttype
+    label: reports.pt.paymentMode
+    type: string
+    source: pt
+    total: false
+  - name: amount
+    label: reports.pt.taxamount
+    type: string
+    source: pt
+    total: true
+  - name: transactionnumber
+    label: reports.pt.ddChequeNo
+    type: string
+    source: pt
+    total: false
+  - name: bankname
+    label: reports.pt.bankName
+    type: string
+    source: pt
+    total: false
+  - name: assessmentnumber
+    label: reports.pt.assessmentNo
+    type: string
+    source: pt
+    total: false
+  - name: collectorname
+    label: reports.pt.collectorname
+    type: string
+    source: pt
+    total: false
+  searchParams:
+  - name: fromDate
+    label: reports.pt.fromDate
+    type: epoch
+    source: pt
+    isMandatory: false
+    searchClause: AND rh.receiptdate >= $fromDate
+  - name: toDate
+    label: reports.pt.toDate
+    type: epoch
+    source: pt
+    isMandatory: false
+    searchClause: AND rh.receiptdate <= $toDate
+  - name: paymentMode
+    label: Payment Mode
+    type: singlevaluelist
+    pattern: 'list://Cash:Cash,Online:Online,Card:Card,DD:DD,Cheque:Cheque'
+    source: pt
+    isMandatory: false
+    searchClause: AND instrumenttype = $paymentMode
+  - name: financialyear
+    label: Financial Year
+    type: singlevaluelist
+    pattern: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?tenantId=$tenantid&moduleName=egf-master&masterName=FinancialYear|$.MdmsRes.egf-master.FinancialYear.[?(@.module=='PT')].code|$.MdmsRes.egf-master.FinancialYear.[?(@.module=='PT')].name
+    source: pt
+    wrapper: true
+    isMandatory: false
+    searchClause: AND financialyear = $financialyear
+  - name: localityArray
+    label: reports.pt.zoneList
+    type: boundarylist
+    source: pt
+    isMandatory: false
+    searchClause: AND pt_addr.locality IN ($localityArray)
+  query: |
+      -- Use CTE to force query plan, compute & use CTE later
+      WITH receipt_breakup AS (
+                  SELECT 
+                    receiptheader, 
+                    SUM(CASE WHEN taxheadcode LIKE 'PT_ADHOC_PENALTY' THEN adjustedamount ELSE 0 END) as adhocpenalty, 
+                    SUM(CASE WHEN taxheadcode LIKE 'PT_ADHOC_REBATE' THEN adjustedamount ELSE 0 END) as adhocrebate, 
+                    SUM(CASE WHEN taxheadcode LIKE 'PT_FIRE_CESS' THEN adjustedamount ELSE 0 END) as firecess, 
+                    SUM(CASE WHEN taxheadcode LIKE 'PT_CANCER_CESS' THEN adjustedamount ELSE 0 END) as cancercess, 
+                    SUM(CASE WHEN taxheadcode LIKE 'PT_TIME_INTEREST' THEN adjustedamount ELSE 0 END) as interest, 
+                    SUM(CASE WHEN taxheadcode LIKE 'PT_TIME_PENALTY' THEN adjustedamount ELSE 0 END) as penalty, 
+                    SUM(CASE WHEN taxheadcode LIKE 'PT_TIME_REBATE' THEN adjustedamount ELSE 0 END) as rebate, 
+                    SUM(CASE WHEN taxheadcode LIKE 'PT_TAX' THEN adjustedamount ELSE 0 END) as propertytax, 
+                    (SUM(CASE WHEN taxheadcode LIKE 'PT_UNIT_USAGE_EXEMPTION' THEN adjustedamount ELSE 0 END)
+                    + SUM(CASE WHEN taxheadcode LIKE 'PT_OWNER_EXEMPTION' THEN adjustedamount ELSE 0 END) )as exemption,
+                    ( SUM(CASE WHEN taxheadcode LIKE 'PT_ROUNDOFF' THEN adjustedamount ELSE 0 END)
+                    + SUM(CASE WHEN taxheadcode LIKE 'PT_DECIMAL_CEILING_DEBIT' THEN adjustedamount ELSE 0 END)
+                    + SUM(CASE WHEN taxheadcode LIKE 'PT_DECIMAL_CEILING_CREDIT' THEN adjustedamount ELSE 0 END)) as adjustment
+                  FROM egcl_receiptdetails_v1 as rd
+                  INNER JOIN egcl_receiptheader_v1 as rh on rh.id = rd.receiptheader
+                  WHERE rd.tenantid LIKE $tenantid
+                  GROUP BY rd.receiptheader
+      )
+      SELECT 
+        rh.tenantid AS tenantid, 
+        rh.id, 
+        Substring(rh.consumercode, '(.*):') AS propertyid, 
+        Substring(rh.consumercode, ':(.*)') AS assessmentnumber, 
+        rh.consumercode, 
+        rh.receiptdate, 
+        To_char(To_timestamp(rh.receiptdate / 1000), 'DD/MM/YYYY') AS transactiondate, 
+        bankid AS bankname, 
+        receiptnumber, 
+        amount, 
+        instrumenttype, 
+        transactionnumber, 
+        receipt_breakup.*, 
+        rh.totalamount - ih.amount AS pendingamount,
+        pt_detail.financialyear,
+        To_char(To_timestamp(rh.manualreceiptdate / 1000), 'DD/MM/YYYY') AS g8issuedate,
+        Initcap(COALESCE(pt_detail.usagecategoryminor, pt_detail.usagecategorymajor)) as usagetype,
+        manualreceiptnumber as g8receiptno,
+        (CASE WHEN collectiontype='COUNTER' THEN eg_user.name ELSE '' END) as collectorname
+      FROM egcl_receiptheader_v1 AS rh
+      JOIN egcl_receiptinstrument_v1 AS ri ON rh.id = ri.receiptheader
+      JOIN egcl_instrumentheader_v1 AS ih ON ih.id = ri.instrumentheader
+      JOIN receipt_breakup ON rh.id = receipt_breakup.receiptheader
+      JOIN eg_pt_propertydetail_v2 pt_detail ON CONCAT(pt_detail.property, ':', pt_detail.assessmentnumber) = rh.consumercode
+      JOIN eg_pt_address_v2 pt_addr ON pt_detail.property = pt_addr.property
+      Join eg_user ON eg_user.id = rh.createdby::INTEGER
+      WHERE rh.tenantid LIKE $tenantid and rh.status != 'Cancelled'
+  orderby: ORDER BY rh.receiptdate DESC
