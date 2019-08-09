@@ -1111,7 +1111,7 @@ ReportDefinitions:
     type: string
     source: pt
     isMandatory: false
-    searchClause: AND eg_user.name = $collectorname
+    searchClause: AND lower(eg_user.name) = lower($collectorname)
   query: |
       -- Use CTE to force query plan, compute & use CTE later
       WITH receipt_breakup AS (
