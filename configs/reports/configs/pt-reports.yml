@@ -1023,6 +1023,16 @@ ReportDefinitions:
     print:
       pdfPageSize: "Legal"
   sourceColumns:
+  - name: receiptnumber
+    label: reports.pt.receiptNo
+    type: string
+    source: pt
+    total: false
+  - name: transactiondate
+    label: reports.pt.receiptDate
+    type: string
+    source: pt
+    total: false
   - name: g8receiptno
     label: reports.pt.g8book
     type: string
@@ -1107,6 +1117,12 @@ ReportDefinitions:
     source: pt
     isMandatory: false
     searchClause: AND pt_addr.locality IN ($localityArray)
+  - name: collectorname
+    label: reports.pt.collectorname
+    type: string
+    source: pt
+    isMandatory: false
+    searchClause: AND lower(eg_user.name) = lower($collectorname)
   query: |
       -- Use CTE to force query plan, compute & use CTE later
       WITH receipt_breakup AS (
