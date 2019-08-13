@@ -1120,11 +1120,11 @@ ReportDefinitions:
   - name: collectorname
     label: reports.pt.collectorname
     type: singlevaluelist
-    pattern: https://mseva-uat.lgpunjab.gov.in/egov-hrms/employees/_search?tenantId=$tenantid&roles=PTCEMP|$.user.name
+    pattern: https://mseva-uat.lgpunjab.gov.in/egov-hrms/employees/_search?tenantId=$tenantid&roles=PTCEMP|$.user.id|$.user.name
     source: pt
     wrapper: true
     isMandatory: false
-    searchClause: AND lower(eg_user.name) = lower($collectorname)
+    searchClause: AND eg_user.id = $collectorname::INTEGER
   query: |
       -- Use CTE to force query plan, compute & use CTE later
       WITH receipt_breakup AS (
