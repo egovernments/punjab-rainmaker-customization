@@ -219,6 +219,9 @@ ReportDefinitions:
   summary: Receipt Register for cancelled Receipts
   version: 1.0.0
   moduleName: rainmaker-pt
+  additionalConfig:
+    print:
+      pdfPageSize: "A1"
   sourceColumns:
   - name: receiptnumber
     label: reports.pt.receiptNo
@@ -481,6 +484,9 @@ ReportDefinitions:
   summary: Receipt Register for cancelled Receipts State
   version: 1.0.0
   moduleName: rainmaker-pt
+  additionalConfig:
+    print:
+      pdfPageSize: "A1"
   sourceColumns:
   - name: tenantid
     label: reports.pt.ulbName
@@ -1017,6 +1023,11 @@ ReportDefinitions:
     print:
       pdfPageSize: "Legal"
   sourceColumns:
+  - name: receiptnumber
+    label: reports.pt.receiptNo
+    type: string
+    source: pt
+    total: false
   - name: transactiondate
     label: reports.pt.receiptDate
     type: string
@@ -1108,8 +1119,10 @@ ReportDefinitions:
     searchClause: AND pt_addr.locality IN ($localityArray)
   - name: collectorname
     label: reports.pt.collectorname
-    type: string
+    type: singlevaluelist
+    pattern: https://mseva-uat.lgpunjab.gov.in/egov-hrms/employees/_search?tenantId=$tenantid&roles=PTCEMP|$.user.name
     source: pt
+    wrapper: true
     isMandatory: false
     searchClause: AND lower(eg_user.name) = lower($collectorname)
   query: |
