@@ -128,6 +128,11 @@ ReportDefinitions:
     type: string
     source: pt
     total: false
+  - name: remarks
+    label: reports.pt.remarks
+    type: string
+    source: pt
+    total: false
   searchParams:
   - name: fromDate
     label: reports.pt.fromDate
@@ -957,6 +962,11 @@ ReportDefinitions:
     total: false 
   - name: address
     label: reports.pt.address
+    type: string
+    source: pt
+    total: false
+  - name: remarks
+    label: reports.pt.remarks
     type: string
     source: pt
     total: false
