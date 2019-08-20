@@ -128,6 +128,11 @@ ReportDefinitions:
     type: string
     source: pt
     total: false
+  - name: remarks
+    label: reports.pt.remarks
+    type: string
+    source: pt
+    total: false
   searchParams:
   - name: fromDate
     label: reports.pt.fromDate
@@ -204,7 +209,8 @@ ReportDefinitions:
         To_char(To_timestamp(rh.manualreceiptdate / 1000), 'DD/MM/YYYY') AS g8issuedate,
         Initcap(COALESCE(pt_detail.usagecategoryminor, pt_detail.usagecategorymajor)) as usagetype,
         manualreceiptnumber as g8receiptno,
-        (CASE WHEN collectiontype='COUNTER' THEN eg_user.name ELSE '' END) as collectorname
+        (CASE WHEN collectiontype='COUNTER' THEN eg_user.name ELSE '' END) as collectorname,
+        pt_detail.additionaldetails->>'remarks' as "remarks"
       FROM egcl_receiptheader_v1 AS rh
       JOIN egcl_receiptinstrument_v1 AS ri ON rh.id = ri.receiptheader
       JOIN egcl_instrumentheader_v1 AS ih ON ih.id = ri.instrumentheader
@@ -959,6 +965,11 @@ ReportDefinitions:
     type: string
     source: pt
     total: false
+  - name: remarks
+    label: reports.pt.remarks
+    type: string
+    source: pt
+    total: false
   searchParams:
   - name: fromDate
     label: reports.pt.fromDate
@@ -1003,7 +1014,8 @@ ReportDefinitions:
       ih.amount as "paymentamount",
       to_char(to_timestamp(ih.transactiondate/1000), 'DD/MM/YYYY') as "paymentdate",
       eu.emailid     as "emailid"    ,
-      REGEXP_REPLACE(REGEXP_REPLACE(CONCAT(pta.doorno, ',', pta.addressline1, ',', pta.addressline2, ',', pta.buildingname, ',', pta.pincode), ',+', ','), '^,|,$', '') as "address"
+      REGEXP_REPLACE(REGEXP_REPLACE(CONCAT(pta.doorno, ',', pta.addressline1, ',', pta.addressline2, ',', pta.buildingname, ',', pta.pincode), ',+', ','), '^,|,$', '') as "address",
+      pd.additionaldetails->>'remarks' as "remarks"
     from egcl_receiptheader_v1 as rh
     inner join egcl_receiptinstrument_v1 as ri on ri.receiptheader = rh.id    
     inner join egcl_instrumentheader_v1     as ih on ih.id = ri.instrumentheader
@@ -1080,6 +1092,11 @@ ReportDefinitions:
     total: false
   - name: collectorname
     label: reports.pt.collectorname
+    type: string
+    source: pt
+    total: false
+  - name: remarks
+    label: reports.pt.remarks
     type: string
     source: pt
     total: false
@@ -1165,7 +1182,8 @@ ReportDefinitions:
         To_char(To_timestamp(rh.manualreceiptdate / 1000), 'DD/MM/YYYY') AS g8issuedate,
         Initcap(COALESCE(pt_detail.usagecategoryminor, pt_detail.usagecategorymajor)) as usagetype,
         manualreceiptnumber as g8receiptno,
-        (CASE WHEN collectiontype='COUNTER' THEN eg_user.name ELSE '' END) as collectorname
+        (CASE WHEN collectiontype='COUNTER' THEN eg_user.name ELSE '' END) as collectorname,
+        pt_detail.additionaldetails->>'remarks' as "remarks"
       FROM egcl_receiptheader_v1 AS rh
       JOIN egcl_receiptinstrument_v1 AS ri ON rh.id = ri.receiptheader
       JOIN egcl_instrumentheader_v1 AS ih ON ih.id = ri.instrumentheader
