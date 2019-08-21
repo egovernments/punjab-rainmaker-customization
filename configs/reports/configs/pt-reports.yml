@@ -217,7 +217,7 @@ ReportDefinitions:
       JOIN receipt_breakup ON rh.id = receipt_breakup.receiptheader
       JOIN eg_pt_propertydetail_v2 pt_detail ON CONCAT(pt_detail.property, ':', pt_detail.assessmentnumber) = rh.consumercode
       JOIN eg_pt_address_v2 pt_addr ON pt_detail.property = pt_addr.property
-      Join eg_user ON eg_user.id = rh.createdby::INTEGER
+      LEFT OUTER JOIN eg_user ON eg_user.id = rh.createdby::INTEGER
       WHERE rh.tenantid LIKE $tenantid and rh.status != 'Cancelled'
   orderby: ORDER BY rh.receiptdate DESC
 
@@ -1085,11 +1085,6 @@ ReportDefinitions:
     type: string
     source: pt
     total: false
-  - name: assessmentnumber
-    label: reports.pt.assessmentNo
-    type: string
-    source: pt
-    total: false
   - name: collectorname
     label: reports.pt.collectorname
     type: string
@@ -1190,6 +1185,6 @@ ReportDefinitions:
       JOIN receipt_breakup ON rh.id = receipt_breakup.receiptheader
       JOIN eg_pt_propertydetail_v2 pt_detail ON CONCAT(pt_detail.property, ':', pt_detail.assessmentnumber) = rh.consumercode
       JOIN eg_pt_address_v2 pt_addr ON pt_detail.property = pt_addr.property
-      Join eg_user ON eg_user.id = rh.createdby::INTEGER
+      LEFT OUTER JOIN eg_user ON eg_user.id = rh.createdby::INTEGER
       WHERE rh.tenantid LIKE $tenantid and rh.status != 'Cancelled'
   orderby: ORDER BY rh.receiptdate DESC
