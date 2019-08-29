@@ -348,3 +348,226 @@ ReportDefinitions:
         WHERE rh.id=rd.receiptheader and rh.status != 'Cancelled'  AND rh.tenantid!='pb.testing' AND receiptnumber like 'MP%' 
     group by: group by rh.tenantid,rh.businessdetails
     order by: order by rh.tenantid
+
+  - reportName: MiscReceiptState
+    summary: State Miscellaneous Receipt Register 
+    version: 1.0.0
+    moduleName: rainmaker-uc
+    sourceColumns:
+      - name: ulb
+        label: reports.uc.ulb
+        type: string
+        source: uc
+        total: false
+      - name: noOfReceipts
+        label: reports.uc.noOfReceipts
+        type: string
+        source: uc
+        total: true
+      - name: tax
+        label: reports.uc.tax
+        type: string
+        source: uc
+        total: true
+      - name: cgst
+        label: reports.uc.cgst
+        type: string
+        source: uc
+        total: true
+      - name: sgst
+        label: reports.uc.sgst
+        type: string
+        source: uc
+        total: true
+      - name: fieldcollection
+        label: reports.uc.fieldCollection
+        type: string
+        source: uc
+        total: true
+      - name: totalAmount
+        label: reports.uc.totalamount
+        type: string
+        source: uc
+        total: true
+    searchParams:
+      - name: fromDate
+        label: reports.uc.fromDate
+        type: epoch
+        source: uc
+        isMandatory: false
+        searchClause: AND rh.receiptdate >= $fromDate
+      - name: toDate
+        label: reports.uc.toDate
+        type: epoch
+        source: uc
+        isMandatory: false
+        searchClause: AND rh.receiptdate <= $toDate
+      - name: ulb
+        label: reports.uc.ulb
+        type: singlevaluelist
+        pattern: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?tenantId=$tenantid&moduleName=tenant&masterName=tenants|$.MdmsRes.tenant.tenants.*.code|$.MdmsRes.tenant.tenants.*.name
+        source: uc
+        wrapper: true
+        isMandatory: false
+        searchClause: AND rh.tenantid = $ulb
+    query: |
+        -- Use CTE to force query plan, compute & use CTE later
+        SELECT
+          rh.tenantid as ulb,
+          count(*) as noOfReceipts,
+          SUM(CASE WHEN taxheadcode LIKE '%_TAX' THEN adjustedamount ELSE 0 END) as tax, 
+          SUM(CASE WHEN taxheadcode LIKE '%_CGST' THEN adjustedamount ELSE 0 END) as cgst, 
+          SUM(CASE WHEN taxheadcode LIKE '%_SGST' THEN adjustedamount ELSE 0 END) as sgst, 
+          SUM(CASE WHEN taxheadcode LIKE '%_FIELD_FEE' THEN adjustedamount ELSE 0 END) as fieldCollection,
+          sum(amount) as totalAmount
+        from egcl_receiptheader_v1 rh, egcl_receiptdetails_v1 as rd
+        WHERE rh.id=rd.receiptheader and rh.status != 'Cancelled' AND rh.tenantid!='pb.testing' AND receiptnumber like 'MP%' 
+    group by: group by rh.tenantid
+
+
+
+  - reportName: MiscCollectionState
+    summary: State Miscellaneous Collection Register 
+    version: 1.0.0
+    moduleName: rainmaker-uc
+    sourceColumns:
+      - name: ulb
+        label: reports.uc.ulb
+        type: string
+        source: uc
+        total: false
+      - name: offlineTransactions
+        label: reports.uc.noOfOfflineTransactions
+        type: string
+        source: uc
+        total: true
+      - name: onlineTransactions
+        label: reports.uc.noOfOnlineTransactions
+        type: string
+        source: uc
+        total: true
+      - name: totalTransactions
+        label: reports.uc.totalTransactions
+        type: string
+        source: uc
+        total: true
+      - name: offlineCollection
+        label: reports.uc.offlineCollection
+        type: string
+        source: uc
+        total: true
+      - name: onlineCollection
+        label: reports.uc.onlineCollection
+        type: string
+        source: uc
+        total: true
+      - name: totalCollection
+        label: reports.uc.totalCollection
+        type: string
+        source: uc
+        total: true
+    searchParams:
+      - name: fromDate
+        label: reports.uc.fromDate
+        type: epoch
+        source: uc
+        isMandatory: false
+        searchClause: AND rh.receiptdate >= $fromDate
+      - name: toDate
+        label: reports.uc.toDate
+        type: epoch
+        source: uc
+        isMandatory: false
+        searchClause: AND rh.receiptdate <= $toDate
+      - name: ulb
+        label: reports.uc.ulb
+        type: singlevaluelist
+        pattern: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?tenantId=$tenantid&moduleName=tenant&masterName=tenants|$.MdmsRes.tenant.tenants.*.code|$.MdmsRes.tenant.tenants.*.name
+        source: uc
+        wrapper: true
+        isMandatory: false
+        searchClause: AND rh.tenantid = $ulb
+    query: |
+        -- Use CTE to force query plan, compute & use CTE later
+        SELECT
+          initcap(split_part(rh.tenantId, '.', 2)) as ulb,
+          count(*) FILTER (where collectiontype='COUNTER') as offlineTransactions,
+          count(*) FILTER (where collectiontype='ONLINE') as onlineTransactions,
+          count(*) as totalTransactions,
+          sum(case collectiontype when 'COUNTER' then ih.amount else 0 end) as offlineCollection,
+          sum(case collectiontype when 'ONLINE' then ih.amount else 0 end) as onlineCollection,
+          sum(ih.amount) as totalCollection
+        from egcl_receiptheader_v1 as rh
+        inner join egcl_receiptinstrument_v1 as ri on ri.receiptheader = rh.id
+        inner join egcl_instrumentheader_v1 as ih on ih.id = ri.instrumentheader
+        where rh.receiptnumber like 'MP%' and rh.status !='Cancelled' and rh.tenantid !='pb.testing'
+    group by: GROUP BY rh.tenantid
+    order by: ORDER BY rh.tenantId asc
+
+  - reportName: MiscBusinessServiceCollectionTenant
+    summary: Miscellaneous Business Service Collection 
+    version: 1.0.0
+    moduleName: rainmaker-uc
+    sourceColumns:
+      - name: serviceType
+        label: reports.uc.serviceType
+        type: string
+        source: uc
+        total: false      
+      - name: totalReceipts
+        label: reports.uc.totalReceipts
+        type: string
+        source: uc
+        total: true
+      - name: tax
+        label: reports.uc.tax
+        type: string
+        source: uc
+        total: true
+      - name: cgst
+        label: reports.uc.cgst
+        type: string
+        source: uc
+        total: true
+      - name: sgst
+        label: reports.uc.sgst
+        type: string
+        source: uc
+        total: true
+      - name: fieldCollection
+        label: reports.uc.fieldCollection
+        type: string
+        source: uc
+        total: true
+      - name: totalCollection
+        label: reports.uc.totalCollection
+        type: string
+        source: uc
+        total: true
+    searchParams:
+      - name: fromDate
+        label: reports.uc.fromDate
+        type: epoch
+        source: uc
+        isMandatory: false
+        searchClause: AND rh.receiptdate >= $fromDate
+      - name: toDate
+        label: reports.uc.toDate
+        type: epoch
+        source: uc
+        isMandatory: false
+        searchClause: AND rh.receiptdate <= $toDate
+    query: |
+        -- Use CTE to force query plan, compute & use CTE later
+        SELECT
+          rh.businessdetails as serviceType,
+          count(*) as totalReceipts,
+          SUM(CASE WHEN taxheadcode LIKE '%_TAX' THEN adjustedamount ELSE 0 END) as tax, 
+          SUM(CASE WHEN taxheadcode LIKE '%_CGST' THEN adjustedamount ELSE 0 END) as cgst, 
+          SUM(CASE WHEN taxheadcode LIKE '%_SGST' THEN adjustedamount ELSE 0 END) as sgst, 
+          SUM(CASE WHEN taxheadcode LIKE '%_FIELD_FEE' THEN adjustedamount ELSE 0 END) as fieldCollection,
+          SUM(amount) as totalCollection
+        from egcl_receiptheader_v1 rh, egcl_receiptdetails_v1 as rd
+        WHERE rh.id=rd.receiptheader and rh.status != 'Cancelled' AND rh.tenantid=$tenantid AND receiptnumber like 'MP%' 
+    group by: GROUP BY rh.businessdetails
+    order by: ORDER BY rh.businessdetails
