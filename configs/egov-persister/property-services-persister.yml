@@ -761,6 +761,17 @@ serviceMaps:
 
          - jsonPath: $.Properties.*.tenantId
 
+     - query: UPDATE eg_pt_propertydetail_v2 SET status=? where propertyId=? AND assessmentNumber=? AND tenantId=?;
+       basePath: Properties.*.propertyDetails.*
+       jsonMaps:
+
+         - jsonPath: $.Properties.*.propertyDetails.*.status
+
+         - jsonPath: $.Properties[*][?({assessmentNumber} in @.propertyDetails[*].assessmentNumber)].propertyId
+
+         - jsonPath: $.Properties.*.propertyDetails.*.assessmentNumber
+
+         - jsonPath: $.Properties[*][?({assessmentNumber} in @.propertyDetails[*].assessmentNumber)].tenantId
 
 
 
