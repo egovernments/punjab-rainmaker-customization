@@ -338,7 +338,7 @@ ReportDefinitions:
     query: |
         -- Use CTE to force query plan, compute & use CTE later
         SELECT
-          rh.tenantid as ulb,rh.businessdetails as servicecategory, count(*) as "Receipts",
+          rh.tenantid as ulb,rh.businessdetails as servicecategory, count(*) as receipts,
           SUM(CASE WHEN taxheadcode LIKE '%_FIELD_FEE' THEN adjustedamount ELSE 0 END) as fieldcollection,
           SUM(CASE WHEN taxheadcode LIKE '%_TAX' THEN adjustedamount ELSE 0 END) as tax, 
           SUM(CASE WHEN taxheadcode LIKE '%_CGST' THEN adjustedamount ELSE 0 END) as cgst, 
@@ -359,7 +359,7 @@ ReportDefinitions:
         type: string
         source: uc
         total: false
-      - name: noOfReceipts
+      - name: noofreceipts
         label: reports.uc.noOfReceipts
         type: string
         source: uc
@@ -384,7 +384,7 @@ ReportDefinitions:
         type: string
         source: uc
         total: true
-      - name: totalAmount
+      - name: totalamount
         label: reports.uc.totalamount
         type: string
         source: uc
@@ -414,12 +414,12 @@ ReportDefinitions:
         -- Use CTE to force query plan, compute & use CTE later
         SELECT
           rh.tenantid as ulb,
-          count(*) as noOfReceipts,
+          count(*) as noofreceipts,
           SUM(CASE WHEN taxheadcode LIKE '%_TAX' THEN adjustedamount ELSE 0 END) as tax, 
           SUM(CASE WHEN taxheadcode LIKE '%_CGST' THEN adjustedamount ELSE 0 END) as cgst, 
           SUM(CASE WHEN taxheadcode LIKE '%_SGST' THEN adjustedamount ELSE 0 END) as sgst, 
-          SUM(CASE WHEN taxheadcode LIKE '%_FIELD_FEE' THEN adjustedamount ELSE 0 END) as fieldCollection,
-          sum(amount) as totalAmount
+          SUM(CASE WHEN taxheadcode LIKE '%_FIELD_FEE' THEN adjustedamount ELSE 0 END) as fieldcollection,
+          sum(amount) as totalamount
         from egcl_receiptheader_v1 rh, egcl_receiptdetails_v1 as rd
         WHERE rh.id=rd.receiptheader and rh.status != 'Cancelled' AND rh.tenantid!='pb.testing' AND receiptnumber like 'MP%' 
     group by: group by rh.tenantid
@@ -436,32 +436,32 @@ ReportDefinitions:
         type: string
         source: uc
         total: false
-      - name: offlineTransactions
+      - name: offlinetransactions
         label: reports.uc.noOfOfflineTransactions
         type: string
         source: uc
         total: true
-      - name: onlineTransactions
+      - name: onlinetransactions
         label: reports.uc.noOfOnlineTransactions
         type: string
         source: uc
         total: true
-      - name: totalTransactions
+      - name: totaltransactions
         label: reports.uc.totalTransactions
         type: string
         source: uc
         total: true
-      - name: offlineCollection
+      - name: offlinecollection
         label: reports.uc.offlineCollection
         type: string
         source: uc
         total: true
-      - name: onlineCollection
+      - name: onlinecollection
         label: reports.uc.onlineCollection
         type: string
         source: uc
         total: true
-      - name: totalCollection
+      - name: totalcollection
         label: reports.uc.totalCollection
         type: string
         source: uc
@@ -491,12 +491,12 @@ ReportDefinitions:
         -- Use CTE to force query plan, compute & use CTE later
         SELECT
           initcap(split_part(rh.tenantId, '.', 2)) as ulb,
-          count(*) FILTER (where collectiontype='COUNTER') as offlineTransactions,
-          count(*) FILTER (where collectiontype='ONLINE') as onlineTransactions,
-          count(*) as totalTransactions,
-          sum(case collectiontype when 'COUNTER' then ih.amount else 0 end) as offlineCollection,
-          sum(case collectiontype when 'ONLINE' then ih.amount else 0 end) as onlineCollection,
-          sum(ih.amount) as totalCollection
+          count(*) FILTER (where collectiontype='COUNTER') as offlinetransactions,
+          count(*) FILTER (where collectiontype='ONLINE') as onlinetransactions,
+          count(*) as totaltransactions,
+          sum(case collectiontype when 'COUNTER' then ih.amount else 0 end) as offlinecollection,
+          sum(case collectiontype when 'ONLINE' then ih.amount else 0 end) as onlinecollection,
+          sum(ih.amount) as totalcollection
         from egcl_receiptheader_v1 as rh
         inner join egcl_receiptinstrument_v1 as ri on ri.receiptheader = rh.id
         inner join egcl_instrumentheader_v1 as ih on ih.id = ri.instrumentheader
@@ -509,12 +509,12 @@ ReportDefinitions:
     version: 1.0.0
     moduleName: rainmaker-uc
     sourceColumns:
-      - name: serviceType
+      - name: servicetype
         label: reports.uc.serviceType
         type: string
         source: uc
         total: false      
-      - name: totalReceipts
+      - name: totalreceipts
         label: reports.uc.totalReceipts
         type: string
         source: uc
@@ -534,12 +534,12 @@ ReportDefinitions:
         type: string
         source: uc
         total: true
-      - name: fieldCollection
+      - name: fieldcollection
         label: reports.uc.fieldCollection
         type: string
         source: uc
         total: true
-      - name: totalCollection
+      - name: totalcollection
         label: reports.uc.totalCollection
         type: string
         source: uc
@@ -560,13 +560,13 @@ ReportDefinitions:
     query: |
         -- Use CTE to force query plan, compute & use CTE later
         SELECT
-          rh.businessdetails as serviceType,
-          count(*) as totalReceipts,
+          rh.businessdetails as servicetype,
+          count(*) as totalreceipts,
           SUM(CASE WHEN taxheadcode LIKE '%_TAX' THEN adjustedamount ELSE 0 END) as tax, 
           SUM(CASE WHEN taxheadcode LIKE '%_CGST' THEN adjustedamount ELSE 0 END) as cgst, 
           SUM(CASE WHEN taxheadcode LIKE '%_SGST' THEN adjustedamount ELSE 0 END) as sgst, 
-          SUM(CASE WHEN taxheadcode LIKE '%_FIELD_FEE' THEN adjustedamount ELSE 0 END) as fieldCollection,
-          SUM(amount) as totalCollection
+          SUM(CASE WHEN taxheadcode LIKE '%_FIELD_FEE' THEN adjustedamount ELSE 0 END) as fieldcollection,
+          SUM(amount) as totalcollection
         from egcl_receiptheader_v1 rh, egcl_receiptdetails_v1 as rd
         WHERE rh.id=rd.receiptheader and rh.status != 'Cancelled' AND rh.tenantid=$tenantid AND receiptnumber like 'MP%' 
     group by: GROUP BY rh.businessdetails
