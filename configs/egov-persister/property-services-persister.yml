@@ -733,7 +733,7 @@ serviceMaps:
    isTransaction: true
    queryMaps:
 
-     - query: UPDATE eg_pt_propertydetail_v2 SET status=? where propertyId=? AND assessmentNumber=? AND tenantId=?;
+     - query: UPDATE eg_pt_propertydetail_v2 SET status=? where property=? AND assessmentNumber=? AND tenantId=?;
        basePath: Properties.*.propertyDetails.*
        jsonMaps:
 
@@ -761,7 +761,7 @@ serviceMaps:
 
          - jsonPath: $.Properties.*.tenantId
 
-     - query: UPDATE eg_pt_propertydetail_v2 SET status=? where propertyId=? AND assessmentNumber=? AND tenantId=?;
+     - query: UPDATE eg_pt_propertydetail_v2 SET status=? where property=? AND assessmentNumber=? AND tenantId=?;
        basePath: Properties.*.propertyDetails.*
        jsonMaps:
 
