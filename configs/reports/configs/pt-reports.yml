@@ -1131,10 +1131,12 @@ ReportDefinitions:
     searchClause: AND pt_addr.locality IN ($localityArray)
   - name: collectorname
     label: reports.pt.collectorname
-    type: string
+    type: singlevaluelist
+    pattern: http://egov-hrms:8080/egov-hrms/employees/_search?tenantId=$tenantid&roles=PTCEMP|$.Employees[*].user.id|$.Employees[*].user.name
     source: pt
+    wrapper: true
     isMandatory: false
-    searchClause: AND lower(eg_user.name) = lower($collectorname)
+    searchClause: AND eg_user.id = $collectorname::INTEGER
   query: |
       -- Use CTE to force query plan, compute & use CTE later
       WITH receipt_breakup AS (
