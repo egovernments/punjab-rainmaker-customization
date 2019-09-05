@@ -123,7 +123,7 @@ serviceMaps:
    isTransaction: true
    queryMaps:
 
-     - query: UPDATE eg_pt_assessment active=(CASE ? WHEN 'ACTIVE' THEN true ELSE false END) where propertyid=? AND assessmentNumber=? AND tenantId=?;
+     - query: UPDATE eg_pt_assessment SET active=(CASE ? WHEN 'ACTIVE' THEN true ELSE false END) where propertyid=? AND assessmentNumber=? AND tenantId=?;
        basePath: Properties.*.propertyDetails.*
        jsonMaps:
 
