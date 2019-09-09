@@ -74,6 +74,14 @@
     }
   },
   "common-masters": {
+    "IdFormat": {
+      "masterName": "IdFormat",
+      "moduleDefinition": null,
+      "isStateLevel": true,
+      "uniqueKeys": [
+        "$.idname"
+      ]
+    },
     "OwnerShipCategory": {
       "masterName": "OwnerShipCategory",
       "moduleDefinition": null,
