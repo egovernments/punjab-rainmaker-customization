@@ -346,8 +346,8 @@ ReportDefinitions:
           sum(totalamount) as totalamount
         from egcl_receiptheader_v1 rh, egcl_receiptdetails_v1 as rd
         WHERE rh.id=rd.receiptheader and rh.status != 'Cancelled'  AND rh.tenantid!='pb.testing' AND receiptnumber like 'MP%' 
-    group by: group by rh.tenantid,rh.businessdetails
-    order by: order by rh.tenantid
+    groupby: group by rh.tenantid,rh.businessdetails
+    orderby: order by rh.tenantid
 
   - reportName: MiscReceiptState
     summary: State Miscellaneous Receipt Register 
@@ -422,7 +422,7 @@ ReportDefinitions:
           sum(amount) as totalamount
         from egcl_receiptheader_v1 rh, egcl_receiptdetails_v1 as rd
         WHERE rh.id=rd.receiptheader and rh.status != 'Cancelled' AND rh.tenantid!='pb.testing' AND receiptnumber like 'MP%' 
-    group by: group by rh.tenantid
+    groupby: group by rh.tenantid
 
 
 
@@ -501,8 +501,8 @@ ReportDefinitions:
         inner join egcl_receiptinstrument_v1 as ri on ri.receiptheader = rh.id
         inner join egcl_instrumentheader_v1 as ih on ih.id = ri.instrumentheader
         where rh.receiptnumber like 'MP%' and rh.status !='Cancelled' and rh.tenantid !='pb.testing'
-    group by: GROUP BY rh.tenantid
-    order by: ORDER BY rh.tenantId asc
+    groupby: GROUP BY rh.tenantid
+    orderby: ORDER BY rh.tenantId asc
 
   - reportName: MiscBusinessServiceCollectionTenant
     summary: Miscellaneous Business Service Collection 
@@ -569,5 +569,5 @@ ReportDefinitions:
           SUM(amount) as totalcollection
         from egcl_receiptheader_v1 rh, egcl_receiptdetails_v1 as rd
         WHERE rh.id=rd.receiptheader and rh.status != 'Cancelled' AND rh.tenantid=$tenantid AND receiptnumber like 'MP%' 
-    group by: GROUP BY rh.businessdetails
-    order by: ORDER BY rh.businessdetails
+    groupby: GROUP BY rh.businessdetails
+    orderby: ORDER BY rh.businessdetails
