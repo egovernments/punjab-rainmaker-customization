@@ -29,6 +29,14 @@ const PT_DEMAND_HOST = process.env.PT_DEMAND_HOST
 
 const PT_ZERO_ASSESSMENTYEAR = process.env.PT_ZERO_ASSESSMENTYEAR || "2013-14";
 const PT_ZERO_TENANTS = (process.env.PT_ZERO_TENANTS || "pb.testing").split(",");
+
+//<PT Integration variables>
+const PT_INTEGRATION_ASSESSMENTYEAR =process.env.PT_INTEGRATION_ASSESSMENTYEAR || "2013-14"
+const PT_INTEGRATION_TENANTS = (process.env.PT_INTEGRATION_TENANTS || "pb.testing").split(",");
+
+const PT_INTEGRATION_HOST = process.env.PT_INTEGRATION_HOST 
+//</PT Integration variables>
+
 const PT_ENABLE_FC_CALC = Boolean(process.env.PT_ENABLE_FC_CALC || false);
 const EGOV_MDMS_HOST = process.env.EGOV_MDMS_HOST
 const EGOV_BND_LOGIN_URL = process.env.EGOV_BND_LOGIN_URL
@@ -369,6 +377,19 @@ async function updateDemand(demands, RequestInfo) {
 
 //     return response;
 // }
+
+
+function _estimateIntegrationTaxProcessor(request, response) {
+    let estimate = await request.post({
+        url: url.resolve(PT_INTEGRATION_HOST, "/apt_estimate_pt_2013/api"),
+        body: {request, response},
+        json: true
+    })
+
+    return estimate;
+}
+
+
 
 function _estimateZeroTaxProcessor(request, response) {
     let index = 0;
@@ -765,7 +786,17 @@ router.post('/protected/punjab-pt/pt-calculator-v2/_estimate', asyncMiddleware(a
         response
     } = getRequestResponse(req)
 
-    response = _estimateZeroTaxProcessor(request, response)
+
+    let tenantId = request["CalculationCriteria"][0]["tenantId"]
+    let assessmentYear = request["CalculationCriteria"][0]["assessmentYear"]
+
+    if (assessmentYear == PT_ZERO_ASSESSMENTYEAR && PT_ZERO_TENANTS.indexOf(tenantId) >= 0){
+        response = _estimateZeroTaxProcessor(request, response)
+    }
+    else if (assessmentYear == PT_INTEGRATION_ASSESSMENTYEAR && PT_INTEGRATION_TENANTS.indexOf(tenantId) >= 0){
+        response = _estimateIntegrationTaxProcessor(request, response)
+    }
+
 
     // if (!PT_ENABLE_FC_CALC)
     if ("Errors" in response)
