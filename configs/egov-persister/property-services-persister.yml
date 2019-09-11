@@ -745,6 +745,18 @@ serviceMaps:
 
          - jsonPath: $.Properties[*][?({assessmentNumber} in @.propertyDetails[*].assessmentNumber)].tenantId
 
+     - query: UPDATE eg_pt_assessment SET active=(CASE ? WHEN 'ACTIVE' THEN true ELSE false END) where propertyid=? AND assessmentNumber=? AND tenantId=?;
+       basePath: Properties.*.propertyDetails.*
+       jsonMaps:
+
+         - jsonPath: $.Properties.*.propertyDetails.*.status
+
+         - jsonPath: $.Properties[*][?({assessmentNumber} in @.propertyDetails[*].assessmentNumber)].propertyId
+
+         - jsonPath: $.Properties.*.propertyDetails.*.assessmentNumber
+
+         - jsonPath: $.Properties[*][?({assessmentNumber} in @.propertyDetails[*].assessmentNumber)].tenantId
+
  - version: 1.0
    description: Cancel property in eg_pt_property_v2  table
    fromTopic: cancel-pt-property
