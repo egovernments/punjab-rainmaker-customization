@@ -35,7 +35,6 @@ const PT_INTEGRATION_ASSESSMENTYEAR =process.env.PT_INTEGRATION_ASSESSMENTYEAR |
 const PT_INTEGRATION_TENANTS = (process.env.PT_INTEGRATION_TENANTS || "pb.testing").split(",");
 
 const PT_INTEGRATION_HOST = process.env.PT_INTEGRATION_HOST 
-const PT_INTEGRATION_ENDPOINT = process.env.PT_INTEGRATION_ENDPOINT
 //</PT Integration variables>
 
 const PT_ENABLE_FC_CALC = Boolean(process.env.PT_ENABLE_FC_CALC || false);
