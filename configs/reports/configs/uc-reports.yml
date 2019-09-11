@@ -205,6 +205,21 @@ ReportDefinitions:
         type: string
         source: uc
         total: false
+      - name: ddchequedate
+        label: reports.uc.ddorchequedate
+        type: string
+        source: uc
+        total: false
+      - name: bankname
+        label: reports.uc.bankname
+        type: string
+        source: uc
+        total: false
+      - name: branchname
+        label: reports.uc.branchname
+        type: string
+        source: uc
+        total: false
       - name: collectiontype
         label: reports.uc.collectiontype
         type: string
@@ -238,6 +253,14 @@ ReportDefinitions:
         source: uc
         isMandatory: false
         searchClause: AND rh.receiptdate <= $toDate
+      - name: collectorname
+        label: reports.uc.collectorname
+        type: singlevaluelist
+        pattern: http://egov-hrms:8080/egov-hrms/employees/_search?tenantId=$tenantid&roles=UC_EMP|$.Employees[*].user.id|$.Employees[*].user.name
+        source: uc
+        wrapper: true
+        isMandatory: false
+        searchClause: AND eg_user.id = $collectorname::INTEGER
     query: |
         -- Use CTE to force query plan, compute & use CTE later
         WITH receipt_breakup AS (
@@ -263,6 +286,9 @@ ReportDefinitions:
           amount as totalamount, 
           instrumenttype as paymentmode,
           (case when instrumenttype like 'Cash' then '' else  transactionnumber end) as ddorchequenumber,
+          To_char(To_timestamp(ih.transactiondate / 1000), 'DD/MM/YYYY') as ddchequedate,
+          ih.bankid as bankname,
+          ih.branchname as branchname,
           'System' as collectiontype,
           eg_user.name as collectorname
         FROM egcl_receiptheader_v1 AS rh
