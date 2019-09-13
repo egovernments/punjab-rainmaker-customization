@@ -379,7 +379,7 @@ async function updateDemand(demands, RequestInfo) {
 // }
 
 
-function _estimateIntegrationTaxProcessor(request, response) {
+async function _estimateIntegrationTaxProcessor(request, response) {
     let estimate = await request.post({
         url: url.resolve(PT_INTEGRATION_HOST, "/apt_estimate_pt_2013/api"),
         body: {request, response},
