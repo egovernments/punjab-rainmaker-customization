@@ -286,7 +286,7 @@ ReportDefinitions:
           amount as totalamount, 
           instrumenttype as paymentmode,
           (case when instrumenttype like 'Cash' then '' else  transactionnumber end) as ddorchequenumber,
-          To_char(To_timestamp(ih.transactiondate / 1000), 'DD/MM/YYYY') as ddchequedate,
+          (case when instrumenttype like 'DD' or instrumenttype like 'Cheque' then To_char(To_timestamp(ih.transactiondate / 1000), 'DD/MM/YYYY') else '' end) as ddchequedate,
           ih.bankid as bankname,
           ih.branchname as branchname,
           'System' as collectiontype,
