@@ -970,6 +970,11 @@ ReportDefinitions:
     type: string
     source: pt
     total: false
+  - name: businessname
+    label: reports.pt.businessname
+    type: string
+    source: pt
+    total: false
   searchParams:
   - name: fromDate
     label: reports.pt.fromDate
@@ -1015,7 +1020,8 @@ ReportDefinitions:
       to_char((To_timestamp(ih.transactiondate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY')  AS "paymentdate",
       eu.emailid     as "emailid"    ,
       REGEXP_REPLACE(REGEXP_REPLACE(CONCAT(pta.doorno, ',', pta.addressline1, ',', pta.addressline2, ',', pta.buildingname, ',', pta.pincode), ',+', ','), '^,|,$', '') as "address",
-      pd.additionaldetails->>'remarks' as "remarks"
+      pd.additionaldetails->>'remarks' as "remarks",
+      pt.additionaldetails->>'FirmBusinessName' as "businessname"
     from egcl_receiptheader_v1 as rh
     inner join egcl_receiptinstrument_v1 as ri on ri.receiptheader = rh.id    
     inner join egcl_instrumentheader_v1     as ih on ih.id = ri.instrumentheader
