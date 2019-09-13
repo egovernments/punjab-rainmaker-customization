@@ -794,7 +794,7 @@ router.post('/protected/punjab-pt/pt-calculator-v2/_estimate', asyncMiddleware(a
         response = _estimateZeroTaxProcessor(request, response)
     }
     else if (assessmentYear == PT_INTEGRATION_ASSESSMENTYEAR && PT_INTEGRATION_TENANTS.indexOf(tenantId) >= 0){
-        response = _estimateIntegrationTaxProcessor(request, response)
+        response = await _estimateIntegrationTaxProcessor(request, response)
     }
 
 
