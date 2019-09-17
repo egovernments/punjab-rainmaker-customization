@@ -381,7 +381,7 @@ async function updateDemand(demands, RequestInfo) {
 
 async function _estimateIntegrationTaxProcessor(req1, res1) {
     let estimate = await request.post({
-        url: url.resolve(PT_INTEGRATION_HOST, "/apt_estimate_pt_2013/api"),
+        url: url.resolve(PT_INTEGRATION_HOST, "/apt_estimate_pt_2013/api_estimate_pt_2013"),
         body: {request:req1, response:res1},
         json: true
     })
