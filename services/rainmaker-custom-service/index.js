@@ -379,10 +379,10 @@ async function updateDemand(demands, RequestInfo) {
 // }
 
 
-async function _estimateIntegrationTaxProcessor(req, res) {
+async function _estimateIntegrationTaxProcessor(req1, res1) {
     let estimate = await request.post({
         url: url.resolve(PT_INTEGRATION_HOST, "/apt_estimate_pt_2013/api"),
-        body: {request:req, response:res},
+        body: {request:req1, response:res1},
         json: true
     })
 
@@ -620,6 +620,77 @@ async function _createAndUpdateZeroTaxProcessor(request, response) {
     return response;
 }
 
+async function _createAndUpdateIntegrationTaxProcessor(req, response){
+    let index = 0
+    let interationResponse = response;
+    for (reqProperty of req["Properties"]) {
+
+        let resProperty = response["Properties"][index]
+        let propertyId = resProperty["propertyId"]
+
+        let assessmentNumber = resProperty["propertyDetails"][0]["assessmentNumber"]
+
+        let assessmentYear = resProperty["propertyDetails"][0]["financialYear"]
+        let tenantId = reqProperty["tenantId"]
+
+        if (!(assessmentYear == PT_INTEGRATION_ASSESSMENTYEAR && PT_INTEGRATION_TENANTS.indexOf(tenantId) >= 0))
+            continue
+            
+        interationResponse = await request.post({
+                url: url.resolve(PT_INTEGRATION_HOST, "/apt_estimate_pt_2013/api_create_pt_2013"),
+                body: {request:req, response:response},
+                json: true
+            })
+
+        
+        request_info = req["RequestInfo"] || req["requestInfo"]
+
+        let consumerCode = propertyId + ":" + assessmentNumber
+        let service = "PT"
+        let calc = interationResponse["Properties"][index]["propertyDetails"][0]["calculation"]
+        let taxHeads = calc["taxHeadEstimates"];
+        let createTaxHeadsArray = {};
+        for(taxHead of taxHeads){
+            createTaxHeadsArray[taxHead.taxHeadCode] = taxHead.estimateAmount;
+            //print(texthead)
+        }
+
+        let demandSearchResponse = await findDemandForConsumerCode(consumerCode, tenantId, service, req["RequestInfo"])
+
+        let newTotal = 0;
+        
+        for (demandDetail of demandSearchResponse["Demands"][0]["demandDetails"]) 
+        {
+            if(demandDetail.taxAmount){
+                demandDetail.taxAmount = 0
+            }
+        }
+        
+
+
+        for (demandDetail of demandSearchResponse["Demands"][0]["demandDetails"]) 
+        {
+            if(createTaxHeadsArray[demandDetail.taxHeadMasterCode])
+            {
+                demandDetail.taxAmount = createTaxHeadsArray[demandDetail.taxHeadMasterCode]; 
+                createTaxHeadsArray[demandDetail.taxHeadMasterCode] =0; // Incase of Multiple PT_ROUNDOFF
+                newTotal += demandDetail.taxAmount;
+            }
+        }
+
+        let demandUpdateResponse = await updateDemand(demandSearchResponse["Demands"], req["RequestInfo"])
+        calc["taxAmount"] = 0;
+        calc["exemption"] = 0;
+        calc["totalAmount"] = newTotal;
+        calc["rebate"] = 0;
+        calc["penanlty"] = 0;
+        index++
+   
+    }
+    return interationResponse;
+
+}
+
 // async function _createAndUpdateTaxProcessor(request, response, fireCessConfig) {
 
 //     let index = 0
@@ -697,9 +768,23 @@ async function _createAndUpdateRequestHandler(req, res) {
         request,
         response
     } = getRequestResponse(req)
+    let index =0
+    for (reqProperty of request["Properties"]) {
+        let resProperty = response["Properties"][index]
+        let propertyId = resProperty["propertyId"]
 
-    response = await _createAndUpdateZeroTaxProcessor(request, response)
+        let assessmentNumber = resProperty["propertyDetails"][0]["assessmentNumber"]
 
+        let assessmentYear = resProperty["propertyDetails"][0]["financialYear"]
+        let tenantId = reqProperty["tenantId"]
+
+        if (assessmentYear == PT_ZERO_ASSESSMENTYEAR && PT_ZERO_TENANTS.indexOf(tenantId) >= 0){
+            response = await _createAndUpdateZeroTaxProcessor(request, response)
+        }else if(assessmentYear == PT_INTEGRATION_ASSESSMENTYEAR && PT_INTEGRATION_TENANTS.indexOf(tenantId) >= 0){
+            response = await _createAndUpdateIntegrationTaxProcessor(request, response)
+        }
+    index++;
+    }
     // if (!PT_ENABLE_FC_CALC)
     if ("Errors" in response)
         res.status(400).json(response)
@@ -737,7 +822,7 @@ function getRequestResponse(req) {
     }
 }
 
-router.post('/protected/punjab-pt/property/_create', asyncMiddleware(_createAndUpdateRequestHandler))
+router.post('/protected/punjab-pt/property/_create',  asyncMiddleware(_createAndUpdateRequestHandler))
 
 router.post('/protected/punjab-pt/property/_update', asyncMiddleware(_createAndUpdateRequestHandler))
 
