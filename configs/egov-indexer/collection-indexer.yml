@@ -130,7 +130,7 @@ ServiceMaps:
   - topic: egov.collection.receipt-create-legacyindex
     configKey: LEGACYINDEX
     indexes:
-    - name: collectionsindex-v1
+    - name: collectionsindex-v2
       type: receipts
       id: $.Bill[0].billDetails[0].id
       isBulk: true
