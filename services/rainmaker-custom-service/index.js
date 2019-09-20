@@ -923,7 +923,7 @@ router.post('/protected/punjab-pt/pt-calculator-v2/_estimate', asyncMiddleware(a
                     }
                 ]
             }
-        return data;
+        response = data;
         }
 
     }
