@@ -67,6 +67,16 @@ function getUserID(data) {
     return data.RequestInfo.userInfo.id;
 }
 
+function isReceiptGenerated(demand){
+    for (demandDetail of demandSearchResponse["Demands"][0]["demandDetails"]) 
+        {
+            if(demandDetail.collectionAmount || 0 > 0){
+                return true;
+            }
+        }
+    return false;
+}
+
 async function getFireCessConfig(tenantId) {
     let fireCessConfig = await request.post({
         url: url.resolve(EGOV_MDMS_HOST, "/egov-mdms-service/v1/_search?tenantId=" + tenantId),
@@ -380,6 +390,33 @@ async function updateDemand(demands, RequestInfo) {
 
 
 async function _estimateIntegrationTaxProcessor(req1, res1) {
+    let index = 0;
+
+    for (let calc of res1["Calculation"]) {
+        let assessmentYear = req1["CalculationCriteria"][index]["assessmentYear"]
+        let tenantId = req1["CalculationCriteria"][index]["tenantId"]
+        let newTotal = 0;
+
+        if (isCitizen(req1) && assessmentYear == PT_INTEGRATION_ASSESSMENTYEAR && !(PT_INTEGRATION_TENANTS.indexOf(tenantId) >= 0)) {
+            
+            data =  
+                {
+                    "ResponseInfo":null,
+                    "Errors":[
+                        {
+                            "code":"CitizenOnlineNotAllowed",
+                            "message":"Sorry but online assessment for " + PT_INTEGRATION_ASSESSMENTYEAR + " is not allowed. Please make the payment at the counter",
+                            "description": "Sorry but online assessment for " + PTPT_INTEGRATION_ASSESSMENTYEAR_ZERO_ASSESSMENTYEAR + " is not allowed. Please make the payment at the counter",
+                            "params":null
+                        }
+                    ]
+                }
+            return data;
+            
+        }
+    index++;
+    }
+
     let estimate = await request.post({
         url: url.resolve(PT_INTEGRATION_HOST, "/apt_estimate_pt_2013/api_estimate_pt_2013"),
         body: {request:req1, response:res1},
@@ -656,6 +693,24 @@ async function _createAndUpdateIntegrationTaxProcessor(req, response){
         }
 
         let demandSearchResponse = await findDemandForConsumerCode(consumerCode, tenantId, service, req["RequestInfo"])
+
+        if(isReceiptGenerated(demandSearchResponse)){
+            //Throw Error
+            data =  
+                {
+                    "ResponseInfo":null,
+                    "Errors":[
+                        {
+                            "code":"MultiplePaymentNotAllowed",
+                            "message":"There already exists a recipt for property id : "+ propertyId +" for financial year" + PT_INTEGRATION_ASSESSMENTYEAR,
+                            "description": "There already exists a recipt for property id : "+ propertyId +" for financial year" + PT_INTEGRATION_ASSESSMENTYEAR,
+                            "params":null
+                        }
+                    ]
+                };
+            return data;
+        }
+
 
         let newTotal = 0;
         
