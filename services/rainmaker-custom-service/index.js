@@ -27,6 +27,12 @@ const EGOV_BND_REDIRECT_URL = process.env.EGOV_BND_REDIRECT_URL
 // const EGOV_BND_API_KEY = process.env.EGOV_BND_API_KEY
 const EGOV_BND_ENCRYPTION_KEY = process.env.EGOV_BND_ENCRYPTION_KEY || "Vol0otuji0X03wSuZGI3zySUzxj7bReQ"
 
+//<PT Integration variables>
+const PT_INTEGRATION_ASSESSMENTYEAR =process.env.PT_INTEGRATION_ASSESSMENTYEAR || "2013-14"
+const PT_INTEGRATION_TENANTS = (process.env.PT_INTEGRATION_TENANTS || "pb.testing").split(",");
+const PT_INTEGRATION_HOST = process.env.PT_INTEGRATION_HOST 
+//</PT Integration variables>
+
 function log(val) {
     if (DEBUG_MODE) {
         console.log(val)
