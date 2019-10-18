@@ -879,7 +879,7 @@ ReportDefinitions:
     type: string
     source: tl
     total: false
- - name: name
+  - name: name
     label: report.tl.user.name
     type: string
     source: tl
@@ -919,16 +919,25 @@ ReportDefinitions:
     isMandatory: false
     searchClause: AND tla.locality IN ($localityArray)
   query: |
-    SELECT 
-      tl.applicationnumber,tl.licensenumber,tl.tradeName, 
-	    initcap(split_part(tl.tenantId, '.', 2)) as tenantId,ownername, mobilenumber,tla.locality,
-      to_char(To_timestamp(applicationdate / 1000), 'DD/MM/YYYY') as applicationDate,initcap(tl.status) as status
+     SELECT 
+      tl.applicationnumber,
+      tl.licensenumber,
+      tl.tradeName,
+      (split_part(tl.tenantId, '.', 2)) as tenantId,
+      ownername, 
+      mobilenumber,
+      tla.locality,
+      to_char(To_timestamp(applicationdate / 1000), 'DD/MM/YYYY') as applicationDate,
+      tl.status
       from eg_tl_tradelicense as tl 
-      INNER JOIN eg_tl_tradelicensedetail tld ON tld.tradelicenseid = tl.id 
-	    inner join eg_tl_address as tla on tla.tradelicensedetailid=tld.id
+      INNER JOIN eg_tl_tradelicensedetail tld ON
+      tld.tradelicenseid = tl.id 
+      INNER JOIN eg_tl_address as tla ON
+      tla.tradelicensedetailid=tld.id
       INNER JOIN (SELECT tradelicensedetailid, array_to_string(array_agg(name),', ') as ownername, array_to_string(array_agg(mobilenumber),', ') as mobilenumber
       FROM eg_tl_owner tlowner 
-      INNER JOIN eg_user tluser ON tluser.uuid = tlowner.id
+      INNER JOIN eg_user tluser ON
+      tluser.uuid = tlowner.id
       group by tradelicensedetailid
-    ) tlown ON tlown.tradelicensedetailid = tld.id
-    WHERE tl.tenantid=$tenantid
+      ) tlown ON tlown.tradelicensedetailid = tld.id
+     WHERE tl.tenantid=$tenantid
