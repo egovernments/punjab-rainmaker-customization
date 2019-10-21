@@ -142,7 +142,7 @@ ReportDefinitions:
     WHERE tl.Status in ('APPROVED', 'PAID', 'CANCELLED') AND tl.tenantId LIKE $tenantid
 
 - reportName: StateTradeLicenseCancelledRegistryReport
-  summary: TL Cancelled Receipt Register Report
+  summary: TL Cancelled Receipt Register Reports
   version: 1.0.0
   moduleName: rainmaker-tl
   sourceColumns:
