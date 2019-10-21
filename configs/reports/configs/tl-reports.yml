@@ -34,7 +34,7 @@ ReportDefinitions:
     label: report.tl.issueddate
     type: string
     source: tl
-    total: false
+    total: true
   - name: name
     label: report.tl.user.name
     type: string
