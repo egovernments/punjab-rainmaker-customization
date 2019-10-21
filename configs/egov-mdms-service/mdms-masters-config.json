@@ -12,6 +12,7 @@
     "roles": {
       "masterName": "roles",
       "isStateLevel": true,
+      "isMergeAllowed": true,
       "uniqueKeys": [
         "$.code"
       ]
