@@ -865,7 +865,7 @@ ReportDefinitions:
   orderby: ORDER BY tenantid, totalamountpaid DESC NULLS LAST
 
 
-- reportName: ULBPTDataDumpReport
+- reportName: ULBPTDataDumpReportOLD
   summary: ULB level report
   version: 1.0.0
   moduleName: rainmaker-pt
@@ -1197,7 +1197,7 @@ ReportDefinitions:
   orderby: ORDER BY rh.receiptdate DESC
 
 
-- reportName: ULBPTDataDumpReportNew
+- reportName: ULBPTDataDumpReport
   summary: ULB level report
   version: 1.0.0
   moduleName: rainmaker-pt
