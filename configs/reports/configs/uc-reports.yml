@@ -146,7 +146,7 @@ ReportDefinitions:
     moduleName: rainmaker-uc
     additionalConfig:
       print:
-        pdfPageSize: "A1"
+        pdfPageSize: "LEGAL"
     sourceColumns:
       - name: ulb
         label: reports.uc.ulb
