@@ -111,7 +111,7 @@ ReportDefinitions:
   - name: collectorname
     label: reports.uc.collectorname
     type: singlevaluelist
-    pattern: http://egov-hrms:8080/egov-hrms/employees/_search?tenantId=$tenantid&roles=PTCEMP|$.Employees[*].user.id|$.Employees[*].user.name
+    pattern: http://egov-hrms:8080/egov-hrms/employees/_search?tenantId=$tenantid&roles=TL_CEMP|$.Employees[*].user.id|$.Employees[*].user.name
     source: pt
     wrapper: true
     isMandatory: false
