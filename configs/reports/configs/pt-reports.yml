@@ -118,6 +118,11 @@ ReportDefinitions:
     type: string
     source: pt
     total: false
+  - name: transactiondate
+    label: reports.pt.ddChequeTransactionDate
+    type: string
+    source: pt
+    total: false
   - name: bankname
     label: reports.pt.bankName
     type: string
@@ -203,6 +208,7 @@ ReportDefinitions:
         amount, 
         instrumenttype, 
         transactionnumber, 
+        to_char((To_timestamp(transactiondate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY') AS transactiondate, 
         receipt_breakup.*, 
         rh.totalamount - ih.amount AS pendingamount,
         pt_detail.financialyear,
