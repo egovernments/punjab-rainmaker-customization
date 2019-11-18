@@ -472,7 +472,7 @@ ReportDefinitions:
   groupby: GROUP BY tenantid,servicecode
   orderby: ORDER BY tenantid,servicecode
 
-- reportName: DepartmentReport
+- reportName: DepartmentWiseReport
   summary: Fetches complaint stats based on complaint types for a ULB
   version: 1.0.0
   moduleName: rainmaker-pgr
