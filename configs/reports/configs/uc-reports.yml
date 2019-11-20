@@ -701,3 +701,80 @@ ReportDefinitions:
         WHERE  rh.status = 'Cancelled'  AND receiptnumber like 'MP%'
         and rh.tenantid=$tenantid
     orderby: ORDER BY rh.receiptdate DESC
+
+  - reportName: MiscReceiptULBShort
+    summary: Receipt Register Miscellaneous
+    version: 1.0.0
+    moduleName: rainmaker-uc
+    additionalConfig:
+      print:
+        pdfPageSize: "A3"
+    sourceColumns:
+      - name: consumername
+        label: reports.uc.consumername
+        type: string
+        source: uc
+        total: false
+      - name: mobilenumber
+        label: reports.uc.mobilenumber
+        type: string
+        source: uc
+        total: false
+      - name: receiptdate
+        label: reports.uc.receiptdate
+        type: string
+        source: uc
+        total: false
+      - name: servicecategory
+        label: reports.uc.businessdetails
+        type: string
+        source: uc
+        total: false
+      - name: amount
+        label: reports.uc.totalamount
+        type: string
+        source: uc
+        total: true
+      - name: collectorname
+        label: reports.uc.collectorname
+        type: string
+        source: uc
+        total: false
+    searchParams:
+      - name: fromDate
+        label: reports.uc.fromDate
+        type: epoch
+        source: uc
+        isMandatory: false
+        searchClause: AND rh.receiptdate >= $fromDate
+      - name: toDate
+        label: reports.uc.toDate
+        type: epoch
+        source: uc
+        isMandatory: false
+        searchClause: AND rh.receiptdate <= $toDate
+      - name: collectorname
+        label: reports.uc.collectorname
+        type: singlevaluelist
+        pattern: http://egov-hrms:8080/egov-hrms/employees/_search?tenantId=$tenantid&roles=UC_EMP|$.Employees[*].user.id|$.Employees[*].user.name
+        source: uc
+        wrapper: true
+        isMandatory: false
+        searchClause: AND eg_user.id = $collectorname::INTEGER
+    query: |
+        -- Use CTE to force query plan, compute & use CTE later
+        SELECT 
+          rh.payername as consumername,
+          rh.payermobile as mobilenumber,
+          To_char(To_timestamp(rh.receiptdate / 1000), 'DD/MM/YYYY') as receiptdate,
+          businessdetails as servicecategory,
+          rh.totalamount as amount, 
+          eg_user.name as collectorname,
+          rh.additionaldetails->>'comment' as remarks
+        FROM egcl_receiptheader_v1 AS rh
+        JOIN egcl_receiptinstrument_v1 AS ri ON rh.id = ri.receiptheader
+        JOIN egcl_instrumentheader_v1 AS ih ON ih.id = ri.instrumentheader
+        JOIN eg_user ON rh.createdby::INTEGER=eg_user.id
+        WHERE  rh.status != 'Cancelled'  AND receiptnumber like 'MP%'
+        and rh.tenantid=$tenantid
+    orderby: ORDER BY rh.receiptdate DESC
