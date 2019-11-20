@@ -735,6 +735,11 @@ ReportDefinitions:
         type: string
         source: uc
         total: true
+      - name: remarks
+        label: reports.uc.remarks
+        type: string
+        source: uc
+        total: false
       - name: collectorname
         label: reports.uc.collectorname
         type: string
