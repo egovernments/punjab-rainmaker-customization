@@ -13,7 +13,7 @@ ReportDefinitions:
     type: string
     source: pt
     total: false
-  - name: transactiondate
+  - name: receiptdate
     label: reports.pt.receiptDate
     type: string
     source: pt
@@ -200,9 +200,8 @@ ReportDefinitions:
         rh.id, 
         Substring(rh.consumercode, '(.*):') AS propertyid, 
         Substring(rh.consumercode, ':(.*)') AS assessmentnumber, 
-        rh.consumercode, 
-        rh.receiptdate,
-        to_char((To_timestamp(rh.receiptdate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY')  AS transactiondate,
+        rh.consumercode,
+        to_char((To_timestamp(rh.receiptdate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY')  AS receiptdate,
         bankid AS bankname, 
         receiptnumber, 
         amount, 
