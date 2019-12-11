@@ -121,8 +121,8 @@ ReportDefinitions:
         SELECT 
           rh.tenantid as ulb,
           rh.receiptnumber as receiptnumber,
-          To_char(To_timestamp(rh.receiptdate / 1000), 'DD/MM/YYYY') as receiptdate,
-          To_char(To_timestamp(rh.manualreceiptdate / 1000), 'DD/MM/YYYY') as g8issuedate,
+          To_char((To_timestamp(rh.receiptdate / 1000) at time Zone 'Asia/Kolkata'), 'DD/MM/YYYY') as receiptdate,
+          To_char((To_timestamp(rh.manualreceiptdate / 1000) at time Zone 'Asia/Kolkata'), 'DD/MM/YYYY') as g8issuedate,
           rh.manualreceiptnumber as g8receiptno,
           rh.status as status,
           businessdetails as servicecategory,
@@ -263,13 +263,13 @@ ReportDefinitions:
         SELECT 
           rh.tenantid as ulb,
           rh.receiptnumber as receiptnumber,
-          To_char(To_timestamp(rh.receiptdate / 1000), 'DD/MM/YYYY') as receiptdate,
+          To_char((To_timestamp(rh.receiptdate / 1000) at time Zone 'Asia/Kolkata'), 'DD/MM/YYYY') as receiptdate,
           businessdetails as servicecategory,
           receipt_breakup.*,  
           amount as totalamount, 
           instrumenttype as paymentmode,
           (case when instrumenttype like 'Cash' then '' else  transactionnumber end) as ddorchequenumber,
-          (case when instrumenttype like 'DD' or instrumenttype like 'Cheque' then To_char(To_timestamp(ih.transactiondate / 1000), 'DD/MM/YYYY') else '' end) as ddchequedate,
+          (case when instrumenttype like 'DD' or instrumenttype like 'Cheque' then To_char((To_timestamp(ih.transactiondate / 1000) at time Zone 'Asia/Kolkata'), 'DD/MM/YYYY') else '' end) as ddchequedate,
           eg_user.name as collectorname
         FROM egcl_receiptheader_v1 AS rh
         JOIN egcl_receiptinstrument_v1 AS ri ON rh.id = ri.receiptheader
@@ -693,13 +693,13 @@ ReportDefinitions:
         SELECT 
           rh.tenantid as ulb,
           rh.receiptnumber as receiptnumber,
-          To_char(To_timestamp(rh.receiptdate / 1000), 'DD/MM/YYYY') as receiptdate,
+          To_char((To_timestamp(rh.receiptdate / 1000) at time Zone 'Asia/Kolkata'), 'DD/MM/YYYY') as receiptdate,
           businessdetails as servicecategory,
           receipt_breakup.*,  
           amount as totalamount, 
           instrumenttype as paymentmode,
           (case when instrumenttype like 'Cash' then '' else  transactionnumber end) as ddorchequenumber,
-          (case when instrumenttype like 'DD' or instrumenttype like 'Cheque' then To_char(To_timestamp(ih.transactiondate / 1000), 'DD/MM/YYYY') else '' end) as ddchequedate,
+          (case when instrumenttype like 'DD' or instrumenttype like 'Cheque' then To_char((To_timestamp(ih.transactiondate / 1000) at time Zone 'Asia/Kolkata'), 'DD/MM/YYYY') else '' end) as ddchequedate,
           eg_user.name as collectorname
         FROM egcl_receiptheader_v1 AS rh
         JOIN egcl_receiptinstrument_v1 AS ri ON rh.id = ri.receiptheader
@@ -779,7 +779,7 @@ ReportDefinitions:
         SELECT 
           rh.payername as consumername,
           rh.payermobile as mobilenumber,
-          To_char(To_timestamp(rh.receiptdate / 1000), 'DD/MM/YYYY') as receiptdate,
+          To_char((To_timestamp(rh.receiptdate / 1000) at time Zone 'Asia/Kolkata'), 'DD/MM/YYYY') as receiptdate,
           businessdetails as servicecategory,
           rh.totalamount as amount, 
           eg_user.name as collectorname,
