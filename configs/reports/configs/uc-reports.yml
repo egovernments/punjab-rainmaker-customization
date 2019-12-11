@@ -256,6 +256,14 @@ ReportDefinitions:
         source: uc
         isMandatory: false
         searchClause: AND rh.receiptdate <= $toDate
+      - name: businessservice
+        label: reports.uc.businessservice
+        type: singlevaluelist
+        pattern: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?moduleName=BillingService&masterName=BusinessService&tenantId=$tenantid|$.MdmsRes.BillingService.BusinessService[*].code|$.MdmsRes.BillingService.BusinessService[*].code
+        source: uc
+        wrapper: true
+        isMandatory: false
+        searchClause: AND rh.businessdetails = $businessservice
       - name: collectorname
         label: reports.uc.collectorname
         type: singlevaluelist
