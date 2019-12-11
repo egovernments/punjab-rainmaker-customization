@@ -119,10 +119,10 @@ ReportDefinitions:
   query: |
     SELECT 
       licensenumber,
-      to_char(To_timestamp(issueddate / 1000), 'DD/MM/YYYY') as formattedIssuedDate,
+      to_char((To_timestamp(issueddate / 1000) at time Zone 'Asia/Kolkata'), 'DD/MM/YYYY') as formattedIssuedDate,
       tl.tradeName,
       initcap(tl.status) as status,
-      to_char(To_timestamp(receipt.receiptdate / 1000), 'DD/MM/YYYY') as receiptIssueDate , 
+      to_char((To_timestamp(receipt.receiptdate / 1000) at time Zone 'Asia/Kolkata'), 'DD/MM/YYYY') as receiptIssueDate , 
       receipt.receiptnumber,
       tradeTypeName,
       acc, 
@@ -133,7 +133,7 @@ ReportDefinitions:
       ih.transactionnumber as transactionnumber,
       ih.instrumenttype,
       amount as totalamount,
-      To_char(To_timestamp(receipt.manualreceiptdate / 1000), 'DD/MM/YYYY') AS g8issuedate,
+      To_char((To_timestamp(receipt.manualreceiptdate / 1000) at time Zone 'Asia/Kolkata'), 'DD/MM/YYYY') AS g8issuedate,
       receipt.manualreceiptnumber as g8receiptno,
       (CASE WHEN collectiontype='COUNTER' THEN eg_user.name ELSE '' END) as collectorname
 
@@ -270,10 +270,10 @@ ReportDefinitions:
     SELECT 
       initcap(split_part(tl.tenantId, '.', 2)) as tenantId,
       licensenumber,
-      to_char(To_timestamp(issueddate / 1000), 'DD/MM/YYYY') as formattedIssuedDate,
+      to_char((To_timestamp(issueddate / 1000) at time Zone 'Asia/Kolkata'), 'DD/MM/YYYY') as formattedIssuedDate,
       tl.tradeName,
       initcap(tl.status) as status,
-      to_char(To_timestamp(receipt.receiptdate / 1000), 'DD/MM/YYYY') as receiptIssueDate , 
+      to_char((To_timestamp(receipt.receiptdate / 1000) at time Zone 'Asia/Kolkata'), 'DD/MM/YYYY') as receiptIssueDate , 
       receipt.receiptnumber,
       tradeTypeName,
       acc, 
@@ -284,7 +284,7 @@ ReportDefinitions:
       ih.transactionnumber,
       ih.instrumenttype,
       amount as totalamount, 
-      To_char(To_timestamp(receipt.manualreceiptdate / 1000), 'DD/MM/YYYY') AS g8issuedate,
+      To_char((To_timestamp(receipt.manualreceiptdate / 1000) at time Zone 'Asia/Kolkata'), 'DD/MM/YYYY') AS g8issuedate,
       receipt.manualreceiptnumber as g8receiptno
 
     FROM eg_tl_tradelicense tl 
@@ -412,10 +412,10 @@ ReportDefinitions:
   query: |
     SELECT 
       licensenumber,
-      to_char(To_timestamp(issueddate / 1000), 'DD/MM/YYYY') as formattedIssuedDate,
+      to_char((To_timestamp(issueddate / 1000) at time Zone 'Asia/Kolkata'), 'DD/MM/YYYY') as formattedIssuedDate,
       tl.tradeName,
       initcap(tl.status) as status,
-      to_char(To_timestamp(receipt.receiptdate / 1000), 'DD/MM/YYYY') as receiptIssueDate , 
+      to_char((To_timestamp(receipt.receiptdate / 1000) at time Zone 'Asia/Kolkata'), 'DD/MM/YYYY') as receiptIssueDate , 
       receipt.receiptnumber,
       tradeTypeName,
       acc, 
@@ -426,7 +426,7 @@ ReportDefinitions:
       ih.transactionnumber,
       ih.instrumenttype,
       amount as totalamount,
-      To_char(To_timestamp(receipt.manualreceiptdate / 1000), 'DD/MM/YYYY') AS g8issuedate,
+      To_char((To_timestamp(receipt.manualreceiptdate / 1000) at time Zone 'Asia/Kolkata'), 'DD/MM/YYYY') AS g8issuedate,
       receipt.manualreceiptnumber as g8receiptno
 
     FROM eg_tl_tradelicense tl 
@@ -848,14 +848,14 @@ ReportDefinitions:
       SELECT 
         tl.tenantId as tenantId,
         licensenumber,
-        to_char(To_timestamp(issueddate / 1000), 'DD/MM/YYYY') as formattedIssuedDate,
+        to_char((To_timestamp(issueddate / 1000) at time Zone 'Asia/Kolkata'), 'DD/MM/YYYY') as formattedIssuedDate,
         tl.tradeName,
         tradeTypeName,
         acc, 
         name,
         mobilenumber,
         amount as totalamount,
-        To_char(To_timestamp(receipt.manualreceiptdate / 1000), 'DD/MM/YYYY') AS g8issuedate,
+        To_char((To_timestamp(receipt.manualreceiptdate / 1000) at time Zone 'Asia/Kolkata'), 'DD/MM/YYYY') AS g8issuedate,
         receipt.manualreceiptnumber as g8receiptno 
       FROM eg_tl_tradelicense tl 
       INNER JOIN eg_tl_tradelicensedetail tld ON tld.tradelicenseid = tl.id 
@@ -943,7 +943,7 @@ ReportDefinitions:
       ownername, 
       mobilenumber,
       tla.locality,
-      to_char(To_timestamp(applicationdate / 1000), 'DD/MM/YYYY') as applicationDate,
+      to_char((To_timestamp(applicationdate / 1000) at time Zone 'Asia/Kolkata'), 'DD/MM/YYYY') as applicationDate,
       tl.status
       from eg_tl_tradelicense as tl 
       INNER JOIN eg_tl_tradelicensedetail tld ON
