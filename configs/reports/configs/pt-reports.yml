@@ -1347,7 +1347,7 @@ ReportDefinitions:
     label: reports.pt.zoneList
     type: boundarylist
     source: pt
-    isMandatory: false
+    isMandatory: true
     searchClause: AND pta.locality IN ($localityArray)
   query: |
     --S.no    Service Name	ULB    Property Tax Unique ID    Date Of Transcation    Receipt Number	Existing Property ID    Owner Name    Guardian Name    Total Area (SQ.YARD)    Covered  Area/Built Area (SQ.FEET)    Floors    Occupancy (Rented,Self /Unoccupied)    Type Of Property	Mobile Number    Transcation Mode of Payment    Payment Amount    Payment Date    Email Id	Address
