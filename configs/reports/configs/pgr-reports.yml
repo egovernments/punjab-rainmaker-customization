@@ -753,17 +753,17 @@ ReportDefinitions:
     source: eg_pgr_service
     total: true
   - name: pendinginsla
-    label: reports.rainmaker-pgr.pendingsla
+    label: reports.rainmaker-pgr.pendinginsla
     type: string
     source: eg_pgr_service
     total: true
   - name: pendingoutsidesla
-    label: reports.rainmaker-pgr.rejected
+    label: reports.rainmaker-pgr.pendingoutsidesla
     type: string
     source: eg_pgr_service
     total: true
   - name: resolvedinsla
-    label: reports.rainmaker-pgr.resolved
+    label: reports.rainmaker-pgr.resolvedinsla
     type: string
     source: eg_pgr_service
     total: true
