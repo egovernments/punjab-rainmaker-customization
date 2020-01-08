@@ -753,24 +753,24 @@ ReportDefinitions:
     source: eg_pgr_service
     total: true
   - name: pendinginsla
-    label: reports.rainmaker-pgr.employee
+    label: reports.rainmaker-pgr.pendingsla
     type: string
-    source: pgr_data
+    source: eg_pgr_service
     total: true
   - name: pendingoutsidesla
     label: reports.rainmaker-pgr.rejected
     type: string
-    source: pgr_data
+    source: eg_pgr_service
     total: true
   - name: resolvedinsla
     label: reports.rainmaker-pgr.resolved
     type: string
-    source: pgr_data
+    source: eg_pgr_service
     total: true
   - name: resolvedoutsidesla
     label: reports.rainmaker-pgr.resolvedoutsidesla
     type: string
-    source: pgr_data
+    source: eg_pgr_service
     total: true
   searchParams:
   - name: fromDate
@@ -803,6 +803,6 @@ ReportDefinitions:
       SUM (CASE WHEN eg_pgr_service.status in ('closed', 'resolved') and (resolvedtime - opentime) < 14 * 86400 * 1000 THEN 1 ELSE 0 END) as resolvedinsla,
       SUM (CASE WHEN eg_pgr_service.status in ('closed', 'resolved') and (resolvedtime - opentime) >= 14 * 86400 * 1000 THEN 1 ELSE 0 END) as resolvedoutsidesla
     from eg_pgr_service,pgr_data
-    WHERE tenantid != 'pb.testing') and eg_pgr_service.servicerequestid=pgr_data.servicerequestid
+    WHERE tenantid != 'pb.testing' and eg_pgr_service.servicerequestid=pgr_data.servicerequestid
   groupby: GROUP BY tenantid,eg_pgr_service.servicecode
   orderby: ORDER BY tenantid,eg_pgr_service.servicecode
