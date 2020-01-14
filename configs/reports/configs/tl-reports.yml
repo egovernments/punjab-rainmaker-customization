@@ -1008,11 +1008,6 @@ ReportDefinitions:
     type: string
     source: tl
     total: false
-  - name: block
-    label: report.tl.block
-    type: string
-    source: tl
-    total: false
   - name: formattedIssuedDate
     label: report.tl.issueddate
     type: string
@@ -1064,7 +1059,7 @@ ReportDefinitions:
         to_char((To_timestamp(issueddate / 1000) at time Zone 'Asia/Kolkata'), 'DD/MM/YYYY') as formattedIssuedDate,
         tl.tradeName,
         tradeTypeName,
-        tla.locality as block,
+        
         acc, 
         name,
         mobilenumber,
