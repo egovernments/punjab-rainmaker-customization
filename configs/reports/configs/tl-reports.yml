@@ -968,6 +968,26 @@ ReportDefinitions:
     type: string
     source: tl
     total: false
+  - name: propertyid
+    label: report.tl.propertyid
+    type: string
+    source: tl
+    total: false
+  - name: financialyear
+    label: report.tl.financialyear
+    type: string
+    source: tl
+    total: false
+  - name: licensetype
+    label: report.tl.licensetype
+    type: string
+    source: tl
+    total: false
+  - name: oldlicensenumber
+    label: report.tl.oldlicensenumber
+    type: string
+    source: tl
+    total: false
   - name: licensenumber
     label: report.tl.licensenumber
     type: string
@@ -988,18 +1008,13 @@ ReportDefinitions:
     type: string
     source: tl
     total: false
-  - name: locality
-    label: report.tl.locality
+  - name: block
+    label: report.tl.block
     type: string
     source: tl
     total: false
   - name: formattedIssuedDate
     label: report.tl.issueddate
-    type: string
-    source: tl
-    total: false
-  - name: status
-    label: report.tl.status
     type: string
     source: tl
     total: false
@@ -1038,23 +1053,25 @@ ReportDefinitions:
     isMandatory: false
     searchClause: AND tla.locality IN ($localityArray)
   query: |
-     SELECT 
+      SELECT 
        	tl.applicationnumber,
        	propertyid,
        	financialyear,
-       	(case when oldlicensenumber is null then 'New' else 'Renewal' end),
+       	(case when oldlicensenumber is null then 'New' else 'Renewal' end) AS licensetype,
+
        	oldlicensenumber,
         licensenumber,
         to_char((To_timestamp(issueddate / 1000) at time Zone 'Asia/Kolkata'), 'DD/MM/YYYY') as formattedIssuedDate,
         tl.tradeName,
         tradeTypeName,
-        tla.locality,
+        tla.locality as block,
         acc, 
         name,
         mobilenumber,
         amount as totalamount
       FROM eg_tl_tradelicense tl 
-      INNER JOIN eg_tl_tradelicensedetail tld ON tld.tradelicenseid = tl.id
+      INNER JOIN eg_tl_tradelicensedetail tld ON tld.tradelicenseid = tl.id 
+
       INNER JOIN eg_tl_address as tla ON
       tla.tradelicensedetailid=tld.id
       INNER JOIN eg_tl_owner tlowner ON tlowner.tradelicensedetailid = tld.id 
@@ -1069,5 +1086,6 @@ ReportDefinitions:
       (
         SELECT tradelicensedetailid,array_to_string(array_agg(message.message),',') AS acc FROM eg_tl_accessory
         LEFT OUTER JOIN message ON code=CONCAT('TRADELICENSE_ACCESSORIESCATEGORY_', REGEXP_REPLACE(accessorycategory, '[^A-Za-z0-9]','_', 'g')) AND message.locale = 'en_IN' GROUP BY 1 ) tlacc ON tlacc.tradelicensedetailid = tld.id
-      WHERE tl.tenantid=$tenantid
+        WHERE tl.tenantid=$tenantid
+
 
