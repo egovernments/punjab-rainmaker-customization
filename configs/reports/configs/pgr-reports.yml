@@ -736,6 +736,11 @@ ReportDefinitions:
   summary: Fetches employee sla
   version: 1.0.0
   moduleName: rainmaker-pgr
+  externalService:
+  - entity: $.MdmsRes.RAINMAKER-PGR.ServiceDefs
+    apiURL: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?moduleName=RAINMAKER-PGR&masterName=ServiceDefs&tenantId=$tenantId
+    keyOrder: serviceCode,department,slaHours
+    tableName: tbl_dept
   sourceColumns:
   - name: tenantid
     label: reports.rainmaker-pgr.tenantid
@@ -800,9 +805,10 @@ ReportDefinitions:
       count(eg_pgr_service.status) as total,
       SUM (CASE WHEN eg_pgr_service.status in ('assigned', 'reassignrequested', 'open') and (extract(epoch from now()) * 1000 - opentime) < 14 * 86400 * 1000 THEN 1 ELSE 0 END) as pendinginsla,
       SUM (CASE WHEN eg_pgr_service.status in ('assigned', 'reassignrequested', 'open') and (extract(epoch from now()) * 1000 - opentime) >= 14 * 86400 * 1000 THEN 1 ELSE 0 END) as pendingoutsidesla,
-      SUM (CASE WHEN eg_pgr_service.status in ('closed', 'resolved') and (resolvedtime - opentime) < 14 * 86400 * 1000 THEN 1 ELSE 0 END) as resolvedinsla,
-      SUM (CASE WHEN eg_pgr_service.status in ('closed', 'resolved') and (resolvedtime - opentime) >= 14 * 86400 * 1000 THEN 1 ELSE 0 END) as resolvedoutsidesla
+      SUM (CASE WHEN eg_pgr_service.status in ('closed', 'resolved') and (resolvedtime - opentime) < slaHours * 3600 * 1000 THEN 1 ELSE 0 END) as resolvedinsla,
+      SUM (CASE WHEN eg_pgr_service.status in ('closed', 'resolved') and (resolvedtime - opentime) >= slaHours * 3600 * 1000 THEN 1 ELSE 0 END) as resolvedoutsidesla
     from eg_pgr_service,pgr_data
+    INNER JOIN (VALUES tbl_dept) AS deptmap(serviceCode, department, slaHours) ON deptmap.serviceCode = pgr_data.servicecode
     WHERE tenantid != 'pb.testing' and eg_pgr_service.servicerequestid=pgr_data.servicerequestid
   groupby: GROUP BY tenantid,eg_pgr_service.servicecode
   orderby: ORDER BY tenantid,eg_pgr_service.servicecode
