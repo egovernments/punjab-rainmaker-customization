@@ -958,7 +958,7 @@ ReportDefinitions:
      WHERE tl.tenantid=$tenantid
 
 
-- reportName: TradeLicenseDetailsReport
+- reportName: TradeLicenseDetailsReport                   
   summary: Trade License Details Report
   version: 1.0.0
   moduleName: rainmaker-tl
@@ -1003,11 +1003,11 @@ ReportDefinitions:
     type: string
     source: tl
     total: false
-  -  name: tradeTypeName
+  - name: tradeTypeName
     label: report.tl.tradetype
     type: string
     source: tl
-    total: true
+    total: false
   - name: acc
     label: report.tl.accessorycategories
     type: string
@@ -1047,7 +1047,7 @@ ReportDefinitions:
       mobilenumber,
       tla.locality,
       tradeTypeName,
-      acc, 
+      acc,
       amount as totalamount,
       to_char((To_timestamp(applicationdate / 1000) at time Zone 'Asia/Kolkata'), 'DD/MM/YYYY') as applicationDate,
       tl.status
