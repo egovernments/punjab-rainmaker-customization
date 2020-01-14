@@ -653,6 +653,11 @@ ReportDefinitions:
   summary: Fetches employee wise assignment report
   version: 1.0.0
   moduleName: rainmaker-pgr
+  externalService:
+  - entity: $.MdmsRes.RAINMAKER-PGR.ServiceDefs
+    apiURL: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?moduleName=RAINMAKER-PGR&masterName=ServiceDefs&tenantId=$tenantId
+    keyOrder: serviceCode,department,slaHours
+    tableName: tbl_dept
   sourceColumns:
   - name: employee
     label: reports.rainmaker-pgr.employee
@@ -728,6 +733,7 @@ ReportDefinitions:
       SUM (CASE WHEN status in ('open') THEN 1 ELSE 0 END) as open,
       SUM (CASE WHEN status in ('assigned', 'reassignrequested', 'open') and (extract(epoch from now()) * 1000 - opentime) >= deptmap.slaHours::Integer * 3600 * 1000 THEN 1 ELSE 0 END) as outsidesla
       from pgr_data
+      INNER JOIN (VALUES tbl_dept) AS deptmap(serviceCode, department, slaHours) ON deptmap.serviceCode = pgr_data.servicecode
       WHERE 1=1
   orderby: ORDER BY assignee NULLS FIRST
   groupby: GROUP BY assignee
