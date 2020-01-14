@@ -803,10 +803,10 @@ ReportDefinitions:
       initcap(split_part(tenantid, '.', 2)) as tenantid,
       regexp_replace(eg_pgr_service.servicecode, '([a-z])([A-Z])', '\1 \2','g') as complainttype,
       count(eg_pgr_service.status) as total,
-      SUM (CASE WHEN eg_pgr_service.status in ('assigned', 'reassignrequested', 'open') and (extract(epoch from now()) * 1000 - opentime) < deptmap.slaHours * 3600 * 1000 THEN 1 ELSE 0 END) as pendinginsla,
-      SUM (CASE WHEN eg_pgr_service.status in ('assigned', 'reassignrequested', 'open') and (extract(epoch from now()) * 1000 - opentime) >= deptmap.slaHours * 3600 * 1000 THEN 1 ELSE 0 END) as pendingoutsidesla,
-      SUM (CASE WHEN eg_pgr_service.status in ('closed', 'resolved') and (resolvedtime - opentime) < deptmap.slaHours * 3600 * 1000 THEN 1 ELSE 0 END) as resolvedinsla,
-      SUM (CASE WHEN eg_pgr_service.status in ('closed', 'resolved') and (resolvedtime - opentime) >= deptmap.slaHours * 3600 * 1000 THEN 1 ELSE 0 END) as resolvedoutsidesla
+      SUM (CASE WHEN eg_pgr_service.status in ('assigned', 'reassignrequested', 'open') and (extract(epoch from now()) * 1000 - opentime) < deptmap.slaHours::Integer * 3600 * 1000 THEN 1 ELSE 0 END) as pendinginsla,
+      SUM (CASE WHEN eg_pgr_service.status in ('assigned', 'reassignrequested', 'open') and (extract(epoch from now()) * 1000 - opentime) >= deptmap.slaHours::Integer * 3600 * 1000 THEN 1 ELSE 0 END) as pendingoutsidesla,
+      SUM (CASE WHEN eg_pgr_service.status in ('closed', 'resolved') and (resolvedtime - opentime) < deptmap.slaHours::Integer * 3600 * 1000 THEN 1 ELSE 0 END) as resolvedinsla,
+      SUM (CASE WHEN eg_pgr_service.status in ('closed', 'resolved') and (resolvedtime - opentime) >= deptmap.slaHours::Integer * 3600 * 1000 THEN 1 ELSE 0 END) as resolvedoutsidesla
     from eg_pgr_service,pgr_data
     INNER JOIN (VALUES tbl_dept) AS deptmap(serviceCode, department, slaHours) ON deptmap.serviceCode = pgr_data.servicecode
     WHERE tenantid != 'pb.testing' and eg_pgr_service.servicerequestid=pgr_data.servicerequestid
