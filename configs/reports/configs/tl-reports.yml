@@ -1058,6 +1058,7 @@ ReportDefinitions:
        	propertyid,
        	financialyear,
        	(case when oldlicensenumber is null then 'New' else 'Renewal' end) AS licensetype,
+
        	oldlicensenumber,
         licensenumber,
         to_char((To_timestamp(issueddate / 1000) at time Zone 'Asia/Kolkata'), 'DD/MM/YYYY') as formattedIssuedDate,
@@ -1070,6 +1071,7 @@ ReportDefinitions:
         amount as totalamount
       FROM eg_tl_tradelicense tl 
       INNER JOIN eg_tl_tradelicensedetail tld ON tld.tradelicenseid = tl.id 
+
       INNER JOIN eg_tl_address as tla ON
       tla.tradelicensedetailid=tld.id
       INNER JOIN eg_tl_owner tlowner ON tlowner.tradelicensedetailid = tld.id 
@@ -1085,4 +1087,5 @@ ReportDefinitions:
         SELECT tradelicensedetailid,array_to_string(array_agg(message.message),',') AS acc FROM eg_tl_accessory
         LEFT OUTER JOIN message ON code=CONCAT('TRADELICENSE_ACCESSORIESCATEGORY_', REGEXP_REPLACE(accessorycategory, '[^A-Za-z0-9]','_', 'g')) AND message.locale = 'en_IN' GROUP BY 1 ) tlacc ON tlacc.tradelicensedetailid = tld.id
         WHERE tl.tenantid=$tenantid
+
 
