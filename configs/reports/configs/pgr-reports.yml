@@ -808,6 +808,7 @@ ReportDefinitions:
       SUM (CASE WHEN eg_pgr_service.status in ('closed', 'resolved') and (resolvedtime - opentime) < slaHours * 3600 * 1000 THEN 1 ELSE 0 END) as resolvedinsla,
       SUM (CASE WHEN eg_pgr_service.status in ('closed', 'resolved') and (resolvedtime - opentime) >= slaHours * 3600 * 1000 THEN 1 ELSE 0 END) as resolvedoutsidesla
     from eg_pgr_service,pgr_data
+    INNER JOIN (VALUES tbl_dept) AS deptmap(serviceCode, department, slaHours) ON deptmap.serviceCode = pgr_data.servicecode
     WHERE tenantid != 'pb.testing' and eg_pgr_service.servicerequestid=pgr_data.servicerequestid
   groupby: GROUP BY tenantid,eg_pgr_service.servicecode
   orderby: ORDER BY tenantid,eg_pgr_service.servicecode
