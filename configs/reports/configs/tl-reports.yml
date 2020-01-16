@@ -964,7 +964,7 @@ ReportDefinitions:
   moduleName: rainmaker-tl
   externalService:
   - entity: $.TenantBoundary[0].boundary
-    apiURL: http://egov-location.egov:8080/egov-location/location/v11/boundarys/_search?hierarchyTypeCode=ADMIN&boundaryType=Locality&tenantId=$tenantId
+    apiURL: http://egov-location.egov:8080/egov-location/location/v11/boundarys/_search?hierarchyTypeCode=REVENUE&boundaryType=Locality&tenantId=$tenantId
     keyOrder: name,code
     tableName: tbl_boundary
     additionalConfig:
