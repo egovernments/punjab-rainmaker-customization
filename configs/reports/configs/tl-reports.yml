@@ -962,10 +962,15 @@ ReportDefinitions:
   summary: Trade License Details Report
   version: 1.0.0
   moduleName: rainmaker-tl
-  additionalConfig:
+  externalService:
+  - entity: $.TenantBoundary[0].boundary
+    apiURL: http://egov-location.egov:8080/egov-location/location/v11/boundarys/_search?hierarchyTypeCode=REVENUE&boundaryType=Locality&tenantId=$tenantId
+    keyOrder: name,code
+    tableName: tbl_boundary
+    additionalConfig:
     print:
-      pdfPageSize: "A1"  
-  sourceColumns:
+      pdfPageSize: "A1"
+    sourceColumns:
   - name: applicationnumber
     label: report.tl.applicationnumber
     type: string
@@ -1031,6 +1036,11 @@ ReportDefinitions:
     type: string
     source: tl
     total: true
+  - name: locality
+    label: report.tl.locality
+    type: string
+    source: tl
+    total: false
   searchParams:
   - name: fromDate
     label: reports.tl.fromDate
@@ -1052,6 +1062,7 @@ ReportDefinitions:
     searchClause: AND tla.locality IN ($localityArray)
   query: |
       SELECT 
+      (SELECT boundary_def.name FROM (VALUES tbl_boundary) AS boundary_def(name,code) where code=eg_tl_address.locality) as locality,
        	tl.applicationnumber,
        	propertyid,
        	financialyear,
