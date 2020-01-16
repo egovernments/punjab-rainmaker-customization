@@ -1062,7 +1062,7 @@ ReportDefinitions:
     searchClause: AND tla.locality IN ($localityArray)
   query: |
       SELECT 
-      (SELECT boundary_def.name FROM (VALUES tbl_boundary) AS boundary_def(name,code) where code=eg_tl_address.locality) as locality,
+      (SELECT DISTINCT boundary_def.name FROM (VALUES tbl_boundary) AS boundary_def(name,code) where code=eg_tl_address.locality) as locality,
        	tl.applicationnumber,
        	propertyid,
        	financialyear,
