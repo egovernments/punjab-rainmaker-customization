@@ -707,7 +707,7 @@ ReportDefinitions:
   sourceColumns:
   - name: tenantid
     label: reports.pt.ulbName
-    type: string
+    type: tenanttype
     source: pt
     total: false
   - name: totalassessments
