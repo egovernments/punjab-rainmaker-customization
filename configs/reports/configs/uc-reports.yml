@@ -452,7 +452,7 @@ ReportDefinitions:
         -- Use CTE to force query plan, compute & use CTE later
         SELECT
           rh.tenantid as ulb,
-          count(*) as noofreceipts,
+          count(distinct rh.id) as noofreceipts,
           SUM(CASE WHEN taxheadcode LIKE '%_TAX' THEN adjustedamount ELSE 0 END) as tax, 
           SUM(CASE WHEN taxheadcode LIKE '%_CGST' THEN adjustedamount ELSE 0 END) as cgst, 
           SUM(CASE WHEN taxheadcode LIKE '%_SGST' THEN adjustedamount ELSE 0 END) as sgst, 
