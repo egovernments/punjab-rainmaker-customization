@@ -971,6 +971,11 @@ ReportDefinitions:
     print:
       pdfPageSize: "A1"
     sourceColumns:
+  - name: location
+    label: report.tl.location
+    type: string
+    source: tl
+    total: false  
   - name: applicationnumber
     label: report.tl.applicationnumber
     type: string
@@ -1061,9 +1066,10 @@ ReportDefinitions:
     isMandatory: false
     searchClause: AND tla.locality IN ($localityArray)
   query: |
-      SELECT 
-      (SELECT DISTINCT boundary_def.name FROM (VALUES tbl_boundary) AS boundary_def(name,code) where code=eg_tl_address.locality) as locality,
-       	tl.applicationnumber,
+      SELECT
+        locality,
+        (SELECT boundary_def.name FROM (VALUES tbl_boundary) AS boundary_def(name,code) where code=locality) as location, 
+        tl.applicationnumber,
        	propertyid,
        	financialyear,
        	(case when oldlicensenumber is null then 'New' else 'Renewal' end) AS licensetype,
