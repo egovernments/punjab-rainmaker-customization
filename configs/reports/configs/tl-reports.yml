@@ -1067,8 +1067,7 @@ ReportDefinitions:
     searchClause: AND tla.locality IN ($localityArray)
   query: |
       SELECT
-        locality,
-        (SELECT boundary_def.name FROM (VALUES tbl_boundary) AS boundary_def(name,code) where code=locality) as location, 
+        boundary_def.name as location,
         tl.applicationnumber,
        	propertyid,
        	financialyear,
@@ -1081,14 +1080,14 @@ ReportDefinitions:
         tradeTypeName,
         
         acc, 
-        name,
+        tluser.name as name,
         mobilenumber,
         amount as totalamount
-      FROM eg_tl_tradelicense tl 
+      FROM  (VALUES tbl_boundary) AS boundary_def(name,code),eg_tl_tradelicense tl
+      
       INNER JOIN eg_tl_tradelicensedetail tld ON tld.tradelicenseid = tl.id 
-
-      INNER JOIN eg_tl_address as tla ON
-      tla.tradelicensedetailid=tld.id
+      
+      INNER JOIN eg_tl_address as tla ON tla.tradelicensedetailid=tld.id
       INNER JOIN eg_tl_owner tlowner ON tlowner.tradelicensedetailid = tld.id 
       INNER JOIN (
         SELECT tradelicensedetailid, array_to_string(array_agg(message.message),', ') as tradeTypeName FROM eg_tl_tradeunit
@@ -1101,6 +1100,5 @@ ReportDefinitions:
       (
         SELECT tradelicensedetailid,array_to_string(array_agg(message.message),',') AS acc FROM eg_tl_accessory
         LEFT OUTER JOIN message ON code=CONCAT('TRADELICENSE_ACCESSORIESCATEGORY_', REGEXP_REPLACE(accessorycategory, '[^A-Za-z0-9]','_', 'g')) AND message.locale = 'en_IN' GROUP BY 1 ) tlacc ON tlacc.tradelicensedetailid = tld.id
-        WHERE tl.tenantid=$tenantid
-
+        WHERE tl.tenantid=$tenantid and boundary_def.code=tla.locality
 
