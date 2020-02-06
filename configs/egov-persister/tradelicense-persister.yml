@@ -805,8 +805,8 @@ serviceMaps:
 
           - jsonPath: $.Licenses.*.auditDetails.lastModifiedTime
 
-          - jsonPath: $.Licenses.*.tradeLicenseDetail.id
-          
           - jsonPath: $.Licenses.*.tradeLicenseDetail.additionalDetail
             type: JSON
             dbType: JSONB
+            
+          - jsonPath: $.Licenses.*.tradeLicenseDetail.id
