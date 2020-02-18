@@ -1395,3 +1395,97 @@ ReportDefinitions:
     inner join eg_pt_address_v2    as pta on pta.property = pt.propertyid
     left outer join eg_pt_unit_v2_ot as pot on pot.propertydetail = pd.assessmentnumber
     where rh.tenantid = $tenantid and rh.status != 'Cancelled'
+
+- reportName: FYCollectionsReport
+  summary: FY Collections
+  version: 1.0.0
+  moduleName: rainmaker-pt
+  additionalConfig:
+    print:
+      pdfPageSize: "Legal"
+  sourceColumns:
+  - name: financialyear
+    label: reports.pt.financialyear
+    type: string
+    source: pt
+    total: false
+  - name: residential
+    label: reports.pt.residential
+    type: string
+    source: pt
+    total: true
+  - name: nonresidential
+    label: reports.pt.nonresidential
+    type: string
+    source: pt
+    total: true
+  - name: mixed
+    label: reports.pt.mixed
+    type: string
+    source: pt
+    total: true
+  - name: totalamount
+    label: reports.pt.totalamount
+    type: string
+    source: pt
+    total: true
+  - name: online
+    label: reports.pt.online
+    type: string
+    source: pt
+    total: true
+  - name: cash
+    label: reports.pt.cash
+    type: string
+    source: pt
+    total: true
+  - name: cheque
+    label: reports.pt.cheque
+    type: string
+    source: pt
+    total: true
+  - name: dd
+    label: reports.pt.dd
+    type: string
+    source: pt
+    total: true
+  searchParams:
+  - name: fromDate
+    label: reports.pt.fromDate
+    type: epoch
+    source: pt
+    isMandatory: false
+    searchClause: AND rh.receiptdate >= $fromDate
+  - name: toDate
+    label: reports.pt.toDate
+    type: epoch
+    source: pt
+    isMandatory: false
+    searchClause: AND rh.receiptdate <= $toDate
+  - name: localityArray
+    label: reports.pt.zoneList
+    type: boundarylist
+    source: pt
+    isMandatory: false
+    searchClause: AND pt_addr.locality IN ($localityArray)
+  query: |
+      -- Use CTE to force query plan, compute & use CTE later
+      SELECT
+        financialyear,
+        sum(case when usagecategorymajor='RESIDENTIAL' then amount else 0 end) as "residential",
+        sum(case when usagecategorymajor='NONRESIDENTIAL' then amount else 0 end) as "nonresidential",
+        sum(case when usagecategorymajor='MIXED' then amount else 0 end) as "mixed",
+        sum(amount) as totalamount,
+        sum(case when instrumenttype='Online' then amount else 0 end) as "online",
+        sum(case when instrumenttype='Cash' then amount else 0 end) as "cash",
+        sum(case when instrumenttype='Cheque' then amount else 0 end) as "cheque",
+        sum(case when instrumenttype='DD' then amount else 0 end) as "dd"
+      FROM egcl_receiptheader_v1 AS rh
+      JOIN egcl_receiptinstrument_v1 AS ri ON rh.id = ri.receiptheader
+      JOIN egcl_instrumentheader_v1 AS ih ON ih.id = ri.instrumentheader
+      JOIN eg_pt_propertydetail_v2 pt_detail ON (pt_detail.property || ':' || pt_detail.assessmentnumber) = rh.consumercode
+      JOIN eg_pt_address_v2 pt_addr ON pt_detail.property = pt_addr.property
+      LEFT OUTER JOIN eg_user ON eg_user.id = rh.createdby::INTEGER
+      WHERE rh.tenantid LIKE $tenantid and rh.status != 'Cancelled'
+  groupby: GROUP BY financialyear
+  orderby: ORDER BY financialyear
