@@ -22,7 +22,7 @@
                   "name": "DSS_TOTAL_COLLECTION_TODAY",
                   "code": "",
                   "chartType": "",
-                  "filter": "",
+                  "filter": {"title": "TODAY"},
                   "headers": []
                 },
                 {
@@ -307,12 +307,13 @@
               "isCollapsible": false,
               "label": "DSS_OVERVIEW",
               "charts": [
+
                 {
                   "id": "todaysCollection",
                   "name": "DSS_TOTAL_COLLECTION_TODAY",
                   "code": "",
                   "chartType": "metric",
-                  "filter": "",
+                  "filter": {"title": "TODAY"},
                   "headers": []
                 },
                 {
@@ -697,7 +698,7 @@
                   "name": "DSS_TOTAL_COLLECTION_TODAY",
                   "code": "",
                   "chartType": "metric",
-                  "filter": "",
+                  "filter": {"title": "TODAY"},
                   "headers": []
                 },
                 {
@@ -1423,7 +1424,7 @@
               ]
             },
             {
-              "id": 131,
+              "id": 141,
               "name": "DSS_TRADE_LICENCE",
               "vizType": "module",
               "moduleLevel": "TL",
@@ -1475,6 +1476,28 @@
                 {
                   "id": "slaAchieved",
                   "name": "DSS_SLA_ACHIEVED",
+                  "code": "",
+                  "chartType": "metric",
+                  "filter": "",
+                  "headers": []
+                }
+              ]
+            },
+            {
+              "id": 142,
+              "name": "DSS_WATER_SEWERAGE",
+              "vizType": "module",
+              "moduleLevel": "W&S",
+              "ref": {
+                "url": "ws",
+                "logoUrl": "",
+                "type": "internal"
+              },
+              "label": "",
+              "charts": [
+                {
+                  "id": "wstotalCollection",
+                  "name": "DSS_WS_TOTAL_COLLECTION",
                   "code": "",
                   "chartType": "metric",
                   "filter": "",
@@ -1796,7 +1819,7 @@
                   "name": "DSS_TOTAL_COLLECTION_TODAY",
                   "code": "",
                   "chartType": "metric",
-                  "filter": "",
+                  "filter": {"title": "TODAY"},
                   "headers": []
                 },
                 {
@@ -2181,7 +2204,7 @@
                   "name": "DSS_TOTAL_COLLECTION_TODAY",
                   "code": "",
                   "chartType": "metric",
-                  "filter": "",
+                  "filter": {"title": "TODAY"},
                   "headers": []
                 },
                 {
@@ -2549,7 +2572,7 @@
                   "name": "DSS_TOTAL_COLLECTION_TODAY",
                   "code": "",
                   "chartType": "",
-                  "filter": "",
+                  "filter": {"title": "TODAY"},
                   "headers": []
                 },
                 {
@@ -2972,7 +2995,8 @@
         }
       ]
     },
-     {
+
+    {
       "name": "DSS_W&S_DASHBOARD",
       "id": "ws",
       "isActive": "",
