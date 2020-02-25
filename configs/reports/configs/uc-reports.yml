@@ -248,13 +248,13 @@ ReportDefinitions:
         label: reports.uc.fromDate
         type: epoch
         source: uc
-        isMandatory: false
+        isMandatory: true
         searchClause: AND rh.receiptdate >= $fromDate
       - name: toDate
         label: reports.uc.toDate
         type: epoch
         source: uc
-        isMandatory: false
+        isMandatory: true
         searchClause: AND rh.receiptdate <= $toDate
       - name: businessservice
         label: reports.uc.businessservice
