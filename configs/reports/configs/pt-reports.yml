@@ -1111,13 +1111,13 @@ ReportDefinitions:
     label: reports.pt.fromDate
     type: epoch
     source: pt
-    isMandatory: false
+    isMandatory: true
     searchClause: AND rh.receiptdate >= $fromDate
   - name: toDate
     label: reports.pt.toDate
     type: epoch
     source: pt
-    isMandatory: false
+    isMandatory: true
     searchClause: AND rh.receiptdate <= $toDate
   - name: paymentMode
     label: Payment Mode
@@ -1328,13 +1328,13 @@ ReportDefinitions:
     label: reports.pt.fromDate
     type: epoch
     source: pt
-    isMandatory: false
+    isMandatory: true
     searchClause: AND rh.receiptdate >= $fromDate
   - name: toDate
     label: reports.pt.toDate
     type: epoch
     source: pt
-    isMandatory: false
+    isMandatory: true
     searchClause: AND rh.receiptdate <= $toDate
   - name: financialyear
     label: Financial Year
