@@ -116,6 +116,7 @@ ReportDefinitions:
                       SUM(CASE WHEN taxheadcode LIKE '%_FIELD_FEE' THEN adjustedamount ELSE 0 END) as fieldcollection            
                     FROM egcl_receiptdetails_v1 as rd
                     INNER JOIN egcl_receiptheader_v1 as rh on rh.id = rd.receiptheader
+                    WHERE  rh.status != 'Cancelled'  AND rh.tenantid!='pb.testing' AND receiptnumber like 'MP%'
                     GROUP BY rd.receiptheader
         )
         SELECT 
@@ -720,6 +721,7 @@ ReportDefinitions:
                       SUM(CASE WHEN taxheadcode LIKE '%_FIELD_FEE' THEN adjustedamount ELSE 0 END) as fieldcollection            
                     FROM egcl_receiptdetails_v1 as rd
                     INNER JOIN egcl_receiptheader_v1 as rh on rh.id = rd.receiptheader
+                    WHERE  rh.status = 'Cancelled'  AND receiptnumber like 'MP%' and rh.tenantid=$tenantid
                     GROUP BY rd.receiptheader
         )
         SELECT 
