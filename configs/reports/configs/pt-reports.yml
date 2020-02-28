@@ -192,7 +192,7 @@ ReportDefinitions:
                     + SUM(CASE WHEN taxheadcode = 'PT_DECIMAL_CEILING_CREDIT' THEN adjustedamount ELSE 0 END)) as adjustment
                   FROM egcl_receiptdetails_v1 as rd
                   INNER JOIN egcl_receiptheader_v1 as rh on rh.id = rd.receiptheader
-                  WHERE rd.tenantid = $tenantid
+                  WHERE rd.tenantid = $tenantid $_fromDate $_toDate
                   GROUP BY rd.receiptheader
       )
       SELECT 
@@ -404,7 +404,7 @@ ReportDefinitions:
                   FROM egcl_receiptdetails_v1 as rd
                   INNER JOIN egcl_receiptheader_v1 as rh on rh.id = rd.receiptheader
                   WHERE rd.tenantid = $tenantid
-                  GROUP BY rd.receiptheader
+                  GROUP BY rd.receiptheader $_fromDate $_toDate
       )
       SELECT 
         rh.tenantid AS tenantid, 
