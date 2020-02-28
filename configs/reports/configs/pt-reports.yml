@@ -192,7 +192,7 @@ ReportDefinitions:
                     + SUM(CASE WHEN taxheadcode LIKE 'PT_DECIMAL_CEILING_CREDIT' THEN adjustedamount ELSE 0 END)) as adjustment
                   FROM egcl_receiptdetails_v1 as rd
                   INNER JOIN egcl_receiptheader_v1 as rh on rh.id = rd.receiptheader
-                  WHERE rd.tenantid = $tenantid and rh.status != 'Cancelled' and (receiptnumber like 'PT/%' or receiptnumber like '10/%')
+                  WHERE rd.tenantid = $tenantid and rh.status != 'Cancelled' and businessdetails='PT'
                   GROUP BY rd.receiptheader
       )
       SELECT 
@@ -223,7 +223,7 @@ ReportDefinitions:
       JOIN eg_pt_propertydetail_v2 pt_detail ON (pt_detail.property || ':' || pt_detail.assessmentnumber) = rh.consumercode
       JOIN eg_pt_address_v2 pt_addr ON pt_detail.property = pt_addr.property
       LEFT OUTER JOIN eg_user ON eg_user.id = rh.createdby::INTEGER
-      WHERE rh.tenantid = $tenantid and rh.status != 'Cancelled' and (receiptnumber like 'PT/%' or receiptnumber like '10/%')
+      WHERE rh.tenantid = $tenantid and rh.status != 'Cancelled'  and businessdetails='PT'
   orderby: ORDER BY rh.receiptdate DESC
 
 - reportName: CancelledReceiptRegister
@@ -403,7 +403,7 @@ ReportDefinitions:
                     + SUM(CASE WHEN taxheadcode LIKE 'PT_DECIMAL_CEILING_CREDIT' THEN adjustedamount ELSE 0 END)) as adjustment
                   FROM egcl_receiptdetails_v1 as rd
                   INNER JOIN egcl_receiptheader_v1 as rh on rh.id = rd.receiptheader
-                  WHERE rd.tenantid = $tenantid and rh.status = 'Cancelled'  and (receiptnumber like 'PT/%' or receiptnumber like '10/%')
+                  WHERE rd.tenantid = $tenantid and rh.status = 'Cancelled'   and businessdetails='PT'
                   GROUP BY rd.receiptheader
       )
       SELECT 
@@ -432,7 +432,7 @@ ReportDefinitions:
       JOIN receipt_breakup ON rh.id = receipt_breakup.receiptheader
       JOIN eg_pt_propertydetail_v2 pt_detail ON (pt_detail.property || ':' || pt_detail.assessmentnumber) = rh.consumercode
       JOIN eg_pt_address_v2 pt_addr ON pt_detail.property = pt_addr.property
-      WHERE rh.tenantid = $tenantid and rh.status = 'Cancelled'  and (receiptnumber like 'PT/%' or receiptnumber like '10/%')
+      WHERE rh.tenantid = $tenantid and rh.status = 'Cancelled'   and businessdetails='PT'
   orderby: ORDER BY rh.receiptdate DESC
 
 - reportName: OldUlbWisePtCollection
@@ -667,7 +667,7 @@ ReportDefinitions:
                     + SUM(CASE WHEN taxheadcode LIKE 'PT_DECIMAL_CEILING_CREDIT' THEN adjustedamount ELSE 0 END)) as adjustment
                   FROM egcl_receiptdetails_v1 as rd
                   INNER JOIN egcl_receiptheader_v1 as rh on rh.id = rd.receiptheader
-                  WHERE rd.tenantid !='pb.testing' and rh.status = 'Cancelled' and (receiptnumber like 'PT/%' or receiptnumber like '10/%')
+                  WHERE rd.tenantid !='pb.testing' and rh.status = 'Cancelled'  and businessdetails='PT'
                   GROUP BY rd.receiptheader
       )
       SELECT 
@@ -696,7 +696,7 @@ ReportDefinitions:
       JOIN receipt_breakup ON rh.id = receipt_breakup.receiptheader
       JOIN eg_pt_propertydetail_v2 pt_detail ON (pt_detail.property || ':' || pt_detail.assessmentnumber) = rh.consumercode
       JOIN eg_pt_address_v2 pt_addr ON pt_detail.property = pt_addr.property
-      WHERE rh.tenantid != 'pb.testing' and rh.status = 'Cancelled' and rh.status = 'Cancelled' and (receiptnumber like 'PT/%' or receiptnumber like '10/%')
+      WHERE rh.tenantid != 'pb.testing' and rh.status = 'Cancelled' and rh.status = 'Cancelled'  and businessdetails='PT'
 
   orderby: ORDER BY rh.receiptdate DESC
 
@@ -785,7 +785,7 @@ ReportDefinitions:
       LEFT OUTER JOIN (SELECT consumercode, totalamount, amount, collectiontype, receiptdate FROM egcl_receiptheader_v1 AS rh 
       LEFT OUTER JOIN egcl_receiptinstrument_v1 AS ri ON rh.id = ri.receiptheader 
       LEFT OUTER JOIN egcl_instrumentheader_v1 AS ih ON ri.instrumentheader = ih.id and ih.instrumentstatus	 != 'CANCELLED' 
-      where rh.status != 'Cancelled' and rh.tenantid != 'pb.testing' and (receiptnumber like 'PT/%' or receiptnumber like '10/%')
+      where rh.status != 'Cancelled' and rh.tenantid != 'pb.testing'  and businessdetails='PT'
       ) AS tbl_amounts ON (pd.property || ':' || pd.assessmentnumber) = tbl_amounts.consumercode 
       WHERE tenantid != 'pb.testing'
   groupby: GROUP BY tenantid
