@@ -696,7 +696,7 @@ ReportDefinitions:
       JOIN receipt_breakup ON rh.id = receipt_breakup.receiptheader
       JOIN eg_pt_propertydetail_v2 pt_detail ON (pt_detail.property || ':' || pt_detail.assessmentnumber) = rh.consumercode
       JOIN eg_pt_address_v2 pt_addr ON pt_detail.property = pt_addr.property
-      WHERE rh.tenantid != 'pb.testing' and rh.status = 'Cancelled' and rh.status = 'Cancelled'  and businessdetails='PT'
+      WHERE rh.tenantid != 'pb.testing' and rh.status = 'Cancelled'  and businessdetails='PT'
   orderby: ORDER BY rh.receiptdate DESC
 
 - reportName: StateWidePtCollection
