@@ -1167,7 +1167,7 @@ ReportDefinitions:
                     + SUM(CASE WHEN taxheadcode LIKE 'PT_DECIMAL_CEILING_CREDIT' THEN adjustedamount ELSE 0 END)) as adjustment
                   FROM egcl_receiptdetails_v1 as rd
                   INNER JOIN egcl_receiptheader_v1 as rh on rh.id = rd.receiptheader
-                  WHERE rd.tenantid LIKE $tenantid
+                  WHERE rd.tenantid = $tenantid and rh.status != 'Cancelled'  and businessdetails ='PT'
                   GROUP BY rd.receiptheader
       )
       SELECT 
@@ -1198,7 +1198,7 @@ ReportDefinitions:
       JOIN eg_pt_propertydetail_v2 pt_detail ON (pt_detail.property || ':' || pt_detail.assessmentnumber) = rh.consumercode
       JOIN eg_pt_address_v2 pt_addr ON pt_detail.property = pt_addr.property
       LEFT OUTER JOIN eg_user ON eg_user.id = rh.createdby::INTEGER
-      WHERE rh.tenantid LIKE $tenantid and rh.status != 'Cancelled'
+      WHERE rh.tenantid = $tenantid and rh.status != 'Cancelled'  and businessdetails ='PT'
   orderby: ORDER BY rh.receiptdate DESC
 
 
@@ -1394,4 +1394,4 @@ ReportDefinitions:
     inner join eg_user as eu on eu.uuid     = po.userid
     inner join eg_pt_address_v2    as pta on pta.property = pt.propertyid
     left outer join eg_pt_unit_v2_ot as pot on pot.propertydetail = pd.assessmentnumber
-    where rh.tenantid = $tenantid and rh.status != 'Cancelled'
+    where rh.tenantid = $tenantid and rh.status != 'Cancelled' and businessdetails ='PT'
