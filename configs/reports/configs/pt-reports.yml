@@ -145,12 +145,12 @@ ReportDefinitions:
     source: pt
     isMandatory: false
     searchClause: AND rh.receiptdate >= $fromDate
-  - name: _toDate
+  - name: toDate
     label: reports.pt.toDate
     type: epoch
     source: pt
     isMandatory: false
-    searchClause: AND rh.receiptdate <= $_toDate
+    searchClause: AND rh.receiptdate <= $toDate
   - name: paymentMode
     label: Payment Mode
     type: singlevaluelist
@@ -192,7 +192,7 @@ ReportDefinitions:
                     + SUM(CASE WHEN taxheadcode = 'PT_DECIMAL_CEILING_CREDIT' THEN adjustedamount ELSE 0 END)) as adjustment
                   FROM egcl_receiptdetails_v1 as rd
                   INNER JOIN egcl_receiptheader_v1 as rh on rh.id = rd.receiptheader
-                  WHERE rd.tenantid = $tenantid $_fromDate $__toDate
+                  WHERE rd.tenantid = $tenantid $_fromDate $_toDate
                   GROUP BY rd.receiptheader
       )
       SELECT 
