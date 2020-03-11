@@ -244,6 +244,11 @@ ReportDefinitions:
         type: string
         source: uc
         total: false
+      - name: comments
+        label: reports.uc.comment
+        type: string
+        source: uc
+        total: false
     searchParams:
       - name: fromDate
         label: reports.uc.fromDate
@@ -284,7 +289,7 @@ ReportDefinitions:
                       SUM(CASE WHEN taxheadcode LIKE '%_FIELD_FEE' THEN adjustedamount ELSE 0 END) as fieldcollection            
                     FROM egcl_receiptdetails_v1 as rd
                     INNER JOIN egcl_receiptheader_v1 as rh on rh.id = rd.receiptheader
-                    where rd.tenantid!='pb.testing' and status!='Cancelled' and businessdetails not in ('PT','TL') and rd.tenantid=$tenantid
+                    where status!='Cancelled' and businessdetails not in ('PT','TL') and rd.tenantid=$tenantid
                     GROUP BY rd.receiptheader
         )
         SELECT 
@@ -303,7 +308,8 @@ ReportDefinitions:
           ih.bankid as bankname,
           ih.branchname as branchname,
           'System' as collectiontype,
-          eg_user.name as collectorname
+          eg_user.name as collectorname,
+          rh.additionaldetails->>'comment' as comments
         FROM egcl_receiptheader_v1 AS rh
         JOIN egcl_receiptinstrument_v1 AS ri ON rh.id = ri.receiptheader
         JOIN egcl_instrumentheader_v1 AS ih ON ih.id = ri.instrumentheader
