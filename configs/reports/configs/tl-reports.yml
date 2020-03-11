@@ -654,7 +654,7 @@ ReportDefinitions:
       message.message as status 
     from eg_tl_tradelicense tl 
     LEFT OUTER JOIN message ON split_part(message.code,'_',2) = status AND message.locale = 'en_IN' 
-    WHERE 1=1
+    WHERE tl.tenantid!='pb.testing'
   groupby: GROUP BY message.message
   orderby: ORDER BY case message.message when 'Pending Application' then 1 when 'Pending Payment' then 2 when 'Pending Approval' then 3 when 'Approved' then 4 when 'Rejected' then 5 when 'Cancelled' then 6 else 7 end
 
