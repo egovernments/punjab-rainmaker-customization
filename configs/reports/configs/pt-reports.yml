@@ -786,7 +786,7 @@ ReportDefinitions:
       LEFT OUTER JOIN egcl_instrumentheader_v1 AS ih ON ri.instrumentheader = ih.id and ih.instrumentstatus	 != 'CANCELLED' 
       where rh.status != 'Cancelled' and rh.tenantid != 'pb.testing'  and businessdetails='PT'
       ) AS tbl_amounts ON (pd.property || ':' || pd.assessmentnumber) = tbl_amounts.consumercode 
-      WHERE tenantid != 'pb.testing'
+      WHERE tenantid not in ('pb.testing','pb.ludhiana_legacy')
   groupby: GROUP BY tenantid
   orderby: ORDER BY tenantid, totalamountpaid DESC NULLS LAST
 
