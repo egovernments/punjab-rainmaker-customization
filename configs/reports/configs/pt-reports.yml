@@ -1621,3 +1621,201 @@ ReportDefinitions:
       LEFT OUTER JOIN eg_user ON eg_user.id = rh.createdby::INTEGER
       WHERE rh.tenantid = $tenantid and rh.status != 'Cancelled'  and businessdetails='PT' and rh.createdby::INTEGER in (select user_id from eg_userrole_v1 where role_code ='SEVA_KENDRA_EMP')
   orderby: ORDER BY rh.receiptdate DESC
+
+- reportName: ReceiptRegisterSummary
+  summary: Receipt Register Summary
+  version: 1.0.0
+  moduleName: rainmaker-pt
+  additionalConfig:
+    print:
+      pdfPageSize: "A1"
+  sourceColumns:
+  - name: ulb
+    label: reports.pt.ulb
+    type: string
+    source: pt
+    total: false
+  - name: adhocpenalty
+    label: reports.pt.adhocpenalty
+    type: string
+    source: pt
+    total: true
+  - name: adhocrebate
+    label: reports.pt.adhocrebate
+    type: string
+    source: pt
+    total: true
+  - name: firecess
+    label: reports.pt.firecess
+    type: string
+    source: pt
+    total: true
+  - name: cancercess
+    label: reports.pt.cancercess
+    type: string
+    source: pt
+    total: true
+  - name: interest
+    label: reports.pt.interest
+    type: string
+    source: pt
+    total: true
+  - name: penalty
+    label: reports.pt.penalty
+    type: string
+    source: pt
+    total: true
+  - name: rebate
+    label: reports.pt.rebate
+    type: string
+    source: pt
+    total: true
+  - name: propertytax
+    label: reports.pt.propertytax
+    type: string
+    source: pt
+    total: true
+  - name: exemption
+    label: reports.pt.exemption
+    type: string
+    source: pt
+    total: true
+  - name: adjustment
+    label: reports.pt.adjustment
+    type: string
+    source: pt
+    total: true
+  searchParams:
+  - name: fromDate
+    label: reports.pt.fromDate
+    type: epoch
+    source: pt
+    isMandatory: true
+    searchClause: AND rh.receiptdate >= $fromDate
+  - name: toDate
+    label: reports.pt.toDate
+    type: epoch
+    source: pt
+    isMandatory: true
+    searchClause: AND rh.receiptdate <= $toDate
+  query: |
+      -- Use CTE to force query plan, compute & use CTE later
+      SELECT
+        split_part(rd.tenantid,'.',2) as ulb,
+        SUM(CASE WHEN taxheadcode LIKE 'PT_ADHOC_PENALTY' THEN adjustedamount ELSE 0 END) as adhocpenalty,
+        SUM(CASE WHEN taxheadcode LIKE 'PT_ADHOC_REBATE' THEN adjustedamount ELSE 0 END) as adhocrebate, 
+        SUM(CASE WHEN taxheadcode LIKE 'PT_FIRE_CESS' THEN adjustedamount ELSE 0 END) as firecess, 
+        SUM(CASE WHEN taxheadcode LIKE 'PT_CANCER_CESS' THEN adjustedamount ELSE 0 END) as cancercess, 
+        SUM(CASE WHEN taxheadcode LIKE 'PT_TIME_INTEREST' THEN adjustedamount ELSE 0 END) as interest, 
+        SUM(CASE WHEN taxheadcode LIKE 'PT_TIME_PENALTY' THEN adjustedamount ELSE 0 END) as penalty, 
+        SUM(CASE WHEN taxheadcode LIKE 'PT_TIME_REBATE' THEN adjustedamount ELSE 0 END) as rebate, 
+        SUM(CASE WHEN taxheadcode LIKE 'PT_TAX' THEN adjustedamount ELSE 0 END) as propertytax, 
+        (SUM(CASE WHEN taxheadcode LIKE 'PT_UNIT_USAGE_EXEMPTION' THEN adjustedamount ELSE 0 END)
+        + SUM(CASE WHEN taxheadcode LIKE 'PT_OWNER_EXEMPTION' THEN adjustedamount ELSE 0 END) )as exemption,
+        ( SUM(CASE WHEN taxheadcode LIKE 'PT_ROUNDOFF' THEN adjustedamount ELSE 0 END)
+        + SUM(CASE WHEN taxheadcode LIKE 'PT_DECIMAL_CEILING_DEBIT' THEN adjustedamount ELSE 0 END)
+        + SUM(CASE WHEN taxheadcode LIKE 'PT_DECIMAL_CEILING_CREDIT' THEN adjustedamount ELSE 0 END)) as adjustment
+      FROM egcl_receiptdetails_v1 as rd
+      INNER JOIN egcl_receiptheader_v1 as rh on rh.id = rd.receiptheader
+      WHERE rd.tenantid = $tenantid and rh.status != 'Cancelled' and businessdetails='PT'
+  groupby: group by rd.tenantid
+  
+- reportName: StateReceiptRegisterSummary
+  summary: Receipt Register Summary
+  version: 1.0.0
+  moduleName: rainmaker-pt
+  additionalConfig:
+    print:
+      pdfPageSize: "A1"
+  sourceColumns:
+  - name: ulb
+    label: reports.pt.ulb
+    type: string
+    source: pt
+    total: false
+  - name: adhocpenalty
+    label: reports.pt.adhocpenalty
+    type: string
+    source: pt
+    total: true
+  - name: adhocrebate
+    label: reports.pt.adhocrebate
+    type: string
+    source: pt
+    total: true
+  - name: firecess
+    label: reports.pt.firecess
+    type: string
+    source: pt
+    total: true
+  - name: cancercess
+    label: reports.pt.cancercess
+    type: string
+    source: pt
+    total: true
+  - name: interest
+    label: reports.pt.interest
+    type: string
+    source: pt
+    total: true
+  - name: penalty
+    label: reports.pt.penalty
+    type: string
+    source: pt
+    total: true
+  - name: rebate
+    label: reports.pt.rebate
+    type: string
+    source: pt
+    total: true
+  - name: propertytax
+    label: reports.pt.propertytax
+    type: string
+    source: pt
+    total: true
+  - name: exemption
+    label: reports.pt.exemption
+    type: string
+    source: pt
+    total: true
+  - name: adjustment
+    label: reports.pt.adjustment
+    type: string
+    source: pt
+    total: true
+  searchParams:
+  - name: fromDate
+    label: reports.pt.fromDate
+    type: epoch
+    source: pt
+    isMandatory: true
+    searchClause: AND rh.receiptdate >= $fromDate
+  - name: toDate
+    label: reports.pt.toDate
+    type: epoch
+    source: pt
+    isMandatory: true
+    searchClause: AND rh.receiptdate <= $toDate
+  query: |
+      -- Use CTE to force query plan, compute & use CTE later
+      SELECT
+        split_part(rd.tenantid,'.',2) as ulb,
+        SUM(CASE WHEN taxheadcode LIKE 'PT_ADHOC_PENALTY' THEN adjustedamount ELSE 0 END) as adhocpenalty,
+        SUM(CASE WHEN taxheadcode LIKE 'PT_ADHOC_REBATE' THEN adjustedamount ELSE 0 END) as adhocrebate, 
+        SUM(CASE WHEN taxheadcode LIKE 'PT_FIRE_CESS' THEN adjustedamount ELSE 0 END) as firecess, 
+        SUM(CASE WHEN taxheadcode LIKE 'PT_CANCER_CESS' THEN adjustedamount ELSE 0 END) as cancercess, 
+        SUM(CASE WHEN taxheadcode LIKE 'PT_TIME_INTEREST' THEN adjustedamount ELSE 0 END) as interest, 
+        SUM(CASE WHEN taxheadcode LIKE 'PT_TIME_PENALTY' THEN adjustedamount ELSE 0 END) as penalty, 
+        SUM(CASE WHEN taxheadcode LIKE 'PT_TIME_REBATE' THEN adjustedamount ELSE 0 END) as rebate, 
+        SUM(CASE WHEN taxheadcode LIKE 'PT_TAX' THEN adjustedamount ELSE 0 END) as propertytax, 
+        (SUM(CASE WHEN taxheadcode LIKE 'PT_UNIT_USAGE_EXEMPTION' THEN adjustedamount ELSE 0 END)
+        + SUM(CASE WHEN taxheadcode LIKE 'PT_OWNER_EXEMPTION' THEN adjustedamount ELSE 0 END) )as exemption,
+        ( SUM(CASE WHEN taxheadcode LIKE 'PT_ROUNDOFF' THEN adjustedamount ELSE 0 END)
+        + SUM(CASE WHEN taxheadcode LIKE 'PT_DECIMAL_CEILING_DEBIT' THEN adjustedamount ELSE 0 END)
+        + SUM(CASE WHEN taxheadcode LIKE 'PT_DECIMAL_CEILING_CREDIT' THEN adjustedamount ELSE 0 END)) as adjustment
+      FROM egcl_receiptdetails_v1 as rd
+      INNER JOIN egcl_receiptheader_v1 as rh on rh.id = rd.receiptheader
+      WHERE rd.tenantid != 'pb.testing' and rh.status != 'Cancelled' and businessdetails='PT'
+  groupby: group by rd.tenantid
+  orderby: order by rd.tenantid
+  
