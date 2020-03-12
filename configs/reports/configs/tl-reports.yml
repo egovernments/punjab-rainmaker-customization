@@ -1083,4 +1083,136 @@ ReportDefinitions:
         LEFT OUTER JOIN message ON code=CONCAT('TRADELICENSE_ACCESSORIESCATEGORY_', REGEXP_REPLACE(accessorycategory, '[^A-Za-z0-9]','_', 'g')) AND message.locale = 'en_IN' GROUP BY 1 ) tlacc ON tlacc.tradelicensedetailid = tld.id
         WHERE tl.tenantid=$tenantid
 
+- reportName: StateDefaulterReport
+  summary: TL Defautler
+  version: 1.0.0
+  moduleName: rainmaker-tl
+  sourceColumns:
+  - name: ulb
+    label: report.tl.ulb
+    type: string
+    source: tl
+    total: false
+  - name: licensenumber
+    label: report.tl.licensenumber
+    type: string
+    source: tl
+    total: false
+  - name: applicationnumber
+    label: report.tl.applicationnumber
+    type: string
+    source: tl
+    total: false
+  - name: oldlicensenumber
+    label: report.tl.oldlicensenumber
+    type: string
+    source: tl
+    total: false
+  - name: financialyear
+    label: report.tl.financialyear
+    type: string
+    source: tl
+    total: false
+  - name: tradename
+    label: report.tl.tradename
+    type: string
+    source: tl
+    total: false
+  - name: ownername
+    label: report.tl.ownername
+    type: string
+    source: tl
+    total: false
+  - name: mobilenumber
+    label: report.tl.mobilenumber
+    type: string
+    source: tl
+    total: false
+  query: |
+    select 
+      split_part(tenantid,'.',2) as ulb,
+      licensenumber,
+      applicationnumber,
+      oldlicensenumber,
+      financialyear,
+      tradename,
+      name as ownername,
+      mobilenumber
+    from eg_tl_tradelicense tl
+    INNER JOIN eg_tl_tradelicensedetail tld ON tld.tradelicenseid = tl.id 
+    INNER JOIN (
+      SELECT tradelicensedetailid, array_to_string(array_agg(name),', ') as name, array_to_string(array_agg(mobilenumber),', ') as mobilenumber 
+      FROM eg_tl_owner tlowner 
+      INNER JOIN eg_user tluser ON tluser.uuid = tlowner.id 
+      group by tradelicensedetailid
+    ) tlown ON tlown.tradelicensedetailid = tld.id
+    where validto < extract (epoch from NOW())*1000 and licensenumber is not null and licensenumber not in (select oldlicensenumber from eg_tl_tradelicense where oldlicensenumber is not null)
+    and tenantid!='pb.testing'
+  orderby: order by tenantid
 
+- reportName: ULBDefaulterReport
+  summary: TL Defautler
+  version: 1.0.0
+  moduleName: rainmaker-tl
+  sourceColumns:
+  - name: ulb
+    label: report.tl.ulb
+    type: string
+    source: tl
+    total: false
+  - name: licensenumber
+    label: report.tl.licensenumber
+    type: string
+    source: tl
+    total: false
+  - name: applicationnumber
+    label: report.tl.applicationnumber
+    type: string
+    source: tl
+    total: false
+  - name: oldlicensenumber
+    label: report.tl.oldlicensenumber
+    type: string
+    source: tl
+    total: false
+  - name: financialyear
+    label: report.tl.financialyear
+    type: string
+    source: tl
+    total: false
+  - name: tradename
+    label: report.tl.tradename
+    type: string
+    source: tl
+    total: false
+  - name: ownername
+    label: report.tl.ownername
+    type: string
+    source: tl
+    total: false
+  - name: mobilenumber
+    label: report.tl.mobilenumber
+    type: string
+    source: tl
+    total: false
+  query: |
+    select 
+      split_part(tenantid,'.',2) as ulb,
+      licensenumber,
+      applicationnumber,
+      oldlicensenumber,
+      financialyear,
+      tradename,
+      name as ownername,
+      mobilenumber
+    from eg_tl_tradelicense tl
+    INNER JOIN eg_tl_tradelicensedetail tld ON tld.tradelicenseid = tl.id 
+    INNER JOIN (
+      SELECT tradelicensedetailid, array_to_string(array_agg(name),', ') as name, array_to_string(array_agg(mobilenumber),', ') as mobilenumber 
+      FROM eg_tl_owner tlowner 
+      INNER JOIN eg_user tluser ON tluser.uuid = tlowner.id 
+      group by tradelicensedetailid
+    ) tlown ON tlown.tradelicensedetailid = tld.id
+    where validto < extract (epoch from NOW())*1000 and licensenumber is not null and licensenumber not in (select oldlicensenumber from eg_tl_tradelicense where oldlicensenumber is not null)
+    and tenantid = $tenantid
+  
