@@ -881,7 +881,7 @@ ReportDefinitions:
     source: pt
     wrapper: true
     isMandatory: false
-    searchClause: AND tenantid = $ulb
+    searchClause: AND eg_pgr_service.tenantid = $ulb
   - name: fromDate
     label: reports.rainmaker-pgr.datefrom
     type: epoch
