@@ -819,7 +819,7 @@ ReportDefinitions:
   groupby: GROUP BY tenantid,eg_pgr_service.servicecode
   orderby: ORDER BY tenantid,eg_pgr_service.servicecode
   
-- reportName: FeedBackReport
+- reportName: FeedbackReport
   summary: Fetches complaint state based on Feedback
   version: 1.0.0
   moduleName: rainmaker-pgr
