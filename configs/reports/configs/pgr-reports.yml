@@ -843,7 +843,7 @@ ReportDefinitions:
     type: string
     source: eg_pgr_service
     total: false
-  - name: citizen name
+  - name: citizenname
     label: reports.rainmaker-pgr.citizename
     type: string
     source: eg_pgr_service
@@ -853,12 +853,12 @@ ReportDefinitions:
     type: string
     source: eg_pgr_service
     total: false
-  - name: complainant number
+  - name: complaintnumber
     label: reports.rainmaker-pgr.complaintnumber
     type: string
     source: eg_pgr_service
     total: false
-  - name: last assign to
+  - name: lastassignto
     label: reports.rainmaker-pgr.lastassignto
     type: string
     source: eg_pgr_service
@@ -902,7 +902,7 @@ ReportDefinitions:
         regexp_replace(servicecode, '([a-z])([A-Z])', '\1 \2','g') AS complainttype,
         ua.name as lastassignto,
         servicerequestid AS complaintnumber,
-        eg_user.name AS citizenName,
+        eg_user.name AS citizename,
         rating, feedback FROM eg_pgr_service 
         left outer join eg_pgr_address on eg_pgr_address.uuid = eg_pgr_service.addressid 
         left outer join eg_user on eg_user.id = eg_pgr_service.accountid::int 
