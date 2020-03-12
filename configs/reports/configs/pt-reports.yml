@@ -1788,14 +1788,22 @@ ReportDefinitions:
     label: reports.pt.fromDate
     type: epoch
     source: pt
-    isMandatory: true
+    isMandatory: false
     searchClause: AND rh.receiptdate >= $fromDate
   - name: toDate
     label: reports.pt.toDate
     type: epoch
     source: pt
-    isMandatory: true
+    isMandatory: false
     searchClause: AND rh.receiptdate <= $toDate
+  - name: ulb
+    label: ULB
+    type: singlevaluelist
+    pattern: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?tenantId=$tenantid&moduleName=tenant&masterName=tenants|$.MdmsRes.tenant.tenants.*.code|$.MdmsRes.tenant.tenants.*.name
+    source: pt
+    wrapper: true
+    isMandatory: false
+    searchClause: AND rd.tenantid = $ulb
   query: |
       -- Use CTE to force query plan, compute & use CTE later
       SELECT
