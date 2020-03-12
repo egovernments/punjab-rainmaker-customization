@@ -847,7 +847,7 @@ ReportDefinitions:
     label: reports.rainmaker-pgr.citizename
     type: string
     source: eg_pgr_service
-    total: true
+    total: false
   - name: complainttype
     label: reports.rainmaker-pgr.complainttype
     type: string
@@ -857,22 +857,22 @@ ReportDefinitions:
     label: reports.rainmaker-pgr.complaintnumber
     type: string
     source: eg_pgr_service
-    total: true
+    total: false
   - name: last assign to
     label: reports.rainmaker-pgr.lastassignto
     type: string
     source: eg_pgr_service
-    total: true
+    total: false
   - name: rating
     label: reports.rainmaker-pgr.rating
     type: string
     source: eg_pgr_service
-    total: true
+    total: false
   - name: feedback
     label: reports.rainmaker-pgr.feedback
     type: string
     source: eg_pgr_service
-    total: true
+    total: false
   searchParams:
   - name: ulb
     label: ULB
@@ -909,7 +909,7 @@ ReportDefinitions:
         left outer join eg_pgr_action as epa on epa.businesskey = eg_pgr_service.servicerequestid and epa.action in ('assign','reassign') 
         left outer join eg_user as ua on ua.id = epa.assignee::int 
         WHERE 
-        eg_pgr_service.tenantid LIKE  'pb.amritsar' 
+        eg_pgr_service.tenantid LIKE $tenantid 
         AND eg_pgr_address.uuid = eg_pgr_service.addressid 
         AND rating is not null AND feedback is not null
   orderby: ORDER BY servicerequestid, epa."when" desc
