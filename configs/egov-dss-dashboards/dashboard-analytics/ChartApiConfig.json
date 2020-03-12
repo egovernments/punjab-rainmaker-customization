@@ -3499,9 +3499,9 @@
       {
         "module": "W&S",
         "indexName": "wsapplications",
-        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"status\":\"Cancelled\"}}]}},\"aggs\":{\"Total Connection\":{\"value_count\":{\"field\":\"applicationnumber.keyword\"}}}}}}",
+        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"applicationstatus.keyword\":\"Cancelled\"}}],\"must\":[{\"terms\":{\"servicetype.keyword\":[\"Water Charges\",\"Sewerage Charges\"]}}]}},\"aggs\":{\"Total Connection\":{\"value_count\":{\"field\":\"applicationnumber.keyword\"}}}}}}",
         "requestQueryMap": "{\"tenantId\" : \"cityname.keyword\", \"wardId\" : \"block.keyword\"}",
-        "dateRefField": "applicationdate"
+        "dateRefField": "@timestamp"
       }
     ],
     "translateTenantCode": true,
@@ -3515,6 +3515,311 @@
     "insight": {
     },
     "_comment": " "
+  },
+  "wsActiveUlbs": {
+    "chartName": "DSS_W&S_ACTIVE_ULBS",
+    "queries": [
+      {
+        "module": "W&S",
+        "indexName": "receipts-consumers",
+        "aggrQuery": "{\"aggs\":{\"Active Ulbs\":{\"cardinality\":{\"field\":\"cityname.keyword\"}}}}",
+        "requestQueryMap": "{\"tenantId\" : \"cityname.keyword\", \"wardId\" : \"block.keyword\"}",
+        "dateRefField": "receiptdate"
+      }
+    ],
+    "translateTenantCode": true,
+    "chartType": "metric",
+    "valueType": "number",
+    "action": "",
+    "drillChart": "none",
+    "aggregationPaths": [
+      "Active Ulbs"
+    ],
+    "insight": {
+    },
+    "_comment": " "
+  },
+  "wsNewWaterConnection": {
+    "chartName": "DSS_W&S_NEW_WATER_CONNECTIONS",
+    "queries": [
+      {
+        "module": "W&S",
+        "indexName": "wsapplications",
+        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"applicationstatus.keyword\":\"Cancelled\"}}],\"must\":[{\"terms\":{\"servicetype.keyword\":[\"Water Charges\"]}}]}},\"aggs\":{\"Water Connections\":{\"value_count\":{\"field\":\"id.keyword\"}}}}}}",
+        "requestQueryMap": "{\"tenantId\" : \"cityname.keyword\", \"wardId\" : \"block.keyword\"}",
+        "dateRefField": "@timestamp"
+      }
+    ],
+    "translateTenantCode": true,
+    "chartType": "metric",
+    "valueType": "number",
+    "action": "",
+    "drillChart": "none",
+    "aggregationPaths": [
+      "Water Connections"
+    ],
+    "insight": {
+    },
+    "_comment": " "
+  },
+  "wsNewSewerageConnection": {
+    "chartName": "DSS_W&S_NEW_WATER_CONNECTIONS",
+    "queries": [
+      {
+        "module": "W&S",
+        "indexName": "wsapplications",
+        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"applicationstatus.keyword\":\"Cancelled\"}}],\"must\":[{\"terms\":{\"servicetype.keyword\":[\"Water Charges\"]}}]}},\"aggs\":{\"Sewerage Connections\":{\"value_count\":{\"field\":\"id.keyword\"}}}}}}",
+        "requestQueryMap": "{\"tenantId\" : \"cityname.keyword\", \"wardId\" : \"block.keyword\"}",
+        "dateRefField": "@timestamp"
+      }
+    ],
+    "translateTenantCode": true,
+    "chartType": "metric",
+    "valueType": "number",
+    "action": "",
+    "drillChart": "none",
+    "aggregationPaths": [
+      "Sewerage Connections"
+    ],
+    "insight": {
+    },
+    "_comment": " "
+  },
+
+  "wscumulativeConnections": {
+    "chartName": "DSS_W&S_CUMULATIVE_COLLECTION",
+    "queries": [
+      {
+        "module": "W&S",
+        "dateRefField": "@timestamp",
+        "requestQueryMap": "{\"tenantId\" : \"cityname.keyword\", \"wardId\" : \"block.keyword\"}",
+        "indexName": "wsapplications",
+        "aggrQuery": "{\"aggs\":{\"Water Connections\":{\"date_histogram\":{\"field\":\"@timestamp\",\"interval\":\"intervalvalue\"},\"aggs\":{\"Water\":{\"filter\":{\"bool\":{\"must\":[{\"terms\":{\"servicetype.keyword\":[\"Water Charges\"]}}],\"must_not\":[{\"terms\":{\"applicationstatus.keyword\":[\"Cancelled\"]}}]}},\"aggs\":{\"Count\":{\"value_count\":{\"field\":\"id.keyword\"}}}}}},\"Sewerage Connections\":{\"date_histogram\":{\"field\":\"@timestamp\",\"interval\":\"intervalvalue\"},\"aggs\":{\"Water\":{\"filter\":{\"bool\":{\"must\":[{\"terms\":{\"servicetype.keyword\":[\"Sewerage Charges\"]}}],\"must_not\":[{\"terms\":{\"applicationstatus.keyword\":[\"Cancelled\"]}}]}},\"aggs\":{\"Count\":{\"value_count\":{\"field\":\"id.keyword\"}}}}}}}}"
+      }
+    ],
+    "translateTenantCode": true,
+    "chartType": "line",
+    "valueType": "number",
+    "action": "",
+    "drillChart": "none",
+    "documentType": "_doc",
+    "aggregationPaths": [
+      "Water Connections",
+      "Sewerage Connections"
+
+    ],
+    "isCumulative": true,
+    "interval": "month",
+    "insight": {
+    },
+    "_comment": " "
+  },
+
+  "wsConsumersByConnectionType": {
+    "chartName": "DSS_W&S_WATER_CONNECTION_BY_USAGE",
+    "queries": [
+      {
+        "module": "W&S",
+        "dateRefField": "@timestamp",
+        "requestQueryMap": "{\"tenantId\" : \"cityname.keyword\", \"wardId\" : \"block.keyword\"}",
+        "indexName": "waterchargesconsumers",
+        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must\":[{\"terms\":{\"servicetype.keyword\":[\"Water Charges\"]}},{\"terms\":{\"connectionstatus.keyword\":[\"ACTIVE\"]}}]}},\"aggs\":{\"Water Consumers by Connection Type\":{\"terms\":{\"field\":\"connectiontype.keyword\",\"size\":170}}}}}}"
+      }
+    ],
+    "translateTenantCode": true,
+    "chartType": "pie",
+    "valueType": "number",
+    "action": "",
+    "documentType": "_doc",
+    "drillChart": "none",
+    "aggregationPaths": [
+      "Water Consumers by Connection Type"
+    ],
+    "insight": {
+    },
+    "_comment": " "
+  },
+
+  "wsConsumersByUsageType": {
+    "chartName": "DSS_W&S_CONNECTION_BY_USAGE",
+    "queries": [
+      {
+        "module": "W&S",
+        "dateRefField": "@timestamp",
+        "requestQueryMap": "{\"tenantId\" : \"cityname.keyword\", \"wardId\" : \"block.keyword\"}",
+        "indexName": "waterchargesconsumers",
+        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"applicationstatus.keyword\":\"Cancelled\"}}],\"must\":[{\"terms\":{\"servicetype.keyword\":[\"Water Charges\",\"Sewerage Charges\"]}},{\"terms\":{\"connectionstatus.keyword\":[\"ACTIVE\"]}}]}},\"aggs\":{\"W & S Consumers by Usage Type\":{\"terms\":{\"field\":\"usage.keyword\"}}}}}}"
+      }
+    ],
+    "translateTenantCode": true,
+    "chartType": "pie",
+    "valueType": "number",
+    "action": "",
+    "documentType": "_doc",
+    "drillChart": "none",
+    "aggregationPaths": [
+      "W & S Consumers by Usage Type"
+    ],
+    "insight": {
+    },
+    "_comment": " "
+  },
+
+  "wsConsumersByChannel": {
+    "chartName": "DSS_W&S_CONNECTION_BY_CHANNEL",
+    "queries": [
+      {
+        "module": "W&S",
+        "dateRefField": "@timestamp",
+        "requestQueryMap": "{\"tenantId\" : \"cityname.keyword\", \"wardId\" : \"block.keyword\"}",
+        "indexName": "receipts-consumers",
+        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"channel\":\"FIELD\"}},{\"term\":{\"channel\":\"SYSTEM\"}}],\"must\":[{\"term\":{\"status\":\"Approved\"}}]}},\"aggs\":{\"W & S Consumers by Channel\":{\"terms\":{\"field\":\"channel\",\"size\":7}}}}}}"
+      }
+    ],
+    "translateTenantCode": true,
+    "chartType": "pie",
+    "valueType": "number",
+    "action": "",
+    "documentType": "_doc",
+    "drillChart": "none",
+    "aggregationPaths": [
+      "W & S Consumers by Channel"
+    ],
+    "insight": {
+    },
+    "_comment": " "
+  },
+
+  "wsConnectionAgeingDDR": {
+    "chartName": "DSS_W&S_CONNECTION_AGEING",
+    "queries": [
+      {
+        "module": "W&S",
+        "requestQueryMap": "{\"tenantId\" : \"cityname.keyword\", \"wardId\" : \"block.keyword\" }",
+        "dateRefField": "applicationdate",
+        "indexName": "wsapplications",
+        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must\":[{\"terms\":{\"servicetype.keyword\":[\"Water Charges\",\"Sewerage Charges\"]}},{\"terms\":{\"applicationstatus.keyword\":[\"Created\",\"Rejected\",\"Verified\",\"verified\"]}}]}},\"aggs\":{\"Pending lt 3 days\":{\"date_range\":{\"field\":\"applicationdate\",\"ranges\":[{\"from\":\"now-3d/d\",\"to\":\"now\"}]}},\"Pending gt 3 and lt 7 days\":{\"date_range\":{\"field\":\"applicationdate\",\"ranges\":[{\"from\":\"now-1w\",\"to\":\"now-3d/d\"}]}},\"Pending gt 7 and lt 15 days\":{\"date_range\":{\"field\":\"applicationdate\",\"ranges\":[{\"from\":\"now-15d\",\"to\":\"now-1w\"}]}},\"Pending gt 15 days\":{\"date_range\":{\"field\":\"applicationdate\",\"ranges\":[{\"from\":\"now-2y\",\"to\":\"now-15d\"}]}}}}}}"
+      }
+    ],
+    "isMdmsEnabled": true,
+    "translateTenantCode": true,
+    "filterKeys": [
+      {"key": "tenantId", "column": "DDRs"}
+    ],
+    "chartType": "xtable",
+    "valueType": "number",
+    "drillChart": "wsConnectionAgeingUlb",
+    "action": "",
+    "plotLabel": "DDRs",
+    "isPostResponseHandler": true,
+    "postAggregationTheory" : "",
+    "aggregationPaths": [
+      "Pending lt 3 days",
+      "Pending gt 3 and lt 7 days",
+      "Pending gt 7 and lt 15 days",
+      "Pending gt 15 days"
+    ],
+    "computedFields": [
+      {
+        "postAggregationTheory" : "",
+        "actionName": "AdditiveComputedField",
+        "fields" : [ "Pending lt 3 days", "Pending gt 3 and lt 7 days", "Pending gt 7 and lt 15 days", "Pending gt 15 days"],
+        "newField" : "Total Pending",
+        "_comments": "fields are field names picked from its aggregation query to use post aggregation newField value with given new field name  "
+      }
+    ],
+
+    "insight": {
+    },
+    "_comment": ""
+  },
+  "wsConnectionAgeingUlb": {
+    "chartName": "DSS_W&S_CONNECTION_AGEING",
+    "queries": [
+      {
+        "module": "W&S",
+        "requestQueryMap": "{\"tenantId\" : \"cityname.keyword\", \"wardId\" : \"block.keyword\" }",
+        "dateRefField": "applicationdate",
+        "indexName": "wsapplications",
+        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must\":[{\"terms\":{\"servicetype.keyword\":[\"Water Charges\",\"Sewerage Charges\"]}},{\"terms\":{\"applicationstatus.keyword\":[\"Created\",\"Rejected\",\"Verified\",\"verified\"]}}]}},\"aggs\":{\"2\":{\"terms\":{\"field\":\"cityname.keyword\",\"size\":170,\"order\":{\"_key\":\"asc\"}},\"aggs\":{\"Pending lt 3 days\":{\"date_range\":{\"field\":\"applicationdate\",\"ranges\":[{\"from\":\"now-3d/d\",\"to\":\"now\"}]}},\"Pending gt 3 and lt 7 days\":{\"date_range\":{\"field\":\"applicationdate\",\"ranges\":[{\"from\":\"now-1w\",\"to\":\"now-3d/d\"}]}},\"Pending gt 7 and lt 15 days\":{\"date_range\":{\"field\":\"applicationdate\",\"ranges\":[{\"from\":\"now-15d\",\"to\":\"now-1w\"}]}},\"Pending gt 15 days\":{\"date_range\":{\"field\":\"applicationdate\",\"ranges\":[{\"from\":\"now-2y\",\"to\":\"now-15d\"}]}}}}}}}}"
+      }
+    ],
+    "isMdmsEnabled": false,
+    "translateTenantCode": true,
+    "filterKeys": [
+      {"key": "tenantId", "column": "ULB"}
+    ],
+    "chartType": "xtable",
+    "valueType": "number",
+    "drillChart": "wsConnectionAgeingWard",
+    "action": "",
+    "plotLabel": "ULB",
+    "isPostResponseHandler": true,
+    "postAggregationTheory" : "",
+    "aggregationPaths": [
+      "Pending lt 3 days",
+      "Pending gt 3 and lt 7 days",
+      "Pending gt 7 and lt 15 days",
+      "Pending gt 15 days"
+
+    ],
+    "computedFields": [
+      {
+        "postAggregationTheory" : "",
+        "actionName": "AdditiveComputedField",
+        "fields" : [ "Pending lt 3 days", "Pending gt 3 and lt 7 days", "Pending gt 7 and lt 15 days", "Pending gt 15 days"],
+        "newField" : "Total Pending",
+        "_comments": "fields are field names picked from its aggregation query to use post aggregation newField value with given new field name  "
+      }
+    ],
+
+    "insight": {
+    },
+    "_comment": ""
+  },
+  "wsConnectionAgeingWard": {
+    "chartName": "DSS_W&S_CONNECTION_AGEING",
+    "queries": [
+      {
+        "module": "W&S",
+        "requestQueryMap": "{\"tenantId\" : \"cityname.keyword\", \"wardId\" : \"block.keyword\" }",
+        "dateRefField": "applicationdate",
+        "indexName": "wsapplications",
+        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must\":[{\"terms\":{\"servicetype.keyword\":[\"Water Charges\",\"Sewerage Charges\"]}},{\"terms\":{\"applicationstatus.keyword\":[\"Created\",\"Rejected\",\"Verified\",\"verified\"]}}]}},\"aggs\":{\"2\":{\"terms\":{\"field\":\"block.keyword\",\"size\":170,\"order\":{\"_key\":\"asc\"}},\"aggs\":{\"Pending lt 3 days\":{\"date_range\":{\"field\":\"applicationdate\",\"ranges\":[{\"from\":\"now-3d/d\",\"to\":\"now\"}]}},\"Pending gt 3 and lt 7 days\":{\"date_range\":{\"field\":\"applicationdate\",\"ranges\":[{\"from\":\"now-1w\",\"to\":\"now-3d/d\"}]}},\"Pending gt 7 and lt 15 days\":{\"date_range\":{\"field\":\"applicationdate\",\"ranges\":[{\"from\":\"now-15d\",\"to\":\"now-1w\"}]}},\"Pending gt 15 days\":{\"date_range\":{\"field\":\"applicationdate\",\"ranges\":[{\"from\":\"now-2y\",\"to\":\"now-15d\"}]}}}}}}}}"
+      }
+    ],
+    "isMdmsEnabled": false,
+    "translateTenantCode": true,
+    "filterKeys": [
+      {"key": "tenantId", "column": "Ward"}
+    ],
+    "chartType": "xtable",
+    "valueType": "number",
+    "drillChart": "",
+    "action": "",
+    "plotLabel": "Ward",
+    "isPostResponseHandler": true,
+    "postAggregationTheory" : "",
+    "aggregationPaths": [
+      "Pending lt 3 days",
+      "Pending gt 3 and lt 7 days",
+      "Pending gt 7 and lt 15 days",
+      "Pending gt 15 days"
+
+    ],
+    "computedFields": [
+      {
+        "postAggregationTheory" : "",
+        "actionName": "AdditiveComputedField",
+        "fields" : [ "Pending lt 3 days", "Pending gt 3 and lt 7 days", "Pending gt 7 and lt 15 days", "Pending gt 15 days"],
+        "newField" : "Total Pending",
+        "_comments": "fields are field names picked from its aggregation query to use post aggregation newField value with given new field name  "
+      }
+    ],
+
+    "insight": {
+    },
+    "_comment": ""
   }
 
 
