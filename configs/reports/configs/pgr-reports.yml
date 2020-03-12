@@ -844,7 +844,7 @@ ReportDefinitions:
     source: eg_pgr_service
     total: false
   - name: citizenname
-    label: reports.rainmaker-pgr.citizename
+    label: reports.rainmaker-pgr.citizenname
     type: string
     source: eg_pgr_service
     total: false
@@ -902,7 +902,7 @@ ReportDefinitions:
         regexp_replace(servicecode, '([a-z])([A-Z])', '\1 \2','g') AS complainttype,
         ua.name as lastassignto,
         servicerequestid AS complaintnumber,
-        eg_user.name AS citizename,
+        eg_user.name AS citizenname,
         rating, feedback FROM eg_pgr_service 
         left outer join eg_pgr_address on eg_pgr_address.uuid = eg_pgr_service.addressid 
         left outer join eg_user on eg_user.id = eg_pgr_service.accountid::int 
