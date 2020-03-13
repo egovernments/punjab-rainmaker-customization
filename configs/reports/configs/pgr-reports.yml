@@ -807,3 +807,97 @@ ReportDefinitions:
     WHERE tenantid != 'pb.testing' and eg_pgr_service.servicerequestid=pgr_data.servicerequestid
   groupby: GROUP BY tenantid,eg_pgr_service.servicecode
   orderby: ORDER BY tenantid,eg_pgr_service.servicecode
+  
+- reportName: FeedbackReport
+  summary: Fetches complaint state based on Feedback
+  version: 1.0.0
+  moduleName: rainmaker-pgr
+  externalService:
+  - entity: $.MdmsRes.RAINMAKER-PGR.ServiceDefs
+    apiURL: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?moduleName=RAINMAKER-PGR&masterName=ServiceDefs&tenantId=$tenantId
+    keyOrder: serviceCode,department,slaHours
+    tableName: tbl_dept
+  - entity: $.MdmsRes.common-masters.Department
+    apiURL: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?moduleName=common-masters&masterName=Department&tenantId=$tenantId
+    keyOrder: name,code
+    tableName: tbl_def_dept
+  sourceColumns:
+  - name: department
+    label: reports.rainmaker-pgr.department
+    type: string
+    source: eg_pgr_service
+    total: false
+  - name: tenantid
+    label: reports.rainmaker-pgr.tenantid
+    type: string
+    source: eg_pgr_service
+    total: false
+  - name: citizenname
+    label: reports.rainmaker-pgr.citizenname
+    type: string
+    source: eg_pgr_service
+    total: false
+  - name: complainttype
+    label: reports.rainmaker-pgr.complainttype
+    type: string
+    source: eg_pgr_service
+    total: false
+  - name: complaintnumber
+    label: reports.rainmaker-pgr.complaintnumber
+    type: string
+    source: eg_pgr_service
+    total: false
+  - name: lastassignto
+    label: reports.rainmaker-pgr.lastassignto
+    type: string
+    source: eg_pgr_service
+    total: false
+  - name: rating
+    label: reports.rainmaker-pgr.rating
+    type: string
+    source: eg_pgr_service
+    total: false
+  - name: feedback
+    label: reports.rainmaker-pgr.feedback
+    type: string
+    source: eg_pgr_service
+    total: false
+  searchParams:
+  - name: ulb
+    label: ULB
+    type: singlevaluelist
+    pattern: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?tenantId=$tenantid&moduleName=tenant&masterName=tenants|$.MdmsRes.tenant.tenants.*.code|$.MdmsRes.tenant.tenants.*.name
+    source: pt
+    wrapper: true
+    isMandatory: false
+    searchClause: AND eg_pgr_service.tenantid = $ulb
+  - name: fromDate
+    label: reports.rainmaker-pgr.datefrom
+    type: epoch
+    source: eg_pgr_service
+    isMandatory: false
+    searchClause: AND createdtime >= $fromDate
+  - name: toDate
+    label: reports.rainmaker-pgr.dateto
+    type: epoch
+    source: eg_pgr_service
+    isMandatory: false
+    searchClause: AND createdtime <= $toDate
+  query: |
+        SELECT
+        DISTINCT ON (servicerequestid)
+        initcap(split_part(eg_pgr_service.tenantid, '.', 2)) as tenantid,
+        (SELECT deptmap_def.name FROM (VALUES tbl_def_dept) AS deptmap_def(name,code) INNER JOIN (VALUES tbl_dept) AS deptmap(serviceCode, department, slaHours) on deptmap.serviceCode = eg_pgr_service.servicecode and deptmap_def.code = deptmap.department) AS department, 
+        regexp_replace(servicecode, '([a-z])([A-Z])', '\1 \2','g') AS complainttype,
+        ua.name as lastassignto,
+        servicerequestid AS complaintnumber,
+        eg_user.name AS citizenname,
+        rating, feedback FROM eg_pgr_service 
+        left outer join eg_pgr_address on eg_pgr_address.uuid = eg_pgr_service.addressid 
+        left outer join eg_user on eg_user.id = eg_pgr_service.accountid::int 
+        left outer join eg_pgr_action as epa on epa.businesskey = eg_pgr_service.servicerequestid and epa.action in ('assign','reassign') 
+        left outer join eg_user as ua on ua.id = epa.assignee::int 
+        WHERE 
+        eg_pgr_address.uuid = eg_pgr_service.addressid 
+        AND rating is not null AND feedback is not null
+  orderby: ORDER BY servicerequestid, epa."when" desc
