@@ -209,6 +209,7 @@ ReportDefinitions:
     searchClause: AND createdtime <= $toDate
   query: |
     select initcap(split_part(tenantid, '.', 2)) as tenantid,
+    SUM(CASE WHEN source ='whatsapp' THEN 1 ELSE 0 END) as whatsapp,
     SUM(CASE WHEN source ='ivr' THEN 1 ELSE 0 END) as ivr,
     SUM(CASE WHEN source ='mobileapp' THEN 1 ELSE 0 END) as mobileapp,
     SUM(CASE WHEN source ='web' THEN 1 ELSE 0 END) as web,
