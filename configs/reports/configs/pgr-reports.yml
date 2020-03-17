@@ -218,7 +218,7 @@ ReportDefinitions:
     SUM(CASE WHEN source ='ivr' THEN 1 ELSE 0 END) as ivr,
     SUM(CASE WHEN source ='mobileapp' THEN 1 ELSE 0 END) as mobileapp,
     SUM(CASE WHEN source ='web' THEN 1 ELSE 0 END) as web,
-    SUM(CASE WHEN source NOT IN ('web', 'ivr', 'mobileapp')  OR source is NULL THEN 1 ELSE 0 END) as unknown
+    SUM(CASE WHEN source NOT IN ('web', 'ivr', 'mobileapp','whatsapp')  OR source is NULL THEN 1 ELSE 0 END) as unknown
     from eg_pgr_service
     WHERE tenantid != 'pb.testing'
 
