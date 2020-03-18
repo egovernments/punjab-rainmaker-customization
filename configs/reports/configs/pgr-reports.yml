@@ -4,25 +4,32 @@ ReportDefinitions:
   version: 1.0.0
   moduleName: rainmaker-pgr
   sourceColumns:
-  - name: citizen_mobile_app
-    label: reports.rainmaker-pgr.citizen_mobile_app
-    type: number
+  - name: whatsapp
+    label: reports.rainmaker-pgr.source.whatsapp
+    type: string
     source: eg_pgr_service
-  - name: citizen_web_app
-    label: reports.rainmaker-pgr.citizen_web_app
-    type: number
+    total: true
+  - name: ivr
+    label: reports.rainmaker-pgr.source.ivr
+    type: string
     source: eg_pgr_service
-  - name: counter_desktop
-    label: reports.rainmaker-pgr.counter_desktop
-    type: number
+    total: true
+  - name: mobileapp
+    label: reports.rainmaker-pgr.source.mobileapp
+    type: string
     source: eg_pgr_service
-  searchParams: 
-  - name: tenantId
-    label: reports.rainmaker-pgr.tenantId
-    type: singlevaluelist
-    pattern: 'list://Wet:Wet,Dry:Dry'
+    total: true
+  - name: web
+    label: reports.rainmaker-pgr.source.web
+    type: string
     source: eg_pgr_service
-    isMandatory: false    
+    total: true
+  - name: unknown
+    label: reports.rainmaker-pgr.source.unknown
+    type: string
+    source: eg_pgr_service
+    total: true
+  searchParams:  
   - name: fromDate
     label: reports.rainmaker-pgr.datefrom
     type: epoch
@@ -33,7 +40,15 @@ ReportDefinitions:
     type: epoch
     source: eg_pgr_service
     isMandatory: false
-  query: SELECT sum(case when source = 'mobileapp' then 1 else 0 end) as citizen_mobile_app, sum(case when source = 'web' then 1 else 0 end) as citizen_web_app, sum(case when source = 'ivr' then 1 else 0 end) as counter_desktop FROM eg_pgr_service WHERE tenantid = $tenantid
+   query: |
+    select
+    SUM(CASE WHEN source ='whatsapp' THEN 1 ELSE 0 END) as whatsapp,
+    SUM(CASE WHEN source ='ivr' THEN 1 ELSE 0 END) as ivr,
+    SUM(CASE WHEN source ='mobileapp' THEN 1 ELSE 0 END) as mobileapp,
+    SUM(CASE WHEN source ='web' THEN 1 ELSE 0 END) as web,
+    SUM(CASE WHEN source NOT IN ('web', 'ivr', 'mobileapp','whatsapp')  OR source is NULL THEN 1 ELSE 0 END) as unknown
+    from eg_pgr_service
+    WHERE tenantid = $tenantid
 
 - reportName: DescriptionReport
   summary: Fetches department wise reports based description of the complaint
