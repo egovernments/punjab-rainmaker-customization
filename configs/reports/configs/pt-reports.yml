@@ -1698,6 +1698,14 @@ ReportDefinitions:
     source: pt
     isMandatory: true
     searchClause: AND rh.receiptdate <= $toDate
+  - name: collectorname
+    label: reports.pt.collectorname
+    type: singlevaluelist
+    pattern: http://egov-hrms:8080/egov-hrms/employees/_search?tenantId=$tenantid&roles=PTCEMP|$.Employees[*].user.id|$.Employees[*].user.name
+    source: pt
+    wrapper: true
+    isMandatory: false
+    searchClause: AND eg_user.id = $collectorname::INTEGER
   query: |
       -- Use CTE to force query plan, compute & use CTE later
       SELECT
@@ -1714,11 +1722,13 @@ ReportDefinitions:
         + SUM(CASE WHEN taxheadcode LIKE 'PT_OWNER_EXEMPTION' THEN adjustedamount ELSE 0 END) )as exemption,
         ( SUM(CASE WHEN taxheadcode LIKE 'PT_ROUNDOFF' THEN adjustedamount ELSE 0 END)
         + SUM(CASE WHEN taxheadcode LIKE 'PT_DECIMAL_CEILING_DEBIT' THEN adjustedamount ELSE 0 END)
-        + SUM(CASE WHEN taxheadcode LIKE 'PT_DECIMAL_CEILING_CREDIT' THEN adjustedamount ELSE 0 END)) as adjustment
+        + SUM(CASE WHEN taxheadcode LIKE 'PT_DECIMAL_CEILING_CREDIT' THEN adjustedamount ELSE 0 END)) as adjustment,
+        (CASE WHEN collectiontype='COUNTER' THEN eg_user.name ELSE 'Online' END) as collectorname
       FROM egcl_receiptdetails_v1 as rd
       INNER JOIN egcl_receiptheader_v1 as rh on rh.id = rd.receiptheader
+      LEFT OUTER JOIN eg_user ON eg_user.id = rh.createdby::INTEGER 
       WHERE rd.tenantid = $tenantid and rh.status != 'Cancelled' and businessdetails='PT'
-  groupby: group by rd.tenantid
+  groupby: group by rd.tenantid,collectorname
   
 - reportName: StateReceiptRegisterSummary
   summary: Receipt Register Summary
