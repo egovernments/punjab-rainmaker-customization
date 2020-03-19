@@ -810,11 +810,21 @@ ReportDefinitions:
     type: string
     source: pt
     total: true
+  - name: countoffline
+    label: reports.pt.countoffline
+    type: string
+    source: pt
+    total: true
   - name: totalonline
     label: reports.pt.totalonline
     type: string
     source: pt
     total: true
+  - name: countonline
+    label: reports.pt.countonline
+    type: string
+    source: pt
+    total: true  
   - name: totalamountdue
     label: reports.pt.totalamountdue
     type: string
@@ -856,7 +866,9 @@ ReportDefinitions:
       SUM(totalamount) AS totalamount, 
       SUM(amount) AS totalamountpaid, 
       SUM(CASE WHEN collectiontype LIKE 'ONLINE' THEN amount ELSE 0 END) AS totalonline, 
-      SUM(CASE WHEN collectiontype LIKE 'COUNTER' THEN amount ELSE 0 END) AS totaloffline, 
+      SUM(CASE WHEN collectiontype LIKE 'COUNTER' THEN amount ELSE 0 END) AS countonline,
+      SUM(CASE WHEN collectiontype LIKE 'COUNTER' THEN amount ELSE 0 END) AS totaloffline,
+      SUM(CASE WHEN collectiontype LIKE 'COUNTER' THEN amount ELSE 0 END) AS countoffline, 
       (SUM(totalamount) - SUM(amount)) AS totalamountdue 
       FROM eg_pt_propertydetail_v2 AS pd 
       LEFT OUTER JOIN (SELECT consumercode, totalamount, amount, collectiontype, receiptdate FROM egcl_receiptheader_v1 AS rh 
