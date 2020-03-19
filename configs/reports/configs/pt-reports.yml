@@ -1715,7 +1715,7 @@ ReportDefinitions:
       -- Use CTE to force query plan, compute & use CTE later
       SELECT
         split_part(rd.tenantid,'.',2) as ulb,
-        Count (*)/8 assessmentnumber,
+        Count (*)/8 noofassessments,
         SUM(CASE WHEN taxheadcode LIKE 'PT_ADHOC_PENALTY' THEN adjustedamount ELSE 0 END) as adhocpenalty,
         SUM(CASE WHEN taxheadcode LIKE 'PT_ADHOC_REBATE' THEN adjustedamount ELSE 0 END) as adhocrebate, 
         SUM(CASE WHEN taxheadcode LIKE 'PT_FIRE_CESS' THEN adjustedamount ELSE 0 END) as firecess, 
