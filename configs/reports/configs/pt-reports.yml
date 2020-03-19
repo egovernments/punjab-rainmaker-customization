@@ -1685,6 +1685,16 @@ ReportDefinitions:
     type: string
     source: pt
     total: true
+  - name: adhocrebate
+    label: reports.pt.adhocrebate
+    type: string
+    source: pt
+    total: true 
+  - name: noofassessments
+    label: reports.pt.noofassessments
+    type: string
+    source: pt
+    total: true 
   - name: collectorname
     label: reports.pt.collectorname
     type: string
