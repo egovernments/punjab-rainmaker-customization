@@ -862,7 +862,7 @@ ReportDefinitions:
   query: |
       SELECT 
       initcap(split_part(tenantid, '.', 2)) as tenantid, 
-      COUNT(*) AS totalassessments, 
+      COUNT(collectiontype) AS totalassessments, 
       SUM(totalamount) AS totalamount, 
       SUM(amount) AS totalamountpaid, 
       SUM(CASE WHEN collectiontype LIKE 'ONLINE' THEN amount ELSE 0 END) AS totalonline, 
