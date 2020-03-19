@@ -866,7 +866,7 @@ ReportDefinitions:
       SUM(totalamount) AS totalamount, 
       SUM(amount) AS totalamountpaid, 
       SUM(CASE WHEN collectiontype LIKE 'ONLINE' THEN amount ELSE 0 END) AS totalonline, 
-      SUM(CASE WHEN collectiontype LIKE 'COUNTER' THEN amount ELSE 0 END) AS countonline,
+      SUM(CASE WHEN collectiontype LIKE 'ONLINE' THEN amount ELSE 0 END) AS countonline,
       SUM(CASE WHEN collectiontype LIKE 'COUNTER' THEN amount ELSE 0 END) AS totaloffline,
       SUM(CASE WHEN collectiontype LIKE 'COUNTER' THEN amount ELSE 0 END) AS countoffline, 
       (SUM(totalamount) - SUM(amount)) AS totalamountdue 
