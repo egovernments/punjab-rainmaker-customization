@@ -475,7 +475,7 @@ ReportDefinitions:
   query: |
     SELECT 
       tenantid, 
-      COUNT(*) AS totalassessments, 
+      (*) AS totalassessments, COUNT
       SUM(totalamount) AS totalamount, 
       SUM(amount) AS totalamountpaid, 
       (SUM(totalamount) - SUM(amount)) AS totalamountdue 
@@ -1714,7 +1714,7 @@ ReportDefinitions:
   query: |
       -- Use CTE to force query plan, compute & use CTE later
       SELECT
-        split_part(rd.tenantid,'.',2) as ulb,
+        Count (*)/8 assessmentnumber,
         SUM(CASE WHEN taxheadcode LIKE 'PT_ADHOC_PENALTY' THEN adjustedamount ELSE 0 END) as adhocpenalty,
         SUM(CASE WHEN taxheadcode LIKE 'PT_ADHOC_REBATE' THEN adjustedamount ELSE 0 END) as adhocrebate, 
         SUM(CASE WHEN taxheadcode LIKE 'PT_FIRE_CESS' THEN adjustedamount ELSE 0 END) as firecess, 
@@ -1733,7 +1733,7 @@ ReportDefinitions:
       INNER JOIN egcl_receiptheader_v1 as rh on rh.id = rd.receiptheader
       LEFT OUTER JOIN eg_user ON eg_user.id = rh.createdby::INTEGER 
       WHERE rd.tenantid = $tenantid and rh.status != 'Cancelled' and businessdetails='PT'
-  groupby: group by rd.tenantid,collectorname
+  groupby: group by collectorname
   
 - reportName: StateReceiptRegisterSummary
   summary: Receipt Register Summary
