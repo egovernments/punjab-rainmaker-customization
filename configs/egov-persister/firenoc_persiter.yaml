@@ -112,7 +112,7 @@ serviceMaps:
 
           - jsonPath: $.FireNOCs.*.fireNOCDetails.applicantDetails.owners.*.uuid
 
-       - query: INSERT INTO public.eg_fn_address(uuid, tenantid, doorno, latitude, longitude, buildingname, addressid, addressnumber, type, addressline1, addressline2, landmark, street, city, locality, pincode, detail, firenocdetailsuuid, createdby, lastmodifiedby, createdtime, lastmodifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+       - query: INSERT INTO public.eg_fn_address(uuid, tenantid, doorno, latitude, longitude, buildingname, addressid, addressnumber, type, addressline1, addressline2, landmark, street, city, locality, pincode, detail, firenocdetailsuuid, createdby, lastmodifiedby, createdtime, lastmodifiedtime,areatype,subdistrict) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?,?);
          basePath: FireNOCs.*.fireNOCDetails.propertyDetails.address
          jsonMaps:
           - jsonPath: $.FireNOCs.*.fireNOCDetails.propertyDetails.address.id
@@ -158,6 +158,10 @@ serviceMaps:
           - jsonPath: $.FireNOCs.*.auditDetails.createdTime
 
           - jsonPath: $.FireNOCs.*.auditDetails.lastModifiedTime
+          
+          - jsonPath: $.FireNOCs.*.fireNOCDetails.propertyDetails.address.areatype
+          
+          - jsonPath: $.FireNOCs.*.fireNOCDetails.propertyDetails.address.subdistrict
 
        - query: INSERT INTO public.eg_fn_institution(uuid, tenantid, firenocdetailsuuid, name, type, designation, createdby, createdtime, lastmodifiedby, lastmodifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
          basePath: FireNOCs.*.fireNOCDetails.applicantDetails.additionalDetail
@@ -457,7 +461,7 @@ serviceMaps:
 
           - jsonPath: $.FireNOCs[*][?({id} in @.fireNOCDetails.applicantDetails.owners[*].id)].auditDetails.lastModifiedTime
 
-       - query: UPDATE eg_fn_address SET doorno =?,street = ?,buildingName = ?, latitude =?, longitude =?, addressid =?, addressnumber =?,locality =?, type =?, addressline1 =?, addressline2 =?, landmark =?, city =?, pincode =?, detail =?,lastmodifiedby =?, lastmodifiedtime =? WHERE uuid =?;
+       - query: UPDATE eg_fn_address SET doorno =?,street = ?,buildingName = ?, latitude =?, longitude =?, addressid =?, addressnumber =?,locality =?, type =?, addressline1 =?, addressline2 =?, landmark =?, city =?, pincode =?, detail =?,lastmodifiedby =?, lastmodifiedtime =?, areatype=?, subdistrict=? WHERE uuid =?;
          basePath: FireNOCs.*.fireNOCDetails.propertyDetails.address
          jsonMaps:
           - jsonPath: $.FireNOCs.*.fireNOCDetails.propertyDetails.address.doorNo
@@ -495,6 +499,10 @@ serviceMaps:
           - jsonPath: $.FireNOCs.*.auditDetails.lastModifiedTime
 
           - jsonPath: $.FireNOCs.*.fireNOCDetails.propertyDetails.address.id
+          
+          - jsonPath: $.FireNOCs.*.fireNOCDetails.propertyDetails.address.areatype
+          
+          - jsonPath: $.FireNOCs.*.fireNOCDetails.propertyDetails.address.subdistrict
 
 
        - query: INSERT INTO eg_fn_institution(tenantId,uuid, firenocdetailsuuid, name, type,designation, createdby, lastmodifiedby, createdtime, lastmodifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT (uuid) DO UPDATE SET active = ?,name = ?,type = ?,designation = ?, lastmodifiedby = ?,lastmodifiedtime = ?;
