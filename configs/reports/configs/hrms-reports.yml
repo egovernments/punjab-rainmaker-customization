@@ -1,0 +1,72 @@
+ReportDefinitions:
+- reportName: EmployeeReport
+  summary: Fetches Employee details from HRMS
+  version: 1.0.0
+  moduleName: rainmaker-hrms
+  externalService:
+  - entity: $.MdmsRes.RAINMAKER-HRMS.ServiceDefs
+    apiURL: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?moduleName=RAINMAKER-HRMS&masterName=ServiceDefs&tenantId=$tenantId
+    keyOrder: serviceCode,department,slaHours
+    tableName: tbl_dept
+  - entity: $.MdmsRes.common-masters.Department
+    apiURL: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?moduleName=common-masters&masterName=Department&tenantId=$tenantId
+    keyOrder: name,code
+    tableName: tbl_def_dept
+  sourceColumns:
+  - name: department
+    label: reports.rainmaker-hrms.department
+    type: string
+    source: eg_hrms_service
+    total: false
+  - name: tenantid
+    label: reports.rainmaker-hrms.tenantid
+    type: string
+    source: eg_hrms_service
+    total: false
+  - name: code
+    label: reports.rainmaker-hrms.code
+    type: string
+    source: eg_hrms_service
+    total: false
+  - name: name
+    label: reports.rainmaker-hrms.name
+    type: string
+    source: eg_hrms_service
+    total: false
+  - name: mobilenumber
+    label: reports.rainmaker-hrms.mobilenumber
+    type: string
+    source: eg_hrms_service
+    total: false
+  searchParams:
+  - name: ulb
+    label: ULB
+    type: singlevaluelist
+    pattern: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?tenantId=$tenantid&moduleName=tenant&masterName=tenants|$.MdmsRes.tenant.tenants.*.code|$.MdmsRes.tenant.tenants.*.name
+    source: hrms
+    wrapper: true
+    isMandatory: false
+    searchClause: AND eg_hrms_service.tenantid = $ulb
+  - name: fromDate
+    label: reports.rainmaker-hrms.datefrom
+    type: epoch
+    source: eg_hrms_service
+    isMandatory: false
+    searchClause: AND createdtime >= $fromDate
+  - name: toDate
+    label: reports.rainmaker-hrms.dateto
+    type: epoch
+    source: eg_hrms_service
+    isMandatory: false
+    searchClause: AND createdtime <= $toDate
+  query: |
+        SELECT
+        DISTINCT ON (servicerequestid)
+        initcap(split_part(eg_hrms_service.tenantid, '.', 2)) as tenantid,
+        (SELECT deptmap_def.name FROM (VALUES tbl_def_dept) AS deptmap_def(name,code) INNER JOIN (VALUES tbl_dept) AS deptmap(serviceCode, department, slaHours) on deptmap.serviceCode = eg_hrms_service.servicecode and deptmap_def.code = deptmap.department) AS department, 
+        hrms.code, eu.id,  eu.mobilenumber, eu.name
+        from eg_hrms_employee AS hrms left join eg_user AS eu ON hrms.uuid=eu.uuid
+        left outer join eg_user on eg_user.id = eg_hrms_service.accountid::int 
+        WHERE 
+        eg_hrms_address.uuid = eg_hrms_service.addressid 
+  orderby: ORDER BY hrms.id desc
