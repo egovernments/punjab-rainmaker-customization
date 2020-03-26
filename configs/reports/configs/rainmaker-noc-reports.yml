@@ -69,7 +69,7 @@ ReportDefinitions:
       - name: subDistrict
         label: reports.noc.collectionreport.subdistrict
         type: multivaluelist
-        pattern: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?tenantId=$tenantid&moduleName=firenoc&masterName=FireStations|$.MdmsRes.FireStations.FireStations.*.subDistrict.*.code|$.MdmsRes.FireStations.FireStations.*.subDistrict.*.code
+        pattern: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?tenantId=$tenantid&moduleName=firenoc&masterName=FireStations|$.MdmsRes.firenoc.FireStations.*.subDistrict.*.code|$.MdmsRes.FireStations.FireStations.*.subDistrict.*.code
         source: noc
         wrapper: true
         isMandatory: false
@@ -77,7 +77,7 @@ ReportDefinitions:
       - name: fireStation
         label: reports.noc.collectionreport.fireStation
         type: multivaluelist
-        pattern: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?tenantId=$tenantid&moduleName=firenoc&masterName=FireStations|$.MdmsRes.FireStations.FireStations.*.code|$.MdmsRes.FireStations.FireStations.*.code
+        pattern: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?tenantId=$tenantid&moduleName=firenoc&masterName=FireStations|$.MdmsRes.firenoc.FireStations.*.code|$.MdmsRes.FireStations.FireStations.*.code
         source: noc
         wrapper: true
         isMandatory: false
@@ -141,7 +141,7 @@ ReportDefinitions:
       - name: subDistrict
         label: reports.noc.applicationstatusreport.subdistrict
         type: multivaluelist
-        pattern: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?tenantId=$tenantid&moduleName=firenoc&masterName=FireStations|$.MdmsRes.FireStations.FireStations.*.subDistrict.*.code|$.MdmsRes.FireStations.FireStations.*.subDistrict.*.code
+        pattern: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?tenantId=$tenantid&moduleName=firenoc&masterName=FireStations|$.MdmsRes.firenoc.FireStations.*.subDistrict.*.code|$.MdmsRes.FireStations.FireStations.*.subDistrict.*.code
         source: noc
         wrapper: true
         isMandatory: false
@@ -149,7 +149,7 @@ ReportDefinitions:
       - name: fireStation
         label: reports.noc.applicationstatusreport.fireStation
         type: multivaluelist
-        pattern: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?tenantId=$tenantid&moduleName=firenoc&masterName=FireStations|$.MdmsRes.FireStations.FireStations.*.code|$.MdmsRes.FireStations.FireStations.*.code
+        pattern: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?tenantId=$tenantid&moduleName=firenoc&masterName=FireStations|$.MdmsRes.firenoc.FireStations.*.code|$.MdmsRes.FireStations.FireStations.*.code
         source: noc
         wrapper: true
         isMandatory: false
@@ -217,7 +217,7 @@ ReportDefinitions:
       - name: subDistrict
         label: reports.noc.channelsreport.subdistrict
         type: multivaluelist
-        pattern: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?tenantId=$tenantid&moduleName=firenoc&masterName=FireStations|$.MdmsRes.FireStations.FireStations.*.subDistrict.*.code|$.MdmsRes.FireStations.FireStations.*.subDistrict.*.code
+        pattern: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?tenantId=$tenantid&moduleName=firenoc&masterName=FireStations|$.MdmsRes.firenoc.FireStations.*.subDistrict.*.code|$.MdmsRes.FireStations.FireStations.*.subDistrict.*.code
         source: noc
         wrapper: true
         isMandatory: false
@@ -225,7 +225,7 @@ ReportDefinitions:
       - name: fireStation
         label: reports.noc.channelsreport.fireStation
         type: multivaluelist
-        pattern: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?tenantId=$tenantid&moduleName=firenoc&masterName=FireStations|$.MdmsRes.FireStations.FireStations.*.code|$.MdmsRes.FireStations.FireStations.*.code
+        pattern: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?tenantId=$tenantid&moduleName=firenoc&masterName=FireStations|$.MdmsRes.firenoc.FireStations.*.code|$.MdmsRes.FireStations.FireStations.*.code
         source: noc
         wrapper: true
         isMandatory: false
