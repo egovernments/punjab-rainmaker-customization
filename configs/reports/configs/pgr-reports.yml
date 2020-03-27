@@ -174,6 +174,11 @@ ReportDefinitions:
     type: string
     source: eg_pgr_service
     total: false
+  - name: whatsapp
+    label: reports.rainmaker-pgr.source.whatsapp
+    type: string
+    source: eg_pgr_service
+    total: true
   - name: ivr
     label: reports.rainmaker-pgr.source.ivr
     type: string
@@ -209,10 +214,11 @@ ReportDefinitions:
     searchClause: AND createdtime <= $toDate
   query: |
     select initcap(split_part(tenantid, '.', 2)) as tenantid,
+    SUM(CASE WHEN source ='whatsapp' THEN 1 ELSE 0 END) as whatsapp,
     SUM(CASE WHEN source ='ivr' THEN 1 ELSE 0 END) as ivr,
     SUM(CASE WHEN source ='mobileapp' THEN 1 ELSE 0 END) as mobileapp,
     SUM(CASE WHEN source ='web' THEN 1 ELSE 0 END) as web,
-    SUM(CASE WHEN source NOT IN ('web', 'ivr', 'mobileapp')  OR source is NULL THEN 1 ELSE 0 END) as unknown
+    SUM(CASE WHEN source NOT IN ('web', 'ivr', 'mobileapp','whatsapp')  OR source is NULL THEN 1 ELSE 0 END) as unknown
     from eg_pgr_service
     WHERE tenantid != 'pb.testing'
 
