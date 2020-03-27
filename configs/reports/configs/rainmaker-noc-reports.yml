@@ -1,5 +1,5 @@
 ReportDefinitions:
-  - reportName: CollectionReport
+  - reportName: UrbanCollectionReport
     summary: Collection Report
     version: 1.0.0
     moduleName: rainmaker-noc
@@ -44,13 +44,179 @@ ReportDefinitions:
         source: common
         isMandatory: false
         searchClause: AND collectiontype IN ($channel)  
-      - name: areaType
-        label: reports.noc.collectionreport.areaType
-        type: multivaluelist
-        pattern: 'list://Urban:Urban,Rural:Rural'
+      - name: paymentMode
+        label: reports.noc.collectionreport.paymentMode
+        type: singlevaluelist
+        pattern: 'list://Cash:Cash,Online:Online,Card:Card,DD:DD,Cheque:Cheque'
         source: common
         isMandatory: false
-        searchClause: AND areatype IN ($areaType)
+        searchClause: AND instrumenttype = $paymentMode
+      - name: city
+        label: reports.noc.collectionreport.city
+        type: multivaluelist
+        pattern: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?tenantId=$tenantid&moduleName=tenant&masterName=tenants|$.MdmsRes.tenant.tenants.*.code|$.MdmsRes.tenant.tenants.*.name
+        source: noc
+        wrapper: true
+        isMandatory: false
+        searchClause: AND fad.city IN ($district)      
+      - name: fireStation
+        label: reports.noc.collectionreport.fireStation
+        type: multivaluelist
+        pattern: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?tenantId=$tenantid&moduleName=firenoc&masterName=FireStations|$.MdmsRes.firenoc.FireStations.*.code|$.MdmsRes.firenoc.FireStations.*.code
+        source: noc
+        wrapper: true
+        isMandatory: false
+        searchClause: AND fdet.firestationid IN ($fireStation)  
+    query: select COALESCE(message,usagetype) localisedmessage, COUNT(*) as transactionNumber, sum(case when collectiontype='COUNTER' then ins.amount else 0 end) fees_counter, sum(case when collectiontype='ONLINE' then ins.amount else 0 end) fees_online from eg_fn_firenoc fnoc inner join eg_fn_firenocdetail fdet on fdet.firenocuuid=fnoc.uuid inner join egcl_receiptheader_v1 rhead on rhead.consumercode=fdet.applicationnumber inner join eg_fn_buidlings build on build.firenocdetailsuuid=fdet.uuid inner join egcl_receiptinstrument_v1 recins on recins.receiptheader=rhead.id inner join egcl_instrumentheader_v1 ins on recins.instrumentheader=ins.id left outer join message on code=concat('FIRENOC_BUILDINGTYPE_',UPPER(REGEXP_REPLACE(usagetype,'\..*',''))) inner join eg_fn_address as fad on fad.firenocdetailsuuid=fdet.uuid and module='rainmaker-noc' where 1=1
+    groupby: GROUP BY localisedmessage
+    orderby: ORDER BY localisedmessage
+
+  - reportName: UrbanApplicationStatusReport
+    summary: Application Status Report
+    version: 1.0.0
+    moduleName: rainmaker-noc
+    sourceColumns:
+      - name: application_status
+        label: reports.noc.applicationstatusreport.appStatus
+        type: string
+        source: rainmaker-noc
+        total: false
+      - name: number_of_application
+        label: reports.noc.applicationstatusreport.noofapplications
+        type: number
+        source: rainmaker-noc
+        total: true
+    searchParams:
+      - name: fromDate
+        label: reports.noc.applicationstatusreport.fromDate
+        type: epoch
+        source: noc
+        isMandatory: false
+        searchClause: AND applicationdate >= $fromDate
+      - name: toDate
+        label: reports.noc.applicationstatusreport.toDate
+        type: epoch
+        source: noc
+        isMandatory: false
+        searchClause: AND applicationdate <= $toDate      
+      - name: city
+        label: reports.noc.applicationstatusreport.city
+        type: multivaluelist
+        pattern: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?tenantId=$tenantid&moduleName=tenant&masterName=tenants|$.MdmsRes.tenant.tenants.*.code|$.MdmsRes.tenant.tenants.*.name
+        source: noc
+        wrapper: true
+        isMandatory: false
+        searchClause: AND fad.city IN ($city)  
+      - name: fireStation
+        label: reports.noc.applicationstatusreport.fireStation
+        type: multivaluelist
+        pattern: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?tenantId=$tenantid&moduleName=firenoc&masterName=FireStations|$.MdmsRes.firenoc.FireStations.*.code|$.MdmsRes.firenoc.FireStations.*.code
+        source: noc
+        wrapper: true
+        isMandatory: false
+        searchClause: AND fdet.firestationid IN ($fireStation)   
+    query: select COALESCE(message,state) application_status,count(*) number_of_application from eg_fn_firenoc fnoc inner join eg_fn_firenocdetail fdet on fdet.firenocuuid=fnoc.uuid inner join (SELECT DISTINCT ON (businessid) * FROM eg_wf_processinstance_v2 ORDER BY businessid,createdtime desc) pinstance on pinstance.businessid=fdet.applicationnumber inner join eg_wf_state_v2 wfstate on pinstance.status=wfstate.uuid left outer join message on code=concat('WF_FIRENOC_',UPPER(state)) and module='rainmaker-noc' inner join eg_fn_address as fad on fad.firenocdetailsuuid=fdet.uuid where 1=1
+    groupby: GROUP BY application_status
+    orderby: ORDER BY application_status
+
+  - reportName: UrbanChannelsReport
+    summary: Channels Report
+    version: 1.0.0
+    moduleName: rainmaker-noc
+    sourceColumns:
+      - name: channel
+        label: reports.noc.channelsreport.channel
+        type: string
+        source: rainmaker-noc
+        total: false
+      - name: number_of_applications
+        label: reports.noc.channelsreport.applicationNo
+        type: number
+        source: rainmaker-noc
+        total: true
+      - name: percentage
+        label: reports.noc.channelsreport.percentage
+        type: number
+        source: rainmaker-noc
+        total: false
+    searchParams:
+      - name: fromDate
+        label: reports.noc.channelsreport.fromDate
+        type: epoch
+        source: noc
+        isMandatory: false
+        searchClause: AND applicationdate >= $fromDate
+      - name: toDate
+        label: reports.noc.channelsreport.toDate
+        type: epoch
+        source: noc
+        isMandatory: false
+        searchClause: AND applicationdate <= $toDate
+      - name: city
+        label: reports.noc.channelsreport.city
+        type: multivaluelist
+        pattern: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?tenantId=$tenantid&moduleName=tenant&masterName=tenants|$.MdmsRes.tenant.tenants.*.code|$.MdmsRes.tenant.tenants.*.name
+        source: noc
+        wrapper: true
+        isMandatory: false
+        searchClause: AND fad.city IN ($district)     
+      - name: fireStation
+        label: reports.noc.channelsreport.fireStation
+        type: multivaluelist
+        pattern: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?tenantId=$tenantid&moduleName=firenoc&masterName=FireStations|$.MdmsRes.firenoc.FireStations.*.code|$.MdmsRes.firenoc.FireStations.*.code
+        source: noc
+        wrapper: true
+        isMandatory: false
+        searchClause: AND fdet.firestationid IN ($fireStation) 
+    query: select channel, count (*) number_of_applications,round((count (*)::decimal/(select count(*) from eg_fn_firenoc fnoc inner join eg_fn_firenocdetail fdet on fdet.firenocuuid=fnoc.uuid))*100,2) percentage from eg_fn_firenoc fnoc inner join eg_fn_firenocdetail fdet on fdet.firenocuuid=fnoc.uuid
+      inner join eg_fn_address as fad on fad.firenocdetailsuuid=fdet.uuid
+    groupby: GROUP BY channel
+    orderby: ORDER BY channel    
+  - reportName: RuralDistrictWiseCollectionReport
+    summary: Collection Report
+    version: 1.0.0
+    moduleName: rainmaker-noc
+    sourceColumns:
+      - name: localisedmessage
+        label: reports.noc.collectionreport.usagetype
+        type: string
+        source: rainmaker-noc
+        total: false
+      - name: transactionNumber
+        label: reports.noc.collectionreport.transactionNumber
+        type: number
+        source: rainmaker-noc
+        total: true
+      - name: fees_counter
+        label: reports.noc.collectionreport.fees_counter
+        type: number
+        source: rainmaker-noc
+        total: true
+      - name: fees_online
+        label: reports.noc.collectionreport.fees_online
+        type: number
+        source: rainmaker-noc
+        total: true
+    searchParams:
+      - name: fromDate
+        label: reports.noc.collectionreport.fromDate
+        type: epoch
+        source: pt
+        isMandatory: false
+        searchClause: AND receiptdate >= $fromDate
+      - name: toDate
+        label: reports.noc.collectionreport.toDate
+        type: epoch
+        source: pt
+        isMandatory: false
+        searchClause: AND receiptdate <= $toDate
+      - name: channel
+        label: reports.noc.collectionreport.channel
+        type: multivaluelist
+        pattern: 'list://COUNTER:ULB Counter,ONLINE:Online by Citizen'
+        source: common
+        isMandatory: false
+        searchClause: AND collectiontype IN ($channel)  
       - name: paymentMode
         label: reports.noc.collectionreport.paymentMode
         type: singlevaluelist
@@ -61,7 +227,7 @@ ReportDefinitions:
       - name: district
         label: reports.noc.collectionreport.district
         type: multivaluelist
-        pattern: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?tenantId=$tenantid&moduleName=tenant&masterName=tenants|$.MdmsRes.tenant.tenants.*.code|$.MdmsRes.tenant.tenants.*.name
+        pattern: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?tenantId=$tenantid&moduleName=tenant&masterName=tenants|$.MdmsRes.tenant.tenants.*.city.districtCode|$.MdmsRes.tenant.tenants.*.city.districtName
         source: noc
         wrapper: true
         isMandatory: false
@@ -86,7 +252,7 @@ ReportDefinitions:
     groupby: GROUP BY localisedmessage
     orderby: ORDER BY localisedmessage
 
-  - reportName: ApplicationStatusReport
+  - reportName: RuralDistrictWiseApplicationStatusReport
     summary: Application Status Report
     version: 1.0.0
     moduleName: rainmaker-noc
@@ -114,18 +280,10 @@ ReportDefinitions:
         source: noc
         isMandatory: false
         searchClause: AND applicationdate <= $toDate
-      - name: areaType
-        label: reports.noc.applicationstatusreport.areaType
-        type: multivaluelist
-        pattern: 'list://Urban:Urban,Rural:Rural'
-        source: common
-        isMandatory: false
-        searchClause: AND areatype IN ($areaType) 
-      
       - name: district
         label: reports.noc.applicationstatusreport.district
         type: multivaluelist
-        pattern: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?tenantId=$tenantid&moduleName=tenant&masterName=tenants|$.MdmsRes.tenant.tenants.*.code|$.MdmsRes.tenant.tenants.*.name
+        pattern: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?tenantId=$tenantid&moduleName=tenant&masterName=tenants|$.MdmsRes.tenant.tenants.*.city.districtCode|$.MdmsRes.tenant.tenants.*.city.districtName
         source: noc
         wrapper: true
         isMandatory: false
@@ -149,8 +307,7 @@ ReportDefinitions:
     query: select COALESCE(message,state) application_status,count(*) number_of_application from eg_fn_firenoc fnoc inner join eg_fn_firenocdetail fdet on fdet.firenocuuid=fnoc.uuid inner join (SELECT DISTINCT ON (businessid) * FROM eg_wf_processinstance_v2 ORDER BY businessid,createdtime desc) pinstance on pinstance.businessid=fdet.applicationnumber inner join eg_wf_state_v2 wfstate on pinstance.status=wfstate.uuid left outer join message on code=concat('WF_FIRENOC_',UPPER(state)) and module='rainmaker-noc' inner join eg_fn_address as fad on fad.firenocdetailsuuid=fdet.uuid where 1=1
     groupby: GROUP BY application_status
     orderby: ORDER BY application_status
-
-  - reportName: ChannelsReport
+  - reportName: RuralDistrictWiseChannelsReport
     summary: Channels Report
     version: 1.0.0
     moduleName: rainmaker-noc
@@ -193,7 +350,7 @@ ReportDefinitions:
       - name: district
         label: reports.noc.channelsreport.district
         type: multivaluelist
-        pattern: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?tenantId=$tenantid&moduleName=tenant&masterName=tenants|$.MdmsRes.tenant.tenants.*.code|$.MdmsRes.tenant.tenants.*.name
+        pattern: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?tenantId=$tenantid&moduleName=tenant&masterName=tenants|$.MdmsRes.tenant.tenants.*.city.districtCode|$.MdmsRes.tenant.tenants.*.city.districtName
         source: noc
         wrapper: true
         isMandatory: false
