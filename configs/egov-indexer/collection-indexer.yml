@@ -127,7 +127,7 @@ ServiceMaps:
 
 
  
-  - topic: egov.collection.receipt-create-legacyindex
+  - topic: collectionsindex-reindex-v1-enriched
     configKey: LEGACYINDEX
     indexes:
     - name: collectionsindex-reindex-v1
