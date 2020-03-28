@@ -253,6 +253,14 @@ ReportDefinitions:
         linkedReport:
           reportName: DrillDownRuralWiseSubdistrictWiseCollectionReport
           linkedColumn: _parent?reportName={reportName}&subdistrict={currentColumnName} 
+      
+      
+      - name: firestation
+        label: reports.noc.collectionreport.firestation
+        type: string
+        source: rainmaker-noc
+        total: false    
+        
       - name: localisedmessage
         label: reports.noc.collectionreport.usagetype
         type: string
@@ -308,8 +316,8 @@ ReportDefinitions:
         wrapper: true
         isMandatory: false
         searchClause: AND fad.city IN ($district)      
-    query: select COALESCE(message,usagetype) localisedmessage, COUNT(*) as transactionNumber,fad.subdistrict as subdistrict, sum(case when collectiontype='COUNTER' then ins.amount else 0 end) fees_counter, sum(case when collectiontype='ONLINE' then ins.amount else 0 end) fees_online from eg_fn_firenoc fnoc inner join eg_fn_firenocdetail fdet on fdet.firenocuuid=fnoc.uuid inner join egcl_receiptheader_v1 rhead on rhead.consumercode=fdet.applicationnumber inner join eg_fn_buidlings build on build.firenocdetailsuuid=fdet.uuid inner join egcl_receiptinstrument_v1 recins on recins.receiptheader=rhead.id inner join egcl_instrumentheader_v1 ins on recins.instrumentheader=ins.id left outer join message on code=concat('FIRENOC_BUILDINGTYPE_',UPPER(REGEXP_REPLACE(usagetype,'\..*',''))) inner join eg_fn_address as fad on fad.firenocdetailsuuid=fdet.uuid and module='rainmaker-noc' where 1=1
-    groupby: GROUP BY (localisedmessage,subdistrict)
+    query: select COALESCE(message,usagetype) localisedmessage, COUNT(*) as transactionNumber,fad.subdistrict as subdistrict,fdet.firestationid as firestation, sum(case when collectiontype='COUNTER' then ins.amount else 0 end) fees_counter, sum(case when collectiontype='ONLINE' then ins.amount else 0 end) fees_online from eg_fn_firenoc fnoc inner join eg_fn_firenocdetail fdet on fdet.firenocuuid=fnoc.uuid inner join egcl_receiptheader_v1 rhead on rhead.consumercode=fdet.applicationnumber inner join eg_fn_buidlings build on build.firenocdetailsuuid=fdet.uuid inner join egcl_receiptinstrument_v1 recins on recins.receiptheader=rhead.id inner join egcl_instrumentheader_v1 ins on recins.instrumentheader=ins.id left outer join message on code=concat('FIRENOC_BUILDINGTYPE_',UPPER(REGEXP_REPLACE(usagetype,'\..*',''))) inner join eg_fn_address as fad on fad.firenocdetailsuuid=fdet.uuid and module='rainmaker-noc' where 1=1
+    groupby: GROUP BY (localisedmessage,subdistrict,firestation)
     orderby: ORDER BY localisedmessage
     
   - reportName: RuralDistrictWiseApplicationStatusReport
@@ -325,6 +333,12 @@ ReportDefinitions:
         linkedReport:
           reportName: DrillDownRuralWiseApplicationStatusReport
           linkedColumn: _parent?reportName={reportName}&subdistrict={currentColumnName} 
+      - name: firestation
+        label: reports.noc.collectionreport.firestation
+        type: string
+        source: rainmaker-noc
+        total: false    
+        
       - name: application_status
         label: reports.noc.applicationstatusreport.appStatus
         type: string
@@ -372,8 +386,8 @@ ReportDefinitions:
         wrapper: true
         isMandatory: false
         searchClause: AND fdet.firestationid IN ($fireStation)   
-    query: select fad.subdistrict as subdistrict,COALESCE(message,state) application_status,count(*) number_of_application from eg_fn_firenoc fnoc inner join eg_fn_firenocdetail fdet on fdet.firenocuuid=fnoc.uuid inner join (SELECT DISTINCT ON (businessid) * FROM eg_wf_processinstance_v2 ORDER BY businessid,createdtime desc) pinstance on pinstance.businessid=fdet.applicationnumber inner join eg_wf_state_v2 wfstate on pinstance.status=wfstate.uuid left outer join message on code=concat('WF_FIRENOC_',UPPER(state)) and module='rainmaker-noc' inner join eg_fn_address as fad on fad.firenocdetailsuuid=fdet.uuid where 1=1
-    groupby: GROUP BY (application_status,subdistrict)
+    query: select fad.subdistrict as subdistrict,fdet.firestationid as firestation,COALESCE(message,state) application_status,count(*) number_of_application from eg_fn_firenoc fnoc inner join eg_fn_firenocdetail fdet on fdet.firenocuuid=fnoc.uuid inner join (SELECT DISTINCT ON (businessid) * FROM eg_wf_processinstance_v2 ORDER BY businessid,createdtime desc) pinstance on pinstance.businessid=fdet.applicationnumber inner join eg_wf_state_v2 wfstate on pinstance.status=wfstate.uuid left outer join message on code=concat('WF_FIRENOC_',UPPER(state)) and module='rainmaker-noc' inner join eg_fn_address as fad on fad.firenocdetailsuuid=fdet.uuid where 1=1
+    groupby: GROUP BY (application_status,subdistrict,firestation)
     orderby: ORDER BY application_status
 
   - reportName: DrillDownRuralWiseApplicationStatusReport
@@ -441,6 +455,11 @@ ReportDefinitions:
         linkedReport:
           reportName: DrillDownRuralWiseChannelReport
           linkedColumn: _parent?reportName={reportName}&subdistrict={currentColumnName}
+      - name: firestation
+        label: reports.noc.collectionreport.firestation
+        type: string
+        source: rainmaker-noc
+        total: false    
       - name: channel
         label: reports.noc.channelsreport.channel
         type: string
@@ -493,9 +512,9 @@ ReportDefinitions:
         wrapper: true
         isMandatory: false
         searchClause: AND fdet.firestationid IN ($fireStation) 
-    query: select channel,fad.subdistrict as subdistrict, count (*) number_of_applications,round((count (*)::decimal/(select count(*) from eg_fn_firenoc fnoc inner join eg_fn_firenocdetail fdet on fdet.firenocuuid=fnoc.uuid))*100,2) percentage from eg_fn_firenoc fnoc inner join eg_fn_firenocdetail fdet on fdet.firenocuuid=fnoc.uuid
+    query: select channel,fad.subdistrict as subdistrict,fdet.fireStationid as firestation, count (*) number_of_applications,round((count (*)::decimal/(select count(*) from eg_fn_firenoc fnoc inner join eg_fn_firenocdetail fdet on fdet.firenocuuid=fnoc.uuid))*100,2) percentage from eg_fn_firenoc fnoc inner join eg_fn_firenocdetail fdet on fdet.firenocuuid=fnoc.uuid
       inner join eg_fn_address as fad on fad.firenocdetailsuuid=fdet.uuid
-    groupby: GROUP BY (channel,subdistrict)
+    groupby: GROUP BY (channel,subdistrict,firestation)
     orderby: ORDER BY channel
   - reportName: DrillDownRuralWiseChannelReport
     summary: Channels Report
