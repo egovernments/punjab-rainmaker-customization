@@ -158,7 +158,7 @@ ReportDefinitions:
         source: noc
         wrapper: true
         isMandatory: false
-        searchClause: AND fad.city IN ($district)     
+        searchClause: AND fad.city IN ($city)     
     query: select channel,fdet.firestationid as firestation, count (*) number_of_applications,round((count (*)::decimal/(select count(*) from eg_fn_firenoc fnoc inner join eg_fn_firenocdetail fdet on fdet.firenocuuid=fnoc.uuid))*100,2) percentage from eg_fn_firenoc fnoc inner join eg_fn_firenocdetail fdet on fdet.firenocuuid=fnoc.uuid
       inner join eg_fn_address as fad on fad.firenocdetailsuuid=fdet.uuid
     groupby: GROUP BY (channel,firestation)
