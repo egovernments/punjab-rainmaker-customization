@@ -164,7 +164,7 @@ ReportDefinitions:
     groupby: GROUP BY (channel,firestation)
     orderby: ORDER BY channel 
     
-  - reportName: DrillDownRuralWiseSubdistrictWiseCollectionReport
+  - reportName: DrillDownRuralWiseSubdistrictCollectionReport
     summary: Collection Report
     version: 1.0.0
     moduleName: rainmaker-noc
@@ -251,7 +251,7 @@ ReportDefinitions:
         source: rainmaker-noc
         total: false
         linkedReport:
-          reportName: DrillDownRuralWiseSubdistrictWiseCollectionReport
+          reportName: DrillDownRuralWiseSubdistrictCollectionReport
           linkedColumn: _parent?reportName={reportName}&subdistrict={currentColumnName} 
       
       
