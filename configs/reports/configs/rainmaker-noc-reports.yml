@@ -250,11 +250,6 @@ ReportDefinitions:
         type: string
         source: rainmaker-noc
         total: false
-        linkedReport:
-          reportName: DrillDownRuralWiseSubdistrictCollectionReport
-          linkedColumn: _parent?reportName={reportName}&subdistrict={currentColumnName} 
-      
-      
       - name: firestation
         label: reports.noc.collectionreport.firestation
         type: string
@@ -329,10 +324,7 @@ ReportDefinitions:
         label: reports.noc.collectionreport.subdistrict
         type: string
         source: rainmaker-noc
-        total: false
-        linkedReport:
-          reportName: DrillDownRuralWiseApplicationStatusReport
-          linkedColumn: _parent?reportName={reportName}&subdistrict={currentColumnName} 
+        total: false 
       - name: firestation
         label: reports.noc.collectionreport.firestation
         type: string
@@ -369,23 +361,7 @@ ReportDefinitions:
         source: noc
         wrapper: true
         isMandatory: false
-        searchClause: AND fad.city IN ($district)
-      - name: subDistrict
-        label: reports.noc.applicationstatusreport.subdistrict
-        type: multivaluelist
-        pattern: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?tenantId=$tenantid&moduleName=firenoc&masterName=FireStations|$.MdmsRes.firenoc.FireStations.*.subDistrict.*.code|$.MdmsRes.firenoc.FireStations.*.subDistrict.*.code
-        source: noc
-        wrapper: true
-        isMandatory: false
-        searchClause: AND fad.subdistrict IN ($subDistrict)       
-      - name: fireStation
-        label: reports.noc.applicationstatusreport.fireStation
-        type: multivaluelist
-        pattern: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?tenantId=$tenantid&moduleName=firenoc&masterName=FireStations|$.MdmsRes.firenoc.FireStations.*.code|$.MdmsRes.firenoc.FireStations.*.code
-        source: noc
-        wrapper: true
-        isMandatory: false
-        searchClause: AND fdet.firestationid IN ($fireStation)   
+        searchClause: AND fad.city IN ($district)  
     query: select fad.subdistrict as subdistrict,fdet.firestationid as firestation,COALESCE(message,state) application_status,count(*) number_of_application from eg_fn_firenoc fnoc inner join eg_fn_firenocdetail fdet on fdet.firenocuuid=fnoc.uuid inner join (SELECT DISTINCT ON (businessid) * FROM eg_wf_processinstance_v2 ORDER BY businessid,createdtime desc) pinstance on pinstance.businessid=fdet.applicationnumber inner join eg_wf_state_v2 wfstate on pinstance.status=wfstate.uuid left outer join message on code=concat('WF_FIRENOC_',UPPER(state)) and module='rainmaker-noc' inner join eg_fn_address as fad on fad.firenocdetailsuuid=fdet.uuid where 1=1
     groupby: GROUP BY (application_status,subdistrict,firestation)
     orderby: ORDER BY application_status
@@ -452,9 +428,6 @@ ReportDefinitions:
         type: string
         source: rainmaker-noc
         total: false
-        linkedReport:
-          reportName: DrillDownRuralWiseChannelReport
-          linkedColumn: _parent?reportName={reportName}&subdistrict={currentColumnName}
       - name: firestation
         label: reports.noc.collectionreport.firestation
         type: string
@@ -495,23 +468,7 @@ ReportDefinitions:
         source: noc
         wrapper: true
         isMandatory: false
-        searchClause: AND fad.city IN ($district)
-      - name: subDistrict
-        label: reports.noc.channelsreport.subdistrict
-        type: multivaluelist
-        pattern: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?tenantId=$tenantid&moduleName=firenoc&masterName=FireStations|$.MdmsRes.firenoc.FireStations.*.subDistrict.*.code|$.MdmsRes.firenoc.FireStations.*.subDistrict.*.code
-        source: noc
-        wrapper: true
-        isMandatory: false
-        searchClause: AND fad.subdistrict IN ($subDistrict)       
-      - name: fireStation
-        label: reports.noc.channelsreport.fireStation
-        type: multivaluelist
-        pattern: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?tenantId=$tenantid&moduleName=firenoc&masterName=FireStations|$.MdmsRes.firenoc.FireStations.*.code|$.MdmsRes.firenoc.FireStations.*.code
-        source: noc
-        wrapper: true
-        isMandatory: false
-        searchClause: AND fdet.firestationid IN ($fireStation) 
+        searchClause: AND fad.city IN ($district) 
     query: select channel,fad.subdistrict as subdistrict,fdet.fireStationid as firestation, count (*) number_of_applications,round((count (*)::decimal/(select count(*) from eg_fn_firenoc fnoc inner join eg_fn_firenocdetail fdet on fdet.firenocuuid=fnoc.uuid))*100,2) percentage from eg_fn_firenoc fnoc inner join eg_fn_firenocdetail fdet on fdet.firenocuuid=fnoc.uuid
       inner join eg_fn_address as fad on fad.firenocdetailsuuid=fdet.uuid
     groupby: GROUP BY (channel,subdistrict,firestation)
