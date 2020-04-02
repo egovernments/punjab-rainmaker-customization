@@ -1047,9 +1047,9 @@ ReportDefinitions:
     isMandatory: false
     searchClause: AND tla.locality IN ($localityArray)
   query: |
-SELECT 
+      SELECT 
        	tl.applicationnumber,
-	locality,
+        locality,
        	propertyid,
        	financialyear,
        	(case when oldlicensenumber is null then 'New' else 'Renewal' end) AS licensetype,
@@ -1063,19 +1063,17 @@ SELECT
         mobilenumber,
         amount as totalamount
       FROM eg_tl_tradelicense tl 
-      INNER JOIN eg_tl_tradelicensedetail tld ON 
-		tld.tradelicenseid = tl.id 
+      INNER JOIN eg_tl_tradelicensedetail tld ON tld.tradelicenseid = tl.id 
       INNER JOIN (
-		select tradelicensedetailid, array_to_string(array_agg(message.message),', ') as locality from eg_tl_address as tla
-		LEFT OUTER JOIN message on code=CONCAT(UPPER(REGEXP_REPLACE( $tenantid , '[^A-Za-z0-9]','_', 'g')),'_REVENUE_', REGEXP_REPLACE( locality , '[^A-Za-z0-9]','_', 'g')) 
-		AND message.locale = 'en_IN' group by 1) locality_tlb
-	ON  locality_tlb.tradelicensedetailid = tld.id
-      INNER JOIN eg_tl_owner tlowner ON 
-		tlowner.tradelicensedetailid = tld.id 
+                select tradelicensedetailid, array_to_string(array_agg(message.message),', ') as locality from eg_tl_address as tla
+                LEFT OUTER JOIN message on code=CONCAT(UPPER(REGEXP_REPLACE( $tenantid , '[^A-Za-z0-9]','_', 'g')),'_REVENUE_', REGEXP_REPLACE( locality , '[^A-Za-z0-9]','_', 'g')) 
+                AND message.locale = 'en_IN' group by 1) locality_tlb
+         ON  locality_tlb.tradelicensedetailid = tld.id
+      INNER JOIN eg_tl_owner tlowner ON tlowner.tradelicensedetailid = tld.id 
       INNER JOIN (
         SELECT tradelicensedetailid, array_to_string(array_agg(message.message),', ') as tradeTypeName FROM eg_tl_tradeunit
         LEFT OUTER JOIN message ON code = CONCAT('TRADELICENSE_TRADETYPE_', REGEXP_REPLACE(tradetype, '[^A-Za-z0-9]','_','g')) 
-	AND message.locale = 'en_IN' GROUP BY 1) tlunit ON tlunit.tradelicensedetailid = tld.id
+        AND message.locale = 'en_IN' GROUP BY 1) tlunit ON tlunit.tradelicensedetailid = tld.id
       INNER JOIN eg_user tluser ON tluser.uuid = tlowner.id 
       LEFT OUTER JOIN egcl_receiptheader_v1 receipt ON receipt.consumercode = tl.applicationnumber 
       LEFT JOIN egcl_receiptinstrument_v1 as ri ON ri.receiptheader = receipt.id 
