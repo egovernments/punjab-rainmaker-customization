@@ -311,7 +311,7 @@ ReportDefinitions:
         source: noc
         wrapper: true
         isMandatory: false
-        searchClause: AND fad.city IN ($district)      
+        searchClause: AND fad.city IN (concat('pb.',LOWER($district))      
     query: select COALESCE(message,usagetype) localisedmessage, COUNT(*) as transactionNumber,fad.subdistrict as subdistrict,(select COALESCE((select message from message where code=concat('FIRENOC_FIRESTATIONS_',UPPER(REGEXP_REPLACE(firestationid,'\..*','')))  limit 1), firestationid)) as firestation, sum(case when collectiontype='COUNTER' then ins.amount else 0 end) fees_counter, sum(case when collectiontype='ONLINE' then ins.amount else 0 end) fees_online from eg_fn_firenoc fnoc inner join eg_fn_firenocdetail fdet on fdet.firenocuuid=fnoc.uuid inner join egcl_receiptheader_v1 rhead on rhead.consumercode=fdet.applicationnumber inner join eg_fn_buidlings build on build.firenocdetailsuuid=fdet.uuid inner join egcl_receiptinstrument_v1 recins on recins.receiptheader=rhead.id inner join egcl_instrumentheader_v1 ins on recins.instrumentheader=ins.id left outer join message on code=concat('FIRENOC_BUILDINGTYPE_',UPPER(REGEXP_REPLACE(usagetype,'\..*',''))) inner join eg_fn_address as fad on fad.firenocdetailsuuid=fdet.uuid and module='rainmaker-noc' where 1=1
     groupby: GROUP BY (localisedmessage,subdistrict,firestation)
     orderby: ORDER BY localisedmessage
@@ -362,7 +362,7 @@ ReportDefinitions:
         source: noc
         wrapper: true
         isMandatory: false
-        searchClause: AND fad.city IN ($district)  
+        searchClause: AND fad.city IN (concat('pb.',LOWER($district))  
     query: select fad.subdistrict as subdistrict,(select COALESCE((select message from message where code=concat('FIRENOC_FIRESTATIONS_',UPPER(REGEXP_REPLACE(firestationid,'\..*','')))  limit 1), firestationid)) as firestation,COALESCE(message,state) application_status,count(*) number_of_application from eg_fn_firenoc fnoc inner join eg_fn_firenocdetail fdet on fdet.firenocuuid=fnoc.uuid inner join (SELECT DISTINCT ON (businessid) * FROM eg_wf_processinstance_v2 ORDER BY businessid,createdtime desc) pinstance on pinstance.businessid=fdet.applicationnumber inner join eg_wf_state_v2 wfstate on pinstance.status=wfstate.uuid left outer join message on code=concat('WF_FIRENOC_',UPPER(state)) and module='rainmaker-noc' inner join eg_fn_address as fad on fad.firenocdetailsuuid=fdet.uuid where 1=1
     groupby: GROUP BY (application_status,subdistrict,firestation)
     orderby: ORDER BY application_status
@@ -465,11 +465,11 @@ ReportDefinitions:
       - name: district
         label: reports.noc.channelsreport.district
         type: multivaluelist
-        pattern: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?tenantId=$tenantid&moduleName=tenant&masterName=tenants|$.MdmsRes.tenant.tenants.*.city.districtCode|$.MdmsRes.tenant.tenants.*.city.districtName
+        pattern: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?tenantId=$tenantid&moduleName=tenant&masterName=tenants|$.MdmsRes.tenant.tenants.*.city.districtName|$.MdmsRes.tenant.tenants.*.city.districtName
         source: noc
         wrapper: true
         isMandatory: false
-        searchClause: AND fad.city IN ($district) 
+        searchClause: AND fad.city IN (concat('pb.',LOWER($district)) 
     query: select channel,fad.subdistrict as subdistrict,(select COALESCE((select message from message where code=concat('FIRENOC_FIRESTATIONS_',UPPER(REGEXP_REPLACE(firestationid,'\..*','')))  limit 1), firestationid)) as firestation, count (*) number_of_applications,round((count (*)::decimal/(select count(*) from eg_fn_firenoc fnoc inner join eg_fn_firenocdetail fdet on fdet.firenocuuid=fnoc.uuid))*100,2) percentage from eg_fn_firenoc fnoc inner join eg_fn_firenocdetail fdet on fdet.firenocuuid=fnoc.uuid
       inner join eg_fn_address as fad on fad.firenocdetailsuuid=fdet.uuid
     groupby: GROUP BY (channel,subdistrict,firestation)
