@@ -187,7 +187,7 @@ serviceMaps:
 
            - jsonPath: $.FireNOCs.*.auditDetails.lastModifiedTime
 
-       - query: INSERT INTO eg_fn_buidlings(uuid, firenocdetailsuuid, tenantid, name, createdby, lastmodifiedby, createdtime, lastmodifiedtime, usagetype) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);
+       - query: INSERT INTO eg_fn_buidlings(uuid, firenocdetailsuuid, tenantid, name, createdby, lastmodifiedby, createdtime, lastmodifiedtime, usagetype,usagesubtype) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?,?);
          basePath: FireNOCs.*.fireNOCDetails.buildings.*
          jsonMaps:
           - jsonPath: $.FireNOCs.*.fireNOCDetails.buildings.*.id
@@ -207,6 +207,9 @@ serviceMaps:
           - jsonPath: $.FireNOCs[*][?({id} in @.fireNOCDetails.buildings[*].id)].auditDetails.lastModifiedTime
 
           - jsonPath: $.FireNOCs.*.fireNOCDetails.buildings.*.usageType
+          
+          - jsonPath: $.FireNOCs.*.fireNOCDetails.buildings.*.usageSubType 
+          
 
        - query: INSERT INTO eg_fn_buildingdocuments(uuid, tenantid, documenttype, filestoreid, active, documentuid, createdby, createdtime, lastmodifiedby, lastmodifiedtime, buildinguuid) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
          basePath: FireNOCs.*.fireNOCDetails.buildings.*.applicationDocuments.*
@@ -307,7 +310,7 @@ serviceMaps:
           - jsonPath: $.FireNOCs.*.fireNOCDetails.id
 
 
-       - query: INSERT INTO eg_fn_buidlings(uuid, tenantid, name, usageType, firenocdetailsuuid, createdby, lastmodifiedby, createdtime, lastmodifiedtime)  VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT (uuid) DO UPDATE SET active = ?, name = ?, usageType = ?,  lastmodifiedby = ?,  lastmodifiedtime = ?;
+       - query: INSERT INTO eg_fn_buidlings(uuid, tenantid, name, usagetype, firenocdetailsuuid, createdby, lastmodifiedby, createdtime, lastmodifiedtime,usagesubtype)  VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT (uuid) DO UPDATE SET active = ?, name = ?, usageType = ?,  lastmodifiedby = ?,  lastmodifiedtime = ?,usagesubtype=?;
          basePath: FireNOCs.*.fireNOCDetails.buildings.*
          jsonMaps:
           - jsonPath: $.FireNOCs.*.fireNOCDetails.buildings.*.id
@@ -327,6 +330,8 @@ serviceMaps:
           - jsonPath: $.FireNOCs[*][?({id} in @.fireNOCDetails.buildings[*].id)].auditDetails.createdTime
 
           - jsonPath: $.FireNOCs[*][?({id} in @.fireNOCDetails.buildings[*].id)].auditDetails.lastModifiedTime
+          
+          - jsonPath: $.FireNOCs.*.fireNOCDetails.buildings.*.usageSubType
 
           - jsonPath: $.FireNOCs.*.fireNOCDetails.buildings.*.active
 
@@ -337,6 +342,8 @@ serviceMaps:
           - jsonPath: $.FireNOCs[*][?({id} in @.fireNOCDetails.buildings[*].id)].auditDetails.lastModifiedBy
 
           - jsonPath: $.FireNOCs[*][?({id} in @.fireNOCDetails.buildings[*].id)].auditDetails.lastModifiedTime
+          
+          - jsonPath: $.FireNOCs.*.fireNOCDetails.buildings.*.usageSubType
 
 
        - query: INSERT INTO eg_fn_buildingdocuments(uuid, tenantid, documenttype, filestoreid, active, documentuid, createdby, createdtime, lastmodifiedby, lastmodifiedtime, buildinguuid) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT (uuid) DO UPDATE SET active = ?,documentType = ?, fileStoreId = ?, documentUid=?,lastmodifiedby = ?,  lastmodifiedtime = ?;
