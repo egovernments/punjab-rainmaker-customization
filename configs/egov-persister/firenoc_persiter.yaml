@@ -133,9 +133,9 @@ serviceMaps:
 
           - jsonPath: $.FireNOCs.*.fireNOCDetails.propertyDetails.address.type
 
-          - jsonPath: $.FireNOCs.*.fireNOCDetails.propertyDetails.address.addressline1
+          - jsonPath: $.FireNOCs.*.fireNOCDetails.propertyDetails.address.addressLine1
 
-          - jsonPath: $.FireNOCs.*.fireNOCDetails.propertyDetails.address.addressline1
+          - jsonPath: $.FireNOCs.*.fireNOCDetails.propertyDetails.address.addressLine2
 
           - jsonPath: $.FireNOCs.*.fireNOCDetails.propertyDetails.address.landmark
 
@@ -489,9 +489,9 @@ serviceMaps:
 
           - jsonPath: $.FireNOCs.*.fireNOCDetails.propertyDetails.address.type
 
-          - jsonPath: $.FireNOCs.*.fireNOCDetails.propertyDetails.address.addressline1
+          - jsonPath: $.FireNOCs.*.fireNOCDetails.propertyDetails.address.addressLine1
 
-          - jsonPath: $.FireNOCs.*.fireNOCDetails.propertyDetails.address.addressline1
+          - jsonPath: $.FireNOCs.*.fireNOCDetails.propertyDetails.address.addressLine2
 
           - jsonPath: $.FireNOCs.*.fireNOCDetails.propertyDetails.address.landmark
 
