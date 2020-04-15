@@ -99,10 +99,10 @@ ServiceMaps:
       timeStampField: $.auditDetails.createdTime
       jsonPath: $.hits.*
       
-  - topic: pt-property-v2-legacyindex
+  - topic: pt-property-legacyindex
     configKey: LEGACYINDEX
     indexes:
-    - name: ptindex-v2
+    - name: ptindex-v1
       type: property
       id: $.propertyId, $.tenantId
       isBulk: true
