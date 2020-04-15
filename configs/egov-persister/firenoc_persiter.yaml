@@ -310,7 +310,7 @@ serviceMaps:
           - jsonPath: $.FireNOCs.*.fireNOCDetails.id
 
 
-       - query: INSERT INTO eg_fn_buidlings(uuid, tenantid, name, usagetype, firenocdetailsuuid, createdby, lastmodifiedby, createdtime, lastmodifiedtime,usagesubtype)  VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT (uuid) DO UPDATE SET active = ?, name = ?, usageType = ?,  lastmodifiedby = ?,  lastmodifiedtime = ?,usagesubtype=?;
+       - query: INSERT INTO eg_fn_buidlings(uuid, tenantid, name, usagetype, firenocdetailsuuid, createdby, lastmodifiedby, createdtime, lastmodifiedtime,usagesubtype)  VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?,?) ON CONFLICT (uuid) DO UPDATE SET active = ?, name = ?, usageType = ?,  lastmodifiedby = ?,  lastmodifiedtime = ?,usagesubtype=?;
          basePath: FireNOCs.*.fireNOCDetails.buildings.*
          jsonMaps:
           - jsonPath: $.FireNOCs.*.fireNOCDetails.buildings.*.id
