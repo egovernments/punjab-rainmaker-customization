@@ -9,6 +9,7 @@ ServiceMaps:
       type: FireNOCs
       id: $.id, $.tenantId
       isBulk: true
+      timeStampField: $.auditDetails.createdTime
       jsonPath: $.FireNOCs
       
   - topic: update-fn-firenoc
@@ -18,6 +19,7 @@ ServiceMaps:
       type: FireNOCs
       id: $.id, $.tenantId
       isBulk: true
+      timeStampField: $.auditDetails.createdTime
       jsonPath: $.FireNOCs
   
   - topic: update-fn-workflow
@@ -27,4 +29,5 @@ ServiceMaps:
       type: FireNOCs
       id: $.id, $.tenantId
       isBulk: true
+      timeStampField: $.auditDetails.createdTime
       jsonPath: $.FireNOCs
