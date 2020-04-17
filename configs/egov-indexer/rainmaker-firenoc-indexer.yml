@@ -1,0 +1,30 @@
+ServiceMaps:
+ serviceName: Fire NOC
+ version: 1.0.0
+ mappings:
+  - topic: save-fn-firenoc
+    configKey: INDEX
+    indexes:
+    - name: firenoc-index
+      type: FireNOCs
+      id: $.id, $.tenantId
+      isBulk: true
+      jsonPath: $.FireNOCs
+      
+  - topic: update-fn-firenoc
+    configKey: INDEX
+    indexes:
+    - name: firenoc-index
+      type: FireNOCs
+      id: $.id, $.tenantId
+      isBulk: true
+      jsonPath: $.FireNOCs
+  
+  - topic: update-fn-workflow
+    configKey: INDEX
+    indexes:
+    - name: firenoc-index
+      type: FireNOCs
+      id: $.id, $.tenantId
+      isBulk: true
+      jsonPath: $.FireNOCs
