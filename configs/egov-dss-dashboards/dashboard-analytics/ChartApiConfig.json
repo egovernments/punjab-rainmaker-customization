@@ -34,7 +34,7 @@
       "downwardIndicator" : "negative",
       "textMessage" : "$indicator$value% than last $insightInterval",
       "colorCode" : "#228B22",
-      "insightInterval" : "month"
+      "insightInterval" : "year"
     },
     "_comment": " "
   },
@@ -98,7 +98,7 @@
       "downwardIndicator" : "negative",
       "textMessage" : "$indicator$value% than last $insightInterval",
       "colorCode" : "#228B22",
-      "insightInterval" : "month"
+      "insightInterval" : "year"
     },
     "_comment": " "
   },
@@ -286,7 +286,7 @@
       "downwardIndicator" : "negative",
       "textMessage" : "$indicator$value% than last $insightInterval",
       "colorCode" : "#228B22",
-      "insightInterval" : "month"
+      "insightInterval" : "year"
     },
     "_comment": " totalApplication is the chartId"
   },
@@ -330,7 +330,7 @@
       "downwardIndicator" : "negative",
       "textMessage" : "$indicator$value% than last $insightInterval",
       "colorCode" : "#228B22",
-      "insightInterval" : "month"
+      "insightInterval" : "year"
     },
     "_comment": " totalApplication is the chartId"
   },
@@ -360,7 +360,7 @@
       "downwardIndicator" : "negative",
       "textMessage" : "$indicator$value% than last $insightInterval",
       "colorCode" : "#228B22",
-      "insightInterval" : "month"
+      "insightInterval" : "year"
     },
     "_comment": " totalApplication is the chartId"
   },
@@ -629,7 +629,7 @@
       "downwardIndicator" : "negative",
       "textMessage" : "$indicator$value% than last $insightInterval",
       "colorCode" : "#228B22",
-      "insightInterval" : "month"
+      "insightInterval" : "year"
     },
     "_comment": " totol properties having assessmentNumber "
   },
@@ -660,7 +660,7 @@
       "downwardIndicator" : "negative",
       "textMessage" : "$indicator$value% than last $insightInterval",
       "colorCode" : "#228B22",
-      "insightInterval" : "month"
+      "insightInterval" : "year"
     },
     "_comment": " totol properties having assessmentNumber "
   },
@@ -722,7 +722,7 @@
       "downwardIndicator" : "negative",
       "textMessage" : "$indicator$value% than last $insightInterval",
       "colorCode" : "#228B22",
-      "insightInterval" : "month"
+      "insightInterval" : "year"
     },
     "_comment": " total ULBs count"
   },
@@ -1569,7 +1569,7 @@
       "downwardIndicator" : "negative",
       "textMessage" : "$indicator$value% than last $insightInterval",
       "colorCode" : "#228B22",
-      "insightInterval" : "month"
+      "insightInterval" : "year"
     },
     "_comment": " licenseIssued is the Chart ID"
   },
@@ -1657,7 +1657,7 @@
       "downwardIndicator" : "negative",
       "textMessage" : "$indicator$value% than last $insightInterval",
       "colorCode" : "#228B22",
-      "insightInterval" : "month"
+      "insightInterval" : "year"
     },
     "_comment": " SLA Achieved Percentage "
   },
@@ -2205,7 +2205,7 @@
       "downwardIndicator" : "negative",
       "textMessage" : "$indicator$value% than last $insightInterval",
       "colorCode" : "#228B22",
-      "insightInterval" : "month"
+      "insightInterval" : "year"
     },
     "_comment": " Total Number of Complaints "
   },
@@ -2235,7 +2235,7 @@
       "downwardIndicator" : "negative",
       "textMessage" : "$indicator$value% than last $insightInterval",
       "colorCode" : "#228B22",
-      "insightInterval" : "month"
+      "insightInterval" : "year"
     },
     "_comment": " Total Number of Complaints "
   },
@@ -2265,7 +2265,7 @@
       "downwardIndicator" : "negative",
       "textMessage" : "$indicator$value% than last $insightInterval",
       "colorCode" : "#228B22",
-      "insightInterval" : "month"
+      "insightInterval" : "year"
     },
     "_comment": " Total Number of Closed Complaints "
   },
@@ -2973,7 +2973,7 @@
       "downwardIndicator" : "negative",
       "textMessage" : "$indicator$value% than last $insightInterval",
       "colorCode" : "#228B22",
-      "insightInterval" : "month"
+      "insightInterval" : "year"
     },
     "_comment": " "
   },
