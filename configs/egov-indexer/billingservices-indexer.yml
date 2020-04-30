@@ -10,3 +10,12 @@ ServiceMaps:
       id: $.id, $.tenantId
       isBulk: true
       jsonPath: $.Demands
+  - topic: demand-reindex
+    configKey: REINDEX
+    indexes:
+    - name: demandindex-v1
+      type: demand
+      id: $.id, $.tenantId
+      isBulk: true
+      jsonPath: $.hits
+      timeStampField: $.auditDetail.createdTime
