@@ -34,7 +34,7 @@
       "downwardIndicator" : "negative",
       "textMessage" : "$indicator$value% than last $insightInterval",
       "colorCode" : "#228B22",
-      "insightInterval" : "month"
+      "insightInterval" : "year"
     },
     "_comment": " "
   },
@@ -98,7 +98,7 @@
       "downwardIndicator" : "negative",
       "textMessage" : "$indicator$value% than last $insightInterval",
       "colorCode" : "#228B22",
-      "insightInterval" : "month"
+      "insightInterval" : "year"
     },
     "_comment": " "
   },
@@ -286,7 +286,7 @@
       "downwardIndicator" : "negative",
       "textMessage" : "$indicator$value% than last $insightInterval",
       "colorCode" : "#228B22",
-      "insightInterval" : "month"
+      "insightInterval" : "year"
     },
     "_comment": " totalApplication is the chartId"
   },
@@ -330,7 +330,7 @@
       "downwardIndicator" : "negative",
       "textMessage" : "$indicator$value% than last $insightInterval",
       "colorCode" : "#228B22",
-      "insightInterval" : "month"
+      "insightInterval" : "year"
     },
     "_comment": " totalApplication is the chartId"
   },
@@ -360,7 +360,7 @@
       "downwardIndicator" : "negative",
       "textMessage" : "$indicator$value% than last $insightInterval",
       "colorCode" : "#228B22",
-      "insightInterval" : "month"
+      "insightInterval" : "year"
     },
     "_comment": " totalApplication is the chartId"
   },
@@ -467,7 +467,7 @@
         "requestQueryMap": "{\"wardId\" : \"Data.ward.name.keyword\", \"module\" : \"businessService.keyword\",\"tenantId\" : \"Data.tenantData.code\" ,  \"district\" : \"Data.tenantData.city.districtCode\"}",
         "dateRefField": "Data.tradelicense.applicationDate",
         "indexName": "tlindex-v1",
-        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tradelicense.tenantId.keyword\":\"pb.testing\"}}]}},\"aggs\":{\"Closed Application\":{\"filter\":{\"exists\":{\"field\":\"Data.tradelicense.issueddate\"}},\"aggs\":{\"count\":{\"terms\":{\"field\":\"Data.tenantData.code.keyword\"},\"aggs\":{\"tenant_count\":{\"value_count\":{\"field\":\"Data.tenantData.code.keyword\"}}}}}},\"Total Application\":{\"filter\":{\"exists\":{\"field\":\"Data.tradelicense.applicationDate\"}},\"aggs\":{\"count\":{\"terms\":{\"field\":\"Data.tenantData.code.keyword\"},\"aggs\":{\"tenant_count\":{\"value_count\":{\"field\":\"Data.tenantData.code.keyword\"}}}}}}}}}}"
+        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tradelicense.tenantId.keyword\":\"pb.testing\"}}]}},\"aggs\":{\"Closed Application\":{\"filter\":{\"exists\":{\"field\":\"Data.tradelicense.issuedDate\"}},\"aggs\":{\"count\":{\"terms\":{\"field\":\"Data.tenantData.code.keyword\"},\"aggs\":{\"tenant_count\":{\"value_count\":{\"field\":\"Data.tenantData.code.keyword\"}}}}}},\"Total Application\":{\"filter\":{\"exists\":{\"field\":\"Data.tradelicense.applicationDate\"}},\"aggs\":{\"count\":{\"terms\":{\"field\":\"Data.tenantData.code.keyword\"},\"aggs\":{\"tenant_count\":{\"value_count\":{\"field\":\"Data.tenantData.code.keyword\"}}}}}}}}}}"
       }
     ],
     "chartType": "perform",
@@ -508,7 +508,7 @@
         "requestQueryMap": "{\"wardId\" : \"Data.ward.name.keyword\", \"module\" : \"businessService.keyword\",\"tenantId\" : \"Data.tenantData.code\" ,  \"district\" : \"Data.tenantData.city.districtCode\"}",
         "dateRefField": "Data.tradelicense.applicationDate",
         "indexName": "tlindex-v1",
-        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tradelicense.tenantId.keyword\":\"pb.testing\"}}]}},\"aggs\":{\"Closed Application\":{\"filter\":{\"exists\":{\"field\":\"Data.tradelicense.issueddate\"}},\"aggs\":{\"count\":{\"terms\":{\"field\":\"Data.tenantData.code.keyword\"},\"aggs\":{\"tenant_count\":{\"value_count\":{\"field\":\"Data.tenantData.code.keyword\"}}}}}},\"Total Application\":{\"filter\":{\"exists\":{\"field\":\"Data.tradelicense.applicationDate\"}},\"aggs\":{\"count\":{\"terms\":{\"field\":\"Data.tenantData.code.keyword\"},\"aggs\":{\"tenant_count\":{\"value_count\":{\"field\":\"Data.tenantData.code.keyword\"}}}}}}}}}}"
+        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tradelicense.tenantId.keyword\":\"pb.testing\"}}]}},\"aggs\":{\"Closed Application\":{\"filter\":{\"exists\":{\"field\":\"Data.tradelicense.issuedDate\"}},\"aggs\":{\"count\":{\"terms\":{\"field\":\"Data.tenantData.code.keyword\"},\"aggs\":{\"tenant_count\":{\"value_count\":{\"field\":\"Data.tenantData.code.keyword\"}}}}}},\"Total Application\":{\"filter\":{\"exists\":{\"field\":\"Data.tradelicense.applicationDate\"}},\"aggs\":{\"count\":{\"terms\":{\"field\":\"Data.tenantData.code.keyword\"},\"aggs\":{\"tenant_count\":{\"value_count\":{\"field\":\"Data.tenantData.code.keyword\"}}}}}}}}}}"
       }
     ],
     "chartType": "perform",
@@ -629,7 +629,7 @@
       "downwardIndicator" : "negative",
       "textMessage" : "$indicator$value% than last $insightInterval",
       "colorCode" : "#228B22",
-      "insightInterval" : "month"
+      "insightInterval" : "year"
     },
     "_comment": " totol properties having assessmentNumber "
   },
@@ -660,7 +660,7 @@
       "downwardIndicator" : "negative",
       "textMessage" : "$indicator$value% than last $insightInterval",
       "colorCode" : "#228B22",
-      "insightInterval" : "month"
+      "insightInterval" : "year"
     },
     "_comment": " totol properties having assessmentNumber "
   },
@@ -722,7 +722,7 @@
       "downwardIndicator" : "negative",
       "textMessage" : "$indicator$value% than last $insightInterval",
       "colorCode" : "#228B22",
-      "insightInterval" : "month"
+      "insightInterval" : "year"
     },
     "_comment": " total ULBs count"
   },
@@ -1300,7 +1300,7 @@
         "requestQueryMap": "{\"wardId\" : \"domainObject.ward.name.keyword\",\"module\" : \"dataObject.Bill.billDetails.businessService.keyword\", \"tenantId\" : \"dataObject.tenantId\", \"district\" : \"dataObject.tenantData.cityDistrictCode\" }",
         "dateRefField": "dataObject.Bill.billDetails.receiptDate",
         "indexName": "dss-collection_v2",
-        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"dataObject.tenantId.keyword\":\"pb.testing\"}},{\"terms\":{\"dataObject.Bill.billDetails.status.keyword\":[\"Cancelled\"]}}]}},\"aggs\":{\"Total Collection\":{\"sum\":{\"field\":\"dataObject.Bill.billDetails.amountPaid\"}},\"Transactions\":{\"value_count\":{\"field\":\"dataObject.transactionId.keyword\"}},\"Total Licence Issued\":{\"value_count\":{\"field\":\"domainObject.tradelicense.licensenumber.keyword\"}}}}}}"
+        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"dataObject.tenantId.keyword\":\"pb.testing\"}},{\"terms\":{\"dataObject.Bill.billDetails.status.keyword\":[\"Cancelled\"]}}]}},\"aggs\":{\"Total Collection\":{\"sum\":{\"field\":\"dataObject.Bill.billDetails.amountPaid\"}},\"Transactions\":{\"value_count\":{\"field\":\"dataObject.transactionId.keyword\"}},\"Total Licence Issued\":{\"value_count\":{\"field\":\"domainObject.tradelicense.licenseNumber.keyword\"}}}}}}"
       },
       {
         "module": "COMMON",
@@ -1354,7 +1354,7 @@
         "requestQueryMap": "{\"wardId\" : \"domainObject.ward.name.keyword\",\"module\" : \"dataObject.Bill.billDetails.businessService.keyword\", \"tenantId\" : \"dataObject.tenantId\", \"district\" : \"dataObject.tenantData.cityDistrictCode\" }",
         "dateRefField": "dataObject.Bill.billDetails.receiptDate",
         "indexName": "dss-collection_v2",
-        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"dataObject.tenantId.keyword\":\"pb.testing\"}},{\"terms\":{\"dataObject.Bill.billDetails.status.keyword\":[\"Cancelled\"]}}]}},\"aggs\":{\"ULBs \":{\"terms\":{\"field\":\"dataObject.tenantId.keyword\",\"size\":200},\"aggs\":{\"Total Collection\":{\"sum\":{\"field\":\"dataObject.Bill.billDetails.amountPaid\"}},\"Transactions\":{\"value_count\":{\"field\":\"dataObject.transactionId.keyword\"}},\"Total Licence Issued\":{\"value_count\":{\"field\":\"domainObject.tradelicense.licensenumber.keyword\"}}}}}}}}"
+        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"dataObject.tenantId.keyword\":\"pb.testing\"}},{\"terms\":{\"dataObject.Bill.billDetails.status.keyword\":[\"Cancelled\"]}}]}},\"aggs\":{\"ULBs \":{\"terms\":{\"field\":\"dataObject.tenantId.keyword\",\"size\":200},\"aggs\":{\"Total Collection\":{\"sum\":{\"field\":\"dataObject.Bill.billDetails.amountPaid\"}},\"Transactions\":{\"value_count\":{\"field\":\"dataObject.transactionId.keyword\"}},\"Total Licence Issued\":{\"value_count\":{\"field\":\"domainObject.tradelicense.licenseNumber.keyword\"}}}}}}}}"
       },
       {
         "module": "COMMON",
@@ -1406,7 +1406,7 @@
         "requestQueryMap": "{\"wardId\" : \"domainObject.ward.name.keyword\",\"module\" : \"dataObject.Bill.billDetails.businessService.keyword\", \"tenantId\" : \"dataObject.tenantId\", \"district\" : \"dataObject.tenantData.cityDistrictCode\" }",
         "dateRefField": "dataObject.Bill.billDetails.receiptDate",
         "indexName": "dss-collection_v2",
-        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"dataObject.tenantId.keyword\":\"pb.testing\"}},{\"terms\":{\"dataObject.Bill.billDetails.status.keyword\":[\"Cancelled\"]}}]}},\"aggs\":{\"Ward \":{\"terms\":{\"field\":\"domainObject.ward.name.keyword\",\"size\":200},\"aggs\":{\"Total Collection\":{\"sum\":{\"field\":\"dataObject.Bill.billDetails.amountPaid\"}},\"Transactions\":{\"value_count\":{\"field\":\"dataObject.transactionId.keyword\"}},\"Total Licence Issued\":{\"value_count\":{\"field\":\"domainObject.tradelicense.licensenumber.keyword\"}}}}}}}}"
+        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"dataObject.tenantId.keyword\":\"pb.testing\"}},{\"terms\":{\"dataObject.Bill.billDetails.status.keyword\":[\"Cancelled\"]}}]}},\"aggs\":{\"Ward \":{\"terms\":{\"field\":\"domainObject.ward.name.keyword\",\"size\":200},\"aggs\":{\"Total Collection\":{\"sum\":{\"field\":\"dataObject.Bill.billDetails.amountPaid\"}},\"Transactions\":{\"value_count\":{\"field\":\"dataObject.transactionId.keyword\"}},\"Total Licence Issued\":{\"value_count\":{\"field\":\"domainObject.tradelicense.licenseNumber.keyword\"}}}}}}}}"
       }
     ],
     "postAggregationTheory" : "repsonseToDifferenceOfDates",
@@ -1549,9 +1549,9 @@
       {
         "module": "TL",
         "indexName": "tlindex-v1",
-        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tradelicense.tenantId.keyword\":\"pb.testing\"}}]}},\"aggs\": {\"License Issued\": {\"value_count\": {\"field\": \"Data.tradelicense.licensenumber.keyword\"}}}}}}",
+        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tradelicense.tenantId.keyword\":\"pb.testing\"}}]}},\"aggs\": {\"License Issued\": {\"value_count\": {\"field\": \"Data.tradelicense.licenseNumber.keyword\"}}}}}}",
         "requestQueryMap": "{\"wardId\" : \"Data.ward.name.keyword\", \r\n  \"district\" : \"Data.tenantData.city.districtCode\", \r\n\"tenantId\" : \"Data.tradelicense.tenantid\" \r\n, \r\n\"businessService\" : \"dataObject.Bill.billDetails.businessServices\" \r\n}",
-        "dateRefField": "Data.tradelicense.issueddate"
+        "dateRefField": "Data.tradelicense.issuedDate"
       }
     ],
     "chartType": "metric",
@@ -1569,7 +1569,7 @@
       "downwardIndicator" : "negative",
       "textMessage" : "$indicator$value% than last $insightInterval",
       "colorCode" : "#228B22",
-      "insightInterval" : "month"
+      "insightInterval" : "year"
     },
     "_comment": " licenseIssued is the Chart ID"
   },
@@ -1579,9 +1579,9 @@
       {
         "module": "TL",
         "indexName": "tlindex-v1",
-        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tradelicense.tenantId.keyword\":\"pb.testing\"}}]}},\"aggs\":{\"Trade Licence Issued\":{\"date_histogram\":{\"field\":\"Data.tradelicense.issueddate\",\"interval\":\"intervalvalue\"},\"aggs\":{\"Count\":{\"value_count\":{\"field\":\"Data.tradelicense.licensenumber.keyword\"}}}}}}}}",
+        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tradelicense.tenantId.keyword\":\"pb.testing\"}}]}},\"aggs\":{\"Trade Licence Issued\":{\"date_histogram\":{\"field\":\"Data.tradelicense.issuedDate\",\"interval\":\"intervalvalue\"},\"aggs\":{\"Count\":{\"value_count\":{\"field\":\"Data.tradelicense.licenseNumber.keyword\"}}}}}}}}",
         "requestQueryMap": "{\"wardId\" : \"Data.ward.name.keyword\", \"tenantId\" : \"Data.tenantData.code\" ,\"district\" : \"Data.tenantData.city.districtCode\"}",
-        "dateRefField": "Data.tradelicense.issueddate"
+        "dateRefField": "Data.tradelicense.issuedDate"
       },
       {
         "module": "TL",
@@ -1612,10 +1612,10 @@
       {
         "module": "TL",
         "requestQueryMap": "{\"wardId\" : \"Data.ward.name.keyword\",  \"tenantId\" : \"Data.tenantData.code\", \"district\" : \"Data.tenantData.cityDistrictCode\"}",
-        "dateRefField": "Data.tradelicense.issueddate",
+        "dateRefField": "Data.tradelicense.issuedDate",
         "indexName": "tlindex-v1",
         "aggrQueryBc": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tradelicense.tenantId.keyword\":\"pb.testing\"}}]}},\"aggs\":{\"Status\":{\"terms\":{\"field\":\"Data.tradelicense.status.keyword\"},\"aggs\":{\"License Issued\":{\"value_count\":{\"field\":\"Data.tradelicense.status.keyword\"}}}}}}}}",
-        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tradelicense.tenantId.keyword\":\"pb.testing\"}}]}},\"aggs\":{\"Status\":{\"terms\":{\"field\":\"Data.tradelicense.status.keyword\",\"size\":1000,\"min_doc_count\":0},\"aggs\":{\"License Issued\":{\"cardinality\":{\"field\":\"Data.tradelicense.licensenumber.keyword\"}}}}}}}}"
+        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tradelicense.tenantId.keyword\":\"pb.testing\"}}]}},\"aggs\":{\"Status\":{\"terms\":{\"field\":\"Data.tradelicense.status.keyword\",\"size\":1000,\"min_doc_count\":0},\"aggs\":{\"License Issued\":{\"cardinality\":{\"field\":\"Data.tradelicense.licenseNumber.keyword\"}}}}}}}}"
       }
     ],
     "chartType": "pie",
@@ -1657,7 +1657,7 @@
       "downwardIndicator" : "negative",
       "textMessage" : "$indicator$value% than last $insightInterval",
       "colorCode" : "#228B22",
-      "insightInterval" : "month"
+      "insightInterval" : "year"
     },
     "_comment": " SLA Achieved Percentage "
   },
@@ -1667,9 +1667,9 @@
       {
         "module": "TL",
         "requestQueryMap": "{\"wardId\" : \"Data.ward.name.keyword\", \"tenantId\" : \"Data.tradelicense.tenantId.keyword\" }",
-        "dateRefField": "Data.tradelicense.issueddate",
+        "dateRefField": "Data.tradelicense.issuedDate",
         "indexName": "tlindex-v1",
-        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tradelicense.tenantId.keyword\":\"pb.testing\"}}]}},\"aggs\":{\"Status\":{\"terms\":{\"field\":\"Data.tradelicense.status.keyword\",\"size\":1000,\"min_doc_count\":0},\"aggs\":{\"License Issued\":{\"value_count\":{\"field\":\"Data.tradelicense.licensenumber.keyword\"}}}}}}}}",
+        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tradelicense.tenantId.keyword\":\"pb.testing\"}}]}},\"aggs\":{\"Status\":{\"terms\":{\"field\":\"Data.tradelicense.status.keyword\",\"size\":1000,\"min_doc_count\":0},\"aggs\":{\"License Issued\":{\"value_count\":{\"field\":\"Data.tradelicense.licenseNumber.keyword\"}}}}}}}}",
         "aggrQueryBC": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tradelicense.tenantId.keyword\":\"pb.testing\"}}]}},\"aggs\":{\"Status\":{\"filters\":{\"filters\":{\"Approved\":{\"match\":{\"Data.tradelicense.status.keyword\":\"APPROVED\"}},\"Initiated\":{\"match\":{\"Data.tradelicense.status.keyword\":\"INITIATED\"}},\"Applied\":{\"match\":{\"Data.tradelicense.status.keyword\":\"APPLIED\"}},\"Rejected\":{\"match\":{\"Data.tradelicense.status.keyword\":\"REJECTED\"}},\"Pending Approval\":{\"match\":{\"Data.tradelicense.status.keyword\":\"PENDINGAPPROVAL\"}},\"Field Inspection\":{\"match\":{\"Data.tradelicense.status.keyword\":\"FIELDINSPECTION\"}},\"Cancelled\":{\"match\":{\"Data.tradelicense.status.keyword\":\"CANCELLED\"}},\"Pending Payment\":{\"match\":{\"Data.tradelicense.status.keyword\":\"PENDINGPAYMENT\"}},\"Paid\":{\"match\":{\"Data.tradelicense.status.keyword\":\"PAID\"}}}}}}}}}"
       }
     ],
@@ -1736,9 +1736,9 @@
       {
         "module": "TL",
         "requestQueryMap": "{\"wardId\" : \"Data.ward.name.keyword\", \"tenantId\" : \"Data.tradelicense.tenantId.keyword\" }",
-        "dateRefField": "Data.tradelicense.issueddate",
+        "dateRefField": "Data.tradelicense.issuedDate",
         "indexName": "tlindex-v1",
-        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tradelicense.tenantId.keyword\":\"pb.testing\"}}]}},\"aggs\":{\"ULBs \":{\"terms\":{\"field\":\"Data.tradelicense.tenantId.keyword\",\"size\":1000},\"aggs\":{\"Status\":{\"terms\":{\"field\":\"Data.tradelicense.status.keyword\",\"size\":1000,\"min_doc_count\":0},\"aggs\":{\"License Issued\":{\"value_count\":{\"field\":\"Data.tradelicense.licensenumber.keyword\"}}}}}}}}}}",
+        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tradelicense.tenantId.keyword\":\"pb.testing\"}}]}},\"aggs\":{\"ULBs \":{\"terms\":{\"field\":\"Data.tradelicense.tenantId.keyword\",\"size\":1000},\"aggs\":{\"Status\":{\"terms\":{\"field\":\"Data.tradelicense.status.keyword\",\"size\":1000,\"min_doc_count\":0},\"aggs\":{\"License Issued\":{\"value_count\":{\"field\":\"Data.tradelicense.licenseNumber.keyword\"}}}}}}}}}}",
         "aggrQueryBc": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tradelicense.tenantId.keyword\":\"pb.testing\"}}]}},\"aggs\":{\"ULBs \":{\"terms\":{\"field\":\"Data.tradelicense.tenantId.keyword\",\"size\":1000},\"aggs\":{\"Status\":{\"filters\":{\"filters\":{\"Approved\":{\"match\":{\"Data.tradelicense.status.keyword\":\"APPROVED\"}},\"Initiated\":{\"match\":{\"Data.tradelicense.status.keyword\":\"INITIATED\"}},\"Applied\":{\"match\":{\"Data.tradelicense.status.keyword\":\"APPLIED\"}},\"Rejected\":{\"match\":{\"Data.tradelicense.status.keyword\":\"REJECTED\"}},\"Pending Approval\":{\"match\":{\"Data.tradelicense.status.keyword\":\"PENDINGAPPROVAL\"}},\"Field Inspection\":{\"match\":{\"Data.tradelicense.status.keyword\":\"FIELDINSPECTION\"}},\"Cancelled\":{\"match\":{\"Data.tradelicense.status.keyword\":\"CANCELLED\"}},\"Pending Payment\":{\"match\":{\"Data.tradelicense.status.keyword\":\"PENDINGPAYMENT\"}},\"Paid\":{\"match\":{\"Data.tradelicense.status.keyword\":\"PAID\"}}}}}}}}}}}"
       }
     ],
@@ -1770,9 +1770,9 @@
       {
         "module": "TL",
         "requestQueryMap": "{\"wardId\" : \"Data.ward.name.keyword\", \"tenantId\" : \"Data.tradelicense.tenantId.keyword\" }",
-        "dateRefField": "Data.tradelicense.issueddate",
+        "dateRefField": "Data.tradelicense.issuedDate",
         "indexName": "tlindex-v1",
-        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tradelicense.tenantId.keyword\":\"pb.testing\"}}]}},\"aggs\":{\"Ward \":{\"terms\":{\"field\":\"Data.ward.name.keyword\",\"size\":1000},\"aggs\":{\"Status\":{\"terms\":{\"field\":\"Data.tradelicense.status.keyword\",\"size\":1000,\"min_doc_count\":0},\"aggs\":{\"License Issued\":{\"value_count\":{\"field\":\"Data.tradelicense.licensenumber.keyword\"}}}}}}}}}}",
+        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tradelicense.tenantId.keyword\":\"pb.testing\"}}]}},\"aggs\":{\"Ward \":{\"terms\":{\"field\":\"Data.ward.name.keyword\",\"size\":1000},\"aggs\":{\"Status\":{\"terms\":{\"field\":\"Data.tradelicense.status.keyword\",\"size\":1000,\"min_doc_count\":0},\"aggs\":{\"License Issued\":{\"value_count\":{\"field\":\"Data.tradelicense.licenseNumber.keyword\"}}}}}}}}}}",
         "aggrQueryBc": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tradelicense.tenantId.keyword\":\"pb.testing\"}}]}},\"aggs\":{\"Ward \":{\"terms\":{\"field\":\"Data.ward.name.keyword\",\"size\":1000},\"aggs\":{\"Status\":{\"filters\":{\"filters\":{\"Approved\":{\"match\":{\"Data.tradelicense.status.keyword\":\"APPROVED\"}},\"Initiated\":{\"match\":{\"Data.tradelicense.status.keyword\":\"INITIATED\"}},\"Applied\":{\"match\":{\"Data.tradelicense.status.keyword\":\"APPLIED\"}},\"Rejected\":{\"match\":{\"Data.tradelicense.status.keyword\":\"REJECTED\"}},\"Pending Approval\":{\"match\":{\"Data.tradelicense.status.keyword\":\"PENDINGAPPROVAL\"}},\"Field Inspection\":{\"match\":{\"Data.tradelicense.status.keyword\":\"FIELDINSPECTION\"}},\"Cancelled\":{\"match\":{\"Data.tradelicense.status.keyword\":\"CANCELLED\"}},\"Pending Payment\":{\"match\":{\"Data.tradelicense.status.keyword\":\"PENDINGPAYMENT\"}},\"Paid\":{\"match\":{\"Data.tradelicense.status.keyword\":\"PAID\"}}}}}}}}}}}"
       }
     ],
@@ -1841,7 +1841,7 @@
         "requestQueryMap": "{\"wardId\" : \"domainObject.ward.name.keyword\",\"module\" : \"dataObject.Bill.billDetails.businessService.keyword\", \"tenantId\" : \"dataObject.tenantId\", \"district\" : \"dataObject.tenantData.cityDistrictCode\" }",
         "dateRefField": "dataObject.Bill.billDetails.receiptDate",
         "indexName": "dss-collection_v2",
-        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"dataObject.tenantId.keyword\":\"pb.testing\"}},{\"terms\":{\"dataObject.Bill.billDetails.status.keyword\":[\"Cancelled\"]}}]}},\"aggs\":{\"ULBs \":{\"terms\":{\"field\":\"dataObject.tenantId.keyword\",\"size\":200,\"min_doc_count\":0},\"aggs\":{\"Total Collection\":{\"sum\":{\"field\":\"dataObject.Bill.billDetails.amountPaid\"}},\"Transactions\":{\"value_count\":{\"field\":\"dataObject.transactionId.keyword\"}},\"Total Licence Issued\":{\"value_count\":{\"field\":\"domainObject.tradelicense.licensenumber.keyword\"}}}}}}}}"
+        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"dataObject.tenantId.keyword\":\"pb.testing\"}},{\"terms\":{\"dataObject.Bill.billDetails.status.keyword\":[\"Cancelled\"]}}]}},\"aggs\":{\"ULBs \":{\"terms\":{\"field\":\"dataObject.tenantId.keyword\",\"size\":200,\"min_doc_count\":0},\"aggs\":{\"Total Collection\":{\"sum\":{\"field\":\"dataObject.Bill.billDetails.amountPaid\"}},\"Transactions\":{\"value_count\":{\"field\":\"dataObject.transactionId.keyword\"}},\"Total Licence Issued\":{\"value_count\":{\"field\":\"domainObject.tradelicense.licenseNumber.keyword\"}}}}}}}}"
       },
       {
         "module": "COMMON",
@@ -1979,7 +1979,7 @@
         "requestQueryMap": "{\"wardId\" : \"Data.complaintWard.name.keyword\", \"tenantId\" : \"Data.tenantId.keyword\" , \"departmentId\" : \"Data.department.keyword\"}",
         "dateRefField": "Data.dateOfComplaint",
         "indexName": "pgrindex-v1",
-        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tenantId.keyword\":\"pb.testing\"}}]}},\"aggs\":{\"withinSLA\":{\"range\":{\"script\":{\"lang\":\"painless\",\"source\":\"doc['Data.slaHours'].value\"},\"ranges\":[{\"key\":\"withinSLA\",\"from\":0,\"to\":360}]}},\"Total Complaints\":{\"value_count\":{\"field\":\"Data.dateOfComplaint\"}},\"Closed_Complaints\":{\"filter\":{\"terms\":{\"Data.status.keyword\":[\"closed\",\"rejected\",\"resolved\"]}},\"aggs\":{\"Closed Complaints\":{\"value_count\":{\"field\":\"Data.tenantId.keyword\"}}}},\"Open_Complaints\":{\"filter\":{\"terms\":{\"Data.status.keyword\":[\"open\"]}},\"aggs\":{\"Open Complaints\":{\"value_count\":{\"field\":\"Data.tenantId.keyword\"}}}},\"Reopened_Complaints\":{\"filter\":{\"terms\":{\"Data.status.keyword\":[\"reopen\"]}},\"aggs\":{\"Reopened Complaints\":{\"value_count\":{\"field\":\"Data.tenantId.keyword\"}}}}}}}}"
+        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tenantId.keyword\":\"pb.testing\"}}]}},\"aggs\":{\"withinSLA\":{\"range\":{\"script\":{\"lang\":\"painless\",\"source\":\"doc['Data.slaHours'].value\"},\"ranges\":[{\"key\":\"withinSLA\",\"from\":0,\"to\":360}]}},\"Total Complaints\":{\"value_count\":{\"field\":\"Data.dateOfComplaint\"}},\"Closed_Complaints\":{\"filter\":{\"terms\":{\"Data.status.keyword\":[\"closed\",\"rejected\",\"resolved\"]}},\"aggs\":{\"Closed Complaints\":{\"value_count\":{\"field\":\"Data.tenantId.keyword\"}}}},\"Open_Complaints\":{\"filter\":{\"terms\":{\"Data.status.keyword\":[\"open\"]}},\"aggs\":{\"Open Complaints\":{\"value_count\":{\"field\":\"Data.tenantId.keyword\"}}}},\"Reopened_Complaints\":{\"filter\":{\"terms\":{\"Data.actionHistory.actions.action.keyword\":[\"reopen\"]}},\"aggs\":{\"Reopened Complaints\":{\"value_count\":{\"field\":\"Data.tenantId.keyword\"}}}}}}}}"
       }
     ],
     "isMdmsEnabled": true,
@@ -2019,7 +2019,7 @@
         "requestQueryMap": "{\"wardId\" : \"Data.complaintWard.name.keyword\", \"tenantId\" : \"Data.tenantId.keyword\" , \"departmentId\" : \"Data.department.keyword\"}",
         "dateRefField": "Data.dateOfComplaint",
         "indexName": "pgrindex-v1",
-        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tenantId.keyword\":\"pb.testing\"}}]}},\"aggs\":{\"ULBs \":{\"terms\":{\"field\":\"Data.tenantId.keyword\",\"size\":1000},\"aggs\":{\"withinSLA\":{\"range\":{\"script\":{\"lang\":\"painless\",\"source\":\"doc['Data.slaHours'].value\"},\"ranges\":[{\"key\":\"withinSLA\",\"from\":0,\"to\":360}]}},\"Total Complaints\":{\"value_count\":{\"field\":\"Data.dateOfComplaint\"}},\"Closed_Complaints\":{\"filter\":{\"terms\":{\"Data.status.keyword\":[\"closed\",\"rejected\",\"resolved\"]}},\"aggs\":{\"Closed Complaints\":{\"value_count\":{\"field\":\"Data.tenantId.keyword\"}}}},\"Open_Complaints\":{\"filter\":{\"terms\":{\"Data.status.keyword\":[\"open\"]}},\"aggs\":{\"Open Complaints\":{\"value_count\":{\"field\":\"Data.tenantId.keyword\"}}}},\"Reopened_Complaints\":{\"filter\":{\"terms\":{\"Data.status.keyword\":[\"reopen\"]}},\"aggs\":{\"Reopened Complaints\":{\"value_count\":{\"field\":\"Data.tenantId.keyword\"}}}}}}}}}}"
+        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tenantId.keyword\":\"pb.testing\"}}]}},\"aggs\":{\"ULBs \":{\"terms\":{\"field\":\"Data.tenantId.keyword\",\"size\":1000},\"aggs\":{\"withinSLA\":{\"range\":{\"script\":{\"lang\":\"painless\",\"source\":\"doc['Data.slaHours'].value\"},\"ranges\":[{\"key\":\"withinSLA\",\"from\":0,\"to\":360}]}},\"Total Complaints\":{\"value_count\":{\"field\":\"Data.dateOfComplaint\"}},\"Closed_Complaints\":{\"filter\":{\"terms\":{\"Data.status.keyword\":[\"closed\",\"rejected\",\"resolved\"]}},\"aggs\":{\"Closed Complaints\":{\"value_count\":{\"field\":\"Data.tenantId.keyword\"}}}},\"Open_Complaints\":{\"filter\":{\"terms\":{\"Data.status.keyword\":[\"open\"]}},\"aggs\":{\"Open Complaints\":{\"value_count\":{\"field\":\"Data.tenantId.keyword\"}}}},\"Reopened_Complaints\":{\"filter\":{\"terms\":{\"Data.actionHistory.actions.action.keyword\":[\"reopen\"]}},\"aggs\":{\"Reopened Complaints\":{\"value_count\":{\"field\":\"Data.tenantId.keyword\"}}}}}}}}}}"
       }
     ],
     "filterKeys": [
@@ -2058,7 +2058,7 @@
         "requestQueryMap": "{\"wardId\" : \"Data.complaintWard.name.keyword\", \"tenantId\" : \"Data.tenantId.keyword\" , \"departmentId\" : \"Data.department.keyword\"}",
         "dateRefField": "Data.dateOfComplaint",
         "indexName": "pgrindex-v1",
-        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tenantId.keyword\":\"pb.testing\"}}]}},\"aggs\":{\"Ward \":{\"terms\":{\"field\":\"Data.complaintWard.name.keyword\",\"size\":1000},\"aggs\":{\"withinSLA\":{\"range\":{\"script\":{\"lang\":\"painless\",\"source\":\"doc['Data.slaHours'].value\"},\"ranges\":[{\"key\":\"withinSLA\",\"from\":0,\"to\":360}]}},\"Total Complaints\":{\"value_count\":{\"field\":\"Data.dateOfComplaint\"}},\"Closed_Complaints\":{\"filter\":{\"terms\":{\"Data.status.keyword\":[\"closed\",\"rejected\",\"resolved\"]}},\"aggs\":{\"Closed Complaints\":{\"value_count\":{\"field\":\"Data.tenantId.keyword\"}}}},\"Open_Complaints\":{\"filter\":{\"terms\":{\"Data.status.keyword\":[\"open\"]}},\"aggs\":{\"Open Complaints\":{\"value_count\":{\"field\":\"Data.tenantId.keyword\"}}}},\"Reopened_Complaints\":{\"filter\":{\"terms\":{\"Data.status.keyword\":[\"reopen\"]}},\"aggs\":{\"Reopened Complaints\":{\"value_count\":{\"field\":\"Data.tenantId.keyword\"}}}}}}}}}}"
+        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tenantId.keyword\":\"pb.testing\"}}]}},\"aggs\":{\"Ward \":{\"terms\":{\"field\":\"Data.complaintWard.name.keyword\",\"size\":1000},\"aggs\":{\"withinSLA\":{\"range\":{\"script\":{\"lang\":\"painless\",\"source\":\"doc['Data.slaHours'].value\"},\"ranges\":[{\"key\":\"withinSLA\",\"from\":0,\"to\":360}]}},\"Total Complaints\":{\"value_count\":{\"field\":\"Data.dateOfComplaint\"}},\"Closed_Complaints\":{\"filter\":{\"terms\":{\"Data.status.keyword\":[\"closed\",\"rejected\",\"resolved\"]}},\"aggs\":{\"Closed Complaints\":{\"value_count\":{\"field\":\"Data.tenantId.keyword\"}}}},\"Open_Complaints\":{\"filter\":{\"terms\":{\"Data.status.keyword\":[\"open\"]}},\"aggs\":{\"Open Complaints\":{\"value_count\":{\"field\":\"Data.tenantId.keyword\"}}}},\"Reopened_Complaints\":{\"filter\":{\"terms\":{\"Data.actionHistory.actions.action.keyword\":[\"reopen\"]}},\"aggs\":{\"Reopened Complaints\":{\"value_count\":{\"field\":\"Data.tenantId.keyword\"}}}}}}}}}}"
       }
     ],
     "filterKeys": [
@@ -2100,7 +2100,7 @@
         "requestQueryMap": "{\"wardId\" : \"Data.complaintWard.name.keyword\",\"tenantId\" : \"Data.tenantId.keyword\" , \"departmentId\" : \"Data.department.keyword\"}",
         "dateRefField": "Data.dateOfComplaint",
         "indexName": "pgrindex-v1",
-        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tenantId.keyword\":\"pb.testing\"}}]}},\"aggs\":{\"Department \":{\"terms\":{\"field\":\"Data.department.keyword\",\"size\":1000},\"aggs\":{\"withinSLA\":{\"range\":{\"script\":{\"lang\":\"painless\",\"source\":\"doc['Data.slaHours'].value\"},\"ranges\":[{\"key\":\"withinSLA\",\"from\":0,\"to\":360}]}},\"Total Complaints\":{\"value_count\":{\"field\":\"Data.dateOfComplaint\"}},\"Closed_Complaints\":{\"filter\":{\"terms\":{\"Data.status.keyword\":[\"closed\",\"rejected\",\"resolved\"]}},\"aggs\":{\"Closed Complaints\":{\"value_count\":{\"field\":\"Data.tenantId.keyword\"}}}},\"Open_Complaints\":{\"filter\":{\"terms\":{\"Data.status.keyword\":[\"open\"]}},\"aggs\":{\"Open Complaints\":{\"value_count\":{\"field\":\"Data.tenantId.keyword\"}}}},\"Reopened_Complaints\":{\"filter\":{\"terms\":{\"Data.status.keyword\":[\"reopen\"]}},\"aggs\":{\"Reopened Complaints\":{\"value_count\":{\"field\":\"Data.tenantId.keyword\"}}}}}}}}}}"
+        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tenantId.keyword\":\"pb.testing\"}}]}},\"aggs\":{\"Department \":{\"terms\":{\"field\":\"Data.department.keyword\",\"size\":1000},\"aggs\":{\"withinSLA\":{\"range\":{\"script\":{\"lang\":\"painless\",\"source\":\"doc['Data.slaHours'].value\"},\"ranges\":[{\"key\":\"withinSLA\",\"from\":0,\"to\":360}]}},\"Total Complaints\":{\"value_count\":{\"field\":\"Data.dateOfComplaint\"}},\"Closed_Complaints\":{\"filter\":{\"terms\":{\"Data.status.keyword\":[\"closed\",\"rejected\",\"resolved\"]}},\"aggs\":{\"Closed Complaints\":{\"value_count\":{\"field\":\"Data.tenantId.keyword\"}}}},\"Open_Complaints\":{\"filter\":{\"terms\":{\"Data.status.keyword\":[\"open\"]}},\"aggs\":{\"Open Complaints\":{\"value_count\":{\"field\":\"Data.tenantId.keyword\"}}}},\"Reopened_Complaints\":{\"filter\":{\"terms\":{\"Data.actionHistory.actions.action.keyword\":[\"reopen\"]}},\"aggs\":{\"Reopened Complaints\":{\"value_count\":{\"field\":\"Data.tenantId.keyword\"}}}}}}}}}}"
       }
     ],
     "filterKeys": [
@@ -2142,7 +2142,7 @@
         "requestQueryMap": "{\"wardId\" : \"Data.complaintWard.name.keyword\", \"tenantId\" : \"Data.tenantId.keyword\" , \"departmentId\" : \"Data.department.keyword\"}",
         "dateRefField": "Data.dateOfComplaint",
         "indexName": "pgrindex-v1",
-        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tenantId.keyword\":\"pb.testing\"}}]}},\"aggs\":{\"Category \":{\"terms\":{\"field\":\"Data.complainCategory.keyword\",\"size\":1000},\"aggs\":{\"withinSLA\":{\"range\":{\"script\":{\"lang\":\"painless\",\"source\":\"doc['Data.slaHours'].value\"},\"ranges\":[{\"key\":\"withinSLA\",\"from\":0,\"to\":360}]}},\"Total Complaints\":{\"value_count\":{\"field\":\"Data.dateOfComplaint\"}},\"Closed_Complaints\":{\"filter\":{\"terms\":{\"Data.status.keyword\":[\"closed\",\"rejected\",\"resolved\"]}},\"aggs\":{\"Closed Complaints\":{\"value_count\":{\"field\":\"Data.tenantId.keyword\"}}}},\"Open_Complaints\":{\"filter\":{\"terms\":{\"Data.status.keyword\":[\"open\"]}},\"aggs\":{\"Open Complaints\":{\"value_count\":{\"field\":\"Data.tenantId.keyword\"}}}},\"Reopened_Complaints\":{\"filter\":{\"terms\":{\"Data.status.keyword\":[\"reopen\"]}},\"aggs\":{\"Reopened Complaints\":{\"value_count\":{\"field\":\"Data.tenantId.keyword\"}}}}}}}}}}"
+        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tenantId.keyword\":\"pb.testing\"}}]}},\"aggs\":{\"Category \":{\"terms\":{\"field\":\"Data.complainCategory.keyword\",\"size\":1000},\"aggs\":{\"withinSLA\":{\"range\":{\"script\":{\"lang\":\"painless\",\"source\":\"doc['Data.slaHours'].value\"},\"ranges\":[{\"key\":\"withinSLA\",\"from\":0,\"to\":360}]}},\"Total Complaints\":{\"value_count\":{\"field\":\"Data.dateOfComplaint\"}},\"Closed_Complaints\":{\"filter\":{\"terms\":{\"Data.status.keyword\":[\"closed\",\"rejected\",\"resolved\"]}},\"aggs\":{\"Closed Complaints\":{\"value_count\":{\"field\":\"Data.tenantId.keyword\"}}}},\"Open_Complaints\":{\"filter\":{\"terms\":{\"Data.status.keyword\":[\"open\"]}},\"aggs\":{\"Open Complaints\":{\"value_count\":{\"field\":\"Data.tenantId.keyword\"}}}},\"Reopened_Complaints\":{\"filter\":{\"terms\":{\"Data.actionHistory.actions.action.keyword\":[\"reopen\"]}},\"aggs\":{\"Reopened Complaints\":{\"value_count\":{\"field\":\"Data.tenantId.keyword\"}}}}}}}}}}"
       }
     ],
     "filterKeys": [
@@ -2205,7 +2205,7 @@
       "downwardIndicator" : "negative",
       "textMessage" : "$indicator$value% than last $insightInterval",
       "colorCode" : "#228B22",
-      "insightInterval" : "month"
+      "insightInterval" : "year"
     },
     "_comment": " Total Number of Complaints "
   },
@@ -2235,7 +2235,7 @@
       "downwardIndicator" : "negative",
       "textMessage" : "$indicator$value% than last $insightInterval",
       "colorCode" : "#228B22",
-      "insightInterval" : "month"
+      "insightInterval" : "year"
     },
     "_comment": " Total Number of Complaints "
   },
@@ -2265,7 +2265,7 @@
       "downwardIndicator" : "negative",
       "textMessage" : "$indicator$value% than last $insightInterval",
       "colorCode" : "#228B22",
-      "insightInterval" : "month"
+      "insightInterval" : "year"
     },
     "_comment": " Total Number of Closed Complaints "
   },
@@ -2277,7 +2277,7 @@
         "dateRefField": "Data.dateOfComplaint",
         "requestQueryMap": "{\"wardId\" : \"Data.complaintWard.name.keyword\",\"tenantId\" : \"Data.tenantId\"}",
         "indexName": "pgrindex-v1",
-        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tenantId.keyword\":\"pb.testing\"}}]}},\"aggs\":{\"Total Complaints\":{\"date_histogram\":{\"field\":\"Data.dateOfComplaint\",\"interval\":\"intervalvalue\"},\"aggs\":{\"Count\":{\"value_count\":{\"field\":\"Data.tenantId.keyword\"}}}},\"Closed Complaints\":{\"date_histogram\":{\"field\":\"Data.dateOfComplaint\",\"interval\":\"intervalvalue\"},\"aggs\":{\"Closed\":{\"filter\":{\"terms\":{\"Data.status.keyword\":[\"closed\",\"rejected\",\"resolved\"]}},\"aggs\":{\"Count\":{\"value_count\":{\"field\":\"Data.tenantId.keyword\"}}}}}},\"Reopened Complaints\":{\"date_histogram\":{\"field\":\"Data.dateOfComplaint\",\"interval\":\"intervalvalue\"},\"aggs\":{\"Reopened\":{\"filter\":{\"terms\":{\"Data.status.keyword\":[\"reopened\"]}},\"aggs\":{\"Count\":{\"value_count\":{\"field\":\"Data.tenantId.keyword\"}}}}}}}}}}"
+        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tenantId.keyword\":\"pb.testing\"}}]}},\"aggs\":{\"Total Complaints\":{\"date_histogram\":{\"field\":\"Data.dateOfComplaint\",\"interval\":\"intervalvalue\"},\"aggs\":{\"Count\":{\"value_count\":{\"field\":\"Data.tenantId.keyword\"}}}},\"Closed Complaints\":{\"date_histogram\":{\"field\":\"Data.dateOfComplaint\",\"interval\":\"intervalvalue\"},\"aggs\":{\"Closed\":{\"filter\":{\"terms\":{\"Data.status.keyword\":[\"closed\",\"rejected\",\"resolved\"]}},\"aggs\":{\"Count\":{\"value_count\":{\"field\":\"Data.tenantId.keyword\"}}}}}},\"Reopened Complaints\":{\"date_histogram\":{\"field\":\"Data.dateOfComplaint\",\"interval\":\"intervalvalue\"},\"aggs\":{\"Reopened\":{\"filter\":{\"terms\":{\"Data.actionHistory.actions.action.keyword\":[\"reopen\"]}},\"aggs\":{\"Count\":{\"value_count\":{\"field\":\"Data.tenantId.keyword\"}}}}}}}}}}"
       }
     ],
     "chartType": "line",
@@ -2873,13 +2873,13 @@
       {
         "module": "W&S",
         "indexName": "receipts-consumers",
-        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must\":[{\"range\":{\"@timestamp\":{\"gte\":\"now-24h\",\"lte\":\"now\"}}}],\"must_not\":[{\"term\":{\"status\":\"Cancelled\"}}]}},\"aggs\":{\"Total collection\":{\"sum\":{\"field\":\"totalamount\"}}}}}}",
+        "aggrQuery": "{\"aggs\": {\"AGGR\": {\"filter\": {\"bool\": {\"must_not\": [{\"term\": {\"status\": \"Cancelled\"}}]}},\"aggs\": {\"Total Collection\": {\"sum\": {\"field\": \"totalamount\"}}}}}}",
         "requestQueryMap": "{\"tenantId\" : \"cityname.keyword\", \"wardId\" : \"block.keyword\"}",
-        "dateRefField": ""
+        "dateRefField": "receiptdate"
       }
     ],
     "chartType": "metric",
-    "valueType": "number",
+    "valueType": "amount",
     "action": "",
     "drillChart": "none",
     "aggregationPaths": [
@@ -2887,7 +2887,7 @@
     ],
     "insight": {
     },
-    "_comment": "W&S total collections "
+    "_comment": "W&S todays collections "
   },
   "wstotalCollection": {
     "chartName": "DSS_W&S_TOTAL_COLLECTION",
@@ -2973,7 +2973,7 @@
       "downwardIndicator" : "negative",
       "textMessage" : "$indicator$value% than last $insightInterval",
       "colorCode" : "#228B22",
-      "insightInterval" : "month"
+      "insightInterval" : "year"
     },
     "_comment": " "
   },
@@ -3081,6 +3081,31 @@
         "requestQueryMap": "{\"tenantId\" : \"cityname.keyword\", \"wardId\" : \"block.keyword\"}",
         "indexName": "receipts-consumers",
         "aggrQuery": "{\"aggs\":{\"Usage Type\":{\"terms\":{\"field\":\"consumertype.keyword\"},\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"status\":\"Cancelled\"}}]}},\"aggs\":{\"approved\":{\"sum\":{\"field\":\"totalamount\"}}}}}}}}"
+      }
+    ],
+    "translateTenantCode": true,
+    "chartType": "pie",
+    "valueType": "number",
+    "action": "",
+    "documentType": "_doc",
+    "drillChart": "none",
+    "aggregationPaths": [
+      "Usage Type"
+    ],
+    "insight": {
+    },
+    "_comment": " "
+  },
+
+  "wscollectionByChannel": {
+    "chartName": "DSS_W&S_COLLECTION_BY_CHANNEL",
+    "queries": [
+      {
+        "module": "W&S",
+        "dateRefField": "receiptdate",
+        "requestQueryMap": "{\"tenantId\" : \"cityname.keyword\", \"wardId\" : \"block.keyword\"}",
+        "indexName": "receipts-consumers",
+        "aggrQuery": "{\"aggs\":{\"Usage Type\":{\"terms\":{\"field\":\"channel.keyword\"},\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"status\":\"Cancelled\"}}]}},\"aggs\":{\"approved\":{\"sum\":{\"field\":\"totalamount\"}}}}}}}}"
       }
     ],
     "translateTenantCode": true,
@@ -3501,9 +3526,9 @@
       {
         "module": "W&S",
         "indexName": "wsapplications",
-        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"applicationstatus.keyword\":\"Cancelled\"}}],\"must\":[{\"terms\":{\"servicetype.keyword\":[\"Water Charges\",\"Sewerage Charges\"]}}]}},\"aggs\":{\"Total Connection\":{\"value_count\":{\"field\":\"applicationnumber.keyword\"}}}}}}",
+        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"applicationstatus.keyword\":\"Cancelled\"}}],\"must\":[{\"terms\":{\"servicetype.keyword\":[\"Water Charges\",\"Sewerage Charges\"]}},{\"terms\":{\"connectionstatus.keyword\":[\"ACTIVE\"]}}]}},\"aggs\":{\"Total Connection\":{\"value_count\":{\"field\":\"id.keyword\"}}}}}}",
         "requestQueryMap": "{\"tenantId\" : \"cityname.keyword\", \"wardId\" : \"block.keyword\"}",
-        "dateRefField": "@timestamp"
+        "dateRefField": "createddate"
       }
     ],
     "translateTenantCode": true,
@@ -3547,9 +3572,9 @@
       {
         "module": "W&S",
         "indexName": "wsapplications",
-        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"applicationstatus.keyword\":\"Cancelled\"}}],\"must\":[{\"terms\":{\"servicetype.keyword\":[\"Water Charges\"]}}]}},\"aggs\":{\"Water Connections\":{\"value_count\":{\"field\":\"id.keyword\"}}}}}}",
+        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"applicationstatus.keyword\":\"Cancelled\"}}],\"must\":[{\"terms\":{\"servicetype.keyword\":[\"Water Charges\"]}},{\"terms\":{\"connectionstatus.keyword\":[\"ACTIVE\"]}}]}},\"aggs\":{\"Water Connections\":{\"value_count\":{\"field\":\"id.keyword\"}}}}}}",
         "requestQueryMap": "{\"tenantId\" : \"cityname.keyword\", \"wardId\" : \"block.keyword\"}",
-        "dateRefField": "@timestamp"
+        "dateRefField": "createddate"
       }
     ],
     "translateTenantCode": true,
@@ -3565,14 +3590,14 @@
     "_comment": " "
   },
   "wsNewSewerageConnection": {
-    "chartName": "DSS_W&S_WATER_CONNECTIONS",
+    "chartName": "DSS_W&S_SEWERAGE_CONNECTIONS",
     "queries": [
       {
         "module": "W&S",
         "indexName": "wsapplications",
-        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"applicationstatus.keyword\":\"Cancelled\"}}],\"must\":[{\"terms\":{\"servicetype.keyword\":[\"Sewerage Charges\"]}}]}},\"aggs\":{\"Sewerage Connections\":{\"value_count\":{\"field\":\"id.keyword\"}}}}}}",
+        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"applicationstatus.keyword\":\"Cancelled\"}}],\"must\":[{\"terms\":{\"servicetype.keyword\":[\"Sewerage Charges\"]}},{\"terms\":{\"connectionstatus.keyword\":[\"ACTIVE\"]}}]}},\"aggs\":{\"Sewerage Connections\":{\"value_count\":{\"field\":\"id.keyword\"}}}}}}",
         "requestQueryMap": "{\"tenantId\" : \"cityname.keyword\", \"wardId\" : \"block.keyword\"}",
-        "dateRefField": "@timestamp"
+        "dateRefField": "createddate"
       }
     ],
     "translateTenantCode": true,
@@ -3593,7 +3618,7 @@
     "queries": [
       {
         "module": "W&S",
-        "dateRefField": "@timestamp",
+        "dateRefField": "createddate",
         "requestQueryMap": "{\"tenantId\" : \"cityname.keyword\", \"wardId\" : \"block.keyword\"}",
         "indexName": "wsapplications",
         "aggrQuery": "{\"aggs\":{\"Water Connections\":{\"date_histogram\":{\"field\":\"@timestamp\",\"interval\":\"intervalvalue\"},\"aggs\":{\"Water\":{\"filter\":{\"bool\":{\"must\":[{\"terms\":{\"servicetype.keyword\":[\"Water Charges\"]}}],\"must_not\":[{\"terms\":{\"applicationstatus.keyword\":[\"Cancelled\"]}}]}},\"aggs\":{\"Count\":{\"value_count\":{\"field\":\"id.keyword\"}}}}}},\"Sewerage Connections\":{\"date_histogram\":{\"field\":\"@timestamp\",\"interval\":\"intervalvalue\"},\"aggs\":{\"Water\":{\"filter\":{\"bool\":{\"must\":[{\"terms\":{\"servicetype.keyword\":[\"Sewerage Charges\"]}}],\"must_not\":[{\"terms\":{\"applicationstatus.keyword\":[\"Cancelled\"]}}]}},\"aggs\":{\"Count\":{\"value_count\":{\"field\":\"id.keyword\"}}}}}}}}"
@@ -3617,15 +3642,15 @@
     "_comment": " "
   },
 
-  "wsConsumersByConnectionType": {
+  "wsWaterConsumersByUsageType": {
     "chartName": "DSS_W&S_WATER_CONNECTION_BY_USAGE",
     "queries": [
       {
         "module": "W&S",
-        "dateRefField": "@timestamp",
+        "indexName": "wsapplications",
+        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"applicationstatus.keyword\":\"Cancelled\"}}],\"must\":[{\"terms\":{\"servicetype.keyword\":[\"Water Charges\"]}},{\"terms\":{\"connectionstatus.keyword\":[\"ACTIVE\"]}}]}},\"aggs\":{\"Water Consumers by Usage Type\":{\"terms\":{\"field\":\"usage.keyword\"}}}}}}",
         "requestQueryMap": "{\"tenantId\" : \"cityname.keyword\", \"wardId\" : \"block.keyword\"}",
-        "indexName": "waterchargesconsumers",
-        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must\":[{\"terms\":{\"servicetype.keyword\":[\"Water Charges\"]}},{\"terms\":{\"connectionstatus.keyword\":[\"ACTIVE\"]}}]}},\"aggs\":{\"Water Consumers by Connection Type\":{\"terms\":{\"field\":\"connectiontype.keyword\",\"size\":170}}}}}}"
+        "dateRefField": "createddate"
       }
     ],
     "translateTenantCode": true,
@@ -3635,22 +3660,22 @@
     "documentType": "_doc",
     "drillChart": "none",
     "aggregationPaths": [
-      "Water Consumers by Connection Type"
+      "Water Consumers by Usage Type"
     ],
     "insight": {
     },
     "_comment": " "
   },
 
-  "wsConsumersByUsageType": {
-    "chartName": "DSS_W&S_CONNECTION_BY_USAGE",
+  "wsSewerageConsumersByUsageType": {
+    "chartName": "DSS_W&S_SEWERAGE_CONNECTION_BY_USAGE",
     "queries": [
       {
         "module": "W&S",
-        "dateRefField": "@timestamp",
+        "indexName": "wsapplications",
+        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"applicationstatus.keyword\":\"Cancelled\"}}],\"must\":[{\"terms\":{\"servicetype.keyword\":[\"Sewerage Charges\"]}},{\"terms\":{\"connectionstatus.keyword\":[\"ACTIVE\"]}}]}},\"aggs\":{\"Sewerage Consumers by Usage Type\":{\"terms\":{\"field\":\"usage.keyword\"}}}}}}",
         "requestQueryMap": "{\"tenantId\" : \"cityname.keyword\", \"wardId\" : \"block.keyword\"}",
-        "indexName": "waterchargesconsumers",
-        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"applicationstatus.keyword\":\"Cancelled\"}}],\"must\":[{\"terms\":{\"servicetype.keyword\":[\"Water Charges\",\"Sewerage Charges\"]}},{\"terms\":{\"connectionstatus.keyword\":[\"ACTIVE\"]}}]}},\"aggs\":{\"W & S Consumers by Usage Type\":{\"terms\":{\"field\":\"usage.keyword\"}}}}}}"
+        "dateRefField": "createddate"
       }
     ],
     "translateTenantCode": true,
@@ -3660,7 +3685,7 @@
     "documentType": "_doc",
     "drillChart": "none",
     "aggregationPaths": [
-      "W & S Consumers by Usage Type"
+      "Sewerage Consumers by Usage Type"
     ],
     "insight": {
     },
@@ -3672,10 +3697,10 @@
     "queries": [
       {
         "module": "W&S",
-        "dateRefField": "@timestamp",
+        "dateRefField": "createddate",
         "requestQueryMap": "{\"tenantId\" : \"cityname.keyword\", \"wardId\" : \"block.keyword\"}",
-        "indexName": "receipts-consumers",
-        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"channel\":\"FIELD\"}},{\"term\":{\"channel\":\"SYSTEM\"}}],\"must\":[{\"term\":{\"status\":\"Approved\"}}]}},\"aggs\":{\"W & S Consumers by Channel\":{\"terms\":{\"field\":\"channel\",\"size\":7}}}}}}"
+        "indexName": "wsapplications",
+        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"applicationstatus.keyword\":\"Cancelled\"}}],\"must\":[{\"terms\":{\"servicetype.keyword\":[\"Water Charges\",\"Sewerage Charges\"]}},{\"terms\":{\"connectionstatus.keyword\":[\"ACTIVE\"]}}]}},\"aggs\":{\"W & S Consumers by Channel\":{\"terms\":{\"field\":\"channel.keyword\"}}}}}}"
       }
     ],
     "translateTenantCode": true,
@@ -3698,9 +3723,9 @@
       {
         "module": "W&S",
         "requestQueryMap": "{\"tenantId\" : \"cityname.keyword\", \"wardId\" : \"block.keyword\" }",
-        "dateRefField": "@timestamp",
+        "dateRefField": "createddate",
         "indexName": "wsapplications",
-        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must\":[{\"terms\":{\"servicetype.keyword\":[\"Water Charges\",\"Sewerage Charges\"]}},{\"terms\":{\"applicationstatus.keyword\":[\"Created\",\"Rejected\",\"Verified\",\"verified\"]}}]}},\"aggs\":{\"Pending lt 3 days\":{\"date_range\":{\"field\":\"applicationdate\",\"ranges\":[{\"from\":\"now-3d/d\",\"to\":\"now\"}]}},\"Pending gt 3 and lt 7 days\":{\"date_range\":{\"field\":\"applicationdate\",\"ranges\":[{\"from\":\"now-1w\",\"to\":\"now-3d/d\"}]}},\"Pending gt 7 and lt 15 days\":{\"date_range\":{\"field\":\"applicationdate\",\"ranges\":[{\"from\":\"now-15d\",\"to\":\"now-1w\"}]}},\"Pending gt 15 days\":{\"date_range\":{\"field\":\"applicationdate\",\"ranges\":[{\"from\":\"now-2y\",\"to\":\"now-15d\"}]}}}}}}"
+        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must\":[{\"terms\":{\"servicetype.keyword\":[\"Water Charges\",\"Sewerage Charges\"]}},{\"terms\":{\"applicationstatus.keyword\":[\"Created\",\"Rejected\",\"Verified\",\"verified\"]}}]}},\"aggs\":{\"Pending from 0 to 3 days\":{\"date_range\":{\"field\":\"applicationdate\",\"ranges\":[{\"from\":\"now-3d/d\",\"to\":\"now\"}]}},\"Pending from 3 to 7 days\":{\"date_range\":{\"field\":\"applicationdate\",\"ranges\":[{\"from\":\"now-1w\",\"to\":\"now-3d/d\"}]}},\"Pending from 7 to 15 days\":{\"date_range\":{\"field\":\"applicationdate\",\"ranges\":[{\"from\":\"now-15d\",\"to\":\"now-1w\"}]}},\"Pending more than 15 days\":{\"date_range\":{\"field\":\"applicationdate\",\"ranges\":[{\"from\":\"now-2y\",\"to\":\"now-15d\"}]}}}}}}"
       }
     ],
     "isMdmsEnabled": true,
@@ -3716,16 +3741,16 @@
     "isPostResponseHandler": true,
     "postAggregationTheory" : "",
     "aggregationPaths": [
-      "Pending lt 3 days",
-      "Pending gt 3 and lt 7 days",
-      "Pending gt 7 and lt 15 days",
-      "Pending gt 15 days"
+      "Pending from 0 to 3 days",
+      "Pending from 3 to 7 days",
+      "Pending from 7 to 15 days",
+      "Pending more than 15 days"
     ],
     "computedFields": [
       {
         "postAggregationTheory" : "",
         "actionName": "AdditiveComputedField",
-        "fields" : [ "Pending lt 3 days", "Pending gt 3 and lt 7 days", "Pending gt 7 and lt 15 days", "Pending gt 15 days"],
+        "fields" : [ "Pending from 0 to 3 days", "Pending from 3 to 7 days", "Pending from 7 to 15 days", "Pending more than 15 days"],
         "newField" : "Total Pending",
         "_comments": "fields are field names picked from its aggregation query to use post aggregation newField value with given new field name  "
       }
@@ -3741,9 +3766,9 @@
       {
         "module": "W&S",
         "requestQueryMap": "{\"tenantId\" : \"cityname.keyword\", \"wardId\" : \"block.keyword\" }",
-        "dateRefField": "@timestamp",
+        "dateRefField": "createddate",
         "indexName": "wsapplications",
-        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must\":[{\"terms\":{\"servicetype.keyword\":[\"Water Charges\",\"Sewerage Charges\"]}},{\"terms\":{\"applicationstatus.keyword\":[\"Created\",\"Rejected\",\"Verified\",\"verified\"]}}]}},\"aggs\":{\"2\":{\"terms\":{\"field\":\"cityname.keyword\",\"size\":170,\"order\":{\"_key\":\"asc\"}},\"aggs\":{\"Pending lt 3 days\":{\"date_range\":{\"field\":\"applicationdate\",\"ranges\":[{\"from\":\"now-3d/d\",\"to\":\"now\"}]}},\"Pending gt 3 and lt 7 days\":{\"date_range\":{\"field\":\"applicationdate\",\"ranges\":[{\"from\":\"now-1w\",\"to\":\"now-3d/d\"}]}},\"Pending gt 7 and lt 15 days\":{\"date_range\":{\"field\":\"applicationdate\",\"ranges\":[{\"from\":\"now-15d\",\"to\":\"now-1w\"}]}},\"Pending gt 15 days\":{\"date_range\":{\"field\":\"applicationdate\",\"ranges\":[{\"from\":\"now-2y\",\"to\":\"now-15d\"}]}}}}}}}}"
+        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must\":[{\"terms\":{\"servicetype.keyword\":[\"Water Charges\",\"Sewerage Charges\"]}},{\"terms\":{\"applicationstatus.keyword\":[\"Created\",\"Rejected\",\"Verified\",\"verified\"]}}]}},\"aggs\":{\"2\":{\"terms\":{\"field\":\"cityname.keyword\",\"size\":170,\"order\":{\"_key\":\"asc\"}},\"aggs\":{\"Pending from 0 to 3 days\":{\"date_range\":{\"field\":\"applicationdate\",\"ranges\":[{\"from\":\"now-3d/d\",\"to\":\"now\"}]}},\"Pending from 3 to 7 days\":{\"date_range\":{\"field\":\"applicationdate\",\"ranges\":[{\"from\":\"now-1w\",\"to\":\"now-3d/d\"}]}},\"Pending from 7 to 15 days\":{\"date_range\":{\"field\":\"applicationdate\",\"ranges\":[{\"from\":\"now-15d\",\"to\":\"now-1w\"}]}},\"Pending more than 15 days\":{\"date_range\":{\"field\":\"applicationdate\",\"ranges\":[{\"from\":\"now-2y\",\"to\":\"now-15d\"}]}}}}}}}}"
       }
     ],
     "isMdmsEnabled": false,
@@ -3759,17 +3784,17 @@
     "isPostResponseHandler": true,
     "postAggregationTheory" : "",
     "aggregationPaths": [
-      "Pending lt 3 days",
-      "Pending gt 3 and lt 7 days",
-      "Pending gt 7 and lt 15 days",
-      "Pending gt 15 days"
+      "Pending from 0 to 3 days",
+      "Pending from 3 to 7 days",
+      "Pending from 7 to 15 days",
+      "Pending more than 15 days"
 
     ],
     "computedFields": [
       {
         "postAggregationTheory" : "",
         "actionName": "AdditiveComputedField",
-        "fields" : [ "Pending lt 3 days", "Pending gt 3 and lt 7 days", "Pending gt 7 and lt 15 days", "Pending gt 15 days"],
+        "fields" : [ "Pending from 0 to 3 days", "Pending from 3 to 7 days", "Pending from 7 to 15 days", "Pending more than 15 days"],
         "newField" : "Total Pending",
         "_comments": "fields are field names picked from its aggregation query to use post aggregation newField value with given new field name  "
       }
@@ -3785,9 +3810,9 @@
       {
         "module": "W&S",
         "requestQueryMap": "{\"tenantId\" : \"cityname.keyword\", \"wardId\" : \"block.keyword\" }",
-        "dateRefField": "@timestamp",
+        "dateRefField": "createddate",
         "indexName": "wsapplications",
-        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must\":[{\"terms\":{\"servicetype.keyword\":[\"Water Charges\",\"Sewerage Charges\"]}},{\"terms\":{\"applicationstatus.keyword\":[\"Created\",\"Rejected\",\"Verified\",\"verified\"]}}]}},\"aggs\":{\"2\":{\"terms\":{\"field\":\"block.keyword\",\"size\":170,\"order\":{\"_key\":\"asc\"}},\"aggs\":{\"Pending lt 3 days\":{\"date_range\":{\"field\":\"applicationdate\",\"ranges\":[{\"from\":\"now-3d/d\",\"to\":\"now\"}]}},\"Pending gt 3 and lt 7 days\":{\"date_range\":{\"field\":\"applicationdate\",\"ranges\":[{\"from\":\"now-1w\",\"to\":\"now-3d/d\"}]}},\"Pending gt 7 and lt 15 days\":{\"date_range\":{\"field\":\"applicationdate\",\"ranges\":[{\"from\":\"now-15d\",\"to\":\"now-1w\"}]}},\"Pending gt 15 days\":{\"date_range\":{\"field\":\"applicationdate\",\"ranges\":[{\"from\":\"now-2y\",\"to\":\"now-15d\"}]}}}}}}}}"
+        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must\":[{\"terms\":{\"servicetype.keyword\":[\"Water Charges\",\"Sewerage Charges\"]}},{\"terms\":{\"applicationstatus.keyword\":[\"Created\",\"Rejected\",\"Verified\",\"verified\"]}}]}},\"aggs\":{\"2\":{\"terms\":{\"field\":\"block.keyword\",\"size\":170,\"order\":{\"_key\":\"asc\"}},\"aggs\":{\"Pending from 0 to 3 days\":{\"date_range\":{\"field\":\"applicationdate\",\"ranges\":[{\"from\":\"now-3d/d\",\"to\":\"now\"}]}},\"Pending from 3 to 7 days\":{\"date_range\":{\"field\":\"applicationdate\",\"ranges\":[{\"from\":\"now-1w\",\"to\":\"now-3d/d\"}]}},\"Pending from 7 to 15 days\":{\"date_range\":{\"field\":\"applicationdate\",\"ranges\":[{\"from\":\"now-15d\",\"to\":\"now-1w\"}]}},\"Pending more than 15 days\":{\"date_range\":{\"field\":\"applicationdate\",\"ranges\":[{\"from\":\"now-2y\",\"to\":\"now-15d\"}]}}}}}}}}"
       }
     ],
     "isMdmsEnabled": false,
@@ -3803,17 +3828,17 @@
     "isPostResponseHandler": true,
     "postAggregationTheory" : "",
     "aggregationPaths": [
-      "Pending lt 3 days",
-      "Pending gt 3 and lt 7 days",
-      "Pending gt 7 and lt 15 days",
-      "Pending gt 15 days"
+      "Pending from 0 to 3 days",
+      "Pending from 3 to 7 days",
+      "Pending from 7 to 15 days",
+      "Pending more than 15 days"
 
     ],
     "computedFields": [
       {
         "postAggregationTheory" : "",
         "actionName": "AdditiveComputedField",
-        "fields" : [ "Pending lt 3 days", "Pending gt 3 and lt 7 days", "Pending gt 7 and lt 15 days", "Pending gt 15 days"],
+        "fields" : [ "Pending from 0 to 3 days", "Pending from 3 to 7 days", "Pending from 7 to 15 days", "Pending more than 15 days"],
         "newField" : "Total Pending",
         "_comments": "fields are field names picked from its aggregation query to use post aggregation newField value with given new field name  "
       }
