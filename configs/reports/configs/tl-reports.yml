@@ -1051,11 +1051,11 @@ ReportDefinitions:
     type: boundarylist
     source: tl
     isMandatory: false
-    searchClause: AND locality IN ($localityArray)
+    searchClause: AND eg_tl_address.locality IN ($localityArray)
   query: |
       SELECT 
        	tl.applicationnumber as applicationnumber,
-        locality,
+        locality_tlb.locality as locality,
        	propertyid,
        	financialyear,
        	(case when oldlicensenumber is null then 'New' else 'Renewal' end) AS licensetype,
@@ -1083,6 +1083,7 @@ ReportDefinitions:
       LEFT OUTER JOIN egcl_receiptheader_v1 receipt ON receipt.consumercode = tl.applicationnumber 
       LEFT JOIN egcl_receiptinstrument_v1 as ri ON ri.receiptheader = receipt.id 
       LEFT JOIN egcl_instrumentheader_v1 as ih ON ih.id = ri.instrumentheader 
+      INNER JOIN eg_tl_address ON eg_tl_address.tradelicensedetailid = tld.id
       LEFT OUTER JOIN 
       (
         SELECT tradelicensedetailid,array_to_string(array_agg(message.message),',') AS acc FROM eg_tl_accessory
