@@ -1028,6 +1028,11 @@ ReportDefinitions:
     type: string
     source: tl
     total: true
+  - name: locality
+    label: report.tl.receipt.locality
+    type: string
+    source: tl
+    total: false
   searchParams:
   - name: fromDate
     label: reports.tl.fromDate
@@ -1049,7 +1054,7 @@ ReportDefinitions:
     searchClause: AND tla.locality IN ($localityArray)
   query: |
       SELECT 
-       	tl.applicationnumber,
+       	tl.applicationnumber as applicationnumber,
         locality,
        	propertyid,
        	financialyear,
