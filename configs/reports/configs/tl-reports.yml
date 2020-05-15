@@ -1051,7 +1051,7 @@ ReportDefinitions:
     type: boundarylist
     source: tl
     isMandatory: false
-    searchClause: AND tla.locality IN ($localityArray)
+    searchClause: AND locality IN ($localityArray)
   query: |
       SELECT 
        	tl.applicationnumber as applicationnumber,
