@@ -1,29 +1,22 @@
 [
-	{
-		"operation": "shift",
-		"spec": {
-			"tradelicense": {
-				"tenantid": "tenantId",
-				"calculation": "tradelicense.calculation",
-				"licensenumber": "tradelicense.licenseNumber",
-				"commencementdate": "tradelicense.commencementDate",
-				"licensetype": "tradelicense.licenseType",
-				"financialyear": "tradelicense.finYear",
-				"tradename": "tradelicense.tradeName",
-				"applicationnumber": "tradelicense.applicationNumber",
-				"accountid": "tradelicense.accountId",
-				"applicationdate": "tradelicense.applicationDate",
-				"oldpropertyid": "tradelicense.oldPropertyId",
-				"action": "tradelicense.action"
-			},
-		        "ward": "ward"
-
-		}
-	}
+  {
+    "operation": "shift",
+    "spec": {
+      "tradelicense": {
+        "tenantId": "tenantId",
+        "calculation": "tradelicense.calculation",
+        "licenseNumber": "tradelicense.licenseNumber",
+        "commencementDate": "tradelicense.commencementDate",
+        "licenseType": "tradelicense.licenseType",
+        "financialYear": "tradelicense.financialYear",
+        "tradeName": "tradelicense.tradeName",
+        "applicationNumber": "tradelicense.applicationNumber",
+        "accountId": "tradelicense.accountId",
+        "applicationDate": "tradelicense.applicationDate",
+        "oldPropertyId": "tradelicense.oldPropertyId",
+        "action": "tradelicense.action"
+      },
+      "ward": "ward"
+    }
+  }
 ]
-
-
-
-
-
-
