@@ -24,11 +24,11 @@
       "businessType": "TL",
       "indexName": "tlindex-v1",
       "documentType": "",
-      "query": "{\"query\":{\"bool\":{\"must\":[{\"match_phrase\":{\"Data.tradelicense.applicationnumber\":\"value\"}}]}}}",
+      "query": "{\"query\":{\"bool\":{\"must\":[{\"match_phrase\":{\"Data.tradelicense.applicationNumber\":\"value\"}}]}}}",
       "references": [
         {
           "fieldName": "consumerCode",
-          "argument": "Data.tradelicense.applicationnumber",
+          "argument": "Data.tradelicense.applicationNumber",
           "dataType": "String"
         }
       ]
