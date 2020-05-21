@@ -1033,6 +1033,11 @@ ReportDefinitions:
     type: string
     source: tl
     total: false
+  - name: status
+    label: report.tl.receipt.applicationstatus
+    type: string
+    source: tl
+    total: false
   searchParams:
   - name: fromDate
     label: reports.tl.fromDate
@@ -1067,7 +1072,8 @@ ReportDefinitions:
         acc, 
         name,
         mobilenumber,
-        amount as totalamount
+        amount as totalamount,
+        tl.status as status
       FROM eg_tl_tradelicense tl 
       INNER JOIN eg_tl_tradelicensedetail tld ON tld.tradelicenseid = tl.id 
       INNER JOIN (
