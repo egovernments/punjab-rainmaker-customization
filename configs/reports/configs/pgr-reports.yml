@@ -139,7 +139,7 @@ ReportDefinitions:
   query: |
     SELECT 
     DISTINCT ON (servicerequestid)
-    ua.name as lastassignedto,
+    (case when ua.name is null then 'GRO' else ua.name end) as lastassignedto,
     (SELECT deptmap_def.name FROM (VALUES tbl_def_dept) AS deptmap_def(name,code) INNER JOIN (VALUES tbl_dept) AS deptmap(serviceCode, department, slaHours) on deptmap.serviceCode = eg_pgr_service.servicecode and deptmap_def.code = deptmap.department) AS department, 
     regexp_replace(servicecode, '([a-z])([A-Z])', '\1 \2','g') AS servicecode, 
     (SELECT boundary_def.name FROM (VALUES tbl_boundary) AS boundary_def(name,code) where code=eg_pgr_address.mohalla) as locality, 
