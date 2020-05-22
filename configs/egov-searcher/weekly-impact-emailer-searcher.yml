@@ -1,4 +1,4 @@
-    SearchDefinitions:
+  SearchDefinitions:
    moduleName: impactemailer
    summary: Weekly impact emailer cron
    version: 1.0.0
