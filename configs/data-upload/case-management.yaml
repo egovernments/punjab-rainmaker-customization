@@ -1,0 +1,26 @@
+service: case-management
+mappings:
+  - id: create-case
+    version: 1.0
+    description: Persists case details into case table
+    steps:
+      - id: create-case
+        url: http://case-management.egov:8080/case-management/case/v1/_create
+        body: |
+          {
+            "RequestInfo": {
+              "userInfo": {
+                "uuid": "DATA-UPLOAD"
+              }
+            },
+            "case": {
+              "tenantId": "{{Tenant}}",
+              "name": "{{Name}}",
+              "mobileNumber": {{Mobile Number}},
+              "age": {{Age}},
+              "startDate": {{#toEpoch}}{{Start Date}}{{/toEpoch}},
+              "endDate": {{#toEpoch}}{{End Date}}{{/toEpoch}},
+              "reason": "{{Reason}}",
+              "medicalHistory": "{{Medical History}}"
+            }
+          }
