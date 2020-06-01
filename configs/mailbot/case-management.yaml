@@ -29,7 +29,7 @@ mappings:
       - type: "SUBJECT"
         value: ["Daily Report to  Health Details Collector", "On-boarding Health Details Collector"]
       - type: "USER_ROLE"
-        value: ["ISOLATION_CASE_ADMIN"]
+        value: ["ISOLATION_HEALTH_DETAILS_COLLECTOR"]
     successResponse: |
       Greetings,
       Thank you for submitting the health details of the home isolated citizens, we have checked the data that you have shared and status for all the entries in have been updated in the file attached to this email.
