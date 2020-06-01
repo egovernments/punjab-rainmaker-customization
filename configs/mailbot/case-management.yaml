@@ -46,7 +46,7 @@ mappings:
       uriPaths: /case-management/create-case-manager/_upload
     filters:
       - type: "SUBJECT"
-        value: ["On-boarding Isolation Case Manager"]
+        value: ["On-board Isolation Case Manager"]
       - type: "USER_ROLE"
         value: ["ISOLATION_CASE_SUPERUSER"]
     successResponse: |
@@ -65,7 +65,7 @@ mappings:
       uriPaths: /case-management/create-health-details-collector/_upload
     filters:
       - type: "SUBJECT"
-        value: ["On-boarding Isolation Health Details Collectors"]
+        value: ["On-board Isolation Health Details Collectors"]
       - type: "USER_ROLE"
         value: ["ISOLATION_CASE_ADMIN"]
     successResponse: |
