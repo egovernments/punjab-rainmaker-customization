@@ -8,13 +8,9 @@ mappings:
         url: http://case-management.egov:8080/case-management/case/v1/_create
         body: |
           {
-            "RequestInfo": {
-              "userInfo": {
-                "uuid": "DATA-UPLOAD"
-              }
-            },
+            "RequestInfo": {{{RequestInfo}}},
             "case": {
-              "tenantId": "{{Tenant}}",
+              "tenantId": "{{tenantId}}",
               "name": "{{Name}}",
               "mobileNumber": {{Mobile Number}},
               "age": {{Age}},
@@ -23,4 +19,60 @@ mappings:
               "reason": "{{Reason}}",
               "medicalHistory": "{{Medical History}}"
             }
+          }
+
+  - id: health-details-collect
+    version: 1.0
+    description: Collects health details related to case management
+    steps:
+      - id: health-details-collect
+        url: http://case-management.egov:8080/case-management/healthdetail/v1/_create
+        body: |
+          {
+            "RequestInfo": {{{RequestInfo}}},
+            "tenantId": "{{tenantId}}",
+            "mobileNumber": "{{Mobile Number}}",
+            "healthDetails": [
+              {
+                "temperature": "{{Current body temperature (in �F)}}",
+                "fever": "{{Fever? (Yes or No)}}",
+                "breathingIssues": "{{Difficulty in breathing ? (Yes or No)}}",
+                "dryCough": "{{Dry Cough? (Yes or No)}}",
+                "symptoms": "Fever"
+              }
+            ]
+          }
+
+  - id: create-case-manager
+    version: 1.0
+    description: Add case manager admins
+    steps:
+      - id: create-case-manager
+        url: http://case-management.egov:8080/case-management/employee/v1/_create
+        body: |
+          {
+            "RequestInfo": {{{RequestInfo}}},
+            "employee": {
+                "emailId": "{{Email ID}}",
+                "name": "{{Name}}",
+                "tenantId": "{{Tenant}}",
+                "roles": [ "ISOLATION_CASE_ADMIN" ]
+              }
+          }
+
+  - id: create-health-details-collector
+    version: 1.0
+    description: Add case manager health details collectors
+    steps:
+      - id: create-health-details-collector
+        url: http://case-management.egov:8080/case-management/employee/v1/_create
+        body: |
+          {
+            "RequestInfo": {{{RequestInfo}}},
+            "employee": {
+                "emailId": "{{Email ID}}",
+                "name": "{{Name}}",
+                "tenantId": "{{tenantId}}",
+                "roles": [ "ISOLATION_HEALTH_DETAILS_COLLECTOR" ]
+              }
           }
