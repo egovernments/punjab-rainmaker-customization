@@ -27,7 +27,7 @@ mappings:
       uriPaths: /case-management/health-details-collect/_upload
     filters:
       - type: "SUBJECT"
-        value: ["Daily Report to  Health Details Collector", "On-boarding Health Details Collector"]
+        value: ["Daily Report to Health Details Collector", "On-boarding Health Details Collector"]
       - type: "USER_ROLE"
         value: ["ISOLATION_HEALTH_DETAILS_COLLECTOR"]
     successResponse: |
