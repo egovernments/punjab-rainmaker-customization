@@ -12,7 +12,7 @@ mappings:
             "case": {
               "tenantId": "{{tenantId}}",
               "name": "{{Name}}",
-              "mobileNumber": {{Mobile Number}},
+              "mobileNumber": "{{Mobile Number}}",
               "age": {{Age}},
               "startDate": {{#toEpoch}}{{Start Date}}{{/toEpoch}},
               "endDate": {{#toEpoch}}{{End Date}}{{/toEpoch}},
