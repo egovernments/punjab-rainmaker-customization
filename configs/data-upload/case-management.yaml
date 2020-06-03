@@ -14,8 +14,8 @@ mappings:
               "name": "{{Name}}",
               "mobileNumber": "{{Mobile Number}}",
               "age": {{Age}},
-              "startDate": {{#toEpoch}}{{Start Date}}{{/toEpoch}},
-              "endDate": {{#toEpoch}}{{End Date}}{{/toEpoch}},
+              "startDate": "{{#toEpoch}}{{Start Date}}{{/toEpoch}}",
+              "endDate": "{{#toEpoch}}{{End Date}}{{/toEpoch}}",
               "reason": "{{Reason}}",
               "medicalHistory": "{{Medical History}}"
             }
