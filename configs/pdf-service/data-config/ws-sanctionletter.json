@@ -35,6 +35,18 @@
                   "module": "rainmaker-common"
                 }
               },
+               {
+                "variable": "door_no",
+                "value": {
+                  "path": "PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_DOOR_NO_LABEL"
+                },
+                "type": "label",
+                "localisation": {
+                  "required": true,
+                  "prefix": null,
+                  "module": "rainmaker-common"
+                }
+              },
               {
                 "variable": "sanctionLetter",
                 "value": {
@@ -60,7 +72,7 @@
                 }
               },
               {
-                "variable": "order_meassage4",
+                "variable": "order_message4",
                 "value": {
                   "path": "PDF_STATIC_LABEL_WS_CONSOLIDATED_SEEKING_ESTIMATE_AMOUNT"
                 },
@@ -72,7 +84,7 @@
                 }
               },
               {
-                "variable": "order_meassage5",
+                "variable": "order_message5",
                 "value": {
                   "path": "PDF_STATIC_LABEL_WS_CONSOLIDATED_PREPARATION_NOTICE"
                 },
@@ -84,7 +96,7 @@
                 }
               },
               {
-                "variable": "order_meassage6",
+                "variable": "order_message6",
                 "value": {
                   "path": "PDF_STATIC_LABEL_WS_CONSOLIDATED_SERVICE_PAYMENT"
                 },
@@ -96,7 +108,7 @@
                 }
               },
               {
-                "variable": "order_meassage7",
+                "variable": "order_message7",
                 "value": {
                   "path": "PDF_STATIC_LABEL_WS_CONSOLIDATED_SAID_PREMISES"
                 },
@@ -108,7 +120,7 @@
                 }
               },
               {
-                "variable": "order_meassage8",
+                "variable": "order_message8",
                 "value": {
                   "path": "PDF_STATIC_LABEL_WS_CONSOLIDATED_FURTHER"
                 },
@@ -120,7 +132,7 @@
                 }
               },
               {
-                "variable": "order_meassage9",
+                "variable": "order_message9",
                 "value": {
                   "path": "PDF_STATIC_LABEL_WS_CONSOLIDATED_CONNECTION_SANCTIONED"
                 },
@@ -132,7 +144,7 @@
                 }
               },
               {
-                "variable": "order_meassage10",
+                "variable": "order_message10",
                 "value": {
                   "path": "PDF_STATIC_LABEL_WS_CONSOLIDATED_PLUMBER_INFO"
                 },
@@ -144,7 +156,7 @@
                 }
               },
               {
-                "variable": "order_meassage11",
+                "variable": "order_message11",
                 "value": {
                   "path": "PDF_STATIC_LABEL_WS_CONSOLIDATED_BILLING_CYCLE"
                 },
@@ -259,7 +271,20 @@
                 }
               },
               {
-                "variable": "order_meassage14",
+                "variable": "sla",
+                "value": {
+                  "path": "$.sla"
+                }
+              },
+              {
+                "variable": "slaDate",
+                "value": {
+                  "path": "$.slaDate"
+                },
+                "type": "date"
+              },
+              {
+                "variable": "order_message14",
                 "value": {
                   "path": "PDF_STATIC_LABEL_WS_CONSOLIDATED_CONCERNED_PLUMBER_CONTACT"
                 },
@@ -271,7 +296,19 @@
                 }
               },
               {
-                "variable": "order_meassage12",
+                "variable": "order_message15",
+                "value": {
+                  "path": "PDF_STATIC_LABEL_CONSOLIDATED_SLA_DATE"
+                },
+                "type": "label",
+                "localisation": {
+                  "required": true,
+                  "prefix": null,
+                  "module": "rainmaker-common"
+                }
+              },
+              {
+                "variable": "order_message12",
                 "value": {
                   "path": "PDF_STATIC_LABEL_WS_CONSOLIDATED_CONCERNED_PLUMBER_ALLOTED"
                 },
@@ -283,7 +320,7 @@
                 }
               },
               {
-                "variable": "order_meassage13",
+                "variable": "order_message13",
                 "value": {
                   "path": "PDF_STATIC_LABEL_WS_CONSOLIDATED_CONCERNED_PLUMBER_LICENCE"
                 },
@@ -364,6 +401,27 @@
                 "variable": "date",
                 "value": {
                   "path": "$.connectionExecutionDate"
+                },
+                "type": "date"
+              },
+              {
+                "variable": "appCreatedDate",
+                "value": {
+                  "path": "$.additionalDetails.appCreatedDate"
+                },
+                "type": "date"
+              },
+              {
+                "variable": "sanctionLetterDate",
+                "value": {
+                  "path": "$.sanctionLetterDate"
+                },
+                "type": "date"
+              },
+              {
+                "variable": "estimationLetterDate",
+                "value": {
+                  "path": "$.additionalDetails.estimationLetterDate"
                 },
                 "type": "date"
               },
@@ -596,7 +654,7 @@
                 }
               },
               {
-                "variable": "order_meassage1",
+                "variable": "order_message1",
                 "value": {
                   "path": "PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_ORDER_MESSAGE1"
                 },
@@ -608,7 +666,7 @@
                 }
               },
               {
-                "variable": "order_meassage2",
+                "variable": "order_message2",
                 "value": {
                   "path": "PDF_STATIC_LABEL_WS_CONSOLIDATED_SEEKING"
                 },
@@ -620,7 +678,7 @@
                 }
               },
               {
-                "variable": "order_meassage3",
+                "variable": "order_message3",
                 "value": {
                   "path": "PDF_STATIC_LABEL_WS_CONSOLIDATED_WATER_TAP_CONNECTION"
                 },

@@ -74,7 +74,7 @@ ServiceMaps:
             uriResponseMapping:
             - inJsonPath: $.ProcessInstances
               outJsonPath: $.Data.history
-     
+
 
   - topic: update-ws-connection
     configKey: INDEX
@@ -148,7 +148,7 @@ ServiceMaps:
             uriResponseMapping:
             - inJsonPath: $.ProcessInstances
               outJsonPath: $.Data.history
-              
+
   - topic: update-ws-workflow
     configKey: INDEX
     indexes:
