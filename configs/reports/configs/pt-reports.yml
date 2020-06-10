@@ -1697,11 +1697,6 @@ ReportDefinitions:
     type: string
     source: pt
     total: true
-  - name: adhocrebate
-    label: reports.pt.adhocrebate
-    type: string
-    source: pt
-    total: true 
   - name: noofassessments
     label: reports.pt.noofassessments
     type: string
@@ -1712,6 +1707,11 @@ ReportDefinitions:
     type: string
     source: pt
     total: false
+  - name: totalamount
+    label: reports.pt.totalamount
+    type: string
+    source: pt
+    total: true
   searchParams:
   - name: fromDate
     label: reports.pt.fromDate
@@ -1735,28 +1735,33 @@ ReportDefinitions:
     searchClause: AND eg_user.id = $collectorname::INTEGER
   query: |
       -- Use CTE to force query plan, compute & use CTE later
-      SELECT
-        split_part(rd.tenantid,'.',2) as ulb,
-        Count (*)/8 noofassessments,
-        SUM(CASE WHEN taxheadcode LIKE 'PT_ADHOC_PENALTY' THEN adjustedamount ELSE 0 END) as adhocpenalty,
-        SUM(CASE WHEN taxheadcode LIKE 'PT_ADHOC_REBATE' THEN adjustedamount ELSE 0 END) as adhocrebate, 
-        SUM(CASE WHEN taxheadcode LIKE 'PT_FIRE_CESS' THEN adjustedamount ELSE 0 END) as firecess, 
-        SUM(CASE WHEN taxheadcode LIKE 'PT_CANCER_CESS' THEN adjustedamount ELSE 0 END) as cancercess, 
-        SUM(CASE WHEN taxheadcode LIKE 'PT_TIME_INTEREST' THEN adjustedamount ELSE 0 END) as interest, 
-        SUM(CASE WHEN taxheadcode LIKE 'PT_TIME_PENALTY' THEN adjustedamount ELSE 0 END) as penalty, 
-        SUM(CASE WHEN taxheadcode LIKE 'PT_TIME_REBATE' THEN adjustedamount ELSE 0 END) as rebate, 
-        SUM(CASE WHEN taxheadcode LIKE 'PT_TAX' THEN adjustedamount ELSE 0 END) as propertytax, 
-        (SUM(CASE WHEN taxheadcode LIKE 'PT_UNIT_USAGE_EXEMPTION' THEN adjustedamount ELSE 0 END)
-        + SUM(CASE WHEN taxheadcode LIKE 'PT_OWNER_EXEMPTION' THEN adjustedamount ELSE 0 END) )as exemption,
-        ( SUM(CASE WHEN taxheadcode LIKE 'PT_ROUNDOFF' THEN adjustedamount ELSE 0 END)
-        + SUM(CASE WHEN taxheadcode LIKE 'PT_DECIMAL_CEILING_DEBIT' THEN adjustedamount ELSE 0 END)
-        + SUM(CASE WHEN taxheadcode LIKE 'PT_DECIMAL_CEILING_CREDIT' THEN adjustedamount ELSE 0 END)) as adjustment,
-        (CASE WHEN collectiontype='COUNTER' THEN eg_user.name ELSE 'Online' END) as collectorname
-      FROM egcl_receiptdetails_v1 as rd
-      INNER JOIN egcl_receiptheader_v1 as rh on rh.id = rd.receiptheader
-      LEFT OUTER JOIN eg_user ON eg_user.id = rh.createdby::INTEGER 
-      WHERE rd.tenantid = $tenantid and rh.status != 'Cancelled' and businessdetails='PT'
-  groupby: group by rd.tenantid,collectorname
+      with summary as (
+        SELECT
+          split_part(rd.tenantid,'.',2) as ulb,
+          Count (*)/8 noofassessments,
+          SUM(CASE WHEN taxheadcode LIKE 'PT_ADHOC_PENALTY' THEN adjustedamount ELSE 0 END) as adhocpenalty,
+          SUM(CASE WHEN taxheadcode LIKE 'PT_ADHOC_REBATE' THEN adjustedamount ELSE 0 END) as adhocrebate, 
+          SUM(CASE WHEN taxheadcode LIKE 'PT_FIRE_CESS' THEN adjustedamount ELSE 0 END) as firecess, 
+          SUM(CASE WHEN taxheadcode LIKE 'PT_CANCER_CESS' THEN adjustedamount ELSE 0 END) as cancercess, 
+          SUM(CASE WHEN taxheadcode LIKE 'PT_TIME_INTEREST' THEN adjustedamount ELSE 0 END) as interest, 
+          SUM(CASE WHEN taxheadcode LIKE 'PT_TIME_PENALTY' THEN adjustedamount ELSE 0 END) as penalty, 
+          SUM(CASE WHEN taxheadcode LIKE 'PT_TIME_REBATE' THEN adjustedamount ELSE 0 END) as rebate, 
+          SUM(CASE WHEN taxheadcode LIKE 'PT_TAX' THEN adjustedamount ELSE 0 END) as propertytax, 
+          (SUM(CASE WHEN taxheadcode LIKE 'PT_UNIT_USAGE_EXEMPTION' THEN adjustedamount ELSE 0 END)
+          + SUM(CASE WHEN taxheadcode LIKE 'PT_OWNER_EXEMPTION' THEN adjustedamount ELSE 0 END) )as exemption,
+          ( SUM(CASE WHEN taxheadcode LIKE 'PT_ROUNDOFF' THEN adjustedamount ELSE 0 END)
+          + SUM(CASE WHEN taxheadcode LIKE 'PT_DECIMAL_CEILING_DEBIT' THEN adjustedamount ELSE 0 END)
+          + SUM(CASE WHEN taxheadcode LIKE 'PT_DECIMAL_CEILING_CREDIT' THEN adjustedamount ELSE 0 END)) as adjustment,
+          (CASE WHEN collectiontype='COUNTER' THEN eg_user.name ELSE 'Online' END) as collectorname
+        FROM egcl_receiptdetails_v1 as rd
+        INNER JOIN egcl_receiptheader_v1 as rh on rh.id = rd.receiptheader
+        LEFT OUTER JOIN eg_user ON eg_user.id = rh.createdby::INTEGER 
+        WHERE rd.tenantid = $tenantid and rh.status != 'Cancelled' and businessdetails='PT'
+        GROUP by rd.tenantid,collectorname
+        )
+      SELECT *,adhocpenalty+adhocrebate+cancercess+firecess+interest+penalty+rebate+propertyTax+exemption+adjustment as totalamount 
+      FROM summary
+  
   
 - reportName: StateReceiptRegisterSummary
   summary: Receipt Register Summary
