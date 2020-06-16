@@ -196,7 +196,7 @@ ReportDefinitions:
     servicerequestid AS complaintNo, 
     to_char(to_timestamp(TRUNC(CAST(eg_pgr_service.createdtime AS bigint) / 1000)), 'DD/MM/YYYY') AS date, 
     eg_user.name, 
-    phone, 
+    eg_user.mobileNumber as phone, 
     eg_pgr_address.landmark, 
     eg_pgr_address.housenoandstreetname as address, 
     description, 
