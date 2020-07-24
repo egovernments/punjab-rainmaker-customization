@@ -7,7 +7,7 @@ serviceMaps:
    isTransaction: true
    queryMaps:
 
-       - query: INSERT INTO eg_fn_firenoc(uuid, tenantid, firenocnumber, provisionfirenocnumber, oldfirenocnumber, dateofapplied, createdby, lastmodifiedby, createdtime, lastmodifiedtime) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+       - query: INSERT INTO eg_fn_firenoc(uuid, tenantid, firenocnumber, provisionfirenocnumber, oldfirenocnumber, dateofapplied, createdby, lastmodifiedby, createdtime, lastmodifiedtime,islegacy) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?);
          basePath: FireNOCs.*
          jsonMaps:
           - jsonPath: $.FireNOCs.*.id
@@ -29,6 +29,8 @@ serviceMaps:
           - jsonPath: $.FireNOCs.*.auditDetails.createdTime
 
           - jsonPath: $.FireNOCs.*.auditDetails.lastModifiedTime
+          
+          - jsonPath: $.FireNOCs.*.islegacy
 
 
        - query: INSERT INTO eg_fn_firenocdetail(uuid, firenocuuid, applicationnumber, firenoctype, firestationid, applicationdate, financialyear, issueddate, validfrom, validto, action,channel, noofbuildings, tenantid, additionaldetail, createdby, lastmodifiedby, createdtime, lastmodifiedtime, propertyid,status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?);
