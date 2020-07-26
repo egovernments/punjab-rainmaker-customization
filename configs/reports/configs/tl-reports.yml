@@ -1339,21 +1339,20 @@ ReportDefinitions:
       to_char((To_timestamp(issueddate / 1000) at time Zone 'Asia/Kolkata'), 'DD/MM/YYYY') as formattedIssuedDate,
       tl.tradeName,
       initcap(tl.status) as status,
-      to_char((To_timestamp(receipt.receiptdate / 1000) at time Zone 'Asia/Kolkata'), 'DD/MM/YYYY') as receiptIssueDate , 
-      receipt.receiptnumber,
+      to_char((To_timestamp(egcl_paymentdetail.receiptdate / 1000) at time Zone 'Asia/Kolkata'), 'DD/MM/YYYY') as receiptIssueDate , 
+      egcl_paymentdetail.receiptnumber,
       tradeTypeName,
       acc, 
       tlown.name,
       tlown.mobilenumber,
-      ih.bankid,
-      ih.branchname,
-      ih.transactionnumber as transactionnumber,
-      ih.instrumenttype,
-      amount as totalamount,
-      To_char((To_timestamp(receipt.manualreceiptdate / 1000) at time Zone 'Asia/Kolkata'), 'DD/MM/YYYY') AS g8issuedate,
-      receipt.manualreceiptnumber as g8receiptno,
-      (CASE WHEN collectiontype='COUNTER' THEN eg_user.name ELSE '' END) as collectorname
-
+      payment.ifsccode as bankid, -- ih.bankid,
+      payment.ifsccode as branchname, --ih.branchname,
+      payment.transactionnumber as transactionnumber, -- ih.transactionnumber as transactionnumber,
+      payment.paymentmode as instrumenttype, -- ih.instrumenttype,
+      payment.totalamountpaid as totalamount, --amount as totalamount,
+      To_char((To_timestamp(egcl_paymentdetail.manualreceiptdate / 1000) at time Zone 'Asia/Kolkata'), 'DD/MM/YYYY') AS g8issuedate,
+      egcl_paymentdetail.manualreceiptnumber as g8receiptno,
+      (CASE WHEN paymentmode!='ONLINE' THEN eg_user.name ELSE '' END) as collectorname
     FROM eg_tl_tradelicense tl 
     INNER JOIN eg_tl_tradelicensedetail tld ON tld.tradelicenseid = tl.id 
     INNER JOIN (
@@ -1365,14 +1364,14 @@ ReportDefinitions:
       INNER JOIN eg_user tluser ON tluser.uuid = tlowner.id
       group by tradelicensedetailid
     ) tlown ON tlown.tradelicensedetailid = tld.id
-    LEFT OUTER JOIN egcl_receiptheader_v1 receipt ON receipt.consumercode = tl.applicationnumber  and receipt.status != 'Cancelled'
-    LEFT OUTER JOIN egcl_receiptinstrument_v1 as ri ON ri.receiptheader = receipt.id
-    LEFT OUTER JOIN egcl_instrumentheader_v1 as ih ON ih.id = ri.instrumentheader and ih.instrumentstatus != 'CANCELLED'
+    LEFT OUTER JOIN egcl_bill bill ON bill.consumercode = tl.applicationnumber 
+    LEFT OUTER JOIN egcl_paymentdetail on bill.id=egcl_paymentdetail.billid
+    LEFT OUTER JOIN egcl_payment as payment  ON payment.id = egcl_paymentdetail.paymentid
     LEFT OUTER JOIN (
       SELECT tradelicensedetailid,array_to_string(array_agg(message.message),',') AS acc FROM eg_tl_accessory
       LEFT OUTER JOIN message ON code=CONCAT('TRADELICENSE_ACCESSORIESCATEGORY_', REGEXP_REPLACE(accessorycategory, '[^A-Za-z0-9]','_', 'g')) AND message.locale = 'en_IN' GROUP BY 1 ) tlacc ON tlacc.tradelicensedetailid = tld.id
-    Join eg_user ON eg_user.id = receipt.createdby::INTEGER
-    WHERE  tl.tenantId = $tenantid
+    Join eg_user ON eg_user.id = egcl_paymentdetail.createdby::INTEGER
+    WHERE  tl.tenantId = $tenantid 
 
 
 - reportName: StateTradeLicenseCancelledRegistryReport_v2
@@ -1490,20 +1489,19 @@ ReportDefinitions:
       to_char((To_timestamp(issueddate / 1000) at time Zone 'Asia/Kolkata'), 'DD/MM/YYYY') as formattedIssuedDate,
       tl.tradeName,
       initcap(tl.status) as status,
-      to_char((To_timestamp(receipt.receiptdate / 1000) at time Zone 'Asia/Kolkata'), 'DD/MM/YYYY') as receiptIssueDate , 
-      receipt.receiptnumber,
+      to_char((To_timestamp(paydetail.receiptdate / 1000) at time Zone 'Asia/Kolkata'), 'DD/MM/YYYY') as receiptIssueDate , 
+      paydetail.receiptnumber,
       tradeTypeName,
       acc, 
       name,
-      mobilenumber,
-      ih.bankid,
-      ih.branchname,
-      ih.transactionnumber,
-      ih.instrumenttype,
-      amount as totalamount, 
-      To_char((To_timestamp(receipt.manualreceiptdate / 1000) at time Zone 'Asia/Kolkata'), 'DD/MM/YYYY') AS g8issuedate,
-      receipt.manualreceiptnumber as g8receiptno
-
+      payment.mobilenumber,
+      payment.ifsccode as bankid, -- ih.bankid,
+      payment.ifsccode as branchname, --ih.branchname,
+      payment.transactionnumber as transactionnumber, -- ih.transactionnumber as transactionnumber,
+      payment.paymentmode as instrumenttype, -- ih.instrumenttype,
+      payment.totalamountpaid as totalamount, --amount as totalamount,      
+      To_char((To_timestamp(paydetail.manualreceiptdate / 1000) at time Zone 'Asia/Kolkata'), 'DD/MM/YYYY') AS g8issuedate,
+      paydetail.manualreceiptnumber as g8receiptno
     FROM eg_tl_tradelicense tl 
     INNER JOIN eg_tl_tradelicensedetail tld ON tld.tradelicenseid = tl.id 
     INNER JOIN (
@@ -1515,9 +1513,9 @@ ReportDefinitions:
       INNER JOIN eg_user tluser ON tluser.uuid = tlowner.id
       group by tradelicensedetailid
     ) tlown ON tlown.tradelicensedetailid = tld.id
-    INNER JOIN egcl_receiptheader_v1 receipt ON receipt.consumercode = tl.applicationnumber  and receipt.status = 'Cancelled'
-    INNER JOIN egcl_receiptinstrument_v1 as ri ON ri.receiptheader = receipt.id
-    INNER JOIN egcl_instrumentheader_v1 as ih ON ih.id = ri.instrumentheader
+    INNER JOIN egcl_bill as bill ON bill.consumercode = tl.applicationnumber 
+    INNER JOIN egcl_paymentdetail as paydetail on bill.id=paydetail.billid
+    INNER JOIN egcl_payment as payment on payment.id=paydetail.paymentid and payment.paymentstatus='CANCELLED'
     LEFT OUTER JOIN (
       SELECT tradelicensedetailid,array_to_string(array_agg(message.message),',') AS acc FROM eg_tl_accessory
       LEFT OUTER JOIN message ON code=CONCAT('TRADELICENSE_ACCESSORIESCATEGORY_', REGEXP_REPLACE(accessorycategory, '[^A-Za-z0-9]','_', 'g')) AND message.locale = 'en_IN' GROUP BY 1 ) tlacc ON tlacc.tradelicensedetailid = tld.id
@@ -1633,20 +1631,19 @@ ReportDefinitions:
       to_char((To_timestamp(issueddate / 1000) at time Zone 'Asia/Kolkata'), 'DD/MM/YYYY') as formattedIssuedDate,
       tl.tradeName,
       initcap(tl.status) as status,
-      to_char((To_timestamp(receipt.receiptdate / 1000) at time Zone 'Asia/Kolkata'), 'DD/MM/YYYY') as receiptIssueDate , 
-      receipt.receiptnumber,
+      to_char((To_timestamp(paydetail.receiptdate / 1000) at time Zone 'Asia/Kolkata'), 'DD/MM/YYYY') as receiptIssueDate , 
+      paydetail.receiptnumber,
       tradeTypeName,
       acc, 
       name,
-      mobilenumber,
-      ih.bankid,
-      ih.branchname,
-      ih.transactionnumber,
-      ih.instrumenttype,
-      amount as totalamount,
-      To_char((To_timestamp(receipt.manualreceiptdate / 1000) at time Zone 'Asia/Kolkata'), 'DD/MM/YYYY') AS g8issuedate,
-      receipt.manualreceiptnumber as g8receiptno
-
+      payment.mobilenumber,
+      payment.ifsccode as bankid, -- ih.bankid,
+      payment.ifsccode as branchname, --ih.branchname,
+      payment.transactionnumber as transactionnumber, -- ih.transactionnumber as transactionnumber,
+      payment.paymentmode as instrumenttype, -- ih.instrumenttype,
+      payment.totalamountpaid as totalamount, --amount as totalamount,      
+      To_char((To_timestamp(paydetail.manualreceiptdate / 1000) at time Zone 'Asia/Kolkata'), 'DD/MM/YYYY') AS g8issuedate,
+      paydetail.manualreceiptnumber as g8receiptno
     FROM eg_tl_tradelicense tl 
     INNER JOIN eg_tl_tradelicensedetail tld ON tld.tradelicenseid = tl.id 
     INNER JOIN (
@@ -1658,9 +1655,9 @@ ReportDefinitions:
       INNER JOIN eg_user tluser ON tluser.uuid = tlowner.id
       group by tradelicensedetailid
     ) tlown ON tlown.tradelicensedetailid = tld.id
-    INNER JOIN egcl_receiptheader_v1 receipt ON receipt.consumercode = tl.applicationnumber  and receipt.status = 'Cancelled'
-    INNER JOIN egcl_receiptinstrument_v1 as ri ON ri.receiptheader = receipt.id
-    INNER JOIN egcl_instrumentheader_v1 as ih ON ih.id = ri.instrumentheader
+    INNER JOIN egcl_bill as bill ON bill.consumercode = tl.applicationnumber 
+    INNER JOIN egcl_paymentdetail as paydetail on bill.id=paydetail.billid
+    INNER JOIN egcl_payment as payment on payment.id=paydetail.paymentid and payment.paymentstatus='CANCELLED'
     LEFT OUTER JOIN (
       SELECT tradelicensedetailid,array_to_string(array_agg(message.message),',') AS acc FROM eg_tl_accessory
       LEFT OUTER JOIN message ON code=CONCAT('TRADELICENSE_ACCESSORIESCATEGORY_', REGEXP_REPLACE(accessorycategory, '[^A-Za-z0-9]','_', 'g')) AND message.locale = 'en_IN' GROUP BY 1 ) tlacc ON tlacc.tradelicensedetailid = tld.id
@@ -1707,17 +1704,16 @@ ReportDefinitions:
     searchClause: AND rh.receiptdate <= $toDate
   query: |
     select 
-      sum(ih.amount) as total,
+      sum(payment.totalamountpaid) as total,
       count(*) as transactionNumber,
-      sum(case collectiontype when 'COUNTER' then amount else 0 end) as offline,
-      sum(case collectiontype when 'ONLINE' then amount else 0 end) as online,
-      initcap(split_part(rh.tenantId, '.', 2)) as tenantId 
-      from egcl_receiptheader_v1 as rh
-    inner join egcl_receiptinstrument_v1 as ri on ri.receiptheader = rh.id
-    inner join egcl_instrumentheader_v1 as ih on ih.id = ri.instrumentheader
-    where rh.businessdetails = 'TL' and rh.status !='Cancelled' and rh.tenantid !='pb.testing'
-    AND rh.tenantId LIKE $tenantid
-  groupby: GROUP BY rh.tenantId
+      sum(case when payment.paymentmode!='ONLINE' then totalamountpaid else 0 end) as offline,
+      sum(case when payment.paymentmode='ONLINE' then totalamountpaid else 0 end) as online,
+      initcap(split_part(payment.tenantId, '.', 2)) as tenantId 
+      from egcl_payment as payment
+      inner join egcl_paymentdetail paydetail on paydetail.paymentid=payment.id
+    where paydetail.businessservice = 'TL'  and payment.tenantid !='pb.testing'  and payment.paymentstatus != 'CANCELLED'
+    AND payment.tenantId LIKE '$tenantid'
+  groupby: GROUP BY payment.tenantId
 
 
 - reportName: TradeLicenseApplicationStatusReport_v2
@@ -1971,17 +1967,16 @@ ReportDefinitions:
     searchClause: AND tl.tenantId = $ulb
   query: |
     select 
-      sum(ih.amount) as total,
+      sum(payment.totalamountpaid) as total,
       count(*) as transactionNumber,
-      sum(case collectiontype when 'COUNTER' then amount else 0 end) as offline,
-      sum(case collectiontype when 'ONLINE' then amount else 0 end) as online,
-      initcap(split_part(rh.tenantId, '.', 2)) as tenantId
-      from egcl_receiptheader_v1 as rh
-    inner join egcl_receiptinstrument_v1 as ri on ri.receiptheader = rh.id
-    inner join egcl_instrumentheader_v1 as ih on ih.id = ri.instrumentheader
-    where rh.businessdetails = 'TL' and rh.status !='Cancelled' and rh.tenantid !='pb.testing'
-  groupby: GROUP BY rh.tenantId
-  orderby: ORDER BY rh.tenantId asc
+      sum(case when payment.paymentmode!='ONLINE' then payment.totalamountpaid else 0 end) as offline,
+      sum(case payment.paymentmode when 'ONLINE' then payment.totalamountpaid else 0 end) as online,
+      initcap(split_part(payment.tenantId, '.', 2)) as tenantId
+      from egcl_payment as payment
+      inner join egcl_paymentdetail as paydetail on paydetail.paymentid=payment.id
+    where paydetail.businessservice = 'TL'  and payment.tenantid !='pb.testing'  and payment.paymentstatus != 'CANCELLED'
+  groupby: GROUP BY payment.tenantId
+  orderby: ORDER BY payment.tenantId asc
 
 
 - reportName: StateLevelTradeLicenseRegistryReport_v2
@@ -2075,9 +2070,9 @@ ReportDefinitions:
         acc, 
         name,
         mobilenumber,
-        amount as totalamount,
-        To_char((To_timestamp(receipt.manualreceiptdate / 1000) at time Zone 'Asia/Kolkata'), 'DD/MM/YYYY') AS g8issuedate,
-        receipt.manualreceiptnumber as g8receiptno 
+        paydetail.amountpaid as totalamount,
+        To_char((To_timestamp(paydetail.manualreceiptdate / 1000) at time Zone 'Asia/Kolkata'), 'DD/MM/YYYY') AS g8issuedate,
+        paydetail.manualreceiptnumber as g8receiptno 
       FROM eg_tl_tradelicense tl 
       INNER JOIN eg_tl_tradelicensedetail tld ON tld.tradelicenseid = tl.id 
       INNER JOIN eg_tl_owner tlowner ON tlowner.tradelicensedetailid = tld.id 
@@ -2085,9 +2080,8 @@ ReportDefinitions:
         SELECT tradelicensedetailid, array_to_string(array_agg(message.message),', ') as tradeTypeName FROM eg_tl_tradeunit
         LEFT OUTER JOIN message ON code = CONCAT('TRADELICENSE_TRADETYPE_', REGEXP_REPLACE(tradetype, '[^A-Za-z0-9]','_','g')) AND message.locale = 'en_IN' GROUP BY 1) tlunit ON tlunit.tradelicensedetailid = tld.id
       INNER JOIN eg_user tluser ON tluser.uuid = tlowner.id 
-      LEFT OUTER JOIN egcl_receiptheader_v1 receipt ON receipt.consumercode = tl.applicationnumber 
-      LEFT JOIN egcl_receiptinstrument_v1 as ri ON ri.receiptheader = receipt.id 
-      LEFT JOIN egcl_instrumentheader_v1 as ih ON ih.id = ri.instrumentheader 
+      LEFT OUTER JOIN egcl_bill as bill ON bill.consumercode = tl.applicationnumber 
+      inner join egcl_paymentdetail as paydetail on paydetail.billid=bill.id 
       LEFT OUTER JOIN 
       (
         SELECT tradelicensedetailid,array_to_string(array_agg(message.message),',') AS acc FROM eg_tl_accessory
@@ -2271,39 +2265,40 @@ ReportDefinitions:
     searchClause: AND tla.locality IN ($localityArray)
   query: |
       SELECT 
-       	tl.applicationnumber,
-       	propertyid,
-       	financialyear,
-       	(case when oldlicensenumber is null then 'New' else 'Renewal' end) AS licensetype,
-
-       	oldlicensenumber,
+        tl.applicationnumber as applicationnumber,
+        locality_tlb.locality as locality,
+        propertyid,
+        financialyear,
+        (case when oldlicensenumber is null then 'New' else 'Renewal' end) AS licensetype,
+        oldlicensenumber,
         licensenumber,
         to_char((To_timestamp(issueddate / 1000) at time Zone 'Asia/Kolkata'), 'DD/MM/YYYY') as formattedIssuedDate,
         tl.tradeName,
-        tradeTypeName,
-        
+        tradeTypeName,   
         acc, 
         name,
         mobilenumber,
-        amount as totalamount
+        paydetail.amountpaid as totalamount,
+        tl.status as status
       FROM eg_tl_tradelicense tl 
       INNER JOIN eg_tl_tradelicensedetail tld ON tld.tradelicenseid = tl.id 
-
-      INNER JOIN eg_tl_address as tla ON
-      tla.tradelicensedetailid=tld.id
+      INNER JOIN (
+                select tradelicensedetailid, array_to_string(array_agg(message.message),', ') as locality from eg_tl_address as tla
+                LEFT OUTER JOIN message on code=CONCAT(UPPER(REGEXP_REPLACE( $tenantid , '[^A-Za-z0-9]','_', 'g')),'_REVENUE_', REGEXP_REPLACE( locality , '[^A-Za-z0-9]','_', 'g')) 
+                AND message.locale = 'en_IN' group by 1) locality_tlb ON  locality_tlb.tradelicensedetailid = tld.id
       INNER JOIN eg_tl_owner tlowner ON tlowner.tradelicensedetailid = tld.id 
       INNER JOIN (
         SELECT tradelicensedetailid, array_to_string(array_agg(message.message),', ') as tradeTypeName FROM eg_tl_tradeunit
         LEFT OUTER JOIN message ON code = CONCAT('TRADELICENSE_TRADETYPE_', REGEXP_REPLACE(tradetype, '[^A-Za-z0-9]','_','g')) AND message.locale = 'en_IN' GROUP BY 1) tlunit ON tlunit.tradelicensedetailid = tld.id
       INNER JOIN eg_user tluser ON tluser.uuid = tlowner.id 
-      LEFT OUTER JOIN egcl_receiptheader_v1 receipt ON receipt.consumercode = tl.applicationnumber 
-      LEFT JOIN egcl_receiptinstrument_v1 as ri ON ri.receiptheader = receipt.id 
-      LEFT JOIN egcl_instrumentheader_v1 as ih ON ih.id = ri.instrumentheader 
+      LEFT OUTER JOIN egcl_bill bill ON bill.consumercode = tl.applicationnumber 
+      LEFT OUTER JOIN egcl_paymentdetail as paydetail on paydetail.billid=bill.id
+      INNER JOIN eg_tl_address ON eg_tl_address.tradelicensedetailid = tld.id
       LEFT OUTER JOIN 
       (
         SELECT tradelicensedetailid,array_to_string(array_agg(message.message),',') AS acc FROM eg_tl_accessory
         LEFT OUTER JOIN message ON code=CONCAT('TRADELICENSE_ACCESSORIESCATEGORY_', REGEXP_REPLACE(accessorycategory, '[^A-Za-z0-9]','_', 'g')) AND message.locale = 'en_IN' GROUP BY 1 ) tlacc ON tlacc.tradelicensedetailid = tld.id
-        WHERE tl.tenantid=$tenantid
+      WHERE tl.tenantid=$tenantid
 
 
 - reportName: StateDefaulterReport_v2
