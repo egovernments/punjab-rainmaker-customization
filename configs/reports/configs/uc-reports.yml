@@ -972,7 +972,7 @@ ReportDefinitions:
         JOIN receipt_breakup ON paydetail.billid = receipt_breakup.bill_id
         JOIN eg_user ON payment.createdby::INTEGER=eg_user.id
         WHERE  payment.tenantid!='pb.testing' AND businessservice not in ('PT','TL','FIRENOC')  and payment.paymentstatus != 'CANCELLED'
-     orderby: ORDER BY paydetail.receiptdate DESC
+    orderby: ORDER BY paydetail.receiptdate DESC
 
 
   - reportName: MiscReceiptULB_v2
@@ -1299,10 +1299,10 @@ ReportDefinitions:
           SUM(CASE WHEN taxheadcode LIKE '%_SGST' THEN adjustedamount ELSE 0 END) as sgst,
           SUM(CASE WHEN taxheadcode LIKE '%_FIELD_FEE' THEN adjustedamount ELSE 0 END) as fieldcollection,
           sum(adjustedamount) as totalamount
-       from egcl_paymentdetail paydetail
-       inner join egcl_billaccountdetail as ebd on paydetail.billid=ebd.billdetailid
-       inner join egcl_payment as payment on paydetail.paymentid=payment.id
-       WHERE paydetail.tenantid!='pb.testing' AND businessservice not in ('PT','TL','FIRENOC') and payment.paymentstatus!='CANCELLED'
+        from egcl_paymentdetail paydetail
+        inner join egcl_billaccountdetail as ebd on paydetail.billid=ebd.billdetailid
+        inner join egcl_payment as payment on paydetail.paymentid=payment.id
+        WHERE paydetail.tenantid!='pb.testing' AND businessservice not in ('PT','TL','FIRENOC') and payment.paymentstatus!='CANCELLED'
     groupby: group by paydetail.tenantid
 
   - reportName: MiscCollectionState_v2
