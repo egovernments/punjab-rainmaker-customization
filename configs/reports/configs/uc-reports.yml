@@ -943,37 +943,37 @@ ReportDefinitions:
         -- Use CTE to force query plan, compute & use CTE later
         WITH receipt_breakup AS (
                     SELECT 
-                      receiptheader, 
+                      egcl_billaccountdetail.billdetailid bill_id, 
                       SUM(CASE WHEN taxheadcode LIKE '%_CGST' THEN adjustedamount ELSE 0 END) as cgst, 
                       SUM(CASE WHEN taxheadcode LIKE '%_TAX' THEN adjustedamount ELSE 0 END) as tax, 
                       SUM(CASE WHEN taxheadcode LIKE '%_SGST' THEN adjustedamount ELSE 0 END) as sgst, 
                       SUM(CASE WHEN taxheadcode LIKE '%_FIELD_FEE' THEN adjustedamount ELSE 0 END) as fieldcollection            
-                    FROM egcl_receiptdetails_v1 as rd
-                    INNER JOIN egcl_receiptheader_v1 as rh on rh.id = rd.receiptheader
-                    WHERE  rh.status != 'Cancelled'  AND rh.tenantid!='pb.testing' AND businessdetails not in ('PT','TL','FIRENOC')
-                    GROUP BY rd.receiptheader
+                    FROM egcl_billaccountdetail 
+                    INNER JOIN egcl_bill as bill on bill.id = egcl_billaccountdetail.billdetailid
+                    WHERE  bill.tenantid!='pb.testing' AND businessservice not in ('PT','TL','FIRENOC') -- and rh.status != 'Cancelled'
+                    GROUP BY billdetailid
         )
         SELECT 
-          rh.tenantid as ulb,
-          rh.receiptnumber as receiptnumber,
-          To_char((To_timestamp(rh.receiptdate / 1000) at time Zone 'Asia/Kolkata'), 'DD/MM/YYYY') as receiptdate,
-          To_char((To_timestamp(rh.manualreceiptdate / 1000) at time Zone 'Asia/Kolkata'), 'DD/MM/YYYY') as g8issuedate,
-          rh.manualreceiptnumber as g8receiptno,
-          rh.status as status,
-          businessdetails as servicecategory,
+          payment.tenantid as ulb,
+          paydetail.receiptnumber as receiptnumber,
+          To_char((To_timestamp(paydetail.receiptdate / 1000) at time Zone 'Asia/Kolkata'), 'DD/MM/YYYY') as receiptdate,
+          To_char((To_timestamp(paydetail.manualreceiptdate / 1000) at time Zone 'Asia/Kolkata'), 'DD/MM/YYYY') as g8issuedate,
+          paydetail.manualreceiptnumber as g8receiptno,
+          payment.paymentstatus as status,
+          businessservice as servicecategory,
           receipt_breakup.*,  
-          amount as totalamount, 
-          instrumenttype as paymentmode,
-          (case when instrumenttype like 'Cash' then '' else  transactionnumber end) as ddorchequenumber,
+          payment.totalamountpaid as totalamount, 
+          paymentmode as paymentmode,
+          (case when paymentmode like 'CASH' then '' else  transactionnumber end) as ddorchequenumber,
           'System' as collectiontype,
           eg_user.name as collectorname
-        FROM egcl_receiptheader_v1 AS rh
-        JOIN egcl_receiptinstrument_v1 AS ri ON rh.id = ri.receiptheader
-        JOIN egcl_instrumentheader_v1 AS ih ON ih.id = ri.instrumentheader
-        JOIN receipt_breakup ON rh.id = receipt_breakup.receiptheader
-        JOIN eg_user ON rh.createdby::INTEGER=eg_user.id
-        WHERE  rh.status != 'Cancelled'  AND rh.tenantid!='pb.testing' AND businessdetails not in ('PT','TL','FIRENOC')
-    orderby: ORDER BY rh.receiptdate DESC
+        FROM egcl_payment AS payment
+        JOIN egcl_paymentdetail as paydetail on paydetail.paymentid=payment.id
+        JOIN receipt_breakup ON paydetail.billid = receipt_breakup.bill_id
+        JOIN eg_user ON payment.createdby::INTEGER=eg_user.id
+        WHERE  payment.tenantid!='pb.testing' AND businessservice not in ('PT','TL','FIRENOC')  and payment.paymentstatus != 'CANCELLED'
+     orderby: ORDER BY paydetail.receiptdate DESC
+
 
   - reportName: MiscReceiptULB_v2
     summary: Receipt Register Miscellaneous
@@ -1116,42 +1116,38 @@ ReportDefinitions:
         -- Use CTE to force query plan, compute & use CTE later
         WITH receipt_breakup AS (
                     SELECT 
-                      receiptheader, 
+                      egcl_billaccountdetail.billdetailid bill_id, 
                       SUM(CASE WHEN taxheadcode LIKE '%_CGST' THEN adjustedamount ELSE 0 END) as cgst, 
                       SUM(CASE WHEN taxheadcode LIKE '%_TAX' THEN adjustedamount ELSE 0 END) as tax, 
                       SUM(CASE WHEN taxheadcode LIKE '%_SGST' THEN adjustedamount ELSE 0 END) as sgst, 
                       SUM(CASE WHEN taxheadcode LIKE '%_FIELD_FEE' THEN adjustedamount ELSE 0 END) as fieldcollection            
-                    FROM egcl_receiptdetails_v1 as rd
-                    INNER JOIN egcl_receiptheader_v1 as rh on rh.id = rd.receiptheader
-                    where status!='Cancelled' and businessdetails not in ('PT','TL','FIRENOC') and rd.tenantid=$tenantid
-                    GROUP BY rd.receiptheader
+                    FROM egcl_billaccountdetail 
+                    INNER JOIN egcl_bill as bill on bill.id = egcl_billaccountdetail.billdetailid
+                    WHERE  bill.tenantid!='pb.testing' AND businessservice not in ('PT','TL','FIRENOC')
+                                        and bill.tenantid=$tenantid  -- and rh.status != 'Cancelled'
+                    GROUP BY billdetailid
         )
         SELECT 
-          rh.tenantid as ulb,
-          rh.receiptnumber as receiptnumber,
-          To_char((To_timestamp(rh.receiptdate / 1000) at time Zone 'Asia/Kolkata'), 'DD/MM/YYYY') as receiptdate,
-          To_char((To_timestamp(rh.manualreceiptdate / 1000) at time Zone 'Asia/Kolkata'), 'DD/MM/YYYY') as g8issuedate,
-          rh.manualreceiptnumber as g8receiptno,
-          rh.status as status,
-          businessdetails as servicecategory,
+          payment.tenantid as ulb,
+          paydetail.receiptnumber as receiptnumber,
+          To_char((To_timestamp(paydetail.receiptdate / 1000) at time Zone 'Asia/Kolkata'), 'DD/MM/YYYY') as receiptdate,
+          To_char((To_timestamp(paydetail.manualreceiptdate / 1000) at time Zone 'Asia/Kolkata'), 'DD/MM/YYYY') as g8issuedate,
+          paydetail.manualreceiptnumber as g8receiptno,
+          payment.paymentstatus as status,
+          businessservice as servicecategory,
           receipt_breakup.*,  
-          amount as totalamount, 
-          instrumenttype as paymentmode,
-          (case when instrumenttype like 'Cash' then '' else  transactionnumber end) as ddorchequenumber,
-          (case when instrumenttype like 'DD' or instrumenttype like 'Cheque' then To_char((To_timestamp(ih.transactiondate / 1000) at time Zone 'Asia/Kolkata'), 'DD/MM/YYYY') else '' end) as ddchequedate,
-          ih.bankid as bankname,
-          ih.branchname as branchname,
+          payment.totalamountpaid as totalamount, 
+          paymentmode as paymentmode,
+          (case when paymentmode like 'CASH' then '' else  transactionnumber end) as ddorchequenumber,
           'System' as collectiontype,
-          eg_user.name as collectorname,
-          rh.additionaldetails->>'comment' as comments
-        FROM egcl_receiptheader_v1 AS rh
-        JOIN egcl_receiptinstrument_v1 AS ri ON rh.id = ri.receiptheader
-        JOIN egcl_instrumentheader_v1 AS ih ON ih.id = ri.instrumentheader
-        JOIN receipt_breakup ON rh.id = receipt_breakup.receiptheader
-        JOIN eg_user ON rh.createdby::INTEGER=eg_user.id
-        WHERE  rh.status != 'Cancelled'  AND businessdetails not in ('PT','TL','FIRENOC')
-        and rh.tenantid=$tenantid
-    orderby: ORDER BY rh.receiptdate DESC
+          eg_user.name as collectorname
+        FROM egcl_payment AS payment
+        JOIN egcl_paymentdetail as paydetail on paydetail.paymentid=payment.id
+        JOIN receipt_breakup ON paydetail.billid = receipt_breakup.bill_id
+        JOIN eg_user ON payment.createdby::INTEGER=eg_user.id
+        WHERE  payment.tenantid!='pb.testing' AND businessservice not in ('PT','TL','FIRENOC') and payment.tenantid=$tenantid  and payment.paymentstatus != 'CANCELLED'
+    orderby: ORDER BY paydetail.receiptdate DESC
+
 
   - reportName: MiscReceiptStateWide_v2
     summary: State Receipt Register Miscellaneous
@@ -1217,16 +1213,20 @@ ReportDefinitions:
     query: |
         -- Use CTE to force query plan, compute & use CTE later
         SELECT
-          rh.tenantid as ulb,rh.businessdetails as servicecategory, count(*) as receipts,
+          payment.tenantid as ulb,
+          paydetail.businessservice as servicecategory, 
+          count(*) as receipts,
           SUM(CASE WHEN taxheadcode LIKE '%_FIELD_FEE' THEN adjustedamount ELSE 0 END) as fieldcollection,
           SUM(CASE WHEN taxheadcode LIKE '%_TAX' THEN adjustedamount ELSE 0 END) as tax, 
           SUM(CASE WHEN taxheadcode LIKE '%_CGST' THEN adjustedamount ELSE 0 END) as cgst, 
           SUM(CASE WHEN taxheadcode LIKE '%_SGST' THEN adjustedamount ELSE 0 END) as sgst, 
-          sum(totalamount) as totalamount
-        from egcl_receiptheader_v1 rh, egcl_receiptdetails_v1 as rd
-        WHERE rh.id=rd.receiptheader and rh.status != 'Cancelled'  AND rh.tenantid!='pb.testing' AND businessdetails not in ('PT','TL','FIRENOC') 
-    groupby: group by rh.tenantid,rh.businessdetails
-    orderby: order by rh.tenantid
+          sum(paydetail.amountpaid) as totalamount
+        from egcl_payment payment 
+        inner join egcl_paymentdetail as paydetail on paydetail.paymentid=payment.id
+        inner join egcl_billaccountdetail as ebd on paydetail.billid=ebd.billdetailid
+        WHERE payment.tenantid!='pb.testing' AND paydetail.businessservice not in ('PT','TL','FIRENOC')   and payment.paymentstatus != 'CANCELLED' 
+    groupby: group by payment.tenantid,paydetail.businessservice
+    orderby: order by payment.tenantid
 
   - reportName: MiscReceiptState_v2
     summary: State Miscellaneous Receipt Register 
@@ -1292,16 +1292,18 @@ ReportDefinitions:
     query: |
         -- Use CTE to force query plan, compute & use CTE later
         SELECT
-          rh.tenantid as ulb,
-          count(distinct rh.id) as noofreceipts,
-          SUM(CASE WHEN taxheadcode LIKE '%_TAX' THEN adjustedamount ELSE 0 END) as tax, 
-          SUM(CASE WHEN taxheadcode LIKE '%_CGST' THEN adjustedamount ELSE 0 END) as cgst, 
-          SUM(CASE WHEN taxheadcode LIKE '%_SGST' THEN adjustedamount ELSE 0 END) as sgst, 
+          paydetail.tenantid as ulb,
+          count(distinct paydetail.receiptnumber) as noofreceipts,
+          SUM(CASE WHEN taxheadcode LIKE '%_TAX' THEN adjustedamount ELSE 0 END) as tax,
+          SUM(CASE WHEN taxheadcode LIKE '%_CGST' THEN adjustedamount ELSE 0 END) as cgst,
+          SUM(CASE WHEN taxheadcode LIKE '%_SGST' THEN adjustedamount ELSE 0 END) as sgst,
           SUM(CASE WHEN taxheadcode LIKE '%_FIELD_FEE' THEN adjustedamount ELSE 0 END) as fieldcollection,
-          sum(amount) as totalamount
-        from egcl_receiptheader_v1 rh, egcl_receiptdetails_v1 as rd
-        WHERE rh.id=rd.receiptheader and rh.status != 'Cancelled' AND rh.tenantid!='pb.testing' AND businessdetails not in ('PT','TL','FIRENOC') 
-    groupby: group by rh.tenantid
+          sum(adjustedamount) as totalamount
+       from egcl_paymentdetail paydetail
+       inner join egcl_billaccountdetail as ebd on paydetail.billid=ebd.billdetailid
+       inner join egcl_payment as payment on paydetail.paymentid=payment.id
+       WHERE paydetail.tenantid!='pb.testing' AND businessservice not in ('PT','TL','FIRENOC') and payment.paymentstatus!='CANCELLED'
+    groupby: group by paydetail.tenantid
 
   - reportName: MiscCollectionState_v2
     summary: State Miscellaneous Collection Register 
@@ -1367,19 +1369,19 @@ ReportDefinitions:
     query: |
         -- Use CTE to force query plan, compute & use CTE later
         SELECT
-          initcap(split_part(rh.tenantId, '.', 2)) as ulb,
-          count(*) FILTER (where collectiontype='COUNTER') as offlinetransactions,
-          count(*) FILTER (where collectiontype='ONLINE') as onlinetransactions,
+          initcap(split_part(payment.tenantId, '.', 2)) as ulb,
+          count(*) FILTER (where payment.paymentmode!='ONLINE') as offlinetransactions,
+          count(*) FILTER (where payment.paymentmode='ONLINE') as onlinetransactions,
           count(*) as totaltransactions,
-          sum(case collectiontype when 'COUNTER' then ih.amount else 0 end) as offlinecollection,
-          sum(case collectiontype when 'ONLINE' then ih.amount else 0 end) as onlinecollection,
-          sum(ih.amount) as totalcollection
-        from egcl_receiptheader_v1 as rh
-        inner join egcl_receiptinstrument_v1 as ri on ri.receiptheader = rh.id
-        inner join egcl_instrumentheader_v1 as ih on ih.id = ri.instrumentheader
-        where rh.businessdetails not in ('PT','TL','FIRENOC') and rh.status !='Cancelled' and rh.tenantid !='pb.testing'
-    groupby: GROUP BY rh.tenantid
-    orderby: ORDER BY rh.tenantId asc
+          sum(case when paymentmode!='ONLINE' then payment.totalamountpaid else 0 end) as offlinecollection,
+          sum(case paymentmode when 'ONLINE' then payment.totalamountpaid else 0 end) as onlinecollection,
+          sum(payment.totalamountpaid) as totalcollection
+        from egcl_payment as payment
+        inner join egcl_paymentdetail as paydetail on paydetail.paymentid=payment.id
+        where paydetail.businessservice not in ('PT','TL','FIRENOC') and payment.tenantid !='pb.testing'  and payment.paymentstatus != 'CANCELLED' 
+    goupby: GROUP BY payment.tenantid
+    orderby: ORDER BY payment.tenantId asc
+
 
   - reportName: MiscBusinessServiceCollectionTenant_v2
     summary: Miscellaneous Business Service Collection 
@@ -1437,17 +1439,19 @@ ReportDefinitions:
     query: |
         -- Use CTE to force query plan, compute & use CTE later
         SELECT
-          rh.businessdetails as servicetype,
-          count(distinct rh.id) as totalreceipts,
+          paydetail.businessservice as servicetype,
+          count(distinct paydetail.receiptnumber) as totalreceipts,
           SUM(CASE WHEN taxheadcode LIKE '%_TAX' THEN adjustedamount ELSE 0 END) as tax, 
           SUM(CASE WHEN taxheadcode LIKE '%_CGST' THEN adjustedamount ELSE 0 END) as cgst, 
           SUM(CASE WHEN taxheadcode LIKE '%_SGST' THEN adjustedamount ELSE 0 END) as sgst, 
           SUM(CASE WHEN taxheadcode LIKE '%_FIELD_FEE' THEN adjustedamount ELSE 0 END) as fieldcollection,
-          SUM(amount) as totalcollection
-        from egcl_receiptheader_v1 rh, egcl_receiptdetails_v1 as rd
-        WHERE rh.id=rd.receiptheader and rh.status != 'Cancelled' AND rh.tenantid=$tenantid AND businessdetails not in ('PT','TL','FIRENOC') 
-    groupby: GROUP BY rh.businessdetails
-    orderby: ORDER BY rh.businessdetails
+          SUM(adjustedamount) as totalcollection
+        from egcl_payment payment, egcl_paymentdetail as paydetail
+        inner join egcl_billaccountdetail as billdetail on billdetail.billdetailid=paydetail.billid
+        WHERE payment.id=paydetail.paymentid  AND payment.tenantid='pb.testing' AND paydetail.businessservice not in ('PT','TL','FIRENOC')  and payment.paymentstatus != 'CANCELLED'
+    groupby: GROUP BY paydetail.businessservice
+    orderby: ORDER BY paydetail.businessservice
+
 
   - reportName: MiscReceiptULBCancelled_v2
     summary: Cancelled Receipt Miscellaneous
@@ -1552,35 +1556,37 @@ ReportDefinitions:
         -- Use CTE to force query plan, compute & use CTE later
         WITH receipt_breakup AS (
                     SELECT 
-                      receiptheader, 
+                      egcl_billaccountdetail.billdetailid bill_id, 
                       SUM(CASE WHEN taxheadcode LIKE '%_CGST' THEN adjustedamount ELSE 0 END) as cgst, 
                       SUM(CASE WHEN taxheadcode LIKE '%_TAX' THEN adjustedamount ELSE 0 END) as tax, 
                       SUM(CASE WHEN taxheadcode LIKE '%_SGST' THEN adjustedamount ELSE 0 END) as sgst, 
                       SUM(CASE WHEN taxheadcode LIKE '%_FIELD_FEE' THEN adjustedamount ELSE 0 END) as fieldcollection            
-                    FROM egcl_receiptdetails_v1 as rd
-                    INNER JOIN egcl_receiptheader_v1 as rh on rh.id = rd.receiptheader
-                    WHERE  rh.status = 'Cancelled'  AND businessdetails not in ('PT','TL','FIRENOC') and rh.tenantid=$tenantid
-                    GROUP BY rd.receiptheader
+                    FROM egcl_billaccountdetail 
+                    INNER JOIN egcl_bill as bill on bill.id = egcl_billaccountdetail.billdetailid
+                    WHERE  bill.tenantid!='pb.testing' AND businessservice not in ('PT','TL','FIRENOC') and bill.tenantid=$tenantid  -- and rh.status != 'Cancelled'
+                    GROUP BY billdetailid
         )
         SELECT 
-          rh.tenantid as ulb,
-          rh.receiptnumber as receiptnumber,
-          To_char((To_timestamp(rh.receiptdate / 1000) at time Zone 'Asia/Kolkata'), 'DD/MM/YYYY') as receiptdate,
-          businessdetails as servicecategory,
+          payment.tenantid as ulb,
+          paydetail.receiptnumber as receiptnumber,
+          To_char((To_timestamp(paydetail.receiptdate / 1000) at time Zone 'Asia/Kolkata'), 'DD/MM/YYYY') as receiptdate,
+          To_char((To_timestamp(paydetail.manualreceiptdate / 1000) at time Zone 'Asia/Kolkata'), 'DD/MM/YYYY') as g8issuedate,
+          paydetail.manualreceiptnumber as g8receiptno,
+          payment.paymentstatus as status,
+          businessservice as servicecategory,
           receipt_breakup.*,  
-          amount as totalamount, 
-          instrumenttype as paymentmode,
-          (case when instrumenttype like 'Cash' then '' else  transactionnumber end) as ddorchequenumber,
-          (case when instrumenttype like 'DD' or instrumenttype like 'Cheque' then To_char((To_timestamp(ih.transactiondate / 1000) at time Zone 'Asia/Kolkata'), 'DD/MM/YYYY') else '' end) as ddchequedate,
+          payment.totalamountpaid as totalamount, 
+          paymentmode as paymentmode,
+          (case when paymentmode like 'CASH' then '' else  transactionnumber end) as ddorchequenumber,
+          'System' as collectiontype,
           eg_user.name as collectorname
-        FROM egcl_receiptheader_v1 AS rh
-        JOIN egcl_receiptinstrument_v1 AS ri ON rh.id = ri.receiptheader
-        JOIN egcl_instrumentheader_v1 AS ih ON ih.id = ri.instrumentheader
-        JOIN receipt_breakup ON rh.id = receipt_breakup.receiptheader
-        JOIN eg_user ON rh.createdby::INTEGER=eg_user.id
-        WHERE  rh.status = 'Cancelled'  AND businessdetails not in ('PT','TL','FIRENOC')
-        and rh.tenantid=$tenantid
-    orderby: ORDER BY rh.receiptdate DESC
+        FROM egcl_payment AS payment
+        JOIN egcl_paymentdetail as paydetail on paydetail.paymentid=payment.id
+        JOIN receipt_breakup ON paydetail.billid = receipt_breakup.bill_id
+        JOIN eg_user ON payment.createdby::INTEGER=eg_user.id
+        WHERE  payment.tenantid!='pb.testing' AND businessservice not in ('PT','TL','FIRENOC') and payment.tenantid=$tenantid  and payment.paymentstatus = 'CANCELLED'
+    orderby: ORDER BY paydetail.receiptdate DESC
+
 
   - reportName: MiscReceiptULBShort_v2
     summary: Receipt Register Miscellaneous
@@ -1649,17 +1655,15 @@ ReportDefinitions:
     query: |
         -- Use CTE to force query plan, compute & use CTE later
         SELECT 
-          rh.payername as consumername,
-          rh.payermobile as mobilenumber,
-          To_char((To_timestamp(rh.receiptdate / 1000) at time Zone 'Asia/Kolkata'), 'DD/MM/YYYY') as receiptdate,
-          businessdetails as servicecategory,
-          rh.totalamount as amount, 
+          payment.payername as consumername,
+          payment.mobilenumber as mobilenumber,
+          To_char((To_timestamp(paydetail.receiptdate / 1000) at time Zone 'Asia/Kolkata'), 'DD/MM/YYYY') as receiptdate,
+          paydetail.businessservice as servicecategory,
+          payment.totalamountpaid as amount, 
           eg_user.name as collectorname,
-          rh.additionaldetails->>'comment' as remarks
-        FROM egcl_receiptheader_v1 AS rh
-        JOIN egcl_receiptinstrument_v1 AS ri ON rh.id = ri.receiptheader
-        JOIN egcl_instrumentheader_v1 AS ih ON ih.id = ri.instrumentheader
-        JOIN eg_user ON rh.createdby::INTEGER=eg_user.id
-        WHERE  rh.status != 'Cancelled'  AND businessdetails not in ('PT','TL','FIRENOC')
-        and rh.tenantid=$tenantid
-    orderby: ORDER BY rh.receiptdate DESC
+          payment.additionaldetails->>'comment' as remarks
+        FROM egcl_payment AS payment
+        inner join egcl_paymentdetail as paydetail on paydetail.paymentid=payment.id
+        JOIN eg_user ON payment.createdby::INTEGER=eg_user.id
+        WHERE  paydetail.businessservice not in ('PT','TL','FIRENOC')  and payment.paymentstatus != 'CANCELLED' and payment.tenantid='pb.testing'
+    orderby: ORDER BY paydetail.receiptdate DESC
