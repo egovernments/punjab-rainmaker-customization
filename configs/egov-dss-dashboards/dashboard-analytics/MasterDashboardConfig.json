@@ -3091,8 +3091,8 @@
               "id": 221,
               "name": "DSS_W&S_TOP_3_PERFORMING_ULBS",
               "dimensions": {
-                "height": 200,
-                "width": 3
+                "height": 250,
+                "width": 4
               },
               "vizType": "performing-metric",
               "noUnit": false,
@@ -3113,8 +3113,8 @@
               "id": 222,
               "name": "DSS_W&S_BOTTOM_3_PERFORMING_ULBS",
               "dimensions": {
-                "height": 200,
-                "width": 3
+                "height": 250,
+                "width": 4
               },
               "vizType": "performing-metric",
               "noUnit": false,
@@ -3129,13 +3129,19 @@
                   "headers": []
                 }
               ]
-            },
+            } 
+          ]
+        },
+        {
+          "row": 3,
+          "name": "DSS_REVENUE",
+          "vizArray": [
             {
               "id": 223,
               "name": "DSS_W&S_COLLECTION_BY_USAGE",
               "dimensions": {
-                "height": 200,
-                "width": 3
+                "height": 250,
+                "width": 4
               },
               "vizType": "chart",
               "noUnit": true,
@@ -3155,8 +3161,8 @@
               "id": 224,
               "name": "DSS_W&S_COLLECTION_BY_CHANNEL",
               "dimensions": {
-                "height": 200,
-                "width": 3
+                "height": 250,
+                "width": 4
               },
               "vizType": "chart",
               "noUnit": true,
@@ -3171,11 +3177,11 @@
                   "headers": []
                 }
               ]
-            } 
+            }
           ]
         },
         {
-          "row": 3,
+          "row": 4,
           "name": "DSS_REVENUE",
           "vizArray": [
             {
@@ -3203,7 +3209,7 @@
           ]
         },
         {
-          "row": 4,
+          "row": 5,
           "name": "DSS_REVENUE",
           "vizArray": [
             {
@@ -3494,8 +3500,8 @@
               "id": 221,
               "name": "DSS_W&S_TOP_3_PERFORMING_ULBS",
               "dimensions": {
-                "height": 200,
-                "width": 3
+                "height": 250,
+                "width": 4
               },
               "vizType": "performing-metric",
               "noUnit": false,
@@ -3516,8 +3522,8 @@
               "id": 222,
               "name": "DSS_W&S_BOTTOM_3_PERFORMING_ULBS",
               "dimensions": {
-                "height": 200,
-                "width": 3
+                "height": 250,
+                "width": 4
               },
               "vizType": "performing-metric",
               "noUnit": false,
@@ -3532,13 +3538,19 @@
                   "headers": []
                 }
               ]
-            },
+            } 
+          ]
+        },
+        {
+          "row": 3,
+          "name": "DSS_REVENUE",
+          "vizArray": [
             {
               "id": 223,
               "name": "DSS_W&S_COLLECTION_BY_USAGE",
               "dimensions": {
-                "height": 200,
-                "width": 3
+                "height": 250,
+                "width": 4
               },
               "vizType": "chart",
               "noUnit": true,
@@ -3558,8 +3570,8 @@
               "id": 224,
               "name": "DSS_W&S_COLLECTION_BY_CHANNEL",
               "dimensions": {
-                "height": 200,
-                "width": 3
+                "height": 250,
+                "width": 4
               },
               "vizType": "chart",
               "noUnit": true,
@@ -3574,11 +3586,11 @@
                   "headers": []
                 }
               ]
-            } 
+            }
           ]
         },
         {
-          "row": 3,
+          "row": 4,
           "name": "DSS_REVENUE",
           "vizArray": [
             {
@@ -3606,7 +3618,7 @@
           ]
         },
         {
-          "row": 3,
+          "row": 5,
           "name": "DSS_REVENUE",
           "vizArray": [
             {
