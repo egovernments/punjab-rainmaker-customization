@@ -1,7 +1,7 @@
 {
   "topicContextConfigurations": [
     {
-      "topic": "collectionsindex-v1-enriched",
+      "topic": "dss-collection-update",
       "dataContext": "collection",
       "dataContextVersion": "v1"
     },
