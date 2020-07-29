@@ -3129,7 +3129,13 @@
                   "headers": []
                 }
               ]
-            },
+            }
+          ]
+        },
+        {
+          "row": 3,
+          "name": "DSS_REVENUE",
+          "vizArray": [
             {
               "id": 223,
               "name": "DSS_W&S_COLLECTION_BY_USAGE",
@@ -3150,11 +3156,32 @@
                   "headers": []
                 }
               ]
+            },
+            {
+              "id": 224,
+              "name": "DSS_W&S_COLLECTION_BY_CHANNEL",
+              "dimensions": {
+                "height": 250,
+                "width": 4
+              },
+              "vizType": "chart",
+              "noUnit": true,
+              "isCollapsible": false,
+              "charts": [
+                {
+                  "id": "wscollectionByChannel",
+                  "name": "DSS_W&S_COLLECTION_BY_CHANNEL",
+                  "code": "",
+                  "chartType": "donut",
+                  "filter": "",
+                  "headers": []
+                }
+              ]
             }
           ]
         },
         {
-          "row": 3,
+          "row": 4,
           "name": "DSS_REVENUE",
           "vizArray": [
             {
@@ -3182,7 +3209,7 @@
           ]
         },
         {
-          "row": 4,
+          "row": 5,
           "name": "DSS_REVENUE",
           "vizArray": [
             {
@@ -3511,7 +3538,13 @@
                   "headers": []
                 }
               ]
-            },
+            }
+          ]
+        },
+        {
+          "row": 3,
+          "name": "DSS_REVENUE",
+          "vizArray": [
             {
               "id": 223,
               "name": "DSS_W&S_COLLECTION_BY_USAGE",
@@ -3532,11 +3565,32 @@
                   "headers": []
                 }
               ]
+            },
+            {
+              "id": 224,
+              "name": "DSS_W&S_COLLECTION_BY_CHANNEL",
+              "dimensions": {
+                "height": 250,
+                "width": 4
+              },
+              "vizType": "chart",
+              "noUnit": true,
+              "isCollapsible": false,
+              "charts": [
+                {
+                  "id": "wscollectionByChannel",
+                  "name": "DSS_W&S_COLLECTION_BY_CHANNEL",
+                  "code": "",
+                  "chartType": "donut",
+                  "filter": "",
+                  "headers": []
+                }
+              ]
             }
           ]
         },
         {
-          "row": 3,
+          "row": 4,
           "name": "DSS_REVENUE",
           "vizArray": [
             {
@@ -3564,7 +3618,7 @@
           ]
         },
         {
-          "row": 4,
+          "row": 5,
           "name": "DSS_REVENUE",
           "vizArray": [
             {
