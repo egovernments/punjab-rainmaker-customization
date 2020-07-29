@@ -17,7 +17,8 @@ class Document:
     fileStoreId: Optional[str]
     status: Optional[str]
 
-    def __init__(self, id: None = None, document_type: None = None,document_uid: None = None, additional_details: None = None) -> None:
+    def __init__(self, id: None = None, document_type: None = None, document_uid: None = None,
+                 additional_details: None = None) -> None:
         self.id = id
         self.documentType = document_type
         self.documentUid = document_uid
@@ -25,25 +26,10 @@ class Document:
 
 
 class ProcessInstance:
-    id: Optional[str]
-    tenantId: Optional[str]
-    businessService: Optional[str]
-    businessId: Optional[str]
     action: Optional[str]
-    moduleName: Optional[str]
-    state: Optional[str]
-    comment: Optional[str]
-    documents: None
 
-    def __init__(self, id: None = None, tenant_id:  None = None,business_service: None = None, business_id: None = None, action: None = None, module_name:  None = None, comment: None = None, documents: None = None):
-        self.id = id
-        self.tenantId = tenant_id
-        self.businessService = business_service
-        self.businessId = business_id
+    def __init__(self, action: None = None):
         self.action = action
-        self.moduleName = module_name
-        self.comment = comment
-        self.documents = None
 
 
 class WaterConnectionRequest:
@@ -64,7 +50,8 @@ class WaterConnectionRequest:
     actualPipeSize: Optional[int]
     proposedTaps: Optional[int]
     actualTaps: Optional[int]
-    processInstance: Optional[str]
+    service: Optional[str]
+    processInstance: Optional[ProcessInstance]
 
     def __init__(self, tenant_id: None = None, property_id: None = None, documents: None = None,
                  plumber_info: None = None, road_type: None = None, road_cutting_area: None = None,
@@ -72,7 +59,7 @@ class WaterConnectionRequest:
                  additional_details: None = None, rain_water_harvesting: None = None,
                  water_source: None = None, meter_id: None = None, meter_installation_date: None = None,
                  proposed_pipe_size: None = None, actual_pipe_size: None = None,
-                 proposed_taps: None = None, actual_taps: None = None):
+                 proposed_taps: None = None, actual_taps: None = None, service: None = None):
         print(self, tenant_id, property_id, documents)
         self.tenantId = tenant_id
         self.propertyId = property_id
@@ -91,6 +78,7 @@ class WaterConnectionRequest:
         self.actualPipeSize = actual_pipe_size
         self.proposedTaps = proposed_taps
         self.actualTaps = actual_taps
+        self.service = service
 
     def prepare_water_connection(self, json_data, tenant, property_id):
         print(json_data)
@@ -111,7 +99,14 @@ class WaterConnectionRequest:
         self.actualPipeSize = json_data["actualPipeSize"]
         self.proposedTaps = json_data["proposedTaps"]
         self.actualTaps = json_data["actualTaps"]
-        print(self.proposedTaps)
+        self.service = 'Water'
+        self.processInstance = self.prepare_process_instance()
+        print(self.processInstance.action)
+
+    def prepare_process_instance(self):
+        action_initiate = 'INITIATE'
+        process_obj = ProcessInstance(action=action_initiate)
+        return process_obj
 
     def upload_water_connection(self, access_token):
         # print("Water Json : ", self.get_water_json())
@@ -119,17 +114,18 @@ class WaterConnectionRequest:
             "RequestInfo": {
                 "authToken": access_token
             },
-            "Properties": [
+            "WaterConnection": [
                 self.get_water_json()
             ]
         }
         # print(request_data)
-        response = requests.post(urljoin(config.HOST, "/ws-service/ws/_create?tenantId="), json=request_data)
+        response = requests.post(urljoin(config.HOST, "/ws-services/wc/_create?"), json=request_data)
         res = response.json()
         return request_data, res
+
+    # def get_self_json(self):
+    # return json.dumps(self.__dict__)
 
     def get_water_json(self):
         water_encoder = WaterEncoder().encode(self)
         return convert_json(json.loads(water_encoder), underscore_to_camel)
-
-
