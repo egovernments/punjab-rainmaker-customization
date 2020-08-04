@@ -3,7 +3,7 @@
     {
       "id": "1",
       "domain": "PT",
-      "indexName": "ptindex-v1",
+      "indexName": "property-services",
       "documentType": "",
       "query": "{\"query\":{\"bool\":{\"must\":[{\"match_phrase\":{\"Data.propertyId\":\"value\"}}]}}}",
       "targetReferences": [
