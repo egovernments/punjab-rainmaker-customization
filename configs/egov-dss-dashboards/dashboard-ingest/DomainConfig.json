@@ -3,7 +3,7 @@
     {
       "id": "1",
       "domain": "PT",
-      "indexName": "property-services",
+      "indexName": "property-assessments",
       "documentType": "",
       "query": "{\"query\":{\"bool\":{\"must\":[{\"match_phrase\":{\"Data.propertyId\":\"value\"}}]}}}",
       "targetReferences": [
@@ -14,14 +14,6 @@
           "value": "$value",
           "seperator": " ",
           "expression": "propertyId"
-        },
-        {
-          "fieldName": "assessmentNumber",
-          "argument": "Data.propertyDetails.assessmentNumber",
-          "dataType": "String",
-          "value": "$value",
-          "seperator": " ",
-          "expression": "assessmentNumber"
         }
       ],
       "sourceReferences": [
@@ -30,8 +22,8 @@
           "argument": "Bill.billDetails.consumerCode",
           "dataType": "String",
           "value": "$value",
-          "seperator": ":",
-          "expression": "propertyId:assessmentNumber"
+          "seperator": " ",
+          "expression": "propertyId"
         }
       ]
     },
