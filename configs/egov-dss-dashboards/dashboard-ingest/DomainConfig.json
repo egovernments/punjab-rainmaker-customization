@@ -19,7 +19,7 @@
       "sourceReferences": [
         {
           "fieldName": "consumerCode",
-          "argument": "Bill.billDetails.consumerCode",
+          "argument": "paymentDetails.bill.consumerCode",
           "dataType": "String",
           "value": "$value",
           "seperator": " ",
