@@ -3,7 +3,7 @@
     {
       "id": "1",
       "domain": "PT",
-      "indexName": "property-assessments",
+      "indexName": "property-services",
       "documentType": "",
       "query": "{\"query\":{\"bool\":{\"must\":[{\"match_phrase\":{\"Data.propertyId\":\"value\"}}]}}}",
       "targetReferences": [
