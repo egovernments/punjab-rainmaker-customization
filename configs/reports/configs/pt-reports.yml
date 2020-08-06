@@ -2066,4 +2066,4 @@ ReportDefinitions:
    inner join eg_user as eu on eu.uuid     = po.userid
    inner join eg_pt_address_v2    as pta on pta.property = pt.propertyid
    left outer join eg_pt_unit_v2_ot as pot on pot.propertydetail = pd.assessmentnumber
-   where rh.tenantid =$tenantid and pd.property not in (select property from eg_pt_propertydetail_v2 where financialyear  in ('2019-20'))  
+   where rh.tenantid =$tenantid and pd.property not in (select property from eg_pt_propertydetail_v2 where financialyear  in ('2020-21'))  
