@@ -6,7 +6,7 @@
       "id": "id",
       "paymentMode": "paymentMode",
       "paymentStatus": "paymentStatus",
-      "transactionId": "transactionNumber",
+      "transactionNumber": "transactionNumber",
       "paidBy": "paidBy",
       "payer": "payer",
       "paymentDetails": {
