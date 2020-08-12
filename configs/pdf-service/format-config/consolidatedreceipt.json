@@ -284,7 +284,7 @@
                 "style": "receipt-table"
               },
               {
-                "text": "",
+                "text": " ",
                 "border": [
                   false,
                   false,
@@ -294,7 +294,7 @@
                 "style": "receipt-table-value"
               },
               {
-                "text": "",
+                "text": " ",
                 "border": [
                   false,
                   false,
