@@ -1318,13 +1318,13 @@ ReportDefinitions:
     type: epoch
     source: tl
     isMandatory: false
-    searchClause: AND receipt.createddate >= $fromDate
+    searchClause: AND egcl_paymentdetail.receiptdate >= $fromDate
   - name: toDate
     label: reports.tl.toDate
     type: epoch
     source: tl
     isMandatory: false
-    searchClause: AND receipt.createddate  <= $toDate 
+    searchClause: AND egcl_paymentdetail.receiptdate  <= $toDate 
   - name: collectorname
     label: reports.uc.collectorname
     type: singlevaluelist
@@ -1950,13 +1950,13 @@ ReportDefinitions:
     type: epoch
     source: tl
     isMandatory: false
-    searchClause: AND rh.receiptdate >= $fromDate
+    searchClause: AND paydetail.receiptdate >= $fromDate
   - name: toDate
     label: reports.tl.toDate
     type: epoch
     source: tl
     isMandatory: false
-    searchClause: AND rh.receiptdate <= $toDate
+    searchClause: AND paydetail.receiptdate <= $toDate
   - name: ulb
     label: ULB
     type: singlevaluelist
