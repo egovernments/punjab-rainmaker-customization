@@ -1475,13 +1475,13 @@ ReportDefinitions:
     type: epoch
     source: tl
     isMandatory: false
-    searchClause: AND receipt.createddate >= $fromDate
+    searchClause: AND paydetail.receiptdate >= $fromDate
   - name: toDate
     label: reports.tl.toDate
     type: epoch
     source: tl
     isMandatory: false
-    searchClause: AND receipt.createddate  <= $toDate 
+    searchClause: AND paydetail.receiptdate  <= $toDate 
   query: |
     SELECT 
       initcap(split_part(tl.tenantId, '.', 2)) as tenantId,
@@ -2184,6 +2184,11 @@ ReportDefinitions:
     type: string
     source: tl
     total: false
+  - name: locality
+    label: report.tl.locality
+    type: string
+    source: tl
+    total: false
   - name: propertyid
     label: report.tl.propertyid
     type: string
@@ -2244,6 +2249,11 @@ ReportDefinitions:
     type: string
     source: tl
     total: true
+  - name: status
+    label: report.tl.receipt.status
+    type: string
+    source: tl
+    total: false
   searchParams:
   - name: fromDate
     label: reports.tl.fromDate
