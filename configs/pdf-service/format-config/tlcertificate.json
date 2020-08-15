@@ -4,31 +4,36 @@
       "defaultStyle": {
           "font": "Cambay"
            },
-          "content": [
+          
+		  "content": [
              {
                "style":"noc-head",
                "table":{
                  "widths":[
                    "*"
                  ],
-                 "body":[ 
-                      [
-                          {
-                              "image": "{{userpic}}",
+                 "body":[
+                   [
+                       
+                      { 
+                        "style":"noc-head",
+                        "table":
+                        {    
+                        "widths":["30%","*"],
+                       "body":
+                        [
+                          [ 
+                         {
+                              "image": "{{logoImage}}",
                               "width": 70,
                               "height": 82,
                               "alignment": "center",
-                               "margin": [
-                                      0,
-                                      10,
-                                      0,
-                                      10
-                              ]
-                           }  
-                      ],
-                   [
-                     {
-                       "stack": [
+                               "margin": [30, 40, 0,10 ]
+                           },
+                           
+                         {
+                          "stack": 
+                          [
                          {
                            "text":"{{municipal_corportaion}}",
                            "style":"receipt-logo-header"
@@ -38,72 +43,39 @@
                            "style":"receipt-logo-sub-header"
                          },
                          {
-                          "style": "noc-head",
-                          "table": {
-                            "widths": [
-                              "*",
-                              "*"
-                            ],
-                            "body": [
-                                [
-                                    {
-                                        "text": "{{corporation_contact}} : {{corporationContact}} ",
-                                        "style": "receipt-sub-address-sub-header"
+                            "text": "{{corporation_contact}} : {{corporationContact}} ",
+                            "style": "receipt-logo-sub-header"
                                         
-                                    }
-                               ]
-                            ]
-                          },
-                          "layout": "noBorders"
-                    },
-                    {
-                          "style": "noc-head",
-                          "table": {
-                            "widths": [
-                              "*",
-                              "*"
-                            ],
-                            "body": [
-                                [
-                                    {
+                         },
+                         {
                                         "text": "{{corporation_website}} : {{corporationWebsite}}",
-                                        "style": "receipt-sub-website-sub-header"
+                                        "style": "receipt-logo-sub-header"
                                         
-                                    }
-                               ]
-                            ]
-                          },
-                          "layout": "noBorders"
-                    },
-                    {
-                          "style": "noc-head",
-                          "table": {
-                            "widths": [
-                              "*",
-                              "*"
-                            ],
-                            "body": [
-                                [
-                                    {
+                                    },
+                         {
                                         "text": "{{corporation_email}} : {{corporationEmail}}",
-                                        "style": "receipt-sub-email-sub-header"
+                                        "style": "receipt-logo-sub-header"
                                         
                                     }
-                               ]
-                            ]
-                          },
-                          "layout": "noBorders"
-                    }
-                       ],
-                       "alignment":"left",
-                       "margin":[
-                         0,
-                         10,
-                         0,
-                         0
-                       ]
-                     }
+                    ],
+                          "alignment":"left",
+                          "margin":[0,40,0,0]
+                         
+                             
+                             
+                             
+                             
+                         } 
+                         ]
+                        ]
+                    },
+                        "layout":"noBorders"
+                }
+                      
                    ],
+                   
+                   
+                   
                    [
                      {
                        "stack": [
@@ -437,9 +409,16 @@
                    "alignment":"right"
                  }
                ]
+             },
+             {
+                 "text":"\n\n\n Disclaimer\nThis license is not the proof of ownership.\nThis Trade License is issued under rule 10.39 of the Municipal Account Code 2017 with condition that the applicant shall obtain relevant NOC from concerned\ndepartments like Punjab Pollution control board / Fire Ofce /Health Department/ Excise Department/Deputy Commissioner (under Explosive Act) whichever\napplicable. The Municipal Council/Corporation reserves the right to cancel this Trade License for Breach of any condition in accordance with law.\nThis is a computer generated document, hence requires no signature.\nThe grant of Trade License is not approval to any violation of building by laws, town planning scheme.",
+                 "style":"disclaimer"
+                
              }
            ],
-           "styles": {
+		  
+           
+		   "styles": {
             "noc-head": {
               "margin": [
                 -30,
@@ -543,7 +522,13 @@
                 -110,
                 0
               ]
-            }
-          }
+            },
+			"disclaimer":
+			  {
+			     "fontSize":"10"
+			  }
+           }
+		   
+		   
          }
       }
