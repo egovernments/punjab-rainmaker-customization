@@ -70,6 +70,14 @@
                 "type": "date"
               },
               {
+                "variable": "assessmentYear", 
+                "value": {
+                  "path": "$.paymentDetails[0].bill.billDetails[0].fromPeriod"
+                },
+                "type": "date",
+				"format": "YYYY "
+              },
+              {
                 "variable": "paymentMode", 
                 "value": {
                   "path": "$.paymentMode"
@@ -116,6 +124,60 @@
                 "variable": "dueAmount", 
                 "value": {
                   "path": "$.paymentDetails[0].totalDue"
+                }
+              },
+              {
+                "variable": "PropertyTax", 
+                "value": {
+                  "path": "$.paymentDetails[0].bill.billDetails[0].billAccountDetails[8].adjustedAmount"
+                }
+              },
+              {
+                "variable": "FireCess", 
+                "value": {
+                  "path": "$.paymentDetails[0].bill.billDetails[0].billAccountDetails[7].adjustedAmount"
+                }
+              },
+              {
+                "variable": "CancerCess", 
+                "value": {
+                  "path": "$.paymentDetails[0].bill.billDetails[0].billAccountDetails[6].adjustedAmount"
+                }
+              },
+              {
+                "variable": "Penalty", 
+                "value": {
+                  "path": "$.paymentDetails[0].bill.billDetails[0].billAccountDetails[5].adjustedAmount"
+                }
+              },
+              {
+                "variable": "Rebate", 
+                "value": {
+                  "path": "$.paymentDetails[0].bill.billDetails[0].billAccountDetails[0].adjustedAmount"
+                }
+              },
+              {
+                "variable": "Interest", 
+                "value": {
+                  "path": "$.paymentDetails[0].bill.billDetails[0].billAccountDetails[4].adjustedAmount"
+                }
+              },
+              {
+                "variable": "UsageExemption", 
+                "value": {
+                  "path": "$.paymentDetails[0].bill.billDetails[0].billAccountDetails[2].adjustedAmount"
+                }
+              },
+              {
+                "variable": "SpecialCategoryExemption", 
+                "value": {
+                  "path": "$.paymentDetails[0].bill.billDetails[0].billAccountDetails[3].adjustedAmount"
+                }
+              },
+              {
+                "variable": "RoundOff", 
+                "value": {
+                  "path": "$.paymentDetails[0].bill.billDetails[0].billAccountDetails[1].adjustedAmount"
                 }
               },
               {
@@ -349,6 +411,18 @@
                 "variable": "Municipal_Corporation",
                 "value": {
                   "path": "PDF_STATIC_LABEL_MDMS_MUNICIPAL_CORPORATION"
+                },
+                "type": "label",
+                "localisation":{
+                  "required":true,
+                  "prefix": null,
+                  "module":"rainmaker-common"
+               }
+              },
+			  {
+                "variable": "DisclaimerText",
+                "value": {
+                  "path": "PT_RECEIPT_DISCLAIMER"
                 },
                 "type": "label",
                 "localisation":{
