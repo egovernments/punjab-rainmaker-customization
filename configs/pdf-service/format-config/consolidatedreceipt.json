@@ -284,7 +284,7 @@
                 "style": "receipt-table"
               },
               {
-                "text": "{{pending_amount}}",
+                "text": " ",
                 "border": [
                   false,
                   false,
@@ -294,7 +294,7 @@
                 "style": "receipt-table-value"
               },
               {
-                "text": "₹ {{pendingAmount}}",
+                "text": " ",
                 "border": [
                   false,
                   false,

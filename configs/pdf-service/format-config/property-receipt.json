@@ -68,6 +68,146 @@
         },
         "layout": "noBorders"
       },
+	  {
+        "style": "noc-table",
+        "table": {
+          "widths": [
+            "25%",
+            "25%",
+            "25%",
+            "25%"
+          ],
+          "body": [
+            [
+              {
+                "text": "House/Door No. : ",
+                "border": [
+                  true,
+                  true,
+                  false,
+                  false
+                ],
+                "style": "receipt-table-value"
+              },
+              {
+                "text": "To-Fetch",
+                "border": [
+                  false,
+                  true,
+                  false,
+                  false
+                ],
+                "style": "receipt-table"
+              },
+              {
+                "text": "Building/Colony Name: ",
+                "border": [
+                  false,
+                  true,
+                  false,
+                  false
+                ],
+                "style": "receipt-table-value"
+              },
+              {
+                "text": "To-Fetch",
+                "border": [
+                  false,
+                  true,
+                  true,
+                  false
+                ],
+                "style": "receipt-table"
+              }
+            ],
+			[
+			{
+                "text": "Street Name: ",
+                "border": [
+                  true,
+                  false,
+                  false,
+                  true
+                ],
+                "style": "receipt-table-value"
+              },
+              {
+                "text": "To-Fetch",
+                "border": [
+                  false,
+                  false,
+                  false,
+                  true
+                ],
+                "style": "receipt-table"
+              },
+              {
+                "text": "Locality/Mohalla :",
+                "border": [
+                  false,
+                  false,
+                  false,
+                  true
+                ],
+                "style": "receipt-table-value"
+              },
+              {
+                "text": "To-Fetch",
+                "border": [
+                  false,
+                  false,
+                  true,
+                  true
+                ],
+                "style": "receipt-table"
+              }
+            ],
+			[
+			{
+                "text": "Plot Size (Sq. Yards) : ",
+                "border": [
+                  true,
+                  false,
+                  false,
+                  true
+                ],
+                "style": "receipt-table-value"
+              },
+              {
+                "text": "To-Fetch",
+                "border": [
+                  false,
+                  false,
+                  false,
+                  true
+                ],
+                "style": "receipt-table"
+              },
+              {
+                "text": "Property Type: ",
+                "border": [
+                  false,
+                  false,
+                  false,
+                  true
+                ],
+                "style": "receipt-table-value"
+              },
+              {
+                "text": "To-Fetch",
+                "border": [
+                  false,
+                  false,
+                  true,
+                  true
+                ],
+                "style": "receipt-table"
+              }
+            ]
+          ]
+        },
+        "layout": {}
+      },
       {
         "style": "noc-table",
         "table": {
@@ -97,8 +237,7 @@
                   false,
                   false
                 ],
-                "style": "receipt-table",
-                "font": "Roboto"
+                "style": "receipt-table"
               },
               {
                 "text": "{{consumer_id}}",
@@ -118,8 +257,49 @@
                   true,
                   false
                 ],
-                "style": "receipt-table",
-                "font": "Roboto"
+                "style": "receipt-table"
+              }
+            ],
+			[
+			{
+                "text": "assessment_year",
+                "border": [
+                  true,
+                  false,
+                  false,
+                  false
+                ],
+                "style": "receipt-table-value"
+              },
+              {
+                "text": "{{assessmentYear}}",
+                "border": [
+                  false,
+                  false,
+                  false,
+                  false
+                ],
+                "style": "receipt-table"
+              },
+              {
+                "text": "assessment_number",
+                "border": [
+                  false,
+                  false,
+                  false,
+                  false
+                ],
+                "style": "receipt-table-value"
+              },
+              {
+                "text": "To-Fetch",
+                "border": [
+                  false,
+                  false,
+                  true,
+                  false
+                ],
+                "style": "receipt-table"
               }
             ],
             [
@@ -186,7 +366,7 @@
                 "style": "receipt-table"
               },
               {
-                "text" : " ",
+                "text" : "Father/Husband Name: ",
                 "border": [
                   false,
                   false,
@@ -196,7 +376,7 @@
                 "style": "receipt-table-value"
               },
               {
-                "text" : " ",
+                "text" : "To-Fetch",
                 "border": [
                   false,
                   false,
@@ -343,8 +523,7 @@
                   true,
                   false
                 ],
-                "style": "receipt-table",
-                "font": "Roboto"
+                "style": "receipt-table"
               }
             ],
             [
@@ -393,6 +572,170 @@
         },
         "layout": {}
       },
+	  {
+        "style": "next-noc-table",
+        "table": {
+          "widths": [
+            "*","*","*","*","*","*","*","*","*","*"
+          ],
+          "body": [
+            
+			[
+              {
+                "text": "Property Tax",
+                "style": "amounts"
+              },
+			  {
+                "text": "Fire Cess",
+                "style": "amounts"
+              },
+			  {
+                "text": "Cancer Cess",
+                "style": "amounts"
+              },
+			  {
+                "text": "Penalty",
+                "style": "amounts"
+              },
+			  {
+                "text": "Rebate",
+                "style": "amounts"
+              },
+			  {
+                "text": "Interest",
+                "style": "amounts"
+              },
+			  {
+                "text": "Usage Exemption",
+                "style": "amounts"
+              },
+			  {
+                "text": "Special Category Exemption",
+                "style": "amounts"
+              },
+			  {
+                "text": "Round Off",
+                "style": "amounts"
+              },
+			  {
+                "text": "Total",
+                "style": "amounts"
+              }
+			  
+			],
+			
+			[
+              {
+                "text": "{{PropertyTax}}",
+                "style": "amounts"
+              },
+			  {
+                "text": "{{FireCess}}",
+                "style": "amounts"
+              },
+			  {
+                "text": "{{CancerCess}}",
+                "style": "amounts"
+              },
+			  {
+                "text": "{{Penalty}}",
+                "style": "amounts"
+              },
+			  {
+                "text": "{{Rebate}}",
+                "style": "amounts"
+              },
+			  {
+                "text": "{{Interest}}",
+                "style": "amounts"
+              },
+			  {
+                "text": "{{UsageExemption}}",
+                "style": "amounts"
+              },
+			  {
+                "text": "{{SpecialCategoryExemption}}",
+                "style": "amounts"
+              },
+			  {
+                "text": "{{RoundOff}}",
+                "style": "amounts"
+              },
+			  {
+                "text": "{{paidAmount}}",
+                "style": "amounts"
+              }
+			  
+			]
+			  
+		]
+	  },
+	  "layout":{}
+	  },
+	  {
+        "style": "next-noc-table",
+        "table": {
+          "widths": [
+            "20%",
+            "20%",
+            "20%",
+            "20%",
+			"20%"
+          ],
+          "body": [
+            [
+              {
+                "text": "Floor",
+                "style": "receipt-table-value"
+              },
+              {
+                "text": "Usage Type",
+                "style": "receipt-table-value"
+              },
+              {
+                "text": "Sub Usage Type",
+                "style": "receipt-table-value"
+              },
+              {
+                "text": "Occupancy",
+                "style": "receipt-table-value"
+              },
+			  {
+                "text": "Built Area (Sq. Yard) / Total Annual Rent",
+                "style": "receipt-table-value"
+              }
+            ],
+            [
+              {
+                "text": "To-Fetch",
+                "style": "receipt-table"
+              },
+              {
+                "text": "To-Fetch",
+                "style": "receipt-table"
+              },
+              {
+                "text": "To-Fetch",
+                "style": "receipt-table"
+              },
+              {
+                "text": "To-Fetch",
+                "style": "receipt-table"
+              },
+              {
+                "text": "To-Fetch",
+                "style": "receipt-table"
+              }
+            ]
+          ]
+        },
+        "layout": {}
+      },
+	  {
+	     "text": "Assessee Signature",
+	     "style": "receipt-approver"
+	  }
+	  ,
       {
         "style": "receipt-approver",
         "columns": [
@@ -427,10 +770,6 @@
         ]
       },
       {
-        "style": "no-signature",
-        "text": "{{no_signature}}"
-      },
-      {
         "style": "pt-disclaimer",
         "stack": [
           {
@@ -450,7 +789,14 @@
               "body": ["{{#variable11}}[{\"text\":\"{{disclaimerContent}}\",\"border\":[false,false,false,false],\"style\":\"pt-disclaimer-value\"}]{{/variable11}}"]
             },
             "layout": {}
-          }
+          },
+		  {
+			"ol": [
+				"Payment received by cheque/demand draft shall be subject to realization",
+				"This document is not a proof of property ownership and regularization of unauthorised construction",
+				"{{no_signature}}"
+			]
+		  }
         ]
       }
     ],
@@ -481,7 +827,7 @@
       "letterSpacing": 0.6
     },
      "noc-table": {
-      "fontSize": 12,
+      "fontSize": 10,
       "color": "#000000",
       "margin": [
         -25,
@@ -491,7 +837,7 @@
       ]
     },
     "next-noc-table": {
-      "fontSize": 12,
+      "fontSize": 10,
       "color": "#000000",
       "margin": [
         -25,
@@ -503,7 +849,7 @@
      "receipt-table-value": {
       "color": "#000000",
       "bold": true,
-      "fontSize": 12,
+      "fontSize": 10,
       "fontWeight": 500,
       "margin": [
         8,
@@ -515,17 +861,17 @@
     "receipt-table": {
       "color": "#000000",
       "bold": false,
-      "fontSize": 12,
+      "fontSize": 10,
       "fontWeight": 400,
       "margin": [
-        -10,
+        0,
         8,
         0,
         8
       ]
     },
      "receipt-approver": {
-      "fontSize": 12,
+      "fontSize": 10,
       "bold": true,
       "margin": [
         -27,
@@ -536,7 +882,7 @@
       "color": "#484848"
     },
     "no-signature": {
-      "fontSize": 12,
+      "fontSize": 10,
       "margin": [
         -27,
         35,
@@ -546,7 +892,7 @@
       "color": "#484848"
     },
     "pt-disclaimer": {
-      "fontSize": 12,
+      "fontSize": 10,
       "margin": [
         -27,
         30,
@@ -556,7 +902,7 @@
       "color": "#484848"
     },
     "pt-disclaimer-value": {
-      "fontSize": 12,
+      "fontSize": 10,
       "margin": [
         2,
         5,
@@ -564,7 +910,11 @@
         0
       ],
       "color": "#484848"
-     }
+     },
+	 "amounts":
+	 {
+	     "fontSize": 8
+	 }
    }
   }
 }
