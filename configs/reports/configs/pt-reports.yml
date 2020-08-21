@@ -2065,9 +2065,7 @@ ReportDefinitions:
    inner join eg_pt_address_v2    as pta on pta.property = pt.propertyid
    left outer join eg_pt_unit_v2_ot as pot on pot.propertydetail = pd.assessmentnumber
    where rh.tenantid =$tenantid and pd.property not in (select property from eg_pt_propertydetail_v2 where financialyear  in ('2019-20'))
-   
-   ---
-ReportDefinitions:
+
 - reportName: ReceiptRegister_V2
   summary: Receipt Register
   version: 1.0.0
@@ -2296,7 +2294,7 @@ ReportDefinitions:
         JOIN eg_pt_address_v2 pt_addr ON pt_detail.property = pt_addr.property
         LEFT OUTER JOIN eg_user ON eg_user.id = pd.createdby::INTEGER
         WHERE pd.tenantid = $tenantid and payment.paymentstatus != 'CANCELLED' and  pd.businessservice='PT'
-        orderby:ORDER BY pd.receiptdate DESC
+        orderby: ORDER BY pd.receiptdate DESC
 
 - reportName: CancelledReceiptRegister_V2
   summary: Receipt Register for cancelled Receipts
@@ -2508,7 +2506,7 @@ ReportDefinitions:
         JOIN eg_pt_address_v2 pt_addr ON pt_detail.property = pt_addr.property
         LEFT OUTER JOIN eg_user ON eg_user.id = pd.createdby::INTEGER
         WHERE pd.tenantid = $tenantid and payment.paymentstatus = 'CANCELLED' and  pd.businessservice='PT'
-        orderby:ORDER BY pd.receiptdate DESC
+        orderby: ORDER BY pd.receiptdate DESC
 
 - reportName: OldUlbWisePtCollection_V2
   summary: ULB-wise PT Collection
@@ -2776,7 +2774,7 @@ ReportDefinitions:
       JOIN eg_pt_address_v2 pt_addr ON pt_detail.property = pt_addr.property
       LEFT OUTER JOIN eg_user ON eg_user.id = pd.createdby::INTEGER
       WHERE pd.tenantid != 'pb.testing' and payment.paymentstatus = 'CANCELLED' and  pd.businessservice='PT'
-      orderby: ORDER BY pd.receiptdate DESC
+  orderby: ORDER BY pd.receiptdate DESC
 
 - reportName: StateWidePtCollection_V2
   summary: State Wide PT Collection
@@ -2860,9 +2858,9 @@ ReportDefinitions:
       SUM(CASE WHEN billd.collectiontype LIKE 'COUNTER' THEN amount ELSE 0 END) AS totaloffline, 
       (SUM(billd.amount) - SUM(billd.amountpaid)) AS totalamountdue 
       FROM  egcl_billdetial as billd
-          WHERE tenantid not in ('pb.testing','pb.ludhiana_legacy')
-            groupby: GROUP BY tenantid
-            orderby: ORDER BY tenantid, totalamountpaid DESC NULLS LAST
+        WHERE tenantid not in ('pb.testing','pb.ludhiana_legacy')
+        groupby: GROUP BY tenantid
+        orderby: ORDER BY tenantid, totalamountpaid DESC NULLS LAST
 
 - reportName: UlbWisePtCollection_V2
   summary: State Wide PT Collection
@@ -2946,8 +2944,8 @@ ReportDefinitions:
       (SUM(billd.amount) - SUM(billd.amountpaid)) AS totalamountdue 
       FROM egcl_billdetial as billd 
       WHERE tenantid LIKE CONCAT(SPLIT_PART($tenantid, '.', 1), '%') and tenantid = $tenantid
-      groupby: GROUP BY tenantid
-      orderby: ORDER BY tenantid, totalamountpaid DESC NULLS LAST
+  groupby: GROUP BY tenantid
+  orderby: ORDER BY tenantid, totalamountpaid DESC NULLS LAST
 
 - reportName: ReceiptRegisterShort_V2
   summary: Receipt Register
@@ -3083,8 +3081,8 @@ ReportDefinitions:
           INNER JOIN egcl_payment as payment on pd.paymentid=payment.id
       LEFT OUTER JOIN eg_user ON eg_user.id = pd.createdby::INTEGER
       WHERE bd.tenantid = $tenantid and payment.paymentstatus != 'CANCELLED' and pd.businessservice='PT'
-                  roupby: GROUP BY pd.receiptnumber)
-                  SELECT 
+                  GROUP BY pd.receiptnumber)
+      SELECT 
         bill.tenantid AS tenantid, 
         bill.id, 
         pt_detail.property AS propertyid, 
@@ -3114,7 +3112,7 @@ ReportDefinitions:
           JOIN receipt_breakup  ON receipt_breakup.receiptnumber =  pd.receiptnumber
       LEFT OUTER JOIN eg_user ON eg_user.id = pd.createdby::INTEGER
       WHERE pd.tenantid = $tenantid and payment.paymentstatus != 'CANCELLED' and pd.businessservice='PT'
-                   orderby: ORDER BY pd.receiptdate DESC
+      orderby: ORDER BY pd.receiptdate DESC
 
 
 - reportName: ULBPTDataDumpReport_V2
@@ -3538,7 +3536,7 @@ ReportDefinitions:
          LEFT OUTER JOIN eg_user ON eg_user.id = pd.createdby::INTEGER
       WHERE bd.tenantid = $tenantid  and payment.paymentstatus != 'CANCELLED' and pd.businessservice='PT'
           and pd.createdby::INTEGER in (select user_id from eg_userrole_v1 where role_code ='SEVA_KENDRA_EMP')
-          orderby: ORDER BY pd.receiptdate DESC
+  orderby: ORDER BY pd.receiptdate DESC
   
 
 - reportName: ReceiptRegisterSummary_V2
@@ -3666,7 +3664,7 @@ ReportDefinitions:
           INNER JOIN egcl_payment as payment on pd.paymentid=payment.id
       LEFT OUTER JOIN eg_user ON eg_user.id = pd.createdby::INTEGER
       WHERE bd.tenantid = $tenantid  and payment.paymentstatus != 'CANCELLED' and pd.businessservice='PT'
-      groupby: group by collectorname,bd.tenantid
+  groupby: group by collectorname,bd.tenantid
   
 - reportName: StateReceiptRegisterSummary_V2
   summary: Receipt Register Summary
@@ -3773,8 +3771,8 @@ ReportDefinitions:
       INNER JOIN egcl_billdetial as bd on bd.id = bad.billdetailid
         INNER JOIN egcl_paymentdetail as pd on pd.billid = bd.billid
       WHERE bd.tenantid = 'pb.testing' and pd.businessservice='PT'
-      groupby: group by bd.tenantid
-      orderby: order by bd.tenantid
+  groupby: group by bd.tenantid
+  orderby: order by bd.tenantid
 
 - reportName: FYCollectionsReport_V2
   summary: FY Collections
@@ -3867,8 +3865,8 @@ ReportDefinitions:
       JOIN eg_pt_address_v2 pt_addr ON pt_detail.property = pt_addr.property
       LEFT OUTER JOIN eg_user ON eg_user.id = pd.createdby::INTEGER
       WHERE pd.tenantid = $tenantid and payment.paymentstatus != 'CANCELLED'
-      groupby: GROUP BY financialyear
-      orderby: ORDER BY financialyear  
+  groupby: GROUP BY financialyear
+  orderby: ORDER BY financialyear  
 
 - reportName: ULBDEFAULTERPTREPORT_V2
   summary: ULB Defaulter Pt report
