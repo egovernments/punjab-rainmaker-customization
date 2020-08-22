@@ -97,8 +97,7 @@
                   false,
                   false
                 ],
-                "style": "receipt-table",
-                "font": "Roboto"
+                "style": "receipt-table"
               },
               {
                 "text": "{{consumer_id}}",
@@ -118,8 +117,49 @@
                   true,
                   false
                 ],
-                "style": "receipt-table",
-                "font": "Roboto"
+                "style": "receipt-table"
+              }
+            ],
+            [
+              {
+                "text": "Receipt Date",
+                "border": [
+                  true,
+                  false,
+                  false,
+                  false
+                ],
+                "style": "receipt-table-value"
+              },
+              {
+                "text": "{{ReceiptDate}}",
+                "border": [
+                  false,
+                  false,
+                  false,
+                  false
+                ],
+                "style": "receipt-table"
+              },
+              {
+                "text": "Tax period",
+                "border": [
+                  false,
+                  false,
+                  false,
+                  false
+                ],
+                "style": "receipt-table-value"
+              },
+              {
+                "text": "{{fromPeriod}} {{to}} {{toPeriod}}",
+                "border": [
+                  false,
+                  false,
+                  true,
+                  false
+                ],
+                "style": "receipt-table"
               }
             ],
             [
@@ -155,6 +195,48 @@
               },
               {
                 "text": "{{payerName}}",
+                "border": [
+                  false,
+                  false,
+                  true,
+                  false
+                ],
+                "style": "receipt-table"
+              }
+            ],
+            [
+              {
+                "text": "Address: ",
+                "border": [
+                  true,
+                  false,
+                  false,
+                  false
+                ],
+                "style": "receipt-table-value"
+              },
+              {
+                "text": "{{payerAddress}}",
+                "border": [
+                  false,
+                  false,
+                  false,
+                  false
+                ],
+                "style": "receipt-table"
+              },
+              {
+                "text": "Paid By: ",
+                "border": [
+                  false,
+                  false,
+                  false,
+                  false
+                ],
+                "style": "receipt-table-value"
+              },
+              {
+                "text": "{{PaidBy}}",
                 "border": [
                   false,
                   false,
@@ -284,7 +366,9 @@
                 "style": "receipt-table"
               },
               {
-                "text": " ",
+
+                "text": "{{payment_mode}}",
+
                 "border": [
                   false,
                   false,
@@ -294,7 +378,9 @@
                 "style": "receipt-table-value"
               },
               {
-                "text": " ",
+
+                "text": "{{paymentMode}}",
+
                 "border": [
                   false,
                   false,
@@ -306,7 +392,7 @@
             ],
             [
               {
-                "text": "{{payment_mode}}",
+                "text": "Cheque/DD No.",
                 "border": [
                   true,
                   false,
@@ -316,7 +402,7 @@
                 "style": "receipt-table-value"
               },
               {
-                "text": "{{paymentMode}}",
+                "text": "{{chequeDD}}",
                 "border": [
                   false,
                   false,
@@ -343,8 +429,8 @@
                   true,
                   false
                 ],
-                "style": "receipt-table",
-                "font": "Roboto"
+                "style": "receipt-table"
+                
               }
             ],
             [
@@ -392,6 +478,28 @@
           ]
         },
         "layout": {}
+      },
+      {
+        "style": "next-noc-table",
+        "table": {
+          "widths": [
+            "*",
+            "*"
+          ],
+          "body": [
+            [
+              {
+                "text":"Comments: ",
+                "border":[false, false, false, false]
+              },
+              {
+                "text":" ",
+                "border":[false, false, false, false]
+              }
+            ]
+          ],
+          "layout":"noBorders" 
+        }
       },
       {
         "style": "receipt-approver",
