@@ -20,6 +20,18 @@
                 }
               },
               {
+                "variable": "PaidBy", 
+                "value": {
+                  "path": "$.paidBy"
+                }
+              },
+              {
+                "variable": "chequeDD", 
+                "value": {
+                  "path": "$.instrumentNumber"
+                }
+              },
+              {
                 "variable": "user-name", 
                 "value": {
                   "path": "$.userInfo.name"
@@ -70,6 +82,12 @@
                 "type": "date"
               },
               {
+                "variable": "payerAddress", 
+                "value": {
+                  "path": "$.paymentDetails[0].bill.payerAddress"
+                }
+              },
+              {
                 "variable": "paymentMode", 
                 "value": {
                   "path": "$.paymentMode"
@@ -90,6 +108,13 @@
                 "variable": "G8ReceiptDate",
                 "value": {
                   "path": "$.paymentDetails[0].manualReceiptDate"
+                },
+                "type": "date"
+              },
+              {
+                "variable": "ReceiptDate",
+                "value": {
+                  "path": "$.paymentDetails[0].receiptDate"
                 },
                 "type": "date"
               },
@@ -287,6 +312,18 @@
                }
               },
               {
+                "variable": "cheque_no",
+                "value": {
+                  "path": "PDF_STATIC_LABEL_CONSOLIDATED_RECEIPT_CHEQUE_NO"
+                },
+                "type": "label",
+                "localisation":{
+                  "required":true,
+                  "prefix": null,
+                  "module":"rainmaker-common"
+               }
+              },
+              {
                 "variable": "generated_by",
                 "value": {
                   "path": "PDF_STATIC_LABEL_CONSOLIDATED_RECEIPT_GENERATED_BY"
@@ -431,7 +468,7 @@
           {
             "externalAPI": [     
               { 
-                  "path": "http://egov-mdms-service:8080/egov-mdms-service/v1/_get",
+                  "path": "http://localhost:8069/egov-mdms-service/v1/_get",
                   "queryParam": "moduleName=tenant&masterName=tenants&tenantId=pb&filter=%5B?(@.code=='{$.tenantId}')%5D",
                   "apiRequest": null,
                   "responseMapping":[
