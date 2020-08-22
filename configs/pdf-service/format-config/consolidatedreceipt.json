@@ -366,7 +366,9 @@
                 "style": "receipt-table"
               },
               {
+
                 "text": "{{payment_mode}}",
+
                 "border": [
                   false,
                   false,
@@ -376,7 +378,9 @@
                 "style": "receipt-table-value"
               },
               {
+
                 "text": "{{paymentMode}}",
+
                 "border": [
                   false,
                   false,

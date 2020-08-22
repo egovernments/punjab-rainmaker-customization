@@ -363,6 +363,18 @@
                     "prefix": null,
                     "module":"rainmaker-common"
                  }
+              },
+			  {
+                  "variable": "disclaimer",
+                  "value": {
+                    "path": "TL_CERTIFICATE_DISCLAIMER"
+                  },
+                  "type": "label",
+                  "localisation":{
+                    "required":true,
+                    "prefix": null,
+                    "module":"rainmaker-common"
+                 }
               }
           ]
         },
@@ -398,7 +410,7 @@
               "responseMapping":[
                 {            
                   "variable":"tradeLicenseFee",
-                  "value":"$.Payments[0].totalDue"
+                  "value":"$.Payments[0].totalAmountPaid"
                 },
                 {            
                   "variable":"recieptNo",
