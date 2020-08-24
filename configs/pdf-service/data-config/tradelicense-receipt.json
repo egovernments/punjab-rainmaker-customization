@@ -431,8 +431,80 @@
                     } 
                  }
                 ]
-            }
-            ]
+            },   
+                {
+                  "path": "http://tl-services.egov:8080/tl-services/v1/_search",
+                  "queryParam": "tenantId=$.tenantId,applicationNumber=$.paymentDetails[0].bill.consumerCode",
+                    "apiRequest": null,
+                    "responseMapping":[
+                      {            
+                        "variable":"applicationType",
+                        "value":"$.Licenses[0].applicationType"
+                      },
+                      {            
+                        "variable":"licenseNumber",
+                        "value":"$.Licenses[0].licenseNumber"
+                      },
+                      {            
+                        "variable":"oldLicenseNumber",
+                        "value":"$.Licenses[0].oldLicenseNumber"
+                      },
+                      {            
+                        "variable":"financialYear",
+                        "value":"$.Licenses[0].financialYear"
+                      },
+                      {            
+                        "variable":"tradeName",
+                        "value":"$.Licenses[0].tradeName"
+                      },
+                      {
+                        "variable": "tradeType",
+                        "value":  "$.Licenses[0].tradeLicenseDetail.tradeUnits[0].tradeType",
+                        "localisation":{
+                          "required":true,
+                          "prefix": "TRADELICENSE_TRADETYPE",
+                          "module": "rainmaker-tl",
+                          "isCategoryRequired":true
+                       }
+                    },
+                    {
+                      "variable": "variable14",                        
+                      "value": "$.Licenses[0].tradeLicenseDetail.accessories.*",                       
+                       "type":"array",
+                       "format":{                            
+                          "type":"string",
+                          "scema":[
+                            {
+                              "variable": "accesoryType",
+                              "value": "accessoryCategory",
+                              "localisation":{
+                                "required":true,
+                                "prefix": "TRADELICENSE_ACCESSORIESCATEGORY",
+                                "module": "rainmaker-tl"
+                              }
+                            },
+                            {
+                              "variable": "accessoryUomValue",
+                              "value": "uomValue"
+                            },
+                            
+                            {
+                                "variable": "uom",
+                                "value": "uom"
+                            },
+                            {
+                                "variable": "accessoryCount",
+                                "value": "count"
+                            }
+                         
+                          ]
+                      } 
+                   }
+
+                    ]
+                }
+              ]
+           
           }
         ]
       }
