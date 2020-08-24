@@ -410,7 +410,7 @@
               "responseMapping":[
                 {            
                   "variable":"tradeLicenseFee",
-                  "value":"$.Payments[0].totalDue"
+                  "value":"$.Payments[0].totalAmountPaid"
                 },
                 {            
                   "variable":"recieptNo",

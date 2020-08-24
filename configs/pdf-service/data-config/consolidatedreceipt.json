@@ -20,6 +20,18 @@
                 }
               },
               {
+                "variable": "PaidBy", 
+                "value": {
+                  "path": "$.paidBy"
+                }
+              },
+              {
+                "variable": "chequeDD", 
+                "value": {
+                  "path": "$.instrumentNumber"
+                }
+              },
+              {
                 "variable": "user-name", 
                 "value": {
                   "path": "$.userInfo.name"
@@ -70,6 +82,12 @@
                 "type": "date"
               },
               {
+                "variable": "payerAddress", 
+                "value": {
+                  "path": "$.paymentDetails[0].bill.payerAddress"
+                }
+              },
+              {
                 "variable": "paymentMode", 
                 "value": {
                   "path": "$.paymentMode"
@@ -90,6 +108,13 @@
                 "variable": "G8ReceiptDate",
                 "value": {
                   "path": "$.paymentDetails[0].manualReceiptDate"
+                },
+                "type": "date"
+              },
+              {
+                "variable": "ReceiptDate",
+                "value": {
+                  "path": "$.paymentDetails[0].receiptDate"
                 },
                 "type": "date"
               },
@@ -278,6 +303,18 @@
                 "variable": "g8_receipt_date",
                 "value": {
                   "path": "PDF_STATIC_LABEL_CONSOLIDATED_RECEIPT_G8_RECEIPT_DATE"
+                },
+                "type": "label",
+                "localisation":{
+                  "required":true,
+                  "prefix": null,
+                  "module":"rainmaker-common"
+               }
+              },
+              {
+                "variable": "cheque_no",
+                "value": {
+                  "path": "PDF_STATIC_LABEL_CONSOLIDATED_RECEIPT_CHEQUE_NO"
                 },
                 "type": "label",
                 "localisation":{
