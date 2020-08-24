@@ -63,7 +63,7 @@
                               "bold" : false
                              },
                              {
-                              "text":"{{Rs}} {{totalAmount}}",
+                              "text":"{{Rs}} {{totalAmount}} - {{billStatus}}",
                               "style":"receipt-table-value-total",
                               "fontSize": 20
                              }
@@ -908,7 +908,7 @@
                             "style": "receipt-table2"
                          },  
                          {
-                           "text":"{{mobileNo}}",
+                           "text":"{{mobileNo}}, {{altContactNumber}}",
                            "border":[
                              false,
                              false,
