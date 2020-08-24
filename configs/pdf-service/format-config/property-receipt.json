@@ -90,7 +90,7 @@
                 "style": "receipt-table-value"
               },
               {
-                "text": "To-Fetch",
+                "text": "{{doorNo}}",
                 "border": [
                   false,
                   true,
@@ -110,7 +110,7 @@
                 "style": "receipt-table-value"
               },
               {
-                "text": "To-Fetch",
+                "text": "{{buildingName}}",
                 "border": [
                   false,
                   true,
@@ -132,7 +132,7 @@
                 "style": "receipt-table-value"
               },
               {
-                "text": "To-Fetch",
+                "text": "{{streetName}}",
                 "border": [
                   false,
                   false,
@@ -152,7 +152,7 @@
                 "style": "receipt-table-value"
               },
               {
-                "text": "To-Fetch",
+                "text": "{{locality}}",
                 "border": [
                   false,
                   false,
@@ -174,7 +174,7 @@
                 "style": "receipt-table-value"
               },
               {
-                "text": "To-Fetch",
+                "text": "{{landArea}}",
                 "border": [
                   false,
                   false,
@@ -194,7 +194,7 @@
                 "style": "receipt-table-value"
               },
               {
-                "text": "To-Fetch",
+                "text": "{{propertyType}}",
                 "border": [
                   false,
                   false,
@@ -376,7 +376,7 @@
                 "style": "receipt-table-value"
               },
               {
-                "text" : "To-Fetch",
+                "text" : "{{fatherHusbandName}}",
                 "border": [
                   false,
                   false,

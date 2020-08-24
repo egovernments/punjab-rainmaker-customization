@@ -129,55 +129,55 @@
               {
                 "variable": "PropertyTax", 
                 "value": {
-                  "path": "$.paymentDetails[0].bill.billDetails[0].billAccountDetails[8].adjustedAmount"
+                  "path": "$.paymentDetails[0].bill.billDetails[0].billAccountDetails[?(@.taxHeadCode=='PT_TAX')].adjustedAmount"
                 }
               },
               {
                 "variable": "FireCess", 
                 "value": {
-                  "path": "$.paymentDetails[0].bill.billDetails[0].billAccountDetails[7].adjustedAmount"
+                  "path": "$.paymentDetails[0].bill.billDetails[0].billAccountDetails[?(@.taxHeadCode=='PT_FIRE_CESS')].adjustedAmount"
                 }
               },
               {
                 "variable": "CancerCess", 
                 "value": {
-                  "path": "$.paymentDetails[0].bill.billDetails[0].billAccountDetails[6].adjustedAmount"
+                  "path": "$.paymentDetails[0].bill.billDetails[0].billAccountDetails[?(@.taxHeadCode=='PT_CANCER_CESS')].adjustedAmount"
                 }
               },
               {
                 "variable": "Penalty", 
                 "value": {
-                  "path": "$.paymentDetails[0].bill.billDetails[0].billAccountDetails[5].adjustedAmount"
+                  "path": "$.paymentDetails[0].bill.billDetails[0].billAccountDetails[?(@.taxHeadCode=='PT_TIME_PENALTY')].adjustedAmount"
                 }
               },
               {
                 "variable": "Rebate", 
                 "value": {
-                  "path": "$.paymentDetails[0].bill.billDetails[0].billAccountDetails[0].adjustedAmount"
+                  "path": "$.paymentDetails[0].bill.billDetails[0].billAccountDetails[?(@.taxHeadCode=='PT_TIME_REBATE')].adjustedAmount"
                 }
               },
               {
                 "variable": "Interest", 
                 "value": {
-                  "path": "$.paymentDetails[0].bill.billDetails[0].billAccountDetails[4].adjustedAmount"
+                  "path": "$.paymentDetails[0].bill.billDetails[0].billAccountDetails[?(@.taxHeadCode=='PT_TIME_INTEREST')].adjustedAmount"
                 }
               },
               {
                 "variable": "UsageExemption", 
                 "value": {
-                  "path": "$.paymentDetails[0].bill.billDetails[0].billAccountDetails[2].adjustedAmount"
+                  "path": "$.paymentDetails[0].bill.billDetails[0].billAccountDetails[?(@.taxHeadCode=='PT_UNIT_USAGE_EXEMPTION')].adjustedAmount"
                 }
               },
               {
                 "variable": "SpecialCategoryExemption", 
                 "value": {
-                  "path": "$.paymentDetails[0].bill.billDetails[0].billAccountDetails[3].adjustedAmount"
+                  "path": "$.paymentDetails[0].bill.billDetails[0].billAccountDetails[?(@.taxHeadCode=='PT_OWNER_EXEMPTION')].adjustedAmount"
                 }
               },
               {
                 "variable": "RoundOff", 
                 "value": {
-                  "path": "$.paymentDetails[0].bill.billDetails[0].billAccountDetails[1].adjustedAmount"
+                  "path": "$.paymentDetails[0].bill.billDetails[0].billAccountDetails[?(@.taxHeadCode=='PT_ROUNDOFF')].adjustedAmount"
                 }
               },
               {
@@ -444,7 +444,7 @@
           {
             "externalAPI": [     
               { 
-                  "path": "http://egov-mdms-service:8080/egov-mdms-service/v1/_get",
+                  "path": "http://localhost:8069/egov-mdms-service/v1/_get",
                   "queryParam": "moduleName=tenant&masterName=tenants&tenantId=pb&filter=%5B?(@.code=='{$.tenantId}')%5D",
                   "apiRequest": null,
                   "responseMapping":[
@@ -481,7 +481,42 @@
                   ]
               },
               { 
-                "path": "http://egov-mdms-service:8080/egov-mdms-service/v1/_get",
+                "path": "http://localhost:8075/property-services/property/_search",
+                "queryParam": "propertyIds=PT-1012-877972,tenantId=pb.testing",
+                "apiRequest": null,
+                "responseMapping":[
+                  {             
+                    "variable":"fatherHusbandName",
+                    "value":"$.Properties[0].owners[0].fatherOrHusbandName"
+                  },
+                  {             
+                    "variable":"doorNo",
+                    "value":"$.Properties[0].address.doorNo"
+                  },
+                  {             
+                    "variable":"buildingName",
+                    "value":"$.Properties[0].address.buildingName"
+                  },
+                  {             
+                    "variable":"streetName",
+                    "value":"$.Properties[0].address.street"
+                  },
+                  {             
+                    "variable":"locality",
+                    "value":"$.Properties[0].address.locality.name"
+                  },
+                  {             
+                    "variable":"landArea",
+                    "value":"$.Properties[0].landArea"
+                  },
+                  {             
+                    "variable":"propertyType",
+                    "value":"$.Properties[0].propertyType"
+                  }
+                ]
+             },
+              { 
+                "path": "http://localhost:8069/egov-mdms-service/v1/_get",
                 "queryParam": "moduleName=tenant&masterName=footer&tenantId=pb&filter=%5B?(@.code=='{$.tenantId}' %26%26 @.service=='{$.paymentDetails[0].businessService}')%5D",
                 "apiRequest": null,
                 "responseMapping":[
