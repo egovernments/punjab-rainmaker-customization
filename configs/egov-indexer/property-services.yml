@@ -334,13 +334,13 @@ ServiceMaps:
             moduleName: PropertyTax
             masterName: UsageCategory
             tenantId: pb
-            filter: "[?(@.name == $UsageCategory)]"
+            filter: "[?(@.code == $usageCategory)]"
             filterMapping:
             - variable: $name
               valueJsonpath: $.UsageCategory
             uriResponseMapping:
             - inJsonPath: $.MdmsRes.PropertyTax.UsageCategory
-              outJsonPath: $.Data.UsageCategory        
+              outJsonPath: $.Data.usageCategory        
         
   - topic: save-pt-assessment
     configKey: INDEX
