@@ -93,7 +93,7 @@ ServiceMaps:
               valueJsonpath: $.UsageCategory
             uriResponseMapping:
             - inJsonPath: $.MdmsRes.PropertyTax.UsageCategory
-              outJsonPath: $.Data.usageCategory
+              outJsonPath: $.Data
 
   - topic: update-property-registry
     configKey: INDEX
