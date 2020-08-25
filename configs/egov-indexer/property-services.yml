@@ -87,13 +87,13 @@ ServiceMaps:
             moduleName: PropertyTax
             masterName: UsageCategory
             tenantId: pb
-            filter: "[?(@.code == '$usageCategory')]"
+            filter: "[?(@.code == $usageCategory)]"
             filterMapping:
             - variable: $usageCategory
               valueJsonpath: $.Data.usageCategory
             uriResponseMapping:
             - inJsonPath: $.MdmsRes.PropertyTax.UsageCategory[0].name
-              outJsonPath: $.Data.usageCategory
+              outJsonPath: $.Data
 
   - topic: update-property-registry
     configKey: INDEX
