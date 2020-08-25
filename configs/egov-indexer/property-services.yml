@@ -89,11 +89,11 @@ ServiceMaps:
             tenantId: pb
             filter: "[?(@.code == $usageCategory)]"
             filterMapping:
-            - variable: $name
-              valueJsonpath: $.usageCategory
+            - variable: $usageCategory
+              valueJsonpath: $.Data.usageCategory
             uriResponseMapping:
-            - inJsonPath: $.MdmsRes.PropertyTax.UsageCategory
-              outJsonPath: $.Data
+            - inJsonPath: $.MdmsRes.PropertyTax.UsageCategory[0].name
+              outJsonPath: $.Data.usageCategory
 
   - topic: update-property-registry
     configKey: INDEX
