@@ -83,6 +83,17 @@ ServiceMaps:
             uriResponseMapping:
             - inJsonPath: $.MdmsRes.tenant.tenants
               outJsonPath: $.Data.tenantData
+          - path: http://egov-mdms-service.egov:8080/egov-mdms-service/v1/_search
+            moduleName: PropertyTax
+            masterName: UsageCategory
+            tenantId: pb
+            filter: "[?(@.code == $usageCategory)]"
+            filterMapping:
+            - variable: $name
+              valueJsonpath: $.UsageCategory
+            uriResponseMapping:
+            - inJsonPath: $.MdmsRes.PropertyTax.UsageCategory
+              outJsonPath: $.Data.usageCategory
 
   - topic: update-property-registry
     configKey: INDEX
