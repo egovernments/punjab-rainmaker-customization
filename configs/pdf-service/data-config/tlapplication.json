@@ -259,7 +259,7 @@
               {
                   "variable": "altContactNumber",
                   "value": {
-                    "path": "$..tradeLicenseDetail.owners[0].altContactNumber"
+                    "path": "$.tradeLicenseDetail.owners[0].altContactNumber"
                   }
               },
               {
