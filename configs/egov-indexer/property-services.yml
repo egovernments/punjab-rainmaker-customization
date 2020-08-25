@@ -87,7 +87,7 @@ ServiceMaps:
             moduleName: PropertyTax
             masterName: UsageCategory
             tenantId: pb
-            filter: "[?(@.code == 'RESIDENTIAL')]"
+            filter: "[?(@.code == '\''RESIDENTIAL'\'')]"
             filterMapping:
             - variable: $usageCategory
               valueJsonpath: $.Data.usageCategory
