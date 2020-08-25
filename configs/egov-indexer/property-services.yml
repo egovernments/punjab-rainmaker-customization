@@ -90,7 +90,7 @@ ServiceMaps:
             filter: "[?(@.code == $usageCategory)]"
             filterMapping:
             - variable: $name
-              valueJsonpath: $.UsageCategory
+              valueJsonpath: $.usageCategory
             uriResponseMapping:
             - inJsonPath: $.MdmsRes.PropertyTax.UsageCategory
               outJsonPath: $.Data
