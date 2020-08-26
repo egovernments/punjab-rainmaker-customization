@@ -70,12 +70,20 @@
                 "type": "date"
               },
               {
-                "variable": "assessmentYear", 
+                "variable": "assessmentYear1", 
                 "value": {
                   "path": "$.paymentDetails[0].bill.billDetails[0].fromPeriod"
                 },
                 "type": "date",
-				"format": "YYYY "
+				        "format": "YYYY"
+              },
+              {
+                "variable": "assessmentYear2", 
+                "value": {
+                  "path": "$.paymentDetails[0].bill.billDetails[0].toPeriod"
+                },
+                "type": "date",
+				        "format": "YYYY"
               },
               {
                 "variable": "paymentMode", 
@@ -482,7 +490,7 @@
               },
               { 
                 "path": "http://property-services.egov:8080/property-services/property/_search",
-                "queryParam": "propertyIds=PT-1012-877972,tenantId=pb.testing",
+                "queryParam": "propertyIds=$.paymentDetails[0].bill.consumerCode,tenantId=$.tenantId",
                 "apiRequest": null,
                 "responseMapping":[
                   {             
@@ -511,8 +519,76 @@
                   },
                   {             
                     "variable":"propertyType",
-                    "value":"$.Properties[0].propertyType"
-                  }
+                    "value":"$.Properties[0].propertyType",
+                    "localisation": {
+                      "required": true,
+                      "prefix": "WS_PROPTYPE",
+                      "module": "rainmaker-ws"
+                    }
+                  },
+                  {
+                    "variable": "var_owners",                        
+                    "value":"$.Properties[0].owners.*",
+                     "type":"array",
+                     "format":{                            
+                        "type":"string",
+                        "scema":[
+                           {
+                              "variable":"name2",
+                              "value":"name"
+                           },
+                           {
+                              "variable":"fatherOrHusbandName2",
+                              "value":"fatherOrHusbandName"
+                           }]
+                    } 
+                 },
+                 {
+                   "variable": "var_floors",                        
+                   "value":"$.Properties[0].units.*",
+                    "type":"array",
+                    "format":{                            
+                       "type":"string",
+                       "scema":[
+                          {
+                             "variable":"floor_no",
+                             "value":"floorNo",
+                             "localisation": {
+                              "required": true,
+                              "prefix": "PROPERTYTAX_FLOOR",
+                              "module": "rainmaker-pt"
+                            }
+                          },
+                          {
+                             "variable":"usage_category",
+                             "value":"usageCategory",
+                             "localisation": {
+                              "required": true,
+                              "prefix": "COMMON_PROPSUBUSGTYPE",
+                              "module": "rainmaker-pt"
+                            }
+                          },
+                          {
+                            "variable":"occupancy_type",
+                            "value":"occupancyType"
+                         },
+                         {
+                          "variable":"builtup_area",
+                          "value":"constructionDetail.builtUpArea"
+                         },
+                         {
+                          "variable":"arv_rent",
+                          "value":"arv"
+                         },
+                         {
+                           "variable":"additional_details",
+                           "value":"additionalDetails"
+                         }
+                        ]
+                   } 
+                }
+                  
+                  
                 ]
              },
               { 
