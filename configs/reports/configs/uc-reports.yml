@@ -924,13 +924,13 @@ ReportDefinitions:
         type: epoch
         source: uc
         isMandatory: false
-        searchClause: AND rh.receiptdate >= $fromDate
+        searchClause: AND paydetail.receiptdate >= $fromDate
       - name: toDate
         label: reports.uc.toDate
         type: epoch
         source: uc
         isMandatory: false
-        searchClause: AND rh.receiptdate <= $toDate
+        searchClause: AND paydetail.receiptdate <= $toDate
       - name: ulb
         label: reports.uc.ulb
         type: singlevaluelist
@@ -938,7 +938,7 @@ ReportDefinitions:
         source: uc
         wrapper: true
         isMandatory: false
-        searchClause: AND rh.tenantid = $ulb
+        searchClause: AND paydetail.tenantid = $ulb
     query: |
         -- Use CTE to force query plan, compute & use CTE later
         WITH receipt_breakup AS (
@@ -1089,13 +1089,13 @@ ReportDefinitions:
         type: epoch
         source: uc
         isMandatory: true
-        searchClause: AND rh.receiptdate >= $fromDate
+        searchClause: AND paydetail.receiptdate >= $fromDate
       - name: toDate
         label: reports.uc.toDate
         type: epoch
         source: uc
         isMandatory: true
-        searchClause: AND rh.receiptdate <= $toDate
+        searchClause: AND paydetail.receiptdate <= $toDate
       - name: businessservice
         label: reports.uc.businessservice
         type: singlevaluelist
@@ -1103,7 +1103,7 @@ ReportDefinitions:
         source: uc
         wrapper: true
         isMandatory: false
-        searchClause: AND rh.businessdetails = $businessservice
+        searchClause: AND paydetail.businessservice = $businessservice
       - name: collectorname
         label: reports.uc.collectorname
         type: singlevaluelist
@@ -1195,13 +1195,13 @@ ReportDefinitions:
         type: epoch
         source: uc
         isMandatory: false
-        searchClause: AND rh.receiptdate >= $fromDate
+        searchClause: AND paydetail.receiptdate >= $fromDate
       - name: toDate
         label: reports.uc.toDate
         type: epoch
         source: uc
         isMandatory: false
-        searchClause: AND rh.receiptdate <= $toDate
+        searchClause: AND paydetail.receiptdate <= $toDate
       - name: ulb
         label: reports.uc.ulb
         type: singlevaluelist
@@ -1209,7 +1209,7 @@ ReportDefinitions:
         source: uc
         wrapper: true
         isMandatory: false
-        searchClause: AND rh.tenantid = $ulb
+        searchClause: AND paydetail.tenantid = $ulb
     query: |
         -- Use CTE to force query plan, compute & use CTE later
         SELECT
@@ -1274,13 +1274,13 @@ ReportDefinitions:
         type: epoch
         source: uc
         isMandatory: false
-        searchClause: AND rh.receiptdate >= $fromDate
+        searchClause: AND paydetail.receiptdate >= $fromDate
       - name: toDate
         label: reports.uc.toDate
         type: epoch
         source: uc
         isMandatory: false
-        searchClause: AND rh.receiptdate <= $toDate
+        searchClause: AND paydetail.receiptdate <= $toDate
       - name: ulb
         label: reports.uc.ulb
         type: singlevaluelist
@@ -1288,7 +1288,7 @@ ReportDefinitions:
         source: uc
         wrapper: true
         isMandatory: false
-        searchClause: AND rh.tenantid = $ulb
+        searchClause: AND paydetail.tenantid = $ulb
     query: |
         -- Use CTE to force query plan, compute & use CTE later
         SELECT
@@ -1351,13 +1351,13 @@ ReportDefinitions:
         type: epoch
         source: uc
         isMandatory: false
-        searchClause: AND rh.receiptdate >= $fromDate
+        searchClause: AND paydetail.receiptdate >= $fromDate
       - name: toDate
         label: reports.uc.toDate
         type: epoch
         source: uc
         isMandatory: false
-        searchClause: AND rh.receiptdate <= $toDate
+        searchClause: AND paydetail.receiptdate <= $toDate
       - name: ulb
         label: reports.uc.ulb
         type: singlevaluelist
@@ -1365,7 +1365,7 @@ ReportDefinitions:
         source: uc
         wrapper: true
         isMandatory: false
-        searchClause: AND rh.tenantid = $ulb
+        searchClause: AND paydetail.tenantid = $ulb
     query: |
         -- Use CTE to force query plan, compute & use CTE later
         SELECT
@@ -1429,13 +1429,13 @@ ReportDefinitions:
         type: epoch
         source: uc
         isMandatory: false
-        searchClause: AND rh.receiptdate >= $fromDate
+        searchClause: AND paydetail.receiptdate >= $fromDate
       - name: toDate
         label: reports.uc.toDate
         type: epoch
         source: uc
         isMandatory: false
-        searchClause: AND rh.receiptdate <= $toDate
+        searchClause: AND paydetail.receiptdate <= $toDate
     query: |
         -- Use CTE to force query plan, compute & use CTE later
         SELECT
@@ -1448,7 +1448,7 @@ ReportDefinitions:
           SUM(adjustedamount) as totalcollection
         from egcl_payment payment, egcl_paymentdetail as paydetail
         inner join egcl_billaccountdetail as billdetail on billdetail.billdetailid=paydetail.billid
-        WHERE payment.id=paydetail.paymentid  AND payment.tenantid='pb.testing' AND paydetail.businessservice not in ('PT','TL','FIRENOC')  and payment.paymentstatus != 'CANCELLED'
+        WHERE payment.id=paydetail.paymentid  AND payment.tenantid=$tenantid AND paydetail.businessservice not in ('PT','TL','FIRENOC')  and payment.paymentstatus != 'CANCELLED'
     groupby: GROUP BY paydetail.businessservice
     orderby: ORDER BY paydetail.businessservice
 
@@ -1537,13 +1537,13 @@ ReportDefinitions:
         type: epoch
         source: uc
         isMandatory: false
-        searchClause: AND rh.receiptdate >= $fromDate
+        searchClause: AND paydetail.receiptdate >= $fromDate
       - name: toDate
         label: reports.uc.toDate
         type: epoch
         source: uc
         isMandatory: false
-        searchClause: AND rh.receiptdate <= $toDate
+        searchClause: AND paydetail.receiptdate <= $toDate
       - name: collectorname
         label: reports.uc.collectorname
         type: singlevaluelist
@@ -1637,13 +1637,13 @@ ReportDefinitions:
         type: epoch
         source: uc
         isMandatory: false
-        searchClause: AND rh.receiptdate >= $fromDate
+        searchClause: AND paydetail.receiptdate >= $fromDate
       - name: toDate
         label: reports.uc.toDate
         type: epoch
         source: uc
         isMandatory: false
-        searchClause: AND rh.receiptdate <= $toDate
+        searchClause: AND paydetail.receiptdate <= $toDate
       - name: collectorname
         label: reports.uc.collectorname
         type: singlevaluelist
@@ -1665,5 +1665,5 @@ ReportDefinitions:
         FROM egcl_payment AS payment
         inner join egcl_paymentdetail as paydetail on paydetail.paymentid=payment.id
         JOIN eg_user ON payment.createdby::INTEGER=eg_user.id
-        WHERE  paydetail.businessservice not in ('PT','TL','FIRENOC')  and payment.paymentstatus != 'CANCELLED' and payment.tenantid='pb.testing'
+        WHERE  paydetail.businessservice not in ('PT','TL','FIRENOC')  and payment.paymentstatus != 'CANCELLED' and payment.tenantid =$tenantid
     orderby: ORDER BY paydetail.receiptdate DESC
