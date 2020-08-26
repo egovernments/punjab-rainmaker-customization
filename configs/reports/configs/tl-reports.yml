@@ -691,7 +691,7 @@ ReportDefinitions:
       COUNT(applicationnumber) as total,
       message.message as status 
     from eg_tl_tradelicense tl 
-    LEFT OUTER JOIN message ON split_part(message.code,'_',2) = status AND message.locale = 'en_IN' 
+    LEFT OUTER JOIN message ON split_part(message.code,'_',2) = status  AND split_part(message.code,'_',1)='TL' AND message.locale = 'en_IN' 
     WHERE tl.tenantid=$tenantid
   groupby: GROUP BY message.message
   orderby: ORDER BY case message.message when 'Pending Application' then 1 when 'Pending Payment' then 2 when 'Pending Approval' then 3 when 'Approved' then 4 when 'Rejected' then 5 when 'Cancelled' then 6 else 7 end
@@ -1908,7 +1908,7 @@ ReportDefinitions:
       COUNT(applicationnumber) as total,
       message.message as status 
     from eg_tl_tradelicense tl 
-    LEFT OUTER JOIN message ON split_part(message.code,'_',2) = status AND message.locale = 'en_IN' 
+    LEFT OUTER JOIN message ON split_part(message.code,'_',2) = status  AND split_part(message.code,'_',1)='TL' AND message.locale = 'en_IN' 
     WHERE tl.tenantid=$tenantid
   groupby: GROUP BY message.message
   orderby: ORDER BY case message.message when 'Pending Application' then 1 when 'Pending Payment' then 2 when 'Pending Approval' then 3 when 'Approved' then 4 when 'Rejected' then 5 when 'Cancelled' then 6 else 7 end
