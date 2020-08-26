@@ -440,7 +440,7 @@
             },
              "receipt-approver": {
               "color": "#000000",
-              "fontSize": 14,
+              "fontSize": 12,
               "letterSpacing": 0.6,
               "alignment": "center",
               "margin": [
@@ -459,12 +459,12 @@
                 0,
                 0,
                 0,
-                5
+                1
               ]
             },
             "receipt-sub-logo-header": {
               "color": "#000000",
-              "fontSize": 18,
+              "fontSize": 16,
               "letterSpacing": 0.74,
               "alignment": "center",
               "margin": [
@@ -476,19 +476,19 @@
             },
             "receipt-logo-sub-header": {
               "color": "#484848",
-              "fontSize": 14,
+              "fontSize": 10,
               "letterSpacing": 0.6,
               "alignment": "center",
               "margin": [
                 0,
-                5,
+                1,
                 0,
                 0
               ]
             },
             "receipt-sub-logo-sub-header": {
               "color": "#484848",
-              "fontSize": 14,
+              "fontSize": 12,
               "letterSpacing": 0.6,
               "alignment": "left",
               "margin": [
@@ -500,7 +500,7 @@
             },
               "receipt-sub-address-sub-header": {
               "color": "#484848",
-              "fontSize": 14,
+              "fontSize": 12,
               "letterSpacing": 0.1,
               "alignment": "right",
               "margin": [
@@ -512,7 +512,7 @@
             },
              "receipt-sub-website-sub-header": {
               "color": "#484848",
-              "fontSize": 14,
+              "fontSize": 12,
               "letterSpacing": 0.1,
               "alignment": "right",
               "margin": [
@@ -524,11 +524,11 @@
             },
               "receipt-sub-email-sub-header": {
               "color": "#484848",
-              "fontSize": 14,
+              "fontSize": 12,
               "letterSpacing": 0.1,
               "alignment": "right",
               "margin": [
-                50,
+                20,
                 30,
                 -110,
                 0
@@ -536,7 +536,13 @@
             },
 			"disclaimer":
 			  {
-			     "fontSize":"10"
+           "fontSize":"10",
+           "margin": [
+            10,
+            0,
+            0,
+            0
+          ]
 			  }
            }
 		   

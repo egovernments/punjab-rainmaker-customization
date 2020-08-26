@@ -34,7 +34,7 @@
                 "alignment": "left",
                 "margin": [
                   0,
-                  10,
+                  2,
                   0,
                   0
                 ]
@@ -440,7 +440,7 @@
                 "style": "receipt-table-value"
               },
               {
-                "text": "₹ 0",
+                "text": "{{adhocRebate}}",
                 "border": [
                   false,
                   false,
@@ -460,7 +460,7 @@
                 "style": "receipt-table-value"
               },
               {
-                "text": " ",
+                "text": "{{adhocRebateReason}}",
                 "border": [
                   false,
                   false,
@@ -482,7 +482,7 @@
                 "style": "receipt-table-value"
               },
               {
-                "text": "₹ ",
+                "text": "{{adhocPenalty}}",
                 "border": [
                   false,
                   false,
@@ -502,7 +502,7 @@
                 "style": "receipt-table-value"
               },
               {
-                "text": " ",
+                "text": "NA",
                 "border": [
                   false,
                   false,
@@ -545,6 +545,48 @@
               },
               {
                 "text": "{{transactionID}}",
+                "border": [
+                  false,
+                  false,
+                  true,
+                  false
+                ],
+                "style": "receipt-table"
+              }
+            ],
+            [
+              {
+                "text": "Cheque or DD No.",
+                "border": [
+                  true,
+                  false,
+                  false,
+                  false
+                ],
+                "style": "receipt-table-value"
+              },
+              {
+                "text": "{{chequeNo}}",
+                "border": [
+                  false,
+                  false,
+                  false,
+                  false
+                ],
+                "style": "receipt-table"
+              },
+              {
+                "text": "Cheque or DD Date",
+                "border": [
+                  false,
+                  false,
+                  false,
+                  false
+                ],
+                "style": "receipt-table-value"
+              },
+              {
+                "text": "{{chequeDate}}",
                 "border": [
                   false,
                   false,
@@ -601,10 +643,10 @@
         "layout": {}
       },
       {
-        "style": "noc-table",
+        "style": "next-noc-table",
         "table": {
          "widths":["*", "*", "*", "*"],
-          "body": ["{{#variable14}}[{\"text\":\"Accessory Type\", \"border\":[ false, false, false, false ], \"style\": \"receipt-table-value-cont\" },{ \"text\":\"UOM\",\"border\":[ false, false, false, false ], \"style\": \"receipt-table-value-cont\", \"fontSize\": 11 }, { \"text\":\"UOM Value\", \"border\":[ false, false, false, false ], \"style\": \"receipt-table-value-cont\" }, { \"text\":\"Count\", \"border\":[ false, false, false, false ], \"style\": \"receipt-table-value-cont\" } ], [ { \"text\":\"{{accesoryType}}\", \"border\":[ false, false, false, false ], \"style\": \"receipt-table2\" }, { \"text\":\"{{uom}}\", \"border\":[ false, false, false, false ], \"style\": \"receipt-table2\" }, { \"text\":\"{{accessoryUomValue}}\", \"border\":[ false, false, false, false ], \"style\": \"receipt-table2\" }, { \"text\":\"{{accessoryCount}}\", \"border\":[ false, false, false, false ], \"style\": \"receipt-table2\" } ]{{/variable14}}" ]
+          "body": ["{{#variable14}}[{\"text\":\"Accessory Type\", \"border\":[ true, true, false, false ], \"style\": \"receipt-table-value\" },{ \"text\":\"UOM\",\"border\":[ false, true, false, false ], \"style\": \"receipt-table-value\", \"fontSize\": 11 }, { \"text\":\"UOM Value\", \"border\":[ false, true, false, false ], \"style\": \"receipt-table-value\" }, { \"text\":\"Count\", \"border\":[ false, true, true, false ], \"style\": \"receipt-table-value\" } ], [ { \"text\":\"{{accesoryType}}\", \"border\":[ true, false, false, true ], \"style\": \"receipt-table\" }, { \"text\":\"{{uom}}\", \"border\":[ false, false, false, true ], \"style\": \"receipt-table\" }, { \"text\":\"{{accessoryUomValue}}\", \"border\":[ false, false, false, true ], \"style\": \"receipt-table\" }, { \"text\":\"{{accessoryCount}}\", \"border\":[ false, false, true, true ], \"style\": \"receipt-table\" } ]{{/variable14}}" ]
            },
           "border":[
         true,
@@ -632,14 +674,14 @@
           {
             "text": [
               {
-                "text": "{{commissioner/eo}}",
+                "text": "Authorised Signatory",
                 "bold": true
               }
             ],
             "alignment": "right",
             "margin": [
                 0,
-                0,
+                4,
                -10,
                 1
             ]
@@ -712,7 +754,7 @@
       "color": "#000000",
       "margin": [
         -25,
-        45,
+        25,
         -22,
         -8
       ]
@@ -722,7 +764,7 @@
       "color": "#000000",
       "margin": [
         -25,
-        28,
+        15,
         -22,
         -8
       ]
@@ -733,10 +775,10 @@
       "fontSize": 12,
       "fontWeight": 500,
       "margin": [
-        8,
-        8,
+        2,
+        2,
         0,
-        8
+        2
       ]
     },
     "receipt-table": {
@@ -746,9 +788,9 @@
       "fontWeight": 400,
       "margin": [
         -10,
-        8,
+        2,
         0,
-        8
+        2
       ]
     },
      "receipt-approver": {
@@ -756,37 +798,37 @@
       "bold": true,
       "margin": [
         -27,
-        50,
+        40,
         -10,
         0
       ],
       "color": "#484848"
     },
     "no-signature": {
-      "fontSize": 12,
+      "fontSize": 10,
       "margin": [
         -27,
-        35,
+        5,
         -10,
         0
       ],
       "color": "#484848"
     },
     "pt-disclaimer": {
-      "fontSize": 12,
+      "fontSize": 10,
       "margin": [
         -27,
-        30,
+        5,
         -10,
         0
       ],
       "color": "#484848"
     },
     "pt-disclaimer-value": {
-      "fontSize": 12,
+      "fontSize": 10,
       "margin": [
-        2,
-        5,
+        0,
+        1,
         0,
         0
       ],
