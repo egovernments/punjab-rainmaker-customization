@@ -1448,7 +1448,7 @@ ReportDefinitions:
           SUM(adjustedamount) as totalcollection
         from egcl_payment payment, egcl_paymentdetail as paydetail
         inner join egcl_billaccountdetail as billdetail on billdetail.billdetailid=paydetail.billid
-        WHERE payment.id=paydetail.paymentid  AND payment.tenantid='pb.testing' AND paydetail.businessservice not in ('PT','TL','FIRENOC')  and payment.paymentstatus != 'CANCELLED'
+        WHERE payment.id=paydetail.paymentid  AND payment.tenantid=$tenantid AND paydetail.businessservice not in ('PT','TL','FIRENOC')  and payment.paymentstatus != 'CANCELLED'
     groupby: GROUP BY paydetail.businessservice
     orderby: ORDER BY paydetail.businessservice
 
@@ -1665,5 +1665,5 @@ ReportDefinitions:
         FROM egcl_payment AS payment
         inner join egcl_paymentdetail as paydetail on paydetail.paymentid=payment.id
         JOIN eg_user ON payment.createdby::INTEGER=eg_user.id
-        WHERE  paydetail.businessservice not in ('PT','TL','FIRENOC')  and payment.paymentstatus != 'CANCELLED' and payment.tenantid='pb.testing'
+        WHERE  paydetail.businessservice not in ('PT','TL','FIRENOC')  and payment.paymentstatus != 'CANCELLED' and payment.tenantid=$tenantid
     orderby: ORDER BY paydetail.receiptdate DESC
