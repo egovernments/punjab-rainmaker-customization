@@ -34,7 +34,7 @@
                 "alignment": "left",
                 "margin": [
                   0,
-                  10,
+                  4,
                   0,
                   0
                 ]
@@ -272,7 +272,7 @@
                 "style": "receipt-table-value"
               },
               {
-                "text": "{{assessmentYear}}",
+                "text": "{{assessmentYear1}}-{{assessmentYear2}}",
                 "border": [
                   false,
                   false,
@@ -292,7 +292,7 @@
                 "style": "receipt-table-value"
               },
               {
-                "text": "To-Fetch",
+                "text": " ",
                 "border": [
                   false,
                   false,
@@ -671,67 +671,58 @@
 		]
 	  },
 	  "layout":{}
-	  },
+    },
+    {
+      "style": "next-noc-table",
+      "table": {
+        "widths": [
+          "*",
+          "*",
+          "*",
+          "*"
+        ],
+        "body": ["{{#var_owners}}[{\"text\":\"Owner Name\",\"border\":[true,true,false,true],\"style\":\"receipt-table-key\"},{\"text\":\"{{name2}}\",\"border\":[false,true,true,true]},{\"text\":\"Father's Name\",\"border\":[true,true,false,true],\"style\":\"receipt-table-key\"},{\"text\":\"{{fatherOrHusbandName2}}\",\"border\":[false,true,true,true]}]{{/var_owners}}"]
+      },
+      "layout": {}
+    },
 	  {
         "style": "next-noc-table",
         "table": {
           "widths": [
-            "20%",
-            "20%",
-            "20%",
-            "20%",
-			"20%"
+            "*",
+            "*",
+            "*",
+            "*"
           ],
-          "body": [
+          "body":             
             [
-              {
-                "text": "Floor",
-                "style": "receipt-table-value"
-              },
-              {
-                "text": "Usage Type",
-                "style": "receipt-table-value"
-              },
-              {
-                "text": "Sub Usage Type",
-                "style": "receipt-table-value"
-              },
-              {
-                "text": "Occupancy",
-                "style": "receipt-table-value"
-              },
-			  {
-                "text": "Built Area (Sq. Yard) / Total Annual Rent",
-                "style": "receipt-table-value"
-              }
-            ],
-            [
-              {
-                "text": "To-Fetch",
-                "style": "receipt-table"
-              },
-              {
-                "text": "To-Fetch",
-                "style": "receipt-table"
-              },
-              {
-                "text": "To-Fetch",
-                "style": "receipt-table"
-              },
-              {
-                "text": "To-Fetch",
-                "style": "receipt-table"
-              },
-              {
-                "text": "To-Fetch",
-                "style": "receipt-table"
-              }
-            ]
-          ]
+              [
+                {
+                  "text": "Floor",
+                  "style": "receipt-table-value"
+                },
+                {
+                  "text": "Usage",
+                  "style": "receipt-table-value"
+                },
+                {
+                  "text": "Occupancy",
+                  "style": "receipt-table-value"
+                },
+               {
+                  "text": "Built Area (Sq. Yard) / Total Annual Rent",
+                  "style": "receipt-table-value"
+                }
+              ],
+              "{{#var_floors}}[{\"text\":\"{{floor_no}}\",\"style\":\"receipt-table\"},{\"text\":\"{{usage_category}}\",\"style\":\"receipt-table\"},{\"text\":\"{{occupancy_type}}\",\"style\":\"receipt-table\"},{\"text\":\"{{builtup_area}}/{{arv_rent}}\",\"style\":\"receipt-table\"}]{{/var_floors}}"
+              ]
+              
+          
         },
         "layout": {}
       },
-	  {
+      
+	    {
 	     "text": "Assessee Signature",
 	     "style": "receipt-approver"
 	  }
@@ -777,20 +768,7 @@
             "bold": true,
             "style": "pt-disclaimer-value"
           },
-          {
-            "style": "pt-disclaimer-value",
-            "table": {
-              "widths": [
-                "120%",
-                "*",
-                "*",
-                "*"
-              ],
-              "body": ["{{#variable11}}[{\"text\":\"{{disclaimerContent}}\",\"border\":[false,false,false,false],\"style\":\"pt-disclaimer-value\"}]{{/variable11}}"]
-            },
-            "layout": {}
-          },
-		  {
+		   {
 			"ol": [
 				"Payment received by cheque/demand draft shall be subject to realization",
 				"This document is not a proof of property ownership and regularization of unauthorised construction",
@@ -809,39 +787,48 @@
         1
       ]
     },
+    "pt-reciept-citizen-table": {
+      "fontSize": 8,
+      "color": "#484848"
+    },
+    "receipt-assess-table-header": {
+      "bold": true,
+      "fillColor": "#D8D8D8",
+      "color": "#484848"
+    },
     "receipt-logo-header": {
       "color": "#000000",
-      "fontSize": 14,
+      "fontSize": 10,
       "bold": true,
       "letterSpacing": 0.74,
       "margin": [
         0,
         0,
         0,
-        5
+        3
       ]
     },
     "receipt-logo-sub-header": {
       "color": "#000000",
-      "fontSize": 12,
+      "fontSize": 10,
       "letterSpacing": 0.6
     },
      "noc-table": {
-      "fontSize": 10,
+      "fontSize": 8,
       "color": "#000000",
       "margin": [
         -25,
-        45,
+        15,
         -22,
         -8
       ]
     },
     "next-noc-table": {
-      "fontSize": 10,
+      "fontSize": 8,
       "color": "#000000",
       "margin": [
         -25,
-        28,
+        18,
         -22,
         -8
       ]
@@ -849,63 +836,63 @@
      "receipt-table-value": {
       "color": "#000000",
       "bold": true,
-      "fontSize": 10,
+      "fontSize": 8,
       "fontWeight": 500,
       "margin": [
         8,
-        8,
+        4,
         0,
-        8
+        4
       ]
     },
     "receipt-table": {
       "color": "#000000",
       "bold": false,
-      "fontSize": 10,
+      "fontSize": 8,
       "fontWeight": 400,
       "margin": [
         0,
-        8,
+        4,
         0,
-        8
+        4
       ]
     },
      "receipt-approver": {
-      "fontSize": 10,
+      "fontSize": 8,
       "bold": true,
       "margin": [
         -27,
-        50,
+        20,
         -10,
         0
       ],
       "color": "#484848"
     },
     "no-signature": {
-      "fontSize": 10,
+      "fontSize": 8,
       "margin": [
         -27,
-        35,
+        20,
         -10,
         0
       ],
       "color": "#484848"
     },
     "pt-disclaimer": {
-      "fontSize": 10,
+      "fontSize": 8,
       "margin": [
         -27,
-        30,
+        20,
         -10,
         0
       ],
       "color": "#484848"
     },
     "pt-disclaimer-value": {
-      "fontSize": 10,
+      "fontSize": 8,
       "margin": [
         2,
-        5,
+        3,
         0,
         0
       ],
