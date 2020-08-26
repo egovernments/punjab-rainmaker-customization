@@ -65,7 +65,7 @@
                              {
                               "text":"{{Rs}} {{totalAmount}} - {{billStatus}}",
                               "style":"receipt-table-value-total",
-                              "fontSize": 20
+                              "fontSize": 15
                              }
                            ],
                              "border":[
@@ -287,7 +287,7 @@
                              false
                            ],
                             "style": "receipt-table-value-cont",
-                            "fontSize": 11
+                            "fontSize": 9
                          },  
                          {
                            "text":"{{licence_type}}",
@@ -372,7 +372,7 @@
                              false
                            ],
                             "style": "receipt-table-value-cont",
-                            "fontSize": 11
+                            "fontSize": 9
                          },  
                          {
                            "text":"{{trade_commencement}}",
@@ -457,7 +457,7 @@
                              false
                            ],
                             "style": "receipt-table-value-cont",
-                            "fontSize": 11
+                            "fontSize": 9
                          },  
                          {
                            "text":" ",
@@ -555,7 +555,7 @@
                   {
                      "table": {
                       "widths":["*", "*", "*", "*"],
-                       "body": ["{{#variable13}}[{\"text\":\"{{trade_category}}\", \"border\":[ false, false, false, false ], \"style\": \"receipt-table-value-cont\" }, { \"text\":\"{{trade_type}}\", \"border\":[ false, false, false, false ], \"style\": \"receipt-table-value-cont\", \"fontSize\": 11 }, { \"text\":\"{{trade_sub_type}}\", \"border\":[ false, false, false, false ], \"style\": \"receipt-table-value-cont\" }, { \"text\":\"{{uom_measurement}}\", \"border\":[ false, false, false, false ], \"style\": \"receipt-table-value-cont\" } ], [ { \"text\":\"{{tradeCat}}\", \"border\":[ false, false, false, false ], \"style\": \"receipt-table2\" }, { \"text\":\"{{tradetyp}}\", \"border\":[ false, false, false, false ], \"style\": \"receipt-table2\" }, { \"text\":\"{{tradesub}}\", \"border\":[ false, false, false, false ], \"style\": \"receipt-table2\" }, { \"text\":\"{{UOM-measurement}}\", \"border\":[ false, false, false, false ], \"style\": \"receipt-table2\" } ], [ { \"text\":\"{{uom_value}}\", \"border\":[ false, false, false, false ], \"style\": \"receipt-table-value-cont\" }, { \"text\":\" \", \"border\":[ false, false, false, false ], \"style\": \"receipt-table-value-cont\", \"fontSize\": 11 }, { \"text\":\" \", \"border\":[ false, false, false, false ], \"style\": \"receipt-table-value-cont\" }, { \"text\":\" \", \"border\":[ false, false, false, false ], \"style\": \"receipt-table-value-cont\" } ], [ { \"text\":\"{{uomValue}}\", \"border\":[ false, false, false, false ], \"style\": \"receipt-table2\" }, { \"text\":\" \", \"border\":[ false, false, false, false ], \"style\": \"receipt-table2\" }, { \"text\":\" \", \"border\":[ false, false, false, false ], \"style\": \"receipt-table2\" }, { \"text\":\" \", \"border\":[ false, false, false, false ], \"style\": \"receipt-table2\" } ]{{/variable13}}" ]
+                       "body": ["{{#variable13}}[{\"text\":\"{{trade_category}}\", \"border\":[ false, false, false, false ], \"style\": \"receipt-table-value-cont\" }, { \"text\":\"{{trade_type}}\", \"border\":[ false, false, false, false ], \"style\": \"receipt-table-value-cont\", \"fontSize\": 9 }, { \"text\":\"{{trade_sub_type}}\", \"border\":[ false, false, false, false ], \"style\": \"receipt-table-value-cont\" }, { \"text\":\"{{uom_measurement}}\", \"border\":[ false, false, false, false ], \"style\": \"receipt-table-value-cont\" } ], [ { \"text\":\"{{tradeCat}}\", \"border\":[ false, false, false, false ], \"style\": \"receipt-table2\" }, { \"text\":\"{{tradetyp}}\", \"border\":[ false, false, false, false ], \"style\": \"receipt-table2\" }, { \"text\":\"{{tradesub}}\", \"border\":[ false, false, false, false ], \"style\": \"receipt-table2\" }, { \"text\":\"{{UOM-measurement}}\", \"border\":[ false, false, false, false ], \"style\": \"receipt-table2\" } ], [ { \"text\":\"{{uom_value}}\", \"border\":[ false, false, false, false ], \"style\": \"receipt-table-value-cont\" }, { \"text\":\" \", \"border\":[ false, false, false, false ], \"style\": \"receipt-table-value-cont\", \"fontSize\":9 }, { \"text\":\" \", \"border\":[ false, false, false, false ], \"style\": \"receipt-table-value-cont\" }, { \"text\":\" \", \"border\":[ false, false, false, false ], \"style\": \"receipt-table-value-cont\" } ], [ { \"text\":\"{{uomValue}}\", \"border\":[ false, false, false, false ], \"style\": \"receipt-table2\" }, { \"text\":\" \", \"border\":[ false, false, false, false ], \"style\": \"receipt-table2\" }, { \"text\":\" \", \"border\":[ false, false, false, false ], \"style\": \"receipt-table2\" }, { \"text\":\" \", \"border\":[ false, false, false, false ], \"style\": \"receipt-table2\" } ]{{/variable13}}" ]
                  },
                  "border":[
                      true,
@@ -588,7 +588,7 @@
                   {
                      "table": {
                       "widths":["*", "*", "*", "*"],
-                       "body": ["{{#variable14}}[{\"text\":\"{{accesory_type}}\", \"border\":[ false, false, false, false ], \"style\": \"receipt-table-value-cont\" },{ \"text\":\"{{uom_label}}\",\"border\":[ false, false, false, false ], \"style\": \"receipt-table-value-cont\", \"fontSize\": 11 }, { \"text\":\"{{uom_value}}\", \"border\":[ false, false, false, false ], \"style\": \"receipt-table-value-cont\" }, { \"text\":\"{{accessory_count}}\", \"border\":[ false, false, false, false ], \"style\": \"receipt-table-value-cont\" } ], [ { \"text\":\"{{accesoryType}}\", \"border\":[ false, false, false, false ], \"style\": \"receipt-table2\" }, { \"text\":\"{{uom}}\", \"border\":[ false, false, false, false ], \"style\": \"receipt-table2\" }, { \"text\":\"{{accessoryUomValue}}\", \"border\":[ false, false, false, false ], \"style\": \"receipt-table2\" }, { \"text\":\"{{accessoryCount}}\", \"border\":[ false, false, false, false ], \"style\": \"receipt-table2\" } ]{{/variable14}}" ]
+                       "body": ["{{#variable14}}[{\"text\":\"{{accesory_type}}\", \"border\":[ false, false, false, false ], \"style\": \"receipt-table-value-cont\" },{ \"text\":\"{{uom_label}}\",\"border\":[ false, false, false, false ], \"style\": \"receipt-table-value-cont\", \"fontSize\": 9 }, { \"text\":\"{{uom_value}}\", \"border\":[ false, false, false, false ], \"style\": \"receipt-table-value-cont\" }, { \"text\":\"{{accessory_count}}\", \"border\":[ false, false, false, false ], \"style\": \"receipt-table-value-cont\" } ], [ { \"text\":\"{{accesoryType}}\", \"border\":[ false, false, false, false ], \"style\": \"receipt-table2\" }, { \"text\":\"{{uom}}\", \"border\":[ false, false, false, false ], \"style\": \"receipt-table2\" }, { \"text\":\"{{accessoryUomValue}}\", \"border\":[ false, false, false, false ], \"style\": \"receipt-table2\" }, { \"text\":\"{{accessoryCount}}\", \"border\":[ false, false, false, false ], \"style\": \"receipt-table2\" } ]{{/variable14}}" ]
                       },
                        "border":[
                      true,
@@ -647,7 +647,7 @@
                              false
                            ],
                             "style": "receipt-table-value-cont",
-                            "fontSize": 11
+                            "fontSize": 9
                          },  
                          {
                            "text":"{{door_house_no}}",
@@ -732,7 +732,7 @@
                              false
                            ],
                             "style": "receipt-table-value-cont",
-                            "fontSize": 11
+                            "fontSize": 9
                          },  
                          {
                            "text":"{{pincode_label}}",
@@ -863,7 +863,7 @@
                              false
                            ],
                             "style": "receipt-table-value-cont",
-                            "fontSize": 11
+                            "fontSize": 9
                          },  
                          {
                            "text":"{{mobile_no}}",
@@ -948,7 +948,7 @@
                              false
                            ],
                             "style": "receipt-table-value-cont",
-                            "fontSize": 11
+                            "fontSize": 9
                          },  
                          {
                            "text":"{{gender_label}}",
@@ -1033,7 +1033,7 @@
                              false
                            ],
                             "style": "receipt-table-value-cont",
-                            "fontSize": 11
+                            "fontSize": 9
                          },  
                          {
                            "text":"{{correspondance_address}}",
@@ -1168,7 +1168,7 @@
                              false
                            ],
                             "style": "receipt-table-value-cont",
-                            "fontSize": 11
+                            "fontSize": 9
                          },
                          {
                           "text":"{{owner_photo}}",
@@ -1179,7 +1179,7 @@
                             false
                           ],
                            "style": "receipt-table-value-cont",
-                           "fontSize": 11
+                           "fontSize": 9
                         }  
                          
                        ],
@@ -1240,25 +1240,25 @@
           "noc-head": {
            "margin": [
              -25,
-             -30,
+             -40,
              0,
-             1
+             0
            ]
          },
          "receipt-logo-header": {
            "color": "#484848",
-           "fontSize": 14,
+           "fontSize": 11,
            "bold": true,
            "letterSpacing": 0.74,
            "margin": [
              0,
              0,
              0,
-             5
+             2
            ]
          },
           "noc-table": {
-           "fontSize": 12,
+           "fontSize": 9,
            "color": "#484848",
            "margin": [
              -25,
@@ -1268,7 +1268,7 @@
            ]
          },
          "noc-table2": {
-           "fontSize": 12,
+           "fontSize": 9,
            "color": "#484848",
            "margin": [
              -25,
@@ -1280,11 +1280,11 @@
           "receipt-table-value": {
            "color": "#000000",
            "bold": true,
-           "fontSize": 12,
-           "fontWeight": 500,
+           "fontSize": 9,
+           "fontWeight": 350,
            "margin": [
-             5,
-             5,
+             1,
+             1,
              0,
              0
            ]
@@ -1292,36 +1292,36 @@
          "receipt-table-value-total": {
            "color": "#000000",
            "bold": true,
-           "fontSize": 12,
-           "fontWeight": 500,
+           "fontSize": 10,
+           "fontWeight": 350,
            "alignment": "right",
            "margin": [
              0,
-             5,
-             30,
+             3,
+             15,
              0
            ]
          },
          "receipt-table-value-down": {
            "color": "#000000",
            "bold": false,
-           "fontSize": 12,
-           "fontWeight": 400,
+           "fontSize": 9,
+           "fontWeight": 350,
            "alignment": "left",
            "margin": [
-             3,
-             5,
+             1,
              0,
-             5
+             0,
+             0
            ]
          },
          "receipt-table-value2": {
            "color": "#000000",
            "bold": false,
-           "fontSize": 12,
-           "fontWeight": 500,
+           "fontSize": 9,
+           "fontWeight": 350,
            "margin": [
-             3,
+             0,
              0,
              0,
              0
@@ -1330,10 +1330,10 @@
           "receipt-table-value-cont": {
            "color": "#000000",
            "bold": false,
-           "fontSize": 11,
-           "fontWeight": 400,
+           "fontSize": 9,
+           "fontWeight": 350,
            "margin": [
-             3,
+             0,
              0,
              0,
              0
@@ -1342,11 +1342,11 @@
          "receipt-table": {
            "color": "#484848",
            "bold": true,
-           "fontSize": 12,
-           "fontWeight": 400,
+           "fontSize": 9,
+           "fontWeight": 3500,
            "margin": [
-             -30,
-             5,
+             -50,
+            3,
              0,
              0
            ]
@@ -1354,10 +1354,10 @@
          "receipt-table2": {
            "color": "#000000",
            "bold": true,
-           "fontSize": 12,
-           "fontWeight": 500,
+           "fontSize": 9,
+           "fontWeight": 350,
            "margin": [
-             3,
+             1,
              0,
              0,
              0
