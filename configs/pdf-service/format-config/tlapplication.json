@@ -63,7 +63,7 @@
                               "bold" : false
                              },
                              {
-                              "text":"{{Rs}} {{totalAmount}} - {{billStatus}}",
+                              "text":"{{Rs}} {{totalAmount}}",
                               "style":"receipt-table-value-total",
                               "fontSize": 15
                              }
@@ -553,9 +553,39 @@
                 ],
                [
                   {
-                     "table": {
-                      "widths":["*", "*", "*", "*"],
-                       "body": ["{{#variable13}}[{\"text\":\"{{trade_category}}\", \"border\":[ false, false, false, false ], \"style\": \"receipt-table-value-cont\" }, { \"text\":\"{{trade_type}}\", \"border\":[ false, false, false, false ], \"style\": \"receipt-table-value-cont\", \"fontSize\": 9 }, { \"text\":\"{{trade_sub_type}}\", \"border\":[ false, false, false, false ], \"style\": \"receipt-table-value-cont\" }, { \"text\":\"{{uom_measurement}}\", \"border\":[ false, false, false, false ], \"style\": \"receipt-table-value-cont\" } ], [ { \"text\":\"{{tradeCat}}\", \"border\":[ false, false, false, false ], \"style\": \"receipt-table2\" }, { \"text\":\"{{tradetyp}}\", \"border\":[ false, false, false, false ], \"style\": \"receipt-table2\" }, { \"text\":\"{{tradesub}}\", \"border\":[ false, false, false, false ], \"style\": \"receipt-table2\" }, { \"text\":\"{{UOM-measurement}}\", \"border\":[ false, false, false, false ], \"style\": \"receipt-table2\" } ], [ { \"text\":\"{{uom_value}}\", \"border\":[ false, false, false, false ], \"style\": \"receipt-table-value-cont\" }, { \"text\":\" \", \"border\":[ false, false, false, false ], \"style\": \"receipt-table-value-cont\", \"fontSize\":9 }, { \"text\":\" \", \"border\":[ false, false, false, false ], \"style\": \"receipt-table-value-cont\" }, { \"text\":\" \", \"border\":[ false, false, false, false ], \"style\": \"receipt-table-value-cont\" } ], [ { \"text\":\"{{uomValue}}\", \"border\":[ false, false, false, false ], \"style\": \"receipt-table2\" }, { \"text\":\" \", \"border\":[ false, false, false, false ], \"style\": \"receipt-table2\" }, { \"text\":\" \", \"border\":[ false, false, false, false ], \"style\": \"receipt-table2\" }, { \"text\":\" \", \"border\":[ false, false, false, false ], \"style\": \"receipt-table2\" } ]{{/variable13}}" ]
+                    "table": {
+                      "widths": [
+                        "*",
+                        "*",
+                        "*",
+                        "*",
+                        "*"
+                      ],
+                      "body":             
+                        [
+                          [
+                            {
+                              "text": "{{trade_category}}",
+                              "style": "receipt-table-value"
+                            },
+                            {
+                              "text": "{{trade_type}}",
+                              "style": "receipt-table-value"
+                            },
+                            {
+                              "text": "{{trade_sub_type}}",
+                              "style": "receipt-table-value"
+                            },
+                           {
+                              "text": "{{uom_measurement}}",
+                              "style": "receipt-table-value"
+                            },
+                            {
+                              "text": "{{uom_value}}",
+                              "style": "receipt-table-value-cont"
+                            }
+                          ],
+                          "{{#variable13}}[ { \"text\":\"{{tradeCat}}\", \"border\":[ true, false, true, true ], \"style\": \"receipt-table2\" }, { \"text\":\"{{tradetyp}}\", \"border\":[ false, false, true, true ], \"style\": \"receipt-table2\" }, { \"text\":\"{{tradesub}}\", \"border\":[ false, false, true,true ], \"style\": \"receipt-table2\" }, { \"text\":\"{{UOM-measurement}}\", \"border\":[ false, false, true, true ], \"style\": \"receipt-table2\" } ,{ \"text\":\"{{uomValue}}\", \"border\":[ false, false, true,true ], \"style\": \"receipt-table2\" }]{{/variable13}}" ]
                  },
                  "border":[
                      true,
@@ -566,57 +596,42 @@
                 }
                 
                ],
+              
                [
                   {
-                     "canvas": [
-                                 {
-                                     "type": "line",
-                                     "x1": 5, "y1": 0,
-                                     "x2": 550, "y2": 0,
-                                     "lineWidth": 1
-                                 }
-                             ],
-                          "border":[
-                             true,
-                             false,
-                             true,
-                             false
-                           ]
-                  }   
-                ],
-               [
-                  {
-                     "table": {
-                      "widths":["*", "*", "*", "*"],
-                       "body": ["{{#variable14}}[{\"text\":\"{{accesory_type}}\", \"border\":[ false, false, false, false ], \"style\": \"receipt-table-value-cont\" },{ \"text\":\"{{uom_label}}\",\"border\":[ false, false, false, false ], \"style\": \"receipt-table-value-cont\", \"fontSize\": 9 }, { \"text\":\"{{uom_value}}\", \"border\":[ false, false, false, false ], \"style\": \"receipt-table-value-cont\" }, { \"text\":\"{{accessory_count}}\", \"border\":[ false, false, false, false ], \"style\": \"receipt-table-value-cont\" } ], [ { \"text\":\"{{accesoryType}}\", \"border\":[ false, false, false, false ], \"style\": \"receipt-table2\" }, { \"text\":\"{{uom}}\", \"border\":[ false, false, false, false ], \"style\": \"receipt-table2\" }, { \"text\":\"{{accessoryUomValue}}\", \"border\":[ false, false, false, false ], \"style\": \"receipt-table2\" }, { \"text\":\"{{accessoryCount}}\", \"border\":[ false, false, false, false ], \"style\": \"receipt-table2\" } ]{{/variable14}}" ]
-                      },
-                       "border":[
-                     true,
-                     false,
-                     true,
-                     false
-                   ]
-                }
+                    "table": {
+                      "widths": [
+                        "*",
+                        "*",
+                        "*",
+                        "*"
+                      ],
+                      "body":             
+                        [
+                          [
+                            {
+                              "text": "{{accesory_type}}",
+                              "style": "receipt-table-value"
+                            },
+                            {
+                              "text": "{{uom_label}}",
+                              "style": "receipt-table-value"
+                            },
+                            {
+                              "text": "{{uom_value}}",
+                              "style": "receipt-table-value"
+                            },
+                           {
+                              "text": "{{accessory_count}}",
+                              "style": "receipt-table-value"
+                            }
+                          ],
+                        "{{#variable14}}[ { \"text\":\"{{accesoryType}}\", \"border\":[ true, false, true,true ], \"style\": \"receipt-table2\" }, { \"text\":\"{{uom}}\", \"border\":[ false, false, true, true], \"style\": \"receipt-table2\" }, { \"text\":\"{{accessoryUomValue}}\", \"border\":[ false, false,true, true], \"style\": \"receipt-table2\" }, { \"text\":\"{{accessoryCount}}\", \"border\":[ false, false, true,true ], \"style\": \"receipt-table2\" } ]{{/variable14}}" ]
+                      }
+                                       }
                 
                ],
-               [
-                  {
-                     "canvas": [
-                                 {
-                                     "type": "line",
-                                     "x1": 5, "y1": 0,
-                                     "x2": 550, "y2": 0,
-                                     "lineWidth": 1
-                                 }
-                             ],
-                          "border":[
-                             true,
-                             false,
-                             true,
-                             false
-                           ]
-                  }   
-                ],
+              
                [
                   {
                      "table": {
@@ -1272,7 +1287,7 @@
            "color": "#484848",
            "margin": [
              -25,
-             18,
+             8,
              -25,
              -8
            ]
@@ -1297,7 +1312,7 @@
            "alignment": "right",
            "margin": [
              0,
-             3,
+             0,
              15,
              0
            ]
@@ -1306,20 +1321,30 @@
            "color": "#000000",
            "bold": false,
            "fontSize": 9,
-           "fontWeight": 350,
+           "fontWeight": 250,
            "alignment": "left",
            "margin": [
-             1,
+             0,
              0,
              0,
              0
            ]
          },
+         "next-noc-table": {
+          "fontSize": 12,
+          "color": "#000000",
+          "margin": [
+            -25,
+            15,
+            -22,
+            -8
+          ]
+        },
          "receipt-table-value2": {
            "color": "#000000",
            "bold": false,
            "fontSize": 9,
-           "fontWeight": 350,
+           "fontWeight": 250,
            "margin": [
              0,
              0,
@@ -1331,7 +1356,7 @@
            "color": "#000000",
            "bold": false,
            "fontSize": 9,
-           "fontWeight": 350,
+           "fontWeight": 250,
            "margin": [
              0,
              0,
@@ -1343,10 +1368,10 @@
            "color": "#484848",
            "bold": true,
            "fontSize": 9,
-           "fontWeight": 3500,
+           "fontWeight": 250,
            "margin": [
              -50,
-            3,
+            1,
              0,
              0
            ]
@@ -1355,9 +1380,9 @@
            "color": "#000000",
            "bold": true,
            "fontSize": 9,
-           "fontWeight": 350,
+           "fontWeight": 200,
            "margin": [
-             1,
+             0,
              0,
              0,
              0
