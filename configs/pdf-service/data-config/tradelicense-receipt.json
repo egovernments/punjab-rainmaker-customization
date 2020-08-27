@@ -49,6 +49,18 @@
                }
               },
               {
+                "variable": "adhocRebate", 
+                "value": {
+                  "path": "$.paymentDetails[0].bill.billDetails[0].billAccountDetails[?(@.taxHeadCode == 'TL_ADHOC_REBATE')].amount"
+                }
+              },
+              {
+                "variable": "adhocPenalty", 
+                "value": {
+                  "path": "$.paymentDetails[0].bill.billDetails[0].billAccountDetails[?(@.taxHeadCode == 'TL_ADHOC_PENALTY')].amount"
+                }
+              },
+              {
                 "variable": "paidAmount", 
                 "value": {
                   "path": "$.paymentDetails[0].totalAmountPaid"
@@ -65,6 +77,19 @@
                 "variable": "toPeriod", 
                 "value": {
                   "path": "$.paymentDetails[0].bill.billDetails[0].toPeriod"
+                },
+                "type": "date"
+              },
+               {
+                "variable": "chequeNo", 
+                "value": {
+                  "path": "$.instrumentNumber"
+                }
+              },
+              {
+                "variable": "chequeDate", 
+                "value": {
+                  "path": "$.instrumentDate"
                 },
                 "type": "date"
               },
@@ -457,6 +482,14 @@
                         "variable":"tradeName",
                         "value":"$.Licenses[0].tradeName"
                       },
+                       {            
+                        "variable":"adhocRebateReason",
+                        "value":"$.Licenses[0].tradeLicenseDetail.adhocExemptionReason"
+                      },
+                      {            
+                        "variable":"adhocPenaltyReason",
+                        "value":"$.Licenses[0].tradeLicenseDetail.adhocPenaltyReason"
+                      },
                       {
                         "variable": "tradeType",
                         "value":  "$.Licenses[0].tradeLicenseDetail.tradeUnits[0].tradeType",
@@ -468,7 +501,7 @@
                        }
                     },
                     {
-                      "variable": "variable14",                        
+                      "variable": "variable_acc",                        
                       "value": "$.Licenses[0].tradeLicenseDetail.accessories.*",                       
                        "type":"array",
                        "format":{                            

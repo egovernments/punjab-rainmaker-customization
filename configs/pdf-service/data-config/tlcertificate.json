@@ -87,7 +87,7 @@
                   },
                   "localisation":{
                     "required":true,
-                    "prefix": "TL",
+                    "prefix": "TRADELICENSE_ACCESSORIESCATEGORY",
                     "module": "rainmaker-tl"
                  }
               },
