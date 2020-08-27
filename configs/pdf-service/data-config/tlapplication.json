@@ -20,7 +20,7 @@
               {
                 "variable": "applicationType",
                 "value": {
-                  "path": "$.tradeLicenseDetail.additionalDetail.applicationType"
+                  "path": "$.applicationType"
                 },
                 "localisation":{
                   "required":true,
