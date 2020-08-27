@@ -440,7 +440,7 @@
                 "style": "receipt-table-value"
               },
               {
-                "text": "{{adhocRebate}}",
+                "text": "₹ {{adhocRebate}}",
                 "border": [
                   false,
                   false,
@@ -482,7 +482,7 @@
                 "style": "receipt-table-value"
               },
               {
-                "text": "{{adhocPenalty}}",
+                "text": "₹ {{adhocPenalty}}",
                 "border": [
                   false,
                   false,
@@ -502,7 +502,7 @@
                 "style": "receipt-table-value"
               },
               {
-                "text": "NA",
+                "text": "{{adhocPenaltyReason}}",
                 "border": [
                   false,
                   false,
@@ -645,15 +645,37 @@
       {
         "style": "next-noc-table",
         "table": {
-         "widths":["*", "*", "*", "*"],
-          "body": ["{{#variable14}}[{\"text\":\"Accessory Type\", \"border\":[ true, true, false, false ], \"style\": \"receipt-table-value\" },{ \"text\":\"UOM\",\"border\":[ false, true, false, false ], \"style\": \"receipt-table-value\", \"fontSize\": 11 }, { \"text\":\"UOM Value\", \"border\":[ false, true, false, false ], \"style\": \"receipt-table-value\" }, { \"text\":\"Count\", \"border\":[ false, true, true, false ], \"style\": \"receipt-table-value\" } ], [ { \"text\":\"{{accesoryType}}\", \"border\":[ true, false, false, true ], \"style\": \"receipt-table\" }, { \"text\":\"{{uom}}\", \"border\":[ false, false, false, true ], \"style\": \"receipt-table\" }, { \"text\":\"{{accessoryUomValue}}\", \"border\":[ false, false, false, true ], \"style\": \"receipt-table\" }, { \"text\":\"{{accessoryCount}}\", \"border\":[ false, false, true, true ], \"style\": \"receipt-table\" } ]{{/variable14}}" ]
-           },
-          "border":[
-        true,
-        false,
-        true,
-        false
-      ]
+          "widths": [
+            "*",
+            "*",
+            "*",
+            "*"
+          ],
+          "body":             
+            [
+              [
+                {
+                  "text": "Accessory Type",
+                  "style": "receipt-table-value"
+                },
+                {
+                  "text": "UOM",
+                  "style": "receipt-table-value"
+                },
+                {
+                  "text": "UOM Value",
+                  "style": "receipt-table-value"
+                },
+               {
+                  "text": "Count",
+                  "style": "receipt-table-value"
+                }
+              ],
+            "{{#variable_acc}}[{ \"text\":\"{{accesoryType}}\", \"border\":[ true, false, true, true ], \"style\": \"receipt-table\" }, { \"text\":\"{{uom}}\", \"border\":[ false, false, true, true ], \"style\": \"receipt-table\" }, { \"text\":\"{{accessoryUomValue}}\", \"border\":[ false, false, true, true ], \"style\": \"receipt-table\" }, { \"text\":\"{{accessoryCount}}\", \"border\":[ false, false, true, true ], \"style\": \"receipt-table\"}]{{/variable_acc}}" 
+            ]
+           },  "layout": {}
+
+
       },
       {
         "style": "receipt-approver",
@@ -787,7 +809,7 @@
       "fontSize": 12,
       "fontWeight": 400,
       "margin": [
-        -10,
+        0,
         2,
         0,
         2
