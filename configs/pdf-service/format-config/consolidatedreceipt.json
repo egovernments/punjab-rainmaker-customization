@@ -206,7 +206,7 @@
             ],
             [
               {
-                "text": "Address: ",
+                "text": "{{payer_contact}}",
                 "border": [
                   true,
                   false,
@@ -216,7 +216,7 @@
                 "style": "receipt-table-value"
               },
               {
-                "text": "{{payerAddress}}",
+                "text": "{{payerContact}}",
                 "border": [
                   false,
                   false,
@@ -248,22 +248,22 @@
             ],
             [
               {
-                "text": "{{payer_contact}}",
+                "text": "Address: ",
                 "border": [
                   true,
                   false,
                   false,
-                  true
+                  false
                 ],
                 "style": "receipt-table-value"
               },
               {
-                "text": "{{payerContact}}",
+                "text": "{{payerAddress}}",
                 "border": [
                   false,
                   false,
                   false,
-                  true
+                  false
                 ],
                 "style": "receipt-table"
               },
@@ -273,9 +273,9 @@
                   false,
                   false,
                   false,
-                  true
+                  false
                 ],
-                "style": "receipt-table-value"
+                "style": "receipt-table"
               },
               {
                 "text" : " ",
@@ -283,7 +283,7 @@
                   false,
                   false,
                   true,
-                  true
+                  false
                 ],
                 "style": "receipt-table"
               }
@@ -533,10 +533,6 @@
             ]
           }
         ]
-      },
-      {
-        "style": "no-signature",
-        "text": "{{no_signature}}"
       },
       {
         "style": "pt-disclaimer",
@@ -769,7 +765,7 @@
             ],
             [
               {
-                "text": "Address: ",
+                "text": "{{payer_contact}}",
                 "border": [
                   true,
                   false,
@@ -779,7 +775,7 @@
                 "style": "receipt-table-value"
               },
               {
-                "text": "{{payerAddress}}",
+                "text": "{{payerContact}}",
                 "border": [
                   false,
                   false,
@@ -788,6 +784,7 @@
                 ],
                 "style": "receipt-table"
               },
+              
               {
                 "text": "Paid By: ",
                 "border": [
@@ -811,22 +808,22 @@
             ],
             [
               {
-                "text": "{{payer_contact}}",
+                "text": "Address: ",
                 "border": [
                   true,
                   false,
                   false,
-                  true
+                  false
                 ],
                 "style": "receipt-table-value"
               },
               {
-                "text": "{{payerContact}}",
+                "text": "{{payerAddress}}",
                 "border": [
                   false,
                   false,
                   false,
-                  true
+                  false
                 ],
                 "style": "receipt-table"
               },
@@ -836,9 +833,9 @@
                   false,
                   false,
                   false,
-                  true
+                  false
                 ],
-                "style": "receipt-table-value"
+                "style": "receipt-table"
               },
               {
                 "text" : " ",
@@ -846,7 +843,7 @@
                   false,
                   false,
                   true,
-                  true
+                  false
                 ],
                 "style": "receipt-table"
               }
@@ -1096,10 +1093,6 @@
             ]
           }
         ]
-      },
-      {
-        "style": "no-signature",
-        "text": "{{no_signature}}"
       },
       {
         "style": "pt-disclaimer",
