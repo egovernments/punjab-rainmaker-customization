@@ -72,10 +72,10 @@
         "style": "noc-table",
         "table": {
           "widths": [
-            "25%",
-            "25%",
-            "25%",
-            "25%"
+            "20%",
+            "29%",
+            "22%",
+            "29%"
           ],
           "body": [
             [
@@ -184,7 +184,7 @@
                 "style": "receipt-table"
               },
               {
-                "text": "Old License No.",
+                "text": "{{payer_contact}}",
                 "border": [
                   false,
                   true,
@@ -194,7 +194,7 @@
                 "style": "receipt-table-value"
               },
               {
-                "text": "{{oldLicenseNumber}}",
+                "text": "{{payerContact}}",
                 "border": [
                   false,
                   true,
@@ -203,6 +203,7 @@
                 ],
                 "style": "receipt-table"
               }
+              
             ],
             [
               {
@@ -248,7 +249,7 @@
             ],
             [
               {
-                "text": "{{payer_contact}}",
+                "text": "Address",
                 "border": [
                   true,
                   false,
@@ -258,7 +259,7 @@
                 "style": "receipt-table-value"
               },
               {
-                "text": "{{payerContact}}",
+                "text": "{{payerAddress}}",
                 "border": [
                   false,
                   false,
@@ -366,7 +367,7 @@
                 "style": "receipt-table"
               },
               {
-                "text": "Trade Type",
+                "text": "Structure Type",
                 "border": [
                   false,
                   true,
@@ -376,7 +377,7 @@
                 "style": "receipt-table-value"
               },
               {
-                "text": "{{tradeType}}",
+                "text": "{{structureType}},{{structureSubType}}",
                 "border": [
                   false,
                   true,
@@ -642,6 +643,37 @@
         },
         "layout": {}
       },
+    
+      {
+        "style": "next-noc-table",
+        "table": {
+          "widths": [
+            "*",
+            "*",
+            "*"
+          ],
+          "body":             
+            [
+              [
+                {
+                  "text": "Trade ategory",
+                  "style": "receipt-table-value"
+                },
+                {
+                  "text": "Trade Type",
+                  "style": "receipt-table-value"
+                },
+                {
+                  "text": "Trade Sub Type",
+                  "style": "receipt-table-value"
+                }
+              ],
+            "{{#variable13}}[{ \"text\":\"{{tradeCat}}\", \"border\":[ true, false, true, true ], \"style\": \"receipt-table\" }, { \"text\":\"{{tradeTyp}}\", \"border\":[ false, false, true, true ], \"style\": \"receipt-table\" },{ \"text\":\"{{tradeSub}}\", \"border\":[ false, false, true, true ], \"style\": \"receipt-table\"}]{{/variable13}}" 
+            ]
+           },  "layout": {}
+
+
+      },
       {
         "style": "next-noc-table",
         "table": {
@@ -722,19 +754,7 @@
             "bold": true,
             "style": "pt-disclaimer-value"
           },
-          {
-            "style": "pt-disclaimer-value",
-            "table": {
-              "widths": [
-                "120%",
-                "*",
-                "*",
-                "*"
-              ],
-              "body": ["{{#variable11}}[{\"text\":\"{{disclaimerContent}}\",\"border\":[false,false,false,false],\"style\":\"pt-disclaimer-value\"}]{{/variable11}}"]
-            },
-            "layout": {}
-          },
+         
           {
             "ol":
             [
@@ -776,7 +796,7 @@
       "color": "#000000",
       "margin": [
         -25,
-        25,
+        8,
         -22,
         -8
       ]
@@ -786,7 +806,7 @@
       "color": "#000000",
       "margin": [
         -25,
-        15,
+        10,
         -22,
         -8
       ]
@@ -798,9 +818,9 @@
       "fontWeight": 500,
       "margin": [
         2,
-        2,
+        -1,
         0,
-        2
+        1
       ]
     },
     "receipt-table": {
@@ -810,7 +830,7 @@
       "fontWeight": 400,
       "margin": [
         0,
-        2,
+        -1,
         0,
         2
       ]
@@ -820,7 +840,7 @@
       "bold": true,
       "margin": [
         -27,
-        40,
+        30,
         -10,
         0
       ],
@@ -840,7 +860,7 @@
       "fontSize": 10,
       "margin": [
         -27,
-        5,
+        0,
         -10,
         0
       ],
@@ -850,7 +870,7 @@
       "fontSize": 10,
       "margin": [
         0,
-        1,
+        0,
         0,
         0
       ],
