@@ -1618,13 +1618,13 @@ ReportDefinitions:
     type: epoch
     source: tl
     isMandatory: false
-    searchClause: AND receipt.createddate >= $fromDate
+    searchClause: AND paydetail.receiptdate >= $fromDate
   - name: toDate
     label: reports.tl.toDate
     type: epoch
     source: tl
     isMandatory: false
-    searchClause: AND receipt.createddate  <= $toDate 
+    searchClause: AND paydetail.receiptdate  <= $toDate 
   query: |
     SELECT 
       licensenumber,
@@ -1695,13 +1695,13 @@ ReportDefinitions:
     type: epoch
     source: tl
     isMandatory: false
-    searchClause: AND rh.receiptdate >= $fromDate
+    searchClause: AND paydetail.receiptdate >= $fromDate
   - name: toDate
     label: reports.tl.toDate
     type: epoch
     source: tl
     isMandatory: false
-    searchClause: AND rh.receiptdate <= $toDate
+    searchClause: AND paydetail.receiptdate <= $toDate
   query: |
     select 
       sum(payment.totalamountpaid) as total,
@@ -1711,7 +1711,7 @@ ReportDefinitions:
       initcap(split_part(payment.tenantId, '.', 2)) as tenantId 
       from egcl_payment as payment
       inner join egcl_paymentdetail paydetail on paydetail.paymentid=payment.id
-    where paydetail.businessservice = 'TL'  and payment.tenantid !='pb.testing'  and payment.paymentstatus != 'CANCELLED'
+    where paydetail.businessservice = 'TL' and payment.paymentstatus != 'CANCELLED'
     AND payment.tenantId LIKE '$tenantid'
   groupby: GROUP BY payment.tenantId
 
