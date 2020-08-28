@@ -481,7 +481,7 @@
                   "queryParam": "tenantId=$.tenantId,applicationNumber=$.paymentDetails[0].bill.consumerCode",
                     "apiRequest": null,
                     "responseMapping":[
-                      {            
+                        {            
                         "variable":"applicationType",
                         "value":"$.Licenses[0].applicationType"
                       },
@@ -501,7 +501,7 @@
                         "variable":"tradeName",
                         "value":"$.Licenses[0].tradeName"
                       },
-                       {            
+                      {
                         "variable":"adhocRebateReason",
                         "value":"$.Licenses[0].tradeLicenseDetail.adhocExemptionReason"
                       },
@@ -510,15 +510,25 @@
                         "value":"$.Licenses[0].tradeLicenseDetail.adhocPenaltyReason"
                       },
                       {
-                        "variable": "tradeType",
-                        "value":  "$.Licenses[0].tradeLicenseDetail.tradeUnits[0].tradeType",
+                        "variable": "structureType",
+                        "value":  "$.Licenses[0].tradeLicenseDetail.structureType",
                         "localisation":{
                           "required":true,
-                          "prefix": "TRADELICENSE_TRADETYPE",
+                          "prefix": "COMMON_MASTERS_STRUCTURETYPE",
                           "module": "rainmaker-tl",
                           "isCategoryRequired":true
                        }
                     },
+                    {
+                      "variable": "structureSubType",
+                      "value":  "$.Licenses[0].tradeLicenseDetail.structureType",
+                      "localisation":{
+                        "required":true,
+                        "prefix": "COMMON_MASTERS_STRUCTURETYPE",
+                        "module": "rainmaker-tl",
+                        "isSubTypeRequired":true
+                     }
+                  },          
                     {
                       "variable": "variable_acc",                        
                       "value": "$.Licenses[0].tradeLicenseDetail.accessories.*",                       
@@ -529,6 +539,7 @@
                             {
                               "variable": "accesoryType",
                               "value": "accessoryCategory",
+                              "type":"string",
                               "localisation":{
                                 "required":true,
                                 "prefix": "TRADELICENSE_ACCESSORIESCATEGORY",
@@ -537,22 +548,68 @@
                             },
                             {
                               "variable": "accessoryUomValue",
-                              "value": "uomValue"
+                              "value": "uomValue",
+                              "type":"string"
                             },
                             
                             {
                                 "variable": "uom",
-                                "value": "uom"
+                                "value": "uom",
+                                "type":"string"
                             },
                             {
                                 "variable": "accessoryCount",
-                                "value": "count"
+                                "value": "count",
+                                "type":"string"
                             }
                          
                           ]
                       } 
-                   }
+                   },
 
+                   {
+                    "variable": "variable13",                        
+                    "value": "$.Licenses[0].tradeLicenseDetail.tradeUnits.*",                       
+                     "type":"array",
+                     "format":{                            
+                        "type":"string",
+                        "scema":[
+                          {
+                            "variable": "tradeCat",
+                            "value": "tradeType",
+                            "type":"string",
+                            "localisation":{
+                              "required":true,
+                              "prefix":"TRADELICENSE_TRADETYPE",
+                              "module": "rainmaker-tl",
+                              "isCategoryRequired":true
+                            }
+                          },
+                          {
+                            "variable": "tradeTyp",
+                            "value": "tradeType",
+                            "type":"string",
+                            "localisation":{
+                              "required":true,
+                              "prefix":"TRADELICENSE_TRADETYPE",
+                              "module": "rainmaker-tl",
+                              "isMainTypeRequired":true
+                            }
+                          },
+                          {
+                            "variable": "tradeSub",
+                            "value": "tradeType",
+                            "type":"string",
+                            "localisation":{
+                              "required":true,
+                              "prefix":"TRADELICENSE_TRADETYPE",
+                              "module": "rainmaker-tl",
+                              "isSubTypeRequired":true
+                            }
+                          }                
+                        ]
+                    } 
+                 }
                     ]
                 }
               ]
