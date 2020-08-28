@@ -1972,7 +1972,7 @@ ReportDefinitions:
     source: tl
     wrapper: true
     isMandatory: false
-    searchClause: AND tl.tenantId = $ulb
+    searchClause: AND payment.tenantId = $ulb
   query: |
     select 
       sum(payment.totalamountpaid) as total,
