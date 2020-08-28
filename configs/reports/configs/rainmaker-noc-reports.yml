@@ -1,4 +1,4 @@
-ReportDefinitions:
+  ReportDefinitions:
   - reportName: CollectionReport
     summary: Collection Report
     version: 1.0.0
@@ -147,3 +147,631 @@ ReportDefinitions:
     query: select channel, count (*) number_of_applications,round((count (*)::decimal/(select count(*) from eg_fn_firenoc fnoc inner join eg_fn_firenocdetail fdet on fdet.firenocuuid=fnoc.uuid))*100,2) percentage from eg_fn_firenoc fnoc inner join eg_fn_firenocdetail fdet on fdet.firenocuuid=fnoc.uuid
     groupby: GROUP BY channel
     orderby: ORDER BY channel
+
+
+ - reportName: CollectionReport_V2
+    summary: Collection Report
+    version: 1.0.0
+    moduleName: rainmaker-noc
+    sourceColumns:
+      - name: localisedmessage
+        label: reports.noc.collectionreport.usagetype
+        type: string
+        source: rainmaker-noc
+        total: false
+      - name: transactionNumber
+        label: reports.noc.collectionreport.transactionNumber
+        type: number
+        source: rainmaker-noc
+        total: true
+      - name: fees_counter
+        label: reports.noc.collectionreport.fees_counter
+        type: number
+        source: rainmaker-noc
+        total: true
+      - name: fees_online
+        label: reports.noc.collectionreport.fees_online
+        type: number
+        source: rainmaker-noc
+        total: true
+    searchParams:
+      - name: fromDate
+        label: reports.noc.collectionreport.fromDate
+        type: epoch
+        source: pt
+        isMandatory: false
+        searchClause: AND receiptdate >= $fromDate
+      - name: toDate
+        label: reports.noc.collectionreport.toDate
+        type: epoch
+        source: pt
+        isMandatory: false
+        searchClause: AND receiptdate <= $toDate
+      - name: channel
+        label: reports.noc.collectionreport.channel
+        type: multivaluelist
+        pattern: 'list://COUNTER:ULB Counter,ONLINE:Online by Citizen'
+        source: common
+        isMandatory: false
+        searchClause: AND collectiontype IN ($channel)
+      - name: paymentMode
+        label: reports.noc.collectionreport.paymentMode
+        type: singlevaluelist
+        pattern: 'list://Cash:Cash,Online:Online,Card:Card,DD:DD,Cheque:Cheque'
+        source: common
+        isMandatory: false
+        searchClause: AND instrumenttype = $paymentMode
+      - name: ulb
+        label: reports.noc.collectionreport.ulb
+        type: multivaluelist
+        pattern: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?tenantId=$tenantid&moduleName=tenant&masterName=tenants|$.MdmsRes.tenant.tenants.*.code|$.MdmsRes.tenant.tenants.*.name
+        source: noc
+        wrapper: true
+        isMandatory: false
+        searchClause: AND fnoc.tenantId IN ($ulb)
+    query: Select COALESCE(message,usagetype) localisedmessage,
+        COUNT(*) as transactionNumber,
+        (select COALESCE((select message from message where code=concat('FIRENOC_FIRESTATIONS_',UPPER(REGEXP_REPLACE(firestationid,'\..*','')))  limit 1), firestationid)) as firestation,
+        SUM (CASE WHEN egcl_payment.paymentmode='CASH' THEN egcl_payment.totalamountpaid ELSE 0 END) as fees_counter,
+        SUM (CASE WHEN egcl_payment.paymentmode='ONLINE' THEN egcl_payment.totalamountpaid ELSE 0 END) AS fees_online
+        from eg_fn_firenoc AS fnoc
+        INNER JOIN eg_fn_firenocdetail fdet on fdet.firenocuuid=fnoc.uuid
+        INNER JOIN egcl_bill as bill on bill.consumercode=fdet.applicationnumber
+        INNER JOIN egcl_billdetial as billd on billd.billid=bill.id
+        INNER JOIN  eg_fn_buidlings build on build.firenocdetailsuuid=fdet.uuid
+        INNER JOIN egcl_paymentdetail ON (egcl_paymentdetail.billid=bill.id AND egcl_paymentdetail.businessservice='FIRENOC')
+        INNER JOIN egcl_payment on egcl_payment.id=egcl_paymentdetail.paymentid
+        LEFT OUTER JOIN message on code=concat('FIRENOC_BUILDINGTYPE_',UPPER(REGEXP_REPLACE(usagetype,'\..*','')))  
+        INNER JOIN eg_fn_address as fad on fad.firenocdetailsuuid=fdet.uuid and module='rainmaker-noc' where 1=1
+   
+    groupby: GROUP BY (localisedmessage,firestation)
+    orderby: ORDER BY localisedmessage
+
+- reportName: ApplicationStatusReport_V2
+    summary: Application Status Report
+    version: 1.0.0
+    moduleName: rainmaker-noc
+    sourceColumns:
+      - name: application_status
+        label: reports.noc.applicationstatusreport.appStatus
+        type: string
+        source: rainmaker-noc
+        total: false
+      - name: number_of_application
+        label: reports.noc.applicationstatusreport.noofapplications
+        type: number
+        source: rainmaker-noc
+        total: true
+    searchParams:
+      - name: fromDate
+        label: reports.noc.applicationstatusreport.fromDate
+        type: epoch
+        source: noc
+        isMandatory: false
+        searchClause: AND applicationdate >= $fromDate
+      - name: toDate
+        label: reports.noc.applicationstatusreport.toDate
+        type: epoch
+        source: noc
+        isMandatory: false
+        searchClause: AND applicationdate <= $toDate
+      - name: ulb
+        label: reports.noc.applicationstatusreport.ulb
+        type: multivaluelist
+        pattern: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?tenantId=$tenantid&moduleName=tenant&masterName=tenants|$.MdmsRes.tenant.tenants.*.code|$.MdmsRes.tenant.tenants.*.name
+        source: noc
+        wrapper: true
+        isMandatory: false
+        searchClause: AND fnoc.tenantId IN ($ulb)
+    query: select COALESCE(message,state) application_status,count(*) number_of_application from eg_fn_firenoc fnoc inner join eg_fn_firenocdetail fdet on fdet.firenocuuid=fnoc.uuid inner join (SELECT DISTINCT ON (businessid) * FROM eg_wf_processinstance_v2 ORDER BY businessid,createdtime desc) pinstance on pinstance.businessid=fdet.applicationnumber inner join eg_wf_state_v2 wfstate on pinstance.status=wfstate.uuid left outer join message on code=concat('WF_FIRENOC_',UPPER(state)) and module='rainmaker-noc'  where 1=1
+    groupby: GROUP BY application_status
+    orderby: ORDER BY application_status
+
+  - reportName: ChannelsReport_V2
+    summary: Channels Report
+    version: 1.0.0
+    moduleName: rainmaker-noc
+    sourceColumns:
+      - name: channel
+        label: reports.noc.channelsreport.channel
+        type: string
+        source: rainmaker-noc
+        total: false
+      - name: number_of_applications
+        label: reports.noc.channelsreport.applicationNo
+        type: number
+        source: rainmaker-noc
+        total: true
+      - name: percentage
+        label: reports.noc.channelsreport.percentage
+        type: number
+        source: rainmaker-noc
+        total: false
+    searchParams:
+      - name: fromDate
+        label: reports.noc.channelsreport.fromDate
+        type: epoch
+        source: noc
+        isMandatory: false
+        searchClause: AND applicationdate >= $fromDate
+      - name: toDate
+        label: reports.noc.channelsreport.toDate
+        type: epoch
+        source: noc
+        isMandatory: false
+        searchClause: AND applicationdate <= $toDate
+      - name: ulb
+        label: reports.noc.channelsreport.ulb
+        type: multivaluelist
+        pattern: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?tenantId=$tenantid&moduleName=tenant&masterName=tenants|$.MdmsRes.tenant.tenants.*.code|$.MdmsRes.tenant.tenants.*.name
+        source: noc
+        wrapper: true
+        isMandatory: false
+        searchClause: AND fnoc.tenantId IN ($ulb)
+    query: select channel, count (*) number_of_applications,round((count (*)::decimal/(select count(*) from eg_fn_firenoc fnoc inner join eg_fn_firenocdetail fdet on fdet.firenocuuid=fnoc.uuid))*100,2) percentage from eg_fn_firenoc fnoc inner join eg_fn_firenocdetail fdet on fdet.firenocuuid=fnoc.uuid
+    groupby: GROUP BY channel
+    orderby: ORDER BY channel
+
+    - reportName: UrbanApplicationStatusReport_V2
+    summary: Application Status Report
+    version: 1.0.0
+    moduleName: rainmaker-noc
+    sourceColumns:
+      - name: application_status
+        label: reports.noc.applicationstatusreport.appStatus
+        type: string
+        source: rainmaker-noc
+        total: false
+      - name: number_of_application
+        label: reports.noc.applicationstatusreport.noofapplications
+        type: number
+        source: rainmaker-noc
+        total: true
+      - name: firestation
+        label: reports.noc.applicationstatusreport.firestation
+        type: string
+        source: rainmaker-noc
+        total: false    
+    searchParams:
+      - name: fromDate
+        label: reports.noc.applicationstatusreport.fromDate
+        type: epoch
+        source: noc
+        isMandatory: false
+        searchClause: AND applicationdate >= $fromDate
+      - name: toDate
+        label: reports.noc.applicationstatusreport.toDate
+        type: epoch
+        source: noc
+        isMandatory: false
+        searchClause: AND applicationdate <= $toDate      
+      - name: city
+        label: reports.noc.applicationstatusreport.city
+        type: multivaluelist
+        pattern: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?tenantId=$tenantid&moduleName=tenant&masterName=tenants|$.MdmsRes.tenant.tenants.*.code|$.MdmsRes.tenant.tenants.*.name
+        source: noc
+        wrapper: true
+        isMandatory: false
+        searchClause: AND fad.subdistrict IN ($city)    
+    query: select COALESCE(message,state) application_status,(select COALESCE((select message from message where code=concat('FIRENOC_FIRESTATIONS_',UPPER(REGEXP_REPLACE(firestationid,'\..*','')))  limit 1), firestationid)) as firestation,count(*) number_of_application from eg_fn_firenoc fnoc inner join eg_fn_firenocdetail fdet on fdet.firenocuuid=fnoc.uuid inner join (SELECT DISTINCT ON (businessid) * FROM eg_wf_processinstance_v2 ORDER BY businessid,createdtime desc) pinstance on pinstance.businessid=fdet.applicationnumber inner join eg_wf_state_v2 wfstate on pinstance.status=wfstate.uuid left outer join message on code=concat('WF_FIRENOC_',UPPER(state)) and module='rainmaker-noc' inner join eg_fn_address as fad on fad.firenocdetailsuuid=fdet.uuid where 1=1
+    groupby: GROUP BY (application_status,firestation)
+    orderby: ORDER BY application_status
+
+
+ - reportName: UrbanChannelsReport_V2
+    summary: Channels Report
+    version: 1.0.0
+    moduleName: rainmaker-noc
+    sourceColumns:
+      - name: channel
+        label: reports.noc.channelsreport.channel
+        type: string
+        source: rainmaker-noc
+        total: false
+      - name: number_of_applications
+        label: reports.noc.channelsreport.applicationNo
+        type: number
+        source: rainmaker-noc
+        total: true
+      - name: percentage
+        label: reports.noc.channelsreport.percentage
+        type: number
+        source: rainmaker-noc
+        total: false
+      - name: firestation
+        label: reports.noc.channelsreport.firestation
+        type: string
+        source: rainmaker-noc
+        total: false  
+    searchParams:
+      - name: fromDate
+        label: reports.noc.channelsreport.fromDate
+        type: epoch
+        source: noc
+        isMandatory: false
+        searchClause: AND applicationdate >= $fromDate
+      - name: toDate
+        label: reports.noc.channelsreport.toDate
+        type: epoch
+        source: noc
+        isMandatory: false
+        searchClause: AND applicationdate <= $toDate
+      - name: city
+        label: reports.noc.channelsreport.city
+        type: multivaluelist
+        pattern: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?tenantId=$tenantid&moduleName=tenant&masterName=tenants|$.MdmsRes.tenant.tenants.*.code|$.MdmsRes.tenant.tenants.*.name
+        source: noc
+        wrapper: true
+        isMandatory: false
+        searchClause: AND fad.subdistrict IN ($city)     
+    query: select channel,(select COALESCE((select message from message where code=concat('FIRENOC_FIRESTATIONS_',UPPER(REGEXP_REPLACE(firestationid,'\..*','')))  limit 1), firestationid)) as firestation, count (*) number_of_applications,round((count (*)::decimal/(select count(*) from eg_fn_firenoc fnoc inner join eg_fn_firenocdetail fdet on fdet.firenocuuid=fnoc.uuid))*100,2) percentage from eg_fn_firenoc fnoc inner join eg_fn_firenocdetail fdet on fdet.firenocuuid=fnoc.uuid
+      inner join eg_fn_address as fad on fad.firenocdetailsuuid=fdet.uuid
+    groupby: GROUP BY (channel,firestation)
+    orderby: ORDER BY channel 
+
+
+  - reportName: DrillDownRuralSubdistrictCollectionReport_V2
+    summary: Collection Report
+    version: 1.0.0
+    moduleName: rainmaker-noc
+    sourceColumns:
+      - name: firestation
+        label: reports.noc.collectionreport.firestation
+        type: string
+        source: rainmaker-noc
+        total: false
+      - name: localisedmessage
+        label: reports.noc.collectionreport.usagetype
+        type: string
+        source: rainmaker-noc
+        total: false
+      - name: transactionNumber
+        label: reports.noc.collectionreport.transactionNumber
+        type: number
+        source: rainmaker-noc
+        total: true
+      - name: fees_counter
+        label: reports.noc.collectionreport.fees_counter
+        type: number
+        source: rainmaker-noc
+        total: true
+      - name: fees_online
+        label: reports.noc.collectionreport.fees_online
+        type: number
+        source: rainmaker-noc
+        total: true
+    searchParams:
+      - name: fromDate
+        label: reports.noc.collectionreport.fromDate
+        type: epoch
+        source: pt
+        isMandatory: false
+        searchClause: AND receiptdate >= $fromDate
+      - name: toDate
+        label: reports.noc.collectionreport.toDate
+        type: epoch
+        source: pt
+        isMandatory: false
+        searchClause: AND receiptdate <= $toDate
+      - name: channel
+        label: reports.noc.collectionreport.channel
+        type: multivaluelist
+        pattern: 'list://COUNTER:ULB Counter,ONLINE:Online by Citizen'
+        source: common
+        isMandatory: false
+        searchClause: AND collectiontype IN ($channel)  
+      - name: paymentMode
+        label: reports.noc.collectionreport.paymentMode
+        type: singlevaluelist
+        pattern: 'list://Cash:Cash,Online:Online,Card:Card,DD:DD,Cheque:Cheque'
+        source: common
+        isMandatory: false
+        searchClause: AND instrumenttype = $paymentMode
+      - name: district
+        label: reports.noc.collectionreport.district
+        type: multivaluelist
+        pattern: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?tenantId=$tenantid&moduleName=tenant&masterName=tenants|$.MdmsRes.tenant.tenants.*.city.districtName|$.MdmsRes.tenant.tenants.*.city.districtName
+        source: noc
+        wrapper: true
+        isMandatory: false
+        searchClause: AND fad.city IN ($district)
+      - name: subdistrict
+        label: reports.noc.collectionreport.subdistrict
+        type: multivaluelist
+        source: noc
+        wrapper: true
+        isMandatory: false
+        searchClause: AND fad.subdistrict IN ($subdistrict)        
+    query: select COALESCE(message,usagetype) localisedmessage, COUNT(*) as transactionNumber,fad.subdistrict as subdistrict,(select COALESCE((select message from message where code=concat('FIRENOC_FIRESTATIONS_',UPPER(REGEXP_REPLACE(firestationid,'\..*','')))  limit 1), firestationid)) as firestation, sum(case when collectiontype='COUNTER' then ins.amount else 0 end) fees_counter, sum(case when collectiontype='ONLINE' then ins.amount else 0 end) fees_online from eg_fn_firenoc fnoc inner join eg_fn_firenocdetail fdet on fdet.firenocuuid=fnoc.uuid inner join egcl_receiptheader_v1 rhead on rhead.consumercode=fdet.applicationnumber inner join eg_fn_buidlings build on build.firenocdetailsuuid=fdet.uuid inner join egcl_receiptinstrument_v1 recins on recins.receiptheader=rhead.id inner join egcl_instrumentheader_v1 ins on recins.instrumentheader=ins.id left outer join message on code=concat('FIRENOC_BUILDINGTYPE_',UPPER(REGEXP_REPLACE(usagetype,'\..*',''))) inner join eg_fn_address as fad on fad.firenocdetailsuuid=fdet.uuid and module='rainmaker-noc' where 1=1
+    groupby: GROUP BY (localisedmessage,subdistrict,firestation)
+    orderby: ORDER BY localisedmessage
+    
+  - reportName: RuralDistrictWiseCollectionReport_V2
+    summary: Collection Report
+    version: 1.0.0
+    moduleName: rainmaker-noc
+    sourceColumns:
+      - name: subdistrict
+        label: reports.noc.collectionreport.subdistrict
+        type: string
+        source: rainmaker-noc
+        total: false
+      - name: firestation
+        label: reports.noc.collectionreport.firestation
+        type: string
+        source: rainmaker-noc
+        total: false         
+      - name: localisedmessage
+        label: reports.noc.collectionreport.usagetype
+        type: string
+        source: rainmaker-noc
+        total: false
+      - name: transactionNumber
+        label: reports.noc.collectionreport.transactionNumber
+        type: number
+        source: rainmaker-noc
+        total: true
+      - name: fees_counter
+        label: reports.noc.collectionreport.fees_counter
+        type: number
+        source: rainmaker-noc
+        total: true
+      - name: fees_online
+        label: reports.noc.collectionreport.fees_online
+        type: number
+        source: rainmaker-noc
+        total: true
+    searchParams:
+      - name: fromDate
+        label: reports.noc.collectionreport.fromDate
+        type: epoch
+        source: pt
+        isMandatory: false
+        searchClause: AND receiptdate >= $fromDate
+      - name: toDate
+        label: reports.noc.collectionreport.toDate
+        type: epoch
+        source: pt
+        isMandatory: false
+        searchClause: AND receiptdate <= $toDate
+      - name: channel
+        label: reports.noc.collectionreport.channel
+        type: multivaluelist
+        pattern: 'list://COUNTER:ULB Counter,ONLINE:Online by Citizen'
+        source: common
+        isMandatory: false
+        searchClause: AND collectiontype IN ($channel)  
+      - name: paymentMode
+        label: reports.noc.collectionreport.paymentMode
+        type: singlevaluelist
+        pattern: 'list://Cash:Cash,Online:Online,Card:Card,DD:DD,Cheque:Cheque'
+        source: common
+        isMandatory: false
+        searchClause: AND instrumenttype = $paymentMode
+      - name: district
+        label: reports.noc.collectionreport.district
+        type: multivaluelist
+        pattern: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?tenantId=$tenantid&moduleName=tenant&masterName=tenants|$.MdmsRes.tenant.tenants.*.city.districtTenantCode|$.MdmsRes.tenant.tenants.*.city.districtName
+        source: noc
+        wrapper: true
+        isMandatory: false
+        searchClause: AND fad.city IN ($district)      
+    query: select COALESCE(message,usagetype) localisedmessage, COUNT(*) as transactionNumber,fad.subdistrict as subdistrict,(select COALESCE((select message from message where code=concat('FIRENOC_FIRESTATIONS_',UPPER(REGEXP_REPLACE(firestationid,'\..*','')))  limit 1), firestationid)) as firestation, sum(case when collectiontype='COUNTER' then ins.amount else 0 end) fees_counter, sum(case when collectiontype='ONLINE' then ins.amount else 0 end) fees_online from eg_fn_firenoc fnoc inner join eg_fn_firenocdetail fdet on fdet.firenocuuid=fnoc.uuid inner join egcl_receiptheader_v1 rhead on rhead.consumercode=fdet.applicationnumber inner join eg_fn_buidlings build on build.firenocdetailsuuid=fdet.uuid inner join egcl_receiptinstrument_v1 recins on recins.receiptheader=rhead.id inner join egcl_instrumentheader_v1 ins on recins.instrumentheader=ins.id left outer join message on code=concat('FIRENOC_BUILDINGTYPE_',UPPER(REGEXP_REPLACE(usagetype,'\..*',''))) inner join eg_fn_address as fad on fad.firenocdetailsuuid=fdet.uuid and module='rainmaker-noc' where 1=1 AND fad.subdistrict NOT LIKE 'pb.%'
+    groupby: GROUP BY (localisedmessage,subdistrict,firestation)
+    orderby: ORDER BY localisedmessage
+    
+  - reportName: RuralDistrictWiseApplicationStatusReport_V2
+    summary: Application Status Report
+    version: 1.0.0
+    moduleName: rainmaker-noc
+    sourceColumns:
+      - name: subdistrict
+        label: reports.noc.collectionreport.subdistrict
+        type: string
+        source: rainmaker-noc
+        total: false 
+      - name: firestation
+        label: reports.noc.collectionreport.firestation
+        type: string
+        source: rainmaker-noc
+        total: false            
+      - name: application_status
+        label: reports.noc.applicationstatusreport.appStatus
+        type: string
+        source: rainmaker-noc
+        total: false
+      - name: number_of_application
+        label: reports.noc.applicationstatusreport.noofapplications
+        type: number
+        source: rainmaker-noc
+        total: true
+    searchParams:
+      - name: fromDate
+        label: reports.noc.applicationstatusreport.fromDate
+        type: epoch
+        source: noc
+        isMandatory: false
+        searchClause: AND applicationdate >= $fromDate
+      - name: toDate
+        label: reports.noc.applicationstatusreport.toDate
+        type: epoch
+        source: noc
+        isMandatory: false
+        searchClause: AND applicationdate <= $toDate
+      - name: district
+        label: reports.noc.applicationstatusreport.district
+        type: multivaluelist
+        pattern: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?tenantId=$tenantid&moduleName=tenant&masterName=tenants|$.MdmsRes.tenant.tenants.*.city.districtTenantCode|$.MdmsRes.tenant.tenants.*.city.districtName
+        source: noc
+        wrapper: true
+        isMandatory: false
+        searchClause: AND fad.city IN ($district)  
+    query: select fad.subdistrict as subdistrict,(select COALESCE((select message from message where code=concat('FIRENOC_FIRESTATIONS_',UPPER(REGEXP_REPLACE(firestationid,'\..*','')))  limit 1), firestationid)) as firestation,COALESCE(message,state) application_status,count(*) number_of_application from eg_fn_firenoc fnoc inner join eg_fn_firenocdetail fdet on fdet.firenocuuid=fnoc.uuid inner join (SELECT DISTINCT ON (businessid) * FROM eg_wf_processinstance_v2 ORDER BY businessid,createdtime desc) pinstance on pinstance.businessid=fdet.applicationnumber inner join eg_wf_state_v2 wfstate on pinstance.status=wfstate.uuid left outer join message on code=concat('WF_FIRENOC_',UPPER(state)) and module='rainmaker-noc' inner join eg_fn_address as fad on fad.firenocdetailsuuid=fdet.uuid where 1=1  AND fad.subdistrict NOT LIKE 'pb.%'
+    groupby: GROUP BY (application_status,subdistrict,firestation)
+    orderby: ORDER BY application_status
+
+  - reportName: DrillDownRuralWiseApplicationStatusReport_V2
+    summary: Application Status Report
+    version: 1.0.0
+    moduleName: rainmaker-noc
+    sourceColumns:
+      - name: firestation
+        label: reports.noc.collectionreport.firestation
+        type: string
+        source: rainmaker-noc
+        total: false
+      - name: application_status
+        label: reports.noc.applicationstatusreport.appStatus
+        type: string
+        source: rainmaker-noc
+        total: false
+      - name: number_of_application
+        label: reports.noc.applicationstatusreport.noofapplications
+        type: number
+        source: rainmaker-noc
+        total: true
+    searchParams:
+      - name: fromDate
+        label: reports.noc.applicationstatusreport.fromDate
+        type: epoch
+        source: noc
+        isMandatory: false
+        searchClause: AND applicationdate >= $fromDate
+      - name: toDate
+        label: reports.noc.applicationstatusreport.toDate
+        type: epoch
+        source: noc
+        isMandatory: false
+        searchClause: AND applicationdate <= $toDate
+      - name: district
+        label: reports.noc.applicationstatusreport.district
+        type: multivaluelist
+        pattern: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?tenantId=$tenantid&moduleName=tenant&masterName=tenants|$.MdmsRes.tenant.tenants.*.city.districtName|$.MdmsRes.tenant.tenants.*.city.districtName
+        source: noc
+        wrapper: true
+        isMandatory: false
+        searchClause: AND fad.city IN ($district)
+      - name: subdistrict
+        label: reports.noc.applicationstatusreport.subdistrict
+        type: multivaluelist
+        source: noc
+        wrapper: true
+        isMandatory: false
+        searchClause: AND fad.subdistrict IN ($subdistrict)         
+    query: (select COALESCE((select message from message where code=concat('FIRENOC_FIRESTATIONS_',UPPER(REGEXP_REPLACE(firestationid,'\..*','')))  limit 1), firestationid)) as firestation, fad.subdistrict as subdistrict,COALESCE(message,state) application_status,count(*) number_of_application from eg_fn_firenoc fnoc inner join eg_fn_firenocdetail fdet on fdet.firenocuuid=fnoc.uuid inner join (SELECT DISTINCT ON (businessid) * FROM eg_wf_processinstance_v2 ORDER BY businessid,createdtime desc) pinstance on pinstance.businessid=fdet.applicationnumber inner join eg_wf_state_v2 wfstate on pinstance.status=wfstate.uuid left outer join message on code=concat('WF_FIRENOC_',UPPER(state)) and module='rainmaker-noc' inner join eg_fn_address as fad on fad.firenocdetailsuuid=fdet.uuid where 1=1
+    groupby: GROUP BY (application_status,subdistrict,firestation)
+    orderby: ORDER BY application_status  
+    
+  - reportName: RuralDistrictWiseChannelsReport_V2
+    summary: Channels Report
+    version: 1.0.0
+    moduleName: rainmaker-noc
+    sourceColumns:
+      - name: subdistrict
+        label: reports.noc.collectionreport.subdistrict
+        type: string
+        source: rainmaker-noc
+        total: false
+      - name: firestation
+        label: reports.noc.collectionreport.firestation
+        type: string
+        source: rainmaker-noc
+        total: false    
+      - name: channel
+        label: reports.noc.channelsreport.channel
+        type: string
+        source: rainmaker-noc
+        total: false
+      - name: number_of_applications
+        label: reports.noc.channelsreport.applicationNo
+        type: number
+        source: rainmaker-noc
+        total: true
+      - name: percentage
+        label: reports.noc.channelsreport.percentage
+        type: number
+        source: rainmaker-noc
+        total: false
+    searchParams:
+      - name: fromDate
+        label: reports.noc.channelsreport.fromDate
+        type: epoch
+        source: noc
+        isMandatory: false
+        searchClause: AND applicationdate >= $fromDate
+      - name: toDate
+        label: reports.noc.channelsreport.toDate
+        type: epoch
+        source: noc
+        isMandatory: false
+        searchClause: AND applicationdate <= $toDate
+      - name: district
+        label: reports.noc.channelsreport.district
+        type: multivaluelist
+        pattern: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?tenantId=$tenantid&moduleName=tenant&masterName=tenants|$.MdmsRes.tenant.tenants.*.city.districtTenantCode|$.MdmsRes.tenant.tenants.*.city.districtName
+        source: noc
+        wrapper: true
+        isMandatory: false
+        searchClause: AND fad.city IN ($district)
+    query: select channel,fad.subdistrict as subdistrict,(select COALESCE((select message from message where code=concat('FIRENOC_FIRESTATIONS_',UPPER(REGEXP_REPLACE(firestationid,'\..*','')))  limit 1), firestationid)) as firestation, count (*) number_of_applications,round((count (*)::decimal/(select count(*) from eg_fn_firenoc fnoc inner join eg_fn_firenocdetail fdet on fdet.firenocuuid=fnoc.uuid))*100,2) percentage from eg_fn_firenoc fnoc inner join eg_fn_firenocdetail fdet on fdet.firenocuuid=fnoc.uuid
+      inner join eg_fn_address as fad on fad.firenocdetailsuuid=fdet.uuid Where 1=1 AND fad.subdistrict NOT LIKE 'pb.%'
+    groupby: GROUP BY (channel,subdistrict,firestation)
+    orderby: ORDER BY channel
+
+  - reportName: DrillDownRuralWiseChannelReport_V2
+    summary: Channels Report
+    version: 1.0.0
+    moduleName: rainmaker-noc
+    sourceColumns:
+      - name: firestation
+        label: reports.noc.collectionreport.firestation
+        type: string
+        source: rainmaker-noc
+        total: false
+      - name: channel
+        label: reports.noc.channelsreport.channel
+        type: string
+        source: rainmaker-noc
+        total: false
+      - name: number_of_applications
+        label: reports.noc.channelsreport.applicationNo
+        type: number
+        source: rainmaker-noc
+        total: true
+      - name: percentage
+        label: reports.noc.channelsreport.percentage
+        type: number
+        source: rainmaker-noc
+        total: false
+    searchParams:
+      - name: fromDate
+        label: reports.noc.channelsreport.fromDate
+        type: epoch
+        source: noc
+        isMandatory: false
+        searchClause: AND applicationdate >= $fromDate
+      - name: toDate
+        label: reports.noc.channelsreport.toDate
+        type: epoch
+        source: noc
+        isMandatory: false
+        searchClause: AND applicationdate <= $toDate
+      - name: district
+        label: reports.noc.channelsreport.district
+        type: multivaluelist
+        pattern: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?tenantId=$tenantid&moduleName=tenant&masterName=tenants|$.MdmsRes.tenant.tenants.*.city.districtCode|$.MdmsRes.tenant.tenants.*.city.districtName
+        source: noc
+        wrapper: true
+        isMandatory: false
+        searchClause: AND fad.city IN ($district)
+      - name: subdistrict
+        label: reports.noc.channelsreport.subdistrict
+        type: multivaluelist
+        source: noc
+        wrapper: true
+        isMandatory: false
+        searchClause: AND fad.subdistrict IN ($subdistrict)       
+    query: select channel,fad.subdistrict as subdistrict,(select COALESCE((select message from message where code=concat('FIRENOC_FIRESTATIONS_',UPPER(REGEXP_REPLACE(firestationid,'\..*','')))  limit 1), firestationid)) as firestation, count (*) number_of_applications,round((count (*)::decimal/(select count(*) from eg_fn_firenoc fnoc inner join eg_fn_firenocdetail fdet on fdet.firenocuuid=fnoc.uuid))*100,2) percentage from eg_fn_firenoc fnoc inner join eg_fn_firenocdetail fdet on fdet.firenocuuid=fnoc.uuid
+      inner join eg_fn_address as fad on fad.firenocdetailsuuid=fdet.uuid
+    groupby: GROUP BY (channel,subdistrict,firestation)
+    orderby: ORDER BY channel  
