@@ -1369,8 +1369,8 @@ ReportDefinitions:
         -- Use CTE to force query plan, compute & use CTE later
         SELECT
           initcap(split_part(payment.tenantId, '.', 2)) as ulb,
-          count(*) FILTER (where payment.paymentmode!='ONLINE') as offlinetransactions,
-          count(*) FILTER (where payment.paymentmode='ONLINE') as onlinetransactions,
+          count(*) FILTER (where payment.paymentmode!='ONLINE') as noOfOfflineTransactions,
+          count(*) FILTER (where payment.paymentmode='ONLINE') as noOfOnlineTransactions,
           count(*) as totaltransactions,
           sum(case when paymentmode!='ONLINE' then payment.totalamountpaid else 0 end) as offlinecollection,
           sum(case paymentmode when 'ONLINE' then payment.totalamountpaid else 0 end) as onlinecollection,
