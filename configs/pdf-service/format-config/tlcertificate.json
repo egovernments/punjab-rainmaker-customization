@@ -259,50 +259,7 @@
                                },
                                "layout":"noBorders"
                          },
-                         {
-                               "style":"noc-head",
-                               "table":{
-                                 "widths":[
-                                  "35%",
-                                   "65%"
-                                 ],
-                                 "body":[
-                                     [
-                                         {
-                                             "text":"{{trade_type}}",
-                                             "style":"receipt-sub-logo-sub-header"
-                                         },
-                                         {
-                                             "text":"{{tradeType}}",
-                                             "style":"receipt-sub-logo-sub-header"
-                                         }
-                                    ]
-                                 ]
-                               },
-                               "layout":"noBorders"
-                         },
-                         {
-                               "style":"noc-head",
-                               "table":{
-                                 "widths":[
-                                   "35%",
-                                   "65%"
-                                 ],
-                                 "body":[
-                                     [
-                                         {
-                                             "text":"{{accessories_label}}",
-                                             "style":"receipt-sub-logo-sub-header"
-                                         },
-                                         {
-                                             "text":"{{accessories}}",
-                                             "style":"receipt-sub-logo-sub-header"
-                                         }
-                                    ]
-                                 ]
-                               },
-                               "layout":"noBorders"
-                         },
+                        
                          {
                                "style":"noc-head",
                                "table":{
@@ -347,6 +304,7 @@
                                },
                                "layout":"noBorders"
                          },
+                         
                          {
                                "style":"noc-head",
                                "table":{
@@ -368,7 +326,109 @@
                                  ]
                                },
                                "layout":"noBorders"
-                         }
+                         },
+                         {
+                          "table":{
+                            "widths": [
+                              "*",
+                              "*",
+                              "*",
+                              "*",
+                              "*"
+                            ],
+                            "body":             
+                              [
+                                [
+                                  {
+                                    "text": "{{trade_category}}",
+                                    "style": "receipt-table-value2"
+                                  },
+                                  {
+                                    "text": "{{trade_type}}",
+                                    "style": "receipt-table-value"
+                                  },
+                                  {
+                                    "text": "{{trade_sub_type}}",
+                                    "style": "receipt-table-value"
+                                  },
+                                 {
+                                    "text": "{{uom_measurement}}",
+                                    "style": "receipt-table-value"
+                                  },
+                                  {
+                                    "text": "{{uom_value}}",
+                                    "style": "receipt-table-value"
+                                  }
+                                ],
+                                "{{#variable13}}[ { \"text\":\"{{tradeCat}}\", \"border\":[ true, false, true, true ], \"style\": \"receipt-table3\" }, { \"text\":\"{{tradetyp}}\", \"border\":[ false, false, true, true ], \"style\": \"receipt-table2\" }, { \"text\":\"{{tradesub}}\", \"border\":[ false, false, true,true ], \"style\": \"receipt-table2\" }, { \"text\":\"{{UOM-measurement}}\", \"border\":[ false, false, true, true ], \"style\": \"receipt-table2\" } ,{ \"text\":\"{{uomValue}}\", \"border\":[ false, false, true,true ], \"style\": \"receipt-table2\" }]{{/variable13}}" ]
+                          },
+                          "border":[
+                            true,
+                            false,
+                            true,
+                            false
+                          ]
+                    },
+                    {
+                      "style":"noc-head",
+                      "table":{
+                        "widths":[
+                          "35%",
+                          "65%"
+                        ],
+                        "body":[
+                            [
+                                {
+                                    "text":" ",
+                                    "style":"receipt-sub-logo-sub-header"
+                                },
+                                {
+                                    "text":" ",
+                                    "style":"receipt-sub-logo-sub-header"
+                                }
+                           ]
+                        ]
+                      },
+                      "layout":"noBorders"
+                },
+                    {
+                   "table": {
+                        "widths": [
+                          "*",
+                          "*",
+                          "*",
+                          "*"
+                        ],
+                        "body":             
+                          [
+                            [
+                              {
+                                "text": "{{accesory_type}}",
+                                "style": "receipt-table-value2"
+                              },
+                              {
+                                "text": "{{uom_label}}",
+                                "style": "receipt-table-value"
+                              },
+                              {
+                                "text": "{{uom_value}}",
+                                "style": "receipt-table-value"
+                              },
+                             {
+                                "text": "{{accessory_count}}",
+                                "style": "receipt-table-value"
+                              }
+                            ],
+                          "{{#variable14}}[ { \"text\":\"{{accesoryType}}\", \"border\":[ true, false, true,true ], \"style\": \"receipt-table3\" }, { \"text\":\"{{uom}}\", \"border\":[ false, false, true, true], \"style\": \"receipt-table2\" }, { \"text\":\"{{accessoryUomValue}}\", \"border\":[ false, false,true, true], \"style\": \"receipt-table2\" }, { \"text\":\"{{accessoryCount}}\", \"border\":[ false, false, true,true ], \"style\": \"receipt-table2\" } ]{{/variable14}}" ]
+                        } ,
+                        "border":[
+                          true,
+                          false,
+                          true,
+                          false
+                        ]
+                    }
+
                        ],
                        "alignment":"left",
                        "margin":[
@@ -438,6 +498,54 @@
                 -2
               ]
             },
+
+            "noc-head2": {
+              "margin": [
+               50,
+               2,0,0
+              ]
+            },
+            "receipt-table-value": {
+              "color": "#000000",
+              "fontSize": 9,
+              "margin": [
+                0,
+                2,
+                0,
+                0
+              ]
+            },
+            "receipt-table2": {
+              "color": "#000000",
+              "fontSize": 9,
+              
+              "margin": [
+                0,
+                2,
+                0,
+                0
+              ]
+            },
+            "receipt-table-value2": {
+              "color": "#000000",
+              "fontSize": 9,
+              "margin": [
+                20,
+                2,
+                0,
+                0
+              ]
+            },
+            "receipt-table3": {
+              "color": "#000000",
+              "fontSize": 9,
+              "margin": [
+                20,
+                2,
+                0,
+                0
+              ]
+            },
              "receipt-approver": {
               "color": "#000000",
               "fontSize": 12,
@@ -481,7 +589,7 @@
               "alignment": "center",
               "margin": [
                 0,
-                1,
+                0,
                 0,
                 0
               ]
@@ -493,7 +601,7 @@
               "alignment": "left",
               "margin": [
                 50,
-                40,
+                30,
                 0,
                 0
               ]
@@ -538,7 +646,7 @@
 			  {
            "fontSize":"10",
            "margin": [
-            10,
+            8,
             0,
             0,
             0
