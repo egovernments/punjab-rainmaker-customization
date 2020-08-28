@@ -59,10 +59,52 @@
                   },
                   "localisation":{
                     "required":true,
-                    "prefix": "EGOVLOCATION_BOUNDARYDATA",
+                    "prefix": "EGOV-LOCATION_BOUNDARYDATA",
                     "module": "rainmaker-tl"
                  }
               },
+              {
+                "variable": "doorNo",
+                "value": {
+                  "path": "$.tradeLicenseDetail.address.doorNo"
+                }
+            },
+            {
+              "variable": "structureType",
+              "value": {
+                "path": "$.tradeLicenseDetail.structureType"
+              },
+              "localisation":{
+                "required":true,
+                "prefix": "COMMON_MASTERS_STRUCTURETYPE",
+                "module": "rainmaker-tl",
+                "isCategoryRequired":true
+             }
+          },
+          {
+              "variable": "structureSubType",
+              "value": {
+                "path": "$.tradeLicenseDetail.structureType"
+              },
+              "localisation":{
+                "required":true,
+                "prefix": "COMMON_MASTERS_STRUCTURETYPE",
+                "module": "rainmaker-tl",
+                "isSubTypeRequired":true
+             }
+          },
+            {
+              "variable": "streetName",
+              "value": {
+                "path": "$.tradeLicenseDetail.address.street"
+              }
+          },
+          {
+            "variable": "buildingName",
+            "value": {
+              "path": "$.tradeLicenseDetail.address.buildingName"
+            }
+        },
               {
                 "variable": "city",
                 "value": {
