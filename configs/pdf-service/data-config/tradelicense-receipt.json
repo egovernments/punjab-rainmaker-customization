@@ -19,6 +19,12 @@
                 }
               },
               {
+                "variable": "payerAddress", 
+                "value": {
+                  "path": "$.payerAddress"
+                }
+              },
+              {
                 "variable": "user-name", 
                 "value": {
                   "path": "$.userInfo.name"
@@ -81,6 +87,19 @@
                 "type": "date"
               },
                {
+                "variable": "chequeNo", 
+                "value": {
+                  "path": "$.instrumentNumber"
+                }
+              },
+              {
+                "variable": "chequeDate", 
+                "value": {
+                  "path": "$.instrumentDate"
+                },
+                "type": "date"
+              },
+              {
                 "variable": "chequeNo", 
                 "value": {
                   "path": "$.instrumentNumber"
