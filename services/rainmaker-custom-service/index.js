@@ -35,6 +35,8 @@ const PT_INTEGRATION_ASSESSMENTYEAR =process.env.PT_INTEGRATION_ASSESSMENTYEAR |
 const PT_INTEGRATION_TENANTS = (process.env.PT_INTEGRATION_TENANTS || "pb.testing").split(",");
 
 const PT_INTEGRATION_HOST = process.env.PT_INTEGRATION_HOST 
+const PT_CALCULATOR_V2_HOST = process.env.PT_CALCULATOR_V2_HOST
+
 //</PT Integration variables>
 
 const PT_ENABLE_FC_CALC = Boolean(process.env.PT_ENABLE_FC_CALC || false);
@@ -68,7 +70,7 @@ function getUserID(data) {
 }
 
 function isReceiptGenerated(demand){
-    for (demandDetail of demandSearchResponse["Demands"][0]["demandDetails"]) 
+    for (demandDetail of demand["Demands"][0]["demandDetails"]) 
         {
             if(demandDetail.collectionAmount || 0 > 0){
                 return true;
@@ -368,6 +370,16 @@ async function updateDemand(demands, RequestInfo) {
     return demandUpdateResponse;
 }
 
+async function getOldRequestBody(requestBody) {
+    let CalculationCriteria = await request.post({
+        url: url.resolve(PT_CALCULATOR_V2_HOST, "/pt-calculator-v2/propertytax/v2/_translate"),
+        body: requestBody,
+        json: true
+    })
+
+    return CalculationCriteria;
+}
+
 // function _estimateTaxProcessor(request, response, fireCessConfig) {
 //     response = _estimateZeroTaxProcessor(request, response);
 
@@ -390,11 +402,16 @@ async function updateDemand(demands, RequestInfo) {
 
 
 async function _estimateIntegrationTaxProcessor(req1, res1) {
+
+    log("Calling PMIDC estimate API: "+res1 )
+
     let estimate = await request.post({
         url: url.resolve(PT_INTEGRATION_HOST, "/apt_estimate_pt_2013/api_estimate_pt_2013"),
         body: {request:req1, response:res1},
         json: true
     })
+
+    log("Got response from PMIDC estimate API: " +estimate)
 
     return estimate;
 }
@@ -899,9 +916,18 @@ router.post('/protected/punjab-pt/pt-calculator-v2/_estimate', asyncMiddleware(a
         response
     } = getRequestResponse(req)
 
+    let oldRequestbody = getOldRequestBody(request) 
+
+    oldRequestbody["CalculationCriteria"][0]["assessmentYear"] = oldRequestBody["CalculationCriteria"][0]["property"]["propertyDetails"][0]["financialYear"]
+    // assessmentYear field was there in old request body but not present in new request body so we are adding this field.
+
+    request = oldRequestbody
 
     let tenantId = request["CalculationCriteria"][0]["tenantId"]
     let assessmentYear = request["CalculationCriteria"][0]["assessmentYear"]
+
+    log("Got request for tenantid: "+tenantId+" and finanancial year: "+assessmentYear)
+    log("Request body: "+request)
 
     if (assessmentYear == PT_ZERO_ASSESSMENTYEAR && PT_ZERO_TENANTS.indexOf(tenantId) >= 0){
         response = _estimateZeroTaxProcessor(request, response)
