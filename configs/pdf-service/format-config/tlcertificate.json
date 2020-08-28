@@ -215,51 +215,73 @@
                                },
                                "layout":"noBorders"
                          },
-                                         {
-                               "style":"noc-head",
-                               "table":{
-                                 "widths":[
-                                   "35%",
-                                   "65%"
-                                 ],
-                                 "body":[
-                                     [
-                                         {
-                                             "text":"{{trade_owner_contact}}",
-                                             "style":"receipt-sub-logo-sub-header"
-                                         },
-                                         {
-                                             "text":"{{tradeOwnerContact}}",
-                                             "style":"receipt-sub-logo-sub-header"
-                                         }
-                                    ]
-                                 ]
-                               },
-                               "layout":"noBorders"
-                         },
-                                         {
-                               "style":"noc-head",
-                               "table":{
-                                 "widths":[
-                                   "35%",
-                                   "65%"
-                                 ],
-                                 "body":[
-                                     [
-                                         {
-                                             "text":"{{trade_address}}",
-                                             "style":"receipt-sub-logo-sub-header"
-                                         },
-                                         {
-                                             "text":"{{tradeAddress}}, {{city}}",
-                                             "style":"receipt-sub-logo-sub-header"
-                                         }
-                                    ]
-                                 ]
-                               },
-                               "layout":"noBorders"
-                         },
-                        
+                                             
+                         {
+                          "style":"noc-head",
+                          "table":{
+                            "widths":[
+                              "35%",
+                              "65%"
+                            ],
+                            "body":[
+                                [
+                                    {
+                                        "text":"{{trade_owner_contact}}",
+                                        "style":"receipt-sub-logo-sub-header"
+                                    },
+                                    {
+                                        "text":"{{tradeOwnerContact}}",
+                                        "style":"receipt-sub-logo-sub-header"
+                                    }
+                               ]
+                            ]
+                          },
+                          "layout":"noBorders"
+                    },
+                                    {
+                          "style":"noc-head",
+                          "table":{
+                            "widths":[
+                              "35%",
+                              "65%"
+                            ],
+                            "body":[
+                                [
+                                    {
+                                        "text":"{{trade_address}}",
+                                        "style":"receipt-sub-logo-sub-header"
+                                    },
+                                    {
+                                        "text":"{{doorNo}},{{streetName}},{{buildingName}},{{tradeAddress}}, {{city}}",
+                                        "style":"receipt-sub-logo-sub-header"
+                                    }
+                               ]
+                            ]
+                          },
+                          "layout":"noBorders"
+                    },
+                    {
+                      "style":"noc-head",
+                      "table":{
+                        "widths":[
+                          "35%",
+                          "65%"
+                        ],
+                        "body":[
+                            [
+                                {
+                                    "text":"Structure Type/Sub Type",
+                                    "style":"receipt-sub-logo-sub-header"
+                                },
+                                {
+                                    "text":"{{structureType}}, {{structureSubType}}",
+                                    "style":"receipt-sub-logo-sub-header"
+                                }
+                           ]
+                        ]
+                      },
+                      "layout":"noBorders"
+                },
                          {
                                "style":"noc-head",
                                "table":{
@@ -332,8 +354,6 @@
                             "widths": [
                               "*",
                               "*",
-                              "*",
-                              "*",
                               "*"
                             ],
                             "body":             
@@ -350,17 +370,9 @@
                                   {
                                     "text": "{{trade_sub_type}}",
                                     "style": "receipt-table-value"
-                                  },
-                                 {
-                                    "text": "{{uom_measurement}}",
-                                    "style": "receipt-table-value"
-                                  },
-                                  {
-                                    "text": "{{uom_value}}",
-                                    "style": "receipt-table-value"
                                   }
                                 ],
-                                "{{#variable13}}[ { \"text\":\"{{tradeCat}}\", \"border\":[ true, false, true, true ], \"style\": \"receipt-table3\" }, { \"text\":\"{{tradetyp}}\", \"border\":[ false, false, true, true ], \"style\": \"receipt-table2\" }, { \"text\":\"{{tradesub}}\", \"border\":[ false, false, true,true ], \"style\": \"receipt-table2\" }, { \"text\":\"{{UOM-measurement}}\", \"border\":[ false, false, true, true ], \"style\": \"receipt-table2\" } ,{ \"text\":\"{{uomValue}}\", \"border\":[ false, false, true,true ], \"style\": \"receipt-table2\" }]{{/variable13}}" ]
+                                "{{#variable13}}[ { \"text\":\"{{tradeCat}}\", \"border\":[ true, false, true, true ], \"style\": \"receipt-table3\" }, { \"text\":\"{{tradetyp}}\", \"border\":[ false, false, true, true ], \"style\": \"receipt-table2\" }, { \"text\":\"{{tradesub}}\", \"border\":[ false, false, true,true ], \"style\": \"receipt-table2\" }]{{/variable13}}" ]
                           },
                           "border":[
                             true,
@@ -394,10 +406,10 @@
                     {
                    "table": {
                         "widths": [
-                          "*",
-                          "*",
-                          "*",
-                          "*"
+                          "55%",
+                          "15%",
+                          "15%",
+                          "15%"
                         ],
                         "body":             
                           [
@@ -553,21 +565,21 @@
               "alignment": "center",
               "margin": [
                 -10,
-                50,
+                30,
                 0,
                 1
               ]
             },
             "receipt-logo-header": {
               "color": "#000000",
-              "fontSize": 20,
+              "fontSize": 17,
               "letterSpacing": 0.74,
               "alignment": "center",
               "margin": [
                 0,
                 0,
                 0,
-                1
+                0
               ]
             },
             "receipt-sub-logo-header": {
@@ -577,9 +589,9 @@
               "alignment": "center",
               "margin": [
                 0,
-                5,
+                -10,
                 0,
-                5
+                0
               ]
             },
             "receipt-logo-sub-header": {
@@ -589,7 +601,7 @@
               "alignment": "center",
               "margin": [
                 0,
-                0,
+                -5,
                 0,
                 0
               ]
@@ -646,7 +658,7 @@
 			  {
            "fontSize":"10",
            "margin": [
-            8,
+            5,
             0,
             0,
             0
