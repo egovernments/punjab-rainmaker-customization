@@ -504,11 +504,21 @@
                       },
                       {
                         "variable":"adhocRebateReason",
-                        "value":"$.Licenses[0].tradeLicenseDetail.adhocExemptionReason"
+                        "value":"$.Licenses[0].tradeLicenseDetail.adhocExemptionReason",
+                          "localisation":{
+                          "required":true,
+                          "prefix": "null",
+                          "module": "rainmaker-tl"
+                       }
                       },
                       {            
                         "variable":"adhocPenaltyReason",
-                        "value":"$.Licenses[0].tradeLicenseDetail.adhocPenaltyReason"
+                        "value":"$.Licenses[0].tradeLicenseDetail.adhocPenaltyReason",
+                          "localisation":{
+                          "required":true,
+                          "prefix": "null",
+                          "module": "rainmaker-tl"
+                       }
                       },
                       {
                         "variable": "structureType",
