@@ -582,7 +582,7 @@
                             },
                             {
                               "text": "{{uom_value}}",
-                              "style": "receipt-table-value-cont"
+                              "style": "receipt-table-value"
                             }
                           ],
                           "{{#variable13}}[ { \"text\":\"{{tradeCat}}\", \"border\":[ true, false, true, true ], \"style\": \"receipt-table2\" }, { \"text\":\"{{tradetyp}}\", \"border\":[ false, false, true, true ], \"style\": \"receipt-table2\" }, { \"text\":\"{{tradesub}}\", \"border\":[ false, false, true,true ], \"style\": \"receipt-table2\" }, { \"text\":\"{{UOM-measurement}}\", \"border\":[ false, false, true, true ], \"style\": \"receipt-table2\" } ,{ \"text\":\"{{uomValue}}\", \"border\":[ false, false, true,true ], \"style\": \"receipt-table2\" }]{{/variable13}}" ]
