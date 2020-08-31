@@ -796,6 +796,11 @@ ReportDefinitions:
   version: 1.0.0
   moduleName: rainmaker-pt
   sourceColumns:
+  - name: financialyear
+    label: reports.pt.financialyear
+    type: string
+    source: pt
+    total: false
   - name: totalassessments
     label: reports.pt.totalassessments
     type: string
@@ -852,6 +857,7 @@ ReportDefinitions:
     searchClause: AND usagecategorymajor = $usage
   query: |
       SELECT 
+      financialyear,
       initcap(split_part(tenantid, '.', 2)) as tenantid, 
       COUNT(*) AS totalassessments, 
       SUM(totalamount) AS totalamount, 
@@ -866,7 +872,7 @@ ReportDefinitions:
       where rh.status != 'Cancelled'
       ) AS tbl_amounts ON CONCAT(pd.property, ':', pd.assessmentnumber) = tbl_amounts.consumercode 
       WHERE tenantid LIKE CONCAT(SPLIT_PART($tenantid, '.', 1), '%') and tenantid = $tenantid
-  groupby: GROUP BY tenantid
+  groupby: GROUP BY tenantid, financialyear
   orderby: ORDER BY tenantid, totalamountpaid DESC NULLS LAST
 
 
@@ -1473,8 +1479,11 @@ ReportDefinitions:
       SELECT
         financialyear,
         sum(case when usagecategorymajor='RESIDENTIAL' then amount else 0 end) as "residential",
+        count(case when usagecategorymajor='RESIDENTIAL' then amount else 0 end) as "residential",        
         sum(case when usagecategorymajor='NONRESIDENTIAL' then amount else 0 end) as "nonresidential",
+        count(case when usagecategorymajor='NONRESIDENTIAL' then amount else 0 end) as "nonresidential",
         sum(case when usagecategorymajor='MIXED' then amount else 0 end) as "mixed",
+        count(case when usagecategorymajor='MIXED' then amount else 0 end) as "mixed",
         sum(amount) as totalamount,
         sum(case when instrumenttype='Online' then amount else 0 end) as "online",
         sum(case when instrumenttype='Cash' then amount else 0 end) as "cash",
