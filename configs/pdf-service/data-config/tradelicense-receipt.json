@@ -482,7 +482,7 @@
                   "queryParam": "tenantId=$.tenantId,applicationNumber=$.paymentDetails[0].bill.consumerCode",
                     "apiRequest": null,
                     "responseMapping":[
-                      {            
+                        {            
                         "variable":"applicationType",
                         "value":"$.Licenses[0].applicationType"
                       },
@@ -568,7 +568,7 @@
                       } 
                    },
 
-                   {
+                    {
                     "variable": "variable13",                        
                     "value": "$.Licenses[0].tradeLicenseDetail.tradeUnits.*",                       
                      "type":"array",
@@ -611,7 +611,6 @@
                         ]
                     } 
                  }
-
                     ]
                 }
               ]

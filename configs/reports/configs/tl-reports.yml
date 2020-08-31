@@ -1291,7 +1291,7 @@ ReportDefinitions:
     label: report.tl.tradetype
     type: string
     source: tl
-    total: true
+    total: false
   - name: acc
     label: report.tl.accessorycategories
     type: string
@@ -1618,13 +1618,13 @@ ReportDefinitions:
     type: epoch
     source: tl
     isMandatory: false
-    searchClause: AND receipt.createddate >= $fromDate
+    searchClause: AND paydetail.receiptdate >= $fromDate
   - name: toDate
     label: reports.tl.toDate
     type: epoch
     source: tl
     isMandatory: false
-    searchClause: AND receipt.createddate  <= $toDate 
+    searchClause: AND paydetail.receiptdate  <= $toDate 
   query: |
     SELECT 
       licensenumber,
@@ -1695,13 +1695,13 @@ ReportDefinitions:
     type: epoch
     source: tl
     isMandatory: false
-    searchClause: AND rh.receiptdate >= $fromDate
+    searchClause: AND paydetail.receiptdate >= $fromDate
   - name: toDate
     label: reports.tl.toDate
     type: epoch
     source: tl
     isMandatory: false
-    searchClause: AND rh.receiptdate <= $toDate
+    searchClause: AND paydetail.receiptdate <= $toDate
   query: |
     select 
       sum(payment.totalamountpaid) as total,
@@ -1711,7 +1711,7 @@ ReportDefinitions:
       initcap(split_part(payment.tenantId, '.', 2)) as tenantId 
       from egcl_payment as payment
       inner join egcl_paymentdetail paydetail on paydetail.paymentid=payment.id
-    where paydetail.businessservice = 'TL'  and payment.tenantid !='pb.testing'  and payment.paymentstatus != 'CANCELLED'
+    where paydetail.businessservice = 'TL' and payment.paymentstatus != 'CANCELLED'
     AND payment.tenantId LIKE '$tenantid'
   groupby: GROUP BY payment.tenantId
 
@@ -1813,6 +1813,14 @@ ReportDefinitions:
     source: tl
     isMandatory: false
     searchClause: AND tl.lastmodifiedtime <= $toDate
+  - name: ulb
+    label: ULB
+    type: singlevaluelist
+    pattern: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?tenantId=$tenantid&moduleName=tenant&masterName=tenants|$.MdmsRes.tenant.tenants.*.code|$.MdmsRes.tenant.tenants.*.name
+    source: tl
+    wrapper: true
+    isMandatory: false
+    searchClause: AND tl.tenantId = $ulb
   query: |
      SELECT 
         initcap(split_part(tenantId, '.', 2)) as tenantId, 
@@ -1964,7 +1972,7 @@ ReportDefinitions:
     source: tl
     wrapper: true
     isMandatory: false
-    searchClause: AND tl.tenantId = $ulb
+    searchClause: AND payment.tenantId = $ulb
   query: |
     select 
       sum(payment.totalamountpaid) as total,
@@ -2184,11 +2192,6 @@ ReportDefinitions:
     type: string
     source: tl
     total: false
-  - name: locality
-    label: report.tl.locality
-    type: string
-    source: tl
-    total: false
   - name: propertyid
     label: report.tl.propertyid
     type: string
@@ -2249,6 +2252,11 @@ ReportDefinitions:
     type: string
     source: tl
     total: true
+  - name: locality
+    label: report.tl.locality
+    type: string
+    source: tl
+    total: false
   - name: status
     label: report.tl.receipt.status
     type: string
@@ -2272,7 +2280,7 @@ ReportDefinitions:
     type: boundarylist
     source: tl
     isMandatory: false
-    searchClause: AND tla.locality IN ($localityArray)
+    searchClause: AND locality_tlb.locality IN ($localityArray)
   query: |
       SELECT 
         tl.applicationnumber as applicationnumber,

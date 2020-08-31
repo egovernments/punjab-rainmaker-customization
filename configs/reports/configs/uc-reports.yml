@@ -1123,8 +1123,7 @@ ReportDefinitions:
                       SUM(CASE WHEN taxheadcode LIKE '%_FIELD_FEE' THEN adjustedamount ELSE 0 END) as fieldcollection            
                     FROM egcl_billaccountdetail 
                     INNER JOIN egcl_bill as bill on bill.id = egcl_billaccountdetail.billdetailid
-                    WHERE  bill.tenantid!='pb.testing' AND businessservice not in ('PT','TL','FIRENOC')
-                                        and bill.tenantid=$tenantid  -- and rh.status != 'Cancelled'
+                    WHERE  businessservice not in ('PT','TL','FIRENOC') and bill.tenantid=$tenantid  -- and rh.status != 'Cancelled'
                     GROUP BY billdetailid
         )
         SELECT 
@@ -1145,7 +1144,7 @@ ReportDefinitions:
         JOIN egcl_paymentdetail as paydetail on paydetail.paymentid=payment.id
         JOIN receipt_breakup ON paydetail.billid = receipt_breakup.bill_id
         JOIN eg_user ON payment.createdby::INTEGER=eg_user.id
-        WHERE  payment.tenantid!='pb.testing' AND businessservice not in ('PT','TL','FIRENOC') and payment.tenantid=$tenantid  and payment.paymentstatus != 'CANCELLED'
+        WHERE  businessservice not in ('PT','TL','FIRENOC') and payment.tenantid=$tenantid  and payment.paymentstatus != 'CANCELLED'
     orderby: ORDER BY paydetail.receiptdate DESC
 
 
@@ -1370,8 +1369,8 @@ ReportDefinitions:
         -- Use CTE to force query plan, compute & use CTE later
         SELECT
           initcap(split_part(payment.tenantId, '.', 2)) as ulb,
-          count(*) FILTER (where payment.paymentmode!='ONLINE') as offlinetransactions,
-          count(*) FILTER (where payment.paymentmode='ONLINE') as onlinetransactions,
+          count(*) FILTER (where payment.paymentmode!='ONLINE') as noOfOfflineTransactions,
+          count(*) FILTER (where payment.paymentmode='ONLINE') as noOfOnlineTransactions,
           count(*) as totaltransactions,
           sum(case when paymentmode!='ONLINE' then payment.totalamountpaid else 0 end) as offlinecollection,
           sum(case paymentmode when 'ONLINE' then payment.totalamountpaid else 0 end) as onlinecollection,
