@@ -73,7 +73,8 @@ function getIntegrateYearDemand(demands){
     for(demand of demands["Demands"]){
         demandYear = new Date(demand["taxPeriodFrom"]).getFullYear()
         integrationYear = PT_INTEGRATION_ASSESSMENTYEAR.split("-")[0]
-        if(demandYear == integrationYear){
+        demandStatus = demand["status"]
+        if((demandYear == integrationYear) && (demandStatus == "ACTIVE")){
             demands["Demands"] = demand
             break;
         }
