@@ -69,6 +69,19 @@ function getUserID(data) {
     return data.RequestInfo.userInfo.id;
 }
 
+function getIntegrateYearDemand(demands){
+    for(demand of demands["Demands"]){
+        demandYear = new Date(demand["taxPeriodFrom"]).getFullYear()
+        integrationYear = PT_INTEGRATION_ASSESSMENTYEAR.split("-")[0]
+        if(demandYear == integrationYear){
+            demands["Demands"] = demand
+            break;
+        }
+        
+    }
+    return demands;
+}
+
 function isReceiptGenerated(demand){
     for (demandDetail of demand["Demands"][0]["demandDetails"]) 
         {
@@ -357,6 +370,8 @@ async function findDemandForConsumerCode(consumerCode, tenantId, service, Reques
     return demandSearchResponse;
 }
 
+
+
 async function updateDemand(demands, RequestInfo) {
     let demandUpdateResponse = await request.post({
         url: url.resolve(PT_DEMAND_HOST, "/billing-service/demand/_update"),
@@ -380,6 +395,16 @@ async function getOldRequestBody(requestBody) {
     return CalculationCriteria;
 }
 
+async function findEstimate(requestBody){
+
+    let estimateRes = await request.post({
+        url: url.resolve(PT_CALCULATOR_V2_HOST, "/pt-calculator-v2/propertytax/v2/_estimate"),
+        body: requestBody,
+        json: true
+    })
+
+    return estimateRes;
+}
 // function _estimateTaxProcessor(request, response, fireCessConfig) {
 //     response = _estimateZeroTaxProcessor(request, response);
 
@@ -648,33 +673,34 @@ async function _createAndUpdateZeroTaxProcessor(request, response) {
 }
 
 async function _createAndUpdateIntegrationTaxProcessor(req, response){
-    let index = 0
-    let interationResponse = response;
-    for (reqProperty of req["Properties"]) {
 
-        let resProperty = response["Properties"][index]
-        let propertyId = resProperty["propertyId"]
+        reqProperty = req["Assessment"];
 
-        let assessmentNumber = resProperty["propertyDetails"][0]["assessmentNumber"]
+        let propertyId = reqProperty["propertyId"]
 
-        let assessmentYear = resProperty["propertyDetails"][0]["financialYear"]
+        let assessmentYear = reqProperty["financialYear"]
         let tenantId = reqProperty["tenantId"]
 
         if (!(assessmentYear == PT_INTEGRATION_ASSESSMENTYEAR && PT_INTEGRATION_TENANTS.indexOf(tenantId) >= 0))
-            continue
+            return response;
+
+
             
-        interationResponse = await request.post({
-                url: url.resolve(PT_INTEGRATION_HOST, "/apt_estimate_pt_2013/api_create_pt_2013"),
-                body: {request:req, response:response},
-                json: true
-            })
+        let oldRequestbody = getOldRequestBody(req)
+
+        oldRequestbody["CalculationCriteria"][0]["assessmentYear"] = oldRequestBody["CalculationCriteria"][0]["property"]["propertyDetails"][0]["financialYear"]
+
+        log("Got request for tenantid: "+tenantId+" and finanancial year: "+assessmentYear)
+        log("Assessment CREATE/ UPDATE Request body: "+reqProperty)
+
+        estimateResponse = await findEstimate(req)
 
         
         request_info = req["RequestInfo"] || req["requestInfo"]
 
-        let consumerCode = propertyId + ":" + assessmentNumber
+        let consumerCode = propertyId
         let service = "PT"
-        let calc = interationResponse["Properties"][index]["propertyDetails"][0]["calculation"]
+        let calc = estimateResponse["Calculation"]
         let taxHeads = calc["taxHeadEstimates"];
         let createTaxHeadsArray = {};
         for(taxHead of taxHeads){
@@ -683,6 +709,10 @@ async function _createAndUpdateIntegrationTaxProcessor(req, response){
         }
 
         let demandSearchResponse = await findDemandForConsumerCode(consumerCode, tenantId, service, req["RequestInfo"])
+
+        demandSearchResponse = getIntegrateYearDemand(demandSearchResponse)
+
+        log("Search Demand response For Integrated Year: " + demandSearchResponse)
 
         if(isReceiptGenerated(demandSearchResponse)){
             //Throw Error
@@ -729,10 +759,10 @@ async function _createAndUpdateIntegrationTaxProcessor(req, response){
         calc["totalAmount"] = newTotal;
         calc["rebate"] = 0;
         calc["penanlty"] = 0;
-        index++
-   
-    }
-    return interationResponse;
+        
+        log("Demand Updated with Details : " + demandUpdateResponse )
+    
+    return response;
 
 }
 
@@ -813,14 +843,9 @@ async function _createAndUpdateRequestHandler(req, res) {
         request,
         response
     } = getRequestResponse(req)
-    let index =0
-    for (reqProperty of request["Properties"]) {
-        let resProperty = response["Properties"][index]
-        let propertyId = resProperty["propertyId"]
+    for (reqProperty of request["Assessment"]) {
 
-        let assessmentNumber = resProperty["propertyDetails"][0]["assessmentNumber"]
-
-        let assessmentYear = resProperty["propertyDetails"][0]["financialYear"]
+        let assessmentYear = reqProperty["financialYear"]
         let tenantId = reqProperty["tenantId"]
 
         if (assessmentYear == PT_ZERO_ASSESSMENTYEAR && PT_ZERO_TENANTS.indexOf(tenantId) >= 0){
@@ -867,9 +892,9 @@ function getRequestResponse(req) {
     }
 }
 
-router.post('/protected/punjab-pt/property/_create',  asyncMiddleware(_createAndUpdateRequestHandler))
+router.post('/protected/punjab-pt/assessment/_create',  asyncMiddleware(_createAndUpdateRequestHandler))
 
-router.post('/protected/punjab-pt/property/_update', asyncMiddleware(_createAndUpdateRequestHandler))
+router.post('/protected/punjab-pt/assessment/_update', asyncMiddleware(_createAndUpdateRequestHandler))
 
 router.post('/open/punjab-pt/payu/confirm', asyncMiddleware((async function (req, res) {
     let return_data = req.body;
