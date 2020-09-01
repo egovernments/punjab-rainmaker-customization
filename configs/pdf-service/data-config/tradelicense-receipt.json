@@ -486,6 +486,14 @@
                         "variable":"applicationType",
                         "value":"$.Licenses[0].applicationType"
                       },
+                       {            
+                        "variable":"penaltyComments",
+                        "value":"$.Licenses[0].tradeLicenseDetail.additionalDetail.penaltyComments"
+                      },
+                      {            
+                        "variable":"rebateComments",
+                        "value":"$.Licenses[0].tradeLicenseDetail.additionalDetail.rebateComments"
+                      },
                       {            
                         "variable":"licenseNumber",
                         "value":"$.Licenses[0].licenseNumber"
