@@ -185,17 +185,6 @@
                   }
               },
               {
-                  "variable": "mohalla",
-                  "value": {
-                    "path": "$.tradeLicenseDetail.address.locality.code"
-                  },
-                  "localisation":{
-                    "required":true,
-                    "prefix": "TENANTS_MOHALLA",
-                    "module": "rainmaker-common"
-                 }
-              },
-              {
                   "variable": "pincode",
                   "value": {
                     "path": "$.tradeLicenseDetail.address.pincode"
@@ -1036,7 +1025,18 @@
             ]
           },
           {
-            "externalAPI": [    
+            "externalAPI": [ 
+                { 
+                "path": "http://egov-location:8080/egov-location/location/v11/boundarys/_search",
+                "queryParam": "tenantId=$.tenantId,hierarchyTypeCode=REVENUE,boundaryType=Locality,codes=$.tradeLicenseDetail.address.locality.code",
+                  "apiRequest": null,
+                  "responseMapping":[
+                    {             
+                      "variable":"mohalla",
+                      "value":"$.TenantBoundary[0].boundary[0].name"
+                    }
+                  ]
+              },
               {
                 "path": "http://billing-service:8080/billing-service/bill/v2/_search",
                 "queryParam": "tenantId=$.tenantId,consumerCode=$.applicationNumber,businessService=TL",
