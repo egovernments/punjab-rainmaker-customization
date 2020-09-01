@@ -83,6 +83,20 @@ function getIntegrateYearDemand(demands){
     return demands;
 }
 
+function isValidDemand(demands){
+    let count = 0;
+    for(demand of demands["Demands"]){
+        demandYear = new Date(demand["taxPeriodFrom"]).getFullYear()
+        integrationYear = PT_INTEGRATION_ASSESSMENTYEAR.split("-")[0]
+        demandStatus = demand["status"]
+        if((demandYear == integrationYear) && (demandStatus == "ACTIVE")){
+            count++;
+        }
+    }
+
+    return count == 1;
+}
+
 function isReceiptGenerated(demand){
     for (demandDetail of demand["Demands"][0]["demandDetails"]) 
         {
@@ -710,6 +724,23 @@ async function _createAndUpdateIntegrationTaxProcessor(req, response){
         }
 
         let demandSearchResponse = await findDemandForConsumerCode(consumerCode, tenantId, service, req["RequestInfo"])
+
+        if( !isValidDemand(demandSearchResponse)){
+            //Throw Error
+            data =  
+            {
+                "ResponseInfo":null,
+                "Errors":[
+                    {
+                        "code":"MultipleActiveDemandForOneFinancialYear",
+                        "message":"There are multiple demand for property id : "+ propertyId +" for financial year" + PT_INTEGRATION_ASSESSMENTYEAR,
+                        "description": "There multiple demand  for property id : "+ propertyId +" for financial year" + PT_INTEGRATION_ASSESSMENTYEAR,
+                        "params":null
+                    }
+                ]
+            };
+        return data; 
+        }
 
         demandSearchResponse = getIntegrateYearDemand(demandSearchResponse)
 
