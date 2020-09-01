@@ -647,7 +647,7 @@
               ]
           },
 	  { 
-              "path": "http://localhost:8082/egov-location/location/v11/boundarys/_search",
+              "path": "http://egov-location:8080/egov-location/location/v11/boundarys/_search",
               "queryParam": "tenantId=$.tenantId,hierarchyTypeCode=REVENUE,boundaryType=Locality,codes=$.tradeLicenseDetail.address.locality.code",
                 "apiRequest": null,
                 "responseMapping":[
