@@ -816,8 +816,18 @@ ReportDefinitions:
     type: string
     source: pt
     total: true
+  - name: totalofflinecount
+    label: reports.pt.totalofflinecount
+    type: string
+    source: pt
+    total: true    
   - name: totalonline
     label: reports.pt.totalonline
+    type: string
+    source: pt
+    total: true
+  - name: totalonlinecount
+    label: reports.pt.totalonlinecount
     type: string
     source: pt
     total: true
@@ -859,11 +869,13 @@ ReportDefinitions:
       SELECT 
       financialyear,
       initcap(split_part(tenantid, '.', 2)) as tenantid, 
-      COUNT(*) AS totalassessments, 
+      COUNT(collectiontype) AS totalassessments, 
       SUM(totalamount) AS totalamount, 
       SUM(amount) AS totalamountpaid, 
-      SUM(CASE WHEN collectiontype = 'ONLINE' THEN amount ELSE 0 END) AS totalonline, 
-      SUM(CASE WHEN collectiontype = 'COUNTER' THEN amount ELSE 0 END) AS totaloffline, 
+      SUM(CASE WHEN collectiontype = 'ONLINE' THEN amount ELSE 0 END) AS totalonline,
+      SUM(CASE WHEN collectiontype = 'ONLINE' THEN 1 ELSE 0 END) AS totalonlinecount,
+      SUM(CASE WHEN collectiontype != 'ONLINE' THEN amount ELSE 0 END) AS totaloffline,
+      SUM(CASE WHEN collectiontype != 'ONLINE' THEN 1 ELSE 0 END) AS totalofflinecount,
       (SUM(totalamount) - SUM(amount)) AS totalamountdue 
       FROM eg_pt_propertydetail_v2 AS pd 
       LEFT OUTER JOIN (SELECT consumercode, totalamount, amount, collectiontype, receiptdate FROM egcl_receiptheader_v1 AS rh 
@@ -871,7 +883,7 @@ ReportDefinitions:
       LEFT OUTER JOIN egcl_instrumentheader_v1 AS ih ON ri.instrumentheader = ih.id and ih.instrumentstatus	 != 'CANCELLED' 
       where rh.status != 'Cancelled'
       ) AS tbl_amounts ON CONCAT(pd.property, ':', pd.assessmentnumber) = tbl_amounts.consumercode 
-      WHERE tenantid LIKE CONCAT(SPLIT_PART($tenantid, '.', 1), '%') and tenantid = $tenantid
+      WHERE  tenantid = $tenantid
   groupby: GROUP BY tenantid, financialyear
   orderby: ORDER BY tenantid, totalamountpaid DESC NULLS LAST
 
@@ -1420,8 +1432,18 @@ ReportDefinitions:
     type: string
     source: pt
     total: true
+  - name: countresidential
+    label: reports.pt.countresidential
+    type: string
+    source: pt
+    total: true  
   - name: nonresidential
     label: reports.pt.nonresidential
+    type: string
+    source: pt
+    total: true
+  - name: countnonresidential
+    label: reports.pt.countnonresidential
     type: string
     source: pt
     total: true
@@ -1430,11 +1452,21 @@ ReportDefinitions:
     type: string
     source: pt
     total: true
+  - name: countmixed
+    label: reports.pt.countmixed
+    type: string
+    source: pt
+    total: true
   - name: totalamount
     label: reports.pt.totalamount
     type: string
     source: pt
     total: true
+  - name: totalcount
+    label: reports.pt.totalcount
+    type: string
+    source: pt
+    total: true  
   - name: online
     label: reports.pt.online
     type: string
@@ -1479,17 +1511,18 @@ ReportDefinitions:
       SELECT
         financialyear,
         sum(case when usagecategorymajor='RESIDENTIAL' then amount else 0 end) as "residential",
-        count(case when usagecategorymajor='RESIDENTIAL' then amount else 0 end) as "residential",        
+        sum(case when usagecategorymajor='RESIDENTIAL' then 1 else 0 end) as "countresidential",
         sum(case when usagecategorymajor='NONRESIDENTIAL' then amount else 0 end) as "nonresidential",
-        count(case when usagecategorymajor='NONRESIDENTIAL' then amount else 0 end) as "nonresidential",
+        sum(case when usagecategorymajor='NONRESIDENTIAL' then 1 else 0 end) as "countnonresidential",
         sum(case when usagecategorymajor='MIXED' then amount else 0 end) as "mixed",
-        count(case when usagecategorymajor='MIXED' then amount else 0 end) as "mixed",
+        sum(case when usagecategorymajor='MIXED' then 1 else 0 end) as "countmixed",
         sum(amount) as totalamount,
+        count(amount) as totalcount,
         sum(case when instrumenttype='Online' then amount else 0 end) as "online",
         sum(case when instrumenttype='Cash' then amount else 0 end) as "cash",
         sum(case when instrumenttype='Cheque' then amount else 0 end) as "cheque",
         sum(case when instrumenttype='DD' then amount else 0 end) as "dd"
-      FROM egcl_receiptheader_v1 AS rh
+        FROM egcl_receiptheader_v1 AS rh
       JOIN egcl_receiptinstrument_v1 AS ri ON rh.id = ri.receiptheader
       JOIN egcl_instrumentheader_v1 AS ih ON ih.id = ri.instrumentheader
       JOIN eg_pt_propertydetail_v2 pt_detail ON (pt_detail.property || ':' || pt_detail.assessmentnumber) = rh.consumercode
