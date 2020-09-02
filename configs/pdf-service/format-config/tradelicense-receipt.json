@@ -34,7 +34,7 @@
                 "alignment": "left",
                 "margin": [
                   0,
-                  2,
+                  0,
                   0,
                   0
                 ]
@@ -42,16 +42,23 @@
               {
                 "stack": [
                   {
-                    "text": "{{address}}"
+                    "text": "{{address}}",
+                    "style":"receipt-logo-address-header"
                   },
                   {
-                    "text": "{{phoneNumber}}"
+                    "text": "{{phoneNumber}}",
+                    "style":"receipt-logo-address-header"
+
                   },
                   {
-                    "text": "{{website}}"
+                    "text": "{{website}}",
+                    "style":"receipt-logo-address-header"
+
                   },
                   {
-                    "text": "{{email}}"
+                    "text": "{{email}}",
+                    "style":"receipt-logo-address-header"
+
                   }
                 ],
                 "alignment": "right",
@@ -825,7 +832,7 @@
         0,
         0,
         0,
-        5
+        1
       ]
     },
     "receipt-logo-sub-header": {
@@ -833,18 +840,23 @@
       "fontSize": 12,
       "letterSpacing": 0.6
     },
+    "receipt-logo-address-header": {
+      "color": "#000000",
+      "fontSize": 8,
+      "letterSpacing": 0.6
+    },
      "noc-table": {
-      "fontSize": 12,
+      "fontSize": 10,
       "color": "#000000",
       "margin": [
         -25,
-        8,
+        1,
         -22,
         -8
       ]
     },
     "next-noc-table": {
-      "fontSize": 12,
+      "fontSize": 10,
       "color": "#000000",
       "margin": [
         -25,
@@ -856,29 +868,29 @@
      "receipt-table-value": {
       "color": "#000000",
       "bold": true,
-      "fontSize": 12,
-      "fontWeight": 500,
+      "fontSize": 10,
+      "fontWeight": 400,
       "margin": [
         2,
         -1,
         0,
-        1
+        0
       ]
     },
     "receipt-table": {
       "color": "#000000",
       "bold": false,
-      "fontSize": 12,
-      "fontWeight": 400,
+      "fontSize": 10,
+      "fontWeight": 300,
       "margin": [
         0,
         -1,
         0,
-        2
+        0
       ]
     },
      "receipt-approver": {
-      "fontSize": 12,
+      "fontSize": 10,
       "bold": true,
       "margin": [
         -27,
@@ -889,7 +901,7 @@
       "color": "#484848"
     },
     "no-signature": {
-      "fontSize": 10,
+      "fontSize": 8,
       "margin": [
         -27,
         5,
@@ -899,7 +911,7 @@
       "color": "#484848"
     },
     "pt-disclaimer": {
-      "fontSize": 10,
+      "fontSize": 9,
       "margin": [
         -27,
         0,
