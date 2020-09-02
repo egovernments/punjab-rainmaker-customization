@@ -1,5 +1,6 @@
 FROM node:8.12-alpine
-USER root
+RUN chown -R root:root root \
+    && chmod -R 775 root
 RUN mkdir /opt/app
 RUN npm install -g yarn
 COPY package.json yarn.lock /opt/app/ 
