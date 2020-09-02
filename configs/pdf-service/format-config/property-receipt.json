@@ -68,8 +68,12 @@
         },
         "layout": "noBorders"
       },
+      {
+        "text":"PROPERTY INFORMATION",
+        "style":"block-head"
+     },
 	  {
-        "style": "noc-table",
+        "style": "next-noc-table",
         "table": {
           "widths": [
             "25%",
@@ -127,7 +131,7 @@
                   true,
                   false,
                   false,
-                  true
+                  false
                 ],
                 "style": "receipt-table-value"
               },
@@ -137,7 +141,7 @@
                   false,
                   false,
                   false,
-                  true
+                  false
                 ],
                 "style": "receipt-table"
               },
@@ -147,7 +151,7 @@
                   false,
                   false,
                   false,
-                  true
+                  false
                 ],
                 "style": "receipt-table-value"
               },
@@ -157,7 +161,7 @@
                   false,
                   false,
                   true,
-                  true
+                  false
                 ],
                 "style": "receipt-table"
               }
@@ -223,7 +227,7 @@
                 "text": "{{receipt_no}}.",
                 "border": [
                   true,
-                  true,
+                  false,
                   false,
                   false
                 ],
@@ -233,7 +237,7 @@
                 "text": "{{receiptNo}}",
                 "border": [
                   false,
-                  true,
+                  false,
                   false,
                   false
                 ],
@@ -243,7 +247,7 @@
                 "text": "{{consumer_id}}",
                 "border": [
                   false,
-                  true,
+                  false,
                   false,
                   false
                 ],
@@ -253,7 +257,7 @@
                 "text": "{{consumerID}}",
                 "border": [
                   false,
-                  true,
+                  false,
                   true,
                   false
                 ],
@@ -282,7 +286,7 @@
                 "style": "receipt-table"
               },
               {
-                "text": "assessment_number",
+                "text": "Existing Property Id",
                 "border": [
                   false,
                   false,
@@ -292,7 +296,7 @@
                 "style": "receipt-table-value"
               },
               {
-                "text": " ",
+                "text": "{{oldPropertyId}}",
                 "border": [
                   false,
                   false,
@@ -389,6 +393,10 @@
           ]
         },
         "layout": {}
+      },
+      {
+        "text":"PAYMENT INFORMATION",
+        "style":"block-head"
       },
       {
         "style": "next-noc-table",
@@ -572,7 +580,11 @@
         },
         "layout": {}
       },
-	  {
+      {
+        "text":"PAYABLE AMOUNT",
+        "style":"block-head"
+      },
+	    {
         "style": "next-noc-table",
         "table": {
           "widths": [
@@ -673,6 +685,11 @@
 	  "layout":{}
     },
     {
+       "text":"OWNERSHIP INFORMATION",
+       "style":"block-head"
+    }
+    ,
+    {
       "style": "next-noc-table",
       "table": {
         "widths": [
@@ -684,6 +701,10 @@
         "body": ["{{#var_owners}}[{\"text\":\"Owner Name\",\"border\":[true,true,false,true],\"style\":\"receipt-table-key\"},{\"text\":\"{{name2}}\",\"border\":[false,true,true,true]},{\"text\":\"Father's Name\",\"border\":[true,true,false,true],\"style\":\"receipt-table-key\"},{\"text\":\"{{fatherOrHusbandName2}}\",\"border\":[false,true,true,true]}]{{/var_owners}}"]
       },
       "layout": {}
+    },
+    {
+       "text":"BUILT-UP AREA DETAILS",
+       "style":"block-head"
     },
 	  {
         "style": "next-noc-table",
@@ -723,7 +744,7 @@
       },
       
 	    {
-	     "text": "Assessee Signature",
+	     "text": "Mobile Number {{ownerMobileNumber}}                                    Assessee Signature: ",
 	     "style": "receipt-approver"
 	  }
 	  ,
@@ -772,7 +793,10 @@
 			"ol": [
 				"Payment received by cheque/demand draft shall be subject to realization",
 				"This document is not a proof of property ownership and regularization of unauthorised construction",
-				"{{no_signature}}"
+        "{{no_signature}}",
+        "Assessment and payment is subjected to verification/scruitiny by competetive authority",
+        "Please deposit the property tx dues for earlier years also, Ignore if already paid",
+        "Citizen for online payments please refer to the link http://lgpunjab.gov.in/cms/pay-property-tax.php"
 			]
 		  }
         ]
@@ -785,6 +809,17 @@
         -30,
         0,
         1
+      ]
+    },
+    "block-head": {
+      "fontSize": 8,
+      "bold": true,
+      "letterSpacing": 0.74,
+      "margin": [
+        -25,
+        10,
+        0,
+        -10
       ]
     },
     "pt-reciept-citizen-table": {
@@ -818,7 +853,7 @@
       "color": "#000000",
       "margin": [
         -25,
-        15,
+        5,
         -22,
         -8
       ]
@@ -828,7 +863,7 @@
       "color": "#000000",
       "margin": [
         -25,
-        18,
+        10,
         -22,
         -8
       ]
@@ -840,9 +875,9 @@
       "fontWeight": 500,
       "margin": [
         8,
-        4,
         0,
-        4
+        0,
+        0
       ]
     },
     "receipt-table": {
@@ -852,9 +887,9 @@
       "fontWeight": 400,
       "margin": [
         0,
-        4,
         0,
-        4
+        0,
+        0
       ]
     },
      "receipt-approver": {
@@ -882,7 +917,7 @@
       "fontSize": 8,
       "margin": [
         -27,
-        20,
+        10,
         -10,
         0
       ],
@@ -892,7 +927,7 @@
       "fontSize": 8,
       "margin": [
         2,
-        3,
+        1,
         0,
         0
       ],
