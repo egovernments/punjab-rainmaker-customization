@@ -35,7 +35,7 @@
                           "stack": 
                           [
                          {
-                           "text":"{{municipal_corportaion}}",
+                           "text":"{{municipal_corportaion}},{{city}}",
                            "style":"receipt-logo-header"
                          },
                          {
