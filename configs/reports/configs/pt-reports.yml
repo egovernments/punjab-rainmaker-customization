@@ -2307,7 +2307,7 @@ ReportDefinitions:
       pdfPageSize: "A1"
   sourceColumns:
   - name: receiptnumber
-    label: reports.pt.receiptNo
+    label: reports.pt.receiptnumber
     type: string
     source: pt
     total: false
@@ -2316,7 +2316,7 @@ ReportDefinitions:
     type: string
     source: pt
     total: false
-  - name: transactiondate
+  - name: receiptDate
     label: reports.pt.receiptDate
     type: string
     source: pt
@@ -2337,17 +2337,17 @@ ReportDefinitions:
     source: pt
     total: true
   - name: propertytax
-    label: reports.pt.propertyTax
+    label: reports.pt.propertytax
     type: string
     source: pt
     total: true
   - name: firecess
-    label: reports.pt.fireCess
+    label: reports.pt.firecess
     type: string
     source: pt
     total: true
   - name: cancercess
-    label: reports.pt.cancerCess
+    label: reports.pt.cancercess
     type: string
     source: pt
     total: true
@@ -2382,12 +2382,12 @@ ReportDefinitions:
     source: pt
     total: true
   - name: adjustment
-    label: reports.pt.roundoff
+    label: reports.pt.adjustment
     type: string
     source: pt
     total: true
   - name: propertyid
-    label: reports.pt.propertyId
+    label: reports.pt.propertyid
     type: string
     source: pt
     total: false
@@ -2397,27 +2397,27 @@ ReportDefinitions:
     source: pt
     total: false
   - name: assessmentnumber
-    label: reports.pt.assessmentNo
+    label: reports.pt.assessmentnumber
     type: string
     source: pt
     total: false
   - name: financialyear
-    label: reports.pt.financialYear
+    label: reports.pt.financialyear
     type: string
     source: pt
     total: false
   - name: instrumenttype
-    label: reports.pt.paymentMode
+    label: reports.pt.instrumenttype
     type: string
     source: pt
     total: false
   - name: transactionnumber
-    label: reports.pt.ddChequeTransactionNo
+    label: reports.pt.transactionnumber
     type: string
     source: pt
     total: false
   - name: bankname
-    label: reports.pt.bankName
+    label: reports.pt.bankname
     type: string
     source: pt
     total: false
@@ -2457,7 +2457,7 @@ ReportDefinitions:
     searchClause: AND pt_addr.locality IN ($localityArray)
   query: |
       -- Use CTE to force query plan, compute & use CTE later
-      WITH receipt_breakup AS (
+       WITH receipt_breakup AS (
                     SELECT 
                     receiptnumber as receiptheader, 
                     SUM(CASE WHEN taxheadcode LIKE 'PT_ADHOC_PENALTY' THEN adjustedamount ELSE 0 END) as adhocpenalty,
@@ -2485,7 +2485,7 @@ ReportDefinitions:
             pd.id, 
             pt_detail.property AS propertyid, 
             pt_detail.assessmentnumber AS assessmentnumber, 
-            payment.paymentstatus,
+            payment.paymentstatus as status,
             bill.consumercode,
             to_char((To_timestamp(pd.receiptdate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY')  AS receiptdate,
             payment.ifsccode AS bankname, 
@@ -2508,7 +2508,7 @@ ReportDefinitions:
           JOIN eg_pt_propertydetail_v2 pt_detail ON pt_detail.property = pt.propertyid
           JOIN eg_pt_address_v2 pt_addr ON pt_detail.property = pt_addr.property
           LEFT OUTER JOIN eg_user ON eg_user.id = pd.createdby::INTEGER
-          WHERE pd.tenantid = $tenantid and payment.paymentstatus = 'CANCELLED' and  pd.businessservice='PT'
+          WHERE pd.tenantid = $tenantid and payment.paymentstatus = 'CANCELLED' and  pd.businessservice='PT' 
   orderby: ORDER BY pd.receiptdate DESC
 
 - reportName: OldUlbWisePtCollection_V2
@@ -2936,7 +2936,8 @@ ReportDefinitions:
     searchClause: AND usagecategorymajor = $usage
   query: |
     SELECT 
-      initcap(split_part(tenantid, '.', 2)) as tenantid, 
+      financialyear,
+      initcap(split_part(pt_detail.tenantid, '.', 2)) as tenantid, 
       COUNT(collectiontype) AS totalassessments, 
       SUM(billd.amount) AS totalamount, 
       SUM(billd.amountpaid) AS totalamountpaid, 
@@ -2945,10 +2946,12 @@ ReportDefinitions:
       SUM(CASE WHEN collectiontype LIKE 'COUNTER' THEN amount ELSE 0 END) AS totaloffline,
       SUM(CASE WHEN collectiontype LIKE 'COUNTER' THEN 1 ELSE 0 END) AS countoffline, 
       (SUM(billd.amount) - SUM(billd.amountpaid)) AS totalamountdue 
-      FROM egcl_billdetial as billd 
-      WHERE tenantid LIKE CONCAT(SPLIT_PART($tenantid, '.', 1), '%') and tenantid = $tenantid
-  groupby: GROUP BY tenantid
-  orderby: ORDER BY tenantid, totalamountpaid DESC NULLS LAST
+       FROM egcl_billdetial as billd 
+       JOIN egcl_bill as bill ON bill.id  = billd.billid 
+       JOIN eg_pt_propertydetail_v2 as pt_detail ON pt_detail.property  = bill.consumercode
+      WHERE pt_detail.tenantid LIKE CONCAT(SPLIT_PART($tenantid, '.', 1), '%') and pt_detail.tenantid = $tenantid
+  groupby: GROUP BY financialyear, pt_detail.tenantid
+  orderby: ORDER BY pt_detail.tenantid, totalamountpaid DESC NULLS LAST
 
 - reportName: ReceiptRegisterShort_V2
   summary: Receipt Register
