@@ -313,7 +313,7 @@
     orderby: ORDER BY channel
 
     - reportName: UrbanApplicationStatusReport_V2
-    summary: Application Status Report
+    summary: Urban Application Status Report
     version: 1.0.0
     moduleName: rainmaker-noc
     sourceColumns:
@@ -359,7 +359,7 @@
 
 
  - reportName: UrbanChannelsReport_V2
-    summary: Channels Report
+    summary: Urban Channels Report
     version: 1.0.0
     moduleName: rainmaker-noc
     sourceColumns:
@@ -411,7 +411,7 @@
 
 
   - reportName: DrillDownRuralSubdistrictCollectionReport_V2
-    summary: Collection Report
+    summary: Rural Subdistrict Collection Report
     version: 1.0.0
     moduleName: rainmaker-noc
     sourceColumns:
@@ -487,7 +487,7 @@
     orderby: ORDER BY localisedmessage
     
   - reportName: RuralDistrictWiseCollectionReport_V2
-    summary: Collection Report
+    summary: Rural District Wise Collection Report
     version: 1.0.0
     moduleName: rainmaker-noc
     sourceColumns:
@@ -561,7 +561,7 @@
     orderby: ORDER BY localisedmessage
     
   - reportName: RuralDistrictWiseApplicationStatusReport_V2
-    summary: Application Status Report
+    summary: Rural District Wise Application Status Report
     version: 1.0.0
     moduleName: rainmaker-noc
     sourceColumns:
@@ -611,7 +611,7 @@
     orderby: ORDER BY application_status
 
   - reportName: DrillDownRuralWiseApplicationStatusReport_V2
-    summary: Application Status Report
+    summary: Rural Wise Application Status Report
     version: 1.0.0
     moduleName: rainmaker-noc
     sourceColumns:
@@ -663,7 +663,7 @@
     orderby: ORDER BY application_status  
     
   - reportName: RuralDistrictWiseChannelsReport_V2
-    summary: Channels Report
+    summary: Rural District Wise Channels Report
     version: 1.0.0
     moduleName: rainmaker-noc
     sourceColumns:
@@ -719,7 +719,7 @@
     orderby: ORDER BY channel
 
   - reportName: DrillDownRuralWiseChannelReport_V2
-    summary: Channels Report
+    summary: Rural Wise Channel Report
     version: 1.0.0
     moduleName: rainmaker-noc
     sourceColumns:
