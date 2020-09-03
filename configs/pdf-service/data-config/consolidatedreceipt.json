@@ -72,12 +72,20 @@
                   "path": "$.paymentDetails[0].totalAmountPaid"
                 }
               },
+
               {
                 "variable": "fromPeriod", 
                 "value": {
                   "path": "$.paymentDetails[0].bill.billDetails[0].fromPeriod"
                 },
                 "type": "date"
+              },
+                 {
+                "variable": "chequeDDDate", 
+                "value": {
+                  "path": "$.instrumentDate"
+                },
+                "type":"date"
               },
               {
                 "variable": "toPeriod", 
