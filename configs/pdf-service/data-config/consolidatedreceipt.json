@@ -37,6 +37,13 @@
                 }
               },
               {
+                "variable": "chequeDD_date", 
+                "value": {
+                  "path": "$.instrumentDate"
+                },
+                "type": "date"
+              },
+              {
                 "variable": "user-name", 
                 "value": {
                   "path": "$.userInfo.name"
@@ -89,7 +96,13 @@
               {
                 "variable": "payerAddress", 
                 "value": {
-                  "path": "$.paymentDetails[0].bill.payerAddress"
+                  "path": "$.paymentDetails[0].bill.billDetails[0].additionalDetails.address"
+                }
+              },
+              {
+                "variable": "comments", 
+                "value": {
+                  "path": "$.paymentDetails[0].bill.billDetails[0].additionalDetails.comment"
                 }
               },
               {
@@ -473,7 +486,7 @@
           {
             "externalAPI": [     
               { 
-                "path": "http://egov-mdms-service:8080/egov-mdms-service/v1/_get",
+                "path": "http://localhost:8069/egov-mdms-service/v1/_get",
                 "queryParam": "moduleName=tenant&masterName=tenants&tenantId=pb&filter=%5B?(@.code=='{$.tenantId}')%5D",
                   "apiRequest": null,
                   "responseMapping":[
@@ -509,6 +522,7 @@
                     }
                   ]
               }
+              
             ]
           }
         ]

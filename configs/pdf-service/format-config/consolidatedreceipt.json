@@ -392,7 +392,7 @@
             ],
             [
               {
-                "text": "Cheque/DD No.",
+                "text": "CH/DD/RTGS/IPO No.",
                 "border": [
                   true,
                   false,
@@ -412,7 +412,7 @@
                 "style": "receipt-table"
               },
               {
-                "text": "Transaction No.",
+                "text": "CH/DD/RTGS/IPO Date",
                 "border": [
                   false,
                   false,
@@ -422,7 +422,7 @@
                 "style": "receipt-table-value"
               },
               {
-                "text": "{{transactionID}}",
+                "text": "{{chequeDD_date}}",
                 "border": [
                   false,
                   false,
@@ -483,7 +483,7 @@
         "style": "next-noc-table",
         "table": {
           "widths": [
-            "*",
+            "10%",
             "*"
           ],
           "body": [
@@ -493,7 +493,7 @@
                 "border":[false, false, false, false]
               },
               {
-                "text":" ",
+                "text":"{{comments}}",
                 "border":[false, false, false, false]
               }
             ]
@@ -952,7 +952,7 @@
             ],
             [
               {
-                "text": "Cheque/DD No.",
+                "text": "CH/DD/RTGS/IPO No.",
                 "border": [
                   true,
                   false,
@@ -972,7 +972,7 @@
                 "style": "receipt-table"
               },
               {
-                "text": "Transaction No.",
+                "text": "CH/DD/RTGS/IPO Date",
                 "border": [
                   false,
                   false,
@@ -982,7 +982,7 @@
                 "style": "receipt-table-value"
               },
               {
-                "text": "{{transactionID}}",
+                "text": "{{chequeDD_date}}",
                 "border": [
                   false,
                   false,
@@ -990,7 +990,6 @@
                   false
                 ],
                 "style": "receipt-table"
-                
               }
             ],
             [
@@ -1043,7 +1042,7 @@
         "style": "next-noc-table",
         "table": {
           "widths": [
-            "*",
+            "10%",
             "*"
           ],
           "body": [
@@ -1053,7 +1052,7 @@
                 "border":[false, false, false, false]
               },
               {
-                "text":" ",
+                "text":"{{comments}}",
                 "border":[false, false, false, false]
               }
             ]
