@@ -149,7 +149,7 @@
     orderby: ORDER BY channel
 
 
- - reportName: CollectionReport_V2
+  - reportName: CollectionReport_V2
     decryptionPathId: CollectionReport_V2
     summary: Collection Report
     version: 1.0.0
@@ -210,11 +210,13 @@
         wrapper: true
         isMandatory: false
         searchClause: AND fnoc.tenantId IN ($ulb)
-    query: Select COALESCE(message,usagetype) localisedmessage,
-        COUNT(*) as transactionNumber,
-        (select COALESCE((select message from message where code=concat('FIRENOC_FIRESTATIONS_',UPPER(REGEXP_REPLACE(firestationid,'\..*','')))  limit 1), firestationid)) as firestation,
-        SUM (CASE WHEN egcl_payment.paymentmode='CASH' THEN egcl_payment.totalamountpaid ELSE 0 END) as fees_counter,
-        SUM (CASE WHEN egcl_payment.paymentmode='ONLINE' THEN egcl_payment.totalamountpaid ELSE 0 END) AS fees_online
+    query: 
+        Select 
+          COALESCE(message,usagetype) localisedmessage,
+          COUNT(*) as transactionNumber,
+          --(select COALESCE((select message from message where code=concat('FIRENOC_FIRESTATIONS_',UPPER(REGEXP_REPLACE(firestationid,'\..*','')))  limit 1), firestationid)) as firestation,
+          SUM (CASE WHEN egcl_payment.paymentmode='CASH' THEN egcl_payment.totalamountpaid ELSE 0 END) as fees_counter,
+          SUM (CASE WHEN egcl_payment.paymentmode='ONLINE' THEN egcl_payment.totalamountpaid ELSE 0 END) AS fees_online
         from eg_fn_firenoc AS fnoc
         INNER JOIN eg_fn_firenocdetail fdet on fdet.firenocuuid=fnoc.uuid
         INNER JOIN egcl_bill as bill on bill.consumercode=fdet.applicationnumber
@@ -224,11 +226,10 @@
         INNER JOIN egcl_payment on egcl_payment.id=egcl_paymentdetail.paymentid
         LEFT OUTER JOIN message on code=concat('FIRENOC_BUILDINGTYPE_',UPPER(REGEXP_REPLACE(usagetype,'\..*','')))  
         INNER JOIN eg_fn_address as fad on fad.firenocdetailsuuid=fdet.uuid and module='rainmaker-noc' where 1=1
-   
-    groupby: GROUP BY (localisedmessage,firestation)
+    groupby: GROUP BY (localisedmessage)
     orderby: ORDER BY localisedmessage
 
-- reportName: ApplicationStatusReport_V2
+  - reportName: ApplicationStatusReport_V2
     decryptionPathId: ApplicationStatusReport_V2
     summary: Application Status Report
     version: 1.0.0
@@ -265,7 +266,16 @@
         wrapper: true
         isMandatory: false
         searchClause: AND fnoc.tenantId IN ($ulb)
-    query: select COALESCE(message,state) application_status,count(*) number_of_application from eg_fn_firenoc fnoc inner join eg_fn_firenocdetail fdet on fdet.firenocuuid=fnoc.uuid inner join (SELECT DISTINCT ON (businessid) * FROM eg_wf_processinstance_v2 ORDER BY businessid,createdtime desc) pinstance on pinstance.businessid=fdet.applicationnumber inner join eg_wf_state_v2 wfstate on pinstance.status=wfstate.uuid left outer join message on code=concat('WF_FIRENOC_',UPPER(state)) and module='rainmaker-noc'  where 1=1
+    query: 
+      select 
+        COALESCE(message,state) application_status,
+        count(*) number_of_application 
+      from eg_fn_firenoc fnoc 
+      inner join eg_fn_firenocdetail fdet on fdet.firenocuuid=fnoc.uuid 
+      inner join (SELECT DISTINCT ON (businessid) * FROM eg_wf_processinstance_v2 ORDER BY businessid,createdtime desc) pinstance on pinstance.businessid=fdet.applicationnumber 
+      inner join eg_wf_state_v2 wfstate on pinstance.status=wfstate.uuid 
+      left outer join message on code=concat('WF_FIRENOC_',UPPER(state)) and module='rainmaker-noc'
+      where 1=1
     groupby: GROUP BY application_status
     orderby: ORDER BY application_status
 
@@ -315,7 +325,7 @@
     groupby: GROUP BY channel
     orderby: ORDER BY channel
 
-    - reportName: UrbanApplicationStatusReport_V2
+  - reportName: UrbanApplicationStatusReport_V2
     decryptionPathId: UrbanApplicationStatusReport_V2
     summary: Urban Application Status Report
     version: 1.0.0
@@ -362,7 +372,7 @@
     orderby: ORDER BY application_status
 
 
- - reportName: UrbanChannelsReport_V2
+  - reportName: UrbanChannelsReport_V2
     decryptionPathId: UrbanChannelsReport_V2
     summary: Urban Channels Report
     version: 1.0.0
@@ -409,8 +419,15 @@
         wrapper: true
         isMandatory: false
         searchClause: AND fad.subdistrict IN ($city)     
-    query: select channel,(select COALESCE((select message from message where code=concat('FIRENOC_FIRESTATIONS_',UPPER(REGEXP_REPLACE(firestationid,'\..*','')))  limit 1), firestationid)) as firestation, count (*) number_of_applications,round((count (*)::decimal/(select count(*) from eg_fn_firenoc fnoc inner join eg_fn_firenocdetail fdet on fdet.firenocuuid=fnoc.uuid))*100,2) percentage from eg_fn_firenoc fnoc inner join eg_fn_firenocdetail fdet on fdet.firenocuuid=fnoc.uuid
-      inner join eg_fn_address as fad on fad.firenocdetailsuuid=fdet.uuid
+    query: 
+        select 
+          channel,
+          (select COALESCE((select message from message where code=concat('FIRENOC_FIRESTATIONS_',UPPER(REGEXP_REPLACE(firestationid,'\..*','')))  limit 1), firestationid)) as firestation, 
+          count (*) number_of_applications,
+          round((count (*)::decimal/(select count(*) from eg_fn_firenoc fnoc 
+        inner join eg_fn_firenocdetail fdet on fdet.firenocuuid=fnoc.uuid))*100,2) percentage from eg_fn_firenoc fnoc
+        inner join eg_fn_firenocdetail fdet on fdet.firenocuuid=fnoc.uuid
+        inner join eg_fn_address as fad on fad.firenocdetailsuuid=fdet.uuid
     groupby: GROUP BY (channel,firestation)
     orderby: ORDER BY channel 
 
