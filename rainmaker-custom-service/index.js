@@ -980,20 +980,17 @@ router.post('/protected/punjab-pt/pt-calculator-v2/_estimate', asyncMiddleware(a
         response
     } = getRequestResponse(req)
 
-    // log("Estimate req : " +JSON.stringify(req));
-    // log("Estimate res : "+JSON.parse(res.body.request));
-    // log("Estimate request : "+JSON.parse(request.body.request));
-    // log("Estimate response : "+JSON.parse(response.body.request));
+    log(":: Estimate request Received ::");
 
-    let oldRequestbody = getOldRequestBody(request) 
+    // let oldRequestbody = getOldRequestBody(request) 
 
-    oldRequestbody["CalculationCriteria"][0]["assessmentYear"] = oldRequestbody["CalculationCriteria"][0]["property"]["propertyDetails"][0]["financialYear"]
-    // assessmentYear field was there in old request body but not present in new request body so we are adding this field.
+    // oldRequestbody["CalculationCriteria"][0]["assessmentYear"] = oldRequestbody["CalculationCriteria"][0]["property"]["propertyDetails"][0]["financialYear"]
+    // // assessmentYear field was there in old request body but not present in new request body so we are adding this field.
 
-    request = oldRequestbody;
+    // request = oldRequestbody;
 
-    let tenantId = request["CalculationCriteria"][0]["tenantId"]
-    let assessmentYear = request["CalculationCriteria"][0]["assessmentYear"]
+    let tenantId = request["Assessment"]["tenantId"]
+    let assessmentYear = request["Assessment"]["financialYear"]
 
     log("Got request for tenantid: "+tenantId+" and finanancial year: "+assessmentYear)
     log("Request body: "+request)
