@@ -3786,6 +3786,7 @@ ReportDefinitions:
   groupby: group by bd.tenantid
   orderby: order by bd.tenantid
 
+
 - reportName: FYCollectionsReport_V2
   summary: FY Collections
   version: 1.0.0
@@ -3804,8 +3805,18 @@ ReportDefinitions:
     type: string
     source: pt
     total: true
+  - name: countresidential
+    label: reports.pt.countresidential
+    type: string
+    source: pt
+    total: true  
   - name: nonresidential
     label: reports.pt.nonresidential
+    type: string
+    source: pt
+    total: true
+  - name: countnonresidential
+    label: reports.pt.countnonresidential
     type: string
     source: pt
     total: true
@@ -3814,11 +3825,21 @@ ReportDefinitions:
     type: string
     source: pt
     total: true
+  - name: countmixed
+    label: reports.pt.countmixed
+    type: string
+    source: pt
+    total: true
   - name: totalamount
     label: reports.pt.totalamount
     type: string
     source: pt
     total: true
+  - name: totalcount
+    label: reports.pt.totalcount
+    type: string
+    source: pt
+    total: true  
   - name: online
     label: reports.pt.online
     type: string
@@ -3845,13 +3866,13 @@ ReportDefinitions:
     type: epoch
     source: pt
     isMandatory: false
-    searchClause: AND pd.receiptdate >= $fromDate
+    searchClause: AND rh.receiptdate >= $fromDate
   - name: toDate
     label: reports.pt.toDate
     type: epoch
     source: pt
     isMandatory: false
-    searchClause: AND pd.receiptdate <= $toDate
+    searchClause: AND rh.receiptdate <= $toDate
   - name: localityArray
     label: reports.pt.zoneList
     type: boundarylist
@@ -3860,25 +3881,27 @@ ReportDefinitions:
     searchClause: AND pt_addr.locality IN ($localityArray)
   query: |
       -- Use CTE to force query plan, compute & use CTE later
-      SELECT
-        financialyear,
-        sum(case when pt_detail.usagecategorymajor='RESIDENTIAL' then pd.amountpaid else 0 end) as "residential",
-        sum(case when pt_detail.usagecategorymajor='NONRESIDENTIAL' then pd.amountpaid else 0 end) as "nonresidential",
-        sum(case when pt_detail.usagecategorymajor='MIXED' then pd.amountpaid else 0 end) as "mixed",
-        sum(pd.amountpaid) as totalamount,
-        sum(case when payment.paymentmode='ONLINE' then pd.amountpaid else 0 end) as "online",
-        sum(case when payment.paymentmode='CASH' then pd.amountpaid else 0 end) as "cash",
-        sum(case when payment.paymentmode='CHEQUE' then pd.amountpaid else 0 end) as "cheque",
-        sum(case when payment.paymentmode='DD' then pd.amountpaid else 0 end) as "dd"
-      FROM egcl_paymentdetail AS pd
-      join egcl_payment as payment on payment.id = pd.paymentid
-      join egcl_bill as bill on bill.id = pd.billid
-      JOIN eg_pt_propertydetail_v2 pt_detail ON pt_detail.property  = bill.consumercode
-      JOIN eg_pt_address_v2 pt_addr ON pt_detail.property = pt_addr.property
-      LEFT OUTER JOIN eg_user ON eg_user.id = pd.createdby::INTEGER
-      WHERE pd.tenantid = $tenantid and payment.paymentstatus != 'CANCELLED'
-  groupby: GROUP BY financialyear
-  orderby: ORDER BY financialyear  
+      SELECT 
+      financialyear,
+      initcap(split_part(tenantid, '.', 2)) as tenantid, 
+      COUNT(collectiontype) AS totalassessments, 
+      SUM(totalamount) AS totalamount, 
+      SUM(amount) AS totalamountpaid, 
+      SUM(CASE WHEN collectiontype = 'ONLINE' THEN amount ELSE 0 END) AS totalonline,
+      SUM(CASE WHEN collectiontype = 'ONLINE' THEN 1 ELSE 0 END) AS totalonlinecount,
+      SUM(CASE WHEN collectiontype != 'ONLINE' THEN amount ELSE 0 END) AS totaloffline,
+      SUM(CASE WHEN collectiontype != 'ONLINE' THEN 1 ELSE 0 END) AS totalofflinecount,
+      (SUM(totalamount) - SUM(amount)) AS totalamountdue 
+      FROM eg_pt_propertydetail_v2 AS pd 
+      LEFT OUTER JOIN (SELECT consumercode, totalamount, amount, collectiontype, receiptdate FROM egcl_receiptheader_v1 AS rh 
+      LEFT OUTER JOIN egcl_receiptinstrument_v1 AS ri ON rh.id = ri.receiptheader 
+      LEFT OUTER JOIN egcl_instrumentheader_v1 AS ih ON ri.instrumentheader = ih.id and ih.instrumentstatus	 != 'CANCELLED' 
+      where rh.status != 'Cancelled'
+      ) AS tbl_amounts ON CONCAT(pd.property, ':', pd.assessmentnumber) = tbl_amounts.consumercode 
+      WHERE  tenantid = $tenantid
+  groupby: GROUP BY tenantid, financialyear
+  orderby: ORDER BY tenantid, totalamountpaid DESC NULLS LAST
+
 
 - reportName: ULBDEFAULTERPTREPORT_V2
   summary: ULB Defaulter Pt report
