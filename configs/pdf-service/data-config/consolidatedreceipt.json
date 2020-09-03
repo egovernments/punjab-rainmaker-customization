@@ -97,7 +97,13 @@
               {
                 "variable": "payerAddress", 
                 "value": {
-                  "path": "$.paymentDetails[0].bill.payerAddress"
+                   "path": "$.paymentDetails[0].bill.billDetails[0].additionalDetails.address"
+                }
+              },
+              {
+                "variable": "comments", 
+                "value": {
+                  "path": "$.paymentDetails[0].bill.billDetails[0].additionalDetails.comment"
                 }
               },
               {
