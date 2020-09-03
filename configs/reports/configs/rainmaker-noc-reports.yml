@@ -1,6 +1,6 @@
 ---
 ReportDefinitions:
-  - reportName: CollectionReport
+  - reportName: UrbanCollectionReport
     summary: Collection Report
     version: 1.0.0
     moduleName: rainmaker-noc
@@ -12,17 +12,17 @@ ReportDefinitions:
         total: false
       - name: transactionNumber
         label: reports.noc.collectionreport.transactionNumber
-        type: number
+        type: string
         source: rainmaker-noc
         total: true
       - name: fees_counter
         label: reports.noc.collectionreport.fees_counter
-        type: number
+        type: string
         source: rainmaker-noc
         total: true
       - name: fees_online
         label: reports.noc.collectionreport.fees_online
-        type: number
+        type: string
         source: rainmaker-noc
         total: true
     searchParams:
@@ -64,7 +64,7 @@ ReportDefinitions:
     groupby: GROUP BY localisedmessage
     orderby: ORDER BY localisedmessage
 
-  - reportName: ApplicationStatusReport
+  - reportName: UrbanApplicationStatusReport
     summary: Application Status Report
     version: 1.0.0
     moduleName: rainmaker-noc
@@ -76,7 +76,7 @@ ReportDefinitions:
         total: false
       - name: number_of_application
         label: reports.noc.applicationstatusreport.noofapplications
-        type: number
+        type: string
         source: rainmaker-noc
         total: true
     searchParams:
@@ -104,7 +104,7 @@ ReportDefinitions:
     groupby: GROUP BY application_status
     orderby: ORDER BY application_status
 
-  - reportName: ChannelsReport
+  - reportName: UrbanChannelsReport
     summary: Channels Report
     version: 1.0.0
     moduleName: rainmaker-noc
@@ -116,12 +116,12 @@ ReportDefinitions:
         total: false
       - name: number_of_applications
         label: reports.noc.channelsreport.applicationNo
-        type: number
+        type: string
         source: rainmaker-noc
         total: true
       - name: percentage
         label: reports.noc.channelsreport.percentage
-        type: number
+        type: string
         source: rainmaker-noc
         total: false
     searchParams:
@@ -163,17 +163,17 @@ ReportDefinitions:
         total: false
       - name: transactionNumber
         label: reports.noc.collectionreport.transactionNumber
-        type: number
+        type: string
         source: rainmaker-noc
         total: true
       - name: fees_counter
         label: reports.noc.collectionreport.fees_counter
-        type: number
+        type: string
         source: rainmaker-noc
         total: true
       - name: fees_online
         label: reports.noc.collectionreport.fees_online
-        type: number
+        type: string
         source: rainmaker-noc
         total: true
     searchParams:
@@ -243,7 +243,7 @@ ReportDefinitions:
         total: false
       - name: number_of_application
         label: reports.noc.applicationstatusreport.noofapplications
-        type: number
+        type: string
         source: rainmaker-noc
         total: true
     searchParams:
@@ -293,12 +293,12 @@ ReportDefinitions:
         total: false
       - name: number_of_applications
         label: reports.noc.channelsreport.applicationNo
-        type: number
+        type: string
         source: rainmaker-noc
         total: true
       - name: percentage
         label: reports.noc.channelsreport.percentage
-        type: number
+        type: string
         source: rainmaker-noc
         total: false
     searchParams:
@@ -339,7 +339,7 @@ ReportDefinitions:
         total: false
       - name: number_of_application
         label: reports.noc.applicationstatusreport.noofapplications
-        type: number
+        type: string
         source: rainmaker-noc
         total: true
       - name: firestation
@@ -386,12 +386,12 @@ ReportDefinitions:
         total: false
       - name: number_of_applications
         label: reports.noc.channelsreport.applicationNo
-        type: number
+        type: string
         source: rainmaker-noc
         total: true
       - name: percentage
         label: reports.noc.channelsreport.percentage
-        type: number
+        type: string
         source: rainmaker-noc
         total: false
       - name: firestation
@@ -451,17 +451,17 @@ ReportDefinitions:
         total: false
       - name: transactionNumber
         label: reports.noc.collectionreport.transactionNumber
-        type: number
+        type: string
         source: rainmaker-noc
         total: true
       - name: fees_counter
         label: reports.noc.collectionreport.fees_counter
-        type: number
+        type: string
         source: rainmaker-noc
         total: true
       - name: fees_online
         label: reports.noc.collectionreport.fees_online
-        type: number
+        type: string
         source: rainmaker-noc
         total: true
     searchParams:
@@ -533,17 +533,17 @@ ReportDefinitions:
         total: false
       - name: transactionNumber
         label: reports.noc.collectionreport.transactionNumber
-        type: number
+        type: string
         source: rainmaker-noc
         total: true
       - name: fees_counter
         label: reports.noc.collectionreport.fees_counter
-        type: number
+        type: string
         source: rainmaker-noc
         total: true
       - name: fees_online
         label: reports.noc.collectionreport.fees_online
-        type: number
+        type: string
         source: rainmaker-noc
         total: true
     searchParams:
@@ -608,7 +608,7 @@ ReportDefinitions:
         total: false
       - name: number_of_application
         label: reports.noc.applicationstatusreport.noofapplications
-        type: number
+        type: string
         source: rainmaker-noc
         total: true
     searchParams:
@@ -654,7 +654,7 @@ ReportDefinitions:
         total: false
       - name: number_of_application
         label: reports.noc.applicationstatusreport.noofapplications
-        type: number
+        type: string
         source: rainmaker-noc
         total: true
     searchParams:
@@ -711,12 +711,12 @@ ReportDefinitions:
         total: false
       - name: number_of_applications
         label: reports.noc.channelsreport.applicationNo
-        type: number
+        type: string
         source: rainmaker-noc
         total: true
       - name: percentage
         label: reports.noc.channelsreport.percentage
-        type: number
+        type: string
         source: rainmaker-noc
         total: false
     searchParams:
@@ -763,12 +763,12 @@ ReportDefinitions:
         total: false
       - name: number_of_applications
         label: reports.noc.channelsreport.applicationNo
-        type: number
+        type: string
         source: rainmaker-noc
         total: true
       - name: percentage
         label: reports.noc.channelsreport.percentage
-        type: number
+        type: string
         source: rainmaker-noc
         total: false
     searchParams:
