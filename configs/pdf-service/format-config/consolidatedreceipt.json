@@ -72,10 +72,10 @@
         "style": "noc-table",
         "table": {
           "widths": [
-            "25%",
-            "25%",
-            "25%",
-            "25%"
+            "30%",
+            "20%",
+            "30%",
+            "20%"
           ],
           "body": [
             [
@@ -256,10 +256,10 @@
         "style": "next-noc-table",
         "table": {
           "widths": [
-            "25%",
-            "25%",
-            "25%",
-            "25%"
+            "30%",
+            "20%",
+            "30%",
+            "20%"
           ],
           "body": [
             [
@@ -352,7 +352,7 @@
             ],
             [
               {
-                "text": "Cheque/DD No.",
+                "text": "Cheque/DD/RTGS/NEFT No.",
                 "border": [
                   true,
                   false,
@@ -372,7 +372,7 @@
                 "style": "receipt-table"
               },
               {
-                "text": "Cheque/DD Date",
+                "text": "Cheque/DD/RTGS/NEFT Date",
                 "border": [
                   false,
                   false,
@@ -636,10 +636,10 @@
         "style": "noc-table",
         "table": {
           "widths": [
-            "25%",
-            "25%",
-            "25%",
-            "25%"
+            "30%",
+            "20%",
+            "30%",
+            "20%"
           ],
           "body": [
             [
@@ -821,10 +821,10 @@
         "style": "next-noc-table",
         "table": {
           "widths": [
-            "25%",
-            "25%",
-            "25%",
-            "25%"
+            "30%",
+            "20%",
+            "30%",
+            "20%"
           ],
           "body": [
             [
@@ -917,7 +917,7 @@
             ],
             [
               {
-                "text": "Cheque/DD No.",
+                "text": "Cheque/DD/RTGS/NEFT No.",
                 "border": [
                   true,
                   false,
@@ -937,7 +937,7 @@
                 "style": "receipt-table"
               },
               {
-                "text": "Cheque/DD Date",
+                "text": "Cheque/DD/RTGS/NEFT Date",
                 "border": [
                   false,
                   false,
