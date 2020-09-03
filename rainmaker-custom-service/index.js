@@ -405,14 +405,14 @@ async function updateDemand(demands, RequestInfo) {
 }
 
 async function getOldRequestBody(requestBody) {
-    log("Translate Call for Property: ")
+    log("Translate Call for Property: "+ JSON.stringify(requestBody));
     let CalculationCriteria = await request.post({
         url: url.resolve(PT_CALCULATOR_V2_HOST, "/pt-calculator-v2/propertytax/v2/_translate"),
         body: requestBody,
         json: true
     })
 
-    log("Response from Translate API: " +CalculationCriteria);
+    log("Response from Translate API: " +JSON.stringify(CalculationCriteria));
 
     return CalculationCriteria;
 }
@@ -993,7 +993,12 @@ router.post('/protected/punjab-pt/pt-calculator-v2/_estimate', asyncMiddleware(a
     let assessmentYear = request["Assessment"]["financialYear"]
 
     log("Got request for tenantid: "+tenantId+" and finanancial year: "+assessmentYear)
-    log("Request body: "+request)
+    log("Request body: "+ JSON.stringify(request));
+
+    let oldRequestbody = getOldRequestBody(request); 
+    oldRequestbody["CalculationCriteria"][0]["assessmentYear"] =  assessmentYear;
+    // assessmentYear field was there in old request body but not present in new request body Without this field we will get null pointer exception.
+
 
     if (assessmentYear == PT_ZERO_ASSESSMENTYEAR && PT_ZERO_TENANTS.indexOf(tenantId) >= 0){
         response = _estimateZeroTaxProcessor(request, response)
@@ -1001,7 +1006,7 @@ router.post('/protected/punjab-pt/pt-calculator-v2/_estimate', asyncMiddleware(a
     else if (assessmentYear == PT_INTEGRATION_ASSESSMENTYEAR){
             
         if(PT_INTEGRATION_TENANTS.indexOf(tenantId) >= 0){
-                response = await _estimateIntegrationTaxProcessor(request, response)
+                response = await _estimateIntegrationTaxProcessor(oldRequestbody, response)
         } else if(isCitizen(request)){
             data =  
             {
