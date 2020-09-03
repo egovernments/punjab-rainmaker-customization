@@ -708,14 +708,14 @@ async function _createAndUpdateIntegrationTaxProcessor(req, response){
 
 
             
-        let oldRequestbody = getOldRequestBody(req)
+        let oldRequestbody = await getOldRequestBody(req)
 
         oldRequestbody["CalculationCriteria"][0]["assessmentYear"] = oldRequestBody["CalculationCriteria"][0]["property"]["propertyDetails"][0]["financialYear"]
 
         log("Got request for tenantid: "+tenantId+" and finanancial year: "+assessmentYear)
         log("Assessment CREATE/ UPDATE Request body: "+reqProperty)
 
-        estimateResponse = await findEstimate(req)
+        let estimateResponse = await findEstimate(req)
 
         
         request_info = req["RequestInfo"] || req["requestInfo"]
@@ -995,7 +995,7 @@ router.post('/protected/punjab-pt/pt-calculator-v2/_estimate', asyncMiddleware(a
     log("Got request for tenantid: "+tenantId+" and finanancial year: "+assessmentYear)
     log("Request body: "+ JSON.stringify(request));
 
-    let oldRequestbody = getOldRequestBody(request); 
+    let oldRequestbody = await getOldRequestBody(request); 
     oldRequestbody["CalculationCriteria"][0]["assessmentYear"] =  assessmentYear;
     // assessmentYear field was there in old request body but not present in new request body Without this field we will get null pointer exception.
 
