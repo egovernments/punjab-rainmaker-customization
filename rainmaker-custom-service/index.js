@@ -730,7 +730,7 @@ async function _createAndUpdateIntegrationTaxProcessor(req, response){
 
         let consumerCode = propertyId
         let service = "PT"
-        let calc = estimateResponse["Calculation"]
+        let calc = estimateResponse["Calculation"][0]
         let taxHeads = calc["taxHeadEstimates"];
         let createTaxHeadsArray = {};
         for(taxHead of taxHeads){
