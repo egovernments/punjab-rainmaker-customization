@@ -405,11 +405,14 @@ async function updateDemand(demands, RequestInfo) {
 }
 
 async function getOldRequestBody(requestBody) {
+    log("Translate Call for Property: ")
     let CalculationCriteria = await request.post({
         url: url.resolve(PT_CALCULATOR_V2_HOST, "/pt-calculator-v2/propertytax/v2/_translate"),
         body: requestBody,
         json: true
     })
+
+    log("Response from Translate API: " +CalculationCriteria);
 
     return CalculationCriteria;
 }
@@ -977,12 +980,17 @@ router.post('/protected/punjab-pt/pt-calculator-v2/_estimate', asyncMiddleware(a
         response
     } = getRequestResponse(req)
 
-    let oldRequestbody = getOldRequestBody(request) 
+    log("Estimate req : " +req);
+    log("Estimate res : "+res);
+    log("Estimate request : "+request);
+    log("Estimate response : "+response);
 
-    oldRequestbody["CalculationCriteria"][0]["assessmentYear"] = oldRequestBody["CalculationCriteria"][0]["property"]["propertyDetails"][0]["financialYear"]
+    let oldRequestbody = getOldRequestBody(req) 
+
+    oldRequestbody["CalculationCriteria"][0]["assessmentYear"] = oldRequestbody["CalculationCriteria"][0]["property"]["propertyDetails"][0]["financialYear"]
     // assessmentYear field was there in old request body but not present in new request body so we are adding this field.
 
-    request = oldRequestbody
+    request = oldRequestbody;
 
     let tenantId = request["CalculationCriteria"][0]["tenantId"]
     let assessmentYear = request["CalculationCriteria"][0]["assessmentYear"]
