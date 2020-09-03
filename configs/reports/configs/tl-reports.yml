@@ -1219,6 +1219,7 @@ ReportDefinitions:
 
 
 - reportName: TradeLicenseRegistryReport_v2
+  decryptionPathId: TradeLicenseRegistryReport_v2
   summary: TL Receipt Register Report
   version: 1.0.0
   moduleName: rainmaker-tl
@@ -1376,6 +1377,7 @@ ReportDefinitions:
 
 
 - reportName: StateTradeLicenseCancelledRegistryReport_v2
+  decryptionPathId: StateTradeLicenseCancelledRegistryReport_v2
   summary: TL Cancelled Receipt Register Report
   version: 1.0.0
   moduleName: rainmaker-tl
@@ -1524,6 +1526,7 @@ ReportDefinitions:
 
 
 - reportName: TradeLicenseCancelledRegistryReport_v2
+  decryptionPathId: TradeLicenseCancelledRegistryReport_v2
   summary: TL Cancelled Receipt Register Report
   version: 1.0.0
   moduleName: rainmaker-tl
@@ -1666,6 +1669,7 @@ ReportDefinitions:
 
 
 - reportName: TradeWiseCollectionReport_v2
+  decryptionPathId: TradeWiseCollectionReport_v2
   summary: Collection according to tradeTypes
   version: 1.0.0
   moduleName: rainmaker-tl
@@ -1718,6 +1722,7 @@ ReportDefinitions:
 
 
 - reportName: TradeLicenseApplicationStatusReport_v2
+  decryptionPathId: TradeLicenseApplicationStatusReport_v2
   summary: Nummber of applications by there status
   version: 1.0.0
   moduleName: rainmaker-tl
@@ -1762,6 +1767,7 @@ ReportDefinitions:
 
 
 - reportName: TradeLicenseULBWiseApplicationStatusReport_v2
+  decryptionPathId: TradeLicenseULBWiseApplicationStatusReport_v2
   summary: Nummber of applications by there status
   version: 1.0.0
   moduleName: rainmaker-tl
@@ -1838,6 +1844,7 @@ ReportDefinitions:
 
 
 - reportName: StateLevelStatus_v2
+  decryptionPathId: StateLevelStatus_v2
   summary: Nummber of applications by there status state level
   version: 1.0.0
   moduleName: rainmaker-tl
@@ -1885,6 +1892,7 @@ ReportDefinitions:
 
 
 - reportName: ULBLevelStatus_v2
+  decryptionPathId: ULBLevelStatus_v2
   summary: Nummber of applications by there status ULB level
   version: 1.0.0
   moduleName: rainmaker-tl
@@ -1924,6 +1932,7 @@ ReportDefinitions:
 
 
 - reportName: StateLevelTradeWiseCollection_v2
+  decryptionPathId: StateLevelTradeWiseCollection_v2
   summary: Collection according to tradeTypes state level
   version: 1.0.0
   moduleName: rainmaker-tl
@@ -1989,6 +1998,7 @@ ReportDefinitions:
 
 
 - reportName: StateLevelTradeLicenseRegistryReport_v2
+  decryptionPathId: StateLevelTradeLicenseRegistryReport_v2
   summary: TL Basic Report State Level
   version: 1.0.0
   moduleName: rainmaker-tl
@@ -2100,6 +2110,7 @@ ReportDefinitions:
 
 
 - reportName: SearchTradeLicenseApplicationReport_v2
+  decryptionPathId: SearchTradeLicenseApplicationReport_v2
   summary: TL Search Application Report
   version: 1.0.0
   moduleName: rainmaker-tl
@@ -2183,7 +2194,8 @@ ReportDefinitions:
      WHERE tl.tenantid=$tenantid
 
 
-- reportName: TradeLicenseDetailsReport_v2                   
+- reportName: TradeLicenseDetailsReport_v2
+  decryptionPathId: TradeLicenseDetailsReport_v2                   
   summary: Trade License Details Report
   version: 1.0.0
   moduleName: rainmaker-tl
@@ -2321,6 +2333,7 @@ ReportDefinitions:
 
 
 - reportName: StateDefaulterReport_v2
+  decryptionPathId: StateDefaulterReport_v2                   
   summary: TL Defautler
   version: 1.0.0
   moduleName: rainmaker-tl
@@ -2389,6 +2402,7 @@ ReportDefinitions:
 
 
 - reportName: ULBDefaulterReport_v2
+  decryptionPathId: StateDefaulterReport_v2                   
   summary: TL Defautler
   version: 1.0.0
   moduleName: rainmaker-tl
