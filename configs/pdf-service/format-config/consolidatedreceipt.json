@@ -434,52 +434,7 @@
                 ],
                 "style": "receipt-table"
               }
-            ],
-            [
-              {
-                "text": "Transaction No.",
-                "border": [
-                  true,
-                  false,
-                  false,
-                  true
-                ],
-                "style": "receipt-table-value"
-              },
-              {
-                "text": "{{transactionID}}",
-                "border": [
-                  false,
-                  false,
-                  false,
-                  true
-                ],
-                "style": "receipt-table"
-                
-              },
-              {
-                "text": " ",
-                "border": [
-                  false,
-                  false,
-                  false,
-                  true
-                ],
-                "style": "receipt-table-value"
-              },
-              {
-                "text": " ",
-                "border": [
-                  false,
-                  false,
-                  true,
-                  true
-                ],
-                "style": "receipt-table"
-                
-              }
             ]
-          
           ]
         },
         "layout": {}
@@ -488,7 +443,7 @@
         "style": "next-noc-table",
         "table": {
           "widths": [
-            "*",
+            "10%",
             "*"
           ],
           "body": [
@@ -498,7 +453,7 @@
                 "border":[false, false, false, false]
               },
               {
-                "text":" ",
+                "text":"{{comments}}",
                 "border":[false, false, false, false]
               }
             ]
@@ -999,50 +954,6 @@
                 ],
                 "style": "receipt-table"
               }
-            ],
-            [
-              {
-                "text": "Transaction No.",
-                "border": [
-                  true,
-                  false,
-                  false,
-                  true
-                ],
-                "style": "receipt-table-value"
-              },
-              {
-                "text": "{{transactionID}}",
-                "border": [
-                  false,
-                  false,
-                  false,
-                  true
-                ],
-                "style": "receipt-table"
-                
-              },
-              {
-                "text": " ",
-                "border": [
-                  false,
-                  false,
-                  false,
-                  true
-                ],
-                "style": "receipt-table-value"
-              },
-              {
-                "text": " ",
-                "border": [
-                  false,
-                  false,
-                  true,
-                  true
-                ],
-                "style": "receipt-table"
-                
-              }
             ]
           ]
         },
@@ -1052,7 +963,7 @@
         "style": "next-noc-table",
         "table": {
           "widths": [
-            "*",
+            "10%",
             "*"
           ],
           "body": [
@@ -1062,7 +973,7 @@
                 "border":[false, false, false, false]
               },
               {
-                "text":" ",
+                "text":"{{comments}}",
                 "border":[false, false, false, false]
               }
             ]
