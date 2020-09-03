@@ -71,15 +71,21 @@ function getUserID(data) {
 
 function getIntegrateYearDemand(demands){
     for(demand of demands["Demands"]){
-        demandYear = new Date(demand["taxPeriodFrom"]).getFullYear()
-        integrationYear = PT_INTEGRATION_ASSESSMENTYEAR.split("-")[0]
-        demandStatus = demand["status"]
+        let demandYear = new Date(demand["taxPeriodFrom"]).getFullYear();
+        let integrationYear = PT_INTEGRATION_ASSESSMENTYEAR.split("-")[0];
+        let demandStatus = demand["status"]
+
+        log("getIntegrateYearDemand> Demand year: "+ demandYear+" Integrated Year: "+integrationYear+" Demand Status: "+status);
+
         if((demandYear == integrationYear) && (demandStatus == "ACTIVE")){
-            demands["Demands"] = demand
+            demands["Demands"] = [demand];
             break;
         }
         
     }
+
+    log("Response from getIntegrateYearDemand: "+ JSON.stringify(demands));
+
     return demands;
 }
 
@@ -759,7 +765,7 @@ async function _createAndUpdateIntegrationTaxProcessor(req, response){
 
         demandSearchResponse = getIntegrateYearDemand(demandSearchResponse)
 
-        log("Search Demand response For Integrated Year: " + demandSearchResponse)
+        log("Search Demand response For Integrated Year: " + JSON.stringify(demandSearchResponse))
 
         if(isReceiptGenerated(demandSearchResponse)){
             //Throw Error
