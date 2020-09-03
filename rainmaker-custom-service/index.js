@@ -156,6 +156,10 @@ if (PT_DEMAND_HOST === undefined) {
     throw Error("PT_DEMAND_HOST environment variable needs to be configured to run this")
 }
 
+if (PT_CALCULATOR_V2_HOST === undefined) {
+    throw Error("PT_CALCULATOR_V2_HOST environment variable needs to be configured to run this")
+}
+
 function round(num, digits) {
     return parseFloat(parseFloat(num).toFixed(digits))
 }
