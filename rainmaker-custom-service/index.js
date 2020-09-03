@@ -980,10 +980,10 @@ router.post('/protected/punjab-pt/pt-calculator-v2/_estimate', asyncMiddleware(a
         response
     } = getRequestResponse(req)
 
-    log("Estimate req : " +req);
-    log("Estimate res : "+res);
-    log("Estimate request : "+request);
-    log("Estimate response : "+response);
+    log("Estimate req : " +JSON.parse(req));
+    log("Estimate res : "+JSON.parse(res));
+    log("Estimate request : "+JSON.parse(request));
+    log("Estimate response : "+JSON.parse(response));
 
     let oldRequestbody = getOldRequestBody(req) 
 
