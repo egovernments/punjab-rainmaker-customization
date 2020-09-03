@@ -1,4 +1,5 @@
-  ReportDefinitions:
+---
+ReportDefinitions:
   - reportName: CollectionReport
     summary: Collection Report
     version: 1.0.0
