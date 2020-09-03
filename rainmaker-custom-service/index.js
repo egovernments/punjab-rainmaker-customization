@@ -75,7 +75,7 @@ function getIntegrateYearDemand(demands){
         let integrationYear = PT_INTEGRATION_ASSESSMENTYEAR.split("-")[0];
         let demandStatus = demand["status"]
 
-        log("getIntegrateYearDemand> Demand year: "+ demandYear+" Integrated Year: "+integrationYear+" Demand Status: "+status);
+        log("getIntegrateYearDemand> Demand year: "+ demandYear+" Integrated Year: "+integrationYear+" Demand Status: "+demandStatus);
 
         if((demandYear == integrationYear) && (demandStatus == "ACTIVE")){
             demands["Demands"] = [demand];
