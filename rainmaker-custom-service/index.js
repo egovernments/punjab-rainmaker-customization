@@ -377,6 +377,9 @@ router.post('/protected/bndlogin', asyncMiddleware(async function (req, res) {
 // }
 
 async function findDemandForConsumerCode(consumerCode, tenantId, service, RequestInfo) {
+
+    log("Got Request to Find Demand for Comsumer code: "+consumerCode+" tenantid : "+tenantId+" Service : "+service);
+
     let demandSearchResponse = await request.post({
         url: url.resolve(PT_DEMAND_HOST, "/billing-service/demand/_search?tenantId=" + tenantId +
             "&consumerCode=" + consumerCode + "&businessService=" + service),
@@ -385,6 +388,8 @@ async function findDemandForConsumerCode(consumerCode, tenantId, service, Reques
         },
         json: true
     })
+
+    log("Got response from demand search : "+ JSON.stringify(demandSearchResponse));
 
     return demandSearchResponse;
 }
@@ -419,11 +424,15 @@ async function getOldRequestBody(requestBody) {
 
 async function findEstimate(requestBody){
 
+    log("Got Request to find estimate : "+ JSON.stringify(requestBody))
+
     let estimateRes = await request.post({
         url: url.resolve(PT_CALCULATOR_V2_HOST, "/pt-calculator-v2/propertytax/v2/_estimate"),
         body: requestBody,
         json: true
     })
+
+    log("Got response from estimate : "+ JSON.stringify(estimateRes));
 
     return estimateRes;
 }
@@ -450,7 +459,7 @@ async function findEstimate(requestBody){
 
 async function _estimateIntegrationTaxProcessor(req1, res1) {
 
-    log("Calling PMIDC estimate API: "+res1 )
+    log("Calling PMIDC estimate API: "+ JSON.stringify(res1) )
 
     let estimate = await request.post({
         url: url.resolve(PT_INTEGRATION_HOST, "/apt_estimate_pt_2013/api_estimate_pt_2013"),
@@ -458,7 +467,7 @@ async function _estimateIntegrationTaxProcessor(req1, res1) {
         json: true
     })
 
-    log("Got response from PMIDC estimate API: " +estimate)
+    log("Got response from PMIDC estimate API: " + JSON.stringify(estimate))
 
     return estimate;
 }
@@ -696,7 +705,7 @@ async function _createAndUpdateZeroTaxProcessor(request, response) {
 
 async function _createAndUpdateIntegrationTaxProcessor(req, response){
 
-        reqProperty = req["Assessment"];
+        let reqProperty = req["Assessment"];
 
         let propertyId = reqProperty["propertyId"]
 
@@ -705,15 +714,14 @@ async function _createAndUpdateIntegrationTaxProcessor(req, response){
 
         if (!(assessmentYear == PT_INTEGRATION_ASSESSMENTYEAR && PT_INTEGRATION_TENANTS.indexOf(tenantId) >= 0))
             return response;
-
-
             
         let oldRequestbody = await getOldRequestBody(req)
 
-        oldRequestbody["CalculationCriteria"][0]["assessmentYear"] = oldRequestBody["CalculationCriteria"][0]["property"]["propertyDetails"][0]["financialYear"]
+        oldRequestbody["CalculationCriteria"][0]["assessmentYear"] = assessmentYear;
+            // assessmentYear field was there in old request body but not present in new request body Without this field we will get null pointer exception.
 
-        log("Got request for tenantid: "+tenantId+" and finanancial year: "+assessmentYear)
-        log("Assessment CREATE/ UPDATE Request body: "+reqProperty)
+        log("Got Assessment CREATE/ UPDATE request for tenantid: "+tenantId+" and finanancial year: "+assessmentYear)
+        log("Assessment CREATE/ UPDATE Request body: "+ JSON.stringify(reqProperty) )
 
         let estimateResponse = await findEstimate(req)
 
@@ -882,18 +890,18 @@ async function _createAndUpdateRequestHandler(req, res) {
         request,
         response
     } = getRequestResponse(req)
-    for (reqProperty of request["Assessment"]) {
 
-        let assessmentYear = reqProperty["financialYear"]
-        let tenantId = reqProperty["tenantId"]
+    log("Got Request for Assessment Create and Update")
+
+        let assessmentYear = request["Assessment"]["financialYear"]
+        let tenantId = request["Assessment"]["tenantId"] 
 
         if (assessmentYear == PT_ZERO_ASSESSMENTYEAR && PT_ZERO_TENANTS.indexOf(tenantId) >= 0){
             response = await _createAndUpdateZeroTaxProcessor(request, response)
         }else if(assessmentYear == PT_INTEGRATION_ASSESSMENTYEAR && PT_INTEGRATION_TENANTS.indexOf(tenantId) >= 0){
             response = await _createAndUpdateIntegrationTaxProcessor(request, response)
         }
-    index++;
-    }
+    
     // if (!PT_ENABLE_FC_CALC)
     if ("Errors" in response)
         res.status(400).json(response)
