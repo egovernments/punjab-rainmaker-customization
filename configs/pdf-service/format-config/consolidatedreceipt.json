@@ -163,30 +163,11 @@
               }
             ],
             [
-              {
-                "text": "{{payment_date}}",
-                "border": [
-                  true,
-                  false,
-                  false,
-                  false
-                ],
-                "style": "receipt-table-value"
-              },
-              {
-                "text": "{{paymentDate}}",
-                "border": [
-                  false,
-                  false,
-                  false,
-                  false
-                ],
-                "style": "receipt-table"
-              },
+            
               {
                 "text": "Consumer Name",
                 "border": [
-                  false,
+                  true,
                   false,
                   false,
                   false
@@ -198,17 +179,15 @@
                 "border": [
                   false,
                   false,
-                  true,
+                  false,
                   false
                 ],
                 "style": "receipt-table"
-              }
-            ],
-            [
+              },
               {
                 "text": "{{payer_contact}}",
                 "border": [
-                  true,
+                  false,
                   false,
                   false,
                   false
@@ -220,15 +199,18 @@
                 "border": [
                   false,
                   false,
-                  false,
+                  true,
                   false
                 ],
                 "style": "receipt-table"
-              },
+              }
+            ],
+            [
+              
               {
                 "text": "Paid By: ",
                 "border": [
-                  false,
+                  true,
                   false,
                   false,
                   false
@@ -240,17 +222,15 @@
                 "border": [
                   false,
                   false,
-                  true,
+                  false,
                   false
                 ],
                 "style": "receipt-table"
-              }
-            ],
-            [
+              },
               {
                 "text": "Address: ",
                 "border": [
-                  true,
+                  false,
                   false,
                   false,
                   false
@@ -262,33 +242,13 @@
                 "border": [
                   false,
                   false,
-                  false,
-                  false
-                ],
-                "style": "receipt-table"
-              },
-              {
-                "text" : " ",
-                "border": [
-                  false,
-                  false,
-                  false,
-                  false
-                ],
-                "style": "receipt-table"
-              },
-              {
-                "text" : " ",
-                "border": [
-                  false,
-                  false,
                   true,
                   false
                 ],
                 "style": "receipt-table"
               }
             ]
-          ]
+        ]
         },
         "layout": {}
       },
@@ -412,7 +372,7 @@
                 "style": "receipt-table"
               },
               {
-                "text": "Transaction No.",
+                "text": "Cheque/DD Date",
                 "border": [
                   false,
                   false,
@@ -422,7 +382,7 @@
                 "style": "receipt-table-value"
               },
               {
-                "text": "{{transactionID}}",
+                "text": "{{chequeDDDate}}",
                 "border": [
                   false,
                   false,
@@ -440,7 +400,7 @@
                   true,
                   false,
                   false,
-                  true
+                  false
                 ],
                 "style": "receipt-table-value"
               },
@@ -450,7 +410,7 @@
                   false,
                   false,
                   false,
-                  true
+                  false
                 ],
                 "style": "receipt-table"
               },
@@ -460,7 +420,7 @@
                   false,
                   false,
                   false,
-                  true
+                  false
                 ],
                 "style": "receipt-table-value"
               },
@@ -470,11 +430,56 @@
                   false,
                   false,
                   true,
-                  true
+                  false
                 ],
                 "style": "receipt-table"
               }
+            ],
+            [
+              {
+                "text": "Transaction No.",
+                "border": [
+                  true,
+                  false,
+                  false,
+                  true
+                ],
+                "style": "receipt-table-value"
+              },
+              {
+                "text": "{{transactionID}}",
+                "border": [
+                  false,
+                  false,
+                  false,
+                  true
+                ],
+                "style": "receipt-table"
+                
+              },
+              {
+                "text": " ",
+                "border": [
+                  false,
+                  false,
+                  false,
+                  true
+                ],
+                "style": "receipt-table-value"
+              },
+              {
+                "text": " ",
+                "border": [
+                  false,
+                  false,
+                  true,
+                  true
+                ],
+                "style": "receipt-table"
+                
+              }
             ]
+          
           ]
         },
         "layout": {}
@@ -722,30 +727,11 @@
               }
             ],
             [
-              {
-                "text": "{{payment_date}}",
-                "border": [
-                  true,
-                  false,
-                  false,
-                  false
-                ],
-                "style": "receipt-table-value"
-              },
-              {
-                "text": "{{paymentDate}}",
-                "border": [
-                  false,
-                  false,
-                  false,
-                  false
-                ],
-                "style": "receipt-table"
-              },
+            
               {
                 "text": "Consumer Name",
                 "border": [
-                  false,
+                  true,
                   false,
                   false,
                   false
@@ -757,17 +743,15 @@
                 "border": [
                   false,
                   false,
-                  true,
+                  false,
                   false
                 ],
                 "style": "receipt-table"
-              }
-            ],
-            [
+              },
               {
                 "text": "{{payer_contact}}",
                 "border": [
-                  true,
+                  false,
                   false,
                   false,
                   false
@@ -779,16 +763,18 @@
                 "border": [
                   false,
                   false,
-                  false,
+                  true,
                   false
                 ],
                 "style": "receipt-table"
-              },
+              }
+            ],
+            [
               
               {
                 "text": "Paid By: ",
                 "border": [
-                  false,
+                  true,
                   false,
                   false,
                   false
@@ -800,17 +786,15 @@
                 "border": [
                   false,
                   false,
-                  true,
+                  false,
                   false
                 ],
                 "style": "receipt-table"
-              }
-            ],
-            [
+              },
               {
                 "text": "Address: ",
                 "border": [
-                  true,
+                  false,
                   false,
                   false,
                   false
@@ -822,32 +806,13 @@
                 "border": [
                   false,
                   false,
-                  false,
-                  false
-                ],
-                "style": "receipt-table"
-              },
-              {
-                "text" : " ",
-                "border": [
-                  false,
-                  false,
-                  false,
-                  false
-                ],
-                "style": "receipt-table"
-              },
-              {
-                "text" : " ",
-                "border": [
-                  false,
-                  false,
                   true,
                   false
                 ],
                 "style": "receipt-table"
               }
             ]
+            
           ]
         },
         "layout": {}
@@ -972,7 +937,7 @@
                 "style": "receipt-table"
               },
               {
-                "text": "Transaction No.",
+                "text": "Cheque/DD Date",
                 "border": [
                   false,
                   false,
@@ -982,7 +947,7 @@
                 "style": "receipt-table-value"
               },
               {
-                "text": "{{transactionID}}",
+                "text": "{{chequeDDDate}}",
                 "border": [
                   false,
                   false,
@@ -1000,7 +965,7 @@
                   true,
                   false,
                   false,
-                  true
+                  false
                 ],
                 "style": "receipt-table-value"
               },
@@ -1010,7 +975,7 @@
                   false,
                   false,
                   false,
-                  true
+                  false
                 ],
                 "style": "receipt-table"
               },
@@ -1020,7 +985,7 @@
                   false,
                   false,
                   false,
-                  true
+                  false
                 ],
                 "style": "receipt-table-value"
               },
@@ -1030,9 +995,53 @@
                   false,
                   false,
                   true,
+                  false
+                ],
+                "style": "receipt-table"
+              }
+            ],
+            [
+              {
+                "text": "Transaction No.",
+                "border": [
+                  true,
+                  false,
+                  false,
+                  true
+                ],
+                "style": "receipt-table-value"
+              },
+              {
+                "text": "{{transactionID}}",
+                "border": [
+                  false,
+                  false,
+                  false,
                   true
                 ],
                 "style": "receipt-table"
+                
+              },
+              {
+                "text": " ",
+                "border": [
+                  false,
+                  false,
+                  false,
+                  true
+                ],
+                "style": "receipt-table-value"
+              },
+              {
+                "text": " ",
+                "border": [
+                  false,
+                  false,
+                  true,
+                  true
+                ],
+                "style": "receipt-table"
+                
               }
             ]
           ]
