@@ -348,7 +348,7 @@
             ],
             [
               {
-                "text": "Cheque/DD/RTGS/NEFT No.",
+                "text": "Cheque/DD/PO/Transaction No.",
                 "border": [
                   true,
                   false,
@@ -368,7 +368,7 @@
                 "style": "receipt-table"
               },
               {
-                "text": "Cheque/DD/RTGS/NEFT Date",
+                "text": "Cheque/DD/PO/Transaction Date",
                 "border": [
                   false,
                   false,
@@ -864,7 +864,7 @@
             ],
             [
               {
-                "text": "Cheque/DD/RTGS/NEFT No.",
+                "text": "Cheque/DD/PO/Transaction No.",
                 "border": [
                   true,
                   false,
@@ -884,7 +884,7 @@
                 "style": "receipt-table"
               },
               {
-                "text": "Cheque/DD/RTGS/NEFT Date",
+                "text": "Cheque/DD/PO/Transaction Date",
                 "border": [
                   false,
                   false,
