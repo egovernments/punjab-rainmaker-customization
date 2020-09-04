@@ -151,7 +151,6 @@ ReportDefinitions:
 
 
   - reportName: CollectionReport_V2
-    decryptionPathId: CollectionReport_V2
     summary: Collection Report
     version: 1.0.0
     moduleName: rainmaker-noc
@@ -231,7 +230,6 @@ ReportDefinitions:
     orderby: ORDER BY localisedmessage
 
   - reportName: ApplicationStatusReport_V2
-    decryptionPathId: ApplicationStatusReport_V2
     summary: Application Status Report
     version: 1.0.0
     moduleName: rainmaker-noc
@@ -281,7 +279,6 @@ ReportDefinitions:
     orderby: ORDER BY application_status
 
   - reportName: ChannelsReport_V2
-    decryptionPathId: ChannelsReport_V2
     summary: Channels Report
     version: 1.0.0
     moduleName: rainmaker-noc
@@ -636,7 +633,6 @@ ReportDefinitions:
     orderby: ORDER BY application_status
 
   - reportName: DrillDownRuralWiseApplicationStatusReport_V2
-    decryptionPathId: DrillDownRuralWiseApplicationStatusReport_V2
     summary: Rural Wise Application Status Report
     version: 1.0.0
     moduleName: rainmaker-noc
@@ -745,7 +741,6 @@ ReportDefinitions:
     orderby: ORDER BY channel
 
   - reportName: DrillDownRuralWiseChannelReport_V2
-    decryptionPathId: DrillDownRuralWiseChannelReport_V2
     summary: Rural Wise Channel Report
     version: 1.0.0
     moduleName: rainmaker-noc
