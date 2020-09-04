@@ -584,7 +584,7 @@
                 "style": "receipt-table"
               },
               {
-                "text": "Transanction No.",
+                "text": "  ",
                 "border": [
                   false,
                   false,
@@ -594,7 +594,7 @@
                 "style": "receipt-table-value"
               },
               {
-                "text": "{{transactionID}}",
+                "text": "  ",
                 "border": [
                   false,
                   false,
@@ -606,7 +606,7 @@
             ],
             [
               {
-                "text": "Cheque or DD No.",
+                "text": "Cheque/DD/PO/Transaction No.",
                 "border": [
                   true,
                   false,
@@ -626,7 +626,7 @@
                 "style": "receipt-table"
               },
               {
-                "text": "Cheque or DD Date",
+                "text": "Cheque/DD/PO/Transaction Date",
                 "border": [
                   false,
                   false,
