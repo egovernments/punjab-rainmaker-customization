@@ -632,7 +632,7 @@
             },
             {
               "path": "http://collection-services:8080/collection-services/payments/_search",
-              "queryParam": "tenantId=$.tenantId,consumerCode=$.applicationNumber,businessServices=TL",
+              "queryParam": "tenantId=$.tenantId,consumerCodes=$.applicationNumber,businessServices=TL",
               "apiRequest": null,
               "responseMapping":[
                 {            
