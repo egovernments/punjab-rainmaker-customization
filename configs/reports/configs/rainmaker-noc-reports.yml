@@ -586,7 +586,6 @@ ReportDefinitions:
     orderby: ORDER BY localisedmessage
     
   - reportName: RuralDistrictWiseApplicationStatusReport_V2
-    decryptionPathId: RuralDistrictWiseApplicationStatusReport_V2
     summary: Rural District Wise Application Status Report
     version: 1.0.0
     moduleName: rainmaker-noc
