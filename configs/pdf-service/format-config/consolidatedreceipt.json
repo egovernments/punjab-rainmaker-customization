@@ -11,14 +11,14 @@
           "widths": [
             60,
             "*",
-            120
+            150
           ],
           "body": [
             [
               {
                 "image": "{{logoImage}}",
                 "width": 50,
-                "height": 61.25
+                "height": 50
               },
               {
                 "stack": [
@@ -42,16 +42,12 @@
               {
                 "stack": [
                   {
-                    "text": "{{address}}"
+                    "text": "{{address}},{{phoneNumber}}",
+                    "style": "receipt-logo-sub-header"
                   },
                   {
-                    "text": "{{phoneNumber}}"
-                  },
-                  {
-                    "text": "{{website}}"
-                  },
-                  {
-                    "text": "{{email}}"
+                    "text": "{{website}},{{email}}",
+                    "style": "receipt-logo-sub-header"
                   }
                 ],
                 "alignment": "right",
@@ -537,7 +533,7 @@
               {
                 "image": "{{logoImage}}",
                 "width": 50,
-                "height": 61.25
+                "height": 50
               },
               {
                 "stack": [
@@ -546,7 +542,7 @@
                     "style": "receipt-logo-header"
                   },
                   {
-                    "text": "{{serviceType}} {{payment_receipt}} (Employee Copy)",
+                    "text": "{{serviceType}} {{payment_receipt}} (Citizen Copy)",
                     "style": "receipt-logo-sub-header"
                   }
                 ],
@@ -561,16 +557,12 @@
               {
                 "stack": [
                   {
-                    "text": "{{address}}"
+                    "text": "{{address}},{{phoneNumber}}",
+                    "style": "receipt-logo-sub-header"
                   },
                   {
-                    "text": "{{phoneNumber}}"
-                  },
-                  {
-                    "text": "{{website}}"
-                  },
-                  {
-                    "text": "{{email}}"
+                    "text": "{{website}},{{email}}",
+                    "style": "receipt-logo-sub-header"
                   }
                 ],
                 "alignment": "right",
