@@ -2,7 +2,7 @@
   "key": "property-receipt",
   "config": {
     "defaultStyle": {
-      "font": "Roboto"
+      "font": "Cambay"
      },
     "content": [
       {
@@ -812,7 +812,7 @@
       ]
     },
     "block-head": {
-      "fontSize": 8,
+      "fontSize": 7,
       "bold": true,
       "letterSpacing": 0.74,
       "margin": [
@@ -823,7 +823,7 @@
       ]
     },
     "pt-reciept-citizen-table": {
-      "fontSize": 8,
+      "fontSize": 7,
       "color": "#484848"
     },
     "receipt-assess-table-header": {
@@ -833,7 +833,7 @@
     },
     "receipt-logo-header": {
       "color": "#000000",
-      "fontSize": 10,
+      "fontSize": 8.5,
       "bold": true,
       "letterSpacing": 0.74,
       "margin": [
@@ -845,11 +845,11 @@
     },
     "receipt-logo-sub-header": {
       "color": "#000000",
-      "fontSize": 10,
+      "fontSize": 8.5,
       "letterSpacing": 0.6
     },
      "noc-table": {
-      "fontSize": 8,
+      "fontSize": 7,
       "color": "#000000",
       "margin": [
         -25,
@@ -859,7 +859,7 @@
       ]
     },
     "next-noc-table": {
-      "fontSize": 8,
+      "fontSize": 7,
       "color": "#000000",
       "margin": [
         -25,
@@ -871,7 +871,7 @@
      "receipt-table-value": {
       "color": "#000000",
       "bold": true,
-      "fontSize": 8,
+      "fontSize": 7,
       "fontWeight": 500,
       "margin": [
         8,
@@ -883,7 +883,7 @@
     "receipt-table": {
       "color": "#000000",
       "bold": false,
-      "fontSize": 8,
+      "fontSize": 7,
       "fontWeight": 400,
       "margin": [
         0,
@@ -893,7 +893,7 @@
       ]
     },
      "receipt-approver": {
-      "fontSize": 8,
+      "fontSize": 7,
       "bold": true,
       "margin": [
         -27,
@@ -904,7 +904,7 @@
       "color": "#484848"
     },
     "no-signature": {
-      "fontSize": 8,
+      "fontSize": 7,
       "margin": [
         -27,
         20,
