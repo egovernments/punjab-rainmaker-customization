@@ -1891,7 +1891,6 @@ ReportDefinitions:
 
 
 - reportName: ULBLevelStatus_v2
-  decryptionPathId: ULBLevelStatus_v2
   summary: Nummber of applications by there status ULB level
   version: 1.0.0
   moduleName: rainmaker-tl
