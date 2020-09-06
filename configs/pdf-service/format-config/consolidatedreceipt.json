@@ -27,7 +27,7 @@
                     "style": "receipt-logo-header"
                   },
                   {
-                    "text": "{{serviceType}} {{payment_receipt}} (Citizen Copy)",
+                    "text": "{{serviceType}} {{payment_receipt}} (Employee Copy)",
                     "style": "receipt-logo-sub-header"
                   }
                 ],
