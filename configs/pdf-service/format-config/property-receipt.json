@@ -72,6 +72,188 @@
         "text":"PROPERTY INFORMATION",
         "style":"block-head"
      },
+     {
+      "style": "noc-table",
+      "table": {
+        "widths": [
+          "25%",
+          "25%",
+          "25%",
+          "25%"
+        ],
+        "body": [
+          [
+            {
+              "text": "{{receipt_no}}.",
+              "border": [
+                true,
+                false,
+                false,
+                false
+              ],
+              "style": "receipt-table-value"
+            },
+            {
+              "text": "{{receiptNo}}",
+              "border": [
+                false,
+                false,
+                false,
+                false
+              ],
+              "style": "receipt-table"
+            },
+            {
+              "text": "{{consumer_id}}",
+              "border": [
+                false,
+                false,
+                false,
+                false
+              ],
+              "style": "receipt-table-value"
+            },
+            {
+              "text": "{{consumerID}}",
+              "border": [
+                false,
+                false,
+                true,
+                false
+              ],
+              "style": "receipt-table"
+            }
+          ],
+    [
+    {
+              "text": "assessment_year",
+              "border": [
+                true,
+                false,
+                false,
+                false
+              ],
+              "style": "receipt-table-value"
+            },
+            {
+              "text": "{{assessmentYear1}}-{{assessmentYear2}}",
+              "border": [
+                false,
+                false,
+                false,
+                false
+              ],
+              "style": "receipt-table"
+            },
+            {
+              "text": "Existing Property Id",
+              "border": [
+                false,
+                false,
+                false,
+                false
+              ],
+              "style": "receipt-table-value"
+            },
+            {
+              "text": "{{oldPropertyId}}",
+              "border": [
+                false,
+                false,
+                true,
+                false
+              ],
+              "style": "receipt-table"
+            }
+          ],
+          [
+            {
+              "text": "{{payment_date}}",
+              "border": [
+                true,
+                false,
+                false,
+                false
+              ],
+              "style": "receipt-table-value"
+            },
+            {
+              "text": "{{paymentDate}}",
+              "border": [
+                false,
+                false,
+                false,
+                false
+              ],
+              "style": "receipt-table"
+            },
+            {
+              "text": "{{payer_name}}",
+              "border": [
+                false,
+                false,
+                false,
+                false
+              ],
+              "style": "receipt-table-value"
+            },
+            {
+              "text": "{{payerName}}",
+              "border": [
+                false,
+                false,
+                true,
+                false
+              ],
+              "style": "receipt-table"
+            }
+          ],
+          [
+            {
+              "text": "{{payer_contact}}",
+              "border": [
+                true,
+                false,
+                false,
+                true
+              ],
+              "style": "receipt-table-value"
+            },
+            {
+              "text": "{{payerContact}}",
+              "border": [
+                false,
+                false,
+                false,
+                true
+              ],
+              "style": "receipt-table"
+            },
+            {
+              "text" : "Father/Husband Name: ",
+              "border": [
+                false,
+                false,
+                false,
+                true
+              ],
+              "style": "receipt-table-value"
+            },
+            {
+              "text" : "{{fatherHusbandName}}",
+              "border": [
+                false,
+                false,
+                true,
+                true
+              ],
+              "style": "receipt-table"
+            }
+          ]
+        ]
+      },
+      "layout": {}
+    },
 	  {
         "style": "next-noc-table",
         "table": {
@@ -212,188 +394,7 @@
         },
         "layout": {}
       },
-      {
-        "style": "noc-table",
-        "table": {
-          "widths": [
-            "25%",
-            "25%",
-            "25%",
-            "25%"
-          ],
-          "body": [
-            [
-              {
-                "text": "{{receipt_no}}.",
-                "border": [
-                  true,
-                  false,
-                  false,
-                  false
-                ],
-                "style": "receipt-table-value"
-              },
-              {
-                "text": "{{receiptNo}}",
-                "border": [
-                  false,
-                  false,
-                  false,
-                  false
-                ],
-                "style": "receipt-table"
-              },
-              {
-                "text": "{{consumer_id}}",
-                "border": [
-                  false,
-                  false,
-                  false,
-                  false
-                ],
-                "style": "receipt-table-value"
-              },
-              {
-                "text": "{{consumerID}}",
-                "border": [
-                  false,
-                  false,
-                  true,
-                  false
-                ],
-                "style": "receipt-table"
-              }
-            ],
-			[
-			{
-                "text": "assessment_year",
-                "border": [
-                  true,
-                  false,
-                  false,
-                  false
-                ],
-                "style": "receipt-table-value"
-              },
-              {
-                "text": "{{assessmentYear1}}-{{assessmentYear2}}",
-                "border": [
-                  false,
-                  false,
-                  false,
-                  false
-                ],
-                "style": "receipt-table"
-              },
-              {
-                "text": "Existing Property Id",
-                "border": [
-                  false,
-                  false,
-                  false,
-                  false
-                ],
-                "style": "receipt-table-value"
-              },
-              {
-                "text": "{{oldPropertyId}}",
-                "border": [
-                  false,
-                  false,
-                  true,
-                  false
-                ],
-                "style": "receipt-table"
-              }
-            ],
-            [
-              {
-                "text": "{{payment_date}}",
-                "border": [
-                  true,
-                  false,
-                  false,
-                  false
-                ],
-                "style": "receipt-table-value"
-              },
-              {
-                "text": "{{paymentDate}}",
-                "border": [
-                  false,
-                  false,
-                  false,
-                  false
-                ],
-                "style": "receipt-table"
-              },
-              {
-                "text": "{{payer_name}}",
-                "border": [
-                  false,
-                  false,
-                  false,
-                  false
-                ],
-                "style": "receipt-table-value"
-              },
-              {
-                "text": "{{payerName}}",
-                "border": [
-                  false,
-                  false,
-                  true,
-                  false
-                ],
-                "style": "receipt-table"
-              }
-            ],
-            [
-              {
-                "text": "{{payer_contact}}",
-                "border": [
-                  true,
-                  false,
-                  false,
-                  true
-                ],
-                "style": "receipt-table-value"
-              },
-              {
-                "text": "{{payerContact}}",
-                "border": [
-                  false,
-                  false,
-                  false,
-                  true
-                ],
-                "style": "receipt-table"
-              },
-              {
-                "text" : "Father/Husband Name: ",
-                "border": [
-                  false,
-                  false,
-                  false,
-                  true
-                ],
-                "style": "receipt-table-value"
-              },
-              {
-                "text" : "{{fatherHusbandName}}",
-                "border": [
-                  false,
-                  false,
-                  true,
-                  true
-                ],
-                "style": "receipt-table"
-              }
-            ]
-          ]
-        },
-        "layout": {}
-      },
+     
       {
         "text":"PAYMENT INFORMATION",
         "style":"block-head"
@@ -588,7 +589,7 @@
         "style": "next-noc-table",
         "table": {
           "widths": [
-            "*","*","*","*","*","*","*","*","*","*"
+            "8%","8%","8%","8%","8%","8%","8%","8%","8%","8%","8%","*"
           ],
           "body": [
             
@@ -623,6 +624,14 @@
               },
 			  {
                 "text": "Special Category Exemption",
+                "style": "amounts"
+              },
+              {
+                "text": "Adhoc Penalty",
+                "style": "amounts"
+              },
+              {
+                "text": "Adhoc Rebate",
                 "style": "amounts"
               },
 			  {
@@ -667,6 +676,14 @@
               },
 			  {
                 "text": "{{SpecialCategoryExemption}}",
+                "style": "amounts"
+              },
+              {
+                "text": "{{adhocPenalty}}",
+                "style": "amounts"
+              },
+              	  {
+                "text": "{{adhocRebate}}",
                 "style": "amounts"
               },
 			  {
