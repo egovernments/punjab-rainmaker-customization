@@ -2171,11 +2171,21 @@ ReportDefinitions:
     type: string
     source: pt
     total: false
+  - name: fromdate
+    label: reports.pt.fromDate
+    type: string
+    source: pt
+    total: false
+  - name: todate
+    label: reports.pt.toDate
+    type: string
+    source: pt
+    total: false
   - name: transactiondate
     label: reports.pt.ddChequeTransactionDate
     type: string
     source: pt
-    total: false
+    total: false    
   - name: bankname
     label: reports.pt.bankName
     type: string
