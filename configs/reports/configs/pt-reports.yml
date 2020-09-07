@@ -215,7 +215,7 @@ ReportDefinitions:
         to_char((To_timestamp(rh.manualreceiptdate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY') AS g8issuedate,
         Initcap(COALESCE(pt_detail.usagecategoryminor, pt_detail.usagecategorymajor)) as usagetype,
         manualreceiptnumber as g8receiptno,
-        (CASE WHEN collectiontype='COUNTER' THEN eg_user.name ELSE '' END) as collectorname,
+        eg_user.name as collectorname,
         pt_detail.additionaldetails->>'remarks' as "remarks"
       FROM egcl_receiptheader_v1 AS rh
       JOIN egcl_receiptinstrument_v1 AS ri ON rh.id = ri.receiptheader
