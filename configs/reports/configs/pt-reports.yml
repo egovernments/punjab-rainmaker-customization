@@ -2161,6 +2161,11 @@ ReportDefinitions:
     type: string
     source: pt
     total: false
+  - name: usagetype
+    label: reports.pt.usagetype
+    type: string
+    source: pt
+    total: false
   - name: instrumenttype
     label: reports.pt.paymentMode
     type: string
@@ -2168,6 +2173,21 @@ ReportDefinitions:
     total: false
   - name: transactionnumber
     label: reports.pt.ddChequeTransactionNo
+    type: string
+    source: pt
+    total: false
+  - name: transactiondate
+    label: reports.pt.ddChequeTransactionDate
+    type: string
+    source: pt
+    total: false
+  - name: bankname
+    label: reports.pt.bankName
+    type: string
+    source: pt
+    total: false
+  - name: collectorname
+    label: reports.pt.collectorname
     type: string
     source: pt
     total: false
@@ -2180,17 +2200,7 @@ ReportDefinitions:
     label: reports.pt.toDate
     type: string
     source: pt
-    total: false
-  - name: transactiondate
-    label: reports.pt.ddChequeTransactionDate
-    type: string
-    source: pt
     total: false    
-  - name: bankname
-    label: reports.pt.bankName
-    type: string
-    source: pt
-    total: false
   searchParams:
   - name: fromDate
     label: reports.pt.fromDate
@@ -2211,6 +2221,12 @@ ReportDefinitions:
     source: pt
     isMandatory: false
     searchClause: AND payment.paymentmode = $paymentMode
+  - name: localityArray
+    label: reports.pt.zoneList
+    type: boundarylist
+    source: pt
+    isMandatory: false
+    searchClause: AND pt_addr.locality IN ($localityArray)
   query: |
       -- Use CTE to force query plan, compute & use CTE later
       WITH receipt_breakup AS (
@@ -2250,11 +2266,13 @@ ReportDefinitions:
         to_char((To_timestamp(bd.toperiod/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY') AS todate, 
         to_char((To_timestamp(payment.transactiondate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY') AS transactiondate, 
         pd.due AS pendingamount,
+        Initcap(pt.usagecategory) as usagetype,
+        (CASE WHEN billd.collectiontype='COUNTER' THEN eg_user.name ELSE '' END) as collectorname,
         receipt_breakup.*,
-        to_char((To_timestamp(pd.manualreceiptdate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY') AS g8issuedate, 		manualreceiptnumber as g8receiptno
-      FROM egcl_paymentdetail pd, egcl_payment payment,receipt_breakup, egcl_bill bill, (select bill.id as billid, min(bd.fromperiod) fromperiod, max(bd.toperiod) toperiod from egcl_billdetial bd, egcl_bill bill where bill.id=bd.billid group by bill.id) bd
-      WHERE pd.paymentid=payment.id and bill.id=pd.billid and bd.billid=bill.id and payment.paymentstatus != 'CANCELLED' and pd.businessservice='PT' and payment.tenantid=$tenantid and receipt_breakup.pdid=pd.id
-  orderby: ORDER BY pd.receiptdate DESC;
+        to_char((To_timestamp(pd.manualreceiptdate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY') AS g8issuedate,	manualreceiptnumber as g8receiptno
+      FROM egcl_paymentdetail pd, eg_user, eg_pt_property    as pt, egcl_billdetial as billd, egcl_payment payment,receipt_breakup, egcl_bill bill, (select bill.id as billid, min(bd.fromperiod) fromperiod, max(bd.toperiod) toperiod from egcl_billdetial bd, egcl_bill bill where bill.id=bd.billid group by bill.id) bd
+      WHERE pd.paymentid=payment.id and  eg_user.id = pd.createdby::INTEGER and pt.propertyid = bill.consumercode and bill.id=pd.billid and bill.id=billd.billid and bd.billid=bill.id and payment.paymentstatus != 'CANCELLED' and pd.businessservice='PT' and payment.tenantid=$tenantid and receipt_breakup.pdid=pd.id
+  orerby: ORDER BY pd.receiptdate DESC;
 
 - reportName: CancelledReceiptRegister_V2
   summary: Receipt Register for cancelled Receipts
