@@ -2269,7 +2269,7 @@ ReportDefinitions:
         Initcap(pt.usagecategory) as usagetype,
         (CASE WHEN billd.collectiontype='COUNTER' THEN eg_user.name ELSE '' END) as collectorname,
         receipt_breakup.*,
-        to_char((To_timestamp(pd.manualreceiptdate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY') AS g8issuedate,	manualreceiptnumber as g8receiptno
+        to_char((To_timestamp(pd.manualreceiptdate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY') AS g8issuedate, 		manualreceiptnumber as g8receiptno
       FROM egcl_paymentdetail pd, eg_user, eg_pt_property    as pt, egcl_billdetial as billd, egcl_payment payment,receipt_breakup, egcl_bill bill, (select bill.id as billid, min(bd.fromperiod) fromperiod, max(bd.toperiod) toperiod from egcl_billdetial bd, egcl_bill bill where bill.id=bd.billid group by bill.id) bd
       WHERE pd.paymentid=payment.id and  eg_user.id = pd.createdby::INTEGER and pt.propertyid = bill.consumercode and bill.id=pd.billid and bill.id=billd.billid and bd.billid=bill.id and payment.paymentstatus != 'CANCELLED' and pd.businessservice='PT' and payment.tenantid=$tenantid and receipt_breakup.pdid=pd.id
   orerby: ORDER BY pd.receiptdate DESC;
@@ -2455,7 +2455,7 @@ ReportDefinitions:
                   INNER JOIN egcl_billdetial as bd on bd.id = bad.billdetailid
                   INNER JOIN egcl_paymentdetail as pd on pd.billid = bd.billid
                   INNER JOIN egcl_payment as payment on pd.paymentid=payment.id
-                  WHERE bad.tenantid = $tenantid and payment.paymentstatus != 'CANCELLED' and  pd.businessservice='PT'
+                  WHERE bad.tenantid = $tenantid and payment.paymentstatus = 'CANCELLED' and  pd.businessservice='PT'
                   GROUP BY pdid
       )
       SELECT 
@@ -2475,7 +2475,7 @@ ReportDefinitions:
         Initcap(pt.usagecategory) as usagetype,
         (CASE WHEN billd.collectiontype='COUNTER' THEN eg_user.name ELSE '' END) as collectorname,
         receipt_breakup.*,
-        to_char((To_timestamp(pd.manualreceiptdate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY') AS g8issuedate,	manualreceiptnumber as g8receiptno
+        to_char((To_timestamp(pd.manualreceiptdate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY') AS g8issuedate, 		manualreceiptnumber as g8receiptno
       FROM egcl_paymentdetail pd, eg_user, eg_pt_property    as pt, egcl_billdetial as billd, egcl_payment payment,receipt_breakup, egcl_bill bill, (select bill.id as billid, min(bd.fromperiod) fromperiod, max(bd.toperiod) toperiod from egcl_billdetial bd, egcl_bill bill where bill.id=bd.billid group by bill.id) bd
       WHERE pd.paymentid=payment.id and  eg_user.id = pd.createdby::INTEGER and pt.propertyid = bill.consumercode and bill.id=pd.billid and bill.id=billd.billid and bd.billid=bill.id and payment.paymentstatus = 'CANCELLED' and pd.businessservice='PT' and payment.tenantid=$tenantid and receipt_breakup.pdid=pd.id
   orerby: ORDER BY pd.receiptdate DESC;
