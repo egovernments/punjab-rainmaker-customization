@@ -2221,12 +2221,6 @@ ReportDefinitions:
     source: pt
     isMandatory: false
     searchClause: AND payment.paymentmode = $paymentMode
-  - name: localityArray
-    label: reports.pt.zoneList
-    type: boundarylist
-    source: pt
-    isMandatory: false
-    searchClause: AND pt_addr.locality IN ($localityArray)
   query: |
       -- Use CTE to force query plan, compute & use CTE later
       WITH receipt_breakup AS (
@@ -2427,12 +2421,6 @@ ReportDefinitions:
     source: pt
     isMandatory: false
     searchClause: AND payment.paymentmode = $paymentMode
-  - name: localityArray
-    label: reports.pt.zoneList
-    type: boundarylist
-    source: pt
-    isMandatory: false
-    searchClause: AND pt_addr.locality IN ($localityArray)
   query: |
       -- Use CTE to force query plan, compute & use CTE later
       WITH receipt_breakup AS (
