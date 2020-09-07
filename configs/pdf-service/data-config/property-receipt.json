@@ -480,6 +480,10 @@
                       "variable":"website",
                       "value":"$.MdmsRes.tenant.tenants[0].domainUrl"
                     },
+		    {
+                      "variable":"mcGrade",
+                      "value":"$.MdmsRes.tenant.tenants[0].city.ulbGrade"
+                    },
                     {
                       "variable":"email",
                       "value":"$.MdmsRes.tenant.tenants[0].emailId"
