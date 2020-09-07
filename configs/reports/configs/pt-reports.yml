@@ -2069,6 +2069,7 @@ ReportDefinitions:
 
 
 - reportName: ReceiptRegister_V2
+  decryptionPathId: ReceiptRegister_V2
   summary: Receipt Register
   version: 1.0.0
   moduleName: rainmaker-pt
@@ -2221,12 +2222,6 @@ ReportDefinitions:
     source: pt
     isMandatory: false
     searchClause: AND payment.paymentmode = $paymentMode
-  - name: localityArray
-    label: reports.pt.zoneList
-    type: boundarylist
-    source: pt
-    isMandatory: false
-    searchClause: AND pt_addr.locality IN ($localityArray)
   query: |
       -- Use CTE to force query plan, compute & use CTE later
       WITH receipt_breakup AS (
