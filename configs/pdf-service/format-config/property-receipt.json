@@ -23,7 +23,7 @@
               {
                 "stack": [
                   {
-                    "text": "{{logo-header}} {{Municipal_Corporation}}",
+                    "text": "{{logo-header}} {{mcGrade}}",
                     "style": "receipt-logo-header"
                   },
                   {
@@ -42,16 +42,24 @@
               {
                 "stack": [
                   {
-                    "text": "{{address}}"
+                    "text": "{{address}}",
+                    "style": "receipt-logo-sub-header"
+
                   },
                   {
-                    "text": "{{phoneNumber}}"
+                    "text": "{{phoneNumber}}",
+                    "style": "receipt-logo-sub-header"
+
                   },
                   {
-                    "text": "{{website}}"
+                    "text": "{{website}}",
+                    "style": "receipt-logo-sub-header"
+
                   },
                   {
-                    "text": "{{email}}"
+                    "text": "{{email}}",                    "style": "receipt-logo-sub-header"
+
+                    
                   }
                 ],
                 "alignment": "right",
@@ -73,7 +81,7 @@
         "style":"block-head"
      },
      {
-      "style": "noc-table",
+      "style": "next-noc-table",
       "table": {
         "widths": [
           "25%",
@@ -87,7 +95,7 @@
               "text": "{{receipt_no}}.",
               "border": [
                 true,
-                false,
+                true,
                 false,
                 false
               ],
@@ -97,7 +105,7 @@
               "text": "{{receiptNo}}",
               "border": [
                 false,
-                false,
+                true,
                 false,
                 false
               ],
@@ -107,7 +115,7 @@
               "text": "{{consumer_id}}",
               "border": [
                 false,
-                false,
+                true,
                 false,
                 false
               ],
@@ -117,7 +125,7 @@
               "text": "{{consumerID}}",
               "border": [
                 false,
-                false,
+                true,
                 true,
                 false
               ],
@@ -255,7 +263,7 @@
       "layout": {}
     },
 	  {
-        "style": "next-noc-table",
+        "style": "noc-table",
         "table": {
           "widths": [
             "25%",
@@ -269,7 +277,7 @@
                 "text": "House/Door No. : ",
                 "border": [
                   true,
-                  true,
+                  false,
                   false,
                   false
                 ],
@@ -279,7 +287,7 @@
                 "text": "{{doorNo}}",
                 "border": [
                   false,
-                  true,
+                  false,
                   false,
                   false
                 ],
@@ -289,7 +297,7 @@
                 "text": "Building/Colony Name: ",
                 "border": [
                   false,
-                  true,
+                  false,
                   false,
                   false
                 ],
@@ -299,7 +307,7 @@
                 "text": "{{buildingName}}",
                 "border": [
                   false,
-                  true,
+                  false,
                   true,
                   false
                 ],
@@ -813,7 +821,7 @@
         "{{no_signature}}",
         "Assessment and payment is subjected to verification/scruitiny by competetive authority",
         "Please deposit the property tx dues for earlier years also, Ignore if already paid",
-        "Citizen for online payments please refer to the link http://lgpunjab.gov.in/cms/pay-property-tax.php"
+        "Citizen for online payments please refer to the link https://mseva.lgpunjab.gov.in/"
 			]
 		  }
         ]
