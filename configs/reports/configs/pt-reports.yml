@@ -2098,78 +2098,13 @@ ReportDefinitions:
     type: string
     source: pt
     total: true
-  - name: propertytax
-    label: reports.pt.propertyTax
-    type: string
-    source: pt
-    total: true
-  - name: firecess
-    label: reports.pt.fireCess
-    type: string
-    source: pt
-    total: true
-  - name: cancercess
-    label: reports.pt.cancerCess
-    type: string
-    source: pt
-    total: true
-  - name: rebate
-    label: reports.pt.rebate
-    type: string
-    source: pt
-    total: true
-  - name: adhocrebate
-    label: reports.pt.adhocrebate
-    type: string
-    source: pt
-    total: true
-  - name: penalty
-    label: reports.pt.penalty
-    type: string
-    source: pt
-    total: true
-  - name: adhocpenalty
-    label: reports.pt.adhocpenalty
-    type: string
-    source: pt
-    total: true
-  - name: interest
-    label: reports.pt.interest
-    type: string
-    source: pt
-    total: true
-  - name: exemption
-    label: reports.pt.exemption
-    type: string
-    source: pt
-    total: true
-  - name: adjustment
-    label: reports.pt.roundoff
-    type: string
-    source: pt
-    total: true
   - name: pendingamount
     label: reports.pt.pendingamount
     type: string
     source: pt
     total: true
-  - name: propertyid
+  - name: consumercode
     label: reports.pt.propertyId
-    type: string
-    source: pt
-    total: false
-  - name: usagetype
-    label: reports.pt.usagetype
-    type: string
-    source: pt
-    total: false
-  - name: assessmentnumber
-    label: reports.pt.assessmentNo
-    type: string
-    source: pt
-    total: false
-  - name: financialyear
-    label: reports.pt.financialYear
     type: string
     source: pt
     total: false
@@ -2193,29 +2128,19 @@ ReportDefinitions:
     type: string
     source: pt
     total: false
-  - name: collectorname
-    label: reports.pt.collectorname
-    type: string
-    source: pt
-    total: false
-  - name: remarks
-    label: reports.pt.remarks
-    type: string
-    source: pt
-    total: false
   searchParams:
   - name: fromDate
     label: reports.pt.fromDate
     type: epoch
     source: pt
     isMandatory: true
-    searchClause: AND rh.receiptdate >= $fromDate
+    searchClause: AND pd.receiptdate >= $fromDate
   - name: toDate
     label: reports.pt.toDate
     type: epoch
     source: pt
     isMandatory: true
-    searchClause: AND rh.receiptdate <= $toDate
+    searchClause: AND pd.receiptdate <= $toDate
   - name: paymentMode
     label: Payment Mode
     type: singlevaluelist
