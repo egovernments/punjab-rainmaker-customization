@@ -2069,7 +2069,6 @@ ReportDefinitions:
 
 
 - reportName: ReceiptRegister_V2
-  decryptionPathId: ReceiptRegister_V2
   summary: Receipt Register
   version: 1.0.0
   moduleName: rainmaker-pt
@@ -2270,7 +2269,6 @@ ReportDefinitions:
   orerby: ORDER BY pd.receiptdate DESC;
 
 - reportName: CancelledReceiptRegister_V2
-  decryptionPathId: CancelledReceiptRegister_V2
   summary: Receipt Register for cancelled Receipts
   version: 1.0.0
   moduleName: rainmaker-pt
