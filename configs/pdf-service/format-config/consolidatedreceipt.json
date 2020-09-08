@@ -23,11 +23,11 @@
               {
                 "stack": [
                   {
-                    "text": "{{logo-header}} {{Municipal_Corporation}}",
+                    "text": "{{logo-header}} {{mcGrade}}",
                     "style": "receipt-logo-header"
                   },
                   {
-                    "text": "{{serviceType}} {{payment_receipt}} (Citizen Copy)",
+                    "text": "{{serviceType}} {{payment_receipt}} (Employee Copy)",
                     "style": "receipt-logo-sub-header"
                   }
                 ],
@@ -181,7 +181,7 @@
                 "style": "receipt-table"
               },
               {
-                "text": "{{payer_contact}}",
+                "text": "Consumer Contact",
                 "border": [
                   false,
                   false,
@@ -204,7 +204,7 @@
             [
               
               {
-                "text": "Paid By: ",
+                "text": "Address:",
                 "border": [
                   true,
                   false,
@@ -214,7 +214,7 @@
                 "style": "receipt-table-value"
               },
               {
-                "text": "{{PaidBy}}",
+                "text": "{{payerAddress}}",
                 "border": [
                   false,
                   false,
@@ -224,7 +224,7 @@
                 "style": "receipt-table"
               },
               {
-                "text": "Address: ",
+                "text": " ",
                 "border": [
                   false,
                   false,
@@ -234,7 +234,7 @@
                 "style": "receipt-table-value"
               },
               {
-                "text": "{{payerAddress}}",
+                "text": " ",
                 "border": [
                   false,
                   false,
@@ -538,7 +538,7 @@
               {
                 "stack": [
                   {
-                    "text": "{{logo-header}} {{Municipal_Corporation}}",
+                    "text": "{{logo-header}} {{mcGrade}}",
                     "style": "receipt-logo-header"
                   },
                   {
@@ -696,7 +696,7 @@
                 "style": "receipt-table"
               },
               {
-                "text": "{{payer_contact}}",
+                "text": "Consumer Contact",
                 "border": [
                   false,
                   false,
@@ -719,7 +719,7 @@
             [
               
               {
-                "text": "Paid By: ",
+                "text": "Address:",
                 "border": [
                   true,
                   false,
@@ -728,8 +728,8 @@
                 ],
                 "style": "receipt-table-value"
               },
-              {
-                "text": "{{PaidBy}}",
+              { 
+                "text": "{{payerAddress}}",
                 "border": [
                   false,
                   false,
@@ -739,7 +739,7 @@
                 "style": "receipt-table"
               },
               {
-                "text": "Address: ",
+                "text": " ",
                 "border": [
                   false,
                   false,
@@ -749,7 +749,7 @@
                 "style": "receipt-table-value"
               },
               {
-                "text": "{{payerAddress}}",
+                "text": " ",
                 "border": [
                   false,
                   false,
