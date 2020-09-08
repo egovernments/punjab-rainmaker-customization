@@ -3843,13 +3843,13 @@ ReportDefinitions:
     type: epoch
     source: pt
     isMandatory: false
-    searchClause: AND rh.receiptdate >= $fromDate
+    searchClause: AND receiptdate >= $fromDate
   - name: toDate
     label: reports.pt.toDate
     type: epoch
     source: pt
     isMandatory: false
-    searchClause: AND rh.receiptdate <= $toDate
+    searchClause: AND receiptdate <= $toDate
   - name: localityArray
     label: reports.pt.zoneList
     type: boundarylist
