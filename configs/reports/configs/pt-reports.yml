@@ -2069,6 +2069,7 @@ ReportDefinitions:
    where rh.tenantid =$tenantid and pd.property not in (select property from eg_pt_propertydetail_v2 where financialyear  in ('2019-20'))
 
 - reportName: ReceiptRegister_V2
+  decryptionPathId: ReceiptRegister_V2
   summary: Receipt Register
   version: 1.0.0
   moduleName: rainmaker-pt
