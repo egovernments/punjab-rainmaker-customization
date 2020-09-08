@@ -1944,9 +1944,13 @@ ReportDefinitions:
       SELECT
         financialyear,
         sum(case when usagecategorymajor='RESIDENTIAL' then amount else 0 end) as "residential",
+        sum(case when usagecategorymajor='RESIDENTIAL' then 1 else 0 end) as "countresidential",
         sum(case when usagecategorymajor='NONRESIDENTIAL' then amount else 0 end) as "nonresidential",
+        sum(case when usagecategorymajor='NONRESIDENTIAL' then 1 else 0 end) as "countnonresidential",
         sum(case when usagecategorymajor='MIXED' then amount else 0 end) as "mixed",
+        sum(case when usagecategorymajor='MIXED' then 1 else 0 end) as "countmixed",
         sum(amount) as totalamount,
+        count(amount) as totalcount,
         sum(case when instrumenttype='Online' then amount else 0 end) as "online",
         sum(case when instrumenttype='Cash' then amount else 0 end) as "cash",
         sum(case when instrumenttype='Cheque' then amount else 0 end) as "cheque",
@@ -2221,7 +2225,7 @@ ReportDefinitions:
     pattern: 'list://Cash:Cash,Online:Online,Card:Card,DD:DD,Cheque:Cheque'
     source: pt
     isMandatory: false
-    searchClause: AND payment.paymentmode = upper($paymentMode)
+    searchClause: AND payment.paymentmode = $paymentMode
   query: |
       -- Use CTE to force query plan, compute & use CTE later
       WITH receipt_breakup AS (
@@ -2275,7 +2279,7 @@ ReportDefinitions:
   orderby: ORDER BY pd.receiptdate DESC;
 
 - reportName: CancelledReceiptRegister_V2
-  summary: Cancelled Receipt Register
+  summary: Receipt Register for cancelled Receipts
   version: 1.0.0
   moduleName: rainmaker-pt
   additionalConfig:
@@ -2426,7 +2430,7 @@ ReportDefinitions:
     pattern: 'list://Cash:Cash,Online:Online,Card:Card,DD:DD,Cheque:Cheque'
     source: pt
     isMandatory: false
-    searchClause: AND payment.paymentmode = upper($paymentMode)
+    searchClause: AND payment.paymentmode = $paymentMode
   query: |
       -- Use CTE to force query plan, compute & use CTE later
       WITH receipt_breakup AS (
@@ -2442,23 +2446,23 @@ ReportDefinitions:
                     SUM(CASE WHEN taxheadcode LIKE 'PT_TAX' THEN adjustedamount ELSE 0 END) as propertytax, 
                     (SUM(CASE WHEN taxheadcode LIKE 'PT_UNIT_USAGE_EXEMPTION' THEN adjustedamount ELSE 0 END)
                     + SUM(CASE WHEN taxheadcode LIKE 'PT_OWNER_EXEMPTION' THEN adjustedamount ELSE 0 END) )as exemption,
-                    (SUM(CASE WHEN taxheadcode LIKE 'PT_ROUNDOFF' THEN adjustedamount ELSE 0 END)
+                    ( SUM(CASE WHEN taxheadcode LIKE 'PT_ROUNDOFF' THEN adjustedamount ELSE 0 END)
                     + SUM(CASE WHEN taxheadcode LIKE 'PT_DECIMAL_CEILING_DEBIT' THEN adjustedamount ELSE 0 END)
                     + SUM(CASE WHEN taxheadcode LIKE 'PT_DECIMAL_CEILING_CREDIT' THEN adjustedamount ELSE 0 END)) as adjustment
                   FROM egcl_billaccountdetail as bad
                   INNER JOIN egcl_billdetial as bd on bd.id = bad.billdetailid
                   INNER JOIN egcl_paymentdetail as pd on pd.billid = bd.billid
                   INNER JOIN egcl_payment as payment on pd.paymentid=payment.id
-                  WHERE payment.tenantid = $tenantid and payment.paymentstatus = 'CANCELLED' and  pd.businessservice='PT'
+                  WHERE bad.tenantid = $tenantid and payment.paymentstatus = 'CANCELLED' and  pd.businessservice='PT'
                   GROUP BY pdid
       )
       SELECT 
         pd.tenantid AS tenantid,
         pd.id,
-        pt.propertyid as consumercode,
+        bill.consumercode,
         to_char((To_timestamp(pd.receiptdate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY')  AS receiptdate,
         payment.ifsccode AS bankname, 
-        receiptnumber,
+        receiptnumber, 
         payment.totalamountpaid as amount, 
         payment.paymentmode as instrumenttype, 
         payment.transactionnumber,
@@ -2467,16 +2471,11 @@ ReportDefinitions:
         to_char((To_timestamp(payment.transactiondate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY') AS transactiondate, 
         pd.due AS pendingamount,
         Initcap(pt.usagecategory) as usagetype,
-        eg_user.name as collectorname,
+        (CASE WHEN billd.collectiontype='COUNTER' THEN eg_user.name ELSE '' END) as collectorname,
         receipt_breakup.*,
-        to_char((To_timestamp(pd.manualreceiptdate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY') AS g8issuedate, 
-        manualreceiptnumber as g8receiptno
-      FROM egcl_paymentdetail pd, egcl_payment payment, eg_pt_property as pt, receipt_breakup, eg_user,
-      (select bill.id as billid, bill.consumercode as consumercodei, min(bd.fromperiod) fromperiod, max(bd.toperiod) toperiod from egcl_billdetial bd, egcl_bill bill 
-      where bill.id=bd.billid and bill.tenantid = $tenantid group by bill.id) bd 
-      where pd.paymentid=payment.id and bd.billid=pd.billid and payment.paymentstatus = 'CANCELLED' and pd.businessservice='PT' and payment.tenantid=$tenantid 
-      and pt.propertyid = bd.consumercodei and receipt_breakup.pdid=pd.id and eg_user.id = pd.createdby::INTEGER  and pt.status='ACTIVE' 
-      --and pt.propertyid='PT-1012-978737'
+        to_char((To_timestamp(pd.manualreceiptdate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY') AS g8issuedate, 		manualreceiptnumber as g8receiptno
+      FROM egcl_paymentdetail pd, eg_user, eg_pt_property    as pt, egcl_billdetial as billd, egcl_payment payment,receipt_breakup, egcl_bill bill, (select bill.id as billid, min(bd.fromperiod) fromperiod, max(bd.toperiod) toperiod from egcl_billdetial bd, egcl_bill bill where bill.id=bd.billid group by bill.id) bd
+      WHERE pd.paymentid=payment.id and  eg_user.id = pd.createdby::INTEGER and pt.propertyid = bill.consumercode and bill.id=pd.billid and bill.id=billd.billid and bd.billid=bill.id and payment.paymentstatus = 'CANCELLED' and pd.businessservice='PT' and payment.tenantid=$tenantid and receipt_breakup.pdid=pd.id
   orderby: ORDER BY pd.receiptdate DESC;
 
 - reportName: OldUlbWisePtCollection_V2
@@ -2838,16 +2837,16 @@ ReportDefinitions:
   version: 1.0.0
   moduleName: rainmaker-pt
   sourceColumns:
-  - name: totalassessments
-    label: reports.pt.totalassessments
-    type: string
-    source: pt
-    total: true
   - name: totalamountpaid
     label: reports.pt.totalamountpaid
     type: string
     source: pt
     total: true
+  - name: totalassessments
+    label: reports.pt.totalassessments
+    type: string
+    source: pt
+    total: true  
   - name: totaloffline
     label: reports.pt.totaloffline
     type: string
@@ -3764,8 +3763,18 @@ ReportDefinitions:
     type: string
     source: pt
     total: true
+  - name: countresidential
+    label: reports.pt.countresidential
+    type: string
+    source: pt
+    total: true  
   - name: nonresidential
     label: reports.pt.nonresidential
+    type: string
+    source: pt
+    total: true
+  - name: countnonresidential
+    label: reports.pt.countnonresidential
     type: string
     source: pt
     total: true
@@ -3774,11 +3783,21 @@ ReportDefinitions:
     type: string
     source: pt
     total: true
+  - name: countmixed
+    label: reports.pt.countmixed
+    type: string
+    source: pt
+    total: true
   - name: totalamount
     label: reports.pt.totalamount
     type: string
     source: pt
     total: true
+  - name: totalcount
+    label: reports.pt.totalcount
+    type: string
+    source: pt
+    total: true    
   - name: online
     label: reports.pt.online
     type: string
@@ -3823,9 +3842,13 @@ ReportDefinitions:
       SELECT
         financialyear,
         sum(case when pt_detail.usagecategorymajor='RESIDENTIAL' then pd.amountpaid else 0 end) as "residential",
+        sum(case when pt_detail.usagecategorymajor='RESIDENTIAL' then 1 else 0 end) as "countresidential",	
         sum(case when pt_detail.usagecategorymajor='NONRESIDENTIAL' then pd.amountpaid else 0 end) as "nonresidential",
+        sum(case when pt_detail.usagecategorymajor='NONRESIDENTIAL' then 1 else 0 end) as "countnonresidential",
         sum(case when pt_detail.usagecategorymajor='MIXED' then pd.amountpaid else 0 end) as "mixed",
+        sum(case when pt_detail.usagecategorymajor='MIXED' then 1 else 0 end) as "countmixed",
         sum(pd.amountpaid) as totalamount,
+        count(pd.amountpaid) as totalcount,
         sum(case when payment.paymentmode='ONLINE' then pd.amountpaid else 0 end) as "online",
         sum(case when payment.paymentmode='CASH' then pd.amountpaid else 0 end) as "cash",
         sum(case when payment.paymentmode='CHEQUE' then pd.amountpaid else 0 end) as "cheque",
