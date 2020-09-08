@@ -976,6 +976,7 @@ ReportDefinitions:
 
 
   - reportName: MiscReceiptULB_v2
+    decryptionPathId: MiscReceiptULB_v2
     summary: Receipt Register Miscellaneous
     version: 1.0.0
     moduleName: rainmaker-uc
@@ -1453,6 +1454,7 @@ ReportDefinitions:
 
 
   - reportName: MiscReceiptULBCancelled_v2
+    decryptionPathId: MiscReceiptULBCancelled_v2
     summary: Cancelled Receipt Miscellaneous
     version: 1.0.0
     moduleName: rainmaker-uc
@@ -1588,6 +1590,7 @@ ReportDefinitions:
 
 
   - reportName: MiscReceiptULBShort_v2
+    decryptionPathId: MiscReceiptULBShort_v2
     summary: Receipt Register Miscellaneous
     version: 1.0.0
     moduleName: rainmaker-uc
