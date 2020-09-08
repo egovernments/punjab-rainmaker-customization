@@ -1116,15 +1116,15 @@ ReportDefinitions:
         -- Use CTE to force query plan, compute & use CTE later
         WITH receipt_breakup AS (
                     SELECT 
-                      egcl_billaccountdetail.billdetailid bill_id, 
-                      SUM(CASE WHEN taxheadcode LIKE '%_CGST' THEN adjustedamount ELSE 0 END) as cgst, 
-                      SUM(CASE WHEN taxheadcode LIKE '%_TAX' THEN adjustedamount ELSE 0 END) as tax, 
-                      SUM(CASE WHEN taxheadcode LIKE '%_SGST' THEN adjustedamount ELSE 0 END) as sgst, 
-                      SUM(CASE WHEN taxheadcode LIKE '%_FIELD_FEE' THEN adjustedamount ELSE 0 END) as fieldcollection            
-                    FROM egcl_billaccountdetail 
-                    INNER JOIN egcl_bill as bill on bill.id = egcl_billaccountdetail.billdetailid
-                    WHERE  businessservice not in ('PT','TL','FIRENOC') and bill.tenantid=$tenantid  -- and rh.status != 'Cancelled'
-                    GROUP BY billdetailid
+                      billid as bill_id,
+                      SUM(CASE WHEN taxheadcode LIKE '%_CGST' THEN taxamount ELSE 0 END) as cgst, 
+                      SUM(CASE WHEN taxheadcode LIKE '%_TAX' THEN taxamount ELSE 0 END) as tax, 
+                      SUM(CASE WHEN taxheadcode LIKE '%_SGST' THEN taxamount ELSE 0 END) as sgst, 
+                      SUM(CASE WHEN taxheadcode LIKE '%_FIELD_FEE' THEN taxamount ELSE 0 END) as fieldcollection            
+                    FROM egbs_demanddetail_v1
+                    inner join egbs_billdetail_v1 on egbs_billdetail_v1.demandid=egbs_demanddetail_v1.demandid
+                    WHERE  egbs_billdetail_v1.businessservice not in ('PT','TL','FIRENOC') and  egbs_billdetail_v1.tenantid =$tenantid 
+                    GROUP BY egbs_demanddetail_v1.demandid,billid
         )
         SELECT 
           payment.tenantid as ulb,
