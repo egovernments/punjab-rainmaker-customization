@@ -552,7 +552,7 @@
                   },                  
                   {
                     "variable": "var_owners",                        
-                    "value":"$.Properties[0].owners.*",
+                    "value":"$.Properties[0].owners[?(@.active== true)]",
                      "type":"array",
                      "format":{                            
                         "type":"string",
@@ -569,7 +569,7 @@
                  },
                  {
                    "variable": "var_floors",                        
-                   "value":"$.Properties[0].units.*",
+                   "value":"$.Properties[0].units[?(@.active== true)]",
                     "type":"array",
                     "format":{                            
                        "type":"string",
