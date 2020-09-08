@@ -2837,22 +2837,22 @@ ReportDefinitions:
   groupby: GROUP BY tenantid
   orderby: ORDER BY tenantid, totalamountpaid DESC NULLS LAST
 
+
 - reportName: UlbWisePtCollection_V2
-  decryptionPathId: UlbWisePtCollection_V2
   summary: State Wide PT Collection
   version: 1.0.0
   moduleName: rainmaker-pt
   sourceColumns:
-  - name: totalassessments
-    label: reports.pt.totalassessments
-    type: string
-    source: pt
-    total: true
   - name: totalamountpaid
     label: reports.pt.totalamountpaid
     type: string
     source: pt
     total: true
+  - name: totalassessments
+    label: reports.pt.totalassessments
+    type: string
+    source: pt
+    total: true  
   - name: totaloffline
     label: reports.pt.totaloffline
     type: string
@@ -2909,8 +2909,7 @@ ReportDefinitions:
     searchClause: AND usagecategorymajor = $usage
   query: |
     SELECT 
-      financialyear,
-      initcap(split_part(pt_detail.tenantid, '.', 2)) as tenantid, 
+      initcap(split_part(tenantid, '.', 2)) as tenantid, 
       COUNT(collectiontype) AS totalassessments, 
       SUM(billd.amount) AS totalamount, 
       SUM(billd.amountpaid) AS totalamountpaid, 
@@ -2919,13 +2918,12 @@ ReportDefinitions:
       SUM(CASE WHEN collectiontype LIKE 'COUNTER' THEN amount ELSE 0 END) AS totaloffline,
       SUM(CASE WHEN collectiontype LIKE 'COUNTER' THEN 1 ELSE 0 END) AS countoffline, 
       (SUM(billd.amount) - SUM(billd.amountpaid)) AS totalamountdue 
-       FROM egcl_billdetial as billd 
-       JOIN egcl_bill as bill ON bill.id  = billd.billid 
-       JOIN eg_pt_propertydetail_v2 as pt_detail ON pt_detail.property  = bill.consumercode
-      WHERE pt_detail.tenantid LIKE CONCAT(SPLIT_PART($tenantid, '.', 1), '%') and pt_detail.tenantid = $tenantid
-  groupby: GROUP BY financialyear, pt_detail.tenantid
-  orderby: ORDER BY pt_detail.tenantid, totalamountpaid DESC NULLS LAST
-
+      FROM egcl_billdetial as billd 
+      WHERE tenantid LIKE CONCAT(SPLIT_PART($tenantid, '.', 1), '%') and tenantid = $tenantid
+  groupby: GROUP BY tenantid
+  orderby: ORDER BY tenantid, totalamountpaid DESC NULLS LAST
+  
+  
 - reportName: ReceiptRegisterShort_V2
   decryptionPathId: ReceiptRegisterShort_V2
   summary: Receipt Register
@@ -3766,7 +3764,6 @@ ReportDefinitions:
 
 
 - reportName: FYCollectionsReport_V2
-  decryptionPathId: FYCollectionsReport_V2
   summary: FY Collections
   version: 1.0.0
   moduleName: rainmaker-pt
@@ -3818,7 +3815,7 @@ ReportDefinitions:
     label: reports.pt.totalcount
     type: string
     source: pt
-    total: true  
+    total: true    
   - name: online
     label: reports.pt.online
     type: string
@@ -3860,26 +3857,29 @@ ReportDefinitions:
     searchClause: AND pt_addr.locality IN ($localityArray)
   query: |
       -- Use CTE to force query plan, compute & use CTE later
-      SELECT 
-      financialyear,
-      initcap(split_part(tenantid, '.', 2)) as tenantid, 
-      COUNT(collectiontype) AS totalassessments, 
-      SUM(totalamount) AS totalamount, 
-      SUM(amount) AS totalamountpaid, 
-      SUM(CASE WHEN collectiontype = 'ONLINE' THEN amount ELSE 0 END) AS totalonline,
-      SUM(CASE WHEN collectiontype = 'ONLINE' THEN 1 ELSE 0 END) AS totalonlinecount,
-      SUM(CASE WHEN collectiontype != 'ONLINE' THEN amount ELSE 0 END) AS totaloffline,
-      SUM(CASE WHEN collectiontype != 'ONLINE' THEN 1 ELSE 0 END) AS totalofflinecount,
-      (SUM(totalamount) - SUM(amount)) AS totalamountdue 
-      FROM eg_pt_propertydetail_v2 AS pd 
-      LEFT OUTER JOIN (SELECT consumercode, totalamount, amount, collectiontype, receiptdate FROM egcl_receiptheader_v1 AS rh 
-      LEFT OUTER JOIN egcl_receiptinstrument_v1 AS ri ON rh.id = ri.receiptheader 
-      LEFT OUTER JOIN egcl_instrumentheader_v1 AS ih ON ri.instrumentheader = ih.id and ih.instrumentstatus	 != 'CANCELLED' 
-      where rh.status != 'Cancelled'
-      ) AS tbl_amounts ON CONCAT(pd.property, ':', pd.assessmentnumber) = tbl_amounts.consumercode 
-      WHERE  tenantid = $tenantid
-  groupby: GROUP BY tenantid, financialyear
-  orderby: ORDER BY tenantid, totalamountpaid DESC NULLS LAST
+      SELECT
+        financialyear,
+        sum(case when pt_detail.usagecategorymajor='RESIDENTIAL' then pd.amountpaid else 0 end) as "residential",
+        sum(case when pt_detail.usagecategorymajor='RESIDENTIAL' then 1 else 0 end) as "countresidential",	
+        sum(case when pt_detail.usagecategorymajor='NONRESIDENTIAL' then pd.amountpaid else 0 end) as "nonresidential",
+        sum(case when pt_detail.usagecategorymajor='NONRESIDENTIAL' then 1 else 0 end) as "countnonresidential",
+        sum(case when pt_detail.usagecategorymajor='MIXED' then pd.amountpaid else 0 end) as "mixed",
+        sum(case when pt_detail.usagecategorymajor='MIXED' then 1 else 0 end) as "countmixed",
+        sum(pd.amountpaid) as totalamount,
+        count(pd.amountpaid) as totalcount,
+        sum(case when payment.paymentmode='ONLINE' then pd.amountpaid else 0 end) as "online",
+        sum(case when payment.paymentmode='CASH' then pd.amountpaid else 0 end) as "cash",
+        sum(case when payment.paymentmode='CHEQUE' then pd.amountpaid else 0 end) as "cheque",
+        sum(case when payment.paymentmode='DD' then pd.amountpaid else 0 end) as "dd"
+      FROM egcl_paymentdetail AS pd
+      join egcl_payment as payment on payment.id = pd.paymentid
+      join egcl_bill as bill on bill.id = pd.billid
+      JOIN eg_pt_propertydetail_v2 pt_detail ON pt_detail.property  = bill.consumercode
+      JOIN eg_pt_address_v2 pt_addr ON pt_detail.property = pt_addr.property
+      LEFT OUTER JOIN eg_user ON eg_user.id = pd.createdby::INTEGER
+      WHERE pd.tenantid = $tenantid and payment.paymentstatus != 'CANCELLED'
+  groupby: GROUP BY financialyear
+  orderby: ORDER BY financialyear
 
 
 - reportName: ULBDEFAULTERPTREPORT_V2
