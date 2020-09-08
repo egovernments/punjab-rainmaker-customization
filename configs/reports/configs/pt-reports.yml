@@ -2221,7 +2221,7 @@ ReportDefinitions:
     pattern: 'list://Cash:Cash,Online:Online,Card:Card,DD:DD,Cheque:Cheque'
     source: pt
     isMandatory: false
-    searchClause: AND payment.paymentmode = $paymentMode
+    searchClause: AND payment.paymentmode = upper($paymentMode)
   query: |
       -- Use CTE to force query plan, compute & use CTE later
       WITH receipt_breakup AS (
@@ -2427,7 +2427,7 @@ ReportDefinitions:
     pattern: 'list://Cash:Cash,Online:Online,Card:Card,DD:DD,Cheque:Cheque'
     source: pt
     isMandatory: false
-    searchClause: AND payment.paymentmode = $paymentMode
+    searchClause: AND payment.paymentmode = upper($paymentMode)
   query: |
       -- Use CTE to force query plan, compute & use CTE later
       WITH receipt_breakup AS (
