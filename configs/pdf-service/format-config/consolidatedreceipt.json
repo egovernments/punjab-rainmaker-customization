@@ -538,7 +538,7 @@
               {
                 "stack": [
                   {
-                    "text": "{{logo-header}} {{Municipal_Corporation}}",
+                    "text": "{{logo-header}} {{mcGrade}}",
                     "style": "receipt-logo-header"
                   },
                   {
@@ -696,7 +696,7 @@
                 "style": "receipt-table"
               },
               {
-                "text": "{{payer_contact}}",
+                "text": "Consumer Contact",
                 "border": [
                   false,
                   false,
