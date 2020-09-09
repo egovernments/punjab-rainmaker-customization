@@ -22,7 +22,7 @@
               {
                 "variable": "PaidBy", 
                 "value": {
-                  "path": "$.paidBy"
+                  "path": "$.payerName"
                 },
                 "localisation":{
                   "required":true,
