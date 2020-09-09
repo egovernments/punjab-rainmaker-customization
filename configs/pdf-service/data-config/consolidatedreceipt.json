@@ -507,6 +507,10 @@
                       "variable":"email",
                       "value":"$.MdmsRes.tenant.tenants[0].emailId"
                     },
+                        {
+                      "variable":"mcGrade",
+                      "value":"$.MdmsRes.tenant.tenants[0].city.ulbType"
+                    },
                     {
                       "variable": "logoImage",                        
                       "value":"$.MdmsRes.tenant.tenants[0].logoId",

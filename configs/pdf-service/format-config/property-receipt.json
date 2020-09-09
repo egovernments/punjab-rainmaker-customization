@@ -23,7 +23,7 @@
               {
                 "stack": [
                   {
-                    "text": "{{logo-header}} {{Municipal_Corporation}}",
+                    "text": "{{logo-header}} {{mcGrade}}",
                     "style": "receipt-logo-header"
                   },
                   {
@@ -42,16 +42,24 @@
               {
                 "stack": [
                   {
-                    "text": "{{address}}"
+                    "text": "{{address}}",
+                    "style": "receipt-logo-sub-header"
+
                   },
                   {
-                    "text": "{{phoneNumber}}"
+                    "text": "{{phoneNumber}}",
+                    "style": "receipt-logo-sub-header"
+
                   },
                   {
-                    "text": "{{website}}"
+                    "text": "{{website}}",
+                    "style": "receipt-logo-sub-header"
+
                   },
                   {
-                    "text": "{{email}}"
+                    "text": "{{email}}",                    "style": "receipt-logo-sub-header"
+
+                    
                   }
                 ],
                 "alignment": "right",
@@ -589,7 +597,8 @@
         "style": "next-noc-table",
         "table": {
           "widths": [
-            "8%","8%","8%","8%","8%","8%","8%","8%","8%","8%","8%","*"
+
+            "9%","8%","7%","7%","8%","7%","10%","10%","8%","8%","8%","*"
           ],
           "body": [
             
@@ -748,7 +757,7 @@
                   "style": "receipt-table-value"
                 },
                {
-                  "text": "Built Area (Sq. Yard) / Total Annual Rent",
+                  "text": "Built Area (Sq. Feet) / Total Annual Rent",
                   "style": "receipt-table-value"
                 }
               ],

@@ -1103,7 +1103,7 @@ ReportDefinitions:
         source: uc
         wrapper: true
         isMandatory: false
-        searchClause: AND paydetail.businessservice = $businessservice
+        searchClause: AND businessservice = $businessservice
       - name: collectorname
         label: reports.uc.collectorname
         type: singlevaluelist
@@ -1123,7 +1123,7 @@ ReportDefinitions:
                       SUM(CASE WHEN taxheadcode LIKE '%_FIELD_FEE' THEN adjustedamount ELSE 0 END) as fieldcollection            
                     FROM egcl_billaccountdetail 
                     INNER JOIN egcl_bill as bill on bill.id = egcl_billaccountdetail.billdetailid
-                    WHERE  businessservice not in ('PT','TL','FIRENOC') and bill.tenantid=$tenantid  -- and rh.status != 'Cancelled'
+                    WHERE  bill.tenantid=$tenantid AND businessservice not in ('PT','TL','FIRENOC') 
                     GROUP BY billdetailid
         )
         SELECT 
@@ -1144,7 +1144,7 @@ ReportDefinitions:
         JOIN egcl_paymentdetail as paydetail on paydetail.paymentid=payment.id
         JOIN receipt_breakup ON paydetail.billid = receipt_breakup.bill_id
         JOIN eg_user ON payment.createdby::INTEGER=eg_user.id
-        WHERE  businessservice not in ('PT','TL','FIRENOC') and payment.tenantid=$tenantid  and payment.paymentstatus != 'CANCELLED'
+        WHERE  payment.tenantid=$tenantid AND businessservice not in ('PT','TL','FIRENOC')  and payment.paymentstatus != 'CANCELLED'
     orderby: ORDER BY paydetail.receiptdate DESC
 
 

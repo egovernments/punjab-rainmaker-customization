@@ -2151,29 +2151,14 @@ ReportDefinitions:
     label: reports.pt.roundoff
     type: string
     source: pt
-    total: true
-  - name: pendingamount
-    label: reports.pt.pendingamount
-    type: string
-    source: pt
-    total: true
-  - name: propertyid
+    total: true 
+  - name: consumercode
     label: reports.pt.propertyId
     type: string
     source: pt
     total: false
   - name: usagetype
     label: reports.pt.usagetype
-    type: string
-    source: pt
-    total: false
-  - name: assessmentnumber
-    label: reports.pt.assessmentNo
-    type: string
-    source: pt
-    total: false
-  - name: financialyear
-    label: reports.pt.financialYear
     type: string
     source: pt
     total: false
@@ -2202,11 +2187,16 @@ ReportDefinitions:
     type: string
     source: pt
     total: false
-  - name: remarks
-    label: reports.pt.remarks
+  - name: fromdate
+    label: reports.pt.fromDate
     type: string
     source: pt
     total: false
+  - name: todate
+    label: reports.pt.toDate
+    type: string
+    source: pt
+    total: false    
   searchParams:
   - name: fromDate
     label: reports.pt.fromDate
@@ -2226,26 +2216,12 @@ ReportDefinitions:
     pattern: 'list://Cash:Cash,Online:Online,Card:Card,DD:DD,Cheque:Cheque'
     source: pt
     isMandatory: false
-    searchClause: AND instrumenttype = $paymentMode
-  - name: financialyear
-    label: Financial Year
-    type: singlevaluelist
-    pattern: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?tenantId=$tenantid&moduleName=egf-master&masterName=FinancialYear|$.MdmsRes.egf-master.FinancialYear.[?(@.module=='PT')].code|$.MdmsRes.egf-master.FinancialYear.[?(@.module=='PT')].name
-    source: pt
-    wrapper: true
-    isMandatory: false
-    searchClause: AND financialyear = $financialyear
-  - name: localityArray
-    label: reports.pt.zoneList
-    type: boundarylist
-    source: pt
-    isMandatory: false
-    searchClause: AND pt_addr.locality IN ($localityArray)
+    searchClause: AND payment.paymentmode = upper($paymentMode)
   query: |
       -- Use CTE to force query plan, compute & use CTE later
       WITH receipt_breakup AS (
-                  SELECT 
-                    billdetailid AS receiptheader, pd.id as pdid,
+                  SELECT
+                    pd.id as pdid,
                     SUM(CASE WHEN taxheadcode LIKE 'PT_ADHOC_PENALTY' THEN adjustedamount ELSE 0 END) as adhocpenalty, 
                     SUM(CASE WHEN taxheadcode LIKE 'PT_ADHOC_REBATE' THEN adjustedamount ELSE 0 END) as adhocrebate, 
                     SUM(CASE WHEN taxheadcode LIKE 'PT_FIRE_CESS' THEN adjustedamount ELSE 0 END) as firecess, 
@@ -2256,52 +2232,46 @@ ReportDefinitions:
                     SUM(CASE WHEN taxheadcode LIKE 'PT_TAX' THEN adjustedamount ELSE 0 END) as propertytax, 
                     (SUM(CASE WHEN taxheadcode LIKE 'PT_UNIT_USAGE_EXEMPTION' THEN adjustedamount ELSE 0 END)
                     + SUM(CASE WHEN taxheadcode LIKE 'PT_OWNER_EXEMPTION' THEN adjustedamount ELSE 0 END) )as exemption,
-                    ( SUM(CASE WHEN taxheadcode LIKE 'PT_ROUNDOFF' THEN adjustedamount ELSE 0 END)
+                    (SUM(CASE WHEN taxheadcode LIKE 'PT_ROUNDOFF' THEN adjustedamount ELSE 0 END)
                     + SUM(CASE WHEN taxheadcode LIKE 'PT_DECIMAL_CEILING_DEBIT' THEN adjustedamount ELSE 0 END)
                     + SUM(CASE WHEN taxheadcode LIKE 'PT_DECIMAL_CEILING_CREDIT' THEN adjustedamount ELSE 0 END)) as adjustment
                   FROM egcl_billaccountdetail as bad
                   INNER JOIN egcl_billdetial as bd on bd.id = bad.billdetailid
                   INNER JOIN egcl_paymentdetail as pd on pd.billid = bd.billid
                   INNER JOIN egcl_payment as payment on pd.paymentid=payment.id
-                  WHERE bad.tenantid = $tenantid and payment.paymentstatus != 'CANCELLED' and  pd.businessservice='PT'
-                  GROUP BY billdetailid, pdid
+                  WHERE payment.tenantid = $tenantid and payment.paymentstatus != 'CANCELLED' and  pd.businessservice='PT'
+                  GROUP BY pdid
       )
       SELECT 
-        pd.tenantid AS tenantid, 
-        pd.id, 
-        pt_detail.property AS propertyid, 
-        pt_detail.assessmentnumber AS assessmentnumber, 
-        bill.consumercode,
+        pd.tenantid AS tenantid,
+        pd.id,
+        pt.propertyid as consumercode,
         to_char((To_timestamp(pd.receiptdate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY')  AS receiptdate,
         payment.ifsccode AS bankname, 
-        receiptnumber, 
+        receiptnumber,
         payment.totalamountpaid as amount, 
         payment.paymentmode as instrumenttype, 
-        payment.transactionnumber, 
-        to_char((To_timestamp(payment.transactiondate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY') AS transactiondate, 
-        receipt_breakup.*, 
-        pd.due AS pendingamount,
-        pt_detail.financialyear,
-        to_char((To_timestamp(pd.manualreceiptdate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY') AS g8issuedate,
-        Initcap(COALESCE(pt_detail.usagecategoryminor, pt_detail.usagecategorymajor)) as usagetype,
-        manualreceiptnumber as g8receiptno,
-        (CASE WHEN collectiontype='COUNTER' THEN eg_user.name ELSE '' END) as collectorname,
-        pt_detail.additionaldetails->>'remarks' as "remarks"
-      FROM egcl_paymentdetail AS pd 
-      JOIN egcl_payment as payment on pd.paymentid=payment.id
-      JOIN egcl_bill as bill on bill.id=pd.billid
-      JOIN egcl_billdetial as bd on bd.billid = bill.id
-      JOIN eg_pt_property_v2    as pt on pt.propertyid = bill.consumercode
-      JOIN receipt_breakup ON pd.id = receipt_breakup.pdid
-      JOIN eg_pt_propertydetail_v2 pt_detail ON pt_detail.property = pt.propertyid
-      JOIN eg_pt_address_v2 pt_addr ON pt_detail.property = pt_addr.property
-      LEFT OUTER JOIN eg_user ON eg_user.id = pd.createdby::INTEGER
-      WHERE pd.tenantid = $tenantid and payment.paymentstatus != 'CANCELLED' and  pd.businessservice='PT'
-  orderby: ORDER BY pd.receiptdate DESC
-
+        payment.transactionnumber,
+        to_char((To_timestamp(bd.fromperiod/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY') AS fromdate,
+        to_char((To_timestamp(bd.toperiod/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY') AS todate, 
+        to_char((To_timestamp(payment.transactiondate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY') AS transactiondate,         
+        Initcap(pt.usagecategory) as usagetype,
+        eg_user.name as collectorname,
+        receipt_breakup.*,
+        to_char((To_timestamp(pd.manualreceiptdate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY') AS g8issuedate, 
+        manualreceiptnumber as g8receiptno
+      FROM egcl_paymentdetail pd, egcl_payment payment, eg_pt_property as pt, receipt_breakup, eg_user,
+      (select bill.id as billid, bill.consumercode as consumercodei, min(bd.fromperiod) fromperiod, max(bd.toperiod) toperiod from egcl_billdetial bd, egcl_bill bill 
+      where bill.id=bd.billid and bill.tenantid = $tenantid group by bill.id) bd 
+      where pd.paymentid=payment.id and bd.billid=pd.billid and payment.paymentstatus != 'CANCELLED' and pd.businessservice='PT' and payment.tenantid=$tenantid 
+      and pt.propertyid = bd.consumercodei and receipt_breakup.pdid=pd.id and eg_user.id = pd.createdby::INTEGER  and pt.status='ACTIVE' 
+      --and pt.propertyid='PT-1012-978737'
+  orderby: ORDER BY pd.receiptdate DESC;
+  
+  
 - reportName: CancelledReceiptRegister_V2
   decryptionPathId: CancelledReceiptRegister_V2
-  summary: Receipt Register for cancelled Receipts
+  summary: Cancelled Receipt Register
   version: 1.0.0
   moduleName: rainmaker-pt
   additionalConfig:
@@ -2309,16 +2279,11 @@ ReportDefinitions:
       pdfPageSize: "A1"
   sourceColumns:
   - name: receiptnumber
-    label: reports.pt.receiptnumber
+    label: reports.pt.receiptNo
     type: string
     source: pt
     total: false
-  - name: status
-    label: reports.pt.status
-    type: string
-    source: pt
-    total: false
-  - name: receiptDate
+  - name: receiptdate
     label: reports.pt.receiptDate
     type: string
     source: pt
@@ -2339,17 +2304,17 @@ ReportDefinitions:
     source: pt
     total: true
   - name: propertytax
-    label: reports.pt.propertytax
+    label: reports.pt.propertyTax
     type: string
     source: pt
     total: true
   - name: firecess
-    label: reports.pt.firecess
+    label: reports.pt.fireCess
     type: string
     source: pt
     total: true
   - name: cancercess
-    label: reports.pt.cancercess
+    label: reports.pt.cancerCess
     type: string
     source: pt
     total: true
@@ -2384,12 +2349,17 @@ ReportDefinitions:
     source: pt
     total: true
   - name: adjustment
-    label: reports.pt.adjustment
+    label: reports.pt.roundoff
     type: string
     source: pt
     total: true
-  - name: propertyid
-    label: reports.pt.propertyid
+  - name: pendingamount
+    label: reports.pt.pendingamount
+    type: string
+    source: pt
+    total: true
+  - name: consumercode
+    label: reports.pt.propertyId
     type: string
     source: pt
     total: false
@@ -2398,43 +2368,53 @@ ReportDefinitions:
     type: string
     source: pt
     total: false
-  - name: assessmentnumber
-    label: reports.pt.assessmentnumber
-    type: string
-    source: pt
-    total: false
-  - name: financialyear
-    label: reports.pt.financialyear
-    type: string
-    source: pt
-    total: false
   - name: instrumenttype
-    label: reports.pt.instrumenttype
+    label: reports.pt.paymentMode
     type: string
     source: pt
     total: false
   - name: transactionnumber
-    label: reports.pt.transactionnumber
+    label: reports.pt.ddChequeTransactionNo
+    type: string
+    source: pt
+    total: false
+  - name: transactiondate
+    label: reports.pt.ddChequeTransactionDate
     type: string
     source: pt
     total: false
   - name: bankname
-    label: reports.pt.bankname
+    label: reports.pt.bankName
     type: string
     source: pt
     total: false
+  - name: collectorname
+    label: reports.pt.collectorname
+    type: string
+    source: pt
+    total: false
+  - name: fromdate
+    label: reports.pt.fromDate
+    type: string
+    source: pt
+    total: false
+  - name: todate
+    label: reports.pt.toDate
+    type: string
+    source: pt
+    total: false    
   searchParams:
   - name: fromDate
     label: reports.pt.fromDate
     type: epoch
     source: pt
-    isMandatory: false
+    isMandatory: true
     searchClause: AND pd.receiptdate >= $fromDate
   - name: toDate
     label: reports.pt.toDate
     type: epoch
     source: pt
-    isMandatory: false
+    isMandatory: true
     searchClause: AND pd.receiptdate <= $toDate
   - name: paymentMode
     label: Payment Mode
@@ -2442,77 +2422,60 @@ ReportDefinitions:
     pattern: 'list://Cash:Cash,Online:Online,Card:Card,DD:DD,Cheque:Cheque'
     source: pt
     isMandatory: false
-    searchClause: AND instrumenttype = $paymentMode
-  - name: financialyear
-    label: Financial Year
-    type: singlevaluelist
-    pattern: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?tenantId=$tenantid&moduleName=egf-master&masterName=FinancialYear|$.MdmsRes.egf-master.FinancialYear.[?(@.module=='PT')].code|$.MdmsRes.egf-master.FinancialYear.[?(@.module=='PT')].name
-    source: pt
-    wrapper: true
-    isMandatory: false
-    searchClause: AND financialyear = $financialyear
-  - name: localityArray
-    label: reports.pt.zoneList
-    type: boundarylist
-    source: pt
-    isMandatory: false
-    searchClause: AND pt_addr.locality IN ($localityArray)
+    searchClause: AND payment.paymentmode = upper($paymentMode)
   query: |
       -- Use CTE to force query plan, compute & use CTE later
-       WITH receipt_breakup AS (
-                    SELECT 
-                    receiptnumber as receiptheader, 
-                    SUM(CASE WHEN taxheadcode LIKE 'PT_ADHOC_PENALTY' THEN adjustedamount ELSE 0 END) as adhocpenalty,
-                    SUM(CASE WHEN taxheadcode LIKE 'PT_ADHOC_REBATE' THEN adjustedamount ELSE 0 END) as adhocrebate,
-                    SUM(CASE WHEN taxheadcode LIKE 'PT_FIRE_CESS' THEN adjustedamount ELSE 0 END) as firecess,
-                    SUM(CASE WHEN taxheadcode LIKE 'PT_CANCER_CESS' THEN adjustedamount ELSE 0 END) as cancercess,
-                    SUM(CASE WHEN taxheadcode LIKE 'PT_TIME_INTEREST' THEN adjustedamount ELSE 0 END) as interest,
-                    SUM(CASE WHEN taxheadcode LIKE 'PT_TIME_PENALTY' THEN adjustedamount ELSE 0 END) as penalty,
-                    SUM(CASE WHEN taxheadcode LIKE 'PT_TIME_REBATE' THEN adjustedamount ELSE 0 END) as rebate,
-                    SUM(CASE WHEN taxheadcode LIKE 'PT_TAX' THEN adjustedamount ELSE 0 END) as propertytax,
-                     (SUM(CASE WHEN taxheadcode LIKE 'PT_UNIT_USAGE_EXEMPTION' THEN adjustedamount ELSE 0 END)
+      WITH receipt_breakup AS (
+                  SELECT
+                    pd.id as pdid,
+                    SUM(CASE WHEN taxheadcode LIKE 'PT_ADHOC_PENALTY' THEN adjustedamount ELSE 0 END) as adhocpenalty, 
+                    SUM(CASE WHEN taxheadcode LIKE 'PT_ADHOC_REBATE' THEN adjustedamount ELSE 0 END) as adhocrebate, 
+                    SUM(CASE WHEN taxheadcode LIKE 'PT_FIRE_CESS' THEN adjustedamount ELSE 0 END) as firecess, 
+                    SUM(CASE WHEN taxheadcode LIKE 'PT_CANCER_CESS' THEN adjustedamount ELSE 0 END) as cancercess, 
+                    SUM(CASE WHEN taxheadcode LIKE 'PT_TIME_INTEREST' THEN adjustedamount ELSE 0 END) as interest, 
+                    SUM(CASE WHEN taxheadcode LIKE 'PT_TIME_PENALTY' THEN adjustedamount ELSE 0 END) as penalty, 
+                    SUM(CASE WHEN taxheadcode LIKE 'PT_TIME_REBATE' THEN adjustedamount ELSE 0 END) as rebate, 
+                    SUM(CASE WHEN taxheadcode LIKE 'PT_TAX' THEN adjustedamount ELSE 0 END) as propertytax, 
+                    (SUM(CASE WHEN taxheadcode LIKE 'PT_UNIT_USAGE_EXEMPTION' THEN adjustedamount ELSE 0 END)
                     + SUM(CASE WHEN taxheadcode LIKE 'PT_OWNER_EXEMPTION' THEN adjustedamount ELSE 0 END) )as exemption,
-                    ( SUM(CASE WHEN taxheadcode LIKE 'PT_ROUNDOFF' THEN adjustedamount ELSE 0 END)
+                    (SUM(CASE WHEN taxheadcode LIKE 'PT_ROUNDOFF' THEN adjustedamount ELSE 0 END)
                     + SUM(CASE WHEN taxheadcode LIKE 'PT_DECIMAL_CEILING_DEBIT' THEN adjustedamount ELSE 0 END)
                     + SUM(CASE WHEN taxheadcode LIKE 'PT_DECIMAL_CEILING_CREDIT' THEN adjustedamount ELSE 0 END)) as adjustment
-                    FROM egcl_billaccountdetail as bad
-                    INNER JOIN egcl_billdetial as bd on bd.id = bad.billdetailid
-                    INNER JOIN egcl_paymentdetail as pd on pd.billid = bd.billid
-                    INNER JOIN egcl_payment as payment on pd.paymentid=payment.id
-                    WHERE pd.tenantid = $tenantid  and payment.paymentstatus = 'CANCELLED' and pd.businessservice='PT'
-                    GROUP BY pd.receiptnumber
-        )
-        SELECT
-            pd.tenantid AS tenantid, 
-            pd.id, 
-            pt_detail.property AS propertyid, 
-            pt_detail.assessmentnumber AS assessmentnumber, 
-            payment.paymentstatus as status,
-            bill.consumercode,
-            to_char((To_timestamp(pd.receiptdate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY')  AS receiptdate,
-            payment.ifsccode AS bankname, 
-            receiptnumber, 
-            payment.totalamountpaid as amount, 
-            payment.paymentmode as instrumenttype, 
-            payment.transactionnumber, 
-            receipt_breakup.*,
-            pd.due AS pendingamount,
-            pt_detail.financialyear,
-            to_char((To_timestamp(pd.manualreceiptdate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY') AS g8issuedate,
-            Initcap(COALESCE(pt_detail.usagecategoryminor, pt_detail.usagecategorymajor)) as usagetype,
-            manualreceiptnumber as g8receiptno 
-          FROM egcl_paymentdetail AS pd
-          JOIN egcl_payment as payment on pd.paymentid=payment.id
-          JOIN egcl_bill as bill on bill.id=pd.billid
-          JOIN egcl_billdetial as bd on bd.billid = bill.id 
-          JOIN eg_pt_property_v2    as pt on pt.propertyid = bill.consumercode
-          JOIN receipt_breakup ON receipt_breakup.receiptheader =  pd.receiptnumber
-          JOIN eg_pt_propertydetail_v2 pt_detail ON pt_detail.property = pt.propertyid
-          JOIN eg_pt_address_v2 pt_addr ON pt_detail.property = pt_addr.property
-          LEFT OUTER JOIN eg_user ON eg_user.id = pd.createdby::INTEGER
-          WHERE pd.tenantid = $tenantid and payment.paymentstatus = 'CANCELLED' and  pd.businessservice='PT' 
-  orderby: ORDER BY pd.receiptdate DESC
-
+                  FROM egcl_billaccountdetail as bad
+                  INNER JOIN egcl_billdetial as bd on bd.id = bad.billdetailid
+                  INNER JOIN egcl_paymentdetail as pd on pd.billid = bd.billid
+                  INNER JOIN egcl_payment as payment on pd.paymentid=payment.id
+                  WHERE payment.tenantid = $tenantid and payment.paymentstatus = 'CANCELLED' and  pd.businessservice='PT'
+                  GROUP BY pdid
+      )
+      SELECT 
+        pd.tenantid AS tenantid,
+        pd.id,
+        pt.propertyid as consumercode,
+        to_char((To_timestamp(pd.receiptdate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY')  AS receiptdate,
+        payment.ifsccode AS bankname, 
+        receiptnumber,
+        payment.totalamountpaid as amount, 
+        payment.paymentmode as instrumenttype, 
+        payment.transactionnumber,
+        to_char((To_timestamp(bd.fromperiod/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY') AS fromdate,
+        to_char((To_timestamp(bd.toperiod/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY') AS todate, 
+        to_char((To_timestamp(payment.transactiondate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY') AS transactiondate, 
+        pd.due AS pendingamount,
+        Initcap(pt.usagecategory) as usagetype,
+        eg_user.name as collectorname,
+        receipt_breakup.*,
+        to_char((To_timestamp(pd.manualreceiptdate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY') AS g8issuedate, 
+        manualreceiptnumber as g8receiptno
+      FROM egcl_paymentdetail pd, egcl_payment payment, eg_pt_property as pt, receipt_breakup, eg_user,
+      (select bill.id as billid, bill.consumercode as consumercodei, min(bd.fromperiod) fromperiod, max(bd.toperiod) toperiod from egcl_billdetial bd, egcl_bill bill 
+      where bill.id=bd.billid and bill.tenantid = $tenantid group by bill.id) bd 
+      where pd.paymentid=payment.id and bd.billid=pd.billid and payment.paymentstatus = 'CANCELLED' and pd.businessservice='PT' and payment.tenantid=$tenantid 
+      and pt.propertyid = bd.consumercodei and receipt_breakup.pdid=pd.id and eg_user.id = pd.createdby::INTEGER  and pt.status='ACTIVE' 
+      --and pt.propertyid='PT-1012-978737'
+  orderby: ORDER BY pd.receiptdate DESC;
+  
+  
 - reportName: OldUlbWisePtCollection_V2
   summary: ULB-wise PT Collection
   version: 1.0.0
@@ -2869,22 +2832,22 @@ ReportDefinitions:
   groupby: GROUP BY tenantid
   orderby: ORDER BY tenantid, totalamountpaid DESC NULLS LAST
 
+
 - reportName: UlbWisePtCollection_V2
-  decryptionPathId: UlbWisePtCollection_V2
   summary: State Wide PT Collection
   version: 1.0.0
   moduleName: rainmaker-pt
   sourceColumns:
-  - name: totalassessments
-    label: reports.pt.totalassessments
-    type: string
-    source: pt
-    total: true
   - name: totalamountpaid
     label: reports.pt.totalamountpaid
     type: string
     source: pt
     total: true
+  - name: totalassessments
+    label: reports.pt.totalassessments
+    type: string
+    source: pt
+    total: true  
   - name: totaloffline
     label: reports.pt.totaloffline
     type: string
@@ -2941,8 +2904,7 @@ ReportDefinitions:
     searchClause: AND usagecategorymajor = $usage
   query: |
     SELECT 
-      financialyear,
-      initcap(split_part(pt_detail.tenantid, '.', 2)) as tenantid, 
+      initcap(split_part(tenantid, '.', 2)) as tenantid, 
       COUNT(collectiontype) AS totalassessments, 
       SUM(billd.amount) AS totalamount, 
       SUM(billd.amountpaid) AS totalamountpaid, 
@@ -2951,13 +2913,12 @@ ReportDefinitions:
       SUM(CASE WHEN collectiontype LIKE 'COUNTER' THEN amount ELSE 0 END) AS totaloffline,
       SUM(CASE WHEN collectiontype LIKE 'COUNTER' THEN 1 ELSE 0 END) AS countoffline, 
       (SUM(billd.amount) - SUM(billd.amountpaid)) AS totalamountdue 
-       FROM egcl_billdetial as billd 
-       JOIN egcl_bill as bill ON bill.id  = billd.billid 
-       JOIN eg_pt_propertydetail_v2 as pt_detail ON pt_detail.property  = bill.consumercode
-      WHERE pt_detail.tenantid LIKE CONCAT(SPLIT_PART($tenantid, '.', 1), '%') and pt_detail.tenantid = $tenantid
-  groupby: GROUP BY financialyear, pt_detail.tenantid
-  orderby: ORDER BY pt_detail.tenantid, totalamountpaid DESC NULLS LAST
-
+      FROM egcl_billdetial as billd 
+      WHERE tenantid LIKE CONCAT(SPLIT_PART($tenantid, '.', 1), '%') and tenantid = $tenantid
+  groupby: GROUP BY tenantid
+  orderby: ORDER BY tenantid, totalamountpaid DESC NULLS LAST
+  
+  
 - reportName: ReceiptRegisterShort_V2
   decryptionPathId: ReceiptRegisterShort_V2
   summary: Receipt Register
@@ -3798,7 +3759,6 @@ ReportDefinitions:
 
 
 - reportName: FYCollectionsReport_V2
-  decryptionPathId: FYCollectionsReport_V2
   summary: FY Collections
   version: 1.0.0
   moduleName: rainmaker-pt
@@ -3850,7 +3810,7 @@ ReportDefinitions:
     label: reports.pt.totalcount
     type: string
     source: pt
-    total: true  
+    total: true    
   - name: online
     label: reports.pt.online
     type: string
@@ -3877,13 +3837,13 @@ ReportDefinitions:
     type: epoch
     source: pt
     isMandatory: false
-    searchClause: AND rh.receiptdate >= $fromDate
+    searchClause: AND receiptdate >= $fromDate
   - name: toDate
     label: reports.pt.toDate
     type: epoch
     source: pt
     isMandatory: false
-    searchClause: AND rh.receiptdate <= $toDate
+    searchClause: AND receiptdate <= $toDate
   - name: localityArray
     label: reports.pt.zoneList
     type: boundarylist
@@ -3892,26 +3852,29 @@ ReportDefinitions:
     searchClause: AND pt_addr.locality IN ($localityArray)
   query: |
       -- Use CTE to force query plan, compute & use CTE later
-      SELECT 
-      financialyear,
-      initcap(split_part(tenantid, '.', 2)) as tenantid, 
-      COUNT(collectiontype) AS totalassessments, 
-      SUM(totalamount) AS totalamount, 
-      SUM(amount) AS totalamountpaid, 
-      SUM(CASE WHEN collectiontype = 'ONLINE' THEN amount ELSE 0 END) AS totalonline,
-      SUM(CASE WHEN collectiontype = 'ONLINE' THEN 1 ELSE 0 END) AS totalonlinecount,
-      SUM(CASE WHEN collectiontype != 'ONLINE' THEN amount ELSE 0 END) AS totaloffline,
-      SUM(CASE WHEN collectiontype != 'ONLINE' THEN 1 ELSE 0 END) AS totalofflinecount,
-      (SUM(totalamount) - SUM(amount)) AS totalamountdue 
-      FROM eg_pt_propertydetail_v2 AS pd 
-      LEFT OUTER JOIN (SELECT consumercode, totalamount, amount, collectiontype, receiptdate FROM egcl_receiptheader_v1 AS rh 
-      LEFT OUTER JOIN egcl_receiptinstrument_v1 AS ri ON rh.id = ri.receiptheader 
-      LEFT OUTER JOIN egcl_instrumentheader_v1 AS ih ON ri.instrumentheader = ih.id and ih.instrumentstatus	 != 'CANCELLED' 
-      where rh.status != 'Cancelled'
-      ) AS tbl_amounts ON CONCAT(pd.property, ':', pd.assessmentnumber) = tbl_amounts.consumercode 
-      WHERE  tenantid = $tenantid
-  groupby: GROUP BY tenantid, financialyear
-  orderby: ORDER BY tenantid, totalamountpaid DESC NULLS LAST
+      SELECT
+        financialyear,
+        sum(case when pt_detail.usagecategorymajor='RESIDENTIAL' then pd.amountpaid else 0 end) as "residential",
+        sum(case when pt_detail.usagecategorymajor='RESIDENTIAL' then 1 else 0 end) as "countresidential",	
+        sum(case when pt_detail.usagecategorymajor='NONRESIDENTIAL' then pd.amountpaid else 0 end) as "nonresidential",
+        sum(case when pt_detail.usagecategorymajor='NONRESIDENTIAL' then 1 else 0 end) as "countnonresidential",
+        sum(case when pt_detail.usagecategorymajor='MIXED' then pd.amountpaid else 0 end) as "mixed",
+        sum(case when pt_detail.usagecategorymajor='MIXED' then 1 else 0 end) as "countmixed",
+        sum(pd.amountpaid) as totalamount,
+        count(pd.amountpaid) as totalcount,
+        sum(case when payment.paymentmode='ONLINE' then pd.amountpaid else 0 end) as "online",
+        sum(case when payment.paymentmode='CASH' then pd.amountpaid else 0 end) as "cash",
+        sum(case when payment.paymentmode='CHEQUE' then pd.amountpaid else 0 end) as "cheque",
+        sum(case when payment.paymentmode='DD' then pd.amountpaid else 0 end) as "dd"
+      FROM egcl_paymentdetail AS pd
+      join egcl_payment as payment on payment.id = pd.paymentid
+      join egcl_bill as bill on bill.id = pd.billid
+      JOIN eg_pt_propertydetail_v2 pt_detail ON pt_detail.property  = bill.consumercode
+      JOIN eg_pt_address_v2 pt_addr ON pt_detail.property = pt_addr.property
+      LEFT OUTER JOIN eg_user ON eg_user.id = pd.createdby::INTEGER
+      WHERE pd.tenantid = $tenantid and payment.paymentstatus != 'CANCELLED'
+  groupby: GROUP BY financialyear
+  orderby: ORDER BY financialyear
 
 
 - reportName: ULBDEFAULTERPTREPORT_V2
@@ -4012,7 +3975,7 @@ ReportDefinitions:
      eu.mobilenumber as "mobileno",          
     REGEXP_REPLACE(REGEXP_REPLACE(CONCAT(pta.doorno, ',', pta.addressline1, ',', pta.addressline2, ',', pta.buildingname, ',', pta.pincode), ',+', ','), '^,|,$', '') as "address"    
    from egcl_paymentdetail as payd
-      inner join egcl_bill as bill on bill.id=payd.billid
+   inner join egcl_bill as bill on bill.id=payd.billid
    inner join eg_pt_property_v2    as pt on pt.propertyid = bill.consumercode
    inner join eg_pt_propertydetail_v2    as pd on pd.property = pt.propertyid
    inner join eg_pt_owner_v2     as po on po.propertydetail = pd.assessmentnumber
@@ -4020,3 +3983,273 @@ ReportDefinitions:
    inner join eg_pt_address_v2    as pta on pta.property = pt.propertyid
    left outer join eg_pt_unit_v2_ot as pot on pot.propertydetail = pd.assessmentnumber
    where payd.tenantid = $tenantid and pd.property not in (select property from eg_pt_propertydetail_v2 where financialyear  in ('2019-20'))
+
+- reportName: ZoneFYReport
+  summary: Zone FY Collection Pt report
+  version: 1.0.0
+  moduleName: rainmaker-pt
+  sourceColumns:
+  - name: zonecode
+    label: reports.pt.znecode
+    type: string
+    source: pt
+    total: false
+  - name: zonename
+    label: reports.pt.zonename
+    type: string
+    source: pt
+    total: false  
+  - name: financialyear
+    label: reports.pt.FinancialYear
+    type: string
+    source: pt
+    total: false  
+  - name: 2013_14PTR
+    label: reports.pt.2013_14_PTR
+    type: string
+    source: pt
+    total: true  
+  - name: 2013_14Collection
+    label: reports.pt.2013_14Collection
+    type: string
+    source: pt
+    total: true
+  - name: 2014_15PTR
+    label: reports.pt.2014_15_PTR
+    type: string
+    source: pt
+    total: true  
+  - name: 2014_15Collection
+    label: reports.pt.2014_15Collection
+    type: string
+    source: pt
+    total: true
+  - name: 2015_16PTR
+    label: reports.pt.2015_16_PTR
+    type: string
+    source: pt
+    total: true  
+  - name: 2015_16Collection
+    label: reports.pt.2015_16Collection
+    type: string
+    source: pt
+    total: true
+  - name: 2016_17PTR
+    label: reports.pt.2016_17_PTR
+    type: string
+    source: pt
+    total: true  
+  - name: 2016_17Collection
+    label: reports.pt.2016_17Collection
+    type: string
+    source: pt
+    total: true
+  - name: 2017_18PTR
+    label: reports.pt.2017_18_PTR
+    type: string
+    source: pt
+    total: true  
+  - name: 2017_18Collection
+    label: reports.pt.2017_18Collection
+    type: string
+    source: pt
+    total: true
+  - name: 2018_19PTR
+    label: reports.pt.2018_19_PTR
+    type: string
+    source: pt
+    total: true  
+  - name: 2018_19Collection
+    label: reports.pt.2018_19Collection
+    type: string
+    source: pt
+    total: true
+  - name: 2019_20PTR
+    label: reports.pt.2019_20_PTR
+    type: string
+    source: pt
+    total: true  
+  - name: 2019_20Collection
+    label: reports.pt.2019_20Collection
+    type: string
+    source: pt
+    total: true
+  - name: 2020_21PTR
+    label: reports.pt.2020_21_PTR
+    type: string
+    source: pt
+    total: true  
+  - name: 2020_21Collection
+    label: reports.pt.2020_21Collection
+    type: string
+    source: pt
+    total: true  
+  - name: totalptr
+    label: reports.pt.totalptr
+    type: string
+    source: pt
+    total: true  
+  - name: totalcollection
+    label: reports.pt.totalcollection
+    type: string
+    source: pt
+    total: true
+  query: |
+   --S.no    Service Name ULB    Property Tax Unique ID    Date Of Transcation    Receipt Number Existing Property ID    Type Of Property Mobile Number    Address
+    with fy2013 as
+    (
+    SELECT
+      zonecode,
+      string_agg(distinct zonename,',') as zonename,
+      string_agg(distinct financialYear,',') as financialyear,
+      count(*) as totalptr,
+      sum(totalamount) as amountcollected  
+    FROM egcl_receiptheader_v1 AS rh
+    JOIN eg_pt_propertydetail_v2 pt_detail ON (pt_detail.property || ':' || pt_detail.assessmentnumber) = rh.consumercode
+    JOIN eg_pt_address_v2 pt_addr ON pt_detail.property = pt_addr.property
+    JOIN eg_bndry_mohalla on eg_bndry_mohalla.localitycode=pt_addr.locality
+    LEFT OUTER JOIN eg_user ON eg_user.id = rh.createdby::INTEGER
+    WHERE rh.tenantid =  $tenantid and rh.status != 'Cancelled' and financialyear='2013-14'
+    GROUP BY zonecode
+    ), 
+    fy2014 as
+    (
+    SELECT
+      zonecode,
+      string_agg(distinct zonename,',') as zonename,
+      string_agg(distinct financialYear,',') as financialyear,
+      count(*) as totalptr,
+      sum(totalamount) as amountcollected  
+    FROM egcl_receiptheader_v1 AS rh
+    JOIN eg_pt_propertydetail_v2 pt_detail ON (pt_detail.property || ':' || pt_detail.assessmentnumber) = rh.consumercode
+    JOIN eg_pt_address_v2 pt_addr ON pt_detail.property = pt_addr.property
+    JOIN eg_bndry_mohalla on eg_bndry_mohalla.localitycode=pt_addr.locality
+    LEFT OUTER JOIN eg_user ON eg_user.id = rh.createdby::INTEGER
+    WHERE rh.tenantid =  $tenantid and rh.status != 'Cancelled' and financialyear='2014-15'
+    GROUP BY zonecode
+    ), 
+    fy2015 as
+    (
+    SELECT
+      zonecode,
+      string_agg(distinct zonename,',') as zonename,
+      string_agg(distinct financialYear,',') as financialyear,
+      count(*) as totalptr,
+      sum(totalamount) as amountcollected  
+      FROM egcl_receiptheader_v1 AS rh
+    JOIN eg_pt_propertydetail_v2 pt_detail ON (pt_detail.property || ':' || pt_detail.assessmentnumber) = rh.consumercode
+    JOIN eg_pt_address_v2 pt_addr ON pt_detail.property = pt_addr.property
+    JOIN eg_bndry_mohalla on eg_bndry_mohalla.localitycode=pt_addr.locality
+    LEFT OUTER JOIN eg_user ON eg_user.id = rh.createdby::INTEGER
+    WHERE rh.tenantid =  $tenantid and rh.status != 'Cancelled' and financialyear='2015-16'
+    GROUP BY zonecode
+    ), 
+    fy2016 as
+    (
+    SELECT
+      zonecode,
+      string_agg(distinct zonename,',') as zonename,
+      string_agg(distinct financialYear,',') as financialyear,
+      count(*) as totalptr,
+      sum(totalamount) as amountcollected  
+    FROM egcl_receiptheader_v1 AS rh
+    JOIN eg_pt_propertydetail_v2 pt_detail ON (pt_detail.property || ':' || pt_detail.assessmentnumber) = rh.consumercode
+    JOIN eg_pt_address_v2 pt_addr ON pt_detail.property = pt_addr.property
+    JOIN eg_bndry_mohalla on eg_bndry_mohalla.localitycode=pt_addr.locality
+    LEFT OUTER JOIN eg_user ON eg_user.id = rh.createdby::INTEGER
+    WHERE rh.tenantid =  $tenantid and rh.status != 'Cancelled' and financialyear='2016-17'
+    GROUP BY zonecode
+    ), 
+    fy2017 as
+    (
+    SELECT
+      zonecode,
+      string_agg(distinct zonename,',') as zonename,
+      string_agg(distinct financialYear,',') as financialyear,
+      count(*) as totalptr,
+      sum(totalamount) as amountcollected  
+    FROM egcl_receiptheader_v1 AS rh
+    JOIN eg_pt_propertydetail_v2 pt_detail ON (pt_detail.property || ':' || pt_detail.assessmentnumber) = rh.consumercode
+    JOIN eg_pt_address_v2 pt_addr ON pt_detail.property = pt_addr.property
+    JOIN eg_bndry_mohalla on eg_bndry_mohalla.localitycode=pt_addr.locality
+    LEFT OUTER JOIN eg_user ON eg_user.id = rh.createdby::INTEGER
+    WHERE rh.tenantid =  $tenantid and rh.status != 'Cancelled' and financialyear='2017-18'
+    GROUP BY zonecode
+    ),
+    fy2018 as
+    (
+    SELECT
+      zonecode,
+      string_agg(distinct zonename,',') as zonename,
+      string_agg(distinct financialYear,',') as financialyear,
+      count(*) as totalptr,
+      sum(totalamount) as amountcollected  
+    FROM egcl_receiptheader_v1 AS rh
+    JOIN eg_pt_propertydetail_v2 pt_detail ON (pt_detail.property || ':' || pt_detail.assessmentnumber) = rh.consumercode
+    JOIN eg_pt_address_v2 pt_addr ON pt_detail.property = pt_addr.property
+    JOIN eg_bndry_mohalla on eg_bndry_mohalla.localitycode=pt_addr.locality
+    LEFT OUTER JOIN eg_user ON eg_user.id = rh.createdby::INTEGER
+    WHERE rh.tenantid =  $tenantid and rh.status != 'Cancelled' and financialyear='2018-19'
+    GROUP BY zonecode
+    ),
+    fy2019 as
+    (
+      SELECT
+        zonecode,
+        string_agg(distinct zonename,',') as zonename,
+        string_agg(distinct financialYear,',') as financialyear,
+        count(*) as totalptr,
+        sum(totalamount) as amountcollected  
+      FROM egcl_receiptheader_v1 AS rh
+      JOIN eg_pt_propertydetail_v2 pt_detail ON (pt_detail.property || ':' || pt_detail.assessmentnumber) = rh.consumercode
+      JOIN eg_pt_address_v2 pt_addr ON pt_detail.property = pt_addr.property
+      JOIN eg_bndry_mohalla on eg_bndry_mohalla.localitycode=pt_addr.locality
+      LEFT OUTER JOIN eg_user ON eg_user.id = rh.createdby::INTEGER
+      WHERE rh.tenantid =  $tenantid and rh.status != 'Cancelled' and financialyear='2019-20'
+      GROUP BY zonecode
+    ),
+    fy2020 as
+    (
+    SELECT
+      zonecode,
+      string_agg(distinct zonename,',') as zonename,
+      string_agg(distinct financialYear,',') as financialyear,
+      count(*) as totalptr,
+      sum(totalamount) as amountcollected  
+    FROM egcl_receiptheader_v1 AS rh
+    JOIN eg_pt_propertydetail_v2 pt_detail ON (pt_detail.property || ':' || pt_detail.assessmentnumber) = rh.consumercode
+    JOIN eg_pt_address_v2 pt_addr ON pt_detail.property = pt_addr.property
+    JOIN eg_bndry_mohalla on eg_bndry_mohalla.localitycode=pt_addr.locality
+    LEFT OUTER JOIN eg_user ON eg_user.id = rh.createdby::INTEGER
+    WHERE rh.tenantid =  $tenantid and rh.status != 'Cancelled' and financialyear='2020-21'
+    GROUP BY zonecode
+    )
+    SELECT 
+      fy2019.zonecode,
+      fy2019.zonename,
+      coalesce(fy2013.totalptr,0) as "2013_14PTR",
+      coalesce(fy2013.amountcollected,0) as "2013_14Collection",
+      coalesce(fy2014.totalptr,0) as "2014_15PTR",
+      coalesce(fy2014.amountcollected,0) as "2014_15Collection",
+      coalesce(fy2015.totalptr,0) as "2015_16PTR",
+      coalesce(fy2015.amountcollected,0) as "2015_16Collection",
+      coalesce(fy2016.totalptr,0) as "2016_17PTR",
+      coalesce(fy2016.amountcollected,0) as "2016_17Collection",
+      coalesce(fy2017.totalptr,0) as "2017_18PTR",
+      coalesce(fy2017.amountcollected,0) as "2017_18Collection",
+      coalesce(fy2018.totalptr,0) as "2018_19PTR",
+      coalesce(fy2018.amountcollected,0) as "2018_19Collection",
+      coalesce(fy2019.totalptr,0) as "2019_20PTR",
+      coalesce(fy2019.amountcollected,0) as "2019_20Collection",
+      coalesce(fy2020.totalptr,0) as "2020_21PTR",
+      coalesce(fy2020.amountcollected,0) as "2020_21Collection",
+      coalesce(fy2013.totalptr,0)+coalesce(fy2014.totalptr,0)+coalesce(fy2015.totalptr,0)+coalesce(fy2016.totalptr,0)+coalesce(fy2017.totalptr,0)+coalesce(fy2018.totalptr,0)+coalesce(fy2019.totalptr,0)+coalesce(fy2020.totalptr,0) as "totalptr",
+      coalesce(fy2013.amountcollected,0)+coalesce(fy2014.amountcollected,0)+coalesce(fy2015.amountcollected,0)+coalesce(fy2016.amountcollected,0)+coalesce(fy2017.amountcollected,0)+coalesce(fy2018.amountcollected,0)+coalesce(fy2019.amountcollected,0)+coalesce(fy2020.amountcollected,0) as "totalcollection"
+    from fy2019 -- selected fy2019 because having all zone enteries
+    left outer join fy2013 on fy2013.zonecode=fy2019.zonecode
+    left outer join fy2014 on fy2014.zonecode=fy2019.zonecode
+    left outer join fy2015 on fy2015.zonecode=fy2019.zonecode
+    left outer join fy2016 on fy2016.zonecode=fy2019.zonecode
+    left outer join fy2017 on fy2017.zonecode=fy2019.zonecode
+    left outer join fy2018 on fy2018.zonecode=fy2019.zonecode
+    left outer join fy2020 on fy2020.zonecode=fy2019.zonecode
