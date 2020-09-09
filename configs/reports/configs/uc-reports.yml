@@ -969,7 +969,7 @@ ReportDefinitions:
           eg_user.name as collectorname
         FROM egcl_payment AS payment
         JOIN egcl_paymentdetail as paydetail on paydetail.paymentid=payment.id
-        LET JOIN receipt_breakup ON paydetail.billid = receipt_breakup.bill_id
+        LEFT JOIN receipt_breakup ON paydetail.billid = receipt_breakup.bill_id
         JOIN eg_user ON payment.createdby::INTEGER=eg_user.id
         WHERE  payment.tenantid!='pb.testing' AND businessservice not in ('PT','TL','FIRENOC')  and payment.paymentstatus != 'CANCELLED'
     orderby: ORDER BY paydetail.receiptdate DESC
@@ -1142,7 +1142,7 @@ ReportDefinitions:
           eg_user.name as collectorname
         FROM egcl_payment AS payment
         JOIN egcl_paymentdetail as paydetail on paydetail.paymentid=payment.id
-        JOIN receipt_breakup ON paydetail.billid = receipt_breakup.bill_id
+        LEFT JOIN receipt_breakup ON paydetail.billid = receipt_breakup.bill_id
         JOIN eg_user ON payment.createdby::INTEGER=eg_user.id
         WHERE  payment.tenantid=$tenantid AND businessservice not in ('PT','TL','FIRENOC')  and payment.paymentstatus != 'CANCELLED'
     orderby: ORDER BY paydetail.receiptdate DESC
