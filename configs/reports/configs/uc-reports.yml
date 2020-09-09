@@ -1116,15 +1116,16 @@ ReportDefinitions:
         -- Use CTE to force query plan, compute & use CTE later
         WITH receipt_breakup AS (
                     SELECT 
-                      billid as bill_id,
-                      SUM(CASE WHEN taxheadcode LIKE '%_CGST' THEN taxamount ELSE 0 END) as cgst, 
-                      SUM(CASE WHEN taxheadcode LIKE '%_TAX' THEN taxamount ELSE 0 END) as tax, 
-                      SUM(CASE WHEN taxheadcode LIKE '%_SGST' THEN taxamount ELSE 0 END) as sgst, 
-                      SUM(CASE WHEN taxheadcode LIKE '%_FIELD_FEE' THEN taxamount ELSE 0 END) as fieldcollection            
-                    FROM egbs_demanddetail_v1
-                    inner join egbs_billdetail_v1 on egbs_billdetail_v1.demandid=egbs_demanddetail_v1.demandid
-                    WHERE  egbs_billdetail_v1.businessservice not in ('PT','TL','FIRENOC') and  egbs_billdetail_v1.tenantid =$tenantid 
-                    GROUP BY egbs_demanddetail_v1.demandid,billid
+                      bill.id as bill_id, 
+                      SUM(CASE WHEN taxheadcode LIKE '%_CGST' THEN adjustedamount ELSE 0 END) as cgst, 
+                      SUM(CASE WHEN taxheadcode LIKE '%_TAX' THEN adjustedamount ELSE 0 END) as tax, 
+                      SUM(CASE WHEN taxheadcode LIKE '%_SGST' THEN adjustedamount ELSE 0 END) as sgst, 
+                      SUM(CASE WHEN taxheadcode LIKE '%_FIELD_FEE' THEN adjustedamount ELSE 0 END) as fieldcollection            
+                    FROM egcl_billaccountdetail 
+                    INNER JOIN egcl_billdetial as billd on billd.id = egcl_billaccountdetail.billdetailid
+                    INNER JOIN egcl_bill as bill on bill.id=billd.billid
+                    WHERE  billd.tenantid=$tenantid AND businessservice not in ('PT','TL','FIRENOC') 
+                    GROUP BY billdetailid,bill.id
         )
         SELECT 
           payment.tenantid as ulb,
@@ -1144,7 +1145,7 @@ ReportDefinitions:
         JOIN egcl_paymentdetail as paydetail on paydetail.paymentid=payment.id
         JOIN receipt_breakup ON paydetail.billid = receipt_breakup.bill_id
         JOIN eg_user ON payment.createdby::INTEGER=eg_user.id
-        WHERE  businessservice not in ('PT','TL','FIRENOC') and payment.tenantid=$tenantid  and payment.paymentstatus != 'CANCELLED'
+        WHERE  payment.tenantid=$tenantid AND businessservice not in ('PT','TL','FIRENOC')  and payment.paymentstatus != 'CANCELLED'
     orderby: ORDER BY paydetail.receiptdate DESC
 
 
