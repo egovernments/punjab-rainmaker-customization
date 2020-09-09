@@ -22,7 +22,7 @@
               {
                 "variable": "PaidBy", 
                 "value": {
-                  "path": "$.paidBy"
+                  "path": "$.payerName"
                 },
                 "localisation":{
                   "required":true,
@@ -504,12 +504,12 @@
                       "value":"$.MdmsRes.tenant.tenants[0].domainUrl"
                     },
                     {
-                      "variable":"email",
-                      "value":"$.MdmsRes.tenant.tenants[0].emailId"
-                    },
-                        {
                       "variable":"mcGrade",
                       "value":"$.MdmsRes.tenant.tenants[0].city.ulbType"
+                    },
+                    {
+                      "variable":"email",
+                      "value":"$.MdmsRes.tenant.tenants[0].emailId"
                     },
                     {
                       "variable": "logoImage",                        

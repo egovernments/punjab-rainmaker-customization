@@ -161,7 +161,7 @@
             [
             
               {
-                "text": "Consumer Name",
+                "text": "Paid By",
                 "border": [
                   true,
                   false,
@@ -171,7 +171,7 @@
                 "style": "receipt-table-value"
               },
               {
-                "text": "{{payerName}}",
+                "text": "{{PaidBy}}",
                 "border": [
                   false,
                   false,
@@ -181,7 +181,7 @@
                 "style": "receipt-table"
               },
               {
-                "text": "Consumer Contact",
+                "text": "Contact No.",
                 "border": [
                   false,
                   false,
@@ -676,7 +676,7 @@
             [
             
               {
-                "text": "Consumer Name",
+                "text": "Paid By",
                 "border": [
                   true,
                   false,
@@ -686,7 +686,7 @@
                 "style": "receipt-table-value"
               },
               {
-                "text": "{{payerName}}",
+                "text": "{{PaidBy}}",
                 "border": [
                   false,
                   false,
@@ -696,7 +696,7 @@
                 "style": "receipt-table"
               },
               {
-                "text": "Consumer Contact",
+                "text": "Contact No.",
                 "border": [
                   false,
                   false,
