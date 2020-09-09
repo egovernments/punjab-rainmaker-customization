@@ -2151,12 +2151,7 @@ ReportDefinitions:
     label: reports.pt.roundoff
     type: string
     source: pt
-    total: true
-  - name: pendingamount
-    label: reports.pt.pendingamount
-    type: string
-    source: pt
-    total: true
+    total: true  
   - name: consumercode
     label: reports.pt.propertyId
     type: string
@@ -2259,8 +2254,7 @@ ReportDefinitions:
         payment.transactionnumber,
         to_char((To_timestamp(bd.fromperiod/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY') AS fromdate,
         to_char((To_timestamp(bd.toperiod/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY') AS todate, 
-        to_char((To_timestamp(payment.transactiondate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY') AS transactiondate, 
-        pd.due AS pendingamount,
+        to_char((To_timestamp(payment.transactiondate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY') AS transactiondate,         
         Initcap(pt.usagecategory) as usagetype,
         eg_user.name as collectorname,
         receipt_breakup.*,
