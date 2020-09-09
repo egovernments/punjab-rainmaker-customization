@@ -953,6 +953,9 @@ router.post('/open/punjab-pt/payu/confirm', asyncMiddleware((async function (req
     let return_data = req.body;
     original_callback = req.query.original_callback;
     delete req.query['original_callback'];
+    let txnid = req.query.eg_pg_txnid
+    delete req.query['eg_pg_txnid'];
+
     new_query_params = Object.assign({}, return_data, req.query);
     redirect_url = url.format(
         {
@@ -960,7 +963,8 @@ router.post('/open/punjab-pt/payu/confirm', asyncMiddleware((async function (req
             query: new_query_params
         }
     )
-    
+    //ensuring the first query param is eg_pg_txnid
+    redirect_url = redirect_url.replace('?', '?'+ 'eg_pg_txnid=' + txnid +'&')
     res.redirect(redirect_url);
 })))
 
