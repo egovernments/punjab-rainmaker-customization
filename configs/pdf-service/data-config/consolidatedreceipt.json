@@ -22,13 +22,8 @@
               {
                 "variable": "PaidBy", 
                 "value": {
-                  "path": "$.payerName"
-                },
-                "localisation":{
-                  "required":true,
-                  "prefix":null,   
-                  "module":"rainmaker-common"
-               }
+                  "path": "$.paidBy"
+                }
               },
               {
                 "variable": "chequeDD", 
