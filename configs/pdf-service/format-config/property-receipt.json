@@ -238,7 +238,7 @@
               "style": "receipt-table"
             },
             {
-              "text" : "Father/Husband Name: ",
+              "text" : " ",
               "border": [
                 false,
                 false,
@@ -248,7 +248,7 @@
               "style": "receipt-table-value"
             },
             {
-              "text" : "{{fatherHusbandName}}",
+              "text" : " ",
               "border": [
                 false,
                 false,
