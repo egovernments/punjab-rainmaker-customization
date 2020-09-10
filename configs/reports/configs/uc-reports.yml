@@ -1439,17 +1439,18 @@ ReportDefinitions:
         searchClause: AND paydetail.receiptdate <= $toDate
     query: |
         -- Use CTE to force query plan, compute & use CTE later
-        SELECT
-          paydetail.businessservice as servicetype,
-          count(distinct paydetail.receiptnumber) as totalreceipts,
+        SELECT 
+          paydetail.businessservice,
+          SUM(CASE WHEN taxheadcode LIKE '%_CGST' THEN adjustedamount ELSE 0 END) as cgst,
           SUM(CASE WHEN taxheadcode LIKE '%_TAX' THEN adjustedamount ELSE 0 END) as tax, 
-          SUM(CASE WHEN taxheadcode LIKE '%_CGST' THEN adjustedamount ELSE 0 END) as cgst, 
           SUM(CASE WHEN taxheadcode LIKE '%_SGST' THEN adjustedamount ELSE 0 END) as sgst, 
-          SUM(CASE WHEN taxheadcode LIKE '%_FIELD_FEE' THEN adjustedamount ELSE 0 END) as fieldcollection,
-          SUM(adjustedamount) as totalcollection
-        from egcl_payment payment, egcl_paymentdetail as paydetail
-        inner join egcl_billaccountdetail as billdetail on billdetail.billdetailid=paydetail.billid
-        WHERE payment.id=paydetail.paymentid  AND payment.tenantid=$tenantid AND paydetail.businessservice not in ('PT','TL','FIRENOC')  and payment.paymentstatus != 'CANCELLED'
+          SUM(CASE WHEN taxheadcode LIKE '%_FIELD_FEE' THEN adjustedamount ELSE 0 END) as fieldcollection 
+        FROM egcl_billaccountdetail 
+        INNER JOIN egcl_billdetial as billd on billd.id = egcl_billaccountdetail.billdetailid
+        INNER JOIN egcl_bill as bill on bill.id=billd.billid
+        INNER Join egcl_paymentdetail as paydetail ON paydetail.billid = bill.id
+        Inner join egcl_payment as payment on paydetail.paymentid = payment.id
+        WHERE  billd.tenantid=$tenantid AND paydetail.businessservice not in ('PT','TL','FIRENOC') and payment.paymentStatus!='CANCELLED'
     groupby: GROUP BY paydetail.businessservice
     orderby: ORDER BY paydetail.businessservice
 
