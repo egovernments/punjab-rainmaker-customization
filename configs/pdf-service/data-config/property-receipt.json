@@ -158,6 +158,18 @@
                   "path": "$.paymentDetails[0].bill.billDetails[0].billAccountDetails[?(@.taxHeadCode=='PT_TIME_PENALTY')].adjustedAmount"
                 }
               },
+		{
+                "variable": "adhocPenalty", 
+                "value": {
+                  "path": "$.paymentDetails[0].bill.billDetails[0].billAccountDetails[?(@.taxHeadCode=='PT_ADHOC_PENALTY')].adjustedAmount"
+                }
+              },
+              {
+                "variable": "adhocRebate", 
+                "value": {
+                  "path": "$.paymentDetails[0].bill.billDetails[0].billAccountDetails[?(@.taxHeadCode=='PT_ADHOC_REBATE')].adjustedAmount"
+                }
+              },
               {
                 "variable": "Rebate", 
                 "value": {
@@ -468,6 +480,10 @@
                       "variable":"website",
                       "value":"$.MdmsRes.tenant.tenants[0].domainUrl"
                     },
+		    {
+                      "variable":"mcGrade",
+                      "value":"$.MdmsRes.tenant.tenants[0].city.ulbType"
+                    },
                     {
                       "variable":"email",
                       "value":"$.MdmsRes.tenant.tenants[0].emailId"
@@ -536,7 +552,7 @@
                   },                  
                   {
                     "variable": "var_owners",                        
-                    "value":"$.Properties[0].owners.*",
+                    "value":"$.Properties[0].owners[?(@.active== true && @.status== 'ACTIVE')]",
                      "type":"array",
                      "format":{                            
                         "type":"string",
@@ -553,7 +569,7 @@
                  },
                  {
                    "variable": "var_floors",                        
-                   "value":"$.Properties[0].units.*",
+                   "value":"$.Properties[0].units[?(@.active== true)]",
                     "type":"array",
                     "format":{                            
                        "type":"string",
