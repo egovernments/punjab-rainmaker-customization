@@ -224,7 +224,7 @@
                 "style": "receipt-table"
               },
               {
-                "text": " ",
+                "text": "Paid By",
                 "border": [
                   false,
                   false,
@@ -234,7 +234,7 @@
                 "style": "receipt-table-value"
               },
               {
-                "text": " ",
+                "text": "{{PaidBy}}",
                 "border": [
                   false,
                   false,
@@ -739,7 +739,7 @@
                 "style": "receipt-table"
               },
               {
-                "text": " ",
+                "text": "Paid By",
                 "border": [
                   false,
                   false,
@@ -749,7 +749,7 @@
                 "style": "receipt-table-value"
               },
               {
-                "text": " ",
+                "text": "{{PaidBy}}",
                 "border": [
                   false,
                   false,
