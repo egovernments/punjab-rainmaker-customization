@@ -206,7 +206,7 @@
               "style": "receipt-table-value"
             },
             {
-              "text": "NA",
+              "text": "{{payerName}}",
               "border": [
                 false,
                 false,
@@ -238,7 +238,7 @@
               "style": "receipt-table"
             },
             {
-              "text" : "Father/Husband Name: ",
+              "text" : " ",
               "border": [
                 false,
                 false,
@@ -248,7 +248,7 @@
               "style": "receipt-table-value"
             },
             {
-              "text" : "NA",
+              "text" : " ",
               "border": [
                 false,
                 false,
