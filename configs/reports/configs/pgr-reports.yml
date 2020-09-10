@@ -1138,7 +1138,6 @@ ReportDefinitions:
   orderby: ORDER BY tenantid
 
 - reportName: EmployeeReport_v2
-  decryptionPathId: EmployeeReport_v2
   summary: Fetches complaints for employees
   version: 1.0.0
   moduleName: rainmaker-pgr
