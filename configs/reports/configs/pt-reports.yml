@@ -1050,7 +1050,7 @@ ReportDefinitions:
     where rh.tenantid = $tenantid and rh.status != 'Cancelled'
 
 - reportName: ReceiptRegisterShort
-  summary: Receipt Register
+  summary: Account Receipt Register
   version: 1.0.0
   moduleName: rainmaker-pt
   additionalConfig:
@@ -1635,7 +1635,7 @@ ReportDefinitions:
   orderby: ORDER BY rh.receiptdate DESC
 
 - reportName: ReceiptRegisterSummary
-  summary: Receipt Register Summary
+  summary: Summary Receipt Register
   version: 1.0.0
   moduleName: rainmaker-pt
   additionalConfig:
@@ -2074,18 +2074,8 @@ ReportDefinitions:
   version: 1.0.0
   moduleName: rainmaker-pt
   sourceColumns:
-  - name: zonecode
-    label: reports.pt.znecode
-    type: string
-    source: pt
-    total: false
   - name: zonename
     label: reports.pt.zonename
-    type: string
-    source: pt
-    total: false  
-  - name: financialyear
-    label: reports.pt.FinancialYear
     type: string
     source: pt
     total: false  
@@ -2319,7 +2309,7 @@ ReportDefinitions:
     ),
     zones as
     (
-    select distinct zonecode,string_agg(distinct zonename,',') as zname from eg_bndry_mohalla where tenantid='pb.amritsar' group by zonecode
+    select distinct zonecode,string_agg(distinct zonename,',') as zname from eg_bndry_mohalla where tenantid=$tenantid group by zonecode
     )
     SELECT 
       zones.zonecode as zonecode,
@@ -2352,6 +2342,7 @@ ReportDefinitions:
     left outer join fy2019 on fy2019.zonecode=zones.zonecode
     left outer join fy2020 on fy2020.zonecode=zones.zonecode
     --where 1=1 
+  orderby: order by zonename
     
   
 - reportName: BlockFYReport
@@ -2359,18 +2350,8 @@ ReportDefinitions:
   version: 1.0.0
   moduleName: rainmaker-pt
   sourceColumns:
-  - name: blockcode
-    label: reports.pt.znecode
-    type: string
-    source: pt
-    total: false
   - name: blockname
-    label: reports.pt.zonename
-    type: string
-    source: pt
-    total: false  
-  - name: financialyear
-    label: reports.pt.FinancialYear
+    label: reports.pt.blockname
     type: string
     source: pt
     total: false  
@@ -2628,4 +2609,5 @@ ReportDefinitions:
     left outer join fy2018 on fy2018.blockcode=blocks.blockcode
     left outer join fy2019 on fy2019.blockcode=blocks.blockcode
     left outer join fy2020 on fy2020.blockcode=blocks.blockcode
+  orderby: order by blockname
     
