@@ -4305,7 +4305,7 @@ ReportDefinitions:
     FROM eg_pt_asmt_assessment
     WHERE  and tenantid=$tenantid
 
-- reportName: Dump Report_v2
+- reportName: DumpReport_v2
   summary: Dump Report
   version: 1.0.0
   moduleName: rainmaker-pt
