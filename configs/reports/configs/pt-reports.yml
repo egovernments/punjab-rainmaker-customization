@@ -4094,7 +4094,7 @@ ReportDefinitions:
     source: pt
     total: true
   query: |
-   --S.no    Service Name ULB    Property Tax Unique ID    Date Of Transcation    Receipt Number Existing Property ID    Type Of Property Mobile Number    Address
+    --S.no    Service Name ULB    Property Tax Unique ID    Date Of Transcation    Receipt Number Existing Property ID    Type Of Property Mobile Number    Address
     with fy2013 as
     (
     SELECT
@@ -4252,3 +4252,394 @@ ReportDefinitions:
     left outer join fy2017 on fy2017.zonecode=fy2019.zonecode
     left outer join fy2018 on fy2018.zonecode=fy2019.zonecode
     left outer join fy2020 on fy2020.zonecode=fy2019.zonecode
+
+
+- reportName: AssessmentsReport_v2
+  summary: Assessments Report
+  version: 1.0.0
+  moduleName: rainmaker-pt
+  additionalConfig:
+    print:
+      pdfPageSize: "A1"
+  sourceColumns:
+  - name: assessmentnumber
+    label: reports.pt.assessmentnumber
+    type: string
+    source: pt
+    total: false
+  - name: financialyear
+    label: reports.pt.financialyear
+    type: string
+    source: pt
+    total: false
+  - name: propertyid
+    label: reports.pt.propertyid
+    type: string
+    source: pt
+    total: false
+  - name: status
+    label: reports.pt.status
+    type: string
+    source: pt
+    total: false
+  searchParams:
+  - name: fromDate
+    label: reports.pt.fromDate
+    type: epoch
+    source: pt
+    isMandatory: false
+    searchClause: AND createdtime >= $fromDate
+  - name: toDate
+    label: reports.pt.toDate
+    type: epoch
+    source: pt
+    isMandatory: false
+    searchClause: AND createdtime <= $toDate
+  query: |
+    -- Use CTE to force query plan, compute & use CTE later
+    SELECT 
+      assessmentnumber,
+      financialyear, 
+      propertyid,
+      status 
+    FROM eg_pt_asmt_assessment
+    WHERE  and tenantid=$tenantid
+
+- reportName: Dump Report_v2
+  summary: Dump Report
+  version: 1.0.0
+  moduleName: rainmaker-pt
+  additionalConfig:
+    print:
+      pdfPageSize: "A1"
+  sourceColumns:
+  - name: createddate
+    label: reports.pt.createdDate
+    type: string
+    source: pt
+    total: false
+  - name: propertyid
+    label: reports.pt.propertyid
+    type: string
+    source: pt
+    total: false
+  - name: oldpropertyid
+    label: reports.pt.oldpropertyid
+    type: string
+    source: pt
+    total: false
+  - name: status
+    label: reports.pt.status
+    type: string
+    source: pt
+    total: false
+  - name: propertytype
+    label: reports.pt.propertytype
+    type: string
+    source: pt
+    total: false
+  - name: ownershipcategory
+    label: reports.pt.ownershipcategory
+    type: string
+    source: pt
+    total: false
+  - name: usagecategory
+    label: reports.pt.usagecategory
+    type: string
+    source: pt
+    total: false
+  - name: creationreason
+    label: reports.pt.creationreason
+    type: string
+    source: pt
+    total: false
+  - name: nooffloors
+    label: reports.pt.nooffloors
+    type: string
+    source: pt
+    total: false
+  - name: landarea
+    label: reports.pt.landarea
+    type: string
+    source: pt
+    total: false
+  - name: superbuiltuparea
+    label: reports.pt.superbuiltuparea
+    type: string
+    source: pt
+    total: false
+  - name: linkedproperties
+    label: reports.pt.linkedproperties
+    type: string
+    source: pt
+    total: false
+  - name: source
+    label: reports.pt.source
+    type: string
+    source: pt
+    total: false
+  - name: channel
+    label: reports.pt.channel
+    type: string
+    source: pt
+    total: false
+  - name: floorno
+    label: reports.pt.floorno
+    type: string
+    source: pt
+    total: false
+  - name: unittype
+    label: reports.pt.unittype
+    type: string
+    source: pt
+    total: false
+  - name: usagecategory
+    label: reports.pt.usagecategory
+    type: string
+    source: pt
+    total: false
+  - name: occupancytype
+    label: reports.pt.occupancytype
+    type: string
+    source: pt
+    total: false
+  - name: occupancydate
+    label: reports.pt.occupancydate
+    type: string
+    source: pt
+    total: false
+  - name: carpetarea
+    label: reports.pt.carpetarea
+    type: string
+    source: pt
+    total: false
+  - name: builtuparea
+    label: reports.pt.builtuparea
+    type: string
+    source: pt
+    total: false
+  - name: plintharea
+    label: reports.pt.plintharea
+    type: string
+    source: pt
+    total: false
+  - name: superbuiltuparea
+    label: reports.pt.superbuiltuparea
+    type: string
+    source: pt
+    total: false
+  - name: arv
+    label: reports.pt.arv
+    type: string
+    source: pt
+    total: false
+  - name: constructiontype
+    label: reports.pt.carpetarea
+    type: string
+    source: pt
+    total: false
+  - name: constructiondate
+    label: reports.pt.constructiondate
+    type: string
+    source: pt
+    total: false
+  - name: dimensions
+    label: reports.pt.dimensions
+    type: string
+    source: pt
+    total: false
+  - name: active
+    label: reports.pt.active
+    type: string
+    source: pt
+    total: false
+  - name: doorno
+    label: reports.pt.doorno
+    type: string
+    source: pt
+    total: false
+  - name: plotno
+    label: reports.pt.plotno
+    type: string
+    source: pt
+    total: false
+  - name: buildingname
+    label: reports.pt.buildingname
+    type: string
+    source: pt
+    total: false
+  - name: street
+    label: reports.pt.street
+    type: string
+    source: pt
+    total: false
+  - name: landmark
+    label: reports.pt.landmark
+    type: string
+    source: pt
+    total: false
+  - name: city
+    label: reports.pt.city
+    type: string
+    source: pt
+    total: false
+  - name: pincode
+    label: reports.pt.pincode
+    type: string
+    source: pt
+    total: false
+  - name: locality
+    label: reports.pt.locality
+    type: string
+    source: pt
+    total: false
+  - name: region
+    label: reports.pt.region
+    type: string
+    source: pt
+    total: false
+  - name: state
+    label: reports.pt.state
+    type: string
+    source: pt
+    total: false
+  - name: country
+    label: reports.pt.country
+    type: string
+    source: pt
+    total: false
+  - name: latitude
+    label: reports.pt.latitude
+    type: string
+    source: pt
+    total: false
+  - name: longitude
+    label: reports.pt.longitude
+    type: string
+    source: pt
+    total: false
+  - name: ownerstatus
+    label: reports.pt.ownerstatus
+    type: string
+    source: pt
+    total: false
+  - name: ownershippercentage
+    label: reports.pt.ownershippercentage
+    type: string
+    source: pt
+    total: false
+  - name: institutionid
+    label: reports.pt.institutionid
+    type: string
+    source: pt
+    total: false
+  - name: relationship
+    label: reports.pt.relationship
+    type: string
+    source: pt
+    total: false
+  - name: ownername
+    label: reports.pt.ownername
+    type: string
+    source: pt
+    total: false
+  - name: guardian
+    label: reports.pt.guardian
+    type: string
+    source: pt
+    total: false
+  - name: isprimaryowner
+    label: reports.pt.isprimaryowner
+    type: string
+    source: pt
+    total: false
+  - name: guardianrelation
+    label: reports.pt.guardianrelation
+    type: string
+    source: pt
+    total: false
+  - name: mobilenumber
+    label: reports.pt.mobilenumber
+    type: string
+    source: pt
+    total: false
+  - name: gender
+    label: reports.pt.gender
+    type: string
+    source: pt
+    total: false
+  searchParams:
+  - name: fromDate
+    label: reports.pt.fromDate
+    type: epoch
+    source: pt
+    isMandatory: false
+    searchClause: AND  property.createdtime >= $fromDate
+  - name: toDate
+    label: reports.pt.toDate
+    type: epoch
+    source: pt
+    isMandatory: false
+    searchClause: AND  property.createdtime <= $toDate
+  query: |
+    -- Use CTE to force query plan, compute & use CTE later
+    SELECT 
+      to_char((To_timestamp(property.createdtime/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY HH24:MI:SS') AS  createddate,
+      property.propertyid,
+      property.oldpropertyid , 
+      property.status,  
+      property.propertytype,
+      property.ownershipcategory,
+      property.usagecategory,
+      property.creationreason,
+      property.nooffloors,
+      property.landarea,
+      property.superbuiltuparea, 
+      property.linkedproperties, 
+      property.source, 
+      property.channel,
+      unit.floorno, 
+      unit.unittype, 
+      unit.usagecategory, 
+      unit.occupancytype, 
+      unit.occupancydate, 
+      unit.carpetarea, 
+      unit.builtuparea, 
+      unit.plintharea, 
+      unit.superbuiltuparea, 
+      unit.arv, 
+      unit.constructiontype, 
+      unit.constructiondate, 
+      unit.dimensions, 
+      unit.active, 
+      address.doorno,
+      address.plotno,
+      address.buildingname,
+      address.street,
+      address.landmark,
+      address.city,
+      address.pincode,
+      address.locality,
+      address.district,
+      address.region,
+      address.state,
+      address.country,
+      address.latitude, 
+      address.longitude,
+      owner.status as ownerstatus,
+      owner.isprimaryowner,
+      owner.ownertype,
+      owner.ownershippercentage,
+      owner.institutionid,
+      owner.relationship,
+      users.name as ownername,
+      users.guardian,
+      users.guardianrelation,
+      users.mobilenumber,
+      users.gender 
+    FROM eg_pt_property as property 
+    inner join eg_pt_unit as unit on property.id=unit.propertyid
+    inner join  eg_pt_address as address on property.id=address.propertyid  
+    inner join eg_pt_owner as owner on property.id=owner.propertyid 
+    inner join  eg_user as users on owner.userid=users.uuid 
+    WHERE  owner.status='ACTIVE' and property.tenantid=$tenantid
