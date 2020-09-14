@@ -4303,7 +4303,7 @@ ReportDefinitions:
       propertyid,
       status 
     FROM eg_pt_asmt_assessment
-    WHERE  and tenantid=$tenantid
+    WHERE tenantid=$tenantid
 
 - reportName: DumpReport_v2
   summary: Dump Report
