@@ -2952,11 +2952,6 @@ ReportDefinitions:
     type: string
     source: pt
     total: false
-  - name: financialyear
-    label: reports.pt.financialYear
-    type: string
-    source: pt
-    total: false
   - name: instrumenttype
     label: reports.pt.paymentMode
     type: string
@@ -3007,14 +3002,6 @@ ReportDefinitions:
     source: pt
     isMandatory: false
     searchClause: AND instrumenttype = $paymentMode
-  - name: financialyear
-    label: Financial Year
-    type: singlevaluelist
-    pattern: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?tenantId=$tenantid&moduleName=egf-master&masterName=FinancialYear|$.MdmsRes.egf-master.FinancialYear.[?(@.module=='PT')].code|$.MdmsRes.egf-master.FinancialYear.[?(@.module=='PT')].name
-    source: pt
-    wrapper: true
-    isMandatory: false
-    searchClause: AND financialyear = $financialyear
   - name: localityArray
     label: reports.pt.zoneList
     type: boundarylist
@@ -3031,61 +3018,54 @@ ReportDefinitions:
     searchClause: AND eg_user.id = $collectorname::INTEGER
   query: |
       -- Use CTE to force query plan, compute & use CTE later
-      WITH receipt_breakup AS (
-                  SELECT 
-                    receiptnumber, 
-                    SUM(CASE WHEN taxheadcode LIKE 'PT_ADHOC_PENALTY' THEN adjustedamount ELSE 0 END) as adhocpenalty,
-                    SUM(CASE WHEN taxheadcode LIKE 'PT_ADHOC_REBATE' THEN adjustedamount ELSE 0 END) as adhocrebate,
-                    SUM(CASE WHEN taxheadcode LIKE 'PT_FIRE_CESS' THEN adjustedamount ELSE 0 END) as firecess,
-                    SUM(CASE WHEN taxheadcode LIKE 'PT_CANCER_CESS' THEN adjustedamount ELSE 0 END) as cancercess,
-                    SUM(CASE WHEN taxheadcode LIKE 'PT_TIME_INTEREST' THEN adjustedamount ELSE 0 END) as interest,
-                    SUM(CASE WHEN taxheadcode LIKE 'PT_TIME_PENALTY' THEN adjustedamount ELSE 0 END) as penalty,
-                    SUM(CASE WHEN taxheadcode LIKE 'PT_TIME_REBATE' THEN adjustedamount ELSE 0 END) as rebate,
-                    SUM(CASE WHEN taxheadcode LIKE 'PT_TAX' THEN adjustedamount ELSE 0 END) as propertytax,
+        WITH receipt_breakup AS (
+                  SELECT
+                    pd.id as pdid,
+                    SUM(CASE WHEN taxheadcode LIKE 'PT_ADHOC_PENALTY' THEN adjustedamount ELSE 0 END) as adhocpenalty, 
+                    SUM(CASE WHEN taxheadcode LIKE 'PT_ADHOC_REBATE' THEN adjustedamount ELSE 0 END) as adhocrebate, 
+                    SUM(CASE WHEN taxheadcode LIKE 'PT_FIRE_CESS' THEN adjustedamount ELSE 0 END) as firecess, 
+                    SUM(CASE WHEN taxheadcode LIKE 'PT_CANCER_CESS' THEN adjustedamount ELSE 0 END) as cancercess, 
+                    SUM(CASE WHEN taxheadcode LIKE 'PT_TIME_INTEREST' THEN adjustedamount ELSE 0 END) as interest, 
+                    SUM(CASE WHEN taxheadcode LIKE 'PT_TIME_PENALTY' THEN adjustedamount ELSE 0 END) as penalty, 
+                    SUM(CASE WHEN taxheadcode LIKE 'PT_TIME_REBATE' THEN adjustedamount ELSE 0 END) as rebate, 
+                    SUM(CASE WHEN taxheadcode LIKE 'PT_TAX' THEN adjustedamount ELSE 0 END) as propertytax, 
                     (SUM(CASE WHEN taxheadcode LIKE 'PT_UNIT_USAGE_EXEMPTION' THEN adjustedamount ELSE 0 END)
                     + SUM(CASE WHEN taxheadcode LIKE 'PT_OWNER_EXEMPTION' THEN adjustedamount ELSE 0 END) )as exemption,
-                    ( SUM(CASE WHEN taxheadcode LIKE 'PT_ROUNDOFF' THEN adjustedamount ELSE 0 END)
+                    (SUM(CASE WHEN taxheadcode LIKE 'PT_ROUNDOFF' THEN adjustedamount ELSE 0 END)
                     + SUM(CASE WHEN taxheadcode LIKE 'PT_DECIMAL_CEILING_DEBIT' THEN adjustedamount ELSE 0 END)
                     + SUM(CASE WHEN taxheadcode LIKE 'PT_DECIMAL_CEILING_CREDIT' THEN adjustedamount ELSE 0 END)) as adjustment
                   FROM egcl_billaccountdetail as bad
                   INNER JOIN egcl_billdetial as bd on bd.id = bad.billdetailid
                   INNER JOIN egcl_paymentdetail as pd on pd.billid = bd.billid
                   INNER JOIN egcl_payment as payment on pd.paymentid=payment.id
-                  LEFT OUTER JOIN eg_user ON eg_user.id = pd.createdby::INTEGER
-                  WHERE bd.tenantid = $tenantid and payment.paymentstatus != 'CANCELLED' and pd.businessservice='PT'
-                  GROUP BY pd.receiptnumber
+                  WHERE payment.tenantid = $tenantid and payment.paymentstatus != 'CANCELLED' and  pd.businessservice='PT'
+                  GROUP BY pdid
       )
       SELECT 
-        bill.tenantid AS tenantid, 
-        bill.id, 
-        pt_detail.property AS propertyid, 
-        pt_detail.assessmentnumber AS assessmentnumber,  
-        bill.consumercode, 
-        pd.receiptdate, 
-        to_char((To_timestamp(pd.receiptdate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY')  AS transactiondate,
+        pd.tenantid AS tenantid,
+        pd.id,
+        pt.propertyid,
+        to_char((To_timestamp(pd.receiptdate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY')  AS receiptdate,
         payment.ifsccode AS bankname, 
-        pd.receiptnumber, 
+        receiptnumber,
         payment.totalamountpaid as amount, 
         payment.paymentmode as instrumenttype, 
-        payment.transactionnumber, 
+        payment.transactionnumber,
+        to_char((To_timestamp(bd.fromperiod/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY') AS fromdate,
+        to_char((To_timestamp(bd.toperiod/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY') AS todate, 
+        to_char((To_timestamp(payment.transactiondate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY') AS transactiondate,         
+        Initcap(pt.usagecategory) as usagetype,
+        eg_user.name as collectorname,
         receipt_breakup.*,
-        pd.due AS pendingamount,
-        pt_detail.financialyear,
-        to_char((To_timestamp(pd.manualreceiptdate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY')  AS g8issuedate,
-        Initcap(COALESCE(pt_detail.usagecategoryminor, pt_detail.usagecategorymajor)) as usagetype,
-        manualreceiptnumber as g8receiptno,
-        (CASE WHEN collectiontype='COUNTER' THEN eg_user.name ELSE '' END) as collectorname,
-        pt_detail.additionaldetails->>'remarks' as "remarks"
-      FROM egcl_bill AS bill
-      INNER JOIN egcl_billdetial as bd on bd.billid = bill.id
-      LEFT OUTER JOIN egcl_paymentdetail as pd on pd.billid = bd.billid
-      LEFT OUTER JOIN egcl_payment as payment on pd.paymentid=payment.id
-      JOIN eg_pt_propertydetail_v2 pt_detail ON pt_detail.property  = bill.consumercode
-      JOIN eg_pt_address_v2 pt_addr ON pt_detail.property = pt_addr.property
-      JOIN receipt_breakup  ON receipt_breakup.receiptnumber =  pd.receiptnumber
-      LEFT OUTER JOIN eg_user ON eg_user.id = pd.createdby::INTEGER
-      WHERE pd.tenantid = $tenantid and payment.paymentstatus != 'CANCELLED' and pd.businessservice='PT'
-  orderby: ORDER BY pd.receiptdate DESC
+        locality,
+        to_char((To_timestamp(pd.manualreceiptdate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY') AS g8issuedate, 
+        manualreceiptnumber as g8receiptno
+      FROM egcl_paymentdetail pd, egcl_payment payment, eg_pt_property as pt, receipt_breakup, eg_user, eg_pt_address_v2 as pt_addr,
+      (select bill.id as billid, bill.consumercode as consumercodei, (select get_fromperiod(bill.id)) as fromperiod, (select get_toperiod(bill.id)) as  toperiod from egcl_billdetial bd, egcl_bill bill where bill.id=bd.billid and bill.tenantid = $tenantid  group by bill.id) bd 
+      where pd.paymentid=payment.id and bd.billid=pd.billid and payment.paymentstatus != 'CANCELLED' and pd.businessservice='PT' and payment.tenantid=$tenantid 
+      and pt.propertyid = pt_addr.property and pt.propertyid = bd.consumercodei and receipt_breakup.pdid=pd.id and eg_user.id = pd.createdby::INTEGER  and pt.status='ACTIVE' 
+      --and pt.propertyid='PT-1012-978737'
+  orderby: ORDER BY pd.receiptdate DESC;
 
 
 - reportName: ULBPTDataDumpReport_V2
