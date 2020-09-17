@@ -1783,8 +1783,23 @@ ReportDefinitions:
     type: string
     source: tl
     total: true
+  - name: pendingpayment
+    label: TL_PENDINGPAYMENT
+    type: string
+    source: tl
+    total: true
   - name: paid
     label: TL_PAID
+    type: string
+    source: tl
+    total: true
+  - name: fieldinspection
+    label: TL_FIELDINSPECTION
+    type: string
+    source: tl
+    total: true
+  - name: pendingapproval
+    label: TL_PENDINGAPPROVAL
     type: string
     source: tl
     total: true
@@ -1800,6 +1815,11 @@ ReportDefinitions:
     total: true
   - name: cancelled
     label: TL_CANCELLED
+    type: string
+    source: tl
+    total: true
+  - name: citizenactionrequired
+    label: TL_CITIZENACTIONREQUIRED
     type: string
     source: tl
     total: true
@@ -1829,7 +1849,11 @@ ReportDefinitions:
         initcap(split_part(tenantId, '.', 2)) as tenantId, 
         SUM(CASE status when 'REJECTED' then 1 else 0 end) as rejected,
         SUM(CASE status when 'INITIATED' then 1 else 0 end) as initiated,
+        SUM(CASE status when 'PENDINGPAYMENT' then 1 else 0 end) as pendingpayment,
         SUM(CASE status when 'PAID' then 1 else 0 end) as paid,
+        SUM(CASE status when 'FIELDINSPECTION' then 1 else 0 end) as fieldinspection,
+        SUM(CASE status when 'CITIZENACTIONREQUIRED' then 1 else 0 end) as citizenactionrequired,
+        SUM(CASE status when 'PENDINGAPPROVAL' then 1 else 0 end) as pendingapproval,
         SUM(CASE status when 'APPROVED' then 1 else 0 end) as approved,
         SUM(CASE status when 'APPLIED' then 1 else 0 end) as applied,
         SUM(CASE status when 'CANCELLED' then 1 else 0 end) as cancelled
