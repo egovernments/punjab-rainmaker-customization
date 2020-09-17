@@ -2169,6 +2169,19 @@ ReportDefinitions:
     type: string
     source: pt
     total: true
+  searchParams:
+  - name: fromDate
+    label: reports.pt.fromDate
+    type: epoch
+    source: pt
+    isMandatory: false
+    searchClause: AND 1=1
+  - name: toDate
+    label: reports.pt.toDate
+    type: epoch
+    source: pt
+    isMandatory: false
+    searchClause: AND 1=1
   query: |
    --S.no    Service Name ULB    Property Tax Unique ID    Date Of Transcation    Receipt Number Existing Property ID    Type Of Property Mobile Number    Address
     with fy2013 as
@@ -2185,7 +2198,7 @@ ReportDefinitions:
     JOIN eg_bndry_mohalla on eg_bndry_mohalla.localitycode=pt_addr.locality
     LEFT OUTER JOIN eg_user ON eg_user.id = rh.createdby::INTEGER
     WHERE rh.tenantid =  $tenantid and rh.status != 'Cancelled' and financialyear='2013-14'
-    --and rh.receiptdate>=$fromDate and rh.receiptdate<=$toDate
+    and rh.receiptdate>=$fromDate and rh.receiptdate<=$toDate
     GROUP BY zonecode
     ), 
     fy2014 as
@@ -2202,7 +2215,7 @@ ReportDefinitions:
     JOIN eg_bndry_mohalla on eg_bndry_mohalla.localitycode=pt_addr.locality
     LEFT OUTER JOIN eg_user ON eg_user.id = rh.createdby::INTEGER
     WHERE rh.tenantid =  $tenantid and rh.status != 'Cancelled' and financialyear='2014-15'
-    --and rh.receiptdate>=$fromDate and rh.receiptdate<=$toDate
+    and rh.receiptdate>=$fromDate and rh.receiptdate<=$toDate
     GROUP BY zonecode
     ), 
     fy2015 as
@@ -2219,7 +2232,7 @@ ReportDefinitions:
     JOIN eg_bndry_mohalla on eg_bndry_mohalla.localitycode=pt_addr.locality
     LEFT OUTER JOIN eg_user ON eg_user.id = rh.createdby::INTEGER
     WHERE rh.tenantid =  $tenantid and rh.status != 'Cancelled' and financialyear='2015-16'
-    --and rh.receiptdate>=$fromDate and rh.receiptdate<=$toDate
+    and rh.receiptdate>=$fromDate and rh.receiptdate<=$toDate
     GROUP BY zonecode
     ), 
     fy2016 as
@@ -2236,7 +2249,7 @@ ReportDefinitions:
     JOIN eg_bndry_mohalla on eg_bndry_mohalla.localitycode=pt_addr.locality
     LEFT OUTER JOIN eg_user ON eg_user.id = rh.createdby::INTEGER
     WHERE rh.tenantid =  $tenantid and rh.status != 'Cancelled' and financialyear='2016-17'
-    --and rh.receiptdate>=$fromDate and rh.receiptdate<=$toDate
+    and rh.receiptdate>=$fromDate and rh.receiptdate<=$toDate
     GROUP BY zonecode
     ), 
     fy2017 as
@@ -2253,7 +2266,7 @@ ReportDefinitions:
     JOIN eg_bndry_mohalla on eg_bndry_mohalla.localitycode=pt_addr.locality
     LEFT OUTER JOIN eg_user ON eg_user.id = rh.createdby::INTEGER
     WHERE rh.tenantid =  $tenantid and rh.status != 'Cancelled' and financialyear='2017-18'
-    --and rh.receiptdate>=$fromDate and rh.receiptdate<=$toDate
+    and rh.receiptdate>=$fromDate and rh.receiptdate<=$toDate
     GROUP BY zonecode
     ),
     fy2018 as
@@ -2270,7 +2283,7 @@ ReportDefinitions:
     JOIN eg_bndry_mohalla on eg_bndry_mohalla.localitycode=pt_addr.locality
     LEFT OUTER JOIN eg_user ON eg_user.id = rh.createdby::INTEGER
     WHERE rh.tenantid =  $tenantid and rh.status != 'Cancelled' and financialyear='2018-19'
-    --and rh.receiptdate>=$fromDate and rh.receiptdate<=$toDate
+    and rh.receiptdate>=$fromDate and rh.receiptdate<=$toDate
     GROUP BY zonecode
     ),
     fy2019 as
@@ -2287,7 +2300,7 @@ ReportDefinitions:
       JOIN eg_bndry_mohalla on eg_bndry_mohalla.localitycode=pt_addr.locality
       LEFT OUTER JOIN eg_user ON eg_user.id = rh.createdby::INTEGER
       WHERE rh.tenantid =  $tenantid and rh.status != 'Cancelled' and financialyear='2019-20'
-      --and rh.receiptdate>=$fromDate and rh.receiptdate<=$toDate
+      and rh.receiptdate>=$fromDate and rh.receiptdate<=$toDate
       GROUP BY zonecode
     ),
     fy2020 as
@@ -2304,7 +2317,7 @@ ReportDefinitions:
     JOIN eg_bndry_mohalla on eg_bndry_mohalla.localitycode=pt_addr.locality
     LEFT OUTER JOIN eg_user ON eg_user.id = rh.createdby::INTEGER
     WHERE rh.tenantid =  $tenantid and rh.status != 'Cancelled' and financialyear='2020-21'
-    --and rh.receiptdate>=$fromDate and rh.receiptdate<=$toDate
+    and rh.receiptdate>=$fromDate and rh.receiptdate<=$toDate
     GROUP BY zonecode
     ),
     zones as
@@ -2341,7 +2354,7 @@ ReportDefinitions:
     left outer join fy2018 on fy2018.zonecode=zones.zonecode
     left outer join fy2019 on fy2019.zonecode=zones.zonecode
     left outer join fy2020 on fy2020.zonecode=zones.zonecode
-    --where 1=1 
+    where 1=1 
   orderby: order by zonename
     
   
