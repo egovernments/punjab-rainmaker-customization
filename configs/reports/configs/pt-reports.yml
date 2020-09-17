@@ -1885,8 +1885,18 @@ ReportDefinitions:
     type: string
     source: pt
     total: true
+  - name: countresidential
+    label: reports.pt.countresidential
+    type: string
+    source: pt
+    total: true  
   - name: nonresidential
     label: reports.pt.nonresidential
+    type: string
+    source: pt
+    total: true
+  - name: countnonresidential
+    label: reports.pt.countnonresidential
     type: string
     source: pt
     total: true
@@ -1895,11 +1905,21 @@ ReportDefinitions:
     type: string
     source: pt
     total: true
+  - name: countmixed
+    label: reports.pt.countmixed
+    type: string
+    source: pt
+    total: true
   - name: totalamount
     label: reports.pt.totalamount
     type: string
     source: pt
     total: true
+  - name: totalcount
+    label: reports.pt.totalcount
+    type: string
+    source: pt
+    total: true  
   - name: online
     label: reports.pt.online
     type: string
@@ -1944,14 +1964,18 @@ ReportDefinitions:
       SELECT
         financialyear,
         sum(case when usagecategorymajor='RESIDENTIAL' then amount else 0 end) as "residential",
+        sum(case when usagecategorymajor='RESIDENTIAL' then 1 else 0 end) as "countresidential",
         sum(case when usagecategorymajor='NONRESIDENTIAL' then amount else 0 end) as "nonresidential",
+        sum(case when usagecategorymajor='NONRESIDENTIAL' then 1 else 0 end) as "countnonresidential",
         sum(case when usagecategorymajor='MIXED' then amount else 0 end) as "mixed",
+        sum(case when usagecategorymajor='MIXED' then 1 else 0 end) as "countmixed",
         sum(amount) as totalamount,
+        count(amount) as totalcount,
         sum(case when instrumenttype='Online' then amount else 0 end) as "online",
         sum(case when instrumenttype='Cash' then amount else 0 end) as "cash",
         sum(case when instrumenttype='Cheque' then amount else 0 end) as "cheque",
         sum(case when instrumenttype='DD' then amount else 0 end) as "dd"
-      FROM egcl_receiptheader_v1 AS rh
+        FROM egcl_receiptheader_v1 AS rh
       JOIN egcl_receiptinstrument_v1 AS ri ON rh.id = ri.receiptheader
       JOIN egcl_instrumentheader_v1 AS ih ON ih.id = ri.instrumentheader
       JOIN eg_pt_propertydetail_v2 pt_detail ON (pt_detail.property || ':' || pt_detail.assessmentnumber) = rh.consumercode
@@ -1959,7 +1983,8 @@ ReportDefinitions:
       LEFT OUTER JOIN eg_user ON eg_user.id = rh.createdby::INTEGER
       WHERE rh.tenantid = $tenantid and rh.status != 'Cancelled'
   groupby: GROUP BY financialyear
-  orderby: ORDER BY financialyear  
+  orderby: ORDER BY financialyear
+
 
 - reportName: ULBDEFAULTERPTREPORT
   summary: ULB Defaulter Pt report
