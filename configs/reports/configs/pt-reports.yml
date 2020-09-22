@@ -1702,6 +1702,21 @@ ReportDefinitions:
     type: string
     source: pt
     total: true 
+  - name: countcash
+    label: reports.pt.countcash
+    type: string
+    source: pt
+    total: true 
+  - name: countcheque
+    label: reports.pt.countcheque
+    type: string
+    source: pt
+    total: true 
+  - name: countonline
+    label: reports.pt.countonline
+    type: string
+    source: pt
+    total: true 
   - name: collectorname
     label: reports.pt.collectorname
     type: string
@@ -1737,7 +1752,7 @@ ReportDefinitions:
       -- Use CTE to force query plan, compute & use CTE later
       SELECT
         split_part(rh.tenantid,'.',2) as ulb,
-        Count (*)/8 noofassessments,
+        Count(distinct rd.receiptheader) noofassessments,
         SUM(CASE WHEN taxheadcode LIKE 'PT_ADHOC_PENALTY' THEN adjustedamount ELSE 0 END) as adhocpenalty,
         SUM(CASE WHEN taxheadcode LIKE 'PT_ADHOC_REBATE' THEN adjustedamount ELSE 0 END) as adhocrebate,
         SUM(CASE WHEN taxheadcode LIKE 'PT_FIRE_CESS' THEN adjustedamount ELSE 0 END) as firecess,
@@ -1751,10 +1766,15 @@ ReportDefinitions:
         ( SUM(CASE WHEN taxheadcode LIKE 'PT_ROUNDOFF' THEN adjustedamount ELSE 0 END)
         + SUM(CASE WHEN taxheadcode LIKE 'PT_DECIMAL_CEILING_DEBIT' THEN adjustedamount ELSE 0 END)
         + SUM(CASE WHEN taxheadcode LIKE 'PT_DECIMAL_CEILING_CREDIT' THEN adjustedamount ELSE 0 END)) as adjustment,
-        (CASE WHEN collectiontype='COUNTER' THEN eg_user.name ELSE 'Online' END) as collectorname,
-        sum(adjustedamount) as totalamount
+        count (distinct  case when instrumenttype='Cash' then concat(rd.receiptheader,instrumenttype) end) as countcash,
+        count (distinct  case when instrumenttype='Cheque' then concat(rd.receiptheader,instrumenttype) end) as countcheque,
+        count (distinct  case when instrumenttype='Online' then concat(rd.receiptheader,instrumenttype) end) as countonline,
+        sum(adjustedamount) as totalamount,
+       (CASE WHEN collectiontype='COUNTER' THEN eg_user.name ELSE 'Online' END) as collectorname
       FROM egcl_receiptdetails_v1 as rd
       INNER JOIN egcl_receiptheader_v1 as rh on rh.id = rd.receiptheader
+      JOIN egcl_receiptinstrument_v1 AS ri ON rh.id = ri.receiptheader
+      JOIN egcl_instrumentheader_v1 AS ih ON ih.id = ri.instrumentheader
       LEFT OUTER JOIN eg_user ON eg_user.id = rh.createdby::INTEGER
       WHERE rh.tenantid = $tenantid and rh.status != 'Cancelled' and businessdetails='PT'
   groupby: group by collectorname,rh.tenantid
