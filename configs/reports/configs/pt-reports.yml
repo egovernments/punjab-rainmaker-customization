@@ -2216,11 +2216,13 @@ ReportDefinitions:
       string_agg(distinct zonename,',') as zonename,
       string_agg(distinct financialYear,',') as financialyear,
       count(*) as totalptr,
-      sum(totalamount) as amountcollected  
+      sum(amount) as amountcollected  
     FROM egcl_receiptheader_v1 AS rh
     JOIN eg_pt_propertydetail_v2 pt_detail ON (pt_detail.property || ':' || pt_detail.assessmentnumber) = rh.consumercode
     JOIN eg_pt_address_v2 pt_addr ON pt_detail.property = pt_addr.property
     JOIN eg_bndry_mohalla on eg_bndry_mohalla.localitycode=pt_addr.locality
+    INNER JOIN egcl_receiptinstrument_v1 ri on ri.receiptheader=rh.id 
+    INNER JOIN egcl_instrumentheader_v1 ih on ih.id=ri.instrumentheader
     LEFT OUTER JOIN eg_user ON eg_user.id = rh.createdby::INTEGER
     WHERE rh.tenantid =  $tenantid and rh.status != 'Cancelled' and financialyear='2013-14'
     and rh.receiptdate>=$fromDate and rh.receiptdate<=$toDate
@@ -2233,11 +2235,13 @@ ReportDefinitions:
       string_agg(distinct zonename,',') as zonename,
       string_agg(distinct financialYear,',') as financialyear,
       count(*) as totalptr,
-      sum(totalamount) as amountcollected  
+      sum(amount) as amountcollected  
     FROM egcl_receiptheader_v1 AS rh
     JOIN eg_pt_propertydetail_v2 pt_detail ON (pt_detail.property || ':' || pt_detail.assessmentnumber) = rh.consumercode
     JOIN eg_pt_address_v2 pt_addr ON pt_detail.property = pt_addr.property
     JOIN eg_bndry_mohalla on eg_bndry_mohalla.localitycode=pt_addr.locality
+    INNER JOIN egcl_receiptinstrument_v1 ri on ri.receiptheader=rh.id 
+    INNER JOIN egcl_instrumentheader_v1 ih on ih.id=ri.instrumentheader
     LEFT OUTER JOIN eg_user ON eg_user.id = rh.createdby::INTEGER
     WHERE rh.tenantid =  $tenantid and rh.status != 'Cancelled' and financialyear='2014-15'
     and rh.receiptdate>=$fromDate and rh.receiptdate<=$toDate
@@ -2250,11 +2254,13 @@ ReportDefinitions:
       string_agg(distinct zonename,',') as zonename,
       string_agg(distinct financialYear,',') as financialyear,
       count(*) as totalptr,
-      sum(totalamount) as amountcollected  
+      sum(amount) as amountcollected  
       FROM egcl_receiptheader_v1 AS rh
     JOIN eg_pt_propertydetail_v2 pt_detail ON (pt_detail.property || ':' || pt_detail.assessmentnumber) = rh.consumercode
     JOIN eg_pt_address_v2 pt_addr ON pt_detail.property = pt_addr.property
     JOIN eg_bndry_mohalla on eg_bndry_mohalla.localitycode=pt_addr.locality
+    INNER JOIN egcl_receiptinstrument_v1 ri on ri.receiptheader=rh.id 
+    INNER JOIN egcl_instrumentheader_v1 ih on ih.id=ri.instrumentheader
     LEFT OUTER JOIN eg_user ON eg_user.id = rh.createdby::INTEGER
     WHERE rh.tenantid =  $tenantid and rh.status != 'Cancelled' and financialyear='2015-16'
     and rh.receiptdate>=$fromDate and rh.receiptdate<=$toDate
@@ -2267,11 +2273,13 @@ ReportDefinitions:
       string_agg(distinct zonename,',') as zonename,
       string_agg(distinct financialYear,',') as financialyear,
       count(*) as totalptr,
-      sum(totalamount) as amountcollected  
+      sum(amount) as amountcollected  
     FROM egcl_receiptheader_v1 AS rh
     JOIN eg_pt_propertydetail_v2 pt_detail ON (pt_detail.property || ':' || pt_detail.assessmentnumber) = rh.consumercode
     JOIN eg_pt_address_v2 pt_addr ON pt_detail.property = pt_addr.property
     JOIN eg_bndry_mohalla on eg_bndry_mohalla.localitycode=pt_addr.locality
+    INNER JOIN egcl_receiptinstrument_v1 ri on ri.receiptheader=rh.id 
+    INNER JOIN egcl_instrumentheader_v1 ih on ih.id=ri.instrumentheader
     LEFT OUTER JOIN eg_user ON eg_user.id = rh.createdby::INTEGER
     WHERE rh.tenantid =  $tenantid and rh.status != 'Cancelled' and financialyear='2016-17'
     and rh.receiptdate>=$fromDate and rh.receiptdate<=$toDate
@@ -2284,11 +2292,13 @@ ReportDefinitions:
       string_agg(distinct zonename,',') as zonename,
       string_agg(distinct financialYear,',') as financialyear,
       count(*) as totalptr,
-      sum(totalamount) as amountcollected  
+      sum(amount) as amountcollected  
     FROM egcl_receiptheader_v1 AS rh
     JOIN eg_pt_propertydetail_v2 pt_detail ON (pt_detail.property || ':' || pt_detail.assessmentnumber) = rh.consumercode
     JOIN eg_pt_address_v2 pt_addr ON pt_detail.property = pt_addr.property
     JOIN eg_bndry_mohalla on eg_bndry_mohalla.localitycode=pt_addr.locality
+    INNER JOIN egcl_receiptinstrument_v1 ri on ri.receiptheader=rh.id 
+    INNER JOIN egcl_instrumentheader_v1 ih on ih.id=ri.instrumentheader
     LEFT OUTER JOIN eg_user ON eg_user.id = rh.createdby::INTEGER
     WHERE rh.tenantid =  $tenantid and rh.status != 'Cancelled' and financialyear='2017-18'
     and rh.receiptdate>=$fromDate and rh.receiptdate<=$toDate
@@ -2301,11 +2311,13 @@ ReportDefinitions:
       string_agg(distinct zonename,',') as zonename,
       string_agg(distinct financialYear,',') as financialyear,
       count(*) as totalptr,
-      sum(totalamount) as amountcollected  
+      sum(amount) as amountcollected  
     FROM egcl_receiptheader_v1 AS rh
     JOIN eg_pt_propertydetail_v2 pt_detail ON (pt_detail.property || ':' || pt_detail.assessmentnumber) = rh.consumercode
     JOIN eg_pt_address_v2 pt_addr ON pt_detail.property = pt_addr.property
     JOIN eg_bndry_mohalla on eg_bndry_mohalla.localitycode=pt_addr.locality
+    INNER JOIN egcl_receiptinstrument_v1 ri on ri.receiptheader=rh.id 
+    INNER JOIN egcl_instrumentheader_v1 ih on ih.id=ri.instrumentheader
     LEFT OUTER JOIN eg_user ON eg_user.id = rh.createdby::INTEGER
     WHERE rh.tenantid =  $tenantid and rh.status != 'Cancelled' and financialyear='2018-19'
     and rh.receiptdate>=$fromDate and rh.receiptdate<=$toDate
@@ -2318,11 +2330,13 @@ ReportDefinitions:
         string_agg(distinct zonename,',') as zonename,
         string_agg(distinct financialYear,',') as financialyear,
         count(*) as totalptr,
-        sum(totalamount) as amountcollected  
+        sum(amount) as amountcollected  
       FROM egcl_receiptheader_v1 AS rh
       JOIN eg_pt_propertydetail_v2 pt_detail ON (pt_detail.property || ':' || pt_detail.assessmentnumber) = rh.consumercode
       JOIN eg_pt_address_v2 pt_addr ON pt_detail.property = pt_addr.property
       JOIN eg_bndry_mohalla on eg_bndry_mohalla.localitycode=pt_addr.locality
+      INNER JOIN egcl_receiptinstrument_v1 ri on ri.receiptheader=rh.id 
+      INNER JOIN egcl_instrumentheader_v1 ih on ih.id=ri.instrumentheader
       LEFT OUTER JOIN eg_user ON eg_user.id = rh.createdby::INTEGER
       WHERE rh.tenantid =  $tenantid and rh.status != 'Cancelled' and financialyear='2019-20'
       and rh.receiptdate>=$fromDate and rh.receiptdate<=$toDate
@@ -2335,11 +2349,13 @@ ReportDefinitions:
       string_agg(distinct zonename,',') as zonename,
       string_agg(distinct financialYear,',') as financialyear,
       count(*) as totalptr,
-      sum(totalamount) as amountcollected  
+      sum(amount) as amountcollected  
     FROM egcl_receiptheader_v1 AS rh
     JOIN eg_pt_propertydetail_v2 pt_detail ON (pt_detail.property || ':' || pt_detail.assessmentnumber) = rh.consumercode
     JOIN eg_pt_address_v2 pt_addr ON pt_detail.property = pt_addr.property
     JOIN eg_bndry_mohalla on eg_bndry_mohalla.localitycode=pt_addr.locality
+    INNER JOIN egcl_receiptinstrument_v1 ri on ri.receiptheader=rh.id 
+    INNER JOIN egcl_instrumentheader_v1 ih on ih.id=ri.instrumentheader
     LEFT OUTER JOIN eg_user ON eg_user.id = rh.createdby::INTEGER
     WHERE rh.tenantid =  $tenantid and rh.status != 'Cancelled' and financialyear='2020-21'
     and rh.receiptdate>=$fromDate and rh.receiptdate<=$toDate
@@ -2505,11 +2521,13 @@ ReportDefinitions:
       string_agg(distinct blockname,',') as blockname,
       string_agg(distinct financialYear,',') as financialyear,
       count(*) as totalptr,
-      sum(totalamount) as amountcollected  
+      sum(amount) as amountcollected  
     FROM egcl_receiptheader_v1 AS rh
     JOIN eg_pt_propertydetail_v2 pt_detail ON (pt_detail.property || ':' || pt_detail.assessmentnumber) = rh.consumercode
     JOIN eg_pt_address_v2 pt_addr ON pt_detail.property = pt_addr.property
     JOIN eg_bndry_mohalla on eg_bndry_mohalla.localitycode=pt_addr.locality
+    INNER JOIN egcl_receiptinstrument_v1 ri on ri.receiptheader=rh.id 
+    INNER JOIN egcl_instrumentheader_v1 ih on ih.id=ri.instrumentheader
     LEFT OUTER JOIN eg_user ON eg_user.id = rh.createdby::INTEGER
     WHERE rh.tenantid =  $tenantid and rh.status != 'Cancelled' and financialyear='2013-14'	
     and rh.receiptdate>=$fromDate and rh.receiptdate<=$toDate
@@ -2522,11 +2540,13 @@ ReportDefinitions:
       string_agg(distinct blockname,',') as blockname,
       string_agg(distinct financialYear,',') as financialyear,
       count(*) as totalptr,
-      sum(totalamount) as amountcollected  
+      sum(amount) as amountcollected  
     FROM egcl_receiptheader_v1 AS rh
     JOIN eg_pt_propertydetail_v2 pt_detail ON (pt_detail.property || ':' || pt_detail.assessmentnumber) = rh.consumercode
     JOIN eg_pt_address_v2 pt_addr ON pt_detail.property = pt_addr.property
     JOIN eg_bndry_mohalla on eg_bndry_mohalla.localitycode=pt_addr.locality
+    INNER JOIN egcl_receiptinstrument_v1 ri on ri.receiptheader=rh.id 
+    INNER JOIN egcl_instrumentheader_v1 ih on ih.id=ri.instrumentheader
     LEFT OUTER JOIN eg_user ON eg_user.id = rh.createdby::INTEGER
     WHERE rh.tenantid =  $tenantid and rh.status != 'Cancelled' and financialyear='2014-15'
     and rh.receiptdate>=$fromDate and rh.receiptdate<=$toDate
@@ -2539,11 +2559,13 @@ ReportDefinitions:
       string_agg(distinct blockname,',') as blockname,
       string_agg(distinct financialYear,',') as financialyear,
       count(*) as totalptr,
-      sum(totalamount) as amountcollected  
+      sum(amount) as amountcollected  
       FROM egcl_receiptheader_v1 AS rh
     JOIN eg_pt_propertydetail_v2 pt_detail ON (pt_detail.property || ':' || pt_detail.assessmentnumber) = rh.consumercode
     JOIN eg_pt_address_v2 pt_addr ON pt_detail.property = pt_addr.property
     JOIN eg_bndry_mohalla on eg_bndry_mohalla.localitycode=pt_addr.locality
+    INNER JOIN egcl_receiptinstrument_v1 ri on ri.receiptheader=rh.id 
+    INNER JOIN egcl_instrumentheader_v1 ih on ih.id=ri.instrumentheader
     LEFT OUTER JOIN eg_user ON eg_user.id = rh.createdby::INTEGER
     WHERE rh.tenantid =  $tenantid and rh.status != 'Cancelled' and financialyear='2015-16'
     and rh.receiptdate>=$fromDate and rh.receiptdate<=$toDate
@@ -2556,11 +2578,13 @@ ReportDefinitions:
       string_agg(distinct blockname,',') as blockname,
       string_agg(distinct financialYear,',') as financialyear,
       count(*) as totalptr,
-      sum(totalamount) as amountcollected  
+      sum(amount) as amountcollected  
     FROM egcl_receiptheader_v1 AS rh
     JOIN eg_pt_propertydetail_v2 pt_detail ON (pt_detail.property || ':' || pt_detail.assessmentnumber) = rh.consumercode
     JOIN eg_pt_address_v2 pt_addr ON pt_detail.property = pt_addr.property
     JOIN eg_bndry_mohalla on eg_bndry_mohalla.localitycode=pt_addr.locality
+    INNER JOIN egcl_receiptinstrument_v1 ri on ri.receiptheader=rh.id 
+    INNER JOIN egcl_instrumentheader_v1 ih on ih.id=ri.instrumentheader
     LEFT OUTER JOIN eg_user ON eg_user.id = rh.createdby::INTEGER
     WHERE rh.tenantid =  $tenantid and rh.status != 'Cancelled' and financialyear='2016-17'
     and rh.receiptdate>=$fromDate and rh.receiptdate<=$toDate
@@ -2573,11 +2597,13 @@ ReportDefinitions:
       string_agg(distinct blockname,',') as blockname,
       string_agg(distinct financialYear,',') as financialyear,
       count(*) as totalptr,
-      sum(totalamount) as amountcollected  
+      sum(amount) as amountcollected  
     FROM egcl_receiptheader_v1 AS rh
     JOIN eg_pt_propertydetail_v2 pt_detail ON (pt_detail.property || ':' || pt_detail.assessmentnumber) = rh.consumercode
     JOIN eg_pt_address_v2 pt_addr ON pt_detail.property = pt_addr.property
     JOIN eg_bndry_mohalla on eg_bndry_mohalla.localitycode=pt_addr.locality
+    INNER JOIN egcl_receiptinstrument_v1 ri on ri.receiptheader=rh.id 
+    INNER JOIN egcl_instrumentheader_v1 ih on ih.id=ri.instrumentheader
     LEFT OUTER JOIN eg_user ON eg_user.id = rh.createdby::INTEGER
     WHERE rh.tenantid =  $tenantid and rh.status != 'Cancelled' and financialyear='2017-18'
     and rh.receiptdate>=$fromDate and rh.receiptdate<=$toDate
@@ -2590,11 +2616,13 @@ ReportDefinitions:
       string_agg(distinct blockname,',') as blockname,
       string_agg(distinct financialYear,',') as financialyear,
       count(*) as totalptr,
-      sum(totalamount) as amountcollected  
+      sum(amount) as amountcollected  
     FROM egcl_receiptheader_v1 AS rh
     JOIN eg_pt_propertydetail_v2 pt_detail ON (pt_detail.property || ':' || pt_detail.assessmentnumber) = rh.consumercode
     JOIN eg_pt_address_v2 pt_addr ON pt_detail.property = pt_addr.property
     JOIN eg_bndry_mohalla on eg_bndry_mohalla.localitycode=pt_addr.locality
+    INNER JOIN egcl_receiptinstrument_v1 ri on ri.receiptheader=rh.id 
+    INNER JOIN egcl_instrumentheader_v1 ih on ih.id=ri.instrumentheader
     LEFT OUTER JOIN eg_user ON eg_user.id = rh.createdby::INTEGER
     WHERE rh.tenantid =  $tenantid and rh.status != 'Cancelled' and financialyear='2018-19'
     and rh.receiptdate>=$fromDate and rh.receiptdate<=$toDate
@@ -2607,11 +2635,13 @@ ReportDefinitions:
         string_agg(distinct blockname,',') as blockname,
         string_agg(distinct financialYear,',') as financialyear,
         count(*) as totalptr,
-        sum(totalamount) as amountcollected  
+        sum(amount) as amountcollected  
       FROM egcl_receiptheader_v1 AS rh
       JOIN eg_pt_propertydetail_v2 pt_detail ON (pt_detail.property || ':' || pt_detail.assessmentnumber) = rh.consumercode
       JOIN eg_pt_address_v2 pt_addr ON pt_detail.property = pt_addr.property
       JOIN eg_bndry_mohalla on eg_bndry_mohalla.localitycode=pt_addr.locality
+      INNER JOIN egcl_receiptinstrument_v1 ri on ri.receiptheader=rh.id 
+      INNER JOIN egcl_instrumentheader_v1 ih on ih.id=ri.instrumentheader
       LEFT OUTER JOIN eg_user ON eg_user.id = rh.createdby::INTEGER
       WHERE rh.tenantid =  $tenantid and rh.status != 'Cancelled' and financialyear='2019-20'
       and rh.receiptdate>=$fromDate and rh.receiptdate<=$toDate
@@ -2624,11 +2654,13 @@ ReportDefinitions:
       string_agg(distinct blockname,',') as blockname,
       string_agg(distinct financialYear,',') as financialyear,
       count(*) as totalptr,
-      sum(totalamount) as amountcollected  
+      sum(amount) as amountcollected  
     FROM egcl_receiptheader_v1 AS rh
     JOIN eg_pt_propertydetail_v2 pt_detail ON (pt_detail.property || ':' || pt_detail.assessmentnumber) = rh.consumercode
     JOIN eg_pt_address_v2 pt_addr ON pt_detail.property = pt_addr.property
     JOIN eg_bndry_mohalla on eg_bndry_mohalla.localitycode=pt_addr.locality
+    INNER JOIN egcl_receiptinstrument_v1 ri on ri.receiptheader=rh.id 
+    INNER JOIN egcl_instrumentheader_v1 ih on ih.id=ri.instrumentheader
     LEFT OUTER JOIN eg_user ON eg_user.id = rh.createdby::INTEGER
     WHERE rh.tenantid =  $tenantid and rh.status != 'Cancelled' and financialyear='2020-21'
     and rh.receiptdate>=$fromDate and rh.receiptdate<=$toDate
