@@ -194,14 +194,7 @@ ReportDefinitions:
         pattern: 'list://COUNTER:ULB Counter,ONLINE:Online by Citizen'
         source: common
         isMandatory: false
-        searchClause: AND collectiontype IN ($channel)
-      - name: paymentMode
-        label: reports.noc.collectionreport.paymentMode
-        type: singlevaluelist
-        pattern: 'list://Cash:Cash,Online:Online,Card:Card,DD:DD,Cheque:Cheque'
-        source: common
-        isMandatory: false
-        searchClause: AND instrumenttype = $paymentMode
+        searchClause: AND collectiontype IN ($channel)     
       - name: ulb
         label: reports.noc.collectionreport.ulb
         type: multivaluelist
@@ -378,14 +371,7 @@ ReportDefinitions:
         pattern: 'list://COUNTER:ULB Counter,ONLINE:Online by Citizen'
         source: common
         isMandatory: false
-        searchClause: AND collectiontype IN ($channel)  
-      - name: paymentMode
-        label: reports.noc.collectionreport.paymentMode
-        type: singlevaluelist
-        pattern: 'list://Cash:Cash,Online:Online,Card:Card,DD:DD,Cheque:Cheque'
-        source: common
-        isMandatory: false
-        searchClause: AND instrumenttype = $paymentMode
+        searchClause: AND collectiontype IN ($channel)
       - name: district
         label: reports.noc.collectionreport.district
         type: multivaluelist
