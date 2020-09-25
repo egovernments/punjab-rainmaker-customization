@@ -203,7 +203,7 @@ ReportDefinitions:
         wrapper: true
         isMandatory: false
         searchClause: AND fnoc.tenantId IN ($ulb)
-    query: 
+    query: | 
         Select 
           COALESCE(message,usagetype) localisedmessage,
           COUNT(*) as transactionNumber,
@@ -258,7 +258,7 @@ ReportDefinitions:
         wrapper: true
         isMandatory: false
         searchClause: AND fnoc.tenantId IN ($ulb)
-    query: 
+    query: | 
       select 
         COALESCE(message,state) application_status,
         count(*) number_of_application 
@@ -485,8 +485,16 @@ ReportDefinitions:
         wrapper: true
         isMandatory: false
         searchClause: AND fad.city IN ($district)
-    query: select channel,fad.subdistrict as subdistrict,(select COALESCE((select message from message where code=concat('FIRENOC_FIRESTATIONS_',UPPER(REGEXP_REPLACE(firestationid,'\..*','')))  limit 1), firestationid)) as firestation, count (*) number_of_applications,round((count (*)::decimal/(select count(*) from eg_fn_firenoc fnoc inner join eg_fn_firenocdetail fdet on fdet.firenocuuid=fnoc.uuid))*100,2) percentage from eg_fn_firenoc fnoc inner join eg_fn_firenocdetail fdet on fdet.firenocuuid=fnoc.uuid
-      inner join eg_fn_address as fad on fad.firenocdetailsuuid=fdet.uuid Where 1=1 AND fad.subdistrict NOT LIKE 'pb.%'
+    query: |
+        select 
+          channel,
+          fad.subdistrict as subdistrict,
+          (select COALESCE((select message from message where code=concat('FIRENOC_FIRESTATIONS_',UPPER(REGEXP_REPLACE(firestationid,'\..*','')))  limit 1), firestationid)) as firestation, 
+          count (*) number_of_applications,
+          round((count (*)::decimal/(select count(*) from eg_fn_firenoc fnoc inner join eg_fn_firenocdetail fdet on fdet.firenocuuid=fnoc.uuid))*100,2) percentage 
+        from eg_fn_firenoc fnoc 
+        inner join eg_fn_firenocdetail fdet on fdet.firenocuuid=fnoc.uuid 
+        inner join eg_fn_address as fad on fad.firenocdetailsuuid=fdet.uuid Where 1=1 AND fad.subdistrict NOT LIKE 'pb.%'
     groupby: GROUP BY (channel,subdistrict,firestation)
     orderby: ORDER BY channel
 
