@@ -219,6 +219,7 @@ ReportDefinitions:
         INNER JOIN egcl_payment on egcl_payment.id=egcl_paymentdetail.paymentid
         LEFT OUTER JOIN message on code=concat('FIRENOC_BUILDINGTYPE_',UPPER(REGEXP_REPLACE(usagetype,'\..*','')))  
         INNER JOIN eg_fn_address as fad on fad.firenocdetailsuuid=fdet.uuid and module='rainmaker-noc' where 1=1
+        and egcl_payment.tenantid!='pb.testing' and fad.areatype!='Rural'
     groupby: GROUP BY (localisedmessage)
     orderby: ORDER BY localisedmessage
 
@@ -271,7 +272,8 @@ ReportDefinitions:
     groupby: GROUP BY application_status
     orderby: ORDER BY application_status
 
-  - reportName: UrbanChannelsReport_V2
+
+ - reportName: UrbanChannelsReport_V2
     summary: Channels Report
     version: 1.0.0
     moduleName: rainmaker-noc
@@ -337,8 +339,8 @@ ReportDefinitions:
         type: string
         source: rainmaker-noc
         total: false
-      - name: transactionNumber
-        label: reports.noc.collectionreport.transactionNumber
+      - name: transactionnumber
+        label: reports.noc.collectionreport.transactionnumber
         type: string
         source: rainmaker-noc
         total: true
@@ -380,9 +382,27 @@ ReportDefinitions:
         wrapper: true
         isMandatory: false
         searchClause: AND fad.city IN ($district)      
-    query: select COALESCE(message,usagetype) localisedmessage, COUNT(*) as transactionNumber,fad.subdistrict as subdistrict,(select COALESCE((select message from message where code=concat('FIRENOC_FIRESTATIONS_',UPPER(REGEXP_REPLACE(firestationid,'\..*','')))  limit 1), firestationid)) as firestation, sum(case when collectiontype='COUNTER' then ins.amount else 0 end) fees_counter, sum(case when collectiontype='ONLINE' then ins.amount else 0 end) fees_online from eg_fn_firenoc fnoc inner join eg_fn_firenocdetail fdet on fdet.firenocuuid=fnoc.uuid inner join egcl_receiptheader_v1 rhead on rhead.consumercode=fdet.applicationnumber inner join eg_fn_buidlings build on build.firenocdetailsuuid=fdet.uuid inner join egcl_receiptinstrument_v1 recins on recins.receiptheader=rhead.id inner join egcl_instrumentheader_v1 ins on recins.instrumentheader=ins.id left outer join message on code=concat('FIRENOC_BUILDINGTYPE_',UPPER(REGEXP_REPLACE(usagetype,'\..*',''))) inner join eg_fn_address as fad on fad.firenocdetailsuuid=fdet.uuid and module='rainmaker-noc' where 1=1 AND fad.subdistrict NOT LIKE 'pb.%'
-    groupby: GROUP BY (localisedmessage,subdistrict,firestation)
+    query: |
+        Select 
+          COALESCE(message,usagetype) localisedmessage,
+          COUNT(*) as transactionNumber,
+          fad.subdistrict,
+          --(select COALESCE((select message from message where code=concat('FIRENOC_FIRESTATIONS_',UPPER(REGEXP_REPLACE(firestationid,'\..*','')))  limit 1), firestationid)) as firestation,
+          SUM (CASE WHEN egcl_payment.paymentmode='CASH' THEN egcl_payment.totalamountpaid ELSE 0 END) as fees_counter,
+          SUM (CASE WHEN egcl_payment.paymentmode='ONLINE' THEN egcl_payment.totalamountpaid ELSE 0 END) AS fees_online
+        from eg_fn_firenoc AS fnoc
+        INNER JOIN eg_fn_firenocdetail fdet on fdet.firenocuuid=fnoc.uuid
+        INNER JOIN egcl_bill as bill on bill.consumercode=fdet.applicationnumber
+        INNER JOIN egcl_billdetial as billd on billd.billid=bill.id
+        INNER JOIN  eg_fn_buidlings build on build.firenocdetailsuuid=fdet.uuid
+        INNER JOIN egcl_paymentdetail ON (egcl_paymentdetail.billid=bill.id AND egcl_paymentdetail.businessservice='FIRENOC')
+        INNER JOIN egcl_payment on egcl_payment.id=egcl_paymentdetail.paymentid
+        LEFT OUTER JOIN message on code=concat('FIRENOC_BUILDINGTYPE_',UPPER(REGEXP_REPLACE(usagetype,'\..*','')))  
+        INNER JOIN eg_fn_address as fad on fad.firenocdetailsuuid=fdet.uuid and module='rainmaker-noc' where 1=1
+        and egcl_payment.tenantid!='pb.testing' and fad.areatype!='Urban'
+    groupby: GROUP BY (localisedmessage),fad.subdistrict,
     orderby: ORDER BY localisedmessage
+
     
   - reportName: RuralDistrictWiseApplicationStatusReport_V2
     summary: Rural District Wise Application Status Report
