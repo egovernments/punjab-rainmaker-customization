@@ -400,7 +400,7 @@ ReportDefinitions:
         LEFT OUTER JOIN message on code=concat('FIRENOC_BUILDINGTYPE_',UPPER(REGEXP_REPLACE(usagetype,'\..*','')))  
         INNER JOIN eg_fn_address as fad on fad.firenocdetailsuuid=fdet.uuid and module='rainmaker-noc' where 1=1
         and egcl_payment.tenantid!='pb.testing' and fad.areatype!='Urban'
-    groupby: GROUP BY (localisedmessage),fad.subdistrict,
+    groupby: GROUP BY (localisedmessage),fad.subdistrict
     orderby: ORDER BY localisedmessage
 
     
