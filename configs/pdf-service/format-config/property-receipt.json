@@ -598,7 +598,7 @@
         "table": {
           "widths": [
 
-            "9%","8%","7%","7%","8%","7%","10%","10%","8%","8%","8%","*"
+            "9%","8%","7%","7%","8%","7%","10%","10%","8%","8%","7%","8%","*"
           ],
           "body": [
             
@@ -641,6 +641,9 @@
               },
               {
                 "text": "Adhoc Rebate",
+                "style": "amounts"
+              },{
+                "text": "Arrears",
                 "style": "amounts"
               },
 			  {
@@ -693,6 +696,9 @@
               },
               	  {
                 "text": "{{adhocRebate}}",
+                "style": "amounts"
+              },{
+                "text": "{{Arrears}}",
                 "style": "amounts"
               },
 			  {
