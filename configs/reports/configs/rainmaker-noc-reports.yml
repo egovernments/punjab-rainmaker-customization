@@ -339,8 +339,8 @@ ReportDefinitions:
         type: string
         source: rainmaker-noc
         total: false
-      - name: transactionnumber
-        label: reports.noc.collectionreport.transactionnumber
+      - name: transactionNumber
+        label: reports.noc.collectionreport.transactionNumber
         type: string
         source: rainmaker-noc
         total: true
