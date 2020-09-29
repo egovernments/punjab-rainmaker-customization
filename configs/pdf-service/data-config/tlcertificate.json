@@ -617,6 +617,10 @@
                     "value":"$.MdmsRes.tenant.tenants[0].address"
                   },
                   {
+                    "variable":"mcGrade",
+                    "value":"$.MdmsRes.tenant.tenants[0].city.ulbType"
+                  },
+                  {
                     "variable":"corporationContact",
                     "value":"$.MdmsRes.tenant.tenants[0].contactNumber"
                   },
