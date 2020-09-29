@@ -422,6 +422,10 @@
                       "value":"$.MdmsRes.tenant.tenants[0].address"
                     },
                     {
+                      "variable":"mcGrade",
+                      "value":"$.MdmsRes.tenant.tenants[0].city.ulbType"
+                    },
+                    {
                       "variable":"phoneNumber",
                       "value":"$.MdmsRes.tenant.tenants[0].contactNumber"
                     },
