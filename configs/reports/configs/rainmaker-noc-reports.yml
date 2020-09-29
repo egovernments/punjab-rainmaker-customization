@@ -517,4 +517,144 @@ ReportDefinitions:
     groupby: GROUP BY (channel,subdistrict,firestation)
     orderby: ORDER BY channel
 
- 
+  - reportName: ReceiptRegisterFirenocReport_V2   
+    summary: Receipt Register FireNoc
+    version: 1.0.0
+    moduleName: rainmaker-noc
+    additionalConfig:
+      print:
+        pdfPageSize: "A3"    
+    sourceColumns:
+      - name: ulb
+        label: reports.noc.ulb
+        type: string
+        source: rainmaker-noc
+        total: false
+      - name: receiptnumber
+        label: reports.noc.receiptnumber
+        type: string
+        source: rainmaker-noc
+        total: false
+      - name: receiptdate
+        label: reports.noc.receiptdate
+        type: string
+        source: rainmaker-noc
+        total: false
+      - name: g8issuedate
+        label: reports.noc.g8issuedate
+        type: string
+        source: rainmaker-noc
+        total: false
+      - name: g8receiptno
+        label: reports.noc.g8receiptno
+        type: string
+        source: rainmaker-noc
+        total: false
+      - name: status
+        label: reports.noc.status
+        type: string
+        source: rainmaker-noc
+        total: false
+      - name: servicecategory
+        label: reports.noc.servicecategory
+        type: string
+        source: rainmaker-noc
+        total: false
+      - name: totalamount
+        label: reports.noc.totalamount
+        type: string
+        source: rainmaker-noc
+        total: false
+      - name: paymentmode
+        label: reports.noc.paymentmode
+        type: string
+        source: rainmaker-noc
+        total: false
+      - name: ddorchequenumber
+        label: reports.noc.ddorchequenumber
+        type: string
+        source: rainmaker-noc
+        total: false
+      - name: firenoctype
+        label: reports.noc.firenoctype
+        type: string
+        source: rainmaker-noc
+        total: false
+      - name: usagetype
+        label: reports.noc.usagetype
+        type: string
+        source: rainmaker-noc
+        total: false
+      - name: ownername
+        label: reports.noc.ownername
+        type: string
+        source: rainmaker-noc
+        total: false
+      - name: collectiontype
+        label: reports.noc.collectiontype
+        type: string
+        source: rainmaker-noc
+        total: false
+      - name: collectorname
+        label: reports.noc.collectorname
+        type: string
+        source: rainmaker-noc
+        total: false
+    searchParams:
+      - name: fromDate
+        label: reports.noc.fromDate
+        type: epoch
+        source: noc
+        isMandatory: false
+        searchClause: AND applicationdate >= $fromDate
+      - name: toDate
+        label: reports.noc.toDate
+        type: epoch
+        source: noc
+        isMandatory: false
+        searchClause: AND applicationdate <= $toDate
+      - name: ulb
+        label: reports.noc.ulb
+        type: multivaluelist
+        pattern: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?tenantId=$tenantid&moduleName=tenant&masterName=tenants|$.MdmsRes.tenant.tenants.*.code|$.MdmsRes.tenant.tenants.*.name
+        source: noc
+        wrapper: true
+        isMandatory: false
+        searchClause: AND fnoc.tenantId IN ($ulb)
+    query: |
+        -- Use CTE to force query plan, compute & use CTE later
+        WITH receipt_breakup AS (
+                    SELECT 
+                      egcl_billaccountdetail.billdetailid bill_id, 
+                      string_agg(distinct consumercode,',') as consumercode                               
+                    FROM egcl_billaccountdetail 
+                    INNER JOIN egcl_bill as bill on bill.id = egcl_billaccountdetail.billdetailid
+                    WHERE  bill.tenantid!='pb.testing' AND businessservice in ('FIRENOC')
+                    GROUP BY billdetailid
+        )
+        SELECT 
+          payment.tenantid as ulb,
+          paydetail.receiptnumber as receiptnumber,
+          To_char((To_timestamp(paydetail.receiptdate / 1000) at time Zone 'Asia/Kolkata'), 'DD/MM/YYYY') as receiptdate,
+          To_char((To_timestamp(paydetail.manualreceiptdate / 1000) at time Zone 'Asia/Kolkata'), 'DD/MM/YYYY') as g8issuedate,
+          paydetail.manualreceiptnumber as g8receiptno,
+          payment.paymentstatus as status,
+          paydetail.businessservice as servicecategory,
+          receipt_breakup.*,  
+          payment.totalamountpaid as totalamount, 
+          paymentmode as paymentmode,
+          (case when paymentmode like 'CASH' then '' else  transactionnumber end) as ddorchequenumber,
+          'System' as collectiontype,
+          eg_user.name as collectorname,
+          fdet.firenoctype as firenoctype,
+          build.usagetype as usagetype,
+          build.name as ownername
+        FROM egcl_payment AS payment
+        JOIN egcl_paymentdetail as paydetail on paydetail.paymentid=payment.id
+        JOIN receipt_breakup ON paydetail.billid = receipt_breakup.bill_id
+        JOIN eg_user ON payment.createdby::INTEGER=eg_user.id
+        JOIN egcl_bill as bill ON bill.id=paydetail.billid
+        JOIN eg_fn_firenocdetail AS fdet ON fdet.applicationnumber=bill.consumercode
+        JOIN eg_fn_buidlings AS build ON build.firenocdetailsuuid=fdet.uuid
+        WHERE  payment.tenantid!='pb.testing' AND paydetail.businessservice in ('FIRENOC') AND paydetail.receiptnumber NOT LIKE 'MP%' and paydetail.tenantid=$tenantid
+    orderby: ORDER BY paydetail.receiptdate DESC 
