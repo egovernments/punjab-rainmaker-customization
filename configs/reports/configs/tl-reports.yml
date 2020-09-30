@@ -1668,7 +1668,6 @@ ReportDefinitions:
 
 
 - reportName: TradeWiseCollectionReport_v2
-  decryptionPathId: TradeWiseCollectionReport_v2
   summary: Collection according to tradeTypes
   version: 1.0.0
   moduleName: rainmaker-tl
@@ -1721,7 +1720,6 @@ ReportDefinitions:
 
 
 - reportName: TradeLicenseApplicationStatusReport_v2
-  decryptionPathId: TradeLicenseApplicationStatusReport_v2
   summary: Nummber of applications by there status
   version: 1.0.0
   moduleName: rainmaker-tl
@@ -1766,7 +1764,6 @@ ReportDefinitions:
 
 
 - reportName: TradeLicenseULBWiseApplicationStatusReport_v2
-  decryptionPathId: TradeLicenseULBWiseApplicationStatusReport_v2
   summary: Nummber of applications by there status
   version: 1.0.0
   moduleName: rainmaker-tl
@@ -1786,8 +1783,23 @@ ReportDefinitions:
     type: string
     source: tl
     total: true
+  - name: pendingpayment
+    label: TL_PENDINGPAYMENT
+    type: string
+    source: tl
+    total: true
   - name: paid
     label: TL_PAID
+    type: string
+    source: tl
+    total: true
+  - name: fieldinspection
+    label: TL_FIELDINSPECTION
+    type: string
+    source: tl
+    total: true
+  - name: pendingapproval
+    label: TL_PENDINGAPPROVAL
     type: string
     source: tl
     total: true
@@ -1803,6 +1815,11 @@ ReportDefinitions:
     total: true
   - name: cancelled
     label: TL_CANCELLED
+    type: string
+    source: tl
+    total: true
+  - name: citizenactionrequired
+    label: TL_CITIZENACTIONREQUIRED
     type: string
     source: tl
     total: true
@@ -1832,7 +1849,11 @@ ReportDefinitions:
         initcap(split_part(tenantId, '.', 2)) as tenantId, 
         SUM(CASE status when 'REJECTED' then 1 else 0 end) as rejected,
         SUM(CASE status when 'INITIATED' then 1 else 0 end) as initiated,
+        SUM(CASE status when 'PENDINGPAYMENT' then 1 else 0 end) as pendingpayment,
         SUM(CASE status when 'PAID' then 1 else 0 end) as paid,
+        SUM(CASE status when 'FIELDINSPECTION' then 1 else 0 end) as fieldinspection,
+        SUM(CASE status when 'CITIZENACTIONREQUIRED' then 1 else 0 end) as citizenactionrequired,
+        SUM(CASE status when 'PENDINGAPPROVAL' then 1 else 0 end) as pendingapproval,
         SUM(CASE status when 'APPROVED' then 1 else 0 end) as approved,
         SUM(CASE status when 'APPLIED' then 1 else 0 end) as applied,
         SUM(CASE status when 'CANCELLED' then 1 else 0 end) as cancelled
@@ -1843,7 +1864,6 @@ ReportDefinitions:
 
 
 - reportName: StateLevelStatus_v2
-  decryptionPathId: StateLevelStatus_v2
   summary: Nummber of applications by there status state level
   version: 1.0.0
   moduleName: rainmaker-tl
@@ -1891,7 +1911,6 @@ ReportDefinitions:
 
 
 - reportName: ULBLevelStatus_v2
-  decryptionPathId: ULBLevelStatus_v2
   summary: Nummber of applications by there status ULB level
   version: 1.0.0
   moduleName: rainmaker-tl
@@ -1931,7 +1950,6 @@ ReportDefinitions:
 
 
 - reportName: StateLevelTradeWiseCollection_v2
-  decryptionPathId: StateLevelTradeWiseCollection_v2
   summary: Collection according to tradeTypes state level
   version: 1.0.0
   moduleName: rainmaker-tl
@@ -2280,13 +2298,13 @@ ReportDefinitions:
     type: epoch
     source: tl
     isMandatory: false
-    searchClause: AND tl.applicationdate >= $fromDate
+    searchClause: AND issueddate >= $fromDate
   - name: toDate
     label: reports.tl.toDate
     type: epoch
     source: tl
     isMandatory: false
-    searchClause: AND tl.applicationdate  <= $toDate 
+    searchClause: AND issueddate <= $toDate 
   - name: localityArray
     label: reports.tl.zoneList
     type: boundarylist
@@ -2466,6 +2484,3 @@ ReportDefinitions:
     ) tlown ON tlown.tradelicensedetailid = tld.id
     where validto < extract (epoch from NOW())*1000 and licensenumber is not null and licensenumber not in (select oldlicensenumber from eg_tl_tradelicense where oldlicensenumber is not null)
     and tenantid = $tenantid
-  
-
-  
