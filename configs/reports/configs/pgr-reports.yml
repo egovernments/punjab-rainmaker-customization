@@ -6,15 +6,15 @@ ReportDefinitions:
   sourceColumns:
   - name: citizen_mobile_app
     label: reports.rainmaker-pgr.citizen_mobile_app
-    type: number
+    type: string
     source: eg_pgr_service
   - name: citizen_web_app
     label: reports.rainmaker-pgr.citizen_web_app
-    type: number
+    type: string
     source: eg_pgr_service
   - name: counter_desktop
     label: reports.rainmaker-pgr.counter_desktop
-    type: number
+    type: string
     source: eg_pgr_service
   searchParams: 
   - name: tenantId
@@ -910,23 +910,25 @@ ReportDefinitions:
 
 
 - reportName: SourceWiseReport_v2
-  decryptionPathId: SourceWiseReport_v2
   summary: Fetches reports based on the source of reception of the complaint
   version: 1.0.0
   moduleName: rainmaker-pgr
   sourceColumns:
   - name: citizen_mobile_app
     label: reports.rainmaker-pgr.citizen_mobile_app
-    type: number
+    type: string
     source: eg_pgr_service
+    total: true
   - name: citizen_web_app
     label: reports.rainmaker-pgr.citizen_web_app
-    type: number
+    type: string
     source: eg_pgr_service
+    total: true
   - name: counter_desktop
     label: reports.rainmaker-pgr.counter_desktop
-    type: number
+    type: string
     source: eg_pgr_service
+    total: true
   searchParams: 
   - name: tenantId
     label: reports.rainmaker-pgr.tenantId
@@ -1077,7 +1079,6 @@ ReportDefinitions:
   orderby: ORDER BY servicerequestid, epa."when" desc
 
 - reportName: StateSourceReport_v2
-  decryptionPathId: StateSourceReport_v2
   summary: Source of complaints across tenants
   version: 1.0.0
   moduleName: rainmaker-pgr
@@ -1138,7 +1139,6 @@ ReportDefinitions:
   orderby: ORDER BY tenantid
 
 - reportName: EmployeeReport_v2
-  decryptionPathId: EmployeeReport_v2
   summary: Fetches complaints for employees
   version: 1.0.0
   moduleName: rainmaker-pgr
@@ -1245,7 +1245,6 @@ ReportDefinitions:
   orderby: ORDER BY eg_pgr_service.createdtime asc
 
 - reportName: StateULBReport_v2
-  decryptionPathId: StateULBReport_v2
   summary: Fetches complaints stats for all ULBs in state
   version: 1.0.0
   moduleName: rainmaker-pgr
@@ -1312,7 +1311,6 @@ ReportDefinitions:
   orderby: ORDER BY tenantid
 
 - reportName: ComplaintTypesReport_v2
-  decryptionPathId: ComplaintTypesReport_v2
   summary: Fetches complaint stats based on complaint types for a ULB
   version: 1.0.0
   moduleName: rainmaker-pgr
@@ -1394,7 +1392,6 @@ ReportDefinitions:
   orderby: ORDER BY tenantid,servicecode
 
 - reportName: DepartmentReport_v2
-  decryptionPathId: DepartmentReport_v2
   summary: Fetches complaint stats based on complaint types for a ULB
   version: 1.0.0
   moduleName: rainmaker-pgr
@@ -1482,7 +1479,6 @@ ReportDefinitions:
   orderby: ORDER BY tenantid,deptmap_def.name
 
 - reportName: ULBDepartmentReport_v2
-  decryptionPathId: ULBDepartmentReport_v2
   summary: Fetches complaint stats based on department types for a ULB
   version: 1.0.0
   moduleName: rainmaker-pgr
@@ -1573,7 +1569,6 @@ ReportDefinitions:
   orderby: ORDER BY deptmap_def.name
 
 - reportName: ULBEmployeeWiseReport_v2
-  decryptionPathId: ULBEmployeeWiseReport_v2
   summary: Fetches employee wise assignment report
   version: 1.0.0
   moduleName: rainmaker-pgr
@@ -1658,7 +1653,6 @@ ReportDefinitions:
 
   
 - reportName: UlbPgrSlaReport_v2
-  decryptionPathId: UlbPgrSlaReport_v2
   summary: Fetches employee sla
   version: 1.0.0
   moduleName: rainmaker-pgr
@@ -1734,7 +1728,6 @@ ReportDefinitions:
   orderby: ORDER BY tenantid,eg_pgr_service.servicecode
   
 - reportName: FeedbackReport_v2
-  decryptionPathId: FeedbackReport_v2
   summary: Fetches complaint state based on Feedback
   version: 1.0.0
   moduleName: rainmaker-pgr
