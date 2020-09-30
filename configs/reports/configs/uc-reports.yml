@@ -969,7 +969,7 @@ ReportDefinitions:
           eg_user.name as collectorname
         FROM egcl_payment AS payment
         JOIN egcl_paymentdetail as paydetail on paydetail.paymentid=payment.id
-        JOIN receipt_breakup ON paydetail.billid = receipt_breakup.bill_id
+        LEFT JOIN receipt_breakup ON paydetail.billid = receipt_breakup.bill_id
         JOIN eg_user ON payment.createdby::INTEGER=eg_user.id
         WHERE  payment.tenantid!='pb.testing' AND businessservice not in ('PT','TL','FIRENOC')  and payment.paymentstatus != 'CANCELLED'
     orderby: ORDER BY paydetail.receiptdate DESC
@@ -1104,7 +1104,7 @@ ReportDefinitions:
         source: uc
         wrapper: true
         isMandatory: false
-        searchClause: AND paydetail.businessservice = $businessservice
+        searchClause: AND businessservice = $businessservice
       - name: collectorname
         label: reports.uc.collectorname
         type: singlevaluelist
@@ -1371,8 +1371,8 @@ ReportDefinitions:
         -- Use CTE to force query plan, compute & use CTE later
         SELECT
           initcap(split_part(payment.tenantId, '.', 2)) as ulb,
-          count(*) FILTER (where payment.paymentmode!='ONLINE') as noOfOfflineTransactions,
-          count(*) FILTER (where payment.paymentmode='ONLINE') as noOfOnlineTransactions,
+          count(*) FILTER (where payment.paymentmode!='ONLINE') as offlinetransactions,
+          count(*) FILTER (where payment.paymentmode='ONLINE') as onlinetransactions,
           count(*) as totaltransactions,
           sum(case when paymentmode!='ONLINE' then payment.totalamountpaid else 0 end) as offlinecollection,
           sum(case paymentmode when 'ONLINE' then payment.totalamountpaid else 0 end) as onlinecollection,
@@ -1440,7 +1440,8 @@ ReportDefinitions:
     query: |
         -- Use CTE to force query plan, compute & use CTE later
         SELECT 
-          paydetail.businessservice,
+          paydetail.businessservice as servicetype,
+          count(distinct paydetail.receiptnumber) totalreceipts,
           SUM(CASE WHEN taxheadcode LIKE '%_CGST' THEN adjustedamount ELSE 0 END) as cgst,
           SUM(CASE WHEN taxheadcode LIKE '%_TAX' THEN adjustedamount ELSE 0 END) as tax, 
           SUM(CASE WHEN taxheadcode LIKE '%_SGST' THEN adjustedamount ELSE 0 END) as sgst, 
@@ -1589,7 +1590,6 @@ ReportDefinitions:
         JOIN eg_user ON payment.createdby::INTEGER=eg_user.id
         WHERE  payment.tenantid=$tenantid AND businessservice not in ('PT','TL','FIRENOC')  and payment.paymentstatus = 'CANCELLED'
     orderby: ORDER BY paydetail.receiptdate DESC
-
 
   - reportName: MiscReceiptULBShort_v2
     summary: Receipt Register Miscellaneous
