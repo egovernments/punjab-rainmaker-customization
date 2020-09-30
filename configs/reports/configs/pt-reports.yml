@@ -2118,9 +2118,6 @@ ReportDefinitions:
   summary: Zone FY Collection Pt report
   version: 1.0.0
   moduleName: rainmaker-pt
-  additionalConfig:
-    print:
-      pdfPageSize: "A1"
   sourceColumns:
   - name: zonecode
     label: reports.pt.zonename
@@ -2426,9 +2423,6 @@ ReportDefinitions:
   summary: Block FY Collection PT report
   version: 1.0.0
   moduleName: rainmaker-pt
-  additionalConfig:
-    print:
-      pdfPageSize: "A1"
   sourceColumns:
   - name: blockname
     label: reports.pt.blockname
