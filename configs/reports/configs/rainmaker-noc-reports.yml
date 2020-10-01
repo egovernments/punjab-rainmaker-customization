@@ -772,12 +772,11 @@ ReportDefinitions:
           paymentmode as paymentmode,
           (case when paymentmode like 'CASH' then '' else  transactionnumber end) as ddorchequenumber,
           'System' as collectiontype,
-          eg_user.name as collectorname,
-          fdet.firenoctype as firenoctype,          
+          eg_user.name as collectorname          
         FROM egcl_payment AS payment
         JOIN egcl_paymentdetail as paydetail on paydetail.paymentid=payment.id
         JOIN receipt_breakup ON paydetail.billid = receipt_breakup.bill_id
         JOIN eg_user ON payment.createdby::INTEGER=eg_user.id
-        payment.tenantid=$tenantid AND businessservice not in ('PT','TL','UC') and payment.paymentstatus = 'CANCELLED'
+        WHERE payment.tenantid=$tenantid AND businessservice not in ('PT','TL','UC') and payment.paymentstatus = 'CANCELLED'
     orderby: ORDER BY paydetail.receiptdate DESC
 
