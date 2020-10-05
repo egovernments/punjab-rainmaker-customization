@@ -363,7 +363,7 @@
                   true,
                   false,
                   false,
-                  true
+                  false
                 ],
                 "style": "receipt-table-value"
               },
@@ -373,7 +373,7 @@
                   false,
                   false,
                   false,
-                  true
+                  false
                 ],
                 "style": "receipt-table"
               },
@@ -383,7 +383,7 @@
                   false,
                   false,
                   false,
-                  true
+                  false
                 ],
                 "style": "receipt-table-value"
               },
@@ -393,11 +393,54 @@
                   false,
                   false,
                   true,
-                  true
+                  false
                 ],
                 "style": "receipt-table"
               }
-            ]
+            ],
+            [
+              {
+                        "text": "Property Usage Type ",
+                        "border": [
+                          true,
+                          false,
+                          false,
+                          true
+
+                        ],
+                        "style": "receipt-table-value"
+                      },
+                      {
+                        "text": "{{propertyUsage}}",
+                        "border": [
+                          false,
+                          false,
+                          false,
+                          true
+                        ],
+                        "style": "receipt-table"
+                      },
+                      {
+                        "text": " ",
+                        "border": [
+                          false,
+                          false,
+                          false,
+                          true
+                        ],
+                        "style": "receipt-table-value"
+                      },
+                      {
+                        "text": " ",
+                        "border": [
+                          false,
+                          false,
+                          true,
+                          true
+                        ],
+                        "style": "receipt-table"
+                      }
+                    ]
           ]
         },
         "layout": {}
