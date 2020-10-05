@@ -38,4 +38,4 @@ serviceMaps:
 
       - jsonPath: $.jobs.*.documentType   
       
-      - jsonPath: $.jobs.*.moduleName         
+      - jsonPath: $.jobs.*.moduleName     

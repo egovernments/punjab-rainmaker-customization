@@ -23,5 +23,3 @@ serviceMaps:
       - jsonPath: $.MigrationCount.tenantid
 
       - jsonPath: $.MigrationCount.recordCount
-
-   
