@@ -16,7 +16,7 @@
               {
                 "variable": "payerName", 
                 "value": {
-                  "path": "$.payerName"
+                  "path": "$.paidBy"
                 }
               },
               {
@@ -70,12 +70,20 @@
                 "type": "date"
               },
               {
-                "variable": "assessmentYear", 
+                "variable": "assessmentYear1", 
                 "value": {
                   "path": "$.paymentDetails[0].bill.billDetails[0].fromPeriod"
                 },
                 "type": "date",
-				"format": "YYYY "
+				        "format": "YYYY"
+              },
+              {
+                "variable": "assessmentYear2", 
+                "value": {
+                  "path": "$.paymentDetails[0].bill.billDetails[0].toPeriod"
+                },
+                "type": "date",
+				        "format": "YYYY"
               },
               {
                 "variable": "paymentMode", 
@@ -148,6 +156,59 @@
                 "variable": "Penalty", 
                 "value": {
                   "path": "$.paymentDetails[0].bill.billDetails[0].billAccountDetails[?(@.taxHeadCode=='PT_TIME_PENALTY')].adjustedAmount"
+                }
+              },
+		 {
+                "variable": "Arrears1", 
+                "value": {
+                  "path": "$.paymentDetails[0].bill.billDetails[1].amountPaid"
+                }
+              },  {
+                "variable": "Arrears2", 
+                "value": {
+                  "path": "$.paymentDetails[0].bill.billDetails[2].amountPaid"
+                }
+              },  {
+                "variable": "Arrears3", 
+                "value": {
+                  "path": "$.paymentDetails[0].bill.billDetails[3].amountPaid"
+                }
+              },  {
+                "variable": "Arrears4", 
+                "value": {
+                  "path": "$.paymentDetails[0].bill.billDetails[4].amountPaid"
+                }
+              },  {
+                "variable": "Arrears5", 
+                "value": {
+                  "path": "$.paymentDetails[0].bill.billDetails[5].amountPaid"
+                }
+              },  {
+                "variable": "Arrears6", 
+                "value": {
+                  "path": "$.paymentDetails[0].bill.billDetails[6].amountPaid"
+                }
+              },  {
+                "variable": "Arrears7", 
+                "value": {
+                  "path": "$.paymentDetails[0].bill.billDetails[7].amountPaid"
+                }
+              },  {
+                "variable": "Arrears8", 
+                "value": {
+                  "path": "$.paymentDetails[0].bill.billDetails[8].amountPaid"
+                }
+              },    
+		{
+                "variable": "adhocPenalty", 
+                "value": {
+                  "path": "$.paymentDetails[0].bill.billDetails[0].billAccountDetails[?(@.taxHeadCode=='PT_ADHOC_PENALTY')].adjustedAmount"
+                }
+              },
+              {
+                "variable": "adhocRebate", 
+                "value": {
+                  "path": "$.paymentDetails[0].bill.billDetails[0].billAccountDetails[?(@.taxHeadCode=='PT_ADHOC_REBATE')].adjustedAmount"
                 }
               },
               {
@@ -438,7 +499,11 @@
                {
                   "variable": "pendingAmount",
                   "formula": "{{dueAmount}}-{{paidAmount}}"
-               }
+               },
+               {
+                "variable": "Arrears",
+                "formula": "{{Arrears1}}+{{Arrears2}}+{{Arrears3}}+{{Arrears4}}+{{Arrears5}}+{{Arrears6}}+{{Arrears7}}+{{Arrears8}}"
+             }
             ]
          },
           {
@@ -459,6 +524,10 @@
                     {
                       "variable":"website",
                       "value":"$.MdmsRes.tenant.tenants[0].domainUrl"
+                    },
+		    {
+                      "variable":"mcGrade",
+                      "value":"$.MdmsRes.tenant.tenants[0].city.ulbType"
                     },
                     {
                       "variable":"email",
@@ -482,7 +551,7 @@
               },
               { 
                 "path": "http://property-services.egov:8080/property-services/property/_search",
-                "queryParam": "propertyIds=PT-1012-877972,tenantId=pb.testing",
+                "queryParam": "propertyIds=$.paymentDetails[0].bill.consumerCode,tenantId=$.tenantId",
                 "apiRequest": null,
                 "responseMapping":[
                   {             
@@ -511,8 +580,84 @@
                   },
                   {             
                     "variable":"propertyType",
-                    "value":"$.Properties[0].propertyType"
-                  }
+                    "value":"$.Properties[0].propertyType",
+                    "localisation": {
+                      "required": true,
+                      "prefix": "WS_PROPTYPE",
+                      "module": "rainmaker-ws"
+                    }
+                  },
+                  {             
+                    "variable":"oldPropertyId",
+                    "value":"$.Properties[0].oldPropertyId"
+                  },
+                  {             
+                    "variable":"ownerMobileNumber",
+                    "value":"$.Properties[0].owners[0].mobileNumber"
+                  },                  
+                  {
+                    "variable": "var_owners",                        
+                    "value":"$.Properties[0].owners[?(@.active== true && @.status== 'ACTIVE')]",
+                     "type":"array",
+                     "format":{                            
+                        "type":"string",
+                        "scema":[
+                           {
+                              "variable":"name2",
+                              "value":"name"
+                           },
+                           {
+                              "variable":"fatherOrHusbandName2",
+                              "value":"fatherOrHusbandName"
+                           }]
+                    } 
+                 },
+                 {
+                   "variable": "var_floors",                        
+                   "value":"$.Properties[0].units[?(@.active== true)]",
+                    "type":"array",
+                    "format":{                            
+                       "type":"string",
+                       "scema":[
+                          {
+                             "variable":"floor_no",
+                             "value":"floorNo",
+                             "localisation": {
+                              "required": true,
+                              "prefix": "PROPERTYTAX_FLOOR",
+                              "module": "rainmaker-pt"
+                            }
+                          },
+                          {
+                             "variable":"usage_category",
+                             "value":"usageCategory",
+                             "localisation": {
+                              "required": true,
+                              "prefix": "COMMON_PROPSUBUSGTYPE",
+                              "module": "rainmaker-pt"
+                            }
+                          },
+                          {
+                            "variable":"occupancy_type",
+                            "value":"occupancyType"
+                         },
+                         {
+                          "variable":"builtup_area",
+                          "value":"constructionDetail.builtUpArea"
+                         },
+                         {
+                          "variable":"arv_rent",
+                          "value":"arv"
+                         },
+                         {
+                           "variable":"additional_details",
+                           "value":"additionalDetails"
+                         }
+                        ]
+                   } 
+                }
+                  
+                  
                 ]
              },
               { 

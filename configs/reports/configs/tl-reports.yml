@@ -539,7 +539,7 @@ ReportDefinitions:
       COUNT(applicationnumber) as total,
       message.message as status 
     from eg_tl_tradelicense tl 
-    LEFT OUTER JOIN message ON split_part(message.code,'_',2) = status AND message.locale = 'en_IN' 
+    LEFT OUTER JOIN message ON split_part(message.code,'_',2) = status  AND split_part(message.code,'_',1)='TL'  AND message.locale = 'en_IN' 
     WHERE tl.tenantid LIKE $tenantid
   groupby: GROUP BY message.message
   orderby: ORDER BY case message.message when 'Pending Application' then 1 when 'Pending Payment' then 2 when 'Pending Approval' then 3 when 'Approved' then 4 when 'Rejected' then 5 when 'Cancelled' then 6 else 7 end
@@ -653,7 +653,7 @@ ReportDefinitions:
       COUNT(applicationnumber) as total,
       message.message as status 
     from eg_tl_tradelicense tl 
-    LEFT OUTER JOIN message ON split_part(message.code,'_',2) = status AND message.locale = 'en_IN' 
+    LEFT OUTER JOIN message ON split_part(message.code,'_',2) = status  AND split_part(message.code,'_',1)='TL'  AND message.locale = 'en_IN' 
     WHERE tl.tenantid!='pb.testing'
   groupby: GROUP BY message.message
   orderby: ORDER BY case message.message when 'Pending Application' then 1 when 'Pending Payment' then 2 when 'Pending Approval' then 3 when 'Approved' then 4 when 'Rejected' then 5 when 'Cancelled' then 6 else 7 end
@@ -691,7 +691,7 @@ ReportDefinitions:
       COUNT(applicationnumber) as total,
       message.message as status 
     from eg_tl_tradelicense tl 
-    LEFT OUTER JOIN message ON split_part(message.code,'_',2) = status AND message.locale = 'en_IN' 
+    LEFT OUTER JOIN message ON split_part(message.code,'_',2) = status  AND split_part(message.code,'_',1)='TL' AND message.locale = 'en_IN' 
     WHERE tl.tenantid=$tenantid
   groupby: GROUP BY message.message
   orderby: ORDER BY case message.message when 'Pending Application' then 1 when 'Pending Payment' then 2 when 'Pending Approval' then 3 when 'Approved' then 4 when 'Rejected' then 5 when 'Cancelled' then 6 else 7 end
@@ -1218,6 +1218,7 @@ ReportDefinitions:
 
 
 - reportName: TradeLicenseRegistryReport_v2
+  decryptionPathId: TradeLicenseRegistryReport_v2
   summary: TL Receipt Register Report
   version: 1.0.0
   moduleName: rainmaker-tl
@@ -1291,7 +1292,7 @@ ReportDefinitions:
     label: report.tl.tradetype
     type: string
     source: tl
-    total: true
+    total: false
   - name: acc
     label: report.tl.accessorycategories
     type: string
@@ -1375,6 +1376,7 @@ ReportDefinitions:
 
 
 - reportName: StateTradeLicenseCancelledRegistryReport_v2
+  decryptionPathId: StateTradeLicenseCancelledRegistryReport_v2
   summary: TL Cancelled Receipt Register Report
   version: 1.0.0
   moduleName: rainmaker-tl
@@ -1523,6 +1525,7 @@ ReportDefinitions:
 
 
 - reportName: TradeLicenseCancelledRegistryReport_v2
+  decryptionPathId: TradeLicenseCancelledRegistryReport_v2
   summary: TL Cancelled Receipt Register Report
   version: 1.0.0
   moduleName: rainmaker-tl
@@ -1618,13 +1621,13 @@ ReportDefinitions:
     type: epoch
     source: tl
     isMandatory: false
-    searchClause: AND receipt.createddate >= $fromDate
+    searchClause: AND paydetail.receiptdate >= $fromDate
   - name: toDate
     label: reports.tl.toDate
     type: epoch
     source: tl
     isMandatory: false
-    searchClause: AND receipt.createddate  <= $toDate 
+    searchClause: AND paydetail.receiptdate  <= $toDate 
   query: |
     SELECT 
       licensenumber,
@@ -1665,6 +1668,7 @@ ReportDefinitions:
 
 
 - reportName: TradeWiseCollectionReport_v2
+  decryptionPathId: TradeWiseCollectionReport_v2
   summary: Collection according to tradeTypes
   version: 1.0.0
   moduleName: rainmaker-tl
@@ -1695,13 +1699,13 @@ ReportDefinitions:
     type: epoch
     source: tl
     isMandatory: false
-    searchClause: AND rh.receiptdate >= $fromDate
+    searchClause: AND paydetail.receiptdate >= $fromDate
   - name: toDate
     label: reports.tl.toDate
     type: epoch
     source: tl
     isMandatory: false
-    searchClause: AND rh.receiptdate <= $toDate
+    searchClause: AND paydetail.receiptdate <= $toDate
   query: |
     select 
       sum(payment.totalamountpaid) as total,
@@ -1711,12 +1715,13 @@ ReportDefinitions:
       initcap(split_part(payment.tenantId, '.', 2)) as tenantId 
       from egcl_payment as payment
       inner join egcl_paymentdetail paydetail on paydetail.paymentid=payment.id
-    where paydetail.businessservice = 'TL'  and payment.tenantid !='pb.testing'  and payment.paymentstatus != 'CANCELLED'
+    where paydetail.businessservice = 'TL' and payment.paymentstatus != 'CANCELLED'
     AND payment.tenantId LIKE '$tenantid'
   groupby: GROUP BY payment.tenantId
 
 
 - reportName: TradeLicenseApplicationStatusReport_v2
+  decryptionPathId: TradeLicenseApplicationStatusReport_v2
   summary: Nummber of applications by there status
   version: 1.0.0
   moduleName: rainmaker-tl
@@ -1754,13 +1759,14 @@ ReportDefinitions:
       COUNT(applicationnumber) as total,
       message.message as status 
     from eg_tl_tradelicense tl 
-    LEFT OUTER JOIN message ON split_part(message.code,'_',2) = status AND message.locale = 'en_IN' 
+    LEFT OUTER JOIN message ON split_part(message.code,'_',2) = status  AND split_part(message.code,'_',1)='TL'  AND message.locale = 'en_IN' 
     WHERE tl.tenantid LIKE $tenantid
   groupby: GROUP BY message.message
   orderby: ORDER BY case message.message when 'Pending Application' then 1 when 'Pending Payment' then 2 when 'Pending Approval' then 3 when 'Approved' then 4 when 'Rejected' then 5 when 'Cancelled' then 6 else 7 end
 
 
 - reportName: TradeLicenseULBWiseApplicationStatusReport_v2
+  decryptionPathId: TradeLicenseULBWiseApplicationStatusReport_v2
   summary: Nummber of applications by there status
   version: 1.0.0
   moduleName: rainmaker-tl
@@ -1813,6 +1819,14 @@ ReportDefinitions:
     source: tl
     isMandatory: false
     searchClause: AND tl.lastmodifiedtime <= $toDate
+  - name: ulb
+    label: ULB
+    type: singlevaluelist
+    pattern: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?tenantId=$tenantid&moduleName=tenant&masterName=tenants|$.MdmsRes.tenant.tenants.*.code|$.MdmsRes.tenant.tenants.*.name
+    source: tl
+    wrapper: true
+    isMandatory: false
+    searchClause: AND tl.tenantId = $ulb
   query: |
      SELECT 
         initcap(split_part(tenantId, '.', 2)) as tenantId, 
@@ -1829,6 +1843,7 @@ ReportDefinitions:
 
 
 - reportName: StateLevelStatus_v2
+  decryptionPathId: StateLevelStatus_v2
   summary: Nummber of applications by there status state level
   version: 1.0.0
   moduleName: rainmaker-tl
@@ -1869,13 +1884,14 @@ ReportDefinitions:
       COUNT(applicationnumber) as total,
       message.message as status 
     from eg_tl_tradelicense tl 
-    LEFT OUTER JOIN message ON split_part(message.code,'_',2) = status AND message.locale = 'en_IN' 
+    LEFT OUTER JOIN message ON split_part(message.code,'_',2) = status AND split_part(message.code,'_',1)='TL'  AND message.locale = 'en_IN' 
     WHERE tl.tenantid!='pb.testing'
   groupby: GROUP BY message.message
   orderby: ORDER BY case message.message when 'Pending Application' then 1 when 'Pending Payment' then 2 when 'Pending Approval' then 3 when 'Approved' then 4 when 'Rejected' then 5 when 'Cancelled' then 6 else 7 end
 
 
 - reportName: ULBLevelStatus_v2
+  decryptionPathId: ULBLevelStatus_v2
   summary: Nummber of applications by there status ULB level
   version: 1.0.0
   moduleName: rainmaker-tl
@@ -1908,13 +1924,14 @@ ReportDefinitions:
       COUNT(applicationnumber) as total,
       message.message as status 
     from eg_tl_tradelicense tl 
-    LEFT OUTER JOIN message ON split_part(message.code,'_',2) = status AND message.locale = 'en_IN' 
+    LEFT OUTER JOIN message ON split_part(message.code,'_',2) = status  AND split_part(message.code,'_',1)='TL' AND message.locale = 'en_IN' 
     WHERE tl.tenantid=$tenantid
   groupby: GROUP BY message.message
   orderby: ORDER BY case message.message when 'Pending Application' then 1 when 'Pending Payment' then 2 when 'Pending Approval' then 3 when 'Approved' then 4 when 'Rejected' then 5 when 'Cancelled' then 6 else 7 end
 
 
 - reportName: StateLevelTradeWiseCollection_v2
+  decryptionPathId: StateLevelTradeWiseCollection_v2
   summary: Collection according to tradeTypes state level
   version: 1.0.0
   moduleName: rainmaker-tl
@@ -1964,7 +1981,7 @@ ReportDefinitions:
     source: tl
     wrapper: true
     isMandatory: false
-    searchClause: AND tl.tenantId = $ulb
+    searchClause: AND payment.tenantId = $ulb
   query: |
     select 
       sum(payment.totalamountpaid) as total,
@@ -1980,6 +1997,7 @@ ReportDefinitions:
 
 
 - reportName: StateLevelTradeLicenseRegistryReport_v2
+  decryptionPathId: StateLevelTradeLicenseRegistryReport_v2
   summary: TL Basic Report State Level
   version: 1.0.0
   moduleName: rainmaker-tl
@@ -2091,6 +2109,7 @@ ReportDefinitions:
 
 
 - reportName: SearchTradeLicenseApplicationReport_v2
+  decryptionPathId: SearchTradeLicenseApplicationReport_v2
   summary: TL Search Application Report
   version: 1.0.0
   moduleName: rainmaker-tl
@@ -2174,18 +2193,14 @@ ReportDefinitions:
      WHERE tl.tenantid=$tenantid
 
 
-- reportName: TradeLicenseDetailsReport_v2                   
+- reportName: TradeLicenseDetailsReport_v2
+  decryptionPathId: TradeLicenseDetailsReport_v2                   
   summary: Trade License Details Report
   version: 1.0.0
   moduleName: rainmaker-tl
   sourceColumns:
   - name: applicationnumber
     label: report.tl.applicationnumber
-    type: string
-    source: tl
-    total: false
-  - name: locality
-    label: report.tl.locality
     type: string
     source: tl
     total: false
@@ -2249,6 +2264,11 @@ ReportDefinitions:
     type: string
     source: tl
     total: true
+  - name: locality
+    label: report.tl.locality
+    type: string
+    source: tl
+    total: false
   - name: status
     label: report.tl.receipt.status
     type: string
@@ -2272,7 +2292,7 @@ ReportDefinitions:
     type: boundarylist
     source: tl
     isMandatory: false
-    searchClause: AND tla.locality IN ($localityArray)
+    searchClause: AND locality_tlb.locality IN ($localityArray)
   query: |
       SELECT 
         tl.applicationnumber as applicationnumber,
@@ -2312,6 +2332,7 @@ ReportDefinitions:
 
 
 - reportName: StateDefaulterReport_v2
+  decryptionPathId: StateDefaulterReport_v2                   
   summary: TL Defautler
   version: 1.0.0
   moduleName: rainmaker-tl
@@ -2380,6 +2401,7 @@ ReportDefinitions:
 
 
 - reportName: ULBDefaulterReport_v2
+  decryptionPathId: StateDefaulterReport_v2                   
   summary: TL Defautler
   version: 1.0.0
   moduleName: rainmaker-tl

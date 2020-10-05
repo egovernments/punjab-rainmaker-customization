@@ -206,7 +206,7 @@
                   true,
                   true,
                   true,
-                  true
+                   true
                 ],
                 "alignment": "center"
               }
@@ -323,7 +323,29 @@
               }
             ],
             "alignment": "right"
-          }
+          },
+          {
+            "text": [
+              {
+                "text": "Note",
+                "bold": true
+              }
+            ],
+            "alignment": "left"
+          },
+
+
+          {
+            "ol":
+            [
+              
+              "This license is not the proof of Property Ownership or Copy of NOC.",
+              "This is a computer generated document, hence requires no signature.",
+              "Payment is subjected to vaerification /scrutiny by competent authority."
+            ],
+            "style":"disclaimer"
+           
+        }
         ]
       }
     ],
@@ -434,6 +456,16 @@
           0
         ],
         "color": "#484848"
+      },
+      "disclaimer":
+      {
+         "fontSize":"10",
+         "margin": [
+          10,
+          0,
+          0,
+          0
+        ]
       }
     }
   }

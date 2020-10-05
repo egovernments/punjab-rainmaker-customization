@@ -19,6 +19,12 @@
                 }
               },
               {
+                "variable": "payerAddress", 
+                "value": {
+                  "path": "$.payerAddress"
+                }
+              },
+              {
                 "variable": "user-name", 
                 "value": {
                   "path": "$.userInfo.name"
@@ -49,6 +55,18 @@
                }
               },
               {
+                "variable": "adhocRebate", 
+                "value": {
+                  "path": "$.paymentDetails[0].bill.billDetails[0].billAccountDetails[?(@.taxHeadCode == 'TL_ADHOC_REBATE')].amount"
+                }
+              },
+              {
+                "variable": "adhocPenalty", 
+                "value": {
+                  "path": "$.paymentDetails[0].bill.billDetails[0].billAccountDetails[?(@.taxHeadCode == 'TL_ADHOC_PENALTY')].amount"
+                }
+              },
+              {
                 "variable": "paidAmount", 
                 "value": {
                   "path": "$.paymentDetails[0].totalAmountPaid"
@@ -65,6 +83,32 @@
                 "variable": "toPeriod", 
                 "value": {
                   "path": "$.paymentDetails[0].bill.billDetails[0].toPeriod"
+                },
+                "type": "date"
+              },
+               {
+                "variable": "chequeNo", 
+                "value": {
+                  "path": "$.instrumentNumber"
+                }
+              },
+              {
+                "variable": "chequeDate", 
+                "value": {
+                  "path": "$.instrumentDate"
+                },
+                "type": "date"
+              },
+              {
+                "variable": "chequeNo", 
+                "value": {
+                  "path": "$.instrumentNumber"
+                }
+              },
+              {
+                "variable": "chequeDate", 
+                "value": {
+                  "path": "$.instrumentDate"
                 },
                 "type": "date"
               },
@@ -369,7 +413,7 @@
           {
             "externalAPI": [     
               { 
-                  "path": "http://egov-mdms-service:8080/egov-mdms-service/v1/_get",
+                "path": "http://egov-mdms-service:8080/egov-mdms-service/v1/_get",
                   "queryParam": "moduleName=tenant&masterName=tenants&tenantId=pb&filter=%5B?(@.code=='{$.tenantId}')%5D",
                   "apiRequest": null,
                   "responseMapping":[
@@ -405,6 +449,7 @@
                     }
                   ]
               },
+              
               { 
                 "path": "http://egov-mdms-service:8080/egov-mdms-service/v1/_get",
                 "queryParam": "moduleName=tenant&masterName=footer&tenantId=pb&filter=%5B?(@.code=='{$.tenantId}' %26%26 @.service=='{$.paymentDetails[0].businessService}')%5D",
@@ -437,9 +482,17 @@
                   "queryParam": "tenantId=$.tenantId,applicationNumber=$.paymentDetails[0].bill.consumerCode",
                     "apiRequest": null,
                     "responseMapping":[
-                      {            
+                        {            
                         "variable":"applicationType",
                         "value":"$.Licenses[0].applicationType"
+                      },
+                       {            
+                        "variable":"penaltyComments",
+                        "value":"$.Licenses[0].tradeLicenseDetail.additionalDetail.penaltyComments"
+                      },
+                      {            
+                        "variable":"rebateComments",
+                        "value":"$.Licenses[0].tradeLicenseDetail.additionalDetail.rebateComments"
                       },
                       {            
                         "variable":"licenseNumber",
@@ -458,17 +511,45 @@
                         "value":"$.Licenses[0].tradeName"
                       },
                       {
-                        "variable": "tradeType",
-                        "value":  "$.Licenses[0].tradeLicenseDetail.tradeUnits[0].tradeType",
+                        "variable":"adhocRebateReason",
+                        "value":"$.Licenses[0].tradeLicenseDetail.adhocExemptionReason",
+                          "localisation":{
+                          "required":true,
+                          "prefix": "null",
+                          "module": "rainmaker-tl"
+                       }
+                      },
+                      {            
+                        "variable":"adhocPenaltyReason",
+                        "value":"$.Licenses[0].tradeLicenseDetail.adhocPenaltyReason",
+                          "localisation":{
+                          "required":true,
+                          "prefix": "null",
+                          "module": "rainmaker-tl"
+                       }
+                      },
+                      {
+                        "variable": "structureType",
+                        "value":  "$.Licenses[0].tradeLicenseDetail.structureType",
                         "localisation":{
                           "required":true,
-                          "prefix": "TRADELICENSE_TRADETYPE",
+                          "prefix": "COMMON_MASTERS_STRUCTURETYPE",
                           "module": "rainmaker-tl",
                           "isCategoryRequired":true
                        }
                     },
                     {
-                      "variable": "variable14",                        
+                      "variable": "structureSubType",
+                      "value":  "$.Licenses[0].tradeLicenseDetail.structureType",
+                      "localisation":{
+                        "required":true,
+                        "prefix": "COMMON_MASTERS_STRUCTURETYPE",
+                        "module": "rainmaker-tl",
+                        "isSubTypeRequired":true
+                     }
+                  },          
+                    {
+                      "variable": "variable_acc",                        
                       "value": "$.Licenses[0].tradeLicenseDetail.accessories.*",                       
                        "type":"array",
                        "format":{                            
@@ -477,6 +558,7 @@
                             {
                               "variable": "accesoryType",
                               "value": "accessoryCategory",
+                              "type":"string",
                               "localisation":{
                                 "required":true,
                                 "prefix": "TRADELICENSE_ACCESSORIESCATEGORY",
@@ -485,22 +567,68 @@
                             },
                             {
                               "variable": "accessoryUomValue",
-                              "value": "uomValue"
+                              "value": "uomValue",
+                              "type":"string"
                             },
                             
                             {
                                 "variable": "uom",
-                                "value": "uom"
+                                "value": "uom",
+                                "type":"string"
                             },
                             {
                                 "variable": "accessoryCount",
-                                "value": "count"
+                                "value": "count",
+                                "type":"string"
                             }
                          
                           ]
                       } 
-                   }
+                   },
 
+                    {
+                    "variable": "variable13",                        
+                    "value": "$.Licenses[0].tradeLicenseDetail.tradeUnits.*",                       
+                     "type":"array",
+                     "format":{                            
+                        "type":"string",
+                        "scema":[
+                          {
+                            "variable": "tradeCat",
+                            "value": "tradeType",
+                            "type":"string",
+                            "localisation":{
+                              "required":true,
+                              "prefix":"TRADELICENSE_TRADETYPE",
+                              "module": "rainmaker-tl",
+                              "isCategoryRequired":true
+                            }
+                          },
+                          {
+                            "variable": "tradeTyp",
+                            "value": "tradeType",
+                            "type":"string",
+                            "localisation":{
+                              "required":true,
+                              "prefix":"TRADELICENSE_TRADETYPE",
+                              "module": "rainmaker-tl",
+                              "isMainTypeRequired":true
+                            }
+                          },
+                          {
+                            "variable": "tradeSub",
+                            "value": "tradeType",
+                            "type":"string",
+                            "localisation":{
+                              "required":true,
+                              "prefix":"TRADELICENSE_TRADETYPE",
+                              "module": "rainmaker-tl",
+                              "isSubTypeRequired":true
+                            }
+                          }                
+                        ]
+                    } 
+                 }
                     ]
                 }
               ]

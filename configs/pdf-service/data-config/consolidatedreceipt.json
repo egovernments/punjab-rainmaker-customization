@@ -67,12 +67,20 @@
                   "path": "$.paymentDetails[0].totalAmountPaid"
                 }
               },
+
               {
                 "variable": "fromPeriod", 
                 "value": {
                   "path": "$.paymentDetails[0].bill.billDetails[0].fromPeriod"
                 },
                 "type": "date"
+              },
+                 {
+                "variable": "chequeDDDate", 
+                "value": {
+                  "path": "$.instrumentDate"
+                },
+                "type":"date"
               },
               {
                 "variable": "toPeriod", 
@@ -84,7 +92,13 @@
               {
                 "variable": "payerAddress", 
                 "value": {
-                  "path": "$.paymentDetails[0].bill.payerAddress"
+                   "path": "$.paymentDetails[0].bill.billDetails[0].additionalDetails.address"
+                }
+              },
+              {
+                "variable": "comments", 
+                "value": {
+                  "path": "$.paymentDetails[0].bill.billDetails[0].additionalDetails.comment"
                 }
               },
               {
@@ -468,8 +482,8 @@
           {
             "externalAPI": [     
               { 
-                  "path": "http://egov-mdms-service:8080/egov-mdms-service/v1/_get",
-                  "queryParam": "moduleName=tenant&masterName=tenants&tenantId=pb&filter=%5B?(@.code=='{$.tenantId}')%5D",
+                "path": "http://egov-mdms-service:8080/egov-mdms-service/v1/_get",
+                "queryParam": "moduleName=tenant&masterName=tenants&tenantId=pb&filter=%5B?(@.code=='{$.tenantId}')%5D",
                   "apiRequest": null,
                   "responseMapping":[
                     {             
@@ -483,6 +497,10 @@
                     {
                       "variable":"website",
                       "value":"$.MdmsRes.tenant.tenants[0].domainUrl"
+                    },
+                    {
+                      "variable":"mcGrade",
+                      "value":"$.MdmsRes.tenant.tenants[0].city.ulbType"
                     },
                     {
                       "variable":"email",
