@@ -557,6 +557,9 @@
                   {             
                     "variable":"fatherHusbandName",
                     "value":"$.Properties[0].owners[0].fatherOrHusbandName"
+                  },{             
+                    "variable":"propertyUsage",
+                    "value":"$.Properties[0].usageCategory"
                   },
                   {             
                     "variable":"doorNo",
