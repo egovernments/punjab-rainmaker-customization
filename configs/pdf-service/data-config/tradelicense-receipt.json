@@ -519,7 +519,7 @@
                         "value":"$.Licenses[0].tradeLicenseDetail.adhocExemptionReason",
                           "localisation":{
                           "required":true,
-                          "prefix": "null",
+                          "prefix": null,
                           "module": "rainmaker-tl"
                        }
                       },
@@ -528,7 +528,7 @@
                         "value":"$.Licenses[0].tradeLicenseDetail.adhocPenaltyReason",
                           "localisation":{
                           "required":true,
-                          "prefix": "null",
+                          "prefix": null,
                           "module": "rainmaker-tl"
                        }
                       },
