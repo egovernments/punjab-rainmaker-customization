@@ -516,9 +516,7 @@
                       },
                       {
                         "variable":"adhocRebateReason",
-                        "value": {
-                          "path": "$.Licenses[0].tradeLicenseDetail.adhocExemptionReason"
-                        },
+                        "value":"$.Licenses[0].tradeLicenseDetail.adhocExemptionReason",
                           "localisation":{
                           "required":true,
                           "prefix": null,
@@ -527,8 +525,7 @@
                       },
                       {            
                         "variable":"adhocPenaltyReason",
-                        "value":{
-                        "path":"$.Licenses[0].tradeLicenseDetail.adhocPenaltyReason"},
+                        "value":"$.Licenses[0].tradeLicenseDetail.adhocPenaltyReason",
                           "localisation":{
                           "required":true,
                           "prefix": null,
