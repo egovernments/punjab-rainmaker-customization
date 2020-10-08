@@ -1702,18 +1702,18 @@ ReportDefinitions:
     type: string
     source: pt
     total: true 
-  - name: countcash
-    label: reports.pt.countcash
+  - name: sumcash
+    label: reports.pt.sumcash
     type: string
     source: pt
     total: true 
-  - name: countcheque
-    label: reports.pt.countcheque
+  - name: sumcheque
+    label: reports.pt.sumcheque
     type: string
     source: pt
     total: true 
-  - name: countonline
-    label: reports.pt.countonline
+  - name: sumonline
+    label: reports.pt.sumonline
     type: string
     source: pt
     total: true 
@@ -1766,9 +1766,9 @@ ReportDefinitions:
         ( SUM(CASE WHEN taxheadcode LIKE 'PT_ROUNDOFF' THEN adjustedamount ELSE 0 END)
         + SUM(CASE WHEN taxheadcode LIKE 'PT_DECIMAL_CEILING_DEBIT' THEN adjustedamount ELSE 0 END)
         + SUM(CASE WHEN taxheadcode LIKE 'PT_DECIMAL_CEILING_CREDIT' THEN adjustedamount ELSE 0 END)) as adjustment,
-        count (distinct  case when instrumenttype='Cash' then concat(rd.receiptheader,instrumenttype) end) as countcash,
-        count (distinct  case when instrumenttype='Cheque' then concat(rd.receiptheader,instrumenttype) end) as countcheque,
-        count (distinct  case when instrumenttype='Online' then concat(rd.receiptheader,instrumenttype) end) as countonline,
+        SUM ( case when instrumenttype='Cash' THEN adjustedamount ELSE 0 END) as sumcash,
+        SUM ( case when instrumenttype='Cheque' THEN adjustedamount ELSE 0 END) as sumcheque,
+        SUM ( case when instrumenttype='Online' THEN adjustedamount ELSE 0 END) as sumonline,
         sum(adjustedamount) as totalamount,
        (CASE WHEN collectiontype='COUNTER' THEN eg_user.name ELSE 'Online' END) as collectorname
       FROM egcl_receiptdetails_v1 as rd
