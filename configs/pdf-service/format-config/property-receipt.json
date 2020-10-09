@@ -504,9 +504,29 @@
             ],
             [
               {
-                "text": "{{paid_amount}}",
+                "text": "Amount to be Paid",
                 "border": [
                   true,
+                  false,
+                  false,
+                  false
+                ],
+                "style": "receipt-table-value"
+              },
+              {
+                "text": "₹ {{dueAmount}}",
+                "border": [
+                  false,
+                  false,
+                  false,
+                  false
+                ],
+                "style": "receipt-table"
+              },
+              {
+                "text": "{{paid_amount}}",
+                "border": [
+                  false,
                   false,
                   false,
                   false
@@ -518,15 +538,17 @@
                 "border": [
                   false,
                   false,
-                  false,
+                  true,
                   false
                 ],
                 "style": "receipt-table"
-              },
+              }
+            ],
+            [
               {
                 "text": "{{pending_amount}}",
                 "border": [
-                  false,
+                  true,
                   false,
                   false,
                   false
@@ -538,6 +560,26 @@
                 "border": [
                   false,
                   false,
+                  false,
+                  false
+                ],
+                "style": "receipt-table"
+              },
+              {
+                "text": "{{payment_mode}}",
+                "border": [
+                  false,
+                  false,
+                  false,
+                  false
+                ],
+                "style": "receipt-table-value"
+              },
+              {
+                "text": "₹ {{paymentMode}}",
+                "border": [
+                  false,
+                  false,
                   true,
                   false
                 ],
@@ -546,7 +588,7 @@
             ],
             [
               {
-                "text": "{{payment_mode}}",
+                "text": "{{transaction_id}}",
                 "border": [
                   true,
                   false,
@@ -556,7 +598,7 @@
                 "style": "receipt-table-value"
               },
               {
-                "text": "{{paymentMode}}",
+                "text": "{{transactionID}}",
                 "border": [
                   false,
                   false,
@@ -566,7 +608,7 @@
                 "style": "receipt-table"
               },
               {
-                "text": "{{transaction_id}}",
+                "text": "Trans/Cheque/DD Date",
                 "border": [
                   false,
                   false,
@@ -576,7 +618,7 @@
                 "style": "receipt-table-value"
               },
               {
-                "text": "{{transactionID}}",
+                "text": "{{transactionDate}}",
                 "border": [
                   false,
                   false,
@@ -633,7 +675,7 @@
         "layout": {}
       },
       {
-        "text":"PAYABLE AMOUNT",
+        "text":"PAID AMOUNT",
         "style":"block-head"
       },
 	    {
@@ -786,6 +828,7 @@
         "table": {
           "widths": [
             "15%",
+            "20%",
             "*",
             "20%",
             "20%"
@@ -796,9 +839,12 @@
                 {
                   "text": "Floor",
                   "style": "receipt-table-value"
+                },{
+                  "text": "Usage",
+                  "style": "receipt-table-value"
                 },
                 {
-                  "text": "Usage",
+                  "text": "Sub Usage",
                   "style": "receipt-table-value"
                 },
                 {
@@ -810,7 +856,7 @@
                   "style": "receipt-table-value"
                 }
               ],
-              "{{#var_floors}}[{\"text\":\"{{floor_no}}\",\"style\":\"receipt-table\"},{\"text\":\"{{usage_category}}\",\"style\":\"receipt-table\"},{\"text\":\"{{occupancy_type}}\",\"style\":\"receipt-table\"},{\"text\":\"{{builtup_area}}/{{arv_rent}}\",\"style\":\"receipt-table\"}]{{/var_floors}}"
+              "{{#var_floors}}[{\"text\":\"{{floor_no}}\",\"style\":\"receipt-table\"},{\"text\":\"{{usage_category}}\",\"style\":\"receipt-table\"},{\"text\":\"{{sub_usage_category}}\",\"style\":\"receipt-table\"},{\"text\":\"{{occupancy_type}}\",\"style\":\"receipt-table\"},{\"text\":\"{{builtup_area}}/{{arv_rent}}\",\"style\":\"receipt-table\"}]{{/var_floors}}"
               ]
               
           
