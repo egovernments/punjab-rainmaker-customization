@@ -131,6 +131,21 @@
                   "path": "$.paymentDetails[0].receiptDate"
                 },
                 "type": "date"
+              }, {
+                "variable": "bankName",
+                "value": {
+                  "path": "$.additionalDetails.bankName"
+                }
+              },  {
+                "variable": "branchName",
+                "value": {
+                  "path": "$.additionalDetails.branchName"
+                }
+              }, {
+                "variable": "ifsc",
+                "value": {
+                  "path": "$.ifscCode"
+                }
               },
               {
                 "variable": "paymentDate", 
