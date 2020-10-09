@@ -1140,6 +1140,7 @@ ReportDefinitions:
           payment.totalamountpaid as totalamount, 
           paymentmode as paymentmode,
           (case when paymentmode like 'CASH' then '' else  transactionnumber end) as ddorchequenumber,
+          (case when paymentmode like 'DD' or paymentmode like 'Cheque' then To_char((To_timestamp(payment.transactiondate / 1000) at time Zone 'Asia/Kolkata'), 'DD/MM/YYYY') else '' end) as ddchequedate,
           'System' as collectiontype,
           eg_user.name as collectorname
         FROM egcl_payment AS payment
@@ -1583,6 +1584,7 @@ ReportDefinitions:
           payment.totalamountpaid as totalamount, 
           paymentmode as paymentmode,
           (case when paymentmode like 'CASH' then '' else  transactionnumber end) as ddorchequenumber,
+          (case when paymentmode like 'DD' or paymentmode like 'Cheque' then To_char((To_timestamp(payment.transactiondate / 1000) at time Zone 'Asia/Kolkata'), 'DD/MM/YYYY') else '' end) as ddchequedate,
           'System' as collectiontype,
           eg_user.name as collectorname
         FROM egcl_payment AS payment
