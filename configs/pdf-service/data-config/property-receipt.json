@@ -643,7 +643,7 @@
                             "localisation": {
                              "required": true,
                              "prefix": "COMMON_PROPUSGTYPE",
-                             "module": "rainmaker-pt",
+                             "module": "rainmaker-pt"
                              }
                          },
                           {
