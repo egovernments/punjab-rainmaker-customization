@@ -644,8 +644,7 @@
                              "required": true,
                              "prefix": "COMMON_PROPUSGTYPE",
                              "module": "rainmaker-pt",
-                             "isMainTypeRequired":true
-                           }
+                             }
                          },
                           {
                              "variable":"sub_usage_category",
