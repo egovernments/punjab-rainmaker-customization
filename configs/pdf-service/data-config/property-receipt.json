@@ -655,7 +655,8 @@
                               "prefix": "COMMON_PROPSUBUSGTYPE",
                               "module": "rainmaker-pt",
                               "isSubTypeRequired":true
-                            },
+                            }
+			  },
                           {
                             "variable":"occupancy_type",
                             "value":"occupancyType"
