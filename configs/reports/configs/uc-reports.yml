@@ -1664,9 +1664,10 @@ ReportDefinitions:
           paydetail.businessservice as servicecategory,
           payment.totalamountpaid as amount, 
           eg_user.name as collectorname,
-          payment.additionaldetails->>'comment' as remarks
+          billd.additionaldetails->>'comment' as remarks
         FROM egcl_payment AS payment
-        inner join egcl_paymentdetail as paydetail on paydetail.paymentid=payment.id
+        INNER JOIN egcl_paymentdetail as paydetail on paydetail.paymentid=payment.id
+        INNER JOIN egcl_billdetial as billd on billd.billid=paydetail.billid
         JOIN eg_user ON payment.createdby::INTEGER=eg_user.id
         WHERE  paydetail.businessservice not in ('PT','TL','FIRENOC')  and payment.paymentstatus != 'CANCELLED' and payment.tenantid =$tenantid
     orderby: ORDER BY paydetail.receiptdate DESC
