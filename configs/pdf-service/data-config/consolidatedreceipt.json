@@ -134,12 +134,12 @@
               }, {
                 "variable": "bankName",
                 "value": {
-                  "path": "$.additionalDetails.bankName"
+                  "path": "$.additionalDetails[0].bankName"
                 }
               },  {
                 "variable": "branchName",
                 "value": {
-                  "path": "$.additionalDetails.branchName"
+                  "path": "$.additionalDetails[0].branchName"
                 }
               }, {
                 "variable": "ifsc",
