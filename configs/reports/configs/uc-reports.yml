@@ -1303,7 +1303,6 @@ ReportDefinitions:
           SUM(CASE WHEN taxheadcode LIKE '%_FIELD_FEE' THEN adjustedamount ELSE 0 END) as fieldcollection,
           sum(adjustedamount) as totalamount
         from egcl_paymentdetail paydetail
-        from egcl_paymentdetail paydetail
         INNER JOIN egcl_bill as bill on bill.id = paydetail.billid
         inner join egcl_billdetial as billd on billd.billid=bill.id
         inner join egcl_billaccountdetail as ebd on ebd.billdetailid=billd.id
