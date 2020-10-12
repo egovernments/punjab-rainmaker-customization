@@ -943,13 +943,14 @@ ReportDefinitions:
         -- Use CTE to force query plan, compute & use CTE later
         WITH receipt_breakup AS (
                     SELECT 
-                      egcl_billaccountdetail.billdetailid bill_id, 
+                      string_agg(distinct billd.billid,',') bill_id, 
                       SUM(CASE WHEN taxheadcode LIKE '%_CGST' THEN adjustedamount ELSE 0 END) as cgst, 
                       SUM(CASE WHEN taxheadcode LIKE '%_TAX' THEN adjustedamount ELSE 0 END) as tax, 
                       SUM(CASE WHEN taxheadcode LIKE '%_SGST' THEN adjustedamount ELSE 0 END) as sgst, 
                       SUM(CASE WHEN taxheadcode LIKE '%_FIELD_FEE' THEN adjustedamount ELSE 0 END) as fieldcollection            
                     FROM egcl_billaccountdetail 
-                    INNER JOIN egcl_bill as bill on bill.id = egcl_billaccountdetail.billdetailid
+                    inner join egcl_billdetial as billd on billd.id=egcl_billaccountdetail.billdetailid
+                    INNER JOIN egcl_bill as bill on bill.id = billd.billid
                     WHERE  bill.tenantid!='pb.testing' AND businessservice not in ('PT','TL','FIRENOC') -- and rh.status != 'Cancelled'
                     GROUP BY billdetailid
         )
@@ -1381,7 +1382,7 @@ ReportDefinitions:
         from egcl_payment as payment
         inner join egcl_paymentdetail as paydetail on paydetail.paymentid=payment.id
         where paydetail.businessservice not in ('PT','TL','FIRENOC') and payment.tenantid !='pb.testing'  and payment.paymentstatus != 'CANCELLED' 
-    goupby: GROUP BY payment.tenantid
+    groupby: GROUP BY payment.tenantid
     orderby: ORDER BY payment.tenantId asc
 
 
