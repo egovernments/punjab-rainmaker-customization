@@ -3213,13 +3213,13 @@ ReportDefinitions:
     type: epoch
     source: pt
     isMandatory: true
-    searchClause: AND rh.receiptdate >= $fromDate
+    searchClause: AND payd.receiptdate >= $fromDate
   - name: toDate
     label: reports.pt.toDate
     type: epoch
     source: pt
     isMandatory: true
-    searchClause: AND rh.receiptdate <= $toDate
+    searchClause: AND payd.receiptdate <= $toDate
   - name: financialyear
     label: Financial Year
     type: singlevaluelist
