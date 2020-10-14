@@ -3827,7 +3827,7 @@ ReportDefinitions:
       JOIN eg_pt_property pt ON pt.propertyid  = bill.consumercode
       JOIN eg_pt_address pt_addr ON pt.id = pt_addr.propertyid
       LEFT OUTER JOIN eg_user ON eg_user.id = pd.createdby::INTEGER
-      WHERE pd.tenantid = 'pb.zirakpur' and payment.paymentstatus != 'CANCELLED'
+      WHERE pd.tenantid = $tenantid and payment.paymentstatus != 'CANCELLED'
   groupby: GROUP BY financialyear
   orderby: ORDER BY financialyear  
 
