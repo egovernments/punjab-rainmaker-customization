@@ -2911,6 +2911,7 @@ ReportDefinitions:
     and payment.tenantid = $tenantid
     and payment.id=pd.paymentid
     and payment.paymentstatus!='CANCELLED'
+    and pd.businessservice='PT'
     and bill.id=pd.billid
     and billd.billid=bill.id
     and eg_pt_property.propertyid=bill.consumercode
