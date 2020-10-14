@@ -2868,11 +2868,6 @@ ReportDefinitions:
     type: string
     source: pt
     total: true  
-  - name: totalamountdue
-    label: reports.pt.totalamountdue
-    type: string
-    source: pt
-    total: true
   searchParams:
   - name: fromDate
     label: reports.pt.fromDate
@@ -2893,7 +2888,7 @@ ReportDefinitions:
     source: pt
     wrapper: true
     isMandatory: false
-    searchClause: AND financialyear = $financialyear
+    searchClause: AND concat(to_char((To_timestamp(fromperiod/1000) at time Zone 'Asia/Kolkata'),'YYYY'),'-',to_char((To_timestamp(toperiod/1000) at time Zone 'Asia/Kolkata'),'YY')) = $financialyear
   - name: usage
     label: Usage
     type: singlevaluelist
@@ -2901,22 +2896,26 @@ ReportDefinitions:
     source: pt
     wrapper: true
     isMandatory: false
-    searchClause: AND usagecategorymajor = $usage
+    searchClause: AND eg_pt_property.usagecategory = $usage
   query: |
     SELECT 
-      initcap(split_part(tenantid, '.', 2)) as tenantid, 
-      COUNT(collectiontype) AS totalassessments, 
-      SUM(billd.amount) AS totalamount, 
-      SUM(billd.amountpaid) AS totalamountpaid, 
-      SUM(CASE WHEN collectiontype LIKE 'ONLINE' THEN amount ELSE 0 END) AS totalonline, 
-      SUM(CASE WHEN collectiontype LIKE 'ONLINE' THEN 1 ELSE 0 END) AS countonline,
-      SUM(CASE WHEN collectiontype LIKE 'COUNTER' THEN amount ELSE 0 END) AS totaloffline,
-      SUM(CASE WHEN collectiontype LIKE 'COUNTER' THEN 1 ELSE 0 END) AS countoffline, 
-      (SUM(billd.amount) - SUM(billd.amountpaid)) AS totalamountdue 
-      FROM egcl_billdetial as billd 
-      WHERE tenantid LIKE CONCAT(SPLIT_PART($tenantid, '.', 1), '%') and tenantid = $tenantid
-  groupby: GROUP BY tenantid
-  orderby: ORDER BY tenantid, totalamountpaid DESC NULLS LAST
+      initcap(split_part(payment.tenantid, '.', 2)) as tenantid, 
+      COUNT(paymentmode) AS totalassessments, 
+      SUM(payment.totalamountpaid) AS totalamountpaid, 
+      SUM(CASE WHEN paymentmode='ONLINE' THEN totalamountpaid ELSE 0 END) AS totalonline, 
+      SUM(CASE WHEN paymentmode='ONLINE' THEN 1 ELSE 0 END) AS countonline,
+      SUM(CASE WHEN paymentmode!='ONLINE' THEN totalamountpaid ELSE 0 END) AS totaloffline,
+      SUM(CASE WHEN paymentmode!='ONLINE' THEN 1 ELSE 0 END) AS countoffline
+    FROM  egcl_paymentdetail as pd, egcl_payment as payment, eg_pt_property, egcl_bill bill, egcl_billdetial billd 
+    WHERE payment.tenantid LIKE CONCAT(SPLIT_PART($tenantid, '.', 1), '%') 
+    and payment.tenantid = $tenantid
+    and payment.id=pd.paymentid
+    and payment.paymentstatus!='CANCELLED'
+    and bill.id=pd.billid
+    and billd.billid=bill.id
+    and eg_pt_property.propertyid=bill.consumercode
+  groupby: GROUP BY payment.tenantid 
+  orderby: ORDER BY payment.tenantid, totalamountpaid DESC NULLS LAST
 
 - reportName: ReceiptRegisterShort_V2
   summary: Receipt Register
@@ -3013,7 +3012,7 @@ ReportDefinitions:
     source: pt
     wrapper: true
     isMandatory: false
-    searchClause: AND concat(t amp(bd.fromperiod/1000) at time Zone 'Asia/Kolkata'),'YYYY'),'-', to_char((To_timestamp(bd.toperiod/1000) at time Zone 'Asia/Kolkata'),'YYYY')) = $financialyear
+    searchClause: AND concat(t amp(bd.fromperiod/1000) at time Zone 'Asia/Kolkata'),'YYYY'),'-', to_char((To_timestamp(bd.toperiod/1000) at time Zone 'Asia/Kolkata'),'YY')) = $financialyear
   - name: localityArray
     label: reports.pt.zoneList
     type: boundarylist
