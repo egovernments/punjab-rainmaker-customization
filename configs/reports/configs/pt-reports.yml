@@ -3242,7 +3242,7 @@ ReportDefinitions:
     inner join eg_user as eu on eu.uuid     = po.userid
     inner join eg_pt_address    as pta on pta.propertyid = pt.id
     left outer join eg_pt_unit_v2_ot as pot on pot.propertyid = pt.id
-    where payd.tenantid = $tenantid and payment.paymentstatus != 'CANCELLED' and payd.businessservice='PT'
+    where payd.tenantid = $tenantid and payment.paymentstatus != 'CANCELLED' and payd.businessservice='PT' and pt.status!='INACTIVE' 
 
 
 - reportName: Sewa_Kendra_ReceiptRegister_V2
@@ -3827,7 +3827,7 @@ ReportDefinitions:
       JOIN eg_pt_property pt ON pt.propertyid  = bill.consumercode
       JOIN eg_pt_address pt_addr ON pt.id = pt_addr.propertyid
       LEFT OUTER JOIN eg_user ON eg_user.id = pd.createdby::INTEGER
-      WHERE pd.tenantid = $tenantid and payment.paymentstatus != 'CANCELLED'
+      WHERE pd.tenantid = $tenantid and payment.paymentstatus != 'CANCELLED' and pt.status!='INACTIVE' 
   groupby: GROUP BY financialyear
   orderby: ORDER BY financialyear  
 
@@ -3938,3 +3938,4 @@ ReportDefinitions:
      left outer join eg_pt_unit_v2_ot as pot on pot.propertyid = pt.id   
      where payd.tenantid = $tenantid 
      and bill.consumercode not in (select consumercode from egcl_bill where tenantid=$tenantid and businessservice='PT' and id in (select billid from egcl_billdetial where tenantid=$tenantid and concat(to_char((To_timestamp(fromperiod/1000) at time Zone 'Asia/Kolkata'),'YYYY'),'-',to_char((To_timestamp(toperiod/1000) at time Zone 'Asia/Kolkata'),'YY')) ='2020-21'))
+     and pt.status!='INACTIVE' 
