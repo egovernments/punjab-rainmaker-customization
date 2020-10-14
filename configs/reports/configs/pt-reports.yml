@@ -3047,7 +3047,8 @@ ReportDefinitions:
       FROM egcl_paymentdetail pd, egcl_payment payment, eg_pt_property as pt,  eg_user,	
       (select bill.id as billid, bill.consumercode as consumercodei, min(bd.fromperiod) fromperiod, max(bd.toperiod) toperiod from egcl_billdetial bd, egcl_bill bill 	
       where bill.id=bd.billid and bill.tenantid = $tenantid group by bill.id) bd 	
-      where pd.paymentid=payment.id and bd.billid=pd.billid and payment.paymentstatus != 'CANCELLED' and pd.businessservice='PT' and payment.tenantid='pb.zirakpur' 	
+      where pd.paymentid=payment.id and bd.billid=pd.billid and payment.paymentstatus != 'CANCELLED' and pd.businessservice='PT' and payment.tenantid=$tenantid
+      and pt_addr.propertyid=pt.id
       and pt.propertyid = bd.consumercodei and eg_user.id = pd.createdby::INTEGER  and pt.status!='INACTIVE' 	
   orderby: ORDER BY pd.receiptdate DESC;
 
