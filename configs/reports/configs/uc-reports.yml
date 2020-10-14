@@ -1135,6 +1135,8 @@ ReportDefinitions:
           To_char((To_timestamp(paydetail.receiptdate / 1000) at time Zone 'Asia/Kolkata'), 'DD/MM/YYYY') as receiptdate,
           To_char((To_timestamp(paydetail.manualreceiptdate / 1000) at time Zone 'Asia/Kolkata'), 'DD/MM/YYYY') as g8issuedate,
           paydetail.manualreceiptnumber as g8receiptno,
+          payment.ifsccode as bankname,
+          payment.ifsccode as branchname,
           payment.paymentstatus as status,
           businessservice as servicecategory,
           receipt_breakup.*,  
