@@ -3807,13 +3807,13 @@ ReportDefinitions:
   query: |
       -- Use CTE to force query plan, compute & use CTE later
       SELECT
-        financialyear,
-        sum(case when pt_detail.usagecategorymajor='RESIDENTIAL' then pd.amountpaid else 0 end) as "residential",
-        sum(case when pt_detail.usagecategorymajor='RESIDENTIAL' then 1 else 0 end) as "countresidential",	
-        sum(case when pt_detail.usagecategorymajor='NONRESIDENTIAL' then pd.amountpaid else 0 end) as "nonresidential",
-        sum(case when pt_detail.usagecategorymajor='NONRESIDENTIAL' then 1 else 0 end) as "countnonresidential",
-        sum(case when pt_detail.usagecategorymajor='MIXED' then pd.amountpaid else 0 end) as "mixed",
-        sum(case when pt_detail.usagecategorymajor='MIXED' then 1 else 0 end) as "countmixed",
+        concat(to_char((To_timestamp(billd.fromperiod/1000) at time Zone 'Asia/Kolkata'),'YYYY'),'-',to_char((To_timestamp(billd.toperiod/1000) at time Zone 'Asia/Kolkata'),'YYYY'))  AS  "financialyear",
+        sum(case when pt.usagecategory='RESIDENTIAL' then pd.amountpaid else 0 end) as "residential",
+        sum(case when pt.usagecategory='RESIDENTIAL' then 1 else 0 end) as "countresidential",
+        sum(case when pt.usagecategory='NONRESIDENTIAL' then pd.amountpaid else 0 end) as "nonresidential",
+        sum(case when pt.usagecategory='NONRESIDENTIAL' then 1 else 0 end) as "countnonresidential",
+        sum(case when pt.usagecategory='MIXED' then pd.amountpaid else 0 end) as "mixed",
+        sum(case when pt.usagecategory='MIXED' then 1 else 0 end) as "countmixed",
         sum(pd.amountpaid) as totalamount,
         count(pd.amountpaid) as totalcount,
         sum(case when payment.paymentmode='ONLINE' then pd.amountpaid else 0 end) as "online",
@@ -3823,10 +3823,11 @@ ReportDefinitions:
       FROM egcl_paymentdetail AS pd
       join egcl_payment as payment on payment.id = pd.paymentid
       join egcl_bill as bill on bill.id = pd.billid
-      JOIN eg_pt_propertydetail_v2 pt_detail ON pt_detail.property  = bill.consumercode
-      JOIN eg_pt_address_v2 pt_addr ON pt_detail.property = pt_addr.property
+      join egcl_billdetial as billd on billd.billid = bill.id
+      JOIN eg_pt_property pt ON pt.propertyid  = bill.consumercode
+      JOIN eg_pt_address pt_addr ON pt.id = pt_addr.propertyid
       LEFT OUTER JOIN eg_user ON eg_user.id = pd.createdby::INTEGER
-      WHERE pd.tenantid = $tenantid and payment.paymentstatus != 'CANCELLED'
+      WHERE pd.tenantid = 'pb.zirakpur' and payment.paymentstatus != 'CANCELLED'
   groupby: GROUP BY financialyear
   orderby: ORDER BY financialyear  
 
