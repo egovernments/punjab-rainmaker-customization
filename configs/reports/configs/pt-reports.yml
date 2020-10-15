@@ -3666,13 +3666,13 @@ ReportDefinitions:
     type: epoch
     source: pt
     isMandatory: false
-    searchClause: AND rh.receiptdate >= $fromDate
+    searchClause: AND pd.receiptdate >= $fromDate
   - name: toDate
     label: reports.pt.toDate
     type: epoch
     source: pt
     isMandatory: false
-    searchClause: AND rh.receiptdate <= $toDate
+    searchClause: AND pd.receiptdate <= $toDate
   - name: ulb
     label: ULB
     type: singlevaluelist
@@ -3680,7 +3680,7 @@ ReportDefinitions:
     source: pt
     wrapper: true
     isMandatory: false
-    searchClause: AND rd.tenantid = $ulb
+    searchClause: AND bd.tenantid = $ulb
   query: |
       -- Use CTE to force query plan, compute & use CTE later
       SELECT
@@ -3701,7 +3701,7 @@ ReportDefinitions:
       FROM egcl_billaccountdetail as bad
       INNER JOIN egcl_billdetial as bd on bd.id = bad.billdetailid
       INNER JOIN egcl_paymentdetail as pd on pd.billid = bd.billid
-      WHERE bd.tenantid = 'pb.testing' and pd.businessservice='PT'
+      WHERE bd.tenantid != 'pb.testing' and pd.businessservice='PT'
   groupby: group by bd.tenantid
   orderby: order by bd.tenantid
 
