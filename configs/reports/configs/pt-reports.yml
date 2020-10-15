@@ -215,7 +215,7 @@ ReportDefinitions:
         to_char((To_timestamp(rh.manualreceiptdate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY') AS g8issuedate,
         Initcap(COALESCE(pt_detail.usagecategoryminor, pt_detail.usagecategorymajor)) as usagetype,
         manualreceiptnumber as g8receiptno,
-        eg_user.name as collectorname,
+        (case when eg_user.name is null then '30048|21Fj+c3k2ldB0X3AzIh7atXB' else eg_user.name end)  as collectorname,
         pt_detail.additionaldetails->>'remarks' as "remarks"
       FROM egcl_receiptheader_v1 AS rh
       JOIN egcl_receiptinstrument_v1 AS ri ON rh.id = ri.receiptheader
@@ -2919,7 +2919,8 @@ ReportDefinitions:
   orderby: ORDER BY payment.tenantid, totalamountpaid DESC NULLS LAST
 
 - reportName: ReceiptRegisterShort_V2
-  summary: Receipt Register
+  decryptionPathId: ReceiptRegisterShort_V2
+  summary: Account Receipt Register
   version: 1.0.0
   moduleName: rainmaker-pt
   additionalConfig:
@@ -3054,6 +3055,7 @@ ReportDefinitions:
 
 
 - reportName: ULBPTDataDumpReport_V2
+  decryptionPathId: ULBPTDataDumpReport_V2
   summary: ULB level report
   version: 1.0.0
   moduleName: rainmaker-pt
@@ -3833,6 +3835,7 @@ ReportDefinitions:
   orderby: ORDER BY financialyear  
 
 - reportName: ULBDEFAULTERPTREPORT_V2
+  decryptionPathId: ULBDEFAULTERPTREPORT_V2
   summary: ULB Defaulter Pt report
   version: 1.0.0
   moduleName: rainmaker-pt
