@@ -1712,6 +1712,11 @@ ReportDefinitions:
     type: string
     source: pt
     total: true 
+  - name: countcheque
+    label: reports.pt.countcheque
+    type: string
+    source: pt
+    total: true     
   - name: sumonline
     label: reports.pt.sumonline
     type: string
@@ -1768,6 +1773,7 @@ ReportDefinitions:
         + SUM(CASE WHEN taxheadcode LIKE 'PT_DECIMAL_CEILING_CREDIT' THEN adjustedamount ELSE 0 END)) as adjustment,
         SUM ( case when instrumenttype='Cash' THEN adjustedamount ELSE 0 END) as sumcash,
         SUM ( case when instrumenttype='Cheque' THEN adjustedamount ELSE 0 END) as sumcheque,
+        count (distinct  case when instrumenttype='Cheque' then concat(rd.receiptheader,instrumenttype) end) as countcheque,
         SUM ( case when instrumenttype='Online' THEN adjustedamount ELSE 0 END) as sumonline,
         sum(adjustedamount) as totalamount,
        (CASE WHEN collectiontype='COUNTER' THEN eg_user.name ELSE 'Online' END) as collectorname
