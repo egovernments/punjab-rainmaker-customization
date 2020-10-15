@@ -2920,7 +2920,7 @@ ReportDefinitions:
 
 - reportName: ReceiptRegisterShort_V2
   decryptionPathId: ReceiptRegisterShort_V2
-  summary: Account Receipt Register
+  summary: Receipt Register
   version: 1.0.0
   moduleName: rainmaker-pt
   additionalConfig:
@@ -3040,7 +3040,7 @@ ReportDefinitions:
         payment.paymentmode as instrumenttype, 	
         payment.transactionnumber as transactionnumber,	
         concat(to_char((To_timestamp(bd.fromperiod/1000) at time Zone 'Asia/Kolkata'),'YYYY'),'-', to_char((To_timestamp(bd.toperiod/1000) at time Zone 'Asia/Kolkata'),'YYYY')) AS financialyear,  
-        eg_user.name as collectorname,	
+        (case when eg_user.name is null then '30048|21Fj+c3k2ldB0X3AzIh7atXB' else eg_user.name end)  as collectorname,	
         --receipt_breakup.*,	
         to_char((To_timestamp(pd.manualreceiptdate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY') AS g8issuedate, 	
         manualreceiptnumber as g8receiptno,
@@ -3221,12 +3221,12 @@ ReportDefinitions:
       receiptnumber    as "receiptnumber",
       pt.oldpropertyid as "existingpropertyid",
       concat(to_char((To_timestamp(billd.fromperiod/1000) at time Zone 'Asia/Kolkata'),'YYYY'),'-',to_char((To_timestamp(billd.toperiod/1000) at time Zone 'Asia/Kolkata'),'YY'))  AS "financialyear",
-      eu."name" as "ownername", 
-      eu.guardian     as "guardianname",
+      (case when eu."name" is null then '30048|21Fj+c3k2ldB0X3AzIh7atXB' else eu."name" end)  as "ownername", 
+      (case when eu.guardian is null then '30048|21Fj+c3k2ldB0X3AzIh7atXB' else eu.guardian end)   as "guardianname",
       pt.landarea     as "totalarea",
       pt.superbuiltuparea * 9 as "builtarea",    
       pt.nooffloors     as "floors",
-      eu.mobilenumber as "mobileno",
+      (case when eu.mobilenumber is null then '30048|21Fj+c3k2ldB0X3AzIh7atXB' else eu.mobilenumber end) as "mobileno",
       paymentmode as "transcationmode",
       payment.totalamountpaid as "paymentamount",
       to_char((To_timestamp(payment.transactiondate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY')  AS "paymentdate",
@@ -3465,7 +3465,7 @@ ReportDefinitions:
         to_char((To_timestamp(pd.manualreceiptdate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY')  AS g8issuedate,
         Initcap(COALESCE(pt_detail.usagecategoryminor, pt_detail.usagecategorymajor)) as usagetype,
         manualreceiptnumber as g8receiptno,
-        (CASE WHEN collectiontype='COUNTER' THEN eg_user.name ELSE '' END) as collectorname,
+        (CASE WHEN collectiontype='COUNTER' THEN eg_user.name ELSE '30048|21Fj+c3k2ldB0X3AzIh7atXB' END) as collectorname,
         pt_detail.additionaldetails->>'remarks' as "remarks"
       FROM egcl_bill AS bill
       INNER JOIN egcl_billdetial as bd on bd.billid = bill.id
@@ -3926,10 +3926,10 @@ ReportDefinitions:
        payd.receiptnumber    as "receiptnumber",
        pt.oldpropertyid as "existingpropertyid",
        concat(to_char((To_timestamp(billd.fromperiod/1000) at time Zone 'Asia/Kolkata'),'YYYY'),'-',to_char((To_timestamp(billd.toperiod/1000) at time Zone 'Asia/Kolkata'),'YY'))  AS "financialyear",
-       eu."name" as "ownername",
-       eu.guardian     as "guardianname",    
+       (case when eu."name" is null then '30048|21Fj+c3k2ldB0X3AzIh7atXB' else eu."name" end)  as "ownername", 
+       (case when eu.guardian is null then '30048|21Fj+c3k2ldB0X3AzIh7atXB' else eu.guardian end)   as "guardianname",
        pot.propertytype     as "propertytype",
-       eu.mobilenumber as "mobileno",          
+       (case when eu.mobilenumber is null then '30048|21Fj+c3k2ldB0X3AzIh7atXB' else eu.mobilenumber end) as "mobileno",          
        REGEXP_REPLACE(REGEXP_REPLACE(CONCAT(pta.doorno, ',', pta.buildingname, ',',pta.street,',', pta.pincode), ',+', ','), '^,|,$', '') as "address"
      from egcl_paymentdetail as payd
      inner join egcl_payment as payment on payment.id = payd.paymentid        
