@@ -828,6 +828,10 @@ serviceMaps:
       basePath: Licenses.*.tradeLicenseDetail
       jsonMaps:
 
+      - jsonPath: $.Licenses.*.tradeLicenseDetail.additionalDetail
+        type: JSON
+        dbType: JSONB
+
       - jsonPath: $.Licenses.*.tradeLicenseDetail.adhocExemption
 
       - jsonPath: $.Licenses.*.tradeLicenseDetail.adhocPenalty
@@ -841,7 +845,3 @@ serviceMaps:
       - jsonPath: $.Licenses.*.auditDetails.lastModifiedTime
 
       - jsonPath: $.Licenses.*.tradeLicenseDetail.id
-
-      - jsonPath: $.Licenses.*.tradeLicenseDetail.additionalDetail
-        type: JSON
-        dbType: JSONB
