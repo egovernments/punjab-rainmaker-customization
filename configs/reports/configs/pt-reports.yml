@@ -1623,7 +1623,7 @@ ReportDefinitions:
         to_char((To_timestamp(rh.manualreceiptdate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY') AS g8issuedate,
         Initcap(COALESCE(pt_detail.usagecategoryminor, pt_detail.usagecategorymajor)) as usagetype,
         manualreceiptnumber as g8receiptno,
-        (CASE WHEN collectiontype='COUNTER' THEN eg_user.name ELSE '' END) as collectorname,
+        (case when eg_user.name is null then '30048|21Fj+c3k2ldB0X3AzIh7atXB' else eg_user.name end)  as collectorname,
         pt_detail.additionaldetails->>'remarks' as "remarks"
       FROM egcl_receiptheader_v1 AS rh
       JOIN egcl_receiptinstrument_v1 AS ri ON rh.id = ri.receiptheader
@@ -2266,7 +2266,7 @@ ReportDefinitions:
         to_char((To_timestamp(payment.transactiondate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY') AS transactiondate, 
         pd.due AS pendingamount,
         Initcap(pt.usagecategory) as usagetype,
-        eg_user.name as collectorname,
+        (case when eg_user.name is null then '30048|21Fj+c3k2ldB0X3AzIh7atXB' else eg_user.name end)  as collectorname,
         receipt_breakup.*,
         to_char((To_timestamp(pd.manualreceiptdate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY') AS g8issuedate, 
         manualreceiptnumber as g8receiptno
@@ -2472,7 +2472,7 @@ ReportDefinitions:
         to_char((To_timestamp(payment.transactiondate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY') AS transactiondate, 
         pd.due AS pendingamount,
         Initcap(pt.usagecategory) as usagetype,
-        (CASE WHEN billd.collectiontype='COUNTER' THEN eg_user.name ELSE '' END) as collectorname,
+        (CASE WHEN billd.collectiontype='COUNTER' THEN eg_user.name ELSE '30048|21Fj+c3k2ldB0X3AzIh7atXB' END) as collectorname,
         receipt_breakup.*,
         to_char((To_timestamp(pd.manualreceiptdate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY') AS g8issuedate, 		manualreceiptnumber as g8receiptno
       FROM egcl_paymentdetail pd, eg_user, eg_pt_property    as pt, egcl_billdetial as billd, egcl_payment payment,receipt_breakup, egcl_bill bill, (select bill.id as billid, min(bd.fromperiod) fromperiod, max(bd.toperiod) toperiod from egcl_billdetial bd, egcl_bill bill where bill.id=bd.billid group by bill.id) bd
@@ -3033,7 +3033,7 @@ ReportDefinitions:
         payment.paymentmode as instrumenttype, 	
         payment.transactionnumber as transactionnumber,	
         concat(to_char((To_timestamp(bd.fromperiod/1000) at time Zone 'Asia/Kolkata'),'YYYY'),'-', to_char((To_timestamp(bd.toperiod/1000) at time Zone 'Asia/Kolkata'),'YYYY')) AS financialyear,  
-        (case when eg_user.name is null then ' ' else eg_user.name end)  as collectorname,	
+        (case when eg_user.name is null then '30048|21Fj+c3k2ldB0X3AzIh7atXB' else eg_user.name end)  as collectorname,
         --receipt_breakup.*,	
         to_char((To_timestamp(pd.manualreceiptdate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY') AS g8issuedate, 	
         manualreceiptnumber as g8receiptno,
