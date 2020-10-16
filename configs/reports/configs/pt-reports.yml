@@ -2219,6 +2219,14 @@ ReportDefinitions:
     source: pt
     isMandatory: true
     searchClause: AND pd.receiptdate <= $toDate
+  - name: financialyear
+    label: Financial Year
+    type: singlevaluelist
+    pattern: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?tenantId=$tenantid&moduleName=egf-master&masterName=FinancialYear|$.MdmsRes.egf-master.FinancialYear.[?(@.module=='PT')].code|$.MdmsRes.egf-master.FinancialYear.[?(@.module=='PT')].name
+    source: pt
+    wrapper: true
+    isMandatory: false
+    searchClause: AND concat(to_char((To_timestamp(fromperiod/1000) at time Zone 'Asia/Kolkata'),'YYYY'),'-',to_char((To_timestamp(toperiod/1000) at time Zone 'Asia/Kolkata'),'YY')) = $financialyear
   - name: paymentMode
     label: Payment Mode
     type: singlevaluelist
@@ -2425,6 +2433,14 @@ ReportDefinitions:
     source: pt
     isMandatory: true
     searchClause: AND pd.receiptdate <= $toDate
+  - name: financialyear
+    label: Financial Year
+    type: singlevaluelist
+    pattern: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?tenantId=$tenantid&moduleName=egf-master&masterName=FinancialYear|$.MdmsRes.egf-master.FinancialYear.[?(@.module=='PT')].code|$.MdmsRes.egf-master.FinancialYear.[?(@.module=='PT')].name
+    source: pt
+    wrapper: true
+    isMandatory: false
+    searchClause: AND concat(to_char((To_timestamp(fromperiod/1000) at time Zone 'Asia/Kolkata'),'YYYY'),'-',to_char((To_timestamp(toperiod/1000) at time Zone 'Asia/Kolkata'),'YY')) = $financialyear
   - name: paymentMode
     label: Payment Mode
     type: singlevaluelist
