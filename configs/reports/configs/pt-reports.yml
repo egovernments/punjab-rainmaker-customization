@@ -2234,6 +2234,12 @@ ReportDefinitions:
     source: pt
     isMandatory: false
     searchClause: AND payment.paymentmode = $paymentMode
+  - name: localityArray
+    label: reports.pt.zoneList
+    type: boundarylist
+    source: pt
+    isMandatory: false
+    searchClause: AND pt_addr.locality IN ($localityArray)
   query: |
       -- Use CTE to force query plan, compute & use CTE later
       WITH receipt_breakup AS (
@@ -2280,9 +2286,11 @@ ReportDefinitions:
         manualreceiptnumber as g8receiptno
       FROM egcl_paymentdetail pd, egcl_payment payment, eg_pt_property as pt, receipt_breakup, eg_user,
       (select bill.id as billid, bill.consumercode as consumercodei, min(bd.fromperiod) fromperiod, max(bd.toperiod) toperiod from egcl_billdetial bd, egcl_bill bill 
-      where bill.id=bd.billid and bill.tenantid = $tenantid group by bill.id) bd 
+      where bill.id=bd.billid and bill.tenantid = $tenantid group by bill.id) bd,
+      (select string_agg(distinct propertyid,',') as propertyid,string_agg(distinct locality,',') as locality from eg_pt_address where tenantid='pb.testing' group by propertyid ) pt_addr
       where pd.paymentid=payment.id and bd.billid=pd.billid and payment.paymentstatus != 'CANCELLED' and pd.businessservice='PT' and payment.tenantid=$tenantid 
       and pt.propertyid = bd.consumercodei and receipt_breakup.pdid=pd.id and eg_user.id = pd.createdby::INTEGER  and pt.status!='INACTIVE' 
+      and pt_addr.propertyid=pt.id 
       --and pt.propertyid='PT-1012-978737'
   orderby: ORDER BY pd.receiptdate DESC;
 
@@ -2448,6 +2456,12 @@ ReportDefinitions:
     source: pt
     isMandatory: false
     searchClause: AND payment.paymentmode = $paymentMode
+  - name: localityArray
+    label: reports.pt.zoneList
+    type: boundarylist
+    source: pt
+    isMandatory: false
+    searchClause: AND pt_addr.locality IN ($localityArray)
   query: |
       -- Use CTE to force query plan, compute & use CTE later
       WITH receipt_breakup AS (
@@ -2491,8 +2505,10 @@ ReportDefinitions:
         (CASE WHEN billd.collectiontype='COUNTER' THEN eg_user.name ELSE '30048|21Fj+c3k2ldB0X3AzIh7atXB' END) as collectorname,
         receipt_breakup.*,
         to_char((To_timestamp(pd.manualreceiptdate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY') AS g8issuedate, 		manualreceiptnumber as g8receiptno
-      FROM egcl_paymentdetail pd, eg_user, eg_pt_property    as pt, egcl_billdetial as billd, egcl_payment payment,receipt_breakup, egcl_bill bill, (select bill.id as billid, min(bd.fromperiod) fromperiod, max(bd.toperiod) toperiod from egcl_billdetial bd, egcl_bill bill where bill.id=bd.billid group by bill.id) bd
+      FROM egcl_paymentdetail pd, eg_user, eg_pt_property    as pt, egcl_billdetial as billd, egcl_payment payment,receipt_breakup, egcl_bill bill, (select bill.id as billid, min(bd.fromperiod) fromperiod, max(bd.toperiod) toperiod from egcl_billdetial bd, egcl_bill bill where bill.id=bd.billid group by bill.id) bd,
+      (select string_agg(distinct propertyid,',') as propertyid,string_agg(distinct locality,',') as locality from eg_pt_address where tenantid='pb.testing' group by propertyid ) pt_addr
       WHERE pd.paymentid=payment.id and  eg_user.id = pd.createdby::INTEGER and pt.propertyid = bill.consumercode and bill.id=pd.billid and bill.id=billd.billid and bd.billid=bill.id and payment.paymentstatus = 'CANCELLED' and pd.businessservice='PT' and payment.tenantid=$tenantid and receipt_breakup.pdid=pd.id
+      and pt_addr.propertyid=pt.id 
   orderby: ORDER BY pd.receiptdate DESC;
 
 - reportName: OldUlbWisePtCollection_V2
