@@ -2729,7 +2729,7 @@ ReportDefinitions:
         to_char((To_timestamp(payment.transactiondate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY') AS transactiondate, 
         pd.due AS pendingamount,
         Initcap(pt.usagecategory) as usagetype,
-        (CASE WHEN billd.collectiontype='COUNTER' THEN eg_user.name ELSE '' END) as collectorname,
+        (CASE WHEN billd.collectiontype='COUNTER' THEN eg_user.name ELSE '30048|21Fj+c3k2ldB0X3AzIh7atXB' END) as collectorname,
         receipt_breakup.*,
         to_char((To_timestamp(pd.manualreceiptdate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY') AS g8issuedate, 		manualreceiptnumber as g8receiptno
       FROM egcl_paymentdetail pd, eg_user, eg_pt_property    as pt, egcl_billdetial as billd, egcl_payment payment,receipt_breakup, egcl_bill bill, (select bill.id as billid, min(bd.fromperiod) fromperiod, max(bd.toperiod) toperiod from egcl_billdetial bd, egcl_bill bill where bill.id=bd.billid group by bill.id) bd
