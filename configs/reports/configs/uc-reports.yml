@@ -1466,6 +1466,7 @@ ReportDefinitions:
 
 
   - reportName: MiscReceiptULBCancelled_v2
+    decryptionPathId: MiscReceiptULB_v2
     summary: Cancelled Receipt Miscellaneous
     version: 1.0.0
     moduleName: rainmaker-uc
@@ -1593,7 +1594,7 @@ ReportDefinitions:
           (case when paymentmode like 'CASH' then '' else  transactionnumber end) as ddorchequenumber,
           (case when paymentmode like 'DD' or paymentmode like 'CHEQUE' then To_char((To_timestamp(payment.transactiondate / 1000) at time Zone 'Asia/Kolkata'), 'DD/MM/YYYY') else '' end) as ddchequedate,
           'System' as collectiontype,
-          eg_user.name as collectorname
+          (case when eg_user.name is null then '30048|21Fj+c3k2ldB0X3AzIh7atXB' else eg_user.name end) as collectorname
         FROM egcl_payment AS payment
         JOIN egcl_paymentdetail as paydetail on paydetail.paymentid=payment.id
         JOIN receipt_breakup ON paydetail.billid = receipt_breakup.bill_id
@@ -1602,6 +1603,7 @@ ReportDefinitions:
     orderby: ORDER BY paydetail.receiptdate DESC
 
   - reportName: MiscReceiptULBShort_v2
+    decryptionPathId: MiscReceiptULB_v2
     summary: Receipt Register Miscellaneous
     version: 1.0.0
     moduleName: rainmaker-uc
@@ -1673,7 +1675,7 @@ ReportDefinitions:
           To_char((To_timestamp(paydetail.receiptdate / 1000) at time Zone 'Asia/Kolkata'), 'DD/MM/YYYY') as receiptdate,
           paydetail.businessservice as servicecategory,
           payment.totalamountpaid as amount, 
-          eg_user.name as collectorname,
+          (case when eg_user.name is null then '30048|21Fj+c3k2ldB0X3AzIh7atXB' else eg_user.name end) as collectorname,
           billd.additionaldetails->>'comment' as remarks
         FROM egcl_payment AS payment
         INNER JOIN egcl_paymentdetail as paydetail on paydetail.paymentid=payment.id
