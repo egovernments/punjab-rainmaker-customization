@@ -2310,7 +2310,7 @@ ReportDefinitions:
     type: boundarylist
     source: tl
     isMandatory: false
-    searchClause: AND locality_tlb.locality IN ($localityArray)
+    searchClause: AND localitycode IN ($localityArray)
   query: |
       SELECT 
         tl.applicationnumber as applicationnumber,
@@ -2331,7 +2331,7 @@ ReportDefinitions:
       FROM eg_tl_tradelicense tl 
       INNER JOIN eg_tl_tradelicensedetail tld ON tld.tradelicenseid = tl.id 
       INNER JOIN (
-                select tradelicensedetailid, array_to_string(array_agg(message.message),', ') as locality from eg_tl_address as tla
+                select tradelicensedetailid, array_to_string(array_agg(message.message),', ') as locality,array_to_string(array_agg(locality),', ') as localitycode from eg_tl_address as tla
                 LEFT OUTER JOIN message on code=CONCAT(UPPER(REGEXP_REPLACE( $tenantid , '[^A-Za-z0-9]','_', 'g')),'_REVENUE_', REGEXP_REPLACE( locality , '[^A-Za-z0-9]','_', 'g')) 
                 AND message.locale = 'en_IN' group by 1) locality_tlb ON  locality_tlb.tradelicensedetailid = tld.id
       INNER JOIN eg_tl_owner tlowner ON tlowner.tradelicensedetailid = tld.id 
