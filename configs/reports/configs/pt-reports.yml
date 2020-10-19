@@ -3589,9 +3589,14 @@ ReportDefinitions:
     label: reports.pt.countcheque
     type: string
     source: pt
-    total: true     
+    total: true 
   - name: noofassessments
     label: reports.pt.noofassessments
+    type: string
+    source: pt
+    total: true     
+  - name: sumonline
+    label: reports.pt.sumonline
     type: string
     source: pt
     total: true 
