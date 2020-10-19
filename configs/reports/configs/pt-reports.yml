@@ -3642,6 +3642,7 @@ ReportDefinitions:
         sum(case when payment.paymentmode='CASH' then pd.amountpaid else 0 end) as sumcash,
         sum(case when payment.paymentmode='CHEQUE' then pd.amountpaid else 0 end) as sumcheque,
         count (distinct  case when payment.paymentmode='CHEQUE' then concat(payment.paymentmode) end) as countcheque,
+        sum(case when payment.paymentmode='ONLINE' then pd.amountpaid else 0 end) as sumonline,
         (CASE WHEN collectiontype='COUNTER' THEN eg_user.name ELSE 'Online' END) as collectorname,
         sum(adjustedamount) as totalamount
       FROM egcl_billaccountdetail as bad
