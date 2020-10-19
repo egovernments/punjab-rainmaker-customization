@@ -888,13 +888,13 @@ ReportDefinitions:
     type: epoch
     source: eg_pgr_service
     isMandatory: false
-    searchClause: AND createdtime >= $fromDate
+    searchClause: AND eg_pgr_service.createdtime >= $fromDate
   - name: toDate
     label: reports.rainmaker-pgr.dateto
     type: epoch
     source: eg_pgr_service
     isMandatory: false
-    searchClause: AND createdtime <= $toDate
+    searchClause: AND eg_pgr_service.createdtime <= $toDate
   query: |
         SELECT
         DISTINCT ON (servicerequestid)
