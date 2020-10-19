@@ -3575,6 +3575,21 @@ ReportDefinitions:
     type: string
     source: pt
     total: true
+  - name: sumcash
+    label: reports.pt.sumcash
+    type: string
+    source: pt
+    total: true 
+  - name: sumcheque
+    label: reports.pt.sumcheque
+    type: string
+    source: pt
+    total: true
+  - name: countcheque
+    label: reports.pt.countcheque
+    type: string
+    source: pt
+    total: true         
   - name: adhocrebate
     label: reports.pt.adhocrebate
     type: string
@@ -3629,6 +3644,9 @@ ReportDefinitions:
         ( SUM(CASE WHEN taxheadcode LIKE 'PT_ROUNDOFF' THEN adjustedamount ELSE 0 END)
         + SUM(CASE WHEN taxheadcode LIKE 'PT_DECIMAL_CEILING_DEBIT' THEN adjustedamount ELSE 0 END)
         + SUM(CASE WHEN taxheadcode LIKE 'PT_DECIMAL_CEILING_CREDIT' THEN adjustedamount ELSE 0 END)) as adjustment,
+        sum(case when payment.paymentmode='CASH' then pd.amountpaid else 0 end) as sumcash,
+        sum(case when payment.paymentmode='CHEQUE' then pd.amountpaid else 0 end) as sumcheque,
+        count (distinct  case when payment.paymentmode='CHEQUE' then concat(payment.paymentmode) end) as countcheque,
         (CASE WHEN collectiontype='COUNTER' THEN eg_user.name ELSE 'Online' END) as collectorname,
         sum(adjustedamount) as totalamount
       FROM egcl_billaccountdetail as bad
