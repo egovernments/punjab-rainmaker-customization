@@ -1053,13 +1053,13 @@ ReportDefinitions:
   query: |
     SELECT 
     DISTINCT ON (servicerequestid)
-    ua.name as lastassignedto,
+    (case when ua.name is null then '30048|21Fj+c3k2ldB0X3AzIh7atXB' else ua.name end) as lastassignedto,
     (SELECT deptmap_def.name FROM (VALUES tbl_def_dept) AS deptmap_def(name,code) INNER JOIN (VALUES tbl_dept) AS deptmap(serviceCode, department, slaHours) on deptmap.serviceCode = eg_pgr_service.servicecode and deptmap_def.code = deptmap.department) AS department, 
     regexp_replace(servicecode, '([a-z])([A-Z])', '\1 \2','g') AS servicecode, 
     (SELECT boundary_def.name FROM (VALUES tbl_boundary) AS boundary_def(name,code) where code=eg_pgr_address.mohalla) as locality, 
     servicerequestid AS complaintNo, 
     to_char(to_timestamp(TRUNC(CAST(eg_pgr_service.createdtime AS bigint) / 1000)), 'DD/MM/YYYY') AS date, 
-    eg_user.name, 
+    (case when eg_user.name is null then '30048|21Fj+c3k2ldB0X3AzIh7atXB' else eg_user.name end) as name, 
     phone, 
     eg_pgr_address.landmark, 
     eg_pgr_address.housenoandstreetname as address, 
@@ -1139,6 +1139,7 @@ ReportDefinitions:
   orderby: ORDER BY tenantid
 
 - reportName: EmployeeReport_v2
+  decryptionPathId: EmployeeReport_v2
   summary: Fetches complaints for employees
   version: 1.0.0
   moduleName: rainmaker-pgr
@@ -1569,6 +1570,7 @@ ReportDefinitions:
   orderby: ORDER BY deptmap_def.name
 
 - reportName: ULBEmployeeWiseReport_v2
+  decryptionPathId: ULBEmployeeWiseReport
   summary: Fetches employee wise assignment report
   version: 1.0.0
   moduleName: rainmaker-pgr
@@ -1639,7 +1641,7 @@ ReportDefinitions:
     tenantid = $tenantid)
 
     select 
-      coalesce((select name from eg_user where id::varchar = assignee),'-- Unassigned --') as employee, 
+      coalesce((select name from eg_user where id::varchar = assignee),'30048|4H7+iWsYwRRFSuD94NxlbTqpg/CC952iFU8=') as employee,  -- encrypted value for unassigned
       SUM (CASE WHEN status in ('rejected') THEN 1 ELSE 0 END) as rejected,
       SUM (CASE WHEN status in ('closed', 'resolved') THEN 1 ELSE 0 END) as resolved,
       SUM (CASE WHEN status in ('closed', 'resolved') and (resolvedtime - opentime) >= 14 * 86400 * 1000 THEN 1 ELSE 0 END) as resolvedoutsidesla,
@@ -1728,6 +1730,7 @@ ReportDefinitions:
   orderby: ORDER BY tenantid,eg_pgr_service.servicecode
   
 - reportName: FeedbackReport_v2
+  decryptionPathId: DescriptionReport_v2
   summary: Fetches complaint state based on Feedback
   version: 1.0.0
   moduleName: rainmaker-pgr
