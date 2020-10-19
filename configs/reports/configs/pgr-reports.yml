@@ -949,7 +949,6 @@ ReportDefinitions:
   query: SELECT sum(case when source = 'mobileapp' then 1 else 0 end) as citizen_mobile_app, sum(case when source = 'web' then 1 else 0 end) as citizen_web_app, sum(case when source = 'ivr' then 1 else 0 end) as counter_desktop FROM eg_pgr_service WHERE tenantid = $tenantid
 
 - reportName: DescriptionReport_v2
-  decryptionPathId: DescriptionReport_v2
   summary: Fetches department wise reports based description of the complaint
   version: 1.0.0
   moduleName: rainmaker-pgr
