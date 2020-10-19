@@ -3600,6 +3600,11 @@ ReportDefinitions:
     type: string
     source: pt
     total: true 
+  - name: totalamount
+    label: reports.pt.totalamount
+    type: string
+    source: pt
+    total: true    
   - name: collectorname
     label: reports.pt.collectorname
     type: string
