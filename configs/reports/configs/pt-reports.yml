@@ -3575,6 +3575,11 @@ ReportDefinitions:
     type: string
     source: pt
     total: true
+  - name: noofassessments
+    label: reports.pt.noofassessments
+    type: string
+    source: pt
+    total: true     
   - name: sumcash
     label: reports.pt.sumcash
     type: string
@@ -3587,11 +3592,6 @@ ReportDefinitions:
     total: true
   - name: countcheque
     label: reports.pt.countcheque
-    type: string
-    source: pt
-    total: true 
-  - name: noofassessments
-    label: reports.pt.noofassessments
     type: string
     source: pt
     total: true     
