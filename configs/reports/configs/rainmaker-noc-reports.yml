@@ -569,7 +569,7 @@ ReportDefinitions:
         label: reports.noc.totalamount
         type: string
         source: rainmaker-noc
-        total: false
+        total: true
       - name: paymentmode
         label: reports.noc.paymentmode
         type: string
@@ -717,7 +717,7 @@ ReportDefinitions:
         label: reports.noc.totalamount
         type: string
         source: rainmaker-noc
-        total: false
+        total: true
       - name: paymentmode
         label: reports.noc.paymentmode
         type: string
