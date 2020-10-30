@@ -7,7 +7,7 @@ ServiceMaps:
     configKey: INDEX
     indexes:
     - name: pgrindex-v1
-      type: grievances
+      type: general
       id: $.serviceRequestId, $.tenantId
       isBulk: true
       jsonPath: $.serviceRequests
@@ -97,7 +97,7 @@ ServiceMaps:
     configKey: INDEX
     indexes:
     - name: pgrindex-v1
-      type: grievances
+      type: general
       id: $.serviceRequestId, $.tenantId
       isBulk: true
       jsonPath: $.serviceRequests
@@ -200,7 +200,7 @@ ServiceMaps:
     configKey: REINDEX
     indexes:
     - name: pgrreindex-v1
-      type: grievances
+      type: general
       id: $.Data.serviceRequestId, $.Data.tenantId
       isBulk: true
       jsonPath: $.hits
@@ -210,7 +210,7 @@ ServiceMaps:
     configKey: LEGACYINDEX
     indexes:
     - name: pgrindex-v1
-      type: grievances
+      type: general
       id: $.serviceRequestId, $.tenantId
       isBulk: true
       jsonPath: $.serviceRequests
