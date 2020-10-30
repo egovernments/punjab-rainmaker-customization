@@ -238,7 +238,7 @@
               "style": "receipt-table"
             },
             {
-              "text" : " ",
+              "text" : "{{payment_status}}",
               "border": [
                 false,
                 false,
@@ -248,7 +248,7 @@
               "style": "receipt-table-value"
             },
             {
-              "text" : " ",
+              "text" : "{{payment_status}}",
               "border": [
                 false,
                 false,
