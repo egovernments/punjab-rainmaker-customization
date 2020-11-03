@@ -2284,12 +2284,12 @@ ReportDefinitions:
         receipt_breakup.*,
         to_char((To_timestamp(pd.manualreceiptdate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY') AS g8issuedate, 
         manualreceiptnumber as g8receiptno
-      FROM egcl_paymentdetail pd, egcl_payment payment, eg_pt_property as pt, receipt_breakup, eg_user,
+      FROM egcl_paymentdetail pd Left outer join eg_user on eg_user.id = pd.createdby::INTEGER, egcl_payment payment, eg_pt_property as pt, receipt_breakup, 
       (select bill.id as billid, bill.consumercode as consumercodei, min(bd.fromperiod) fromperiod, max(bd.toperiod) toperiod from egcl_billdetial bd, egcl_bill bill 
       where bill.id=bd.billid and bill.tenantid = $tenantid group by bill.id) bd,
       (select string_agg(distinct propertyid,',') as propertyid,string_agg(distinct locality,',') as locality from eg_pt_address where tenantid=$tenantid group by propertyid ) pt_addr
       where pd.paymentid=payment.id and bd.billid=pd.billid and payment.paymentstatus != 'CANCELLED' and pd.businessservice='PT' and payment.tenantid=$tenantid 
-      and pt.propertyid = bd.consumercodei and receipt_breakup.pdid=pd.id and eg_user.id = pd.createdby::INTEGER  and pt.status!='INACTIVE' 
+      and pt.propertyid = bd.consumercodei and receipt_breakup.pdid=pd.id  and pt.status!='INACTIVE' 
       and pt_addr.propertyid=pt.id 
       --and pt.propertyid='PT-1012-978737'
   orderby: ORDER BY pd.receiptdate DESC;
@@ -3038,7 +3038,7 @@ ReportDefinitions:
     pattern: 'list://CARD:Card,CASH:Cash,CHEQUE:Cheque,DD:DD,OFFLINE_NEFT:NEFT,OFFLINE_RTGS:RTGS,ONLINE:Online,POSTAL_ORDER:PostalOrder'
     source: pt
     isMandatory: false
-    searchClause: AND instrumenttype = $paymentMode
+    searchClause: AND payment.paymentmode = $paymentMode
   - name: financialyear
     label: Financial Year
     type: singlevaluelist
@@ -3077,12 +3077,13 @@ ReportDefinitions:
         to_char((To_timestamp(pd.manualreceiptdate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY') AS g8issuedate, 	
         manualreceiptnumber as g8receiptno,
         'NA' as remarks
-      FROM egcl_paymentdetail pd, egcl_payment payment, eg_pt_property as pt,  eg_user,	eg_pt_address pt_addr,
-      (select bill.id as billid, bill.consumercode as consumercodei, min(bd.fromperiod) fromperiod, max(bd.toperiod) toperiod from egcl_billdetial bd, egcl_bill bill 	
-      where bill.id=bd.billid and bill.tenantid = $tenantid group by bill.id) bd 	
-      where pd.paymentid=payment.id and bd.billid=pd.billid and payment.paymentstatus != 'CANCELLED' and pd.businessservice='PT' and payment.tenantid=$tenantid
-      and pt_addr.propertyid=pt.id
-      and pt.propertyid = bd.consumercodei and eg_user.id = pd.createdby::INTEGER  and pt.status!='INACTIVE' 	
+      FROM egcl_paymentdetail pd Left outer join eg_user on eg_user.id = pd.createdby::INTEGER, egcl_payment payment, eg_pt_property as pt, 
+      (select bill.id as billid, bill.consumercode as consumercodei, min(bd.fromperiod) fromperiod, max(bd.toperiod) toperiod from egcl_billdetial bd, egcl_bill bill 
+      where bill.id=bd.billid and bill.tenantid = $tenantid group by bill.id) bd,
+      (select string_agg(distinct propertyid,',') as propertyid,string_agg(distinct locality,',') as locality from eg_pt_address where tenantid=$tenantid group by propertyid ) pt_addr
+      where pd.paymentid=payment.id and bd.billid=pd.billid and payment.paymentstatus != 'CANCELLED' and pd.businessservice='PT' and payment.tenantid=$tenantid 
+      and pt.propertyid = bd.consumercodei and pt.status!='INACTIVE' 
+      and pt_addr.propertyid=pt.id 
   orderby: ORDER BY pd.receiptdate DESC;
 
 
@@ -3434,7 +3435,7 @@ ReportDefinitions:
   - name: paymentMode
     label: Payment Mode
     type: singlevaluelist
-    pattern: 'list://Cash:Cash,Online:Online,Card:Card,DD:DD,Cheque:Cheque'
+    pattern: 'list://CARD:Card,CASH:Cash,CHEQUE:Cheque,DD:DD,OFFLINE_NEFT:NEFT,OFFLINE_RTGS:RTGS,ONLINE:Online,POSTAL_ORDER:PostalOrder'
     source: pt
     isMandatory: false
     searchClause: AND instrumenttype = $paymentMode
@@ -3575,6 +3576,11 @@ ReportDefinitions:
     type: string
     source: pt
     total: true
+  - name: noofassessments
+    label: reports.pt.noofassessments
+    type: string
+    source: pt
+    total: true     
   - name: sumcash
     label: reports.pt.sumcash
     type: string
@@ -3590,11 +3596,16 @@ ReportDefinitions:
     type: string
     source: pt
     total: true     
-  - name: noofassessments
-    label: reports.pt.noofassessments
+  - name: sumonline
+    label: reports.pt.sumonline
     type: string
     source: pt
     total: true 
+  - name: totalamount
+    label: reports.pt.totalamount
+    type: string
+    source: pt
+    total: true    
   - name: collectorname
     label: reports.pt.collectorname
     type: string
@@ -3951,7 +3962,7 @@ ReportDefinitions:
     label: reports.pt.zoneList
     type: boundarylist
     source: pt
-    isMandatory: true
+    isMandatory: false
     searchClause: AND pta.locality IN ($localityArray)
   query: |
    --S.no    Service Name	ULB    Property Tax Unique ID    Date Of Transcation    Receipt Number	Existing Property ID    Type Of Property	Mobile Number   	Address
