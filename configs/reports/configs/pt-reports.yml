@@ -2196,16 +2196,11 @@ ReportDefinitions:
     type: string
     source: pt
     total: false
-  - name: fromdate
-    label: reports.pt.fromDate
+  - name: financialyear
+    label: reports.pt.financialyear
     type: string
     source: pt
     total: false
-  - name: todate
-    label: reports.pt.toDate
-    type: string
-    source: pt
-    total: false    
   searchParams:
   - name: fromDate
     label: reports.pt.fromDate
@@ -2275,8 +2270,7 @@ ReportDefinitions:
         payment.totalamountpaid as amount, 
         payment.paymentmode as instrumenttype, 
         payment.transactionnumber,
-        to_char((To_timestamp(bd.fromperiod/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY') AS fromdate,
-        to_char((To_timestamp(bd.toperiod/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY') AS todate, 
+        concat(to_char((To_timestamp(bd.fromperiod/1000) at time Zone 'Asia/Kolkata'),'YYYY'),'-', to_char((To_timestamp(bd.toperiod/1000) at time Zone 'Asia/Kolkata'),'YY')) as financialyear, 
         to_char((To_timestamp(payment.transactiondate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY') AS transactiondate, 
         pd.due AS pendingamount,
         Initcap(case when pt.usagecategory like '%.%' then split_part(pt.usagecategory,'.',2) else pt.usagecategory end) as usagetype,
@@ -2418,13 +2412,8 @@ ReportDefinitions:
     type: string
     source: pt
     total: false
-  - name: fromdate
-    label: reports.pt.fromDate
-    type: string
-    source: pt
-    total: false
-  - name: todate
-    label: reports.pt.toDate
+  - name: financialyear
+    label: reports.pt.financialyear
     type: string
     source: pt
     total: false
@@ -2501,9 +2490,7 @@ ReportDefinitions:
         receiptnumber, 
         payment.totalamountpaid as amount, 
         payment.paymentmode as instrumenttype, 
-        payment.transactionnumber,
-        to_char((To_timestamp(bd.fromperiod/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY') AS fromdate,
-        to_char((To_timestamp(bd.toperiod/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY') AS todate, 
+        payment.transactionnumber,concat(to_char((To_timestamp(bd.fromperiod/1000) at time Zone 'Asia/Kolkata'),'YYYY'),'-', to_char((To_timestamp(bd.toperiod/1000) at time Zone 'Asia/Kolkata'),'YY')) as financialyear,
         to_char((To_timestamp(payment.transactiondate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY') AS transactiondate, 
         pd.due AS pendingamount,
         Initcap(case when pt.usagecategory like '%.%' then split_part(pt.usagecategory,'.',2) else pt.usagecategory end) as usagetype,
@@ -2698,16 +2685,11 @@ ReportDefinitions:
     type: string
     source: pt
     total: false
-  - name: fromdate
-    label: reports.pt.fromDate
+  - name: financialyear
+    label: reports.pt.financialyear
     type: string
     source: pt
     total: false
-  - name: todate
-    label: reports.pt.toDate
-    type: string
-    source: pt
-    total: false    
   searchParams:
   - name: fromDate
     label: reports.pt.fromDate
@@ -2763,8 +2745,7 @@ ReportDefinitions:
         payment.totalamountpaid as amount, 
         payment.paymentmode as instrumenttype, 
         payment.transactionnumber,
-        to_char((To_timestamp(bd.fromperiod/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY') AS fromdate,
-        to_char((To_timestamp(bd.toperiod/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY') AS todate, 
+        concat(to_char((To_timestamp(bd.fromperiod/1000) at time Zone 'Asia/Kolkata'),'YYYY'),'-', to_char((To_timestamp(bd.toperiod/1000) at time Zone 'Asia/Kolkata'),'YY')) as financialyear,
         to_char((To_timestamp(payment.transactiondate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY') AS transactiondate, 
         pd.due AS pendingamount,
         Initcap(case when pt.usagecategory like '%.%' then split_part(pt.usagecategory,'.',2) else pt.usagecategory end) as usagetype,
