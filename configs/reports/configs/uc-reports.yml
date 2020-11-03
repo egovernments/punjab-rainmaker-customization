@@ -943,13 +943,14 @@ ReportDefinitions:
         -- Use CTE to force query plan, compute & use CTE later
         WITH receipt_breakup AS (
                     SELECT 
-                      egcl_billaccountdetail.billdetailid bill_id, 
+                      string_agg(distinct billd.billid,',') bill_id, 
                       SUM(CASE WHEN taxheadcode LIKE '%_CGST' THEN adjustedamount ELSE 0 END) as cgst, 
                       SUM(CASE WHEN taxheadcode LIKE '%_TAX' THEN adjustedamount ELSE 0 END) as tax, 
                       SUM(CASE WHEN taxheadcode LIKE '%_SGST' THEN adjustedamount ELSE 0 END) as sgst, 
                       SUM(CASE WHEN taxheadcode LIKE '%_FIELD_FEE' THEN adjustedamount ELSE 0 END) as fieldcollection            
                     FROM egcl_billaccountdetail 
-                    INNER JOIN egcl_bill as bill on bill.id = egcl_billaccountdetail.billdetailid
+                    inner join egcl_billdetial as billd on billd.id=egcl_billaccountdetail.billdetailid
+                    INNER JOIN egcl_bill as bill on bill.id = billd.billid
                     WHERE  bill.tenantid!='pb.testing' AND businessservice not in ('PT','TL','FIRENOC') -- and rh.status != 'Cancelled'
                     GROUP BY billdetailid
         )
@@ -1079,8 +1080,8 @@ ReportDefinitions:
         type: string
         source: uc
         total: false
-      - name: comments
-        label: reports.uc.comment
+      - name: remarks
+        label: reports.uc.remarks
         type: string
         source: uc
         total: false
@@ -1134,17 +1135,22 @@ ReportDefinitions:
           To_char((To_timestamp(paydetail.receiptdate / 1000) at time Zone 'Asia/Kolkata'), 'DD/MM/YYYY') as receiptdate,
           To_char((To_timestamp(paydetail.manualreceiptdate / 1000) at time Zone 'Asia/Kolkata'), 'DD/MM/YYYY') as g8issuedate,
           paydetail.manualreceiptnumber as g8receiptno,
+          payment.ifsccode as bankname,
+          payment.ifsccode as branchname,
           payment.paymentstatus as status,
           businessservice as servicecategory,
           receipt_breakup.*,  
           payment.totalamountpaid as totalamount, 
           paymentmode as paymentmode,
           (case when paymentmode like 'CASH' then '' else  transactionnumber end) as ddorchequenumber,
+          (case when paymentmode like 'DD' or paymentmode like 'CHEQUE' then To_char((To_timestamp(payment.transactiondate / 1000) at time Zone 'Asia/Kolkata'), 'DD/MM/YYYY') else '' end) as ddchequedate,
           'System' as collectiontype,
-          eg_user.name as collectorname
+          eg_user.name as collectorname,
+          billd.additionaldetails->>'comment' as remarks
         FROM egcl_payment AS payment
         JOIN egcl_paymentdetail as paydetail on paydetail.paymentid=payment.id
         JOIN receipt_breakup ON paydetail.billid = receipt_breakup.bill_id
+        JOIN egcl_billdetial as billd on billd.billid=paydetail.billid
         JOIN eg_user ON payment.createdby::INTEGER=eg_user.id
         WHERE  payment.tenantid=$tenantid AND businessservice not in ('PT','TL','FIRENOC')  and payment.paymentstatus != 'CANCELLED'
     orderby: ORDER BY paydetail.receiptdate DESC
@@ -1301,9 +1307,11 @@ ReportDefinitions:
           SUM(CASE WHEN taxheadcode LIKE '%_FIELD_FEE' THEN adjustedamount ELSE 0 END) as fieldcollection,
           sum(adjustedamount) as totalamount
         from egcl_paymentdetail paydetail
-        inner join egcl_billaccountdetail as ebd on paydetail.billid=ebd.billdetailid
+        INNER JOIN egcl_bill as bill on bill.id = paydetail.billid
+        inner join egcl_billdetial as billd on billd.billid=bill.id
+        inner join egcl_billaccountdetail as ebd on ebd.billdetailid=billd.id
         inner join egcl_payment as payment on paydetail.paymentid=payment.id
-        WHERE paydetail.tenantid!='pb.testing' AND businessservice not in ('PT','TL','FIRENOC') and payment.paymentstatus!='CANCELLED'
+        WHERE paydetail.tenantid!='pb.testing' AND paydetail.businessservice not in ('PT','TL','FIRENOC') and payment.paymentstatus!='CANCELLED'
     groupby: group by paydetail.tenantid
 
   - reportName: MiscCollectionState_v2
@@ -1380,7 +1388,7 @@ ReportDefinitions:
         from egcl_payment as payment
         inner join egcl_paymentdetail as paydetail on paydetail.paymentid=payment.id
         where paydetail.businessservice not in ('PT','TL','FIRENOC') and payment.tenantid !='pb.testing'  and payment.paymentstatus != 'CANCELLED' 
-    goupby: GROUP BY payment.tenantid
+    groupby: GROUP BY payment.tenantid
     orderby: ORDER BY payment.tenantId asc
 
 
@@ -1445,7 +1453,8 @@ ReportDefinitions:
           SUM(CASE WHEN taxheadcode LIKE '%_CGST' THEN adjustedamount ELSE 0 END) as cgst,
           SUM(CASE WHEN taxheadcode LIKE '%_TAX' THEN adjustedamount ELSE 0 END) as tax, 
           SUM(CASE WHEN taxheadcode LIKE '%_SGST' THEN adjustedamount ELSE 0 END) as sgst, 
-          SUM(CASE WHEN taxheadcode LIKE '%_FIELD_FEE' THEN adjustedamount ELSE 0 END) as fieldcollection 
+          SUM(CASE WHEN taxheadcode LIKE '%_FIELD_FEE' THEN adjustedamount ELSE 0 END) as fieldcollection,
+          SUM(adjustedamount) as totalcollection
         FROM egcl_billaccountdetail 
         INNER JOIN egcl_billdetial as billd on billd.id = egcl_billaccountdetail.billdetailid
         INNER JOIN egcl_bill as bill on bill.id=billd.billid
@@ -1457,6 +1466,7 @@ ReportDefinitions:
 
 
   - reportName: MiscReceiptULBCancelled_v2
+    decryptionPathId: MiscReceiptULB_v2
     summary: Cancelled Receipt Miscellaneous
     version: 1.0.0
     moduleName: rainmaker-uc
@@ -1582,8 +1592,9 @@ ReportDefinitions:
           payment.totalamountpaid as totalamount, 
           paymentmode as paymentmode,
           (case when paymentmode like 'CASH' then '' else  transactionnumber end) as ddorchequenumber,
+          (case when paymentmode like 'DD' or paymentmode like 'CHEQUE' then To_char((To_timestamp(payment.transactiondate / 1000) at time Zone 'Asia/Kolkata'), 'DD/MM/YYYY') else '' end) as ddchequedate,
           'System' as collectiontype,
-          eg_user.name as collectorname
+          (case when eg_user.name is null then '30048|21Fj+c3k2ldB0X3AzIh7atXB' else eg_user.name end) as collectorname
         FROM egcl_payment AS payment
         JOIN egcl_paymentdetail as paydetail on paydetail.paymentid=payment.id
         JOIN receipt_breakup ON paydetail.billid = receipt_breakup.bill_id
@@ -1592,6 +1603,7 @@ ReportDefinitions:
     orderby: ORDER BY paydetail.receiptdate DESC
 
   - reportName: MiscReceiptULBShort_v2
+    decryptionPathId: MiscReceiptULB_v2
     summary: Receipt Register Miscellaneous
     version: 1.0.0
     moduleName: rainmaker-uc
@@ -1663,10 +1675,11 @@ ReportDefinitions:
           To_char((To_timestamp(paydetail.receiptdate / 1000) at time Zone 'Asia/Kolkata'), 'DD/MM/YYYY') as receiptdate,
           paydetail.businessservice as servicecategory,
           payment.totalamountpaid as amount, 
-          eg_user.name as collectorname,
-          payment.additionaldetails->>'comment' as remarks
+          (case when eg_user.name is null then '30048|21Fj+c3k2ldB0X3AzIh7atXB' else eg_user.name end) as collectorname,
+          billd.additionaldetails->>'comment' as remarks
         FROM egcl_payment AS payment
-        inner join egcl_paymentdetail as paydetail on paydetail.paymentid=payment.id
+        INNER JOIN egcl_paymentdetail as paydetail on paydetail.paymentid=payment.id
+        INNER JOIN egcl_billdetial as billd on billd.billid=paydetail.billid
         JOIN eg_user ON payment.createdby::INTEGER=eg_user.id
         WHERE  paydetail.businessservice not in ('PT','TL','FIRENOC')  and payment.paymentstatus != 'CANCELLED' and payment.tenantid =$tenantid
     orderby: ORDER BY paydetail.receiptdate DESC
