@@ -165,7 +165,7 @@ serviceMaps:
               type: LONG
 
 
-        - query: INSERT into egcl_billdetial (id, tenantid, demandid, billid, amount, amountpaid, fromperiod, toperiod, additionaldetails, channel, voucherheader, boundary, collectiontype, billdescription, expirydate, displaymessage, callbackforapportioning, cancellationremarks) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
+        - query: INSERT into egcl_billdetail (id, tenantid, demandid, billid, amount, amountpaid, fromperiod, toperiod, additionaldetails, channel, voucherheader, boundary, collectiontype, billdescription, expirydate, displaymessage, callbackforapportioning, cancellationremarks) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
           basePath: $.Payments.*.paymentDetails.*.bill.billDetails.*
           jsonMaps:
             - jsonPath: $.Payments.*.paymentDetails.*.bill.billDetails.*.id
