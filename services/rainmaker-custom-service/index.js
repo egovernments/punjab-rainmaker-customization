@@ -632,6 +632,9 @@ async function _createAndUpdateZeroTaxProcessor(request, response) {
 
 async function _createAndUpdateIntegrationTaxProcessor(req, response){
 
+    console.log(JSON.stringify(req))
+    console.log(JSON.stringify(response))
+
     console.log("::PT 13-14 Integration function::")
 
     let index = 0
@@ -650,7 +653,7 @@ async function _createAndUpdateIntegrationTaxProcessor(req, response){
 
         let assessmentYear = resProperty["propertyDetails"][0]["financialYear"]
 
-        console.log("financialYear : ", financialYear)
+        console.log("financialYear : ", assessmentYear)
 
 
         let tenantId = reqProperty["tenantId"]
@@ -668,19 +671,35 @@ async function _createAndUpdateIntegrationTaxProcessor(req, response){
             })
 
         
+        console.log("interationResponse : ", interationResponse)
+
+        
         request_info = req["RequestInfo"] || req["requestInfo"]
 
         let consumerCode = propertyId + ":" + assessmentNumber
+
+        console.log("consumerCode : ", consumerCode)
+
+
         let service = "PT"
         let calc = interationResponse["Properties"][index]["propertyDetails"][0]["calculation"]
+
+        console.log("calc : ", JSON.stringify(calc))
+
+
         let taxHeads = calc["taxHeadEstimates"];
         let createTaxHeadsArray = {};
         for(taxHead of taxHeads){
             createTaxHeadsArray[taxHead.taxHeadCode] = taxHead.estimateAmount;
             //print(texthead)
+            console.log(taxHead.taxHeadCode , ": ", taxHead.estimateAmount)
+
         }
 
         let demandSearchResponse = await findDemandForConsumerCode(consumerCode, tenantId, service, req["RequestInfo"])
+
+        console.log("demandSearchResponse : ", JSON.stringify(demandSearchResponse))
+
 
         if(isReceiptGenerated(demandSearchResponse)){
             //Throw Error
@@ -709,6 +728,8 @@ async function _createAndUpdateIntegrationTaxProcessor(req, response){
             }
         }
         
+        console.log("demandSearchResponse AFTER MAKING EVERYTHING ZERO : ", JSON.stringify(demandSearchResponse))
+
 
 
         for (demandDetail of demandSearchResponse["Demands"][0]["demandDetails"]) 
@@ -721,12 +742,19 @@ async function _createAndUpdateIntegrationTaxProcessor(req, response){
             }
         }
 
+        console.log("demandSearchResponse AFTER SETTING THE VALUE: ", JSON.stringify(demandSearchResponse))
+
+
         let demandUpdateResponse = await updateDemand(demandSearchResponse["Demands"], req["RequestInfo"])
+
+        console.log("demandUpdateResponse : ", JSON.stringify(demandUpdateResponse))
+
+
         calc["taxAmount"] = 0;
         calc["exemption"] = 0;
         calc["totalAmount"] = newTotal;
         calc["rebate"] = 0;
-        calc["penanlty"] = 0;
+        calc["penalty"] = 0;
         index++
    
     }
@@ -812,8 +840,7 @@ async function _createAndUpdateRequestHandler(req, res) {
         response
     } = getRequestResponse(req)
 
-    console.log(JSON.stringify(req.data))
-    console.log(JSON.stringify(res.data))
+
     
     let index =0
     for (reqProperty of request["Properties"]) {
