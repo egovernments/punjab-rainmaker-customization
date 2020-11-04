@@ -632,7 +632,7 @@ async function _createAndUpdateZeroTaxProcessor(request, response) {
 
 async function _createAndUpdateIntegrationTaxProcessor(req, response){
 
-    print("::PT 13-14 Integration function::")
+    console.log("::PT 13-14 Integration function::")
 
     let index = 0
     let interationResponse = response;
@@ -641,21 +641,21 @@ async function _createAndUpdateIntegrationTaxProcessor(req, response){
         let resProperty = response["Properties"][index]
         let propertyId = resProperty["propertyId"]
 
-        print("PropertyID : ", propertyId)
+        console.log("PropertyID : ", propertyId)
 
         let assessmentNumber = resProperty["propertyDetails"][0]["assessmentNumber"]
 
-        print("assessmentNumber : ", assessmentNumber)
+        console.log("assessmentNumber : ", assessmentNumber)
 
 
         let assessmentYear = resProperty["propertyDetails"][0]["financialYear"]
 
-        print("financialYear : ", financialYear)
+        console.log("financialYear : ", financialYear)
 
 
         let tenantId = reqProperty["tenantId"]
 
-        print("tenantId : ", tenantId)
+        console.log("tenantId : ", tenantId)
 
 
         if (!(assessmentYear == PT_INTEGRATION_ASSESSMENTYEAR && PT_INTEGRATION_TENANTS.indexOf(tenantId) >= 0))
@@ -812,9 +812,9 @@ async function _createAndUpdateRequestHandler(req, res) {
         response
     } = getRequestResponse(req)
 
-    print(req.data)
-    print(res.data)
-
+    console.log(JSON.stringify(req.data))
+    console.log(JSON.stringify(res.data))
+    
     let index =0
     for (reqProperty of request["Properties"]) {
         let resProperty = response["Properties"][index]
