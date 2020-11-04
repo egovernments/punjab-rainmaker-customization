@@ -632,8 +632,8 @@ async function _createAndUpdateZeroTaxProcessor(request, response) {
 
 async function _createAndUpdateIntegrationTaxProcessor(req, response){
 
-    console.log(JSON.stringify(req))
-    console.log(JSON.stringify(response))
+    console.log("REQ : ", JSON.stringify(req))
+    console.log("RESPONSE : ", JSON.stringify(response))
 
     console.log("::PT 13-14 Integration function::")
 
@@ -671,7 +671,7 @@ async function _createAndUpdateIntegrationTaxProcessor(req, response){
             })
 
         
-        console.log("interationResponse : ", interationResponse)
+        console.log("interationResponse : ", JSON.stringify(interationResponse))
 
         
         request_info = req["RequestInfo"] || req["requestInfo"]
@@ -944,6 +944,9 @@ router.post('/protected/punjab-pt/pt-calculator-v2/_estimate', asyncMiddleware(a
         request,
         response
     } = getRequestResponse(req)
+
+    console.log("request : ", JSON.stringify(request))
+    console.log("response : ", JSON.stringify(response))
 
 
     let tenantId = request["CalculationCriteria"][0]["tenantId"]
