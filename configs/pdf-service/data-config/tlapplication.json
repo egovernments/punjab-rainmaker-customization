@@ -989,7 +989,7 @@
               "value":{
                    "path":"$.tradeLicenseDetail.accessories.*"                          
                },
-               "type":"array-column",
+               "type":"array",
                "format":{                            
                   "type":"string",
                   "scema":[
