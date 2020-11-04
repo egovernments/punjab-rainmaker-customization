@@ -116,14 +116,13 @@ ReportDefinitions:
                       SUM(CASE WHEN taxheadcode LIKE '%_FIELD_FEE' THEN adjustedamount ELSE 0 END) as fieldcollection            
                     FROM egcl_receiptdetails_v1 as rd
                     INNER JOIN egcl_receiptheader_v1 as rh on rh.id = rd.receiptheader
-                    WHERE  rh.status != 'Cancelled'  AND rh.tenantid!='pb.testing' AND businessdetails not in ('PT','TL')
                     GROUP BY rd.receiptheader
         )
         SELECT 
           rh.tenantid as ulb,
           rh.receiptnumber as receiptnumber,
-          To_char((To_timestamp(rh.receiptdate / 1000) at time Zone 'Asia/Kolkata'), 'DD/MM/YYYY') as receiptdate,
-          To_char((To_timestamp(rh.manualreceiptdate / 1000) at time Zone 'Asia/Kolkata'), 'DD/MM/YYYY') as g8issuedate,
+          To_char(To_timestamp(rh.receiptdate / 1000), 'DD/MM/YYYY') as receiptdate,
+          To_char(To_timestamp(rh.manualreceiptdate / 1000), 'DD/MM/YYYY') as g8issuedate,
           rh.manualreceiptnumber as g8receiptno,
           rh.status as status,
           businessdetails as servicecategory,
@@ -138,16 +137,13 @@ ReportDefinitions:
         JOIN egcl_instrumentheader_v1 AS ih ON ih.id = ri.instrumentheader
         JOIN receipt_breakup ON rh.id = receipt_breakup.receiptheader
         JOIN eg_user ON rh.createdby::INTEGER=eg_user.id
-        WHERE  rh.status != 'Cancelled'  AND rh.tenantid!='pb.testing' AND businessdetails not in ('PT','TL')
+        WHERE  rh.status != 'Cancelled'  AND rh.tenantid!='pb.testing' AND receiptnumber like 'MP%'
     orderby: ORDER BY rh.receiptdate DESC
 
   - reportName: MiscReceiptULB
     summary: Receipt Register Miscellaneous
     version: 1.0.0
     moduleName: rainmaker-uc
-    additionalConfig:
-      print:
-        pdfPageSize: "A3"
     sourceColumns:
       - name: ulb
         label: reports.uc.ulb
@@ -244,32 +240,19 @@ ReportDefinitions:
         type: string
         source: uc
         total: false
-      - name: comments
-        label: reports.uc.comment
-        type: string
-        source: uc
-        total: false
     searchParams:
       - name: fromDate
         label: reports.uc.fromDate
         type: epoch
         source: uc
-        isMandatory: true
+        isMandatory: false
         searchClause: AND rh.receiptdate >= $fromDate
       - name: toDate
         label: reports.uc.toDate
         type: epoch
         source: uc
-        isMandatory: true
-        searchClause: AND rh.receiptdate <= $toDate
-      - name: businessservice
-        label: reports.uc.businessservice
-        type: singlevaluelist
-        pattern: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?moduleName=BillingService&masterName=BusinessService&tenantId=$tenantid|$.MdmsRes.BillingService.BusinessService[*].code|$.MdmsRes.BillingService.BusinessService[*].code
-        source: uc
-        wrapper: true
         isMandatory: false
-        searchClause: AND rh.businessdetails = $businessservice
+        searchClause: AND rh.receiptdate <= $toDate
       - name: collectorname
         label: reports.uc.collectorname
         type: singlevaluelist
@@ -289,14 +272,13 @@ ReportDefinitions:
                       SUM(CASE WHEN taxheadcode LIKE '%_FIELD_FEE' THEN adjustedamount ELSE 0 END) as fieldcollection            
                     FROM egcl_receiptdetails_v1 as rd
                     INNER JOIN egcl_receiptheader_v1 as rh on rh.id = rd.receiptheader
-                    where status!='Cancelled' and businessdetails not in ('PT','TL') and rd.tenantid=$tenantid
                     GROUP BY rd.receiptheader
         )
         SELECT 
           rh.tenantid as ulb,
           rh.receiptnumber as receiptnumber,
-          To_char((To_timestamp(rh.receiptdate / 1000) at time Zone 'Asia/Kolkata'), 'DD/MM/YYYY') as receiptdate,
-          To_char((To_timestamp(rh.manualreceiptdate / 1000) at time Zone 'Asia/Kolkata'), 'DD/MM/YYYY') as g8issuedate,
+          To_char(To_timestamp(rh.receiptdate / 1000), 'DD/MM/YYYY') as receiptdate,
+          To_char(To_timestamp(rh.manualreceiptdate / 1000), 'DD/MM/YYYY') as g8issuedate,
           rh.manualreceiptnumber as g8receiptno,
           rh.status as status,
           businessdetails as servicecategory,
@@ -304,18 +286,17 @@ ReportDefinitions:
           amount as totalamount, 
           instrumenttype as paymentmode,
           (case when instrumenttype like 'Cash' then '' else  transactionnumber end) as ddorchequenumber,
-          (case when instrumenttype like 'DD' or instrumenttype like 'Cheque' then To_char((To_timestamp(ih.transactiondate / 1000) at time Zone 'Asia/Kolkata'), 'DD/MM/YYYY') else '' end) as ddchequedate,
+          (case when instrumenttype like 'DD' or instrumenttype like 'Cheque' then To_char(To_timestamp(ih.transactiondate / 1000), 'DD/MM/YYYY') else '' end) as ddchequedate,
           ih.bankid as bankname,
           ih.branchname as branchname,
           'System' as collectiontype,
-          eg_user.name as collectorname,
-          rh.additionaldetails->>'comment' as comments
+          eg_user.name as collectorname
         FROM egcl_receiptheader_v1 AS rh
         JOIN egcl_receiptinstrument_v1 AS ri ON rh.id = ri.receiptheader
         JOIN egcl_instrumentheader_v1 AS ih ON ih.id = ri.instrumentheader
         JOIN receipt_breakup ON rh.id = receipt_breakup.receiptheader
         JOIN eg_user ON rh.createdby::INTEGER=eg_user.id
-        WHERE  rh.status != 'Cancelled'  AND businessdetails not in ('PT','TL')
+        WHERE  rh.status != 'Cancelled'  AND receiptnumber like 'MP%'
         and rh.tenantid=$tenantid
     orderby: ORDER BY rh.receiptdate DESC
 
@@ -390,7 +371,7 @@ ReportDefinitions:
           SUM(CASE WHEN taxheadcode LIKE '%_SGST' THEN adjustedamount ELSE 0 END) as sgst, 
           sum(totalamount) as totalamount
         from egcl_receiptheader_v1 rh, egcl_receiptdetails_v1 as rd
-        WHERE rh.id=rd.receiptheader and rh.status != 'Cancelled'  AND rh.tenantid!='pb.testing' AND businessdetails not in ('PT','TL') 
+        WHERE rh.id=rd.receiptheader and rh.status != 'Cancelled'  AND rh.tenantid!='pb.testing' AND receiptnumber like 'MP%' 
     groupby: group by rh.tenantid,rh.businessdetails
     orderby: order by rh.tenantid
 
@@ -459,14 +440,14 @@ ReportDefinitions:
         -- Use CTE to force query plan, compute & use CTE later
         SELECT
           rh.tenantid as ulb,
-          count(distinct rh.id) as noofreceipts,
+          count(*) as noofreceipts,
           SUM(CASE WHEN taxheadcode LIKE '%_TAX' THEN adjustedamount ELSE 0 END) as tax, 
           SUM(CASE WHEN taxheadcode LIKE '%_CGST' THEN adjustedamount ELSE 0 END) as cgst, 
           SUM(CASE WHEN taxheadcode LIKE '%_SGST' THEN adjustedamount ELSE 0 END) as sgst, 
           SUM(CASE WHEN taxheadcode LIKE '%_FIELD_FEE' THEN adjustedamount ELSE 0 END) as fieldcollection,
           sum(amount) as totalamount
         from egcl_receiptheader_v1 rh, egcl_receiptdetails_v1 as rd
-        WHERE rh.id=rd.receiptheader and rh.status != 'Cancelled' AND rh.tenantid!='pb.testing' AND businessdetails not in ('PT','TL') 
+        WHERE rh.id=rd.receiptheader and rh.status != 'Cancelled' AND rh.tenantid!='pb.testing' AND receiptnumber like 'MP%' 
     groupby: group by rh.tenantid
 
 
@@ -545,7 +526,7 @@ ReportDefinitions:
         from egcl_receiptheader_v1 as rh
         inner join egcl_receiptinstrument_v1 as ri on ri.receiptheader = rh.id
         inner join egcl_instrumentheader_v1 as ih on ih.id = ri.instrumentheader
-        where rh.businessdetails not in ('PT','TL') and rh.status !='Cancelled' and rh.tenantid !='pb.testing'
+        where rh.receiptnumber like 'MP%' and rh.status !='Cancelled' and rh.tenantid !='pb.testing'
     groupby: GROUP BY rh.tenantid
     orderby: ORDER BY rh.tenantId asc
 
@@ -613,221 +594,6 @@ ReportDefinitions:
           SUM(CASE WHEN taxheadcode LIKE '%_FIELD_FEE' THEN adjustedamount ELSE 0 END) as fieldcollection,
           SUM(amount) as totalcollection
         from egcl_receiptheader_v1 rh, egcl_receiptdetails_v1 as rd
-        WHERE rh.id=rd.receiptheader and rh.status != 'Cancelled' AND rh.tenantid=$tenantid AND businessdetails not in ('PT','TL') 
+        WHERE rh.id=rd.receiptheader and rh.status != 'Cancelled' AND rh.tenantid=$tenantid AND receiptnumber like 'MP%' 
     groupby: GROUP BY rh.businessdetails
     orderby: ORDER BY rh.businessdetails
-
-  - reportName: MiscReceiptULBCancelled
-    summary: Cancelled Receipt Miscellaneous
-    version: 1.0.0
-    moduleName: rainmaker-uc
-    additionalConfig:
-      print:
-        pdfPageSize: "A3"
-    sourceColumns:
-      - name: ulb
-        label: reports.uc.ulb
-        type: string
-        source: uc
-        total: false
-      - name: receiptnumber
-        label: reports.uc.receiptnumber
-        type: string
-        source: uc
-        total: false
-      - name: receiptdate
-        label: reports.uc.receiptdate
-        type: string
-        source: uc
-        total: false
-      - name: servicecategory
-        label: reports.uc.businessdetails
-        type: string
-        source: uc
-        total: false
-      - name: cgst
-        label: reports.uc.cgst
-        type: string
-        source: uc
-        total: true
-      - name: tax
-        label: reports.uc.tax
-        type: string
-        source: uc
-        total: true
-      - name: fieldcollection
-        label: reports.uc.fieldcollection
-        type: string
-        source: uc
-        total: true
-      - name: sgst
-        label: reports.uc.sgst
-        type: string
-        source: uc
-        total: true
-      - name: ddorchequenumber
-        label: reports.uc.ddorchequenumber
-        type: string
-        source: uc
-        total: false
-      - name: ddchequedate
-        label: reports.uc.ddorchequedate
-        type: string
-        source: uc
-        total: false
-      - name: collectiontype
-        label: reports.uc.collectiontype
-        type: string
-        source: uc
-        total: false
-      - name: collectorname
-        label: reports.uc.collectorname
-        type: string
-        source: uc
-        total: false
-      - name: totalamount
-        label: reports.uc.totalamount
-        type: string
-        source: uc
-        total: true
-      - name: paymentmode
-        label: reports.uc.paymentmode
-        type: string
-        source: uc
-        total: false
-    searchParams:
-      - name: fromDate
-        label: reports.uc.fromDate
-        type: epoch
-        source: uc
-        isMandatory: false
-        searchClause: AND rh.receiptdate >= $fromDate
-      - name: toDate
-        label: reports.uc.toDate
-        type: epoch
-        source: uc
-        isMandatory: false
-        searchClause: AND rh.receiptdate <= $toDate
-      - name: collectorname
-        label: reports.uc.collectorname
-        type: singlevaluelist
-        pattern: http://egov-hrms:8080/egov-hrms/employees/_search?tenantId=$tenantid&roles=UC_EMP|$.Employees[*].user.id|$.Employees[*].user.name
-        source: uc
-        wrapper: true
-        isMandatory: false
-        searchClause: AND eg_user.id = $collectorname::INTEGER
-    query: |
-        -- Use CTE to force query plan, compute & use CTE later
-        WITH receipt_breakup AS (
-                    SELECT 
-                      receiptheader, 
-                      SUM(CASE WHEN taxheadcode LIKE '%_CGST' THEN adjustedamount ELSE 0 END) as cgst, 
-                      SUM(CASE WHEN taxheadcode LIKE '%_TAX' THEN adjustedamount ELSE 0 END) as tax, 
-                      SUM(CASE WHEN taxheadcode LIKE '%_SGST' THEN adjustedamount ELSE 0 END) as sgst, 
-                      SUM(CASE WHEN taxheadcode LIKE '%_FIELD_FEE' THEN adjustedamount ELSE 0 END) as fieldcollection            
-                    FROM egcl_receiptdetails_v1 as rd
-                    INNER JOIN egcl_receiptheader_v1 as rh on rh.id = rd.receiptheader
-                    WHERE  rh.status = 'Cancelled'  AND businessdetails not in ('PT','TL') and rh.tenantid=$tenantid
-                    GROUP BY rd.receiptheader
-        )
-        SELECT 
-          rh.tenantid as ulb,
-          rh.receiptnumber as receiptnumber,
-          To_char((To_timestamp(rh.receiptdate / 1000) at time Zone 'Asia/Kolkata'), 'DD/MM/YYYY') as receiptdate,
-          businessdetails as servicecategory,
-          receipt_breakup.*,  
-          amount as totalamount, 
-          instrumenttype as paymentmode,
-          (case when instrumenttype like 'Cash' then '' else  transactionnumber end) as ddorchequenumber,
-          (case when instrumenttype like 'DD' or instrumenttype like 'Cheque' then To_char((To_timestamp(ih.transactiondate / 1000) at time Zone 'Asia/Kolkata'), 'DD/MM/YYYY') else '' end) as ddchequedate,
-          eg_user.name as collectorname
-        FROM egcl_receiptheader_v1 AS rh
-        JOIN egcl_receiptinstrument_v1 AS ri ON rh.id = ri.receiptheader
-        JOIN egcl_instrumentheader_v1 AS ih ON ih.id = ri.instrumentheader
-        JOIN receipt_breakup ON rh.id = receipt_breakup.receiptheader
-        JOIN eg_user ON rh.createdby::INTEGER=eg_user.id
-        WHERE  rh.status = 'Cancelled'  AND businessdetails not in ('PT','TL')
-        and rh.tenantid=$tenantid
-    orderby: ORDER BY rh.receiptdate DESC
-
-  - reportName: MiscReceiptULBShort
-    summary: Receipt Register Miscellaneous
-    version: 1.0.0
-    moduleName: rainmaker-uc
-    additionalConfig:
-      print:
-        pdfPageSize: "A3"
-    sourceColumns:
-      - name: consumername
-        label: reports.uc.consumername
-        type: string
-        source: uc
-        total: false
-      - name: mobilenumber
-        label: reports.uc.mobilenumber
-        type: string
-        source: uc
-        total: false
-      - name: receiptdate
-        label: reports.uc.receiptdate
-        type: string
-        source: uc
-        total: false
-      - name: servicecategory
-        label: reports.uc.businessdetails
-        type: string
-        source: uc
-        total: false
-      - name: amount
-        label: reports.uc.totalamount
-        type: string
-        source: uc
-        total: true
-      - name: remarks
-        label: reports.uc.remarks
-        type: string
-        source: uc
-        total: false
-      - name: collectorname
-        label: reports.uc.collectorname
-        type: string
-        source: uc
-        total: false
-    searchParams:
-      - name: fromDate
-        label: reports.uc.fromDate
-        type: epoch
-        source: uc
-        isMandatory: false
-        searchClause: AND rh.receiptdate >= $fromDate
-      - name: toDate
-        label: reports.uc.toDate
-        type: epoch
-        source: uc
-        isMandatory: false
-        searchClause: AND rh.receiptdate <= $toDate
-      - name: collectorname
-        label: reports.uc.collectorname
-        type: singlevaluelist
-        pattern: http://egov-hrms:8080/egov-hrms/employees/_search?tenantId=$tenantid&roles=UC_EMP|$.Employees[*].user.id|$.Employees[*].user.name
-        source: uc
-        wrapper: true
-        isMandatory: false
-        searchClause: AND eg_user.id = $collectorname::INTEGER
-    query: |
-        -- Use CTE to force query plan, compute & use CTE later
-        SELECT 
-          rh.payername as consumername,
-          rh.payermobile as mobilenumber,
-          To_char((To_timestamp(rh.receiptdate / 1000) at time Zone 'Asia/Kolkata'), 'DD/MM/YYYY') as receiptdate,
-          businessdetails as servicecategory,
-          rh.totalamount as amount, 
-          eg_user.name as collectorname,
-          rh.additionaldetails->>'comment' as remarks
-        FROM egcl_receiptheader_v1 AS rh
-        JOIN egcl_receiptinstrument_v1 AS ri ON rh.id = ri.receiptheader
-        JOIN egcl_instrumentheader_v1 AS ih ON ih.id = ri.instrumentheader
-        JOIN eg_user ON rh.createdby::INTEGER=eg_user.id
-        WHERE  rh.status != 'Cancelled'  AND businessdetails not in ('PT','TL')
-        and rh.tenantid=$tenantid
-    orderby: ORDER BY rh.receiptdate DESC

@@ -726,6 +726,7 @@ serviceMaps:
            - jsonPath: $.Properties.*.propertyDetails.*.auditDetails.lastModifiedBy
 
            - jsonPath: $.Properties.*.propertyDetails.*.auditDetails.lastModifiedTime
+
  - version: 1.0
    description: Cancel property details in eg_pt_propertydetail_v2  table
    fromTopic: cancel-pt-propertyDetail
@@ -782,3 +783,6 @@ serviceMaps:
          - jsonPath: $.Properties.*.propertyDetails.*.assessmentNumber
 
          - jsonPath: $.Properties[*][?({assessmentNumber} in @.propertyDetails[*].assessmentNumber)].tenantId
+
+
+

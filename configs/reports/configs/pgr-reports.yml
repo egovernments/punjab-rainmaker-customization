@@ -22,17 +22,17 @@ ReportDefinitions:
     type: singlevaluelist
     pattern: 'list://Wet:Wet,Dry:Dry'
     source: eg_pgr_service
-    isMandatory: false    
+    isMandatory: true    
   - name: fromDate
     label: reports.rainmaker-pgr.datefrom
     type: epoch
     source: eg_pgr_service
-    isMandatory: false
+    isMandatory: true
   - name: toDate
     label: reports.rainmaker-pgr.dateto
     type: epoch
     source: eg_pgr_service
-    isMandatory: false
+    isMandatory: true
   query: SELECT sum(case when source = 'mobileapp' then 1 else 0 end) as citizen_mobile_app, sum(case when source = 'web' then 1 else 0 end) as citizen_web_app, sum(case when source = 'ivr' then 1 else 0 end) as counter_desktop FROM eg_pgr_service WHERE tenantid = $tenantid
 
 - reportName: DescriptionReport
@@ -68,8 +68,8 @@ ReportDefinitions:
     type: string
     source: eg_pgr_service
     total: false
-  - name: createddate
-    label: reports.rainmaker-pgr.createddate
+  - name: date
+    label: reports.rainmaker-pgr.date
     type: string
     source: eg_pgr_service
     total: false
@@ -118,16 +118,6 @@ ReportDefinitions:
     type: string
     source: eg_pgr_service
     total: false
-  - name: actiontakendate
-    label: reports.rainmaker-pgr.actiontakendate
-    type: string
-    source: eg_pgr_service
-    total: false
-  - name: source
-    label: reports.rainmaker-pgr.source
-    type: string
-    source: eg_pgr_service
-    total: false  
   searchParams:
   - name: fromDate
     label: reports.rainmaker-pgr.datefrom
@@ -144,30 +134,28 @@ ReportDefinitions:
   query: |
     SELECT 
     DISTINCT ON (servicerequestid)
-    (case when epa.assignee is null then case when ua.name is null then 'GRO' else ua.name end else (select name from eg_user where id=epa.assignee :: int) end) lastassignedto,
+    ua.name as lastassignedto,
     (SELECT deptmap_def.name FROM (VALUES tbl_def_dept) AS deptmap_def(name,code) INNER JOIN (VALUES tbl_dept) AS deptmap(serviceCode, department, slaHours) on deptmap.serviceCode = eg_pgr_service.servicecode and deptmap_def.code = deptmap.department) AS department, 
     regexp_replace(servicecode, '([a-z])([A-Z])', '\1 \2','g') AS servicecode, 
     (SELECT boundary_def.name FROM (VALUES tbl_boundary) AS boundary_def(name,code) where code=eg_pgr_address.mohalla) as locality, 
     servicerequestid AS complaintNo, 
-    to_char(to_timestamp(TRUNC(CAST(eg_pgr_service.createdtime AS bigint) / 1000)), 'DD/MM/YYYY') AS createddate, 
+    to_char(to_timestamp(TRUNC(CAST(eg_pgr_service.createdtime AS bigint) / 1000)), 'DD/MM/YYYY') AS date, 
     eg_user.name, 
-    eg_user.mobileNumber as phone, 
+    phone, 
     eg_pgr_address.landmark, 
     eg_pgr_address.housenoandstreetname as address, 
-    description,
-    source, 
-    (SELECT (CASE WHEN (((SELECT deptmap.slaHours FROM (VALUES tbl_dept) AS deptmap(serviceCode, department, slaHours) WHERE deptmap.serviceCode = eg_pgr_service.servicecode)::integer / 24) - (epa.when - eg_pgr_service.createdtime)::bigint/86400000) < 1 THEN CONCAT('Overdue by ', ((epa.when - eg_pgr_service.createdtime)::bigint/86400000) - ((SELECT deptmap.slaHours FROM (VALUES tbl_dept) AS deptmap(serviceCode, department, slaHours) WHERE deptmap.serviceCode = eg_pgr_service.servicecode)::integer / 24), ' days') ELSE CONCAT(((SELECT deptmap.slaHours FROM (VALUES tbl_dept) AS deptmap(serviceCode, department, slaHours) WHERE deptmap.serviceCode = eg_pgr_service.servicecode)::integer / 24) - (epa.when - eg_pgr_service.createdtime)::bigint/86400000, ' days remaining') END) as slaHours), 
-    Initcap(eg_pgr_service.status) as status,
-    to_char((To_timestamp(epa.when/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY')  AS actiontakendate
+    description, 
+    (SELECT (CASE WHEN (((SELECT deptmap.slaHours FROM (VALUES tbl_dept) AS deptmap(serviceCode, department, slaHours) WHERE deptmap.serviceCode = eg_pgr_service.servicecode)::integer / 24) - ((((select extract(epoch from now())) * 1000) - eg_pgr_service.createdtime)::bigint/86400000)) < 1 THEN CONCAT('Overdue by ', ((((select extract(epoch from now())) * 1000) - eg_pgr_service.createdtime)::bigint/86400000) - ((SELECT deptmap.slaHours FROM (VALUES tbl_dept) AS deptmap(serviceCode, department, slaHours) WHERE deptmap.serviceCode = eg_pgr_service.servicecode)::integer / 24), ' days') ELSE CONCAT(((SELECT deptmap.slaHours FROM (VALUES tbl_dept) AS deptmap(serviceCode, department, slaHours) WHERE deptmap.serviceCode = eg_pgr_service.servicecode)::integer / 24) - ((((select extract(epoch from now())) * 1000) - eg_pgr_service.createdtime)::bigint/86400000), ' days remaining') END) as slaHours), 
+    Initcap(eg_pgr_service.status) as status
     FROM eg_pgr_service
     left outer join eg_pgr_address on eg_pgr_address.uuid = eg_pgr_service.addressid
     left outer join eg_user on eg_user.id = eg_pgr_service.accountid::int
-    left outer join eg_pgr_action as epa on epa.businesskey = eg_pgr_service.servicerequestid and epa.action in ('assign','reassign','resolve')
-    left outer join eg_user as ua on ua.id =   split_part(epa.by,':', 1)::int
+    left outer join eg_pgr_action as epa on epa.businesskey = eg_pgr_service.servicerequestid and epa.action in ('assign','reassign')
+    left outer join eg_user as ua on ua.id = epa.assignee::int
     WHERE 
     eg_pgr_service.tenantid LIKE  $tenantid 
     AND eg_pgr_address.uuid = eg_pgr_service.addressid
-    AND eg_pgr_service.status IN ('open','assigned','reassigrequested','rejected','closed','resolved')
+    AND eg_pgr_service.status IN ('open','assigned','reassigrequested','rejected')
   orderby: ORDER BY servicerequestid, epa."when" desc
 
 - reportName: StateSourceReport
@@ -180,11 +168,6 @@ ReportDefinitions:
     type: string
     source: eg_pgr_service
     total: false
-  - name: whatsapp
-    label: reports.rainmaker-pgr.source.whatsapp
-    type: string
-    source: eg_pgr_service
-    total: true
   - name: ivr
     label: reports.rainmaker-pgr.source.ivr
     type: string
@@ -220,11 +203,10 @@ ReportDefinitions:
     searchClause: AND createdtime <= $toDate
   query: |
     select initcap(split_part(tenantid, '.', 2)) as tenantid,
-    SUM(CASE WHEN source ='whatsapp' THEN 1 ELSE 0 END) as whatsapp,
     SUM(CASE WHEN source ='ivr' THEN 1 ELSE 0 END) as ivr,
     SUM(CASE WHEN source ='mobileapp' THEN 1 ELSE 0 END) as mobileapp,
     SUM(CASE WHEN source ='web' THEN 1 ELSE 0 END) as web,
-    SUM(CASE WHEN source NOT IN ('web', 'ivr', 'mobileapp','whatsapp')  OR source is NULL THEN 1 ELSE 0 END) as unknown
+    SUM(CASE WHEN source NOT IN ('web', 'ivr', 'mobileapp')  OR source is NULL THEN 1 ELSE 0 END) as unknown
     from eg_pgr_service
     WHERE tenantid != 'pb.testing'
 
@@ -743,173 +725,3 @@ ReportDefinitions:
       WHERE 1=1
   orderby: ORDER BY assignee NULLS FIRST
   groupby: GROUP BY assignee
-
-  
-- reportName: UlbPgrSlaReport
-  summary: Fetches employee sla
-  version: 1.0.0
-  moduleName: rainmaker-pgr
-  sourceColumns:
-  - name: tenantid
-    label: reports.rainmaker-pgr.tenantid
-    type: string
-    source: eg_pgr_service
-    total: false
-  - name: complainttype
-    label: reports.rainmaker-pgr.complainttype
-    type: string
-    source: eg_pgr_service
-    total: false
-  - name: total
-    label: reports.rainmaker-pgr.total
-    type: string
-    source: eg_pgr_service
-    total: true
-  - name: pendinginsla
-    label: reports.rainmaker-pgr.pendinginsla
-    type: string
-    source: eg_pgr_service
-    total: true
-  - name: pendingoutsidesla
-    label: reports.rainmaker-pgr.pendingoutsidesla
-    type: string
-    source: eg_pgr_service
-    total: true
-  - name: resolvedinsla
-    label: reports.rainmaker-pgr.resolvedinsla
-    type: string
-    source: eg_pgr_service
-    total: true
-  - name: resolvedoutsidesla
-    label: reports.rainmaker-pgr.resolvedoutsidesla
-    type: string
-    source: eg_pgr_service
-    total: true
-  searchParams:
-  - name: fromDate
-    label: reports.rainmaker-pgr.datefrom
-    type: epoch
-    source: eg_pgr_service
-    isMandatory: false
-    searchClause: AND pgr_data.createdtime >= $fromDate
-  - name: toDate
-    label: reports.rainmaker-pgr.dateto
-    type: epoch
-    source: eg_pgr_service
-    isMandatory: false
-    searchClause: AND pgr_data.createdtime <= $toDate
-  query: |
-    with pgr_data as (select 
-      servicerequestid,
-      servicecode,
-      createdtime, 
-      status,
-      (select max("when") from eg_pgr_action where action='resolve' and businesskey = servicerequestid) as resolvedtime,
-      (select min("when") from eg_pgr_action where action='open' and businesskey = servicerequestid) as opentime
-      from eg_pgr_service as ps)
-    select 
-      initcap(split_part(tenantid, '.', 2)) as tenantid,
-      regexp_replace(eg_pgr_service.servicecode, '([a-z])([A-Z])', '\1 \2','g') as complainttype,
-      count(eg_pgr_service.status) as total,
-      SUM (CASE WHEN eg_pgr_service.status in ('assigned', 'reassignrequested', 'open') and (extract(epoch from now()) * 1000 - opentime) < 14 * 86400 * 1000 THEN 1 ELSE 0 END) as pendinginsla,
-      SUM (CASE WHEN eg_pgr_service.status in ('assigned', 'reassignrequested', 'open') and (extract(epoch from now()) * 1000 - opentime) >= 14 * 86400 * 1000 THEN 1 ELSE 0 END) as pendingoutsidesla,
-      SUM (CASE WHEN eg_pgr_service.status in ('closed', 'resolved') and (resolvedtime - opentime) < 14 * 86400 * 1000 THEN 1 ELSE 0 END) as resolvedinsla,
-      SUM (CASE WHEN eg_pgr_service.status in ('closed', 'resolved') and (resolvedtime - opentime) >= 14 * 86400 * 1000 THEN 1 ELSE 0 END) as resolvedoutsidesla
-    from eg_pgr_service,pgr_data
-    WHERE tenantid != 'pb.testing' and eg_pgr_service.servicerequestid=pgr_data.servicerequestid
-  groupby: GROUP BY tenantid,eg_pgr_service.servicecode
-  orderby: ORDER BY tenantid,eg_pgr_service.servicecode
-  
-- reportName: FeedbackReport
-  summary: Fetches complaint state based on Feedback
-  version: 1.0.0
-  moduleName: rainmaker-pgr
-  externalService:
-  - entity: $.MdmsRes.RAINMAKER-PGR.ServiceDefs
-    apiURL: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?moduleName=RAINMAKER-PGR&masterName=ServiceDefs&tenantId=$tenantId
-    keyOrder: serviceCode,department,slaHours
-    tableName: tbl_dept
-  - entity: $.MdmsRes.common-masters.Department
-    apiURL: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?moduleName=common-masters&masterName=Department&tenantId=$tenantId
-    keyOrder: name,code
-    tableName: tbl_def_dept
-  sourceColumns:
-  - name: department
-    label: reports.rainmaker-pgr.department
-    type: string
-    source: eg_pgr_service
-    total: false
-  - name: tenantid
-    label: reports.rainmaker-pgr.tenantid
-    type: string
-    source: eg_pgr_service
-    total: false
-  - name: citizenname
-    label: reports.rainmaker-pgr.citizenname
-    type: string
-    source: eg_pgr_service
-    total: false
-  - name: complainttype
-    label: reports.rainmaker-pgr.complainttype
-    type: string
-    source: eg_pgr_service
-    total: false
-  - name: complaintnumber
-    label: reports.rainmaker-pgr.complaintnumber
-    type: string
-    source: eg_pgr_service
-    total: false
-  - name: lastassignto
-    label: reports.rainmaker-pgr.lastassignto
-    type: string
-    source: eg_pgr_service
-    total: false
-  - name: rating
-    label: reports.rainmaker-pgr.rating
-    type: string
-    source: eg_pgr_service
-    total: false
-  - name: feedback
-    label: reports.rainmaker-pgr.feedback
-    type: string
-    source: eg_pgr_service
-    total: false
-  searchParams:
-  - name: ulb
-    label: ULB
-    type: singlevaluelist
-    pattern: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?tenantId=$tenantid&moduleName=tenant&masterName=tenants|$.MdmsRes.tenant.tenants.*.code|$.MdmsRes.tenant.tenants.*.name
-    source: pt
-    wrapper: true
-    isMandatory: false
-    searchClause: AND eg_pgr_service.tenantid = $ulb
-  - name: fromDate
-    label: reports.rainmaker-pgr.datefrom
-    type: epoch
-    source: eg_pgr_service
-    isMandatory: false
-    searchClause: AND eg_pgr_service.createdtime >= $fromDate
-  - name: toDate
-    label: reports.rainmaker-pgr.dateto
-    type: epoch
-    source: eg_pgr_service
-    isMandatory: false
-    searchClause: AND eg_pgr_service.createdtime <= $toDate
-  query: |
-        SELECT
-        DISTINCT ON (servicerequestid)
-        initcap(split_part(eg_pgr_service.tenantid, '.', 2)) as tenantid,
-        (SELECT deptmap_def.name FROM (VALUES tbl_def_dept) AS deptmap_def(name,code) INNER JOIN (VALUES tbl_dept) AS deptmap(serviceCode, department, slaHours) on deptmap.serviceCode = eg_pgr_service.servicecode and deptmap_def.code = deptmap.department) AS department, 
-        regexp_replace(servicecode, '([a-z])([A-Z])', '\1 \2','g') AS complainttype,
-        ua.name as lastassignto,
-        servicerequestid AS complaintnumber,
-        eg_user.name AS citizenname,
-        rating, feedback FROM eg_pgr_service 
-        left outer join eg_pgr_address on eg_pgr_address.uuid = eg_pgr_service.addressid 
-        left outer join eg_user on eg_user.id = eg_pgr_service.accountid::int 
-        left outer join eg_pgr_action as epa on epa.businesskey = eg_pgr_service.servicerequestid and epa.action in ('assign','reassign') 
-        left outer join eg_user as ua on ua.id = epa.assignee::int 
-        WHERE 
-        eg_pgr_address.uuid = eg_pgr_service.addressid 
-        AND rating is not null AND feedback is not null
-  orderby: ORDER BY servicerequestid, epa."when" desc

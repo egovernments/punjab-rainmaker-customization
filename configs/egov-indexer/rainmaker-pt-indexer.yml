@@ -6,7 +6,7 @@ ServiceMaps:
     configKey: INDEX
     indexes:
     - name: ptindex-v1
-      type: general
+      type: property
       id: $.propertyId, $.tenantId
       isBulk: true
       timeStampField: $.auditDetails.createdTime
@@ -50,7 +50,7 @@ ServiceMaps:
     configKey: INDEX
     indexes:
     - name: ptindex-v1
-      type: general
+      type: property
       id: $.propertyId, $.tenantId
       isBulk: true
       timeStampField: $.auditDetails.createdTime
@@ -93,7 +93,7 @@ ServiceMaps:
     configKey: REINDEX
     indexes:
     - name: ptreindex-v1
-      type: general
+      type: property
       id: $.propertyId, $.tenantId
       isBulk: true
       timeStampField: $.auditDetails.createdTime
@@ -103,7 +103,7 @@ ServiceMaps:
     configKey: LEGACYINDEX
     indexes:
     - name: ptindex-v1
-      type: general
+      type: property
       id: $.propertyId, $.tenantId
       isBulk: true
       timeStampField: $.auditDetails.createdTime
@@ -147,7 +147,7 @@ ServiceMaps:
     configKey: INDEX
     indexes:
     - name: ptindex-dcb-v1
-      type: general
+      type: property
       id: $.propertyId, $.tenantId
       isBulk: true
       timeStampField: $.auditDetails.createdTime
