@@ -3495,6 +3495,7 @@ ReportDefinitions:
   
 
 - reportName: ReceiptRegisterSummary_V2
+  decryptionPathId: ReceiptRegisterShort_V2
   summary: Receipt Register Summary
   version: 1.0.0
   moduleName: rainmaker-pt
@@ -3635,7 +3636,7 @@ ReportDefinitions:
         sum(case when payment.paymentmode='CHEQUE' then pd.amountpaid else 0 end) as sumcheque,
         count (distinct  case when payment.paymentmode='CHEQUE' then concat(payment.paymentmode) end) as countcheque,
         sum(case when payment.paymentmode='ONLINE' then pd.amountpaid else 0 end) as sumonline,
-        (CASE WHEN collectiontype='COUNTER' THEN eg_user.name ELSE 'Online' END) as collectorname,
+        (CASE WHEN collectiontype='COUNTER' THEN eg_user.name ELSE '30048|+2XzlkQVhqavkQNuL+i/3UDc+MI=' END) as collectorname, --for online collecion show null as collectorname
         sum(adjustedamount) as totalamount
       FROM egcl_billaccountdetail as bad
       INNER JOIN egcl_billdetial as bd on bd.id = bad.billdetailid
