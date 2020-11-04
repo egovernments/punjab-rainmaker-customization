@@ -881,7 +881,7 @@
                             "fontSize": 9
                          },  
                          {
-                           "text":"{{mobile_no}}",
+                           "text":"Mobile Number/Alternate Contact",
                            "border":[
                              false,
                              false,
