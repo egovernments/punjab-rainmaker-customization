@@ -689,11 +689,12 @@ async function _createAndUpdateIntegrationTaxProcessor(req, response){
 
         let taxHeads = calc["taxHeadEstimates"];
         let createTaxHeadsArray = {};
+        let TaxHeadsType= {};  //Collecting All the Tax head coming from PMIDC
         for(taxHead of taxHeads){
             createTaxHeadsArray[taxHead.taxHeadCode] = taxHead.estimateAmount;
+            TaxHeadsType[taxHead.taxHeadCode] = taxHead.estimateAmount;
             //print(texthead)
             console.log(taxHead.taxHeadCode , ": ", taxHead.estimateAmount)
-
         }
 
         let demandSearchResponse = await findDemandForConsumerCode(consumerCode, tenantId, service, req["RequestInfo"])
@@ -726,11 +727,23 @@ async function _createAndUpdateIntegrationTaxProcessor(req, response){
             if(demandDetail.taxAmount){
                 demandDetail.taxAmount = 0
             }
+            delete TaxHeadsType[demandDetail.taxHeadMasterCode]//Deleting tax head codes present in both TaxHeadsType and demandDetail
+            console.log("Deleted taxhead from TaxHeadsType: ", emandDetail.taxHeadMasterCode);
         }
         
+        console.log("After Deleting the taxhead present in demand: ", JSON.stringify(TaxHeadsType));
         console.log("demandSearchResponse AFTER MAKING EVERYTHING ZERO : ", JSON.stringify(demandSearchResponse))
 
+        for(taxHead of TaxHeadsType){
+            taxHeadObj={};
+            taxHeadObj["taxHeadMasterCode"] = taxHead;
+            taxHeadObj["taxAmount"] = 0;
+            taxHeadObj["collectionAmount"] = 0;
+            demandSearchResponse["Demands"][0]["demandDetails"].push(taxHeadObj); // Adding those obj to demand details for which taxhead there was no entry in it
+            console.log("Pushing obj", taxHeadObj);
+        }
 
+        console.log("After Adding All the tax head demandDetail: ", demandSearchResponse["Demands"][0]["demandDetails"])
 
         for (demandDetail of demandSearchResponse["Demands"][0]["demandDetails"]) 
         {
