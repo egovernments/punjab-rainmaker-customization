@@ -728,7 +728,7 @@ async function _createAndUpdateIntegrationTaxProcessor(req, response){
                 demandDetail.taxAmount = 0
             }
             delete TaxHeadsType[demandDetail.taxHeadMasterCode]//Deleting tax head codes present in both TaxHeadsType and demandDetail
-            console.log("Deleted taxhead from TaxHeadsType: ", emandDetail.taxHeadMasterCode);
+            console.log("Deleted taxhead from TaxHeadsType: ", demandDetail.taxHeadMasterCode);
         }
         
         console.log("After Deleting the taxhead present in demand: ", JSON.stringify(TaxHeadsType));
