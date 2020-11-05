@@ -735,7 +735,7 @@ async function _createAndUpdateIntegrationTaxProcessor(req, response){
         console.log("demandSearchResponse AFTER MAKING EVERYTHING ZERO : ", JSON.stringify(demandSearchResponse))
 
         if(!(Object.keys(TaxHeadsType).length === 0)){
-            for(taxHead of TaxHeadsType){
+            for(taxHead in TaxHeadsType){
                 taxHeadObj={};
                 taxHeadObj["taxHeadMasterCode"] = taxHead;
                 taxHeadObj["taxAmount"] = 0;
