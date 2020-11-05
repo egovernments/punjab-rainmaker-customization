@@ -734,13 +734,15 @@ async function _createAndUpdateIntegrationTaxProcessor(req, response){
         console.log("After Deleting the taxhead present in demand: ", JSON.stringify(TaxHeadsType));
         console.log("demandSearchResponse AFTER MAKING EVERYTHING ZERO : ", JSON.stringify(demandSearchResponse))
 
-        for(taxHead of TaxHeadsType){
-            taxHeadObj={};
-            taxHeadObj["taxHeadMasterCode"] = taxHead;
-            taxHeadObj["taxAmount"] = 0;
-            taxHeadObj["collectionAmount"] = 0;
-            demandSearchResponse["Demands"][0]["demandDetails"].push(taxHeadObj); // Adding those obj to demand details for which taxhead there was no entry in it
-            console.log("Pushing obj", taxHeadObj);
+        if(!(Object.keys(TaxHeadsType).length === 0)){
+            for(taxHead of TaxHeadsType){
+                taxHeadObj={};
+                taxHeadObj["taxHeadMasterCode"] = taxHead;
+                taxHeadObj["taxAmount"] = 0;
+                taxHeadObj["collectionAmount"] = 0;
+                demandSearchResponse["Demands"][0]["demandDetails"].push(taxHeadObj); // Adding those obj to demand details for which taxhead there was no entry in it
+                console.log("Pushing obj", taxHeadObj);
+            }
         }
 
         console.log("After Adding All the tax head demandDetail: ", demandSearchResponse["Demands"][0]["demandDetails"])
