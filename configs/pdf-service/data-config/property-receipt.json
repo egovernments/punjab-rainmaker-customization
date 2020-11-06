@@ -583,7 +583,12 @@
                     "value":"$.Properties[0].owners[0].fatherOrHusbandName"
                   },{             
                     "variable":"propertyUsage",
-                    "value":"$.Properties[0].usageCategory"
+                    "value":"$.Properties[0].usageCategory", 
+		      "localisation": {
+                      "required": true,
+                      "prefix": "COMMON_PROPUSGTYPE",
+                      "module": "rainmaker-pt"
+                      }
                   },
                   {             
                     "variable":"doorNo",
