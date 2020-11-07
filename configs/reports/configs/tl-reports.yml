@@ -2298,13 +2298,13 @@ ReportDefinitions:
     type: epoch
     source: tl
     isMandatory: false
-    searchClause: AND issueddate >= $fromDate
+    searchClause: AND applicationdate >= $fromDate
   - name: toDate
     label: reports.tl.toDate
     type: epoch
     source: tl
     isMandatory: false
-    searchClause: AND issueddate <= $toDate 
+    searchClause: AND applicationdate <= $toDate 
   - name: localityArray
     label: reports.tl.zoneList
     type: boundarylist
