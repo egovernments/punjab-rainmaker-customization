@@ -3220,7 +3220,7 @@ ReportDefinitions:
       select 
         propertyid, 
         string_agg(distinct pu.occupancytype, ',') as occupancytype, 
-        string_agg(distinct coalesce(usagecategory), ',') as propertytype 
+        string_agg(distinct Initcap(case when usagecategory like '%.%' then split_part(usagecategory,'.',2) else usagecategory end),',') as propertytype 
       from eg_pt_unit as pu
       where  pu.tenantid = $tenantid
       group by propertyid
@@ -3247,6 +3247,8 @@ ReportDefinitions:
       payment.payeraddress as "payeraddress",
       pt.additionaldetails->>'remarks' as "remarks",
       pt.additionaldetails->>'FirmBusinessName' as "businessname",
+      pot.occupancytype as occupancy,
+      pot.propertytype as propertytype,
       pta.locality as "localitycode"
     from egcl_paymentdetail as payd
     inner join egcl_payment as payment on payment.id = payd.paymentid        
