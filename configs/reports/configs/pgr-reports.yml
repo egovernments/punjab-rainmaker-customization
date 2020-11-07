@@ -1633,9 +1633,8 @@ ReportDefinitions:
     from eg_pgr_service as ps
     where 
     tenantid = $tenantid)
-
     select 
-      coalesce((select name from eg_user where id::varchar = assignee),'30048|4H7+iWsYwRRFSuD94NxlbTqpg/CC952iFU8=') as employee,  -- encrypted value for unassigned
+      coalesce((select name from eg_user where id::varchar = assignee),'30048|+3/xnyTtx2VYznMwVlAA/wJxplY=') as employee,  -- encrypted value for none
       SUM (CASE WHEN status in ('rejected') THEN 1 ELSE 0 END) as rejected,
       SUM (CASE WHEN status in ('closed', 'resolved') THEN 1 ELSE 0 END) as resolved,
       SUM (CASE WHEN status in ('closed', 'resolved') and (resolvedtime - opentime) >= 14 * 86400 * 1000 THEN 1 ELSE 0 END) as resolvedoutsidesla,
