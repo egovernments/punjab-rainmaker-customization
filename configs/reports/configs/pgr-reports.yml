@@ -1060,13 +1060,13 @@ ReportDefinitions:
   query: |
     SELECT 
     DISTINCT ON (servicerequestid)
-    (case when ua.name is null then '30048|21Fj+c3k2ldB0X3AzIh7atXB' else ua.name end) as lastassignedto,
+    (case when ua.name is null then '721995|PCtyD4kL8cT1K/SqWCPDDLhr8n3vdfJ1R9s=' else ua.name end) as lastassignedto,  --value for Unassigned
     (SELECT deptmap_def.name FROM (VALUES tbl_def_dept) AS deptmap_def(name,code) INNER JOIN (VALUES tbl_dept) AS deptmap(serviceCode, department, slaHours) on deptmap.serviceCode = eg_pgr_service.servicecode and deptmap_def.code = deptmap.department) AS department, 
     regexp_replace(servicecode, '([a-z])([A-Z])', '\1 \2','g') AS servicecode, 
     (SELECT boundary_def.name FROM (VALUES tbl_boundary) AS boundary_def(name,code) where code=eg_pgr_address.mohalla) as locality, 
     servicerequestid AS complaintNo, 
     to_char(to_timestamp(TRUNC(CAST(eg_pgr_service.createdtime AS bigint) / 1000)), 'DD/MM/YYYY') AS date, 
-    (case when eg_user.name is null then '30048|21Fj+c3k2ldB0X3AzIh7atXB' else eg_user.name end) as name, 
+    (case when eg_user.name is null then '721995|JxBfMOBlJR+m/IMM/1eQwdVYJkI=' else eg_user.name end) as name,  --value for NULL
     phone, 
     eg_pgr_address.landmark, 
     eg_pgr_address.housenoandstreetname as address, 
@@ -1640,7 +1640,7 @@ ReportDefinitions:
     where 
     tenantid = $tenantid)
     select 
-      coalesce((select name from eg_user where id::varchar = assignee),'30048|+3/xnyTtx2VYznMwVlAA/wJxplY=') as employee,  -- encrypted value for none
+      coalesce((select name from eg_user where id::varchar = assignee),'721995|JxBfMOBlJR+m/IMM/1eQwdVYJkI=') as employee,  -- encrypted value for NULL
       SUM (CASE WHEN status in ('rejected') THEN 1 ELSE 0 END) as rejected,
       SUM (CASE WHEN status in ('closed', 'resolved') THEN 1 ELSE 0 END) as resolved,
       SUM (CASE WHEN status in ('closed', 'resolved') and (resolvedtime - opentime) >= 14 * 86400 * 1000 THEN 1 ELSE 0 END) as resolvedoutsidesla,
