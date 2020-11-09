@@ -711,6 +711,9 @@ async function _createAndUpdateZeroTaxProcessor(request, response) {
 
 async function _createAndUpdateIntegrationTaxProcessor(req, response){
 
+        console.log("REQ : ", JSON.stringify(req))
+        console.log("RESPONSE : ", JSON.stringify(response))
+
         let reqProperty = req["Assessment"];
 
         let propertyId = reqProperty["propertyId"]
@@ -739,9 +742,13 @@ async function _createAndUpdateIntegrationTaxProcessor(req, response){
         let calc = estimateResponse["Calculation"][0]
         let taxHeads = calc["taxHeadEstimates"];
         let createTaxHeadsArray = {};
+        let TaxHeadsType= {};  //Collecting All the Tax head coming from PMIDC
+        
         for(taxHead of taxHeads){
             createTaxHeadsArray[taxHead.taxHeadCode] = taxHead.estimateAmount;
+            TaxHeadsType[taxHead.taxHeadCode] = taxHead.estimateAmount;
             //print(texthead)
+            console.log(taxHead.taxHeadCode , ": ", taxHead.estimateAmount)
         }
 
         let demandSearchResponse = await findDemandForConsumerCode(consumerCode, tenantId, service, req["RequestInfo"])
@@ -792,9 +799,25 @@ async function _createAndUpdateIntegrationTaxProcessor(req, response){
             if(demandDetail.taxAmount){
                 demandDetail.taxAmount = 0
             }
+            delete TaxHeadsType[demandDetail.taxHeadMasterCode]//Deleting tax head codes present in both TaxHeadsType and demandDetail
+            console.log("Deleted taxhead from TaxHeadsType: ", demandDetail.taxHeadMasterCode);
         }
         
+        console.log("After Deleting the taxhead present in demand: ", JSON.stringify(TaxHeadsType));
+        console.log("demandSearchResponse AFTER MAKING EVERYTHING ZERO : ", JSON.stringify(demandSearchResponse))
 
+        if(!(Object.keys(TaxHeadsType).length === 0)){
+            for(taxHead in TaxHeadsType){
+                taxHeadObj={};
+                taxHeadObj["taxHeadMasterCode"] = taxHead;
+                taxHeadObj["taxAmount"] = 0;
+                taxHeadObj["collectionAmount"] = 0;
+                demandSearchResponse["Demands"][0]["demandDetails"].push(taxHeadObj); // Adding those obj to demand details for which taxhead there was no entry in it
+                console.log("Pushing obj", taxHeadObj);
+            }
+        }
+
+        console.log("After Adding All the tax head demandDetail: ", demandSearchResponse["Demands"][0]["demandDetails"])
 
         for (demandDetail of demandSearchResponse["Demands"][0]["demandDetails"]) 
         {
@@ -806,12 +829,17 @@ async function _createAndUpdateIntegrationTaxProcessor(req, response){
             }
         }
 
+        console.log("demandSearchResponse AFTER SETTING THE VALUE: ", JSON.stringify(demandSearchResponse))
+
         let demandUpdateResponse = await updateDemand(demandSearchResponse["Demands"], req["RequestInfo"])
+
+        console.log("demandUpdateResponse : ", JSON.stringify(demandUpdateResponse))
+
         calc["taxAmount"] = 0;
         calc["exemption"] = 0;
         calc["totalAmount"] = newTotal;
         calc["rebate"] = 0;
-        calc["penanlty"] = 0;
+        calc["penalty"] = 0;
         
         log("Demand Updated with Details : " + demandUpdateResponse )
     
