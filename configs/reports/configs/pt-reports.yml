@@ -3187,6 +3187,11 @@ ReportDefinitions:
     type: string
     source: pt
     total: false
+  - name: localityname
+    label: reports.pt.localityname
+    type: string
+    source: pt
+    total: false
   searchParams:
   - name: fromDate
     label: reports.pt.fromDate
@@ -3249,7 +3254,8 @@ ReportDefinitions:
       pt.additionaldetails->>'FirmBusinessName' as "businessname",
       pot.occupancytype as occupancy,
       pot.propertytype as propertytype,
-      pta.locality as "localitycode"
+      pta.locality as "localitycode",
+      localnames.localityname as localityname
     from egcl_paymentdetail as payd
     inner join egcl_payment as payment on payment.id = payd.paymentid        
     inner join egcl_bill as bill on bill.id = payd.billid 
@@ -3258,6 +3264,7 @@ ReportDefinitions:
     inner join eg_pt_owner as po on po.propertyid = pt.id
     inner join eg_user as eu on eu.uuid     = po.userid
     inner join eg_pt_address    as pta on pta.propertyid = pt.id
+    left outer join eg_bndry_mohalla as localnames on pta.locality=localnames.localitycode
     left outer join eg_pt_unit_v2_ot as pot on pot.propertyid = pt.id
     where payd.tenantid = $tenantid and payment.paymentstatus != 'CANCELLED' and payd.businessservice='PT' and pt.status!='INACTIVE' 
 
