@@ -685,7 +685,7 @@
                          },
                          {
                           "variable":"builtup_area",
-                          "value":"constructionDetail.builtUpArea * 9"
+                          "value":"constructionDetail.builtUpArea"
                          },
                          {
                           "variable":"arv_rent",
