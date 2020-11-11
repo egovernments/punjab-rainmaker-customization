@@ -732,7 +732,10 @@ async function _createAndUpdateIntegrationTaxProcessor(req, response){
         log("Got Assessment CREATE/ UPDATE request for tenantid: "+tenantId+" and finanancial year: "+assessmentYear)
         log("Assessment CREATE/ UPDATE Request body: "+ JSON.stringify(reqProperty) )
 
-        let estimateResponse = await findEstimate(req)
+        let estimateResponseBody = await findEstimate(req)
+        console.log("After Getting Response from entimate sending it to PMIDC TO get the Estimate Response")
+        let estimateResponse = await _estimateIntegrationTaxProcessor(oldRequestbody, estimateResponseBody)
+
 
         
         request_info = req["RequestInfo"] || req["requestInfo"]
@@ -925,7 +928,6 @@ async function _createAndUpdateRequestHandler(req, res) {
         response
     } = getRequestResponse(req)
 
-    log("Got Request for Assessment Create and Update")
 
         let assessmentYear = request["Assessment"]["financialYear"]
         let tenantId = request["Assessment"]["tenantId"] 
@@ -933,6 +935,8 @@ async function _createAndUpdateRequestHandler(req, res) {
         if (assessmentYear == PT_ZERO_ASSESSMENTYEAR && PT_ZERO_TENANTS.indexOf(tenantId) >= 0){
             response = await _createAndUpdateZeroTaxProcessor(request, response)
         }else if(assessmentYear == PT_INTEGRATION_ASSESSMENTYEAR && PT_INTEGRATION_TENANTS.indexOf(tenantId) >= 0){
+            log("Got Request for Assessment Create and Update")
+
             response = await _createAndUpdateIntegrationTaxProcessor(request, response)
         }
     
@@ -1026,7 +1030,6 @@ router.post('/protected/punjab-pt/pt-calculator-v2/_estimate', asyncMiddleware(a
         response
     } = getRequestResponse(req)
 
-    log(":: Estimate request Received ::");
 
     // let oldRequestbody = getOldRequestBody(request) 
 
@@ -1038,8 +1041,6 @@ router.post('/protected/punjab-pt/pt-calculator-v2/_estimate', asyncMiddleware(a
     let tenantId = request["Assessment"]["tenantId"]
     let assessmentYear = request["Assessment"]["financialYear"]
 
-    log("Got request for tenantid: "+tenantId+" and finanancial year: "+assessmentYear)
-    log("Request body: "+ JSON.stringify(request));
 
     let oldRequestbody = await getOldRequestBody(request); 
     oldRequestbody["CalculationCriteria"][0]["assessmentYear"] =  assessmentYear;
@@ -1052,6 +1053,11 @@ router.post('/protected/punjab-pt/pt-calculator-v2/_estimate', asyncMiddleware(a
     else if (assessmentYear == PT_INTEGRATION_ASSESSMENTYEAR){
             
         if(PT_INTEGRATION_TENANTS.indexOf(tenantId) >= 0){
+                log(":: Estimate request Received ::");
+
+                log("Got request for tenantid: "+tenantId+" and finanancial year: "+assessmentYear)
+                log("Request body: "+ JSON.stringify(request));
+                
                 response = await _estimateIntegrationTaxProcessor(oldRequestbody, response)
         } else if(isCitizen(request)){
             data =  
