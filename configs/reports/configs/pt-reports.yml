@@ -2570,6 +2570,11 @@ ReportDefinitions:
     print:
       pdfPageSize: "A1"
   sourceColumns:
+  - name: tenantid
+    label: reports.pt.ulb
+    type: string
+    source: pt
+    total: false
   - name: receiptnumber
     label: reports.pt.receiptNo
     type: string
@@ -2595,6 +2600,11 @@ ReportDefinitions:
     type: string
     source: pt
     total: true
+  - name: paystatus
+    label: reports.pt.paymentstatus
+    type: string
+    source: pt
+    total: false
   - name: propertytax
     label: reports.pt.propertyTax
     type: string
@@ -2751,7 +2761,8 @@ ReportDefinitions:
         Initcap(case when pt.usagecategory like '%.%' then split_part(pt.usagecategory,'.',2) else pt.usagecategory end) as usagetype,
         (CASE WHEN billd.collectiontype='COUNTER' THEN eg_user.name ELSE '721995|Jit/FZQHkmU8SNc06DKOhEnWXXfadQ==' END) as collectorname,
         receipt_breakup.*,
-        to_char((To_timestamp(pd.manualreceiptdate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY') AS g8issuedate, 		manualreceiptnumber as g8receiptno
+        to_char((To_timestamp(pd.manualreceiptdate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY') AS g8issuedate, 		manualreceiptnumber as g8receiptno,
+        payment.paymentstatus as paystatus
       FROM egcl_paymentdetail pd, eg_user, eg_pt_property    as pt, egcl_billdetial as billd, egcl_payment payment,receipt_breakup, egcl_bill bill, (select bill.id as billid, min(bd.fromperiod) fromperiod, max(bd.toperiod) toperiod from egcl_billdetial bd, egcl_bill bill where bill.id=bd.billid group by bill.id) bd
       WHERE pd.paymentid=payment.id and  eg_user.id = pd.createdby::INTEGER and pt.propertyid = bill.consumercode and bill.id=pd.billid and bill.id=billd.billid and bd.billid=bill.id and payment.paymentstatus = 'CANCELLED' and pd.businessservice='PT' and payment.tenantid not in ('pb.testing','pb.ludhiana_legacy') and receipt_breakup.pdid=pd.id
   orderby: ORDER BY pd.receiptdate DESC;
