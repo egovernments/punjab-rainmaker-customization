@@ -576,7 +576,7 @@
                 "style": "receipt-table-value"
               },
               {
-                "text": "₹ {{paymentMode}}",
+                "text": "{{paymentMode}}",
                 "border": [
                   false,
                   false,
