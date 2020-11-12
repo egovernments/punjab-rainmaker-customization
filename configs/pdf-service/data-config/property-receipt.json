@@ -149,25 +149,25 @@
               {
                 "variable": "PropertyTax", 
                 "value": {
-                  "path": "$.paymentDetails[0].bill.billDetails[0].billAccountDetails[?(@.taxHeadCode=='PT_TAX')].adjustedAmount"
+                  "path": "$.paymentDetails[0].bill.billDetails[0].billAccountDetails[?(@.taxHeadCode=='PT_TAX')].amount"
                 }
               },
               {
                 "variable": "FireCess", 
                 "value": {
-                  "path": "$.paymentDetails[0].bill.billDetails[0].billAccountDetails[?(@.taxHeadCode=='PT_FIRE_CESS')].adjustedAmount"
+                  "path": "$.paymentDetails[0].bill.billDetails[0].billAccountDetails[?(@.taxHeadCode=='PT_FIRE_CESS')].amount"
                 }
               },
               {
                 "variable": "CancerCess", 
                 "value": {
-                  "path": "$.paymentDetails[0].bill.billDetails[0].billAccountDetails[?(@.taxHeadCode=='PT_CANCER_CESS')].adjustedAmount"
+                  "path": "$.paymentDetails[0].bill.billDetails[0].billAccountDetails[?(@.taxHeadCode=='PT_CANCER_CESS')].amount"
                 }
               },
               {
                 "variable": "Penalty", 
                 "value": {
-                  "path": "$.paymentDetails[0].bill.billDetails[0].billAccountDetails[?(@.taxHeadCode=='PT_TIME_PENALTY')].adjustedAmount"
+                  "path": "$.paymentDetails[0].bill.billDetails[0].billAccountDetails[?(@.taxHeadCode=='PT_TIME_PENALTY')].amount"
                 }
               },
 		 {
