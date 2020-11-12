@@ -675,7 +675,7 @@
         "layout": {}
       },
       {
-        "text":"PAID AMOUNT",
+        "text":"PAYABLE AMOUNT",
         "style":"block-head"
       },
 	    {
@@ -791,7 +791,7 @@
                 "style": "amounts"
               },
 			  {
-                "text": "{{paidAmount}}",
+                "text": "{{dueAmount}}",
                 "style": "amounts"
               }
 			  
