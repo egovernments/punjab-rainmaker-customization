@@ -158,7 +158,7 @@
               {
                 "variable": "dueAmount", 
                 "value": {
-                  "path": "$.paymentDetails[0].totalDue"
+                  "path": "$.paymentDetails[0].bill.totalAmount"
                 }
               },
               {
