@@ -567,7 +567,7 @@
                   },          
                     {
                       "variable": "variable_acc",                        
-                      "value": "$.Licenses[0].tradeLicenseDetail.accessories.*",                       
+                      "value": "$.Licenses[0].tradeLicenseDetail.accessories.* || 'NA'",                       
                        "type":"array",
                        "format":{                            
                           "type":"string",

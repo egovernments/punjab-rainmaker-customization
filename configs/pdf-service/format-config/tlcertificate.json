@@ -441,6 +441,35 @@
                           true,
                           false
                         ]
+                    }, {
+                      "style": "next-noc-table",
+                      "table": {
+                        "widths": [
+                          "55%",
+                          "*",
+                          "15%"
+                        ],
+                        "body":             
+                          [
+                            [
+                              {
+                                "text": "Owner Name",
+                                "style": "receipt-table-value"
+                              },
+                              {
+                                "text": "Father/Husband Name",
+                                "style": "receipt-table-value"
+                              },
+                              {
+                                "text": "Mobile Number",
+                                "style": "receipt-table-value"
+                              }
+                            ],
+                          "{{#variable_owners}}[{ \"text\":\"{{name}}\", \"border\":[ true, false, true, true ], \"style\": \"receipt-table\" }, { \"text\":\"{{fatherOrHusbandName}}\", \"border\":[ false, false, true, true ], \"style\": \"receipt-table\" }, { \"text\":\"{{mobileNumber}}\", \"border\":[ false, false, true, true ], \"style\": \"receipt-table\" }]{{/variable_owners}}" 
+                          ]
+                         },  "layout": {}
+              
+              
                     }
 
                        ],
