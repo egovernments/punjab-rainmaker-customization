@@ -918,7 +918,8 @@
         "Please deposit the property tx dues for earlier years also, Ignore if already paid",
         "Citizen for online payments please refer to the link https://mseva.lgpunjab.gov.in/"
 			]
-		  }
+		  }, {
+        "text":"Now log a complaint from WhatsApp, give a missed call on 8750975975 or send a Hi message on WhatsApp to this number", "bold": true, "fontSize": 8, "color": "blue", "decoration": "underline"}
         ]
       }
     ],

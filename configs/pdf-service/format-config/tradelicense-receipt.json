@@ -191,7 +191,7 @@
                 "style": "receipt-table"
               },
               {
-                "text": "Owner Contact",
+                "text": "Payer Contact",
                 "border": [
                   false,
                   true,
@@ -234,7 +234,7 @@
                 "style": "receipt-table"
               },
               {
-                "text": "Owner Name",
+                "text": "Payer Name",
                 "border": [
                   false,
                   false,
@@ -266,7 +266,7 @@
                 "style": "receipt-table-value"
               },
               {
-                "text": "{{payerAddress}}",
+                "text": "{{tradeDoor}} {{tradeBuilding}}  {{tradeStreet}} {{mohalla}}",
                 "border": [
                   false,
                   false,
@@ -757,6 +757,35 @@
            },  "layout": {}
 
 
+      },{
+        "style": "next-noc-table",
+        "table": {
+          "widths": [
+            "55%",
+            "*",
+            "15%"
+          ],
+          "body":             
+            [
+              [
+                {
+                  "text": "Owner Name",
+                  "style": "receipt-table-value"
+                },
+                {
+                  "text": "Father/Husband Name",
+                  "style": "receipt-table-value"
+                },
+                {
+                  "text": "Mobile Number",
+                  "style": "receipt-table-value"
+                }
+              ],
+            "{{#variable_owners}}[{ \"text\":\"{{name}}\", \"border\":[ true, false, true, true ], \"style\": \"receipt-table\" }, { \"text\":\"{{fatherOrHusbandName}}\", \"border\":[ false, false, true, true ], \"style\": \"receipt-table\" }, { \"text\":\"{{mobileNumber}}\", \"border\":[ false, false, true, true ], \"style\": \"receipt-table\" }]{{/variable_owners}}" 
+            ]
+           },  "layout": {}
+
+
       },
       {
         "style": "receipt-approver",
@@ -810,7 +839,9 @@
               "Payment received by Cheque/DD shall be subject to realization",
               "This document is not a proof of property ownership" 
             ]
-          }
+          },
+          {
+            "text":"Now log a complaint from WhatsApp, give a missed call on 8750975975 or send a Hi message on WhatsApp to this number", "bold": true, "fontSize": 8, "color": "blue", "decoration": "underline"}
         ]
       }
     ],
