@@ -32,6 +32,12 @@
                 "type":"selectFromRequestInfo"  
               },
               {
+                "variable": "userName", 
+                "value": {
+                  "path": "$.Payments[0].additionalDetails.collectedBy"
+                } 
+              },
+              {
                 "variable": "payerContact", 
                 "value": {
                   "path": "$.mobileNumber"

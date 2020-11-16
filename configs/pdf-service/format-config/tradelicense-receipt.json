@@ -797,7 +797,7 @@
                 "bold": true
               },
               {
-                "text": "{{user-name}}",
+                "text": "{{userName}}",
                 "bold": false
               }
             ],
