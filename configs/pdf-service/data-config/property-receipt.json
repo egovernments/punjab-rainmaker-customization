@@ -690,6 +690,9 @@
                          {
                           "variable":"arv_rent",
                           "value":"arv"
+                         },{
+                          "variable":"multiplier",
+                          "value":"9"
                          },
                          {
                            "variable":"additional_details",
@@ -697,7 +700,7 @@
                          },
                          {
                                 "variable": "builtup_area",
-                                "formula": "{{builtup_areaAA}} * 9"
+                                "formula": "{{builtup_areaAA}} * {{multiplier}}"
                          }
                           
                        
