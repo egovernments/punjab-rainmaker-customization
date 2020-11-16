@@ -266,7 +266,7 @@
                 "style": "receipt-table-value"
               },
               {
-                "text": "{{tradeDoor || ' '}}  {{tradeBuilding || ''}}   {{tradeStreet || ''}}  {{mohalla || ''}}",
+                "text": "{{tradeDoor || ' '}}  {{tradeBuilding || ''}}   {{tradeStreet || ''}} {{add}} {{mohalla || ''}}",
                 "border": [
                   false,
                   false,
