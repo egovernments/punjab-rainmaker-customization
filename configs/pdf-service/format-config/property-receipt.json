@@ -909,16 +909,16 @@
             "bold": true,
             "style": "pt-disclaimer-value"
           },
-		   {
-			"ol": [
-				"Payment received by cheque/demand draft shall be subject to realization",
-				"This document is not a proof of property ownership and regularization of unauthorised construction",
-        "{{no_signature}}",
-        "Assessment and payment is subjected to verification/scruitiny by competetive authority",
-        "Please deposit the property tx dues for earlier years also, Ignore if already paid",
-        "Citizen for online payments please refer to the link https://mseva.lgpunjab.gov.in/"
-			]
-		  }, {
+       { "text": "1. Payment received by cheque/demand draft shall be subject to realization."},
+       {"text":"2. This document is not a proof of Property Ownership and regularization of unauthorized construction."},
+       {"text":"3. This is a computer generated document, hence requires no signature."},
+       {"text":"4. Assessment & Payment is subject to verification/Scrutiny by competitive authority."},
+       {"text":"5. Please deposit property tax dues for earlier years also. Ignore, if already paid."},
+       {"text":[{"text":"6. Citizen for Online Payments please refer to the link "},
+      {"text": "https://mseva.lgpunjab.gov.in/", "bold": true, "fontSize": 8, "color": "blue", "decoration": "underline"}
+       ]
+      }, 
+      {
         "text":"Now log a complaint from WhatsApp, give a missed call on 8750975975 or send a Hi message on WhatsApp to this number", "bold": true, "fontSize": 8, "color": "blue", "decoration": "underline"}
         ]
       }

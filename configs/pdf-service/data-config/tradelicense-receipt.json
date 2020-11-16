@@ -32,6 +32,12 @@
                 "type":"selectFromRequestInfo"  
               },
               {
+                "variable": "userName", 
+                "value": {
+                  "path": "$.additionalDetails.collectedBy"
+                } 
+              },
+              {
                 "variable": "payerContact", 
                 "value": {
                   "path": "$.mobileNumber"
@@ -41,6 +47,12 @@
                 "variable": "receiptNo", 
                 "value": {
                   "path": "$.paymentDetails[0].receiptNumber"
+                }
+              },
+              {
+                "variable": "add", 
+                "value": {
+                  "path": "$.paymentDetails[0].bill.billDetails[0].additionalDetails.address"
                 }
               },
               {
@@ -490,10 +502,6 @@
                         "variable":"applicationType",
                         "value":"$.Licenses[0].applicationType"
                       },
-                      {
-                        "variable":"localityCode",
-                        "value":"$.tradeLicenseDetail.address.locality.code"
-                      },
                        {            
                         "variable":"penaltyComments",
                         "value":"$.Licenses[0].tradeLicenseDetail.additionalDetail.penaltyComments"
@@ -680,7 +688,7 @@
                     ]
                 },{ 
                   "path": "http://egov-location:8080/egov-location/location/v11/boundarys/_search",
-                  "queryParam": "tenantId=$.tenantId,hierarchyTypeCode=REVENUE,boundaryType=Locality,codes={{localityCode}}",
+                  "queryParam": "tenantId=$.tenantId,hierarchyTypeCode=REVENUE,boundaryType=Locality,codes=$.paymentDetails[0].bill.billDetails[0].additionalDetails.address",
                     "apiRequest": null,
                     "responseMapping":[
                       {             
