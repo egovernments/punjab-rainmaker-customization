@@ -584,7 +584,7 @@
                   },{             
                     "variable":"propertyUsage",
                     "value":"$.Properties[0].usageCategory", 
-		      "localisation": {
+		                "localisation": {
                       "required": true,
                       "prefix": "COMMON_PROPUSGTYPE",
                       "module": "rainmaker-pt"
@@ -651,6 +651,7 @@
                     "format":{                            
                        "type":"string",
                        "scema":[
+                         {"direct":[
                           {
                              "variable":"floor_no",
                              "value":"floorNo",
@@ -678,7 +679,7 @@
                               "module": "rainmaker-pt",
                               "isSubTypeRequired":true
                             }
-			  },
+			                    },
                           {
                             "variable":"occupancy_type",
                             "value":"occupancyType"
@@ -690,19 +691,19 @@
                          {
                           "variable":"arv_rent",
                           "value":"arv"
-                         },{
-                          "variable":"multiplier",
-                          "value":"9"
                          },
                          {
                            "variable":"additional_details",
                            "value":"additionalDetails"
-                         },
-                         {
-                                "variable": "builtup_area",
-                                "formula": "{{builtup_areaAA}} * {{multiplier}}"
                          }
+                        ]},{
+                        "derived":[{
                           
+                            "variable": "builtup_area",
+                            "formula": "{{builtup_areaAA}} * 9"
+                     }
+
+                        ]}
                        
                         ]
                    } 
