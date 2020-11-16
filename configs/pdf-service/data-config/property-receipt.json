@@ -684,25 +684,17 @@
                             "value":"occupancyType"
                          },
                          {
-                          "variable":"builtup_areaAA",
+                          "variable":"builtup_area",
                           "value":"constructionDetail.builtUpArea"
                          },
                          {
                           "variable":"arv_rent",
                           "value":"arv"
-                         },{
-                          "variable":"multiplier",
-                          "value":"9"
                          },
                          {
                            "variable":"additional_details",
                            "value":"additionalDetails"
-                         },
-                         {
-                                "variable": "builtup_area",
-                                "formula": "{{builtup_areaAA}} +{{builtup_areaAA}}+{{builtup_areaAA}}+{{builtup_areaAA}}+{{builtup_areaAA}}+{{builtup_areaAA}}+{{builtup_areaAA}}+{{builtup_areaAA}}+{{builtup_areaAA}}"
-                         }
-                          
+                         }                         
                        
                         ]
                    } 
