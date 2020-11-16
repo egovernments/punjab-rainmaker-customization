@@ -699,8 +699,8 @@
                                 "variable": "builtup_area",
                                 "formula": "{{builtup_areaAA}} * 9"
                          }
-                          ]
-                       }
+                          
+                       
                         ]
                    } 
                 }
