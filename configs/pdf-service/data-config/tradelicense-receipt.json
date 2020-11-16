@@ -34,7 +34,7 @@
               {
                 "variable": "userName", 
                 "value": {
-                  "path": "$.Payments[0].additionalDetails.collectedBy"
+                  "path": "$.additionalDetails.collectedBy"
                 } 
               },
               {
