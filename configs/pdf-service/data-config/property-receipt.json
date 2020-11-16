@@ -684,8 +684,8 @@
                             "value":"occupancyType"
                          },
                          {
-                          "variable":"builtup_area",
-                          "value":"constructionDetail.builtUpArea * 9"
+                          "variable":"builtup_areaAA",
+                          "value":"constructionDetail.builtUpArea"
                          },
                          {
                           "variable":"arv_rent",
@@ -694,7 +694,14 @@
                          {
                            "variable":"additional_details",
                            "value":"additionalDetails"
-                         }
+                         }, {
+                          "derived": [
+                             {
+                                "variable": "builtup_area",
+                                "formula": "{{builtup_areaAA}}*9"
+                             }
+                          ]
+                       }
                         ]
                    } 
                 }
