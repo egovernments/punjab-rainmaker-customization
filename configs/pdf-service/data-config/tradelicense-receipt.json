@@ -490,10 +490,6 @@
                         "variable":"applicationType",
                         "value":"$.Licenses[0].applicationType"
                       },
-                      {
-                        "variable":"localityCode",
-                        "value":"$.tradeLicenseDetail.address.locality.code"
-                      },
                        {            
                         "variable":"penaltyComments",
                         "value":"$.Licenses[0].tradeLicenseDetail.additionalDetail.penaltyComments"
@@ -680,7 +676,7 @@
                     ]
                 },{ 
                   "path": "http://egov-location:8080/egov-location/location/v11/boundarys/_search",
-                  "queryParam": "tenantId=$.tenantId,hierarchyTypeCode=REVENUE,boundaryType=Locality,codes={{localityCode}}",
+                  "queryParam": "tenantId=$.tenantId,hierarchyTypeCode=REVENUE,boundaryType=Locality,codes=$.Payments[0].paymentDetails[0].bill.billDetails[0].additionalDetails.address",
                     "apiRequest": null,
                     "responseMapping":[
                       {             
