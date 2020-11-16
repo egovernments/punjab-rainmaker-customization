@@ -911,12 +911,7 @@
           },
 		   {
         "text": [
-          { "text": "1. Payment received by cheque/demand draft shall be subject to realization. \n"},
-          { "text": "2. This document is not a proof of Property Ownership and regularization of unauthorized construction. \n"},
-          { "text": "3. This is a computer generated document, hence requires no signature.\n"},
-          { "text": "4. Assessment & Payment is subject to verification/Scrutiny by competitive authority. \n"},
-          { "text": "5. Please deposit property tax dues for earlier years also. Ignore, if already paid. \n"},
-          { "text": "6. Citizen for Online Payments please refer to the link "},
+          { "text": "1. Payment received by cheque/demand draft shall be subject to realization. \n2. This document is not a proof of Property Ownership and regularization of unauthorized construction. \n3. This is a computer generated document, hence requires no signature.\n4. Assessment & Payment is subject to verification/Scrutiny by competitive authority. \n5. Please deposit property tax dues for earlier years also. Ignore, if already paid. \n6. Citizen for Online Payments please refer to the link "},
           {"text": "https://mseva.lgpunjab.gov.in/", "bold": true, "fontSize": 8, "color": "blue", "decoration": "underline"}
         ]
       }, 

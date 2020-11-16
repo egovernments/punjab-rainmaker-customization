@@ -266,7 +266,7 @@
                 "style": "receipt-table-value"
               },
               {
-                "text": "{{tradeDoor || ' '}}  {{tradeBuilding || ''}}   {{tradeStreet || ''}} {{mohalla}}",
+                "text": "{{tradeDoor || ' '}}  {{tradeBuilding || ''}}   {{tradeStreet || ''}} {{mohalla}},{{logo-header}}",
                 "border": [
                   false,
                   false,
@@ -804,7 +804,7 @@
             "alignment": "left"
           },
           {
-            "text": [
+            "text": [ 
               {
                 "text": "Authorised Signatory",
                 "bold": true

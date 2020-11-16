@@ -694,12 +694,11 @@
                          {
                            "variable":"additional_details",
                            "value":"additionalDetails"
-                         }, {
-                          "derived": [
-                             {
+                         },
+                         {
                                 "variable": "builtup_area",
-                                "formula": "{{builtup_areaAA}}*9"
-                             }
+                                "formula": "{{builtup_areaAA}} * 9"
+                         }
                           ]
                        }
                         ]
