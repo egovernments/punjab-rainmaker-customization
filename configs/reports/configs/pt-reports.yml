@@ -3224,6 +3224,13 @@ ReportDefinitions:
     wrapper: true
     isMandatory: false
     searchClause: AND concat(to_char((To_timestamp(billd.fromperiod/1000) at time Zone 'Asia/Kolkata'),'YYYY'),'-', to_char((To_timestamp(billd.toperiod/1000) at time Zone 'Asia/Kolkata'),'YY')) = $financialyear
+  - name: paymentMode
+    label: Payment Mode
+    type: singlevaluelist
+    pattern: 'list://CARD:Card,CASH:Cash,CHEQUE:Cheque,DD:DD,OFFLINE_NEFT:NEFT,OFFLINE_RTGS:RTGS,ONLINE:Online,POSTAL_ORDER:PostalOrder'
+    source: pt
+    isMandatory: false
+    searchClause: AND payment.paymentmode = $paymentMode
   - name: localityArray
     label: reports.pt.zoneList
     type: boundarylist
