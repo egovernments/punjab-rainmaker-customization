@@ -238,7 +238,7 @@
               "style": "receipt-table"
             },
             {
-              "text" : " ",
+              "text" : "Payment Status",
               "border": [
                 false,
                 false,
@@ -248,7 +248,7 @@
               "style": "receipt-table-value"
             },
             {
-              "text" : " ",
+              "text" : "{{paymentStatus}}",
               "border": [
                 false,
                 false,
@@ -445,7 +445,133 @@
         },
         "layout": {}
       },
-     
+      {
+        "text":"PAYABLE AMOUNT",
+        "style":"block-head"
+      },
+	    {
+        "style": "next-noc-table",
+        "table": {
+          "widths": [
+
+            "9%","8%","6%","7%","7%","7%","9%","9%","8%","8%","7%","7%","*"
+          ],
+          "body": [
+            
+			[
+              {
+                "text": "Property Tax",
+                "style": "amounts"
+              },
+			  {
+                "text": "Fire Cess",
+                "style": "amounts"
+              },
+			  {
+                "text": "Cancer Cess",
+                "style": "amounts"
+              },
+			  {
+                "text": "Penalty",
+                "style": "amounts"
+              },
+			  {
+                "text": "Rebate",
+                "style": "amounts"
+              },
+			  {
+                "text": "Interest",
+                "style": "amounts"
+              },
+			  {
+                "text": "Usage Exemption",
+                "style": "amounts"
+              },
+			  {
+                "text": "Special Category Exemption",
+                "style": "amounts"
+              },
+              {
+                "text": "Adhoc Penalty",
+                "style": "amounts"
+              },
+              {
+                "text": "Adhoc Rebate",
+                "style": "amounts"
+              },{
+                "text": "Arrears",
+                "style": "amounts"
+              },
+			  {
+                "text": "Round Off",
+                "style": "amounts"
+              },
+			  {
+                "text": "Total",
+                "style": "amounts"
+              }
+			  
+			],
+			
+			[
+              {
+                "text": "{{PropertyTax}}",
+                "style": "amountss"
+              },
+			  {
+                "text": "{{FireCess}}",
+                "style": "amountss"
+              },
+			  {
+                "text": "{{CancerCess}}",
+                "style": "amountss"
+              },
+			  {
+                "text": "{{Penalty}}",
+                "style": "amountss"
+              },
+			  {
+                "text": "{{Rebate}}",
+                "style": "amountss"
+              },
+			  {
+                "text": "{{Interest}}",
+                "style": "amountss"
+              },
+			  {
+                "text": "{{UsageExemption}}",
+                "style": "amountss"
+              },
+			  {
+                "text": "{{SpecialCategoryExemption}}",
+                "style": "amountss"
+              },
+              {
+                "text": "{{adhocPenalty}}",
+                "style": "amountss"
+              },
+              	  {
+                "text": "{{adhocRebate}}",
+                "style": "amountss"
+              },{
+                "text": "{{Arrears}}",
+                "style": "amountss"
+              },
+			  {
+                "text": "{{RoundOff}}",
+                "style": "amountss"
+              },
+			  {
+                "text": "{{dueAmount}}",
+                "style": "amountss"
+              }
+			  
+			]
+			  
+		]
+	  },
+	  "layout":{}
+    },
       {
         "text":"PAYMENT INFORMATION",
         "style":"block-head"
@@ -576,7 +702,7 @@
                 "style": "receipt-table-value"
               },
               {
-                "text": "₹ {{paymentMode}}",
+                "text": "{{paymentMode}}",
                 "border": [
                   false,
                   false,
@@ -674,133 +800,6 @@
         },
         "layout": {}
       },
-      {
-        "text":"PAID AMOUNT",
-        "style":"block-head"
-      },
-	    {
-        "style": "next-noc-table",
-        "table": {
-          "widths": [
-
-            "9%","8%","6%","7%","7%","7%","9%","9%","8%","8%","7%","7%","*"
-          ],
-          "body": [
-            
-			[
-              {
-                "text": "Property Tax",
-                "style": "amounts"
-              },
-			  {
-                "text": "Fire Cess",
-                "style": "amounts"
-              },
-			  {
-                "text": "Cancer Cess",
-                "style": "amounts"
-              },
-			  {
-                "text": "Penalty",
-                "style": "amounts"
-              },
-			  {
-                "text": "Rebate",
-                "style": "amounts"
-              },
-			  {
-                "text": "Interest",
-                "style": "amounts"
-              },
-			  {
-                "text": "Usage Exemption",
-                "style": "amounts"
-              },
-			  {
-                "text": "Special Category Exemption",
-                "style": "amounts"
-              },
-              {
-                "text": "Adhoc Penalty",
-                "style": "amounts"
-              },
-              {
-                "text": "Adhoc Rebate",
-                "style": "amounts"
-              },{
-                "text": "Arrears",
-                "style": "amounts"
-              },
-			  {
-                "text": "Round Off",
-                "style": "amounts"
-              },
-			  {
-                "text": "Total",
-                "style": "amounts"
-              }
-			  
-			],
-			
-			[
-              {
-                "text": "{{PropertyTax}}",
-                "style": "amounts"
-              },
-			  {
-                "text": "{{FireCess}}",
-                "style": "amounts"
-              },
-			  {
-                "text": "{{CancerCess}}",
-                "style": "amounts"
-              },
-			  {
-                "text": "{{Penalty}}",
-                "style": "amounts"
-              },
-			  {
-                "text": "{{Rebate}}",
-                "style": "amounts"
-              },
-			  {
-                "text": "{{Interest}}",
-                "style": "amounts"
-              },
-			  {
-                "text": "{{UsageExemption}}",
-                "style": "amounts"
-              },
-			  {
-                "text": "{{SpecialCategoryExemption}}",
-                "style": "amounts"
-              },
-              {
-                "text": "{{adhocPenalty}}",
-                "style": "amounts"
-              },
-              	  {
-                "text": "{{adhocRebate}}",
-                "style": "amounts"
-              },{
-                "text": "{{Arrears}}",
-                "style": "amounts"
-              },
-			  {
-                "text": "{{RoundOff}}",
-                "style": "amounts"
-              },
-			  {
-                "text": "{{paidAmount}}",
-                "style": "amounts"
-              }
-			  
-			]
-			  
-		]
-	  },
-	  "layout":{}
-    },
     {
        "text":"OWNERSHIP INFORMATION",
        "style":"block-head"
@@ -838,22 +837,22 @@
               [
                 {
                   "text": "Floor",
-                  "style": "receipt-table-value"
+                  "style": "receipt-table-value22"
                 },{
                   "text": "Usage",
-                  "style": "receipt-table-value"
+                  "style": "receipt-table-value22"
                 },
                 {
                   "text": "Sub Usage",
-                  "style": "receipt-table-value"
+                  "style": "receipt-table-value22"
                 },
                 {
                   "text": "Occupancy",
-                  "style": "receipt-table-value"
+                  "style": "receipt-table-value22"
                 },
                {
-                  "text": "Built Area (Sq. Feet) / Total Annual Rent",
-                  "style": "receipt-table-value"
+                  "text": "Built Area (Sq. Yard) / Total Annual Rent",
+                  "style": "receipt-table-value22"
                 }
               ],
               "{{#var_floors}}[{\"text\":\"{{floor_no}}\",\"style\":\"receipt-table\"},{\"text\":\"{{usage_category}}\",\"style\":\"receipt-table\"},{\"text\":\"{{sub_usage_category}}\",\"style\":\"receipt-table\"},{\"text\":\"{{occupancy_type}}\",\"style\":\"receipt-table\"},{\"text\":\"{{builtup_area}}/{{arv_rent}}\",\"style\":\"receipt-table\"}]{{/var_floors}}"
@@ -910,16 +909,17 @@
             "bold": true,
             "style": "pt-disclaimer-value"
           },
-		   {
-			"ol": [
-				"Payment received by cheque/demand draft shall be subject to realization",
-				"This document is not a proof of property ownership and regularization of unauthorised construction",
-        "{{no_signature}}",
-        "Assessment and payment is subjected to verification/scruitiny by competetive authority",
-        "Please deposit the property tx dues for earlier years also, Ignore if already paid",
-        "Citizen for online payments please refer to the link https://mseva.lgpunjab.gov.in/"
-			]
-		  }
+       { "text": "1. Payment received by cheque/demand draft shall be subject to realization."},
+       {"text":"2. This document is not a proof of Property Ownership and regularization of unauthorized construction."},
+       {"text":"3. This is a computer generated document, hence requires no signature."},
+       {"text":"4. Assessment & Payment is subject to verification/Scrutiny by competitive authority."},
+       {"text":"5. Please deposit property tax dues for earlier years also. Ignore, if already paid."},
+       {"text":[{"text":"6. Citizen for Online Payments please refer to the link "},
+      {"text": "https://mseva.lgpunjab.gov.in/", "bold": true, "fontSize": 8, "color": "blue", "decoration": "underline"}
+       ]
+      }, 
+      {
+        "text":"Now log a complaint from WhatsApp, give a missed call on 8750975975 or send a Hi message on WhatsApp to this number", "bold": true, "fontSize": 8, "color": "blue", "decoration": "underline"}
         ]
       }
     ],
@@ -1001,6 +1001,19 @@
         0
       ]
     },
+    "receipt-table-value22": {
+      "color": "#000000",
+      "bold": true,
+      "fontSize": 7,
+      "fontWeight": 500,
+      "backgroundColor": "#D3D3D3",
+      "margin": [
+        8,
+        0,
+        0,
+        0
+      ]
+    },
     "receipt-table": {
       "color": "#000000",
       "bold": false,
@@ -1056,7 +1069,12 @@
      },
 	 "amounts":
 	 {
-	     "fontSize": 8
+       "fontSize": 8,
+       "backgroundColor": "#D3D3D3"
+   }, 
+   "amountss":
+	 {
+       "fontSize": 8
 	 }
    }
   }
