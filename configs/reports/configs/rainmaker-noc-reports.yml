@@ -218,8 +218,9 @@ ReportDefinitions:
         INNER JOIN egcl_paymentdetail ON (egcl_paymentdetail.billid=bill.id AND egcl_paymentdetail.businessservice='FIRENOC')
         INNER JOIN egcl_payment on egcl_payment.id=egcl_paymentdetail.paymentid
         LEFT OUTER JOIN message on code=concat('FIRENOC_BUILDINGTYPE_',UPPER(REGEXP_REPLACE(usagetype,'\..*','')))  
-        INNER JOIN eg_fn_address as fad on fad.firenocdetailsuuid=fdet.uuid and module='rainmaker-noc' where 1=1
-        and egcl_payment.tenantid!='pb.testing' and fad.areatype!='Rural'
+        INNER JOIN eg_fn_address as fad on fad.firenocdetailsuuid=fdet.uuid and module='rainmaker-noc' 
+        where 1=1
+        and egcl_payment.tenantid!='pb.testing' and fad.areatype='Urban' and egcl_payment.paymentstatus!='CANCELLED'
     groupby: GROUP BY (localisedmessage)
     orderby: ORDER BY localisedmessage
 
@@ -258,7 +259,7 @@ ReportDefinitions:
         source: noc
         wrapper: true
         isMandatory: false
-        searchClause: AND fnoc.tenantId IN ($ulb)
+        searchClause: AND fnoc.tenantid IN ($ulb)
     query: | 
       select 
         COALESCE(message,state) application_status,
@@ -268,7 +269,7 @@ ReportDefinitions:
       inner join (SELECT DISTINCT ON (businessid) * FROM eg_wf_processinstance_v2 ORDER BY businessid,createdtime desc) pinstance on pinstance.businessid=fdet.applicationnumber 
       inner join eg_wf_state_v2 wfstate on pinstance.status=wfstate.uuid 
       left outer join message on code=concat('WF_FIRENOC_',UPPER(state)) and module='rainmaker-noc'
-      where 1=1
+      where 1=1 and fnoc.tenantid!='pb.testing'
     groupby: GROUP BY application_status
     orderby: ORDER BY application_status
 
@@ -313,8 +314,15 @@ ReportDefinitions:
         source: noc
         wrapper: true
         isMandatory: false
-        searchClause: AND fnoc.tenantId IN ($ulb)
-    query: select channel, count (*) number_of_applications,round((count (*)::decimal/(select count(*) from eg_fn_firenoc fnoc inner join eg_fn_firenocdetail fdet on fdet.firenocuuid=fnoc.uuid))*100,2) percentage from eg_fn_firenoc fnoc inner join eg_fn_firenocdetail fdet on fdet.firenocuuid=fnoc.uuid
+        searchClause: AND fnoc.tenantid IN ($ulb)
+    query: |
+        select 
+          channel, 
+          count (*) number_of_applications,
+          round((count (*)::decimal/(select count(*) from eg_fn_firenoc fnoc inner join eg_fn_firenocdetail fdet on fdet.firenocuuid=fnoc.uuid))*100,2) percentage 
+        from eg_fn_firenoc fnoc 
+        inner join eg_fn_firenocdetail fdet on fdet.firenocuuid=fnoc.uuid
+        where 1=1 and fnoc.tenantid!='pb.testing'
     groupby: GROUP BY channel
     orderby: ORDER BY channel 
     
@@ -397,8 +405,8 @@ ReportDefinitions:
         INNER JOIN egcl_paymentdetail ON (egcl_paymentdetail.billid=bill.id AND egcl_paymentdetail.businessservice='FIRENOC')
         INNER JOIN egcl_payment on egcl_payment.id=egcl_paymentdetail.paymentid
         LEFT OUTER JOIN message on code=concat('FIRENOC_BUILDINGTYPE_',UPPER(REGEXP_REPLACE(usagetype,'\..*','')))  
-        INNER JOIN eg_fn_address as fad on fad.firenocdetailsuuid=fdet.uuid and module='rainmaker-noc' where 1=1
-        and egcl_payment.tenantid!='pb.testing' and fad.areatype!='Urban'
+        INNER JOIN eg_fn_address as fad on fad.firenocdetailsuuid=fdet.uuid and module='rainmaker-noc' 
+        where 1=1  and egcl_payment.tenantid!='pb.testing' and fad.areatype='Rural' and egcl_payment.paymentstatus!='CANCELLED'
     groupby: GROUP BY (localisedmessage),fad.subdistrict
     orderby: ORDER BY localisedmessage
 
@@ -449,7 +457,18 @@ ReportDefinitions:
         wrapper: true
         isMandatory: false
         searchClause: AND fad.city IN ($district)  
-    query: select fad.subdistrict as subdistrict,(select COALESCE((select message from message where code=concat('FIRENOC_FIRESTATIONS_',UPPER(REGEXP_REPLACE(firestationid,'\..*','')))  limit 1), firestationid)) as firestation,COALESCE(message,state) application_status,count(*) number_of_application from eg_fn_firenoc fnoc inner join eg_fn_firenocdetail fdet on fdet.firenocuuid=fnoc.uuid inner join (SELECT DISTINCT ON (businessid) * FROM eg_wf_processinstance_v2 ORDER BY businessid,createdtime desc) pinstance on pinstance.businessid=fdet.applicationnumber inner join eg_wf_state_v2 wfstate on pinstance.status=wfstate.uuid left outer join message on code=concat('WF_FIRENOC_',UPPER(state)) and module='rainmaker-noc' inner join eg_fn_address as fad on fad.firenocdetailsuuid=fdet.uuid where 1=1  AND fad.subdistrict NOT LIKE 'pb.%'
+    query: |
+        select 
+          fad.subdistrict as subdistrict,
+          (select COALESCE((select message from message where code=concat('FIRENOC_FIRESTATIONS_',UPPER(REGEXP_REPLACE(firestationid,'\..*','')))  limit 1), firestationid)) as firestation,
+          COALESCE(message,state) application_status,
+          count(*) number_of_application 
+        from eg_fn_firenoc fnoc 
+        inner join eg_fn_firenocdetail fdet on fdet.firenocuuid=fnoc.uuid 
+        inner join (SELECT DISTINCT ON (businessid) * FROM eg_wf_processinstance_v2 ORDER BY businessid,createdtime desc) pinstance on pinstance.businessid=fdet.applicationnumber 
+        inner join eg_wf_state_v2 wfstate on pinstance.status=wfstate.uuid left outer join message on code=concat('WF_FIRENOC_',UPPER(state)) and module='rainmaker-noc' 
+        inner join eg_fn_address as fad on fad.firenocdetailsuuid=fdet.uuid 
+        where 1=1  AND fad.subdistrict NOT LIKE 'pb.%'
     groupby: GROUP BY (application_status,subdistrict,firestation)
     orderby: ORDER BY application_status 
     
@@ -513,7 +532,8 @@ ReportDefinitions:
           round((count (*)::decimal/(select count(*) from eg_fn_firenoc fnoc inner join eg_fn_firenocdetail fdet on fdet.firenocuuid=fnoc.uuid))*100,2) percentage 
         from eg_fn_firenoc fnoc 
         inner join eg_fn_firenocdetail fdet on fdet.firenocuuid=fnoc.uuid 
-        inner join eg_fn_address as fad on fad.firenocdetailsuuid=fdet.uuid Where 1=1 AND fad.subdistrict NOT LIKE 'pb.%'
+        inner join eg_fn_address as fad on fad.firenocdetailsuuid=fdet.uuid 
+        Where 1=1 AND fad.subdistrict NOT LIKE 'pb.%'
     groupby: GROUP BY (channel,subdistrict,firestation)
     orderby: ORDER BY channel
 
