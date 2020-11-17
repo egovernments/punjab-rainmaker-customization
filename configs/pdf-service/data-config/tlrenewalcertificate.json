@@ -209,7 +209,38 @@
           } 
        
       },
-
+      {
+        "variable": "variable_owners",                        
+        "value": "$.Licenses[0].tradeLicenseDetail.owners[?(@.active== true && @.userActive== true)]",                       
+         "type":"array",
+         "format":{                            
+            "type":"string",
+            "scema":[
+              {
+                "variable": "name",
+                "value": "name",
+                "type":"string"
+              },
+              {
+                "variable": "fatherOrHusbandName",
+                "value": "fatherOrHusbandName",
+                "type":"string"
+              },
+              
+              {
+                  "variable": "permanentAddress",
+                  "value": "permanentAddress",
+                  "type":"string"
+              },
+              {
+                  "variable": "mobileNumber",
+                  "value": "mobileNumber",
+                  "type":"string"
+              }
+           
+            ]
+        } 
+     },
               {
                   "variable": "accessories",
                   "value": {
