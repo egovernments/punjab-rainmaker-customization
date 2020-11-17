@@ -210,7 +210,7 @@
        
       },  {
         "variable": "variable_owners",                        
-        "value": "$.Licenses[0].tradeLicenseDetail.owners[?(@.active== true && @.userActive== true)]",                       
+        "value": "$.tradeLicenseDetail.owners[?(@.active== true && @.userActive== true)]",                       
          "type":"array",
          "format":{                            
             "type":"string",
@@ -640,7 +640,7 @@
         {
           "externalAPI": [     
             { 
-              "path": "http://egov-mdms-service:8080/egov-mdms-service/v1/_get",
+              "path": "http://localhost:8079/egov-mdms-service/v1/_get",
               "queryParam": "moduleName=tenant&masterName=tenants&tenantId=pb&filter=%5B?(@.code=='{$.tenantId}')%5D",
                 "apiRequest": null,
                 "responseMapping":[
