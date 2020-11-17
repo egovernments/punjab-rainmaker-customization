@@ -2,10 +2,10 @@ ServiceMaps:
  serviceName: Property Tax - rainmaker
  version: 1.0.0
  mappings:
-  - topic: save-property-registry
+  - topic: save-property-registry-batch
     configKey: INDEX
     indexes:
-      - name: property-services
+      - name: property-services-test
         type: general
         id: $.propertyId,$.tenantId
         jsonPath: $.Property
@@ -577,10 +577,10 @@ ServiceMaps:
             - inJsonPath: $.MdmsRes.tenant.tenants
               outJsonPath: $.Data.tenantData
               
-  - topic: save-pt-assessment
+  - topic: save-pt-assessment-batch
     configKey: INDEX
     indexes:
-      - name: property-assessments
+      - name: property-assessments-test
         type: general
         id: $.assessmentNumber, $.tenantId
         jsonPath: $.Assessment
