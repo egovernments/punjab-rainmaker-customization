@@ -208,7 +208,8 @@
               ]
           } 
        
-      },  {
+      },  
+      {
         "variable": "variable_owners",                        
         "value": "$.tradeLicenseDetail.owners[?(@.active== true && @.userActive== true)]",                       
          "type":"array",
@@ -217,23 +218,23 @@
             "scema":[
               {
                 "variable": "name",
-                "value": "name",
+                "value": {"path":"name"},
                 "type":"string"
               },
               {
                 "variable": "fatherOrHusbandName",
-                "value": "fatherOrHusbandName",
+                "value": {"path": "fatherOrHusbandName"},
                 "type":"string"
               },
               
               {
                   "variable": "permanentAddress",
-                  "value": "permanentAddress",
+                  "value": {"path": "permanentAddress"},
                   "type":"string"
               },
               {
                   "variable": "mobileNumber",
-                  "value": "mobileNumber",
+                  "value": {"path":"mobileNumber"},
                   "type":"string"
               }
            
