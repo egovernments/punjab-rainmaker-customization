@@ -1344,8 +1344,8 @@ ReportDefinitions:
       egcl_paymentdetail.receiptnumber,
       tradeTypeName,
       acc, 
-      tlown.name,
-      tlown.mobilenumber,
+      split_part(tlown.name,',',1) as name,  -- showing first name as decryption service not able to decrypt multiple comma seperated encrypted names
+      split_part(tlown.mobilenumber,',',1) as mobilenumber,  -- similary showing first mobilenumber only
       payment.ifsccode as bankid, -- ih.bankid,
       payment.ifsccode as branchname, --ih.branchname,
       payment.transactionnumber as transactionnumber, -- ih.transactionnumber as transactionnumber,
@@ -1494,8 +1494,8 @@ ReportDefinitions:
       to_char((To_timestamp(paydetail.receiptdate / 1000) at time Zone 'Asia/Kolkata'), 'DD/MM/YYYY') as receiptIssueDate , 
       paydetail.receiptnumber,
       tradeTypeName,
-      acc, 
-      name,
+      acc,
+      split_part(name,',',1) as name,  -- showing first name as decryption service not able to decrypt multiple encrypted values seperate by comma
       payment.mobilenumber,
       payment.ifsccode as bankid, -- ih.bankid,
       payment.ifsccode as branchname, --ih.branchname,
@@ -1638,7 +1638,7 @@ ReportDefinitions:
       paydetail.receiptnumber,
       tradeTypeName,
       acc, 
-      name,
+      split_part(name,',',1) as name,  -- showing first name as decryption service not able to decrypt multiple encrypted values seperate by comma
       payment.mobilenumber,
       payment.ifsccode as bankid, -- ih.bankid,
       payment.ifsccode as branchname, --ih.branchname,
@@ -2192,8 +2192,8 @@ ReportDefinitions:
       tl.licensenumber,
       tl.tradeName,
       (split_part(tl.tenantId, '.', 2)) as tenantId,
-      ownername, 
-      mobilenumber,
+      split_part(ownername,',',1) as ownername, 
+      split_part(mobilenumber,',',1) as mobilenumber,
       tla.locality,
       to_char((To_timestamp(applicationdate / 1000) at time Zone 'Asia/Kolkata'), 'DD/MM/YYYY') as applicationDate,
       tl.status
@@ -2403,8 +2403,8 @@ ReportDefinitions:
       oldlicensenumber,
       financialyear,
       tradename,
-      name as ownername,
-      mobilenumber
+      split_part(name,',',1) as ownername,
+      split_part(mobilenumber,',',1) as mobilenumber
     from eg_tl_tradelicense tl
     INNER JOIN eg_tl_tradelicensedetail tld ON tld.tradelicenseid = tl.id 
     INNER JOIN (
@@ -2472,8 +2472,8 @@ ReportDefinitions:
       oldlicensenumber,
       financialyear,
       tradename,
-      name as ownername,
-      mobilenumber
+      split_part(name,',',1) as ownername,
+      split_part(mobilenumber,',',1) as mobilenumber
     from eg_tl_tradelicense tl
     INNER JOIN eg_tl_tradelicensedetail tld ON tld.tradelicenseid = tl.id 
     INNER JOIN (

@@ -3874,27 +3874,26 @@ ReportDefinitions:
   query: |
       -- Use CTE to force query plan, compute & use CTE later
       SELECT
-        concat(to_char((To_timestamp(billd.fromperiod/1000) at time Zone 'Asia/Kolkata'),'YYYY'),'-',to_char((To_timestamp(billd.toperiod/1000) at time Zone 'Asia/Kolkata'),'YYYY'))  AS  "financialyear",
-        sum(case when pt.usagecategory='RESIDENTIAL' then pd.amountpaid else 0 end) as "residential",
-        sum(case when pt.usagecategory='RESIDENTIAL' then 1 else 0 end) as "countresidential",
-        sum(case when pt.usagecategory like 'NONRESIDENTIAL%' then pd.amountpaid else 0 end) as "nonresidential",
+        concat(to_char((To_timestamp(billd.fromperiod/1000) at time Zone 'Asia/Kolkata'),'YYYY'),'-',to_char((To_timestamp(billd.toperiod/1000) at time Zone 'Asia/Kolkata'),'YYYY')) AS "financialyear",
+        sum(case when split_part(pt.usagecategory, '.', 1)='RESIDENTIAL' then payment.totalamountpaid else 0 end) as "residential",
+        sum(case when split_part(pt.usagecategory, '.', 1)='RESIDENTIAL' then 1 else 0 end) as "countresidential",
+        sum(case when split_part(pt.usagecategory, '.', 1) = 'NONRESIDENTIAL' then payment.totalamountpaid else 0 end) as "nonresidential",
         sum(case when pt.usagecategory like 'NONRESIDENTIAL%' then 1 else 0 end) as "countnonresidential",
-        sum(case when pt.usagecategory='MIXED' then pd.amountpaid else 0 end) as "mixed",
+        sum(case when pt.usagecategory='MIXED' then payment.totalamountpaid else 0 end) as "mixed",
         sum(case when pt.usagecategory='MIXED' then 1 else 0 end) as "countmixed",
-        sum(pd.amountpaid) as totalamount,
-        count(pd.amountpaid) as totalcount,
-        sum(case when payment.paymentmode='ONLINE' then pd.amountpaid else 0 end) as "online",
-        sum(case when payment.paymentmode='CASH' then pd.amountpaid else 0 end) as "cash",
-        sum(case when payment.paymentmode='CHEQUE' then pd.amountpaid else 0 end) as "cheque",
-        sum(case when payment.paymentmode='DD' then pd.amountpaid else 0 end) as "dd"
+        sum(payment.totalamountpaid) as totalamount,
+        count(payment.totalamountpaid) as totalcount,
+        sum(case when payment.paymentmode='ONLINE' then payment.totalamountpaid else 0 end) as "online",
+        sum(case when payment.paymentmode='CASH' then payment.totalamountpaid else 0 end) as "cash",
+        sum(case when payment.paymentmode='CHEQUE' then payment.totalamountpaid else 0 end) as "cheque",
+        sum(case when payment.paymentmode='DD' then payment.totalamountpaid else 0 end) as "dd"
       FROM egcl_paymentdetail AS pd
       join egcl_payment as payment on payment.id = pd.paymentid
       join egcl_bill as bill on bill.id = pd.billid
       join egcl_billdetial as billd on billd.billid = bill.id
-      JOIN eg_pt_property pt ON pt.propertyid  = bill.consumercode
-      JOIN eg_pt_address pt_addr ON pt.id = pt_addr.propertyid
+      JOIN eg_pt_property pt ON pt.propertyid = bill.consumercode
       LEFT OUTER JOIN eg_user ON eg_user.id = pd.createdby::INTEGER
-      WHERE pd.tenantid = $tenantid and payment.paymentstatus != 'CANCELLED' and pt.status!='INACTIVE' 
+      WHERE pd.tenantid = $tenantid and payment.paymentstatus != 'CANCELLED' and pt.status!='INACTIVE'
   groupby: GROUP BY financialyear
   orderby: ORDER BY financialyear  
 
