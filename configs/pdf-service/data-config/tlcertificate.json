@@ -218,23 +218,23 @@
             "scema":[
               {
                 "variable": "name",
-                "value": {"path":"name"},
+                "value": "name",
                 "type":"string"
               },
               {
                 "variable": "fatherOrHusbandName",
-                "value": {"path": "fatherOrHusbandName"},
+                "value": "fatherOrHusbandName",
                 "type":"string"
               },
               
               {
                   "variable": "permanentAddress",
-                  "value": {"path": "permanentAddress"},
+                  "value": "permanentAddress",
                   "type":"string"
               },
               {
                   "variable": "mobileNumber",
-                  "value": {"path":"mobileNumber"},
+                  "value": "mobileNumber",
                   "type":"string"
               }
            
