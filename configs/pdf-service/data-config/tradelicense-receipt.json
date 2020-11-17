@@ -32,6 +32,12 @@
                 "type":"selectFromRequestInfo"  
               },
               {
+                "variable": "userName", 
+                "value": {
+                  "path": "$.additionalDetails.collectedBy"
+                } 
+              },
+              {
                 "variable": "payerContact", 
                 "value": {
                   "path": "$.mobileNumber"
@@ -41,6 +47,12 @@
                 "variable": "receiptNo", 
                 "value": {
                   "path": "$.paymentDetails[0].receiptNumber"
+                }
+              },
+              {
+                "variable": "add", 
+                "value": {
+                  "path": "$.paymentDetails[0].bill.billDetails[0].additionalDetails.address"
                 }
               },
               {
@@ -158,7 +170,7 @@
               {
                 "variable": "dueAmount", 
                 "value": {
-                  "path": "$.paymentDetails[0].totalDue"
+                  "path": "$.paymentDetails[0].bill.totalAmount"
                 }
               },
               {
@@ -513,6 +525,15 @@
                       {            
                         "variable":"tradeName",
                         "value":"$.Licenses[0].tradeName"
+                      },{            
+                        "variable":"tradeBuilding",
+                        "value":"$.Licenses[0].tradeLicenseDetail.address.buildingName"
+                      },{            
+                        "variable":"tradeDoor",
+                        "value":"$.Licenses[0].tradeLicenseDetail.address.doorNo"
+                      },{            
+                        "variable":"tradeStreet",
+                        "value":"$.Licenses[0].tradeLicenseDetail.address.street"
                       },
                       {
                         "variable":"adhocRebateReason",
@@ -589,7 +610,38 @@
                           ]
                       } 
                    },
-
+                   {
+                    "variable": "variable_owners",                        
+                    "value": "$.Licenses[0].tradeLicenseDetail.owners[?(@.active== true && @.userActive== true)]",                       
+                     "type":"array",
+                     "format":{                            
+                        "type":"string",
+                        "scema":[
+                          {
+                            "variable": "name",
+                            "value": "name",
+                            "type":"string"
+                          },
+                          {
+                            "variable": "fatherOrHusbandName",
+                            "value": "fatherOrHusbandName",
+                            "type":"string"
+                          },
+                          
+                          {
+                              "variable": "permanentAddress",
+                              "value": "permanentAddress",
+                              "type":"string"
+                          },
+                          {
+                              "variable": "mobileNumber",
+                              "value": "mobileNumber",
+                              "type":"string"
+                          }
+                       
+                        ]
+                    } 
+                 },
                     {
                     "variable": "variable13",                        
                     "value": "$.Licenses[0].tradeLicenseDetail.tradeUnits.*",                       
@@ -633,6 +685,16 @@
                         ]
                     } 
                  }
+                    ]
+                },{ 
+                  "path": "http://egov-location:8080/egov-location/location/v11/boundarys/_search",
+                  "queryParam": "tenantId=$.tenantId,hierarchyTypeCode=REVENUE,boundaryType=Locality,codes=$.paymentDetails[0].bill.billDetails[0].additionalDetails.address",
+                    "apiRequest": null,
+                    "responseMapping":[
+                      {             
+                        "variable":"mohalla",
+                        "value":"$.TenantBoundary[0].boundary[0].name"
+                      }
                     ]
                 }
               ]
