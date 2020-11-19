@@ -824,9 +824,13 @@ serviceMaps:
     queryMaps:
 
 
-    - query: UPDATE eg_tl_tradelicensedetail SET adhocExemption = ?,adhocPenalty = ?,adhocExemptionReason = ?,adhocPenaltyReason = ?,lastmodifiedby = ?,  lastmodifiedtime = ? WHERE id = ?;
+    - query: UPDATE eg_tl_tradelicensedetail SET additionaldetail = ?, adhocExemption = ?,adhocPenalty = ?,adhocExemptionReason = ?,adhocPenaltyReason = ?,lastmodifiedby = ?,  lastmodifiedtime = ? WHERE id = ?;
       basePath: Licenses.*.tradeLicenseDetail
       jsonMaps:
+
+      - jsonPath: $.Licenses.*.tradeLicenseDetail.additionalDetail
+        type: JSON
+        dbType: JSONB
 
       - jsonPath: $.Licenses.*.tradeLicenseDetail.adhocExemption
 
