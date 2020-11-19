@@ -442,7 +442,7 @@
                           false
                         ]
                     }, {
-                      "style": "next-noc-table",
+                      "style": "noc-head2",
                       "table": {
                         "widths": [
                           "50%",
