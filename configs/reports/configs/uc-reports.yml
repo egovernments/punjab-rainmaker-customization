@@ -1146,7 +1146,7 @@ ReportDefinitions:
           (case when paymentmode like 'DD' or paymentmode like 'CHEQUE' then To_char((To_timestamp(payment.transactiondate / 1000) at time Zone 'Asia/Kolkata'), 'DD/MM/YYYY') else '' end) as ddchequedate,
           'System' as collectiontype,
           eg_user.name as collectorname,
-          billd.additionaldetails->>'comment' as remarks
+          payment.additionaldetails->>'comment' as remarks
         FROM egcl_payment AS payment
         JOIN egcl_paymentdetail as paydetail on paydetail.paymentid=payment.id
         JOIN receipt_breakup ON paydetail.billid = receipt_breakup.bill_id
@@ -1676,7 +1676,7 @@ ReportDefinitions:
           paydetail.businessservice as servicecategory,
           payment.totalamountpaid as amount, 
           (case when eg_user.name is null then '721995|Jit/FZQHkmU8SNc06DKOhEnWXXfadQ==' else eg_user.name end) as collectorname,
-          billd.additionaldetails->>'comment' as remarks
+          payment.additionaldetails->>'comment' as remarks
         FROM egcl_payment AS payment
         INNER JOIN egcl_paymentdetail as paydetail on paydetail.paymentid=payment.id
         INNER JOIN egcl_billdetial as billd on billd.billid=paydetail.billid
