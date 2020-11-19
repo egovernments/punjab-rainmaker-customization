@@ -6,7 +6,7 @@ ServiceMaps:
     configKey: INDEX
     indexes:
     - name: paymentsindex-v1
-      type: payments
+      type: general
       id: $.id
       isBulk: false
       timeStampField: $.auditDetails.createdTime
