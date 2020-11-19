@@ -104,7 +104,7 @@
               {
                 "variable": "oldComments", 
                 "value": {
-                   "path": "$.additionalDetails.comments"
+                   "path": "$.additionalDetails.comment"
                 }
               },
               {
