@@ -92,7 +92,7 @@
               {
                 "variable": "payerAddress", 
                 "value": {
-                   "path": "$.paymentDetails[0].bill.billDetails[0].additionalDetails.address || $.payerAddress"
+                   "path": "$.paymentDetails[0].bill.billDetails[0].additionalDetails.address"
                 }
               },
               {
@@ -110,7 +110,7 @@
               {
                 "variable": "comments", 
                 "value": {
-                  "path": "$.paymentDetails[0].bill.billDetails[0].additionalDetails.comment || $.additionalDetails.comments"
+                  "path": "$.paymentDetails[0].bill.billDetails[0].additionalDetails.comment"
                 }
               },
               {
