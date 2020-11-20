@@ -967,7 +967,7 @@
                 true,
                 false,
                 false,
-                false
+                true
               ],
               "style": "receipt-table-value"
             },
@@ -977,7 +977,7 @@
                 false,
                 false,
                 false,
-                false
+                true
               ],
               "style": "receipt-table"
             },
@@ -987,7 +987,7 @@
                 false,
                 false,
                 false,
-                false
+                true
               ],
               "style": "receipt-table-value"
             },
@@ -997,7 +997,7 @@
                 false,
                 false,
                 true,
-                false
+                true
               ],
               "style": "receipt-table"
             }
