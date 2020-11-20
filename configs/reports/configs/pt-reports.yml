@@ -215,7 +215,7 @@ ReportDefinitions:
         to_char((To_timestamp(rh.manualreceiptdate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY') AS g8issuedate,
         Initcap(COALESCE(pt_detail.usagecategoryminor, pt_detail.usagecategorymajor)) as usagetype,
         manualreceiptnumber as g8receiptno,
-        (case when eg_user.name is null then '30048|+3/xnyTtx2VYznMwVlAA/wJxplY=' else eg_user.name end)  as collectorname,
+        (case when eg_user.name is null then '721995|Jit/FZQHkmU8SNc06DKOhEnWXXfadQ==' else eg_user.name end)  as collectorname,
         pt_detail.additionaldetails->>'remarks' as "remarks"
       FROM egcl_receiptheader_v1 AS rh
       JOIN egcl_receiptinstrument_v1 AS ri ON rh.id = ri.receiptheader
@@ -1623,7 +1623,7 @@ ReportDefinitions:
         to_char((To_timestamp(rh.manualreceiptdate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY') AS g8issuedate,
         Initcap(COALESCE(pt_detail.usagecategoryminor, pt_detail.usagecategorymajor)) as usagetype,
         manualreceiptnumber as g8receiptno,
-        (case when eg_user.name is null then '30048|+3/xnyTtx2VYznMwVlAA/wJxplY=' else eg_user.name end)  as collectorname,
+        (case when eg_user.name is null then '721995|Jit/FZQHkmU8SNc06DKOhEnWXXfadQ==' else eg_user.name end)  as collectorname,
         pt_detail.additionaldetails->>'remarks' as "remarks"
       FROM egcl_receiptheader_v1 AS rh
       JOIN egcl_receiptinstrument_v1 AS ri ON rh.id = ri.receiptheader
@@ -2270,21 +2270,17 @@ ReportDefinitions:
         payment.totalamountpaid as amount, 
         payment.paymentmode as instrumenttype, 
         payment.transactionnumber,
-        concat(to_char((To_timestamp(bd.fromperiod/1000) at time Zone 'Asia/Kolkata'),'YYYY'),'-', to_char((To_timestamp(bd.toperiod/1000) at time Zone 'Asia/Kolkata'),'YY')) as financialyear, 
-        to_char((To_timestamp(payment.transactiondate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY') AS transactiondate, 
-        pd.due AS pendingamount,
-        Initcap(case when pt.usagecategory like '%.%' then split_part(pt.usagecategory,'.',2) else pt.usagecategory end) as usagetype,
-        (case when eg_user.name is null then '30048|+3/xnyTtx2VYznMwVlAA/wJxplY=' else eg_user.name end)  as collectorname,
+        concat(to_char((To_timestamp(bd.fromperiod/1000) at time Zone 'Asia/Kolkata'),'YYYY'),'-', to_char((To_timestamp(bd.toperiod/1000) at time Zone 'Asia/Kolkata'),'YY')) AS financialyear, 
+        to_char((To_timestamp(payment.transactiondate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY') AS transactiondate,         
+        Initcap(pt.usagecategory) as usagetype,
+        eg_user.name as collectorname,
         receipt_breakup.*,
         to_char((To_timestamp(pd.manualreceiptdate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY') AS g8issuedate, 
         manualreceiptnumber as g8receiptno
-      FROM egcl_paymentdetail pd Left outer join eg_user on eg_user.id = pd.createdby::INTEGER, egcl_payment payment, eg_pt_property as pt, receipt_breakup, 
-      (select bill.id as billid, bill.consumercode as consumercodei, min(bd.fromperiod) fromperiod, max(bd.toperiod) toperiod from egcl_billdetial bd, egcl_bill bill 
-      where bill.id=bd.billid and bill.tenantid = $tenantid group by bill.id) bd,
-      (select string_agg(distinct propertyid,',') as propertyid,string_agg(distinct locality,',') as locality from eg_pt_address where tenantid=$tenantid group by propertyid ) pt_addr
+      FROM egcl_paymentdetail pd, egcl_payment payment, eg_pt_property as pt, receipt_breakup, eg_user,
+      (select bill.id as billid, bill.consumercode as consumercodei, (select get_fromperiod(bill.id)) as fromperiod, (select get_toperiod(bill.id)) as  toperiod from egcl_billdetial bd, egcl_bill bill where bill.id=bd.billid and bill.tenantid = $tenantid  group by bill.id) bd 
       where pd.paymentid=payment.id and bd.billid=pd.billid and payment.paymentstatus != 'CANCELLED' and pd.businessservice='PT' and payment.tenantid=$tenantid 
-      and pt.propertyid = bd.consumercodei and receipt_breakup.pdid=pd.id  and pt.status!='INACTIVE' 
-      and pt_addr.propertyid=pt.id 
+      and pt.propertyid = bd.consumercodei and receipt_breakup.pdid=pd.id and eg_user.id = pd.createdby::INTEGER  and pt.status!='INACTIVE' 
       --and pt.propertyid='PT-1012-978737'
   orderby: ORDER BY pd.receiptdate DESC;
 
@@ -2494,7 +2490,7 @@ ReportDefinitions:
         to_char((To_timestamp(payment.transactiondate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY') AS transactiondate, 
         pd.due AS pendingamount,
         Initcap(case when pt.usagecategory like '%.%' then split_part(pt.usagecategory,'.',2) else pt.usagecategory end) as usagetype,
-        (CASE WHEN billd.collectiontype='COUNTER' THEN eg_user.name ELSE '30048|+3/xnyTtx2VYznMwVlAA/wJxplY=' END) as collectorname,
+        (CASE WHEN billd.collectiontype='COUNTER' THEN eg_user.name ELSE '721995|Jit/FZQHkmU8SNc06DKOhEnWXXfadQ==' END) as collectorname,
         receipt_breakup.*,
         to_char((To_timestamp(pd.manualreceiptdate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY') AS g8issuedate, 		
         manualreceiptnumber as g8receiptno,
@@ -2759,7 +2755,7 @@ ReportDefinitions:
         to_char((To_timestamp(payment.transactiondate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY') AS transactiondate, 
         pd.due AS pendingamount,
         Initcap(case when pt.usagecategory like '%.%' then split_part(pt.usagecategory,'.',2) else pt.usagecategory end) as usagetype,
-        (CASE WHEN billd.collectiontype='COUNTER' THEN eg_user.name ELSE '30048|+3/xnyTtx2VYznMwVlAA/wJxplY=' END) as collectorname,
+        (CASE WHEN billd.collectiontype='COUNTER' THEN eg_user.name ELSE '721995|Jit/FZQHkmU8SNc06DKOhEnWXXfadQ==' END) as collectorname,
         receipt_breakup.*,
         to_char((To_timestamp(pd.manualreceiptdate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY') AS g8issuedate, 		manualreceiptnumber as g8receiptno,
         payment.paymentstatus as paystatus
@@ -3062,7 +3058,7 @@ ReportDefinitions:
         payment.paymentmode as instrumenttype, 	
         payment.transactionnumber as transactionnumber,	
         concat(to_char((To_timestamp(bd.fromperiod/1000) at time Zone 'Asia/Kolkata'),'YYYY'),'-', to_char((To_timestamp(bd.toperiod/1000) at time Zone 'Asia/Kolkata'),'YYYY')) AS financialyear,  
-        (case when eg_user.name is null then '30048|+3/xnyTtx2VYznMwVlAA/wJxplY=' else eg_user.name end)  as collectorname,
+        (case when eg_user.name is null then '721995|Jit/FZQHkmU8SNc06DKOhEnWXXfadQ==' else eg_user.name end)  as collectorname,
         --receipt_breakup.*,	
         to_char((To_timestamp(pd.manualreceiptdate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY') AS g8issuedate, 	
         manualreceiptnumber as g8receiptno,
@@ -3504,7 +3500,7 @@ ReportDefinitions:
         to_char((To_timestamp(pd.manualreceiptdate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY')  AS g8issuedate,
         Initcap(COALESCE(pt_detail.usagecategoryminor, pt_detail.usagecategorymajor)) as usagetype,
         manualreceiptnumber as g8receiptno,
-        (CASE WHEN collectiontype='COUNTER' THEN eg_user.name ELSE '30048|+3/xnyTtx2VYznMwVlAA/wJxplY=' END) as collectorname,
+        (CASE WHEN collectiontype='COUNTER' THEN eg_user.name ELSE '721995|Jit/FZQHkmU8SNc06DKOhEnWXXfadQ==' END) as collectorname,
         pt_detail.additionaldetails->>'remarks' as "remarks"
       FROM egcl_bill AS bill
       INNER JOIN egcl_billdetial as bd on bd.billid = bill.id
@@ -3661,7 +3657,7 @@ ReportDefinitions:
         sum(case when payment.paymentmode='CHEQUE' then bad.adjustedamount else 0 end) as sumcheque,
         count (distinct  case when payment.paymentmode='CHEQUE' then concat(payment.paymentmode) end) as countcheque,
         sum(case when payment.paymentmode='ONLINE' then bad.adjustedamount else 0 end) as sumonline,
-        (CASE WHEN collectiontype='COUNTER' THEN eg_user.name ELSE '30048|+3/xnyTtx2VYznMwVlAA/wJxplY=' END) as collectorname, --for Online collecion show null as collectorname
+        (CASE WHEN collectiontype='COUNTER' THEN eg_user.name ELSE '721995|Jit/FZQHkmU8SNc06DKOhEnWXXfadQ==' END) as collectorname, --for Online collecion show null as collectorname
         sum(adjustedamount) as totalamount
       FROM egcl_billaccountdetail as bad
       INNER JOIN egcl_billdetial as bd on bd.id = bad.billdetailid
