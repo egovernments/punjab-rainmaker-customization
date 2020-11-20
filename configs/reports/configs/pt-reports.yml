@@ -2278,12 +2278,15 @@ ReportDefinitions:
         to_char((To_timestamp(pd.manualreceiptdate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY') AS g8issuedate, 
         manualreceiptnumber as g8receiptno
       FROM egcl_paymentdetail pd, egcl_payment payment, eg_pt_property as pt, receipt_breakup, eg_user,
+      (select propertyid,max(createdtime),locality from eg_pt_address where tenantid=$tenantid group by propertyid,locality) as pt_addr,
       (select bill.id as billid, bill.consumercode as consumercodei, (select get_fromperiod(bill.id)) as fromperiod, (select get_toperiod(bill.id)) as  toperiod from egcl_billdetial bd, egcl_bill bill where bill.id=bd.billid and bill.tenantid = $tenantid  group by bill.id) bd 
       where pd.paymentid=payment.id and bd.billid=pd.billid and payment.paymentstatus != 'CANCELLED' and pd.businessservice='PT' and payment.tenantid=$tenantid 
-      and pt.propertyid = bd.consumercodei and receipt_breakup.pdid=pd.id and eg_user.id = pd.createdby::INTEGER  and pt.status!='INACTIVE' 
+      and pt.propertyid = bd.consumercodei and receipt_breakup.pdid=pd.id and eg_user.id = pd.createdby::INTEGER  and pt.status!='INACTIVE'
+      and pt_addr.propertyid=pt.id
       --and pt.propertyid='PT-1012-978737'
   orderby: ORDER BY pd.receiptdate DESC;
-
+  
+  
 - reportName: CancelledReceiptRegister_V2
   decryptionPathId: CancelledReceiptRegister_V2
   summary: Receipt Register for cancelled Receipts
