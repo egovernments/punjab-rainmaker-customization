@@ -583,13 +583,15 @@
                     "value":"$.Properties[0].additionalDetails.vasikaNo"
                   },  {             
                     "variable":"vasikaDate",
-                    "value":"$.Properties[0].additionalDetails.vasikaDate"
+                    "value":"$.Properties[0].additionalDetails.vasikaDate",
+                    "type":"date"
                   },  {             
                     "variable":"allotmentNo",
                     "value":"$.Properties[0].additionalDetails.allotmentNo"
                   },  {             
                     "variable":"allotmentDate",
-                    "value":"$.Properties[0].additionalDetails.allotmentDate"
+                    "value":"$.Properties[0].additionalDetails.allotmentDate",
+                    "type":"date"
                   },  {             
                     "variable":"businessName",
                     "value":"$.Properties[0].additionalDetails.businessName"
