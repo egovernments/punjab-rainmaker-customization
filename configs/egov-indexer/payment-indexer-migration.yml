@@ -10,7 +10,7 @@ ServiceMaps:
       id: $.id
       isBulk: false
       timeStampField: $.auditDetails.createdTime
-      jsonPath: $.Payments
+      jsonPath: $.Payments.*
       customJsonMapping:
         indexMapping: {"Data":{"tenantId":"","id":"","transactionNumber":"","transactionDate":1,"paymentMode":"","paymentStatus":"","payer":{"id":"","name":""},"paidBy":"","paymentDetails":{},"auditDetails":{},"additionalDetails":{},"tenantData":{},"@timestamp":"timestamp"}}
         fieldMapping:
