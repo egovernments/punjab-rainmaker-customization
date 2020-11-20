@@ -595,7 +595,7 @@
                     "value":"$.Properties[0].additionalDetails.businessName"
                   },  {             
                     "variable":"remarks",
-                    "value":"$.Properties[0].additionalDetails.remarks"
+                    "value":"$.Properties[0].additionalDetails.remrks"
                   },  {             
                     "variable":"fatherHusbandName",
                     "value":"$.Properties[0].owners[0].fatherOrHusbandName"
