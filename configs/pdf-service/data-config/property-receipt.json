@@ -579,9 +579,27 @@
                 "apiRequest": null,
                 "responseMapping":[
                   {             
+                    "variable":"vasikaNo",
+                    "value":"$.Properties[0].additionalDetails.vasikaNo"
+                  },  {             
+                    "variable":"vasikaDate",
+                    "value":"$.Properties[0].additionalDetails.vasikaDate"
+                  },  {             
+                    "variable":"allotmentNo",
+                    "value":"$.Properties[0].additionalDetails.allotmentNo"
+                  },  {             
+                    "variable":"allotmentDate",
+                    "value":"$.Properties[0].additionalDetails.allotmentDate"
+                  },  {             
+                    "variable":"businessName",
+                    "value":"$.Properties[0].additionalDetails.businessName"
+                  },  {             
+                    "variable":"remarks",
+                    "value":"$.Properties[0].additionalDetails.remarks"
+                  },  {             
                     "variable":"fatherHusbandName",
                     "value":"$.Properties[0].owners[0].fatherOrHusbandName"
-                  },{             
+                  }, {             
                     "variable":"propertyUsage",
                     "value":"$.Properties[0].usageCategory", 
 		      "localisation": {
