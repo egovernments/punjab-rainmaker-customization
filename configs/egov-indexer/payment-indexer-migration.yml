@@ -8,7 +8,7 @@ ServiceMaps:
     - name: paymentsindex-v1
       type: payments
       id: $.id
-      isBulk: false
+      isBulk: true
       timeStampField: $.auditDetails.createdTime
       jsonPath: $.Payments.*
       customJsonMapping:
