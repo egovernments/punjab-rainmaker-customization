@@ -2,7 +2,7 @@ ServiceMaps:
  serviceName: Property Tax - rainmaker
  version: 1.0.0
  mappings:
-  - topic: save-property-registry
+  - topic: save-property-registry-batch
     configKey: INDEX
     indexes:
       - name: property-services
