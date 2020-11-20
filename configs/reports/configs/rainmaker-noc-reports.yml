@@ -537,7 +537,8 @@ ReportDefinitions:
     groupby: GROUP BY (channel,subdistrict,firestation)
     orderby: ORDER BY channel
 
-  - reportName: ReceiptRegisterFirenocReport_V2   
+  - reportName: ReceiptRegisterFirenocReport_V2
+    decryptionPathId: ReceiptRegister_V2
     summary: Receipt Register FireNoc
     version: 1.0.0
     moduleName: rainmaker-noc
@@ -685,7 +686,8 @@ ReportDefinitions:
         WHERE  payment.tenantid!='pb.testing' AND paydetail.businessservice in ('FIRENOC') AND paydetail.receiptnumber NOT LIKE 'MP%' and paydetail.tenantid=$tenantid
     orderby: ORDER BY paydetail.receiptdate DESC 
 
-  - reportName: CancelledReceiptRegisterFirenocReport_V2   
+  - reportName: CancelledReceiptRegisterFirenocReport_V2
+    decryptionPathId: ReceiptRegister_V2
     summary: Cancelled Receipt Register FireNoc
     version: 1.0.0
     moduleName: rainmaker-noc
