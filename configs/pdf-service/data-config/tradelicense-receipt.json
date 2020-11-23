@@ -67,6 +67,18 @@
                }
               },
               {
+                "variable": "renewalTradeFee", 
+                "value": {
+                  "path": "$.paymentDetails[0].bill.billDetails[0].billAccountDetails[?(@.taxHeadCode == 'TL_RENEWAL_TAX')].amount"
+                }
+              },
+              {
+                "variable": "newTradeFee", 
+                "value": {
+                  "path": "$.paymentDetails[0].bill.billDetails[0].billAccountDetails[?(@.taxHeadCode == 'TL_TAX')].amount"
+                }
+              },
+              {
                 "variable": "adhocRebate", 
                 "value": {
                   "path": "$.paymentDetails[0].bill.billDetails[0].billAccountDetails[?(@.taxHeadCode == 'TL_ADHOC_REBATE')].amount"
@@ -419,7 +431,11 @@
                {
                   "variable": "pendingAmount",
                   "formula": "{{dueAmount}}-{{paidAmount}}"
-               }
+               },
+               {
+                "variable": "tradeFee",
+                "formula": "{{renewalTradeFee}}+{{newTradeFee}}"
+             }
             ]
          },
           {
