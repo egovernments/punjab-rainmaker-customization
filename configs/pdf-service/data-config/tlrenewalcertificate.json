@@ -211,8 +211,8 @@
       },
       {
         "variable": "variable_owners",                        
-        "value": "$.Licenses[0].tradeLicenseDetail.owners[?(@.active== true && @.userActive== true)]",                       
-         "type":"array",
+	"value": {"path":"$.tradeLicenseDetail.owners[?(@.active== true && @.userActive== true)]"},         
+	"type":"array",
          "format":{                            
             "type":"string",
             "scema":[
