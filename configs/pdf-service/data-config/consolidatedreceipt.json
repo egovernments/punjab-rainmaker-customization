@@ -96,6 +96,18 @@
                 }
               },
               {
+                "variable": "oldPayerAddress", 
+                "value": {
+                   "path": "$.payerAddress"
+                }
+              }, 
+              {
+                "variable": "oldComments", 
+                "value": {
+                   "path": "$.additionalDetails.comment"
+                }
+              },
+              {
                 "variable": "comments", 
                 "value": {
                   "path": "$.paymentDetails[0].bill.billDetails[0].additionalDetails.comment"
