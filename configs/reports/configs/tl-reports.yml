@@ -135,7 +135,7 @@ ReportDefinitions:
       amount as totalamount,
       To_char((To_timestamp(receipt.manualreceiptdate / 1000) at time Zone 'Asia/Kolkata'), 'DD/MM/YYYY') AS g8issuedate,
       receipt.manualreceiptnumber as g8receiptno,
-      (CASE WHEN collectiontype='COUNTER' THEN eg_user.name ELSE '721995|Jit/FZQHkmU8SNc06DKOhEnWXXfadQ==' END) as collectorname  --value for Online
+      (CASE WHEN collectiontype='COUNTER' THEN eg_user.name ELSE '30048|23/xn3x2FAxn8vYAN0IdplsOxaE=' END) as collectorname  --value for Online
 
     FROM eg_tl_tradelicense tl 
     INNER JOIN eg_tl_tradelicensedetail tld ON tld.tradelicenseid = tl.id 
@@ -1353,7 +1353,7 @@ ReportDefinitions:
       payment.totalamountpaid as totalamount, --amount as totalamount,
       To_char((To_timestamp(egcl_paymentdetail.manualreceiptdate / 1000) at time Zone 'Asia/Kolkata'), 'DD/MM/YYYY') AS g8issuedate,
       egcl_paymentdetail.manualreceiptnumber as g8receiptno,
-      (CASE WHEN paymentmode!='ONLINE' THEN eg_user.name ELSE '721995|Jit/FZQHkmU8SNc06DKOhEnWXXfadQ==' END) as collectorname
+      (CASE WHEN paymentmode!='ONLINE' THEN eg_user.name ELSE '30048|23/xn3x2FAxn8vYAN0IdplsOxaE=' END) as collectorname
     FROM eg_tl_tradelicense tl 
     INNER JOIN eg_tl_tradelicensedetail tld ON tld.tradelicenseid = tl.id 
     INNER JOIN (
