@@ -862,7 +862,150 @@
         },
         "layout": {}
       },
-      
+      {
+        "text":"ADDITIONAL DETAILS",
+        "style":"block-head"
+     },
+     {
+      "style": "next-noc-table",
+      "table": {
+        "widths": [
+          "25%",
+          "25%",
+          "25%",
+          "25%"
+        ],
+        "body": [
+          [
+            {
+              "text": "Vasika No.",
+              "border": [
+                true,
+                true,
+                false,
+                false
+              ],
+              "style": "receipt-table-value"
+            },
+            {
+              "text": "{{vasikaNo}}",
+              "border": [
+                false,
+                true,
+                false,
+                false
+              ],
+              "style": "receipt-table"
+            },
+            {
+              "text": "Vasika Date",
+              "border": [
+                false,
+                true,
+                false,
+                false
+              ],
+              "style": "receipt-table-value"
+            },
+            {
+              "text": "{{vasikaDate}}",
+              "border": [
+                false,
+                true,
+                true,
+                false
+              ],
+              "style": "receipt-table"
+            }
+          ],
+    [
+    {
+              "text": "Allotment No",
+              "border": [
+                true,
+                false,
+                false,
+                false
+              ],
+              "style": "receipt-table-value"
+            },
+            {
+              "text": "{{allotmentNo}}",
+              "border": [
+                false,
+                false,
+                false,
+                false
+              ],
+              "style": "receipt-table"
+            },
+            {
+              "text": "Allotment Date",
+              "border": [
+                false,
+                false,
+                false,
+                false
+              ],
+              "style": "receipt-table-value"
+            },
+            {
+              "text": "{{allotmentDate}}",
+              "border": [
+                false,
+                false,
+                true,
+                false
+              ],
+              "style": "receipt-table"
+            }
+          ],
+          [
+            {
+              "text": "Business Name",
+              "border": [
+                true,
+                false,
+                false,
+                true
+              ],
+              "style": "receipt-table-value"
+            },
+            {
+              "text": "{{businessName}}",
+              "border": [
+                false,
+                false,
+                false,
+                true
+              ],
+              "style": "receipt-table"
+            },
+            {
+              "text": "Remarks",
+              "border": [
+                false,
+                false,
+                false,
+                true
+              ],
+              "style": "receipt-table-value"
+            },
+            {
+              "text": "{{remarks}}",
+              "border": [
+                false,
+                false,
+                true,
+                true
+              ],
+              "style": "receipt-table"
+            }
+          ]
+        ]
+      },
+      "layout": {}
+    },
 	    {
 	     "text": "Mobile Number {{ownerMobileNumber}}                                    Assessee Signature: ",
 	     "style": "receipt-approver"
