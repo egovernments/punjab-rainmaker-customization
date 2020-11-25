@@ -483,14 +483,11 @@
                     "scema":[
                        {
                           "variable":"ass_to",
-                          "value":"toPeriod",
-                         "type":"date",
-                         "format":"YYYY"
-                       }, {
+                          "value":"toPeriod"
+                       }, 
+                       {
                         "variable":"ass_from",
-                        "value":"fromPeriod",
-                       "type":"date",
-                       "format":"YYYY"
+                        "value":"fromPeriod"
                      },
                        {
                          "variable":"ass_time_interest",
@@ -510,8 +507,7 @@
                    
                  }, {
                   "variable":"ass_tax",
-                  "value":{"path":"billAccountDetails[?(@.taxHeadCode=='PT_TAX')].amount"}
-                 
+                  "value":"billAccountDetails[?(@.taxHeadCode=='PT_TAX')].amount"
                }, {
                 "variable":"ass_adhoc_penalty",
                 "value":{"path":"billAccountDetails[?(@.taxHeadCode=='PT_ADHOC_PENALTY')].amount"}
