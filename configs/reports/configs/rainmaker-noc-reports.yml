@@ -611,6 +611,11 @@ ReportDefinitions:
         type: string
         source: rainmaker-noc
         total: false
+      - name: areatype
+        label: reports.noc.areatype
+        type: string
+        source: rainmaker-noc
+        total: false
       - name: ownername
         label: reports.noc.ownername
         type: string
