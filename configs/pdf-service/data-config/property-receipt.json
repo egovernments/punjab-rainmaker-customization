@@ -473,7 +473,8 @@
                   "prefix": null,
                   "module":"rainmaker-common"
                }
-              },  {
+              },  
+              {
                 "variable": "var_assessments",                        
                 "value":{
                   "path":"$.paymentDetails[0].bill.billDetails.*"},
