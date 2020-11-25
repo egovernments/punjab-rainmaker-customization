@@ -494,47 +494,47 @@
                      },
                        {
                          "variable":"ass_time_interest",
-                         "value":"billAccountDetails[?(@.taxHeadCode=='PT_TIME_INTEREST')].amount"
+                         "value":{"path":"billAccountDetails[?(@.taxHeadCode=='PT_TIME_INTEREST')].amount"}
                         
                       }, {
                         "variable":"ass_time_penalty",
-                        "value":"billAccountDetails[?(@.taxHeadCode=='PT_TIME_PENALTY')].amount"
+                        "value":{"path":"billAccountDetails[?(@.taxHeadCode=='PT_TIME_PENALTY')].amount"}
                        
                      }, {
                       "variable":"ass_cancer_cess",
-                      "value":"billAccountDetails[?(@.taxHeadCode=='PT_CANCER_CESS')].amount"
+                      "value":{"path":"billAccountDetails[?(@.taxHeadCode=='PT_CANCER_CESS')].amount"}
                      
                    }, {
                     "variable":"ass_fire_cess",
-                    "value":"billAccountDetails[?(@.taxHeadCode=='PT_FIRE_CESS')].amount"
+                    "value":{"path":"billAccountDetails[?(@.taxHeadCode=='PT_FIRE_CESS')].amount"}
                    
                  }, {
                   "variable":"ass_tax",
-                  "value":"billAccountDetails[?(@.taxHeadCode=='PT_TAX')].amount"
+                  "value":{"path":"billAccountDetails[?(@.taxHeadCode=='PT_TAX')].amount"}
                  
                }, {
                 "variable":"ass_adhoc_penalty",
-                "value":"billAccountDetails[?(@.taxHeadCode=='PT_ADHOC_PENALTY')].amount"
+                "value":{"path":"billAccountDetails[?(@.taxHeadCode=='PT_ADHOC_PENALTY')].amount"}
                
              }, {
               "variable":"ass_adhoc_rebate",
-              "value":"billAccountDetails[?(@.taxHeadCode=='PT_ADHOC_REBATE')].amount"
+              "value":{"path":"billAccountDetails[?(@.taxHeadCode=='PT_ADHOC_REBATE')].amount"}
              
            }, {
             "variable":"ass_time_rebate",
-            "value":"billAccountDetails[?(@.taxHeadCode=='PT_TIME_REBATE')].amount"
+            "value":{"path":"billAccountDetails[?(@.taxHeadCode=='PT_TIME_REBATE')].amount"}
            
          }   , {
           "variable":"ass_unit_usage_exemption",
-          "value":"billAccountDetails[?(@.taxHeadCode=='PT_UNIT_USAGE_EXEMPTION')].amount"
+          "value":{"path":"billAccountDetails[?(@.taxHeadCode=='PT_UNIT_USAGE_EXEMPTION')].amount"}
          
        },       {
         "variable":"ass_owner_exemption",
-        "value":"billAccountDetails[?(@.taxHeadCode=='PT_OWNER_EXEMPTION')].amount"
+        "value":{"path":"billAccountDetails[?(@.taxHeadCode=='PT_OWNER_EXEMPTION')].amount"}
        
      }, {
       "variable":"ass_round_off",
-      "value":"billAccountDetails[?(@.taxHeadCode=='PT_ROUND_OFF')].amount"
+      "value":{"path":"billAccountDetails[?(@.taxHeadCode=='PT_ROUND_OFF')].amount"}
      
    }, {
     "variable":"ass_total",
