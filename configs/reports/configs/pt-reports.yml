@@ -4008,7 +4008,7 @@ ReportDefinitions:
      and pt.status!='INACTIVE' 
      
     
-- reportName: ZoneFYReport_v2
+- reportName: ZoneFYReport_V2
   summary: Zone FY Collection Pt report
   version: 1.0.0
   moduleName: rainmaker-pt
