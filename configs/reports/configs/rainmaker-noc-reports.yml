@@ -654,7 +654,7 @@ ReportDefinitions:
                       egcl_billaccountdetail.billdetailid bill_id, 
                       string_agg(distinct consumercode,',') as consumercode                               
                     FROM egcl_billaccountdetail 
-                    INNER JOIN egcl_bill as bill on bill.id = egcl_billaccountdetail.billdetailid
+                    LEFT JOIN egcl_bill as bill on bill.id = egcl_billaccountdetail.billdetailid
                     WHERE  bill.tenantid!='pb.testing' AND businessservice in ('FIRENOC')
                     GROUP BY billdetailid
         )
@@ -677,8 +677,8 @@ ReportDefinitions:
           fdet.applicationnumber as applicationnumber,
           build.name as ownername
         FROM egcl_payment AS payment
-        JOIN egcl_paymentdetail as paydetail on paydetail.paymentid=payment.id
-        JOIN receipt_breakup ON paydetail.billid = receipt_breakup.bill_id
+        LEFT JOIN egcl_paymentdetail as paydetail on paydetail.paymentid=payment.id
+        LEFT JOIN receipt_breakup ON paydetail.billid = receipt_breakup.bill_id
         JOIN eg_user ON payment.createdby::INTEGER=eg_user.id
         JOIN egcl_bill as bill ON bill.id=paydetail.billid
         JOIN eg_fn_firenocdetail AS fdet ON fdet.applicationnumber=bill.consumercode
