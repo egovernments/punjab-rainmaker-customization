@@ -6,11 +6,11 @@ ServiceMaps:
     configKey: INDEX
     indexes:
     - name: paymentsindex-v1
-      type: general
+      type: payments
       id: $.id
-      isBulk: false
+      isBulk: true
       timeStampField: $.auditDetails.createdTime
-      jsonPath: $.Payments
+      jsonPath: $.Payments.*
       customJsonMapping:
         indexMapping: {"Data":{"tenantId":"","id":"","transactionNumber":"","transactionDate":1,"paymentMode":"","paymentStatus":"","payer":{"id":"","name":""},"paidBy":"","paymentDetails":{},"auditDetails":{},"additionalDetails":{},"tenantData":{},"@timestamp":"timestamp"}}
         fieldMapping:
