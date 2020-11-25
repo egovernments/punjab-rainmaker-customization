@@ -683,7 +683,7 @@ ReportDefinitions:
         JOIN egcl_bill as bill ON bill.id=paydetail.billid
         JOIN eg_fn_firenocdetail AS fdet ON fdet.applicationnumber=bill.consumercode
         JOIN eg_fn_buidlings AS build ON build.firenocdetailsuuid=fdet.uuid
-        WHERE  payment.tenantid!='pb.testing' AND paydetail.businessservice in ('FIRENOC') AND paydetail.receiptnumber NOT LIKE 'MP%' and paydetail.tenantid=$tenantid
+        WHERE  payment.tenantid!='pb.testing' AND paydetail.businessservice in ('FIRENOC') AND paydetail.receiptnumber NOT LIKE 'MP%' and paydetail.tenantid!='pb.testing'
     orderby: ORDER BY paydetail.receiptdate DESC 
 
   - reportName: CancelledReceiptRegisterFirenocReport_V2
@@ -817,6 +817,7 @@ ReportDefinitions:
         JOIN egcl_bill as bill ON bill.id=paydetail.billid
         JOIN eg_fn_firenocdetail AS fdet ON fdet.applicationnumber=bill.consumercode
         JOIN eg_fn_buidlings AS build ON build.firenocdetailsuuid=fdet.uuid
-        WHERE  payment.tenantid!='pb.testing' and paydetail.businessservice not in ('PT','TL','UC') and payment.paymentstatus = 'CANCELLED' and  paydetail.receiptnumber NOT LIKE 'MP%' and paydetail.tenantid=$tenantid
+        WHERE  payment.tenantid!='pb.testing' and paydetail.businessservice not in ('PT','TL','UC') and payment.paymentstatus = 'CANCELLED' and  paydetail.receiptnumber NOT LIKE 'MP%' 
+        --and paydetail.tenantid=$tenantid
     orderby: ORDER BY paydetail.receiptdate DESC 
 
