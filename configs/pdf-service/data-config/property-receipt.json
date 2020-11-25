@@ -510,7 +510,7 @@
                    
                  }, {
                   "variable":"ass_tax",
-                  "value":"billAccountDetails[?(@.taxHeadCode=='PT_TAX')].amount"
+                  "value":{"path":"billAccountDetails[?(@.taxHeadCode=='PT_TAX')].amount"}
                }, {
                 "variable":"ass_adhoc_penalty",
                 "value":{"path":"$.billAccountDetails[?(@.taxHeadCode=='PT_ADHOC_PENALTY')].amount"}
