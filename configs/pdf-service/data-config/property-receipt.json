@@ -476,7 +476,7 @@
               },  {
                 "variable": "var_assessments",                        
                 "value":{
-                  "path":"$.paymentDetails[0].bill.billDetails.*.billAccountDetails[?(@.taxHeadCode=='PT_TAX')].amount>0"},
+                  "path":"$.paymentDetails[0].bill.billDetails.*.billAccountDetails[?(@.taxHeadCode=='PT_TAX' && @.amount>0)]"},
                  "type":"array",
                  "format":{                            
                     
