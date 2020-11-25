@@ -144,7 +144,7 @@
               "style": "receipt-table-value"
             },
             {
-              "text": "{{assessmentYear1}}-{{assessmentYear2}}",
+              "text": "{{assessmentYear}}",
               "border": [
                 false,
                 false,
