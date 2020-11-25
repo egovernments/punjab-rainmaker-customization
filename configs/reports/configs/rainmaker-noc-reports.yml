@@ -674,6 +674,7 @@ ReportDefinitions:
           eg_user.name as collectorname,
           fdet.firenoctype as firenoctype,
           build.usagetype as usagetype,
+          fad.areatype as areatype,
           fdet.applicationnumber as applicationnumber,
           build.name as ownername
         FROM egcl_payment AS payment
@@ -683,6 +684,7 @@ ReportDefinitions:
         JOIN egcl_bill as bill ON bill.id=paydetail.billid
         JOIN eg_fn_firenocdetail AS fdet ON fdet.applicationnumber=bill.consumercode
         JOIN eg_fn_buidlings AS build ON build.firenocdetailsuuid=fdet.uuid
+        INNER JOIN eg_fn_address as fad on fad.firenocdetailsuuid=fdet.uuid
         WHERE  payment.tenantid!='pb.testing' AND paydetail.businessservice in ('FIRENOC') AND paydetail.receiptnumber NOT LIKE 'MP%' and payment.tenantid = $tenantid
     orderby: ORDER BY paydetail.receiptdate DESC 
 
