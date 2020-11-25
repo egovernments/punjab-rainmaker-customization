@@ -510,7 +510,7 @@
                    
                  }, {
                   "variable":"ass_tax",
-                  "value":{"path":"billAccountDetails[?(@.taxHeadCode=='PT_TAX')].amount"}
+                  "value":{"path":"billAccountDetails[4].amount"}
                }, {
                 "variable":"ass_adhoc_penalty",
                 "value":{"path":"$.billAccountDetails[?(@.taxHeadCode=='PT_ADHOC_PENALTY')].amount"}
@@ -529,7 +529,7 @@
          
        },       {
         "variable":"ass_owner_exemption",
-        "value":"billAccountDetails[?(@.taxHeadCode=='PT_OWNER_EXEMPTION')].amount"
+        "value":"billAccountDetails[2].amount"
        
      }, {
       "variable":"ass_round_off",
