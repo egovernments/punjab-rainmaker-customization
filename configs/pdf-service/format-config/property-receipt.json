@@ -134,7 +134,7 @@
           ],
     [
     {
-              "text": "Assessment Year",
+              "text": "Assessment Year(Paid Amount)",
               "border": [
                 true,
                 false,
@@ -572,8 +572,7 @@
 	  },
 	  "layout":{}
     }, 
-  
-      {
+        {
         "text":"PAYMENT INFORMATION",
         "style":"block-head"
       },
@@ -609,7 +608,7 @@
                 "style": "receipt-table"
               },
               {
-                "text": "{{billing_period}}",
+                "text": " ",
                 "border": [
                   false,
                   true,
@@ -619,7 +618,7 @@
                 "style": "receipt-table-value"
               },
               {
-                "text": "{{fromPeriod}} {{to}} {{toPeriod}}",
+                "text": " ",
                 "border": [
                   false,
                   true,
