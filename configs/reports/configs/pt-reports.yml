@@ -4011,7 +4011,7 @@ ReportDefinitions:
      
     
 - reportName: ZoneFYReport_V2
-  summary: Zone FY Collection Pt report
+  summary: Zone FY Collection
   version: 1.0.0
   moduleName: rainmaker-pt
   sourceColumns:
@@ -4325,7 +4325,7 @@ ReportDefinitions:
   
   
 - reportName: BlockFYReport_V2
-  summary: Block FY Collection PT report
+  summary: Block FY Collection
   version: 1.0.0
   moduleName: rainmaker-pt
   sourceColumns:
