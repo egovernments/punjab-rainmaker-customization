@@ -571,67 +571,8 @@
 		]
 	  },
 	  "layout":{}
-    }, {
-      "style": "next-noc-table",
-      "table": {
-        "widths": [
-
-          "10%","8%","6%","7%","8%","7%","8%","10%","10%","7%","7%","7%","*"
-        ],
-        "body":             
-          [
-            [
-              {
-                "text": "Assessment Year",
-                "style": "receipt-table-value22"
-              },{
-                "text": "Property Tax",
-                "style": "receipt-table-value22"
-              },
-              {
-                "text": "Fire Cess",
-                "style": "receipt-table-value22"
-              },
-              {
-                "text": "Cancer Cess",
-                "style": "receipt-table-value22"
-              },
-             {
-                "text": "Penalty",
-                "style": "receipt-table-value22"
-              },  {
-                "text": "Rebate",
-                "style": "receipt-table-value22"
-              },  {
-                "text": "Interest",
-                "style": "receipt-table-value22"
-              },  {
-                "text": "Usage Exemption",
-                "style": "receipt-table-value22"
-              },  {
-                "text": "Special Category Exemption",
-                "style": "receipt-table-value22"
-              },  {
-                "text": "Adhoc Penalty",
-                "style": "receipt-table-value22"
-              },  {
-                "text": "Adhoc Rebate",
-                "style": "receipt-table-value22"
-              },   {
-                "text": "Round Off",
-                "style": "receipt-table-value22"
-              }, {
-                "text": "Total",
-                "style": "receipt-table-value22"
-              }
-            ],
-            "{{#var_assessments}}[{\"text\":\"{{ass_from}}-{{ass_to}}\",\"style\":\"receipt-table\"},{\"text\":\"{{ass_tax}}\",\"style\":\"receipt-table\"},{\"text\":\"{{ass_fire_cess}}\",\"style\":\"receipt-table\"},{\"text\":\"{{ass_cancer_cess}}\",\"style\":\"receipt-table\"},{\"text\":\"{{ass_time_penalty}}\",\"style\":\"receipt-table\"},{\"text\":\"{{ass_time_rebate}}\",\"style\":\"receipt-table\"},{\"text\":\"{{ass_time_interest}}\",\"style\":\"receipt-table\"},{\"text\":\"{{ass_unit_usage_exemption}}\",\"style\":\"receipt-table\"},{\"text\":\"{{ass_owner_exemption}}\",\"style\":\"receipt-table\"},{\"text\":\"{{ass_adhoc_penalty}}\",\"style\":\"receipt-table\"},{\"text\":\"{{ass_adhoc_rebate}}\",\"style\":\"receipt-table\"},{\"text\":\"{{ass_round_off}}\",\"style\":\"receipt-table\"},{\"text\":\"{{ass_total}}\",\"style\":\"receipt-table\"}]{{/var_assessments}}"
-            ]
-            
-        
-      },
-      "layout": {}
-    },
+    }, 
+  
       {
         "text":"PAYMENT INFORMATION",
         "style":"block-head"
