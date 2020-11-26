@@ -2112,7 +2112,7 @@ ReportDefinitions:
     source: pt
     total: true
   - name: paidpropertytax
-    label: reports.pt.propertyTax
+    label: reports.pt.paidpropertyTax
     type: string
     source: pt
     total: true
