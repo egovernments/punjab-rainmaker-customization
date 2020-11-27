@@ -537,7 +537,8 @@ ReportDefinitions:
     groupby: GROUP BY (channel,subdistrict,firestation)
     orderby: ORDER BY channel
 
-  - reportName: ReceiptRegisterFirenocReport_V2   
+  - reportName: ReceiptRegisterFirenocReport_V2
+    decryptionPathId: ReceiptRegister_V2
     summary: Receipt Register FireNoc
     version: 1.0.0
     moduleName: rainmaker-noc
@@ -610,6 +611,11 @@ ReportDefinitions:
         type: string
         source: rainmaker-noc
         total: false
+      - name: areatype
+        label: reports.noc.areatype
+        type: string
+        source: rainmaker-noc
+        total: false
       - name: ownername
         label: reports.noc.ownername
         type: string
@@ -673,6 +679,7 @@ ReportDefinitions:
           eg_user.name as collectorname,
           fdet.firenoctype as firenoctype,
           build.usagetype as usagetype,
+          fad.areatype as areatype,
           fdet.applicationnumber as applicationnumber,
           build.name as ownername
         FROM egcl_payment AS payment
@@ -682,10 +689,13 @@ ReportDefinitions:
         JOIN egcl_bill as bill ON bill.id=paydetail.billid
         JOIN eg_fn_firenocdetail AS fdet ON fdet.applicationnumber=bill.consumercode
         JOIN eg_fn_buidlings AS build ON build.firenocdetailsuuid=fdet.uuid
+        INNER JOIN eg_fn_address as fad on fad.firenocdetailsuuid=fdet.uuid
         WHERE  payment.tenantid!='pb.testing' AND paydetail.businessservice in ('FIRENOC') AND paydetail.receiptnumber NOT LIKE 'MP%' and payment.tenantid = $tenantid
+        and payment.paymentstatus!='CANCELLED'
     orderby: ORDER BY paydetail.receiptdate DESC 
 
-  - reportName: CancelledReceiptRegisterFirenocReport_V2   
+  - reportName: CancelledReceiptRegisterFirenocReport_V2
+    decryptionPathId: ReceiptRegister_V2
     summary: Cancelled Receipt Register FireNoc
     version: 1.0.0
     moduleName: rainmaker-noc
@@ -786,7 +796,7 @@ ReportDefinitions:
                       egcl_billaccountdetail.billdetailid bill_id, 
                       string_agg(distinct consumercode,',') as consumercode                               
                     FROM egcl_billaccountdetail 
-                    INNER JOIN egcl_bill as bill on bill.id = egcl_billaccountdetail.billdetailid
+                    LEFT JOIN egcl_bill as bill on bill.id = egcl_billaccountdetail.billdetailid
                     WHERE  bill.tenantid!='pb.testing' AND businessservice in ('FIRENOC')
                     GROUP BY billdetailid
         )
@@ -809,11 +819,12 @@ ReportDefinitions:
           fdet.applicationnumber as applicationnumber,
           build.name as ownername
         FROM egcl_payment AS payment
-        JOIN egcl_paymentdetail as paydetail on paydetail.paymentid=payment.id
-        JOIN receipt_breakup ON paydetail.billid = receipt_breakup.bill_id
+        LEFT JOIN egcl_paymentdetail as paydetail on paydetail.paymentid=payment.id
+        LEFT JOIN receipt_breakup ON paydetail.billid = receipt_breakup.bill_id
         JOIN eg_user ON payment.createdby::INTEGER=eg_user.id
         JOIN egcl_bill as bill ON bill.id=paydetail.billid
         JOIN eg_fn_firenocdetail AS fdet ON fdet.applicationnumber=bill.consumercode
         JOIN eg_fn_buidlings AS build ON build.firenocdetailsuuid=fdet.uuid
-        WHERE  payment.tenantid!='pb.testing' and paydetail.businessservice not in ('PT','TL','UC') and payment.paymentstatus = 'CANCELLED' and  paydetail.receiptnumber NOT LIKE 'MP%' and paydetail.tenantid=$tenantid
+        WHERE  payment.tenantid!='pb.testing' and paydetail.businessservice not in ('PT','TL','UC') and payment.paymentstatus = 'CANCELLED' and  paydetail.receiptnumber NOT LIKE 'MP%' 
+        --and paydetail.tenantid=$tenantid
     orderby: ORDER BY paydetail.receiptdate DESC 
