@@ -83,6 +83,17 @@ ServiceMaps:
             uriResponseMapping:
             - inJsonPath: $.MdmsRes.tenant.tenants
               outJsonPath: $.Data.tenantData
+          - path: http://egov-mdms-service.egov:8080/egov-mdms-service/v1/_search
+            moduleName: PropertyTax
+            masterName: UsageCategory
+            tenantId: pb
+            filter: "[?(@.code == $usageCategory)]"
+            filterMapping:
+            - variable: $usageCategory
+              valueJsonpath: $.usageCategory
+            uriResponseMapping:
+            - inJsonPath: $.MdmsRes.PropertyTax.UsageCategory[0].name
+              outJsonPath: $.Data.usageCategory
               
       - name: property-application
         type: general
@@ -236,6 +247,17 @@ ServiceMaps:
             uriResponseMapping:
             - inJsonPath: $.MdmsRes.tenant.tenants
               outJsonPath: $.Data.tenantData
+          - path: http://egov-mdms-service.egov:8080/egov-mdms-service/v1/_search
+            moduleName: PropertyTax
+            masterName: UsageCategory
+            tenantId: pb
+            filter: "[?(@.code == $usageCategory)]"
+            filterMapping:
+            - variable: $usageCategory
+              valueJsonpath: $.usageCategory
+            uriResponseMapping:
+            - inJsonPath: $.MdmsRes.PropertyTax.UsageCategory[0].name
+              outJsonPath: $.Data.usageCategory
         
       - name: property-application
         type: general
@@ -374,7 +396,18 @@ ServiceMaps:
               valueJsonpath: $.tenantId
             uriResponseMapping:
             - inJsonPath: $.MdmsRes.tenant.tenants
-              outJsonPath: $.Data.tenantData  
+              outJsonPath: $.Data.tenantData
+          - path: http://egov-mdms-service.egov:8080/egov-mdms-service/v1/_search
+            moduleName: PropertyTax
+            masterName: UsageCategory
+            tenantId: pb
+            filter: "[?(@.code == $usageCategory)]"
+            filterMapping:
+            - variable: $usageCategory
+              valueJsonpath: $.usageCategory
+            uriResponseMapping:
+            - inJsonPath: $.MdmsRes.PropertyTax.UsageCategory[0].name
+              outJsonPath: $.Data.usageCategory
               
       - name: property-application
         type: general
@@ -514,7 +547,18 @@ ServiceMaps:
               valueJsonpath: $.tenantId
             uriResponseMapping:
             - inJsonPath: $.MdmsRes.tenant.tenants
-              outJsonPath: $.Data.tenantData      
+              outJsonPath: $.Data.tenantData
+          - path: http://egov-mdms-service.egov:8080/egov-mdms-service/v1/_search
+            moduleName: PropertyTax
+            masterName: UsageCategory
+            tenantId: pb
+            filter: "[?(@.code == $usageCategory)]"
+            filterMapping:
+            - variable: $usageCategory
+              valueJsonpath: $.usageCategory
+            uriResponseMapping:
+            - inJsonPath: $.MdmsRes.PropertyTax.UsageCategory[0].name
+              outJsonPath: $.Data.usageCategory
            
   - topic: property-application-legacyIndex
     configKey: LEGACYINDEX
