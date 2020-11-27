@@ -151,6 +151,17 @@
                 "value": {
                   "path": "$.paymentDetails[0].bill.totalAmount"
                 }
+              },  {
+                "variable": "penaltyReason", 
+                "value": {
+                  "path": "$.paymentDetails[0].bill.additionalDetails.adhocPenaltyReason"
+                }
+              },
+              {
+                "variable": "rebateReason", 
+                "value": {
+                  "path": "$.paymentDetails[0].bill.additionalDetails.adhocRebateReason"
+                }
               },
               {
                 "variable": "PropertyTax", 
@@ -653,6 +664,7 @@
                 "queryParam": "propertyIds=$.paymentDetails[0].bill.consumerCode,tenantId=$.tenantId",
                 "apiRequest": null,
                 "responseMapping":[
+                 
                   {             
                     "variable":"vasikaNo",
                     "value":"$.Properties[0].additionalDetails.vasikaNo"
