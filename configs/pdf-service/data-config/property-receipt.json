@@ -654,6 +654,13 @@
                 "apiRequest": null,
                 "responseMapping":[
                   {             
+                    "variable":"penaltyReason",
+                    "value":"$.Properties[0].propertyDetails[0].adhocPenaltyReason"
+                  },    {             
+                    "variable":"rebateReason",
+                    "value":"$.Properties[0].propertyDetails[0].adhocExemptionReason"
+                  }, 
+                  {             
                     "variable":"vasikaNo",
                     "value":"$.Properties[0].additionalDetails.vasikaNo"
                   },  {             

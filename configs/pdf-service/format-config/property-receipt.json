@@ -799,6 +799,65 @@
           ]
         },
         "layout": {}
+      },{
+        "text":"ADDITIONAL REBATE/PENALTY REASON",
+        "style":"block-head"
+      },
+       {
+        "style": "next-noc-table",
+        "table": {
+          "widths": [
+            "25%",
+            "25%",
+            "25%",
+            "25%"
+          ],
+          "body": [
+            [
+              {
+                "text": "Penalty Reason",
+                "border": [
+                  true,
+                  true,
+                  false,
+                  false
+                ],
+                "style": "receipt-table-value"
+              },
+              {
+                "text": "{{penaltyReason}}",
+                "border": [
+                  false,
+                  true,
+                  false,
+                  false
+                ],
+                "style": "receipt-table"
+              },
+              {
+                "text": "Rebate Reason",
+                "border": [
+                  false,
+                  true,
+                  false,
+                  false
+                ],
+                "style": "receipt-table-value"
+              },
+              {
+                "text": "{{rebateReason}}",
+                "border": [
+                  false,
+                  true,
+                  true,
+                  false
+                ],
+                "style": "receipt-table"
+              }
+            ]
+          ]
+        },
+        "layout": {}
       },
     {
        "text":"OWNERSHIP INFORMATION",
