@@ -828,3 +828,4 @@ ReportDefinitions:
         WHERE  payment.tenantid!='pb.testing' and paydetail.businessservice not in ('PT','TL','UC') and payment.paymentstatus = 'CANCELLED' and  paydetail.receiptnumber NOT LIKE 'MP%' 
         --and paydetail.tenantid=$tenantid
     orderby: ORDER BY paydetail.receiptdate DESC 
+

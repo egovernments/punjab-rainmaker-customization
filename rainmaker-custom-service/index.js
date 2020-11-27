@@ -711,6 +711,9 @@ async function _createAndUpdateZeroTaxProcessor(request, response) {
 
 async function _createAndUpdateIntegrationTaxProcessor(req, response){
 
+        console.log("REQ : ", JSON.stringify(req))
+        console.log("RESPONSE : ", JSON.stringify(response))
+
         let reqProperty = req["Assessment"];
 
         let propertyId = reqProperty["propertyId"]
@@ -729,7 +732,10 @@ async function _createAndUpdateIntegrationTaxProcessor(req, response){
         log("Got Assessment CREATE/ UPDATE request for tenantid: "+tenantId+" and finanancial year: "+assessmentYear)
         log("Assessment CREATE/ UPDATE Request body: "+ JSON.stringify(reqProperty) )
 
-        let estimateResponse = await findEstimate(req)
+        let estimateResponseBody = await findEstimate(req)
+        console.log("After Getting Response from entimate sending it to PMIDC TO get the Estimate Response")
+        let estimateResponse = await _estimateIntegrationTaxProcessor(oldRequestbody, estimateResponseBody)
+
 
         
         request_info = req["RequestInfo"] || req["requestInfo"]
@@ -739,9 +745,13 @@ async function _createAndUpdateIntegrationTaxProcessor(req, response){
         let calc = estimateResponse["Calculation"][0]
         let taxHeads = calc["taxHeadEstimates"];
         let createTaxHeadsArray = {};
+        let TaxHeadsType= {};  //Collecting All the Tax head coming from PMIDC
+        
         for(taxHead of taxHeads){
             createTaxHeadsArray[taxHead.taxHeadCode] = taxHead.estimateAmount;
+            TaxHeadsType[taxHead.taxHeadCode] = taxHead.estimateAmount;
             //print(texthead)
+            console.log(taxHead.taxHeadCode , ": ", taxHead.estimateAmount)
         }
 
         let demandSearchResponse = await findDemandForConsumerCode(consumerCode, tenantId, service, req["RequestInfo"])
@@ -792,9 +802,25 @@ async function _createAndUpdateIntegrationTaxProcessor(req, response){
             if(demandDetail.taxAmount){
                 demandDetail.taxAmount = 0
             }
+            delete TaxHeadsType[demandDetail.taxHeadMasterCode]//Deleting tax head codes present in both TaxHeadsType and demandDetail
+            console.log("Deleted taxhead from TaxHeadsType: ", demandDetail.taxHeadMasterCode);
         }
         
+        console.log("After Deleting the taxhead present in demand: ", JSON.stringify(TaxHeadsType));
+        console.log("demandSearchResponse AFTER MAKING EVERYTHING ZERO : ", JSON.stringify(demandSearchResponse))
 
+        if(!(Object.keys(TaxHeadsType).length === 0)){
+            for(taxHead in TaxHeadsType){
+                taxHeadObj={};
+                taxHeadObj["taxHeadMasterCode"] = taxHead;
+                taxHeadObj["taxAmount"] = 0;
+                taxHeadObj["collectionAmount"] = 0;
+                demandSearchResponse["Demands"][0]["demandDetails"].push(taxHeadObj); // Adding those obj to demand details for which taxhead there was no entry in it
+                console.log("Pushing obj", taxHeadObj);
+            }
+        }
+
+        console.log("After Adding All the tax head demandDetail: ", demandSearchResponse["Demands"][0]["demandDetails"])
 
         for (demandDetail of demandSearchResponse["Demands"][0]["demandDetails"]) 
         {
@@ -806,12 +832,17 @@ async function _createAndUpdateIntegrationTaxProcessor(req, response){
             }
         }
 
+        console.log("demandSearchResponse AFTER SETTING THE VALUE: ", JSON.stringify(demandSearchResponse))
+
         let demandUpdateResponse = await updateDemand(demandSearchResponse["Demands"], req["RequestInfo"])
+
+        console.log("demandUpdateResponse : ", JSON.stringify(demandUpdateResponse))
+
         calc["taxAmount"] = 0;
         calc["exemption"] = 0;
         calc["totalAmount"] = newTotal;
         calc["rebate"] = 0;
-        calc["penanlty"] = 0;
+        calc["penalty"] = 0;
         
         log("Demand Updated with Details : " + demandUpdateResponse )
     
@@ -897,7 +928,6 @@ async function _createAndUpdateRequestHandler(req, res) {
         response
     } = getRequestResponse(req)
 
-    log("Got Request for Assessment Create and Update")
 
         let assessmentYear = request["Assessment"]["financialYear"]
         let tenantId = request["Assessment"]["tenantId"] 
@@ -905,6 +935,8 @@ async function _createAndUpdateRequestHandler(req, res) {
         if (assessmentYear == PT_ZERO_ASSESSMENTYEAR && PT_ZERO_TENANTS.indexOf(tenantId) >= 0){
             response = await _createAndUpdateZeroTaxProcessor(request, response)
         }else if(assessmentYear == PT_INTEGRATION_ASSESSMENTYEAR && PT_INTEGRATION_TENANTS.indexOf(tenantId) >= 0){
+            log("Got Request for Assessment Create and Update")
+
             response = await _createAndUpdateIntegrationTaxProcessor(request, response)
         }
     
@@ -998,7 +1030,6 @@ router.post('/protected/punjab-pt/pt-calculator-v2/_estimate', asyncMiddleware(a
         response
     } = getRequestResponse(req)
 
-    log(":: Estimate request Received ::");
 
     // let oldRequestbody = getOldRequestBody(request) 
 
@@ -1010,8 +1041,6 @@ router.post('/protected/punjab-pt/pt-calculator-v2/_estimate', asyncMiddleware(a
     let tenantId = request["Assessment"]["tenantId"]
     let assessmentYear = request["Assessment"]["financialYear"]
 
-    log("Got request for tenantid: "+tenantId+" and finanancial year: "+assessmentYear)
-    log("Request body: "+ JSON.stringify(request));
 
     let oldRequestbody = await getOldRequestBody(request); 
     oldRequestbody["CalculationCriteria"][0]["assessmentYear"] =  assessmentYear;
@@ -1024,6 +1053,11 @@ router.post('/protected/punjab-pt/pt-calculator-v2/_estimate', asyncMiddleware(a
     else if (assessmentYear == PT_INTEGRATION_ASSESSMENTYEAR){
             
         if(PT_INTEGRATION_TENANTS.indexOf(tenantId) >= 0){
+                log(":: Estimate request Received ::");
+
+                log("Got request for tenantid: "+tenantId+" and finanancial year: "+assessmentYear)
+                log("Request body: "+ JSON.stringify(request));
+                
                 response = await _estimateIntegrationTaxProcessor(oldRequestbody, response)
         } else if(isCitizen(request)){
             data =  
