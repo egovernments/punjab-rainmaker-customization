@@ -834,6 +834,7 @@ ReportDefinitions:
 
 
   - reportName: MiscReceipt_v2
+    decryptionPathId: MiscReceiptULB_v2
     summary: Receipt Register Miscellaneous
     version: 1.0.0
     moduleName: rainmaker-uc
@@ -1135,8 +1136,8 @@ ReportDefinitions:
           To_char((To_timestamp(paydetail.receiptdate / 1000) at time Zone 'Asia/Kolkata'), 'DD/MM/YYYY') as receiptdate,
           To_char((To_timestamp(paydetail.manualreceiptdate / 1000) at time Zone 'Asia/Kolkata'), 'DD/MM/YYYY') as g8issuedate,
           paydetail.manualreceiptnumber as g8receiptno,
-          payment.ifsccode as bankname,
-          payment.ifsccode as branchname,
+          bank_branches.bank_name as bankname,
+          bank_branches.branch as branchname,
           payment.paymentstatus as status,
           businessservice as servicecategory,
           receipt_breakup.*,  
@@ -1152,6 +1153,7 @@ ReportDefinitions:
         JOIN receipt_breakup ON paydetail.billid = receipt_breakup.bill_id
         JOIN egcl_billdetial as billd on billd.billid=paydetail.billid
         JOIN eg_user ON payment.createdby::INTEGER=eg_user.id
+        LEFT OUTER JOIN bank_branches on bank_branches.ifsc=payment.ifsccode 
         WHERE  payment.tenantid=$tenantid AND businessservice not in ('PT','TL','FIRENOC')  and payment.paymentstatus != 'CANCELLED'
     orderby: ORDER BY paydetail.receiptdate DESC
 
@@ -1594,7 +1596,7 @@ ReportDefinitions:
           (case when paymentmode like 'CASH' then '' else  transactionnumber end) as ddorchequenumber,
           (case when paymentmode like 'DD' or paymentmode like 'CHEQUE' then To_char((To_timestamp(payment.transactiondate / 1000) at time Zone 'Asia/Kolkata'), 'DD/MM/YYYY') else '' end) as ddchequedate,
           'System' as collectiontype,
-          (case when eg_user.name is null then '30048|+3/xnyTtx2VYznMwVlAA/wJxplY=' else eg_user.name end) as collectorname
+          (case when eg_user.name is null then '30048|23/xn3x2FAxn8vYAN0IdplsOxaE=' else eg_user.name end) as collectorname
         FROM egcl_payment AS payment
         JOIN egcl_paymentdetail as paydetail on paydetail.paymentid=payment.id
         JOIN receipt_breakup ON paydetail.billid = receipt_breakup.bill_id
@@ -1675,7 +1677,7 @@ ReportDefinitions:
           To_char((To_timestamp(paydetail.receiptdate / 1000) at time Zone 'Asia/Kolkata'), 'DD/MM/YYYY') as receiptdate,
           paydetail.businessservice as servicecategory,
           payment.totalamountpaid as amount, 
-          (case when eg_user.name is null then '30048|+3/xnyTtx2VYznMwVlAA/wJxplY=' else eg_user.name end) as collectorname,
+          (case when eg_user.name is null then '30048|23/xn3x2FAxn8vYAN0IdplsOxaE=' else eg_user.name end) as collectorname,
           billd.additionaldetails->>'comment' as remarks
         FROM egcl_payment AS payment
         INNER JOIN egcl_paymentdetail as paydetail on paydetail.paymentid=payment.id
