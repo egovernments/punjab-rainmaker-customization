@@ -5,7 +5,7 @@ ServiceMaps:
   - topic: save-property-registry-batch
     configKey: INDEX
     indexes:
-      - name: property-services-test
+      - name: property-services
         type: general
         id: $.propertyId,$.tenantId
         jsonPath: $.Property
@@ -624,7 +624,7 @@ ServiceMaps:
   - topic: save-pt-assessment-batch
     configKey: INDEX
     indexes:
-      - name: property-assessments-test
+      - name: property-assessments
         type: general
         id: $.assessmentNumber, $.tenantId
         jsonPath: $.Assessment
