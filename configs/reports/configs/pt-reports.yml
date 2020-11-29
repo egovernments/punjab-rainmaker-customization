@@ -2237,7 +2237,7 @@ ReportDefinitions:
     searchClause: AND pt_addr.locality IN ($localityArray)
   query: |
       -- Use CTE to force query plan, compute & use CTE later
-WITH receipt_breakup AS (
+    WITH receipt_breakup AS (
                   SELECT
                     pd.id as pdid,
                     SUM(CASE WHEN taxheadcode LIKE 'PT_ADHOC_PENALTY' THEN adjustedamount ELSE 0 END) as adhocpenalty, 
