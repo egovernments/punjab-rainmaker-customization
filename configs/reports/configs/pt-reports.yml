@@ -2237,7 +2237,7 @@ ReportDefinitions:
     searchClause: AND pt_addr.locality IN ($localityArray)
   query: |
       -- Use CTE to force query plan, compute & use CTE later
-    WITH receipt_breakup AS (
+      WITH receipt_breakup AS (
                   SELECT
                     pd.id as pdid,
                     SUM(CASE WHEN taxheadcode LIKE 'PT_ADHOC_PENALTY' THEN adjustedamount ELSE 0 END) as adhocpenalty, 
@@ -2259,7 +2259,7 @@ ReportDefinitions:
                   INNER JOIN egcl_paymentdetail as pd on pd.billid = bd.billid
                   INNER JOIN egcl_payment as payment on pd.paymentid=payment.id
                   WHERE payment.tenantid = $tenantid and payment.paymentstatus != 'CANCELLED' and  pd.businessservice='PT'
-		  AND pd.receiptdate >= $fromDate AND pd.receiptdate <= $toDate
+                  AND pd.receiptdate >= $fromDate AND pd.receiptdate <= $toDate
                   GROUP BY pdid
       )
       SELECT 
@@ -2282,7 +2282,7 @@ ReportDefinitions:
         manualreceiptnumber as g8receiptno
       FROM egcl_paymentdetail pd Left outer join eg_user on eg_user.id = pd.createdby::INTEGER, egcl_payment payment, eg_pt_property as pt, receipt_breakup, egcl_bill bill,
       (select string_agg(distinct propertyid,',') as propertyid, string_agg(distinct locality,',') as locality from eg_pt_address where tenantid=$tenantid group by propertyid ) pt_addr
-      where pd.paymentid=payment.id and bill.id=pd.billid and payment.paymentstatus != 'CANCELLED' and pd.businessservice='PT' and payment.tenantid=$tenantid 
+      where pd.paymentid=payment.id and bd.billid=pd.billid and payment.paymentstatus != 'CANCELLED' and pd.businessservice='PT' and payment.tenantid=$tenantid 
       and pt.propertyid = bill.consumercode and receipt_breakup.pdid=pd.id  and pt.status!='INACTIVE' 
       and pt_addr.propertyid=pt.id 
       --and pt.propertyid='PT-1012-978737'
