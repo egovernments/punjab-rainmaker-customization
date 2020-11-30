@@ -3892,8 +3892,8 @@ ReportDefinitions:
       join egcl_payment as payment on payment.id = pd.paymentid
       join egcl_bill as bill on bill.id = pd.billid
       join egcl_billdetial as billd on billd.billid = bill.id
-      JOIN eg_pt_property pt ON pt.propertyid = bill.consumercode
-      inner JOIN eg_pt_address  as pt_addr ON pt_addr.propertyid = pt.id
+      LEFT OUTER JOIN eg_pt_property pt ON pt.propertyid = bill.consumercode
+      LEFT OUTER JOIN eg_pt_address  as pt_addr ON pt_addr.propertyid = pt.id
       LEFT OUTER JOIN eg_user ON eg_user.id = pd.createdby::INTEGER
       WHERE pd.tenantid = $tenantid and payment.paymentstatus != 'CANCELLED' and pt.status!='INACTIVE'
   groupby: GROUP BY financialyear
