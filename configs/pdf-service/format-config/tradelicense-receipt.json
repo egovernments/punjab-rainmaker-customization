@@ -23,7 +23,7 @@
               {
                 "stack": [
                   {
-                    "text": "{{logo-header}} {{mcGrade}}",
+                    "text": "{{mcGrade}} {{logo-header}}",
                     "style": "receipt-logo-header"
                   },
                   {
