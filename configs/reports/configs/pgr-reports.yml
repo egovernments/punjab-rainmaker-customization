@@ -1238,7 +1238,7 @@ ReportDefinitions:
     SELECT (SELECT deptmap.department FROM (VALUES tbl_dept) AS deptmap(serviceCode, department, slaHours) WHERE deptmap.serviceCode = eg_pgr_service.servicecode) AS department, 
     regexp_replace(eg_pgr_service.servicecode, '([a-z])([A-Z])', '\1 \2','g') AS servicecode, 
     servicerequestid AS complaintNo, 
-    to_char(to_timestamp(TRUNC(CAST(eg_pgr_service.createdtime AS bigint) / 1000)), 'DD/MM/YYYY') AS date, 
+    to_char(to_timestamp(TRUNC(eg_pgr_service.createdtime::Integer / 1000)), 'DD/MM/YYYY') AS date, 
     (SELECT boundary_def.name FROM (VALUES tbl_boundary) AS boundary_def(name,code) where code=eg_pgr_address.mohalla) as locality, 
     eg_user.name, 
     phone, 
