@@ -4160,7 +4160,7 @@ ReportDefinitions:
       where pd.paymentid=payment.id and bill.id=pd.billid and payment.paymentstatus != 'CANCELLED' and pd.businessservice='PT' and payment.tenantid=$tenantid
       and pt.propertyid = bill.consumercode and pt.status!='INACTIVE' and pt_addr.propertyid=pt.id
       and concat(to_char((To_timestamp(get_fromperiod(pd.billid)/1000) at time Zone 'Asia/Kolkata'),'YYYY'),'-', to_char((To_timestamp(get_toperiod(pd.billid)/1000) at time Zone 'Asia/Kolkata'),'YY'))='2013-14'
-      and pd.receiptdate>=$fromdate and pd.receiptdate<=$todate
+      and pd.receiptdate>=$fromDate and pd.receiptdate<=$toDate
       GROUP BY financialyear,zonecode
   
     ), 
@@ -4177,7 +4177,7 @@ ReportDefinitions:
       where pd.paymentid=payment.id and bill.id=pd.billid and payment.paymentstatus != 'CANCELLED' and pd.businessservice='PT' and payment.tenantid=$tenantid
       and pt.propertyid = bill.consumercode and pt.status!='INACTIVE' and pt_addr.propertyid=pt.id
       and concat(to_char((To_timestamp(get_fromperiod(pd.billid)/1000) at time Zone 'Asia/Kolkata'),'YYYY'),'-', to_char((To_timestamp(get_toperiod(pd.billid)/1000) at time Zone 'Asia/Kolkata'),'YY'))='2014-15'
-      and pd.receiptdate>=$fromdate and pd.receiptdate<=$todate
+      and pd.receiptdate>=$fromDate and pd.receiptdate<=$toDate
       GROUP BY financialyear,zonecode
     ), 
     fy2015 as
@@ -4193,7 +4193,7 @@ ReportDefinitions:
       where pd.paymentid=payment.id and bill.id=pd.billid and payment.paymentstatus != 'CANCELLED' and pd.businessservice='PT' and payment.tenantid=$tenantid
       and pt.propertyid = bill.consumercode and pt.status!='INACTIVE' and pt_addr.propertyid=pt.id
       and concat(to_char((To_timestamp(get_fromperiod(pd.billid)/1000) at time Zone 'Asia/Kolkata'),'YYYY'),'-', to_char((To_timestamp(get_toperiod(pd.billid)/1000) at time Zone 'Asia/Kolkata'),'YY'))='2015-16'
-      and pd.receiptdate>=$fromdate and pd.receiptdate<=$todate
+      and pd.receiptdate>=$fromDate and pd.receiptdate<=$toDate
       GROUP BY financialyear,zonecode
     ), 
     fy2016 as
@@ -4209,7 +4209,7 @@ ReportDefinitions:
       where pd.paymentid=payment.id and bill.id=pd.billid and payment.paymentstatus != 'CANCELLED' and pd.businessservice='PT' and payment.tenantid=$tenantid
       and pt.propertyid = bill.consumercode and pt.status!='INACTIVE' and pt_addr.propertyid=pt.id
       and concat(to_char((To_timestamp(get_fromperiod(pd.billid)/1000) at time Zone 'Asia/Kolkata'),'YYYY'),'-', to_char((To_timestamp(get_toperiod(pd.billid)/1000) at time Zone 'Asia/Kolkata'),'YY'))='2016-17'
-      and pd.receiptdate>=$fromdate and pd.receiptdate<=$todate
+      and pd.receiptdate>=$fromDate and pd.receiptdate<=$toDate
       GROUP BY financialyear,zonecode
     ), 
     fy2017 as
@@ -4225,7 +4225,7 @@ ReportDefinitions:
       where pd.paymentid=payment.id and bill.id=pd.billid and payment.paymentstatus != 'CANCELLED' and pd.businessservice='PT' and payment.tenantid=$tenantid
       and pt.propertyid = bill.consumercode and pt.status!='INACTIVE' and pt_addr.propertyid=pt.id
       and concat(to_char((To_timestamp(get_fromperiod(pd.billid)/1000) at time Zone 'Asia/Kolkata'),'YYYY'),'-', to_char((To_timestamp(get_toperiod(pd.billid)/1000) at time Zone 'Asia/Kolkata'),'YY'))='2017-18'
-      and pd.receiptdate>=$fromdate and pd.receiptdate<=$todate
+      and pd.receiptdate>=$fromDate and pd.receiptdate<=$toDate
       GROUP BY financialyear,zonecode
     ),
     fy2018 as
@@ -4241,7 +4241,7 @@ ReportDefinitions:
       where pd.paymentid=payment.id and bill.id=pd.billid and payment.paymentstatus != 'CANCELLED' and pd.businessservice='PT' and payment.tenantid=$tenantid
       and pt.propertyid = bill.consumercode and pt.status!='INACTIVE' and pt_addr.propertyid=pt.id
       and concat(to_char((To_timestamp(get_fromperiod(pd.billid)/1000) at time Zone 'Asia/Kolkata'),'YYYY'),'-', to_char((To_timestamp(get_toperiod(pd.billid)/1000) at time Zone 'Asia/Kolkata'),'YY'))='2018-19'
-      and pd.receiptdate>=$fromdate and pd.receiptdate<=$todate
+      and pd.receiptdate>=$fromDate and pd.receiptdate<=$toDate
       GROUP BY financialyear,zonecode
     ),
     fy2019 as
@@ -4257,7 +4257,7 @@ ReportDefinitions:
       where pd.paymentid=payment.id and bill.id=pd.billid and payment.paymentstatus != 'CANCELLED' and pd.businessservice='PT' and payment.tenantid=$tenantid
       and pt.propertyid = bill.consumercode and pt.status!='INACTIVE' and pt_addr.propertyid=pt.id
       and concat(to_char((To_timestamp(get_fromperiod(pd.billid)/1000) at time Zone 'Asia/Kolkata'),'YYYY'),'-', to_char((To_timestamp(get_toperiod(pd.billid)/1000) at time Zone 'Asia/Kolkata'),'YY'))='2019-20'
-      and pd.receiptdate>=$fromdate and pd.receiptdate<=$todate
+      and pd.receiptdate>=$fromDate and pd.receiptdate<=$toDate
       GROUP BY financialyear,zonecode
     ),
     fy2020 as
@@ -4273,7 +4273,7 @@ ReportDefinitions:
       where pd.paymentid=payment.id and bill.id=pd.billid and payment.paymentstatus != 'CANCELLED' and pd.businessservice='PT' and payment.tenantid=$tenantid
       and pt.propertyid = bill.consumercode and pt.status!='INACTIVE' and pt_addr.propertyid=pt.id
       and concat(to_char((To_timestamp(get_fromperiod(pd.billid)/1000) at time Zone 'Asia/Kolkata'),'YYYY'),'-', to_char((To_timestamp(get_toperiod(pd.billid)/1000) at time Zone 'Asia/Kolkata'),'YY'))='2020-21'
-      and pd.receiptdate>=$fromdate and pd.receiptdate<=$todate
+      and pd.receiptdate>=$fromDate and pd.receiptdate<=$toDate
       GROUP BY financialyear,zonecode
     ),
     zones as
@@ -4442,7 +4442,7 @@ ReportDefinitions:
       where pd.paymentid=payment.id and bill.id=pd.billid and payment.paymentstatus != 'CANCELLED' and pd.businessservice='PT' and payment.tenantid=$tenantid
       and pt.propertyid = bill.consumercode and pt.status!='INACTIVE' and pt_addr.propertyid=pt.id
       and concat(to_char((To_timestamp(get_fromperiod(pd.billid)/1000) at time zone 'Asia/Kolkata'),'YYYY'),'-', to_char((To_timestamp(get_toperiod(pd.billid)/1000) at time zone 'Asia/Kolkata'),'YY'))='2013-14'
-      and pd.receiptdate>=$fromperiod and pd.receiptdate<=$toperiod
+      and pd.receiptdate>=$fromDate and pd.receiptdate<=$toDate
       GROUP BY financialyear,blockcode
   
     ), 
@@ -4459,7 +4459,7 @@ ReportDefinitions:
       where pd.paymentid=payment.id and bill.id=pd.billid and payment.paymentstatus != 'CANCELLED' and pd.businessservice='PT' and payment.tenantid=$tenantid
       and pt.propertyid = bill.consumercode and pt.status!='INACTIVE' and pt_addr.propertyid=pt.id
       and concat(to_char((To_timestamp(get_fromperiod(pd.billid)/1000) at time zone 'Asia/Kolkata'),'YYYY'),'-', to_char((To_timestamp(get_toperiod(pd.billid)/1000) at time zone 'Asia/Kolkata'),'YY'))='2014-15'
-      and pd.receiptdate>=$fromperiod and pd.receiptdate<=$toperiod
+      and pd.receiptdate>=$fromDate and pd.receiptdate<=$toDate
       GROUP BY financialyear,blockcode
     ), 
     fy2015 as
@@ -4475,7 +4475,7 @@ ReportDefinitions:
       where pd.paymentid=payment.id and bill.id=pd.billid and payment.paymentstatus != 'CANCELLED' and pd.businessservice='PT' and payment.tenantid=$tenantid
       and pt.propertyid = bill.consumercode and pt.status!='INACTIVE' and pt_addr.propertyid=pt.id
       and concat(to_char((To_timestamp(get_fromperiod(pd.billid)/1000) at time zone 'Asia/Kolkata'),'YYYY'),'-', to_char((To_timestamp(get_toperiod(pd.billid)/1000) at time zone 'Asia/Kolkata'),'YY'))='2015-16'
-      and pd.receiptdate>=$fromperiod and pd.receiptdate<=$toperiod
+      and pd.receiptdate>=$fromDate and pd.receiptdate<=$toDate
       GROUP BY financialyear,blockcode
     ), 
     fy2016 as
@@ -4491,7 +4491,7 @@ ReportDefinitions:
       where pd.paymentid=payment.id and bill.id=pd.billid and payment.paymentstatus != 'CANCELLED' and pd.businessservice='PT' and payment.tenantid=$tenantid
       and pt.propertyid = bill.consumercode and pt.status!='INACTIVE' and pt_addr.propertyid=pt.id
       and concat(to_char((To_timestamp(get_fromperiod(pd.billid)/1000) at time zone 'Asia/Kolkata'),'YYYY'),'-', to_char((To_timestamp(get_toperiod(pd.billid)/1000) at time zone 'Asia/Kolkata'),'YY'))='2016-17'
-      and pd.receiptdate>=$fromperiod and pd.receiptdate<=$toperiod
+      and pd.receiptdate>=$fromDate and pd.receiptdate<=$toDate
       GROUP BY financialyear,blockcode
     ), 
     fy2017 as
@@ -4507,7 +4507,7 @@ ReportDefinitions:
       where pd.paymentid=payment.id and bill.id=pd.billid and payment.paymentstatus != 'CANCELLED' and pd.businessservice='PT' and payment.tenantid=$tenantid
       and pt.propertyid = bill.consumercode and pt.status!='INACTIVE' and pt_addr.propertyid=pt.id
       and concat(to_char((To_timestamp(get_fromperiod(pd.billid)/1000) at time zone 'Asia/Kolkata'),'YYYY'),'-', to_char((To_timestamp(get_toperiod(pd.billid)/1000) at time zone 'Asia/Kolkata'),'YY'))='2017-18'
-      and pd.receiptdate>=$fromperiod and pd.receiptdate<=$toperiod
+      and pd.receiptdate>=$fromDate and pd.receiptdate<=$toDate
       GROUP BY financialyear,blockcode
     ),
     fy2018 as
@@ -4523,7 +4523,7 @@ ReportDefinitions:
       where pd.paymentid=payment.id and bill.id=pd.billid and payment.paymentstatus != 'CANCELLED' and pd.businessservice='PT' and payment.tenantid=$tenantid
       and pt.propertyid = bill.consumercode and pt.status!='INACTIVE' and pt_addr.propertyid=pt.id
       and concat(to_char((To_timestamp(get_fromperiod(pd.billid)/1000) at time zone 'Asia/Kolkata'),'YYYY'),'-', to_char((To_timestamp(get_toperiod(pd.billid)/1000) at time zone 'Asia/Kolkata'),'YY'))='2018-19'
-      and pd.receiptdate>=$fromperiod and pd.receiptdate<=$toperiod
+      and pd.receiptdate>=$fromDate and pd.receiptdate<=$toDate
       GROUP BY financialyear,blockcode
     ),
     fy2019 as
@@ -4539,7 +4539,7 @@ ReportDefinitions:
       where pd.paymentid=payment.id and bill.id=pd.billid and payment.paymentstatus != 'CANCELLED' and pd.businessservice='PT' and payment.tenantid=$tenantid
       and pt.propertyid = bill.consumercode and pt.status!='INACTIVE' and pt_addr.propertyid=pt.id
       and concat(to_char((To_timestamp(get_fromperiod(pd.billid)/1000) at time zone 'Asia/Kolkata'),'YYYY'),'-', to_char((To_timestamp(get_toperiod(pd.billid)/1000) at time zone 'Asia/Kolkata'),'YY'))='2019-20'
-      and pd.receiptdate>=$fromperiod and pd.receiptdate<=$toperiod
+      and pd.receiptdate>=$fromDate and pd.receiptdate<=$toDate
       GROUP BY financialyear,blockcode
     ),
     fy2020 as
@@ -4555,7 +4555,7 @@ ReportDefinitions:
       where pd.paymentid=payment.id and bill.id=pd.billid and payment.paymentstatus != 'CANCELLED' and pd.businessservice='PT' and payment.tenantid=$tenantid
       and pt.propertyid = bill.consumercode and pt.status!='INACTIVE' and pt_addr.propertyid=pt.id
       and concat(to_char((To_timestamp(get_fromperiod(pd.billid)/1000) at time zone 'Asia/Kolkata'),'YYYY'),'-', to_char((To_timestamp(get_toperiod(pd.billid)/1000) at time zone 'Asia/Kolkata'),'YY'))='2020-21'
-      and pd.receiptdate>=$fromperiod and pd.receiptdate<=$toperiod
+      and pd.receiptdate>=$fromDate and pd.receiptdate<=$toDate
       GROUP BY financialyear,blockcode
     ),
     blocks as
@@ -4593,6 +4593,4 @@ ReportDefinitions:
     left outer join fy2019 on fy2019.blockcode=blocks.blockcode
     left outer join fy2020 on fy2020.blockcode=blocks.blockcode
     where 1=1
-    order by blockname
-
   orderby: order by blockname
