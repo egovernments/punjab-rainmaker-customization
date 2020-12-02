@@ -3896,7 +3896,7 @@ ReportDefinitions:
   query: |
       -- Use CTE to force query plan, compute & use CTE later
       SELECT 
-        sum(payment.totalamountpaid) as amount,
+        sum(payment.totalamountpaid) as totalamount,
         count(payment.totalamountpaid) as totalcount,
         sum(case when payment.paymentmode='ONLINE' then payment.totalamountpaid else 0 end) as "online",
         sum(case when payment.paymentmode='CASH' then payment.totalamountpaid else 0 end) as "cash",
