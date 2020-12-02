@@ -484,76 +484,7 @@
                   "prefix": null,
                   "module":"rainmaker-common"
                }
-              },  {
-                "variable": "var_assessments",                        
-                "value":{
-                  "path":"$.paymentDetails[0].bill.billDetails.*.billAccountDetails[?(@.taxHeadCode=='PT_TAX' && @.amount>0)]"},
-                 "type":"array",
-                 "format":{                            
-                    
-                    "scema":[
-                       {
-                          "variable":"ass_to",
-                          "value":{"path":"toPeriod"},
-                          "type":"date"
-
-                       }, 
-                       {
-                        "variable":"ass_from",
-                        "value":"fromPeriod",
-                        "type":"date"
-                     },
-                       {
-                         "variable":"ass_time_interest",
-                         "value":"billAccountDetails[?(@.taxHeadCode=='PT_TIME_INTEREST')].amount"
-                        
-                      }, {
-                        "variable":"ass_time_penalty",
-                        "value":"billAccountDetails[?(@.taxHeadCode=='PT_TIME_PENALTY')].amount"
-                       
-                     }, {
-                      "variable":"ass_cancer_cess",
-                      "value":"billAccountDetails[?(@.taxHeadCode=='PT_CANCER_CESS')].amount"
-                     
-                   }, {
-                    "variable":"ass_fire_cess",
-                    "value":"billAccountDetails[?(@.taxHeadCode=='PT_FIRE_CESS')].amount"
-                   
-                 }, {
-                  "variable":"ass_tax",
-                  "value":{"path":"billAccountDetails[4].amount"}
-               }, {
-                "variable":"ass_adhoc_penalty",
-                "value":{"path":"$.billAccountDetails[?(@.taxHeadCode=='PT_ADHOC_PENALTY')].amount"}
-               
-             }, {
-              "variable":"ass_adhoc_rebate",
-              "value":{"path":"$.billAccountDetails[?(@.taxHeadCode=='PT_ADHOC_REBATE')].amount"}
-             
-           }, {
-            "variable":"ass_time_rebate",
-            "value":"billAccountDetails[?(@.taxHeadCode=='PT_TIME_REBATE)].amount"
-           
-         }   , {
-          "variable":"ass_unit_usage_exemption",
-          "value":"billAccountDetails[?(@.taxHeadCode=='PT_UNIT_USAGE_EXEMPTION')].amount"
-         
-       },       {
-        "variable":"ass_owner_exemption",
-        "value":"billAccountDetails[2].amount"
-       
-     }, {
-      "variable":"ass_round_off",
-      "value":"billAccountDetails[?(@.taxHeadCode=='PT_ROUNDOFF')].amount"
-     
-   }, {
-    "variable":"ass_total",
-    "value":"amount"
-   
- }
-                     ]
-                } 
-             },
+              }, 
               {
                 "variable": "disclamer",
                 "value": {
@@ -619,7 +550,7 @@
           {
             "externalAPI": [     
               { 
-                  "path": "http://egov-mdms-service:8080/egov-mdms-service/v1/_get",
+                  "path": "http://localhost:8079/egov-mdms-service/v1/_get",
                   "queryParam": "moduleName=tenant&masterName=tenants&tenantId=pb&filter=%5B?(@.code=='{$.tenantId}')%5D",
                   "apiRequest": null,
                   "responseMapping":[
@@ -660,7 +591,7 @@
                   ]
               },
               { 
-                "path": "http://property-services.egov:8080/property-services/property/_search",
+                "path": "http://localhost:8078/property-services/property/_search",
                 "queryParam": "propertyIds=$.paymentDetails[0].bill.consumerCode,tenantId=$.tenantId",
                 "apiRequest": null,
                 "responseMapping":[
@@ -811,7 +742,7 @@
                 ]
              },
               { 
-                "path": "http://egov-mdms-service:8080/egov-mdms-service/v1/_get",
+                "path": "http://localhost:8079/egov-mdms-service/v1/_get",
                 "queryParam": "moduleName=tenant&masterName=footer&tenantId=pb&filter=%5B?(@.code=='{$.tenantId}' %26%26 @.service=='{$.paymentDetails[0].businessService}')%5D",
                 "apiRequest": null,
                 "responseMapping":[

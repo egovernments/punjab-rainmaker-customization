@@ -109,7 +109,7 @@
                 false,
                 false
               ],
-              "style": "receipt-table"
+              "style": "receipt-tableee"
             },
             {
               "text": "{{consumer_id}}",
@@ -129,7 +129,7 @@
                 true,
                 false
               ],
-              "style": "receipt-table"
+              "style": "receipt-tableee"
             }
           ],
     [
@@ -151,7 +151,7 @@
                 false,
                 false
               ],
-              "style": "receipt-table"
+              "style": "receipt-tableee"
             },
             {
               "text": "Existing Property Id",
@@ -171,7 +171,7 @@
                 true,
                 false
               ],
-              "style": "receipt-table"
+              "style": "receipt-tableee"
             }
           ],
           [
@@ -1221,6 +1221,17 @@
       "bold": false,
       "fontSize": 7,
       "fontWeight": 400,
+      "margin": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },"receipt-tableee": {
+      "color": "#000000",
+      "bold": false,
+      "fontSize": 7,
+      "fontWeight": 500,
       "margin": [
         0,
         0,
