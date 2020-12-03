@@ -652,7 +652,7 @@ async function _createAndUpdateZeroTaxProcessor(request, response) {
     console.log("Response:", response);
     let index = 0
 
-    for (reqProperty of request["Assessments"]) {
+    for (reqProperty of response["Assessments"]) {
 
         let resProperty = response["Assessments"][index]
         let propertyId = resProperty["propertyId"]
