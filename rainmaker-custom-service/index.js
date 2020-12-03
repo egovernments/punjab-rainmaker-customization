@@ -1048,12 +1048,13 @@ router.post('/protected/punjab-pt/pt-calculator-v2/_estimate', asyncMiddleware(a
 
 
     let oldRequestbody = await getOldRequestBody(request); 
+    console.log("Old Request Body:", oldRequestbody);
     oldRequestbody["CalculationCriteria"][0]["assessmentYear"] =  assessmentYear;
     // assessmentYear field was there in old request body but not present in new request body Without this field we will get null pointer exception.
 
 
     if (assessmentYear == PT_ZERO_ASSESSMENTYEAR && PT_ZERO_TENANTS.indexOf(tenantId) >= 0){
-        response = _estimateZeroTaxProcessor(request, response)
+        response = _estimateZeroTaxProcessor(oldRequestbody, response)
     }
     else if (assessmentYear == PT_INTEGRATION_ASSESSMENTYEAR){
             
