@@ -710,13 +710,13 @@ async function _createAndUpdateZeroTaxProcessor(request, response) {
             }
         }
 
-        let taxHeads = calc["taxHeadEstimates"];
+        /*let taxHeads = calc["taxHeadEstimates"];
 
         for (taxHead of taxHeads) {
             if (taxHead.taxHeadCode != "PT_ADHOC_PENALTY" && taxHead.taxHeadCode == 'PT_ADVANCE_CARRYFORWARD') {
                 taxHead.estimateAmount = 0
             }
-        }
+        }*/
         let demandUpdateResponse = await updateDemand(demandSearchResponse["Demands"], request["RequestInfo"])
 
       /*  calc["taxAmount"] = 0;
