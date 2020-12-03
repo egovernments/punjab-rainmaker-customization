@@ -385,10 +385,13 @@ router.post('/protected/bndlogin', asyncMiddleware(async function (req, res) {
 async function findDemandForConsumerCode(consumerCode, tenantId, service, RequestInfo) {
 
     log("Got Request to Find Demand for Comsumer code: "+consumerCode+" tenantid : "+tenantId+" Service : "+service);
-
+      let fromDate = 1364774400000
+      let toDate = 1396310399000
+      let status = "ACTIVE"
     let demandSearchResponse = await request.post({
         url: url.resolve(PT_DEMAND_HOST, "/billing-service/demand/_search?tenantId=" + tenantId +
-            "&consumerCode=" + consumerCode + "&businessService=" + service),
+            "&consumerCode=" + consumerCode + "&businessService=" + service + "&periodFrom=" + fromDate + 
+            "&periodTo=" + toDate + "&status=" + status),
         body: {
             RequestInfo
         },
@@ -648,15 +651,25 @@ async function _createAndUpdateZeroTaxProcessor(request, response) {
     console.log("Request:", request);
     console.log("Response:", response);
     let index = 0
-    for (reqProperty of request["Properties"]) {
 
-        let resProperty = response["Properties"][index]
+    for (reqProperty of request["Assessments"]) {
+
+        let resProperty = response["Assessments"][index]
         let propertyId = resProperty["propertyId"]
+        let assessmentNumber = resProperty["assessmentNumber"]
 
-        let assessmentNumber = resProperty["propertyDetails"][0]["assessmentNumber"]
-
-        let assessmentYear = resProperty["propertyDetails"][0]["financialYear"]
+        let assessmentYear = resProperty["financialYear"]
         let tenantId = reqProperty["tenantId"]
+
+    // for (reqProperty of request["Properties"]) {
+
+    //     let resProperty = response["Properties"][index]
+    //     let propertyId = resProperty["propertyId"]
+
+    //     let assessmentNumber = resProperty["propertyDetails"][0]["assessmentNumber"]
+
+    //     let assessmentYear = resProperty["propertyDetails"][0]["financialYear"]
+    //     let tenantId = reqProperty["tenantId"]
 
         if (isCitizen(request) && assessmentYear === PT_ZERO_ASSESSMENTYEAR) {
             data =  
@@ -679,7 +692,7 @@ async function _createAndUpdateZeroTaxProcessor(request, response) {
 
         request_info = request["RequestInfo"] || request["requestInfo"]
 
-        let consumerCode = propertyId + ":" + assessmentNumber
+        let consumerCode = propertyId
         let service = "PT"
         let calc = response["Properties"][index]["propertyDetails"][0]["calculation"]
 
