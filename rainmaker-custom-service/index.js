@@ -694,7 +694,7 @@ async function _createAndUpdateZeroTaxProcessor(request, response) {
 
         let consumerCode = propertyId
         let service = "PT"
-        let calc = response["Properties"][index]["propertyDetails"][0]["calculation"]
+       // let calc = response["Properties"][index]["propertyDetails"][0]["calculation"]
 
         let newTotal = 0;
 
@@ -719,11 +719,11 @@ async function _createAndUpdateZeroTaxProcessor(request, response) {
         }
         let demandUpdateResponse = await updateDemand(demandSearchResponse["Demands"], request["RequestInfo"])
 
-        calc["taxAmount"] = 0;
+      /*  calc["taxAmount"] = 0;
         calc["exemption"] = 0;
         calc["totalAmount"] = newTotal;
         calc["rebate"] = 0
-        calc["penanlty"] = newTotal
+        calc["penanlty"] = newTotal*/
         index++
     }
 
