@@ -644,6 +644,9 @@ function _estimateZeroTaxProcessor(request, response) {
 // }
 
 async function _createAndUpdateZeroTaxProcessor(request, response) {
+    console.log("Entered in to _createAndUpdateZeroTaxProcessor======");
+    console.log("Request:", request);
+    console.log("Response:", response);
     let index = 0
     for (reqProperty of request["Properties"]) {
 
