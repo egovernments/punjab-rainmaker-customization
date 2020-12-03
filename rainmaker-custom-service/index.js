@@ -482,8 +482,13 @@ async function _estimateIntegrationTaxProcessor(req1, res1) {
 
 function _estimateZeroTaxProcessor(request, response) {
     let index = 0;
+    console.log("Request:",request, "Response:", response );
+
+    console.log("request[CalculationCriteria]:", request["CalculationCriteria"])
 
     for (let calc of response["Calculation"]) {
+        console.log("Response Calculation:", calc );
+
         let assessmentYear = request["CalculationCriteria"][index]["assessmentYear"]
         let tenantId = request["CalculationCriteria"][index]["tenantId"]
         let newTotal = 0;
