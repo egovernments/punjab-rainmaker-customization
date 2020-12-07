@@ -3019,13 +3019,13 @@ ReportDefinitions:
     type: epoch
     source: pt
     isMandatory: false
-    searchClause: AND payment.createdtime >= $fromDate
+    searchClause: AND pd.receiptdate >= $fromDate
   - name: toDate
     label: reports.pt.toDate
     type: epoch
     source: pt
     isMandatory: false
-    searchClause: AND payment.createdtime <= $toDate
+    searchClause: pd.receiptdate <= $toDate
   - name: financialyear
     label: Financial Year
     type: singlevaluelist
@@ -3033,7 +3033,7 @@ ReportDefinitions:
     source: pt
     wrapper: true
     isMandatory: false
-    searchClause: AND concat(to_char((To_timestamp(fromperiod/1000) at time Zone 'Asia/Kolkata'),'YYYY'),'-',to_char((To_timestamp(toperiod/1000) at time Zone 'Asia/Kolkata'),'YY')) = $financialyear
+    searchClause: AND concat(to_char((To_timestamp(get_fromperiod(pd.billid)/1000) at time Zone 'Asia/Kolkata'),'YYYY'),'-', to_char((To_timestamp(get_toperiod(pd.billid)/1000) at time Zone 'Asia/Kolkata'),'YY')) = $financialyear
   - name: usage
     label: Usage
     type: singlevaluelist
@@ -3041,22 +3041,27 @@ ReportDefinitions:
     source: pt
     wrapper: true
     isMandatory: false
-    searchClause: AND eg_pt_property.usagecategory = $usage
+    searchClause: AND pt.usagecategory = $usage
   query: |
     SELECT 
-      initcap(split_part(payment.tenantid, '.', 2)) as tenantid, 
-      COUNT(paymentmode) AS totalassessments, 
-      SUM(payment.totalamountpaid) AS totalamountpaid, 
-      SUM(CASE WHEN paymentmode='ONLINE' THEN totalamountpaid ELSE 0 END) AS totalonline, 
-      SUM(CASE WHEN paymentmode='ONLINE' THEN 1 ELSE 0 END) AS countonline,
-      SUM(CASE WHEN paymentmode!='ONLINE' THEN totalamountpaid ELSE 0 END) AS totaloffline,
-      SUM(CASE WHEN paymentmode!='ONLINE' THEN 1 ELSE 0 END) AS countoffline
-    FROM  egcl_paymentdetail as pd
-    inner join egcl_payment as payment on payment.id=pd.paymentid
-    inner join egcl_bill bill on bill.id=pd.billid
-    inner join eg_pt_property on eg_pt_property.propertyid=bill.consumercode
-    inner join egcl_billdetial billd on billd.billid=bill.id
-    WHERE payment.paymentstatus!='CANCELLED' and pd.businessservice='PT' and payment.tenantid !='pb.testing'
+        initcap(split_part(payment.tenantid, '.', 2)) as tenantid, 
+        sum(payment.totalamountpaid) as totalamountpaid,
+        count(payment.totalamountpaid) as totalassessments,
+        sum(case when payment.paymentmode='ONLINE' then payment.totalamountpaid else 0 end) as "totalonline",
+        sum(case when payment.paymentmode='ONLINE' then 1 else 0 end) as "countonline",
+        sum(case when payment.paymentmode='CASH' then payment.totalamountpaid else 0 end) +
+        sum(case when payment.paymentmode='CHEQUE' then payment.totalamountpaid else 0 end) +
+        sum(case when payment.paymentmode='DD' then payment.totalamountpaid else 0 end) +
+        sum(case when payment.paymentmode='CARD' then payment.totalamountpaid else 0 end) + 
+        sum(case when payment.paymentmode='OFFLINE_RTGS' then payment.totalamountpaid else 0 end) +
+        sum(case when payment.paymentmode='OFFLINE_NEFT' then payment.totalamountpaid else 0 end) +
+        sum(case when payment.paymentmode='POTAL_ORDER' then payment.totalamountpaid else 0 end) as "totaloffline",
+        sum(case when payment.paymentmode!='ONLINE' then 1 else 0 end) as "countoffline"
+        --concat(to_char((To_timestamp(get_fromperiod(pd.billid)/1000) at time Zone 'Asia/Kolkata'),'YYYY'),'-', to_char((To_timestamp(get_toperiod(pd.billid)/1000) at time Zone 'Asia/Kolkata'),'YY')) as financialyear
+      FROM egcl_paymentdetail pd Left outer join eg_user on eg_user.id = pd.createdby::INTEGER, egcl_payment payment, eg_pt_property as pt, egcl_bill bill,
+      (select string_agg(distinct propertyid,',') as propertyid, string_agg(distinct locality,',') as locality from eg_pt_address where tenantid!='pb.testing' group by propertyid ) pt_addr
+      where pd.paymentid=payment.id and bill.id=pd.billid and payment.paymentstatus != 'CANCELLED' and pd.businessservice='PT' and payment.tenantid!='pb.testing'
+      and pt.propertyid = bill.consumercode and pt.status!='INACTIVE' and pt_addr.propertyid=pt.id
   groupby: GROUP BY payment.tenantid 
   orderby: ORDER BY payment.tenantid, totalamountpaid DESC NULLS LAST
   
@@ -3102,13 +3107,13 @@ ReportDefinitions:
     type: epoch
     source: pt
     isMandatory: false
-    searchClause: AND payment.createdtime >= $fromDate
+    searchClause: AND pd.receiptdate >= $fromDate
   - name: toDate
     label: reports.pt.toDate
     type: epoch
     source: pt
     isMandatory: false
-    searchClause: AND payment.createdtime <= $toDate
+    searchClause: AND pd.receiptdate <= $toDate
   - name: financialyear
     label: Financial Year
     type: singlevaluelist
@@ -3116,7 +3121,7 @@ ReportDefinitions:
     source: pt
     wrapper: true
     isMandatory: false
-    searchClause: AND concat(to_char((To_timestamp(fromperiod/1000) at time Zone 'Asia/Kolkata'),'YYYY'),'-',to_char((To_timestamp(toperiod/1000) at time Zone 'Asia/Kolkata'),'YY')) = $financialyear
+    searchClause: AND concat(to_char((To_timestamp(get_fromperiod(pd.billid)/1000) at time Zone 'Asia/Kolkata'),'YYYY'),'-', to_char((To_timestamp(get_toperiod(pd.billid)/1000) at time Zone 'Asia/Kolkata'),'YY')) = $financialyear
   - name: usage
     label: Usage
     type: singlevaluelist
@@ -3124,27 +3129,28 @@ ReportDefinitions:
     source: pt
     wrapper: true
     isMandatory: false
-    searchClause: AND eg_pt_property.usagecategory = $usage
+    searchClause: AND pt.usagecategory = $usage
   query: |
     SELECT 
-      initcap(split_part(payment.tenantid, '.', 2)) as tenantid, 
-      COUNT(paymentmode) AS totalassessments, 
-      SUM(payment.totalamountpaid) AS totalamountpaid, 
-      SUM(CASE WHEN paymentmode='ONLINE' THEN totalamountpaid ELSE 0 END) AS totalonline, 
-      SUM(CASE WHEN paymentmode='ONLINE' THEN 1 ELSE 0 END) AS countonline,
-      SUM(CASE WHEN paymentmode!='ONLINE' THEN totalamountpaid ELSE 0 END) AS totaloffline,
-      SUM(CASE WHEN paymentmode!='ONLINE' THEN 1 ELSE 0 END) AS countoffline
-    FROM  egcl_paymentdetail as pd
-    inner join egcl_payment as payment on payment.id=pd.paymentid
-    inner join egcl_bill bill on bill.id=pd.billid
-    inner join eg_pt_property on eg_pt_property.propertyid=bill.consumercode
-    inner join egcl_billdetial billd on billd.billid=bill.id
-    WHERE payment.tenantid = $tenantid
-    and payment.paymentstatus!='CANCELLED'
-    and pd.businessservice='PT'
-    --and payment.createdtime>='1577817000000' and payment.createdtime<='1580495399000'
-  groupby: GROUP BY payment.tenantid 
-  orderby: ORDER BY payment.tenantid, totalamountpaid DESC NULLS LAST
+        --initcap(split_part(payment.tenantid, '.', 2)) as tenantid, 
+        sum(payment.totalamountpaid) as totalamountpaid,
+        count(payment.totalamountpaid) as totalassessments,
+        sum(case when payment.paymentmode='ONLINE' then payment.totalamountpaid else 0 end) as "totalonline",
+        sum(case when payment.paymentmode='ONLINE' then 1 else 0 end) as "countonline",
+        sum(case when payment.paymentmode='CASH' then payment.totalamountpaid else 0 end) +
+        sum(case when payment.paymentmode='CHEQUE' then payment.totalamountpaid else 0 end) +
+        sum(case when payment.paymentmode='DD' then payment.totalamountpaid else 0 end) +
+        sum(case when payment.paymentmode='CARD' then payment.totalamountpaid else 0 end) + 
+        sum(case when payment.paymentmode='OFFLINE_RTGS' then payment.totalamountpaid else 0 end) +
+        sum(case when payment.paymentmode='OFFLINE_NEFT' then payment.totalamountpaid else 0 end) +
+        sum(case when payment.paymentmode='POTAL_ORDER' then payment.totalamountpaid else 0 end) as "totaloffline",
+        sum(case when payment.paymentmode!='ONLINE' then 1 else 0 end) as "countoffline"
+        --concat(to_char((To_timestamp(get_fromperiod(pd.billid)/1000) at time Zone 'Asia/Kolkata'),'YYYY'),'-', to_char((To_timestamp(get_toperiod(pd.billid)/1000) at time Zone 'Asia/Kolkata'),'YY')) as financialyear
+      FROM egcl_paymentdetail pd Left outer join eg_user on eg_user.id = pd.createdby::INTEGER, egcl_payment payment, eg_pt_property as pt, egcl_bill bill,
+      (select string_agg(distinct propertyid,',') as propertyid, string_agg(distinct locality,',') as locality from eg_pt_address where tenantid=$tenanid group by propertyid ) pt_addr
+      where pd.paymentid=payment.id and bill.id=pd.billid and payment.paymentstatus != 'CANCELLED' and pd.businessservice='PT' and payment.tenantid=$tenantid  
+      and pt.propertyid = bill.consumercode and pt.status!='INACTIVE' and pt_addr.propertyid=pt.id
+
 
 - reportName: ReceiptRegisterShort_V2
   decryptionPathId: ReceiptRegisterShort_V2
