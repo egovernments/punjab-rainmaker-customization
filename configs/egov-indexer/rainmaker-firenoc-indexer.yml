@@ -31,3 +31,13 @@ ServiceMaps:
       isBulk: true
       timeStampField: $.auditDetails.createdTime
       jsonPath: $.FireNOCs
+      
+  - topic: save-firenoc-legacyIndex
+    configKey: INDEX
+    indexes:
+    - name: firenoc-index
+      type: FireNOCs
+      id: $.id, $.tenantId
+      isBulk: true
+      timeStampField: $.auditDetails.createdTime
+      jsonPath: $.FireNOCs
