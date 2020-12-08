@@ -66,6 +66,21 @@
                 "value": {
                   "path": "$.paymentDetails[0].additionalDetails.assessmentYears"
                 }
+              },  {
+                "variable": "ifsc", 
+                "value": {
+                  "path": "$.ifscCode"
+                }
+              },{
+                "variable": "bank", 
+                "value": {
+                  "path": "$.additionalDetails[0].bankName"
+                }
+              },{
+                "variable": "branch", 
+                "value": {
+                  "path": "$.additionalDetails[0].branchName"
+                }
               },
               {
                 "variable": "fromPeriod", 
@@ -151,7 +166,12 @@
                 "value": {
                   "path": "$.paymentDetails[0].bill.totalAmount"
                 }
-              },  {
+              }, {
+                "variable": "approvedBy", 
+                "value": {
+                  "path": "$.paymentDetails[0].bill.additionalDetails.lastModifier"
+                }
+              }, {
                 "variable": "penaltyReason", 
                 "value": {
                   "path": "$.paymentDetails[0].bill.additionalDetails.adhocPenaltyReason"

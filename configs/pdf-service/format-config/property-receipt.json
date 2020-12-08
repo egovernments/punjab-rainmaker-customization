@@ -711,6 +711,47 @@
                 ],
                 "style": "receipt-table"
               }
+            ],[
+              {
+                "text": "IFSC Code",
+                "border": [
+                  true,
+                  false,
+                  false,
+                  false
+                ],
+                "style": "receipt-table-value"
+              },
+              {
+                "text": "{{ifsc}}",
+                "border": [
+                  false,
+                  false,
+                  false,
+                  false
+                ],
+                "style": "receipt-table"
+              },
+              {
+                "text": "Bank/Branch Name",
+                "border": [
+                  false,
+                  false,
+                  false,
+                  false
+                ],
+                "style": "receipt-table-value"
+              },
+              {
+                "text": "{{bank}},{{branch}}",
+                "border": [
+                  false,
+                  false,
+                  true,
+                  false
+                ],
+                "style": "receipt-table"
+              }
             ],
             [
               {
@@ -1274,7 +1315,7 @@
       "fontSize": 8,
       "margin": [
         2,
-        1,
+        0,
         0,
         0
       ],
