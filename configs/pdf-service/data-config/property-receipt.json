@@ -66,6 +66,21 @@
                 "value": {
                   "path": "$.paymentDetails[0].additionalDetails.assessmentYears"
                 }
+              },  {
+                "variable": "ifsc", 
+                "value": {
+                  "path": "$.ifscCode"
+                }
+              },{
+                "variable": "bank", 
+                "value": {
+                  "path": "$.additionalDetails[0].bankName"
+                }
+              },{
+                "variable": "branch", 
+                "value": {
+                  "path": "$.additionalDetails[0].branchName"
+                }
               },
               {
                 "variable": "fromPeriod", 
@@ -137,7 +152,7 @@
               {
                 "variable": "transactionID", 
                 "value": {
-                  "path": "$.transactionNumber"
+                  "path": "$.instrumentNumber"
                 }
               }, {
                 "variable": "transactionDate", 
@@ -151,7 +166,12 @@
                 "value": {
                   "path": "$.paymentDetails[0].bill.totalAmount"
                 }
-              },  {
+              }, {
+                "variable": "approvedBy", 
+                "value": {
+                  "path": "$.paymentDetails[0].bill.additionalDetails.lastModifier"
+                }
+              }, {
                 "variable": "penaltyReason", 
                 "value": {
                   "path": "$.paymentDetails[0].bill.additionalDetails.adhocPenaltyReason"
@@ -484,76 +504,7 @@
                   "prefix": null,
                   "module":"rainmaker-common"
                }
-              },  {
-                "variable": "var_assessments",                        
-                "value":{
-                  "path":"$.paymentDetails[0].bill.billDetails.*.billAccountDetails[?(@.taxHeadCode=='PT_TAX' && @.amount>0)]"},
-                 "type":"array",
-                 "format":{                            
-                    
-                    "scema":[
-                       {
-                          "variable":"ass_to",
-                          "value":{"path":"toPeriod"},
-                          "type":"date"
-
-                       }, 
-                       {
-                        "variable":"ass_from",
-                        "value":"fromPeriod",
-                        "type":"date"
-                     },
-                       {
-                         "variable":"ass_time_interest",
-                         "value":"billAccountDetails[?(@.taxHeadCode=='PT_TIME_INTEREST')].amount"
-                        
-                      }, {
-                        "variable":"ass_time_penalty",
-                        "value":"billAccountDetails[?(@.taxHeadCode=='PT_TIME_PENALTY')].amount"
-                       
-                     }, {
-                      "variable":"ass_cancer_cess",
-                      "value":"billAccountDetails[?(@.taxHeadCode=='PT_CANCER_CESS')].amount"
-                     
-                   }, {
-                    "variable":"ass_fire_cess",
-                    "value":"billAccountDetails[?(@.taxHeadCode=='PT_FIRE_CESS')].amount"
-                   
-                 }, {
-                  "variable":"ass_tax",
-                  "value":{"path":"billAccountDetails[4].amount"}
-               }, {
-                "variable":"ass_adhoc_penalty",
-                "value":{"path":"$.billAccountDetails[?(@.taxHeadCode=='PT_ADHOC_PENALTY')].amount"}
-               
-             }, {
-              "variable":"ass_adhoc_rebate",
-              "value":{"path":"$.billAccountDetails[?(@.taxHeadCode=='PT_ADHOC_REBATE')].amount"}
-             
-           }, {
-            "variable":"ass_time_rebate",
-            "value":"billAccountDetails[?(@.taxHeadCode=='PT_TIME_REBATE)].amount"
-           
-         }   , {
-          "variable":"ass_unit_usage_exemption",
-          "value":"billAccountDetails[?(@.taxHeadCode=='PT_UNIT_USAGE_EXEMPTION')].amount"
-         
-       },       {
-        "variable":"ass_owner_exemption",
-        "value":"billAccountDetails[2].amount"
-       
-     }, {
-      "variable":"ass_round_off",
-      "value":"billAccountDetails[?(@.taxHeadCode=='PT_ROUNDOFF')].amount"
-     
-   }, {
-    "variable":"ass_total",
-    "value":"amount"
-   
- }
-                     ]
-                } 
-             },
+              }, 
               {
                 "variable": "disclamer",
                 "value": {
