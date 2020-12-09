@@ -2652,7 +2652,7 @@ ReportDefinitions:
     source: pt
     wrapper: true
     isMandatory: false
-    searchClause: AND concat(to_char((To_timestamp(bd.fromperiod/1000) at time Zone 'Asia/Kolkata'),'YYYY'),'-',to_char((To_timestamp(bd.toperiod/1000) at time Zone 'Asia/Kolkata'),'YY')) = $financialyear
+    searchClause: AND concat(to_char((To_timestamp(get_fromperiod(pd.billid)/1000) at time Zone 'Asia/Kolkata'),'YYYY'),'-', to_char((To_timestamp(get_toperiod(pd.billid)/1000) at time Zone 'Asia/Kolkata'),'YY')) = $financialyear
   - name: paymentMode
     label: Payment Mode
     type: singlevaluelist
@@ -2961,7 +2961,7 @@ ReportDefinitions:
         payment.totalamountpaid as amount, 
         payment.paymentmode as instrumenttype, 
         payment.transactionnumber,
-        concat(to_char((To_timestamp(bd.fromperiod/1000) at time Zone 'Asia/Kolkata'),'YYYY'),'-', to_char((To_timestamp(bd.toperiod/1000) at time Zone 'Asia/Kolkata'),'YY')) as financialyear,
+        concat(to_char((To_timestamp(get_fromperiod(pd.billid)/1000) at time Zone 'Asia/Kolkata'),'YYYY'),'-', to_char((To_timestamp(get_toperiod(pd.billid)/1000) at time Zone 'Asia/Kolkata'),'YY')) as financialyear,
         to_char((To_timestamp(payment.transactiondate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY') AS transactiondate, 
         pd.due AS pendingamount,
         Initcap(case when pt.usagecategory like '%.%' then split_part(pt.usagecategory,'.',2) else pt.usagecategory end) as usagetype,
