@@ -109,7 +109,7 @@
                 false,
                 false
               ],
-              "style": "receipt-table"
+              "style": "receipt-tableee"
             },
             {
               "text": "{{consumer_id}}",
@@ -129,7 +129,7 @@
                 true,
                 false
               ],
-              "style": "receipt-table"
+              "style": "receipt-tableee"
             }
           ],
     [
@@ -151,7 +151,7 @@
                 false,
                 false
               ],
-              "style": "receipt-table"
+              "style": "receipt-tableee"
             },
             {
               "text": "Existing Property Id",
@@ -171,7 +171,7 @@
                 true,
                 false
               ],
-              "style": "receipt-table"
+              "style": "receipt-tableee"
             }
           ],
           [
@@ -711,6 +711,47 @@
                 ],
                 "style": "receipt-table"
               }
+            ],[
+              {
+                "text": "IFSC Code",
+                "border": [
+                  true,
+                  false,
+                  false,
+                  false
+                ],
+                "style": "receipt-table-value"
+              },
+              {
+                "text": "{{ifsc}}",
+                "border": [
+                  false,
+                  false,
+                  false,
+                  false
+                ],
+                "style": "receipt-table"
+              },
+              {
+                "text": "Bank/Branch Name",
+                "border": [
+                  false,
+                  false,
+                  false,
+                  false
+                ],
+                "style": "receipt-table-value"
+              },
+              {
+                "text": "{{bank}},{{branch}}",
+                "border": [
+                  false,
+                  false,
+                  true,
+                  false
+                ],
+                "style": "receipt-table"
+              }
             ],
             [
               {
@@ -1103,6 +1144,39 @@
           }
         ]
       },
+	     {
+        "style": "receipt-approver",
+        "columns": [
+          {
+            "text": [
+              {
+                "text": "Approved By ",
+                "bold": true
+              },
+              {
+                "text": "{{approvedBy}}",
+                "bold": false
+              }
+            ],
+            "alignment": "left"
+          },
+          {
+            "text": [
+              {
+                "text": " ",
+                "bold": true
+              }
+            ],
+            "alignment": "right",
+            "margin": [
+                0,
+                0,
+               0,
+                0
+            ]
+          }
+        ]
+      },
       {
         "style": "pt-disclaimer",
         "stack": [
@@ -1227,6 +1301,17 @@
         0,
         0
       ]
+    },"receipt-tableee": {
+      "color": "#000000",
+      "bold": true,
+      "fontSize": 7,
+      "fontWeight": 500,
+      "margin": [
+        0,
+        0,
+        0,
+        0
+      ]
     },
      "receipt-approver": {
       "fontSize": 7,
@@ -1263,7 +1348,7 @@
       "fontSize": 8,
       "margin": [
         2,
-        1,
+        0,
         0,
         0
       ],
