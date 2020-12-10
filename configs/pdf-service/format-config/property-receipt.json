@@ -1145,7 +1145,7 @@
         ]
       },
 	     {
-        "style": "receipt-approver",
+        "style": "receipt-approver2",
         "columns": [
           {
             "text": [
@@ -1318,7 +1318,17 @@
       "bold": true,
       "margin": [
         -27,
-        20,
+        5,
+        -10,
+        0
+      ],
+      "color": "#484848"
+    },"receipt-approver2": {
+      "fontSize": 7,
+      "bold": true,
+      "margin": [
+        -27,
+        1,
         -10,
         0
       ],
