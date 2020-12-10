@@ -967,7 +967,7 @@
         "style":"block-head"
      },
      {
-      "style": "next-noc-table",
+      "style": "next-noc-table2",
       "table": {
         "widths": [
           "25%",
@@ -1264,6 +1264,15 @@
         -22,
         -8
       ]
+    }, "next-noc-table2": {
+      "fontSize": 7,
+      "color": "#000000",
+      "margin": [
+        -25,
+        10,
+        -22,
+        0
+      ]
     },
      "receipt-table-value": {
       "color": "#000000",
@@ -1318,7 +1327,7 @@
       "bold": true,
       "margin": [
         -27,
-        5,
+        7,
         -10,
         0
       ],
