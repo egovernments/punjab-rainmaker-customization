@@ -3025,7 +3025,7 @@ ReportDefinitions:
     type: epoch
     source: pt
     isMandatory: false
-    searchClause: pd.receiptdate <= $toDate
+    searchClause: AND pd.receiptdate <= $toDate
   - name: financialyear
     label: Financial Year
     type: singlevaluelist
