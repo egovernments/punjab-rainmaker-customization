@@ -264,8 +264,29 @@ SearchDefinitions:
     responseInfoPath: $.ResponseInfo
 
  - name: getServiceRequestsOnAssignedTo
+    #select array_to_json(array_agg(row_to_json(servicesRequestIds))) from (select businessKey from eg_pgr_action $where AND eg_pgr_action.when IN (select max("when") from eg_pgr_action where assignee NOTNULL group by businessKey)) servicesRequestIds    baseQuery: | 
    query: 
-    baseQuery: select array_to_json(array_agg(row_to_json(servicesRequestIds))) from (select businessKey from eg_pgr_action $where AND eg_pgr_action.when IN (select max("when") from eg_pgr_action where assignee NOTNULL group by businessKey)) servicesRequestIds
+    baseQuery: | 
+          select
+              array_to_json(array_agg(row_to_json(servicesRequestIds)))
+          from
+              (
+                  select
+                      businessKey
+                  from
+                      eg_pgr_action $where
+                  where
+                      AND eg_pgr_action.when IN (
+                          select
+                              max("when")
+                          from
+                              eg_pgr_action
+                          $where
+                              and assignee NOTNULL
+                          group by
+                              businessKey
+                      )
+              ) servicesRequestIds
     groupBy:    
     orderBy: 
    searchParams:
