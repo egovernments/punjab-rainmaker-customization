@@ -4596,7 +4596,7 @@ ReportDefinitions:
       string_agg(distinct to_char((To_timestamp(payd.receiptdate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY'),',')  AS  "transcationdate",
       --string_agg(payd.receiptnumber,',')    as "receiptnumber",
       string_agg(distinct pt.oldpropertyid,',') as "existingpropertyid",
-      string_agg(distinct payd.amountpaid,',') as paidamounts,
+      string_agg(distinct payd.amountpaid::VARCHAR,',') as paidamounts,
       max(payd.amountpaid) as maxamountpaid,
       string_agg(distinct concat(to_char((To_timestamp(get_fromperiod(payd.billid)/1000) at time Zone 'Asia/Kolkata'),'YYYY'),'-', to_char((To_timestamp(get_toperiod(payd.billid)/1000) at time Zone 'Asia/Kolkata'),'YY')),',') as financialyear,
       split_part(string_agg(distinct eu."name",','),',',1)  as ownername, 
