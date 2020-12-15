@@ -50,6 +50,24 @@
                 }
               },
               {
+                "variable": "ifsc", 
+                "value": {
+                  "path": "$.ifscCode"
+                }
+              },
+              {
+                "variable": "bank", 
+                "value": {
+                  "path": "$.additionalDetails[0].bankName"
+                }
+              },
+              {
+                "variable": "branch", 
+                "value": {
+                  "path": "$.additionalDetails[0].branchName"
+                }
+              },
+              {
                 "variable": "add", 
                 "value": {
                   "path": "$.paymentDetails[0].bill.billDetails[0].additionalDetails.address"
