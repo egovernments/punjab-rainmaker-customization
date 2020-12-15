@@ -36,6 +36,21 @@
                 "value": {
                   "path": "$.additionalDetails.collectedBy"
                 } 
+              },{
+                "variable": "ifsc", 
+                "value": {
+                  "path": "$.ifscCode"
+                }
+              },{
+                "variable": "bank", 
+                "value": {
+                  "path": "$.additionalDetails[0].bankName"
+                }
+              },{
+                "variable": "branch", 
+                "value": {
+                  "path": "$.additionalDetails[0].branchName"
+                }
               },
               {
                 "variable": "payerContact", 
