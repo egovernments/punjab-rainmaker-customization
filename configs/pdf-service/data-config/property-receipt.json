@@ -210,42 +210,42 @@
 		 {
                 "variable": "Arrears1", 
                 "value": {
-                  "path": "$.paymentDetails[0].bill.billDetails[1].amountPaid"
+                  "path": "$.paymentDetails[0].bill.billDetails[1].amount"
                 }
               },  {
                 "variable": "Arrears2", 
                 "value": {
-                  "path": "$.paymentDetails[0].bill.billDetails[2].amountPaid"
+                  "path": "$.paymentDetails[0].bill.billDetails[2].amount"
                 }
               },  {
                 "variable": "Arrears3", 
                 "value": {
-                  "path": "$.paymentDetails[0].bill.billDetails[3].amountPaid"
+                  "path": "$.paymentDetails[0].bill.billDetails[3].amount"
                 }
               },  {
                 "variable": "Arrears4", 
                 "value": {
-                  "path": "$.paymentDetails[0].bill.billDetails[4].amountPaid"
+                  "path": "$.paymentDetails[0].bill.billDetails[4].amount"
                 }
               },  {
                 "variable": "Arrears5", 
                 "value": {
-                  "path": "$.paymentDetails[0].bill.billDetails[5].amountPaid"
+                  "path": "$.paymentDetails[0].bill.billDetails[5].amount"
                 }
               },  {
                 "variable": "Arrears6", 
                 "value": {
-                  "path": "$.paymentDetails[0].bill.billDetails[6].amountPaid"
+                  "path": "$.paymentDetails[0].bill.billDetails[6].amount"
                 }
               },  {
                 "variable": "Arrears7", 
                 "value": {
-                  "path": "$.paymentDetails[0].bill.billDetails[7].amountPaid"
+                  "path": "$.paymentDetails[0].bill.billDetails[7].amount"
                 }
               },  {
                 "variable": "Arrears8", 
                 "value": {
-                  "path": "$.paymentDetails[0].bill.billDetails[8].amountPaid"
+                  "path": "$.paymentDetails[0].bill.billDetails[8].amount"
                 }
               },    
 		{
