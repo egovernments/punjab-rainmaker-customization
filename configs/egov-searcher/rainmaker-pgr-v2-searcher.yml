@@ -275,7 +275,7 @@ SearchDefinitions:
                       businessKey
                   from
                       eg_pgr_action $where
-                  where
+                  
                       AND eg_pgr_action.when IN (
                           select
                               max("when")
