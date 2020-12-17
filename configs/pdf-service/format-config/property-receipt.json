@@ -196,7 +196,7 @@
               "style": "receipt-table"
             },
             {
-              "text": "{{payer_name}}",
+              "text": " ",
               "border": [
                 false,
                 false,
@@ -206,7 +206,7 @@
               "style": "receipt-table-value"
             },
             {
-              "text": "{{payerName}}",
+              "text": " ",
               "border": [
                 false,
                 false,
