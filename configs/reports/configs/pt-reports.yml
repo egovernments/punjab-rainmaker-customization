@@ -4515,36 +4515,11 @@ ReportDefinitions:
     type: string
     source: pt
     total: false  
-  - name: transcationdate
-    label: reports.pt.transcationdate
-    type: string
-    source: pt
-    total: false  
-  - name: receiptnumber
-    label: reports.pt.receiptnumber
-    type: string
-    source: pt
-    total: false  
   - name: existingpropertyid
     label: reports.pt.existingpropertyid
     type: string
     source: pt
     total: false
-  - name: financialyear
-    label: reports.pt.financialYear
-    type: string
-    source: pt
-    total: false
-  - name: paidamounts
-    label: reports.pt.paidamounts
-    type: string
-    source: pt
-    total: false
-  - name: maxamountpaid
-    label: reports.pt.maxamountpaid
-    type: string
-    source: pt
-    total: true
   - name: ownername
     label: reports.pt.ownername
     type: string
@@ -4565,11 +4540,6 @@ ReportDefinitions:
     type: string
     source: pt
     total: false
-  - name: payeraddress
-    label: reports.pt.payeraddress
-    type: string
-    source: pt
-    total: false 
   searchParams:
   - name: localityArray
     label: reports.pt.zoneList
@@ -4579,44 +4549,44 @@ ReportDefinitions:
     searchClause: AND pta.locality IN ($localityArray)
   query: |
    --S.no    Service Name	ULB    Property Tax Unique ID    Date Of Transcation    Receipt Number	Existing Property ID    Type Of Property	Mobile Number   	Address
-   with eg_pt_unit_v2_ot as (
-    select 
-      propertyid,
-      string_agg(distinct pu.occupancytype, ',') as occupancytype,
-      --string_agg(distinct coalesce(usagecategory), ',') as propertytype
-      string_agg(distinct Initcap(case when usagecategory like '%.%' then split_part(usagecategory,'.',2) else usagecategory end),',') as propertytype
-    from eg_pt_unit as pu
-    where  pu.tenantid = $tenantid
-    group by propertyid
-    )
+    with eg_pt_unit_v2_ot as (
+      select 
+        propertyid, 
+        string_agg(distinct pu.occupancytype, ',') as occupancytype, 
+        --string_agg(distinct coalesce(usagecategory), ',') as propertytype 
+        string_agg(distinct Initcap(case when usagecategory like '%.%' then split_part(usagecategory,'.',2) else usagecategory end),',') as propertytype
+      from eg_pt_unit as pu
+      where  pu.tenantid = $tenantid
+      group by propertyid
+      )
     select
-      string_agg(distinct (payd.receiptnumber),',') as receiptnumber,
-      -- initcap(split_part(payd.tenantid, '.', 2))),',') as "ulb",
-      consumercode as "propertytaxuniqueid",
-      string_agg(distinct to_char((To_timestamp(payd.receiptdate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY'),',')  AS  "transcationdate",
-      --string_agg(payd.receiptnumber,',')    as "receiptnumber",
-      string_agg(distinct pt.oldpropertyid,',') as "existingpropertyid",
-      string_agg(distinct payd.amountpaid::VARCHAR,',') as paidamounts,
-      max(payd.amountpaid) as maxamountpaid,
-      string_agg(distinct concat(to_char((To_timestamp(get_fromperiod(payd.billid)/1000) at time Zone 'Asia/Kolkata'),'YYYY'),'-', to_char((To_timestamp(get_toperiod(payd.billid)/1000) at time Zone 'Asia/Kolkata'),'YY')),',') as financialyear,
-      split_part(string_agg(distinct eu."name",','),',',1)  as ownername, 
+      --distinct on (payd.receiptnumber)
+      --initcap(split_part(payd.tenantid, '.', 2)) as "ulb",
+      --split_part(consumercode, ':', 1) as "propertytaxuniqueid",
+      --to_char((To_timestamp(payd.receiptdate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY')  AS  "transcationdate",
+      --payd.receiptnumber    as "receiptnumber",
+      pt.propertyid as "propertytaxuniqueid",
+      string_agg(pt.oldpropertyid,',') as "existingpropertyid",
+      --concat(to_char((To_timestamp(billd.fromperiod/1000) at time Zone 'Asia/Kolkata'),'YYYY'),'-',to_char((To_timestamp(billd.toperiod/1000) at time Zone 'Asia/Kolkata'),'YY'))  AS "financialyear",
+      split_part(string_agg(eu."name",','),',',1)  as "ownername", 
       --eu.guardian  as "guardianname",
-      string_agg(distinct pot.propertytype,',') as "propertytype",
-      split_part(string_agg(distinct eu.mobilenumber,','),',',1) as "mobileno",          
+      string_agg(pot.propertytype,',')  as "propertytype",
+      split_part(string_agg(eu.mobilenumber,','),',',1) as "mobileno",     
       string_agg(distinct REGEXP_REPLACE(REGEXP_REPLACE(CONCAT(pta.doorno, ',', pta.buildingname, ',',pta.street,',', pta.pincode), ',+', ','), '^,|,$', ''),',') as "address"
-    from egcl_paymentdetail as payd
-    inner join egcl_payment as payment on payment.id = payd.paymentid        
-    inner join egcl_bill as bill on bill.id = payd.billid 
-    inner join egcl_billdetial as billd on billd.billid=bill.id
-    inner join eg_pt_property    as pt on pt.propertyid = bill.consumercode
-    inner join eg_pt_owner as po on po.propertyid = pt.id  and po.status='ACTIVE'
+    from eg_pt_property pt
+    --inner join egcl_payment as payment on payment.id = payd.paymentid        
+    --inner join egcl_bill as bill on bill.id = payd.billid 
+    --inner join egcl_billdetial as billd on billd.billid=bill.id		 
+    --inner join     as pt on pt.propertyid = bill.consumercode
+    inner join eg_pt_owner as po on po.propertyid = pt.id  and po.status='ACTIVE' 
     inner join eg_user as eu on eu.uuid     = po.userid
     inner join eg_pt_address    as pta on pta.propertyid = pt.id
-    left outer join eg_pt_unit_v2_ot as pot on pot.propertyid = pt.id
-    where payd.tenantid = $tenantid and payment.paymentstatus!='CANCELLED'
-    and bill.consumercode not in (select consumercode from egcl_bill where tenantid=$tenantid and businessservice='PT' and id in (select billid from egcl_billdetial where tenantid=$tenantid and concat(to_char((To_timestamp(fromperiod/1000) at time Zone 'Asia/Kolkata'),'YYYY'),'-',to_char((To_timestamp(toperiod/1000) at time Zone 'Asia/Kolkata'),'YY')) ='2020-21'))
+    inner join eg_pt_unit_v2_ot as pot on pot.propertyid = pt.id   
+    where pt.tenantid = $tenantid
+    --and bill.consumercode not in (select consumercode from egcl_bill where tenantid=$tenantid and businessservice='PT' and id in (select billid from egcl_billdetial where tenantid=$tenantid and concat(to_char((To_timestamp(fromperiod/1000) at time Zone 'Asia/Kolkata'),'YYYY'),'-',to_char((To_timestamp(toperiod/1000) at time Zone 'Asia/Kolkata'),'YY')) ='2020-21'))
     and pt.status!='INACTIVE'
-  groupby: group by consumercode
+    and pt.propertyid not in (select consumercode from egcl_bill where tenantid=$tenantid and businessservice='PT' and id in (select billid from egcl_billdetial where tenantid=$tenantid and concat(to_char((To_timestamp(fromperiod/1000) at time Zone 'Asia/Kolkata'),'YYYY'),'-',to_char((To_timestamp(toperiod/1000) at time Zone 'Asia/Kolkata'),'YY')) ='2020-21'))
+  groupby: group by pt.propertyid
   
 - reportName: ULBDEFAULTERPTREPORT_MINI_STATE_V2
   decryptionPathId: ULBDEFAULTERPTREPORT_V2
