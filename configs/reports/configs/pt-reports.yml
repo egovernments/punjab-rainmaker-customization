@@ -4617,6 +4617,92 @@ ReportDefinitions:
     and bill.consumercode not in (select consumercode from egcl_bill where tenantid=$tenantid and businessservice='PT' and id in (select billid from egcl_billdetial where tenantid=$tenantid and concat(to_char((To_timestamp(fromperiod/1000) at time Zone 'Asia/Kolkata'),'YYYY'),'-',to_char((To_timestamp(toperiod/1000) at time Zone 'Asia/Kolkata'),'YY')) ='2020-21'))
     and pt.status!='INACTIVE'
   groupby: group by consumercode
+  
+- reportName: ULBDEFAULTERPTREPORT_MINI_STATE_V2
+  decryptionPathId: ULBDEFAULTERPTREPORT_V2
+  summary: ULB Defaulter Pt report
+  version: 1.0.0
+  moduleName: rainmaker-pt
+  sourceColumns:
+  - name: propertytaxuniqueid
+    label: reports.pt.propertytaxuniqueid
+    type: string
+    source: pt
+    total: false  
+  - name: existingpropertyid
+    label: reports.pt.existingpropertyid
+    type: string
+    source: pt
+    total: false
+  - name: ownername
+    label: reports.pt.ownername
+    type: string
+    source: pt
+    total: false  
+  - name: propertytype
+    label: reports.pt.propertytype
+    type: string
+    source: pt
+    total: false  
+  - name: mobileno
+    label: reports.pt.mobileno
+    type: string
+    source: pt
+    total: false   
+  - name: address
+    label: reports.pt.address
+    type: string
+    source: pt
+    total: false
+  searchParams:
+  - name: ulb
+    label: ULB
+    type: singlevaluelist
+    pattern: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?tenantId=$tenantid&moduleName=tenant&masterName=tenants|$.MdmsRes.tenant.tenants.*.code|$.MdmsRes.tenant.tenants.*.name
+    source: pt
+    wrapper: true
+    isMandatory: false
+    searchClause: AND tenantid = $ulb
+  query: |
+   --S.no    Service Name	ULB    Property Tax Unique ID    Date Of Transcation    Receipt Number	Existing Property ID    Type Of Property	Mobile Number   	Address
+    with eg_pt_unit_v2_ot as (
+      select 
+        propertyid, 
+        string_agg(distinct pu.occupancytype, ',') as occupancytype, 
+        --string_agg(distinct coalesce(usagecategory), ',') as propertytype 
+        string_agg(distinct Initcap(case when usagecategory like '%.%' then split_part(usagecategory,'.',2) else usagecategory end),',') as propertytype
+      from eg_pt_unit as pu
+      where  pu.tenantid = $ulb
+      group by propertyid
+      )
+    select
+      --distinct on (payd.receiptnumber)
+      --initcap(split_part(payd.tenantid, '.', 2)) as "ulb",
+      --split_part(consumercode, ':', 1) as "propertytaxuniqueid",
+      --to_char((To_timestamp(payd.receiptdate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY')  AS  "transcationdate",
+      --payd.receiptnumber    as "receiptnumber",
+      pt.propertyid as "propertytaxuniqueid",
+      string_agg(pt.oldpropertyid,',') as "existingpropertyid",
+      --concat(to_char((To_timestamp(billd.fromperiod/1000) at time Zone 'Asia/Kolkata'),'YYYY'),'-',to_char((To_timestamp(billd.toperiod/1000) at time Zone 'Asia/Kolkata'),'YY'))  AS "financialyear",
+      split_part(string_agg(eu."name",','),',',1)  as "ownername", 
+      --eu.guardian  as "guardianname",
+      string_agg(pot.propertytype,',')  as "propertytype",
+      split_part(string_agg(eu.mobilenumber,','),',',1) as "mobileno",     
+      string_agg(distinct REGEXP_REPLACE(REGEXP_REPLACE(CONCAT(pta.doorno, ',', pta.buildingname, ',',pta.street,',', pta.pincode), ',+', ','), '^,|,$', ''),',') as "address"
+    from eg_pt_property pt
+    --inner join egcl_payment as payment on payment.id = payd.paymentid        
+    --inner join egcl_bill as bill on bill.id = payd.billid 
+    --inner join egcl_billdetial as billd on billd.billid=bill.id		 
+    --inner join     as pt on pt.propertyid = bill.consumercode
+    inner join eg_pt_owner as po on po.propertyid = pt.id  and po.status='ACTIVE' 
+    inner join eg_user as eu on eu.uuid     = po.userid
+    inner join eg_pt_address    as pta on pta.propertyid = pt.id
+    inner join eg_pt_unit_v2_ot as pot on pot.propertyid = pt.id   
+    where pt.tenantid = $ulb
+    --and bill.consumercode not in (select consumercode from egcl_bill where tenantid=$ulb and businessservice='PT' and id in (select billid from egcl_billdetial where tenantid=$ulb and concat(to_char((To_timestamp(fromperiod/1000) at time Zone 'Asia/Kolkata'),'YYYY'),'-',to_char((To_timestamp(toperiod/1000) at time Zone 'Asia/Kolkata'),'YY')) ='2020-21'))
+    and pt.status!='INACTIVE'
+    and pt.propertyid not in (select consumercode from egcl_bill where tenantid=$ulb and businessservice='PT' and id in (select billid from egcl_billdetial where tenantid=$ulb and concat(to_char((To_timestamp(fromperiod/1000) at time Zone 'Asia/Kolkata'),'YYYY'),'-',to_char((To_timestamp(toperiod/1000) at time Zone 'Asia/Kolkata'),'YY')) ='2020-21'))
+  groupby: group by pt.propertyid
         
 - reportName: ZoneFYReport_V2
   summary: Zone FY Collection
