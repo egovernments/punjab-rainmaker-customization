@@ -2221,7 +2221,7 @@ ReportDefinitions:
     source: pt
     wrapper: true
     isMandatory: false
-    searchClause: AND concat(to_char((To_timestamp(fromperiod/1000) at time Zone 'Asia/Kolkata'),'YYYY'),'-',to_char((To_timestamp(toperiod/1000) at time Zone 'Asia/Kolkata'),'YY')) = $financialyear
+    searchClause: AND concat(to_char((To_timestamp(get_fromperiod(pd.billid)/1000) at time Zone 'Asia/Kolkata'),'YYYY'),'-', to_char((To_timestamp(get_toperiod(pd.billid)/1000) at time Zone 'Asia/Kolkata'),'YY')) = $financialyear
   - name: paymentMode
     label: Payment Mode
     type: singlevaluelist
@@ -2259,7 +2259,6 @@ ReportDefinitions:
                   INNER JOIN egcl_paymentdetail as pd on pd.billid = bd.billid
                   INNER JOIN egcl_payment as payment on pd.paymentid=payment.id
                   WHERE payment.tenantid = $tenantid and payment.paymentstatus != 'CANCELLED' and  pd.businessservice='PT'
-                  AND pd.receiptdate >= $fromDate AND pd.receiptdate <= $toDate
                   GROUP BY pdid
       )
       SELECT 
@@ -2276,7 +2275,7 @@ ReportDefinitions:
         to_char((To_timestamp(payment.transactiondate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY') AS transactiondate, 
         payment.totaldue - payment.totalamountpaid AS pendingamount,
         Initcap(case when pt.usagecategory like '%.%' then split_part(pt.usagecategory,'.',2) else pt.usagecategory end) as usagetype,
-        (case when eg_user.name is null then '30048|23/xn3x2FAxn8vYAN0IdplsOxaE=' else eg_user.name end)  as collectorname,
+        (case when eg_user.name is null then '30048|21Fj+c3k2ldB0X3AzIh7atXB' else eg_user.name end)  as collectorname,
         receipt_breakup.*,
         to_char((To_timestamp(pd.manualreceiptdate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY') AS g8issuedate, 
         manualreceiptnumber as g8receiptno
@@ -2287,6 +2286,215 @@ ReportDefinitions:
       and pt_addr.propertyid=pt.id 
       --and pt.propertyid='PT-1012-978737'
       --and receiptnumber='PT/1012/2020-21/001021'
+  orderby: ORDER BY pd.receiptdate DESC;
+  
+  
+- reportName: ReceiptRegister_without_locality_V2
+  decryptionPathId: ReceiptRegister_V2
+  summary: Receipt Register
+  version: 1.0.0
+  moduleName: rainmaker-pt
+  additionalConfig:
+    print:
+      pdfPageSize: "A1"
+  sourceColumns:
+  - name: receiptnumber
+    label: reports.pt.receiptNo
+    type: string
+    source: pt
+    total: false
+  - name: receiptdate
+    label: reports.pt.receiptDate
+    type: string
+    source: pt
+    total: false
+  - name: g8issuedate
+    label: reports.pt.g8issuedate
+    type: string
+    source: pt
+    total: false
+  - name: g8receiptno
+    label: reports.pt.g8receiptno
+    type: string
+    source: pt
+    total: false
+  - name: amount
+    label: reports.pt.amount
+    type: string
+    source: pt
+    total: true
+  - name: propertytax
+    label: reports.pt.propertyTax
+    type: string
+    source: pt
+    total: true
+  - name: firecess
+    label: reports.pt.fireCess
+    type: string
+    source: pt
+    total: true
+  - name: cancercess
+    label: reports.pt.cancerCess
+    type: string
+    source: pt
+    total: true
+  - name: rebate
+    label: reports.pt.rebate
+    type: string
+    source: pt
+    total: true
+  - name: adhocrebate
+    label: reports.pt.adhocrebate
+    type: string
+    source: pt
+    total: true
+  - name: penalty
+    label: reports.pt.penalty
+    type: string
+    source: pt
+    total: true
+  - name: adhocpenalty
+    label: reports.pt.adhocpenalty
+    type: string
+    source: pt
+    total: true
+  - name: interest
+    label: reports.pt.interest
+    type: string
+    source: pt
+    total: true
+  - name: exemption
+    label: reports.pt.exemption
+    type: string
+    source: pt
+    total: true
+  - name: adjustment
+    label: reports.pt.roundoff
+    type: string
+    source: pt
+    total: true
+  - name: pendingamount
+    label: reports.pt.pendingamount
+    type: string
+    source: pt
+    total: true
+  - name: consumercode
+    label: reports.pt.propertyId
+    type: string
+    source: pt
+    total: false
+  - name: usagetype
+    label: reports.pt.usagetype
+    type: string
+    source: pt
+    total: false
+  - name: instrumenttype
+    label: reports.pt.paymentMode
+    type: string
+    source: pt
+    total: false
+  - name: transactionnumber
+    label: reports.pt.ddChequeTransactionNo
+    type: string
+    source: pt
+    total: false
+  - name: transactiondate
+    label: reports.pt.ddChequeTransactionDate
+    type: string
+    source: pt
+    total: false
+  - name: bankname
+    label: reports.pt.bankName
+    type: string
+    source: pt
+    total: false
+  - name: collectorname
+    label: reports.pt.collectorname
+    type: string
+    source: pt
+    total: false
+  - name: financialyear
+    label: reports.pt.financialyear
+    type: string
+    source: pt
+    total: false
+  searchParams:
+  - name: fromDate
+    label: reports.pt.fromDate
+    type: epoch
+    source: pt
+    isMandatory: true
+    searchClause: AND pd.receiptdate >= $fromDate
+  - name: toDate
+    label: reports.pt.toDate
+    type: epoch
+    source: pt
+    isMandatory: true
+    searchClause: AND pd.receiptdate <= $toDate
+  - name: financialyear
+    label: Financial Year
+    type: singlevaluelist
+    pattern: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?tenantId=$tenantid&moduleName=egf-master&masterName=FinancialYear|$.MdmsRes.egf-master.FinancialYear.[?(@.module=='PT')].code|$.MdmsRes.egf-master.FinancialYear.[?(@.module=='PT')].name
+    source: pt
+    wrapper: true
+    isMandatory: false
+    searchClause: AND concat(to_char((To_timestamp(get_fromperiod(pd.billid)/1000) at time Zone 'Asia/Kolkata'),'YYYY'),'-', to_char((To_timestamp(get_toperiod(pd.billid)/1000) at time Zone 'Asia/Kolkata'),'YY')) = $financialyear
+  - name: paymentMode
+    label: Payment Mode
+    type: singlevaluelist
+    pattern: 'list://CARD:Card,CASH:Cash,CHEQUE:Cheque,DD:DD,OFFLINE_NEFT:NEFT,OFFLINE_RTGS:RTGS,ONLINE:Online,POSTAL_ORDER:PostalOrder'
+    source: pt
+    isMandatory: false
+    searchClause: AND payment.paymentmode = $paymentMode
+  query: |
+      -- Use CTE to force query plan, compute & use CTE later
+      WITH receipt_breakup AS (
+                  SELECT
+                    pd.id as pdid,
+                    SUM(CASE WHEN taxheadcode LIKE 'PT_ADHOC_PENALTY' THEN adjustedamount ELSE 0 END) as adhocpenalty, 
+                    SUM(CASE WHEN taxheadcode LIKE 'PT_ADHOC_REBATE' THEN adjustedamount ELSE 0 END) as adhocrebate, 
+                    SUM(CASE WHEN taxheadcode LIKE 'PT_FIRE_CESS' THEN adjustedamount ELSE 0 END) as firecess, 
+                    SUM(CASE WHEN taxheadcode LIKE 'PT_CANCER_CESS' THEN adjustedamount ELSE 0 END) as cancercess, 
+                    SUM(CASE WHEN taxheadcode LIKE 'PT_TIME_INTEREST' THEN adjustedamount ELSE 0 END) as interest, 
+                    SUM(CASE WHEN taxheadcode LIKE 'PT_TIME_PENALTY' THEN adjustedamount ELSE 0 END) as penalty, 
+                    SUM(CASE WHEN taxheadcode LIKE 'PT_TIME_REBATE' THEN adjustedamount ELSE 0 END) as rebate,
+                    SUM(CASE WHEN taxheadcode LIKE 'PT_TAX' THEN bad.amount ELSE 0 END) as propertytax,
+                    SUM(CASE WHEN taxheadcode LIKE 'PT_TAX' THEN adjustedamount ELSE 0 END) as paidpropertytax, 
+                    (SUM(CASE WHEN taxheadcode LIKE 'PT_UNIT_USAGE_EXEMPTION' THEN bad.amount ELSE 0 END)
+                    + SUM(CASE WHEN taxheadcode LIKE 'PT_OWNER_EXEMPTION' THEN bad.amount ELSE 0 END) ) as exemption,
+                    (SUM(CASE WHEN taxheadcode LIKE 'PT_ROUNDOFF' THEN adjustedamount ELSE 0 END)
+                    + SUM(CASE WHEN taxheadcode LIKE 'PT_DECIMAL_CEILING_DEBIT' THEN adjustedamount ELSE 0 END)
+                    + SUM(CASE WHEN taxheadcode LIKE 'PT_DECIMAL_CEILING_CREDIT' THEN adjustedamount ELSE 0 END)) as adjustment
+                  FROM egcl_billaccountdetail as bad
+                  INNER JOIN egcl_billdetial as bd on bd.id = bad.billdetailid
+                  INNER JOIN egcl_paymentdetail as pd on pd.billid = bd.billid
+                  INNER JOIN egcl_payment as payment on pd.paymentid=payment.id
+                  WHERE payment.tenantid = $tenantid and payment.paymentstatus != 'CANCELLED' and  pd.businessservice='PT'
+                  GROUP BY pdid
+      )
+      SELECT 
+        pd.tenantid AS tenantid,
+        pd.id,
+        pt.propertyid as consumercode,
+        to_char((To_timestamp(pd.receiptdate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY')  AS receiptdate,
+        payment.ifsccode AS bankname, 
+        receiptnumber,
+        payment.totalamountpaid as amount, 
+        payment.paymentmode as instrumenttype, 
+        payment.transactionnumber,
+        concat(to_char((To_timestamp(get_fromperiod(pd.billid)/1000) at time Zone 'Asia/Kolkata'),'YYYY'),'-', to_char((To_timestamp(get_toperiod(pd.billid)/1000) at time Zone 'Asia/Kolkata'),'YY')) as financialyear, 
+        to_char((To_timestamp(payment.transactiondate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY') AS transactiondate, 
+        payment.totaldue - payment.totalamountpaid AS pendingamount,
+        Initcap(case when pt.usagecategory like '%.%' then split_part(pt.usagecategory,'.',2) else pt.usagecategory end) as usagetype,
+        (case when eg_user.name is null then '30048|21Fj+c3k2ldB0X3AzIh7atXB' else eg_user.name end)  as collectorname,
+        receipt_breakup.*,
+        to_char((To_timestamp(pd.manualreceiptdate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY') AS g8issuedate, 
+        manualreceiptnumber as g8receiptno
+      FROM egcl_paymentdetail pd Left outer join eg_user on eg_user.id = pd.createdby::INTEGER, egcl_payment payment, eg_pt_property as pt, receipt_breakup, egcl_bill bill
+      --,(select string_agg(distinct propertyid,',') as propertyid, string_agg(distinct locality,',') as locality from eg_pt_address where tenantid=$tenantid group by propertyid ) pt_addr
+      where pd.paymentid=payment.id and bill.id=pd.billid and payment.paymentstatus != 'CANCELLED' and pd.businessservice='PT' and payment.tenantid=$tenantid 
+      and pt.propertyid = bill.consumercode and receipt_breakup.pdid=pd.id  and pt.status!='INACTIVE' 
+      --and pt_addr.propertyid=pt.id 
   orderby: ORDER BY pd.receiptdate DESC;
   
   
@@ -2444,7 +2652,7 @@ ReportDefinitions:
     source: pt
     wrapper: true
     isMandatory: false
-    searchClause: AND concat(to_char((To_timestamp(bd.fromperiod/1000) at time Zone 'Asia/Kolkata'),'YYYY'),'-',to_char((To_timestamp(bd.toperiod/1000) at time Zone 'Asia/Kolkata'),'YY')) = $financialyear
+    searchClause: AND concat(to_char((To_timestamp(get_fromperiod(pd.billid)/1000) at time Zone 'Asia/Kolkata'),'YYYY'),'-', to_char((To_timestamp(get_toperiod(pd.billid)/1000) at time Zone 'Asia/Kolkata'),'YY')) = $financialyear
   - name: paymentMode
     label: Payment Mode
     type: singlevaluelist
@@ -2452,12 +2660,6 @@ ReportDefinitions:
     source: pt
     isMandatory: false
     searchClause: AND payment.paymentmode = $paymentMode
-  - name: localityArray
-    label: reports.pt.zoneList
-    type: boundarylist
-    source: pt
-    isMandatory: false
-    searchClause: AND pt_addr.locality IN ($localityArray)
   query: |
       -- Use CTE to force query plan, compute & use CTE later
       WITH receipt_breakup AS (
@@ -2469,42 +2671,44 @@ ReportDefinitions:
                     SUM(CASE WHEN taxheadcode LIKE 'PT_CANCER_CESS' THEN adjustedamount ELSE 0 END) as cancercess, 
                     SUM(CASE WHEN taxheadcode LIKE 'PT_TIME_INTEREST' THEN adjustedamount ELSE 0 END) as interest, 
                     SUM(CASE WHEN taxheadcode LIKE 'PT_TIME_PENALTY' THEN adjustedamount ELSE 0 END) as penalty, 
-                    SUM(CASE WHEN taxheadcode LIKE 'PT_TIME_REBATE' THEN adjustedamount ELSE 0 END) as rebate, 
-                    SUM(CASE WHEN taxheadcode LIKE 'PT_TAX' THEN adjustedamount ELSE 0 END) as propertytax, 
-                    (SUM(CASE WHEN taxheadcode LIKE 'PT_UNIT_USAGE_EXEMPTION' THEN adjustedamount ELSE 0 END)
-                    + SUM(CASE WHEN taxheadcode LIKE 'PT_OWNER_EXEMPTION' THEN adjustedamount ELSE 0 END) )as exemption,
-                    ( SUM(CASE WHEN taxheadcode LIKE 'PT_ROUNDOFF' THEN adjustedamount ELSE 0 END)
+                    SUM(CASE WHEN taxheadcode LIKE 'PT_TIME_REBATE' THEN adjustedamount ELSE 0 END) as rebate,
+                    SUM(CASE WHEN taxheadcode LIKE 'PT_TAX' THEN bad.amount ELSE 0 END) as propertytax,
+                    SUM(CASE WHEN taxheadcode LIKE 'PT_TAX' THEN adjustedamount ELSE 0 END) as paidpropertytax, 
+                    (SUM(CASE WHEN taxheadcode LIKE 'PT_UNIT_USAGE_EXEMPTION' THEN bad.amount ELSE 0 END)
+                    + SUM(CASE WHEN taxheadcode LIKE 'PT_OWNER_EXEMPTION' THEN bad.amount ELSE 0 END) ) as exemption,
+                    (SUM(CASE WHEN taxheadcode LIKE 'PT_ROUNDOFF' THEN adjustedamount ELSE 0 END)
                     + SUM(CASE WHEN taxheadcode LIKE 'PT_DECIMAL_CEILING_DEBIT' THEN adjustedamount ELSE 0 END)
                     + SUM(CASE WHEN taxheadcode LIKE 'PT_DECIMAL_CEILING_CREDIT' THEN adjustedamount ELSE 0 END)) as adjustment
                   FROM egcl_billaccountdetail as bad
                   INNER JOIN egcl_billdetial as bd on bd.id = bad.billdetailid
                   INNER JOIN egcl_paymentdetail as pd on pd.billid = bd.billid
                   INNER JOIN egcl_payment as payment on pd.paymentid=payment.id
-                  WHERE bad.tenantid = $tenantid and payment.paymentstatus = 'CANCELLED' and  pd.businessservice='PT'
+                  WHERE payment.tenantid = $tenantid and payment.paymentstatus = 'CANCELLED' and  pd.businessservice='PT'
                   GROUP BY pdid
       )
       SELECT 
         pd.tenantid AS tenantid,
         pd.id,
-        bill.consumercode,
+        pt.propertyid as consumercode,
         to_char((To_timestamp(pd.receiptdate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY')  AS receiptdate,
         payment.ifsccode AS bankname, 
-        receiptnumber, 
+        receiptnumber,
         payment.totalamountpaid as amount, 
         payment.paymentmode as instrumenttype, 
-        payment.transactionnumber,concat(to_char((To_timestamp(bd.fromperiod/1000) at time Zone 'Asia/Kolkata'),'YYYY'),'-', to_char((To_timestamp(bd.toperiod/1000) at time Zone 'Asia/Kolkata'),'YY')) as financialyear,
+        payment.transactionnumber,
+        concat(to_char((To_timestamp(get_fromperiod(pd.billid)/1000) at time Zone 'Asia/Kolkata'),'YYYY'),'-', to_char((To_timestamp(get_toperiod(pd.billid)/1000) at time Zone 'Asia/Kolkata'),'YY')) as financialyear, 
         to_char((To_timestamp(payment.transactiondate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY') AS transactiondate, 
-        pd.due AS pendingamount,
+        payment.totaldue - payment.totalamountpaid AS pendingamount,
         Initcap(case when pt.usagecategory like '%.%' then split_part(pt.usagecategory,'.',2) else pt.usagecategory end) as usagetype,
-        (CASE WHEN billd.collectiontype='COUNTER' THEN eg_user.name ELSE '30048|23/xn3x2FAxn8vYAN0IdplsOxaE=' END) as collectorname,
+        (case when eg_user.name is null then '30048|21Fj+c3k2ldB0X3AzIh7atXB' else eg_user.name end)  as collectorname,
         receipt_breakup.*,
-        to_char((To_timestamp(pd.manualreceiptdate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY') AS g8issuedate, 		
-        manualreceiptnumber as g8receiptno,
-        payment.paymentstatus as paymentstatus
-      FROM egcl_paymentdetail pd, eg_user, eg_pt_property    as pt, egcl_billdetial as billd, egcl_payment payment,receipt_breakup, egcl_bill bill, (select bill.id as billid, min(bd.fromperiod) fromperiod, max(bd.toperiod) toperiod from egcl_billdetial bd, egcl_bill bill where bill.id=bd.billid group by bill.id) bd,
-      (select string_agg(distinct propertyid,',') as propertyid,string_agg(distinct locality,',') as locality from eg_pt_address where tenantid=$tenantid group by propertyid ) pt_addr
-      WHERE pd.paymentid=payment.id and  eg_user.id = pd.createdby::INTEGER and pt.propertyid = bill.consumercode and bill.id=pd.billid and bill.id=billd.billid and bd.billid=bill.id and payment.paymentstatus = 'CANCELLED' and pd.businessservice='PT' and payment.tenantid=$tenantid and receipt_breakup.pdid=pd.id
-      and pt_addr.propertyid=pt.id 
+        to_char((To_timestamp(pd.manualreceiptdate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY') AS g8issuedate, 
+        manualreceiptnumber as g8receiptno
+      FROM egcl_paymentdetail pd Left outer join eg_user on eg_user.id = pd.createdby::INTEGER, egcl_payment payment, eg_pt_property as pt, receipt_breakup, egcl_bill bill
+      --,(select string_agg(distinct propertyid,',') as propertyid, string_agg(distinct locality,',') as locality from eg_pt_address where tenantid=$tenantid group by propertyid ) pt_addr
+      where pd.paymentid=payment.id and bill.id=pd.billid and payment.paymentstatus = 'CANCELLED' and pd.businessservice='PT' and payment.tenantid=$tenantid 
+      and pt.propertyid = bill.consumercode and receipt_breakup.pdid=pd.id  and pt.status!='INACTIVE' 
+      --and pt_addr.propertyid=pt.id 
   orderby: ORDER BY pd.receiptdate DESC;
 
 - reportName: OldUlbWisePtCollection_V2
@@ -2757,7 +2961,7 @@ ReportDefinitions:
         payment.totalamountpaid as amount, 
         payment.paymentmode as instrumenttype, 
         payment.transactionnumber,
-        concat(to_char((To_timestamp(bd.fromperiod/1000) at time Zone 'Asia/Kolkata'),'YYYY'),'-', to_char((To_timestamp(bd.toperiod/1000) at time Zone 'Asia/Kolkata'),'YY')) as financialyear,
+        concat(to_char((To_timestamp(get_fromperiod(pd.billid)/1000) at time Zone 'Asia/Kolkata'),'YYYY'),'-', to_char((To_timestamp(get_toperiod(pd.billid)/1000) at time Zone 'Asia/Kolkata'),'YY')) as financialyear,
         to_char((To_timestamp(payment.transactiondate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY') AS transactiondate, 
         pd.due AS pendingamount,
         Initcap(case when pt.usagecategory like '%.%' then split_part(pt.usagecategory,'.',2) else pt.usagecategory end) as usagetype,
@@ -2815,13 +3019,13 @@ ReportDefinitions:
     type: epoch
     source: pt
     isMandatory: false
-    searchClause: AND payment.createdtime >= $fromDate
+    searchClause: AND pd.receiptdate >= $fromDate
   - name: toDate
     label: reports.pt.toDate
     type: epoch
     source: pt
     isMandatory: false
-    searchClause: AND payment.createdtime <= $toDate
+    searchClause: AND pd.receiptdate <= $toDate
   - name: financialyear
     label: Financial Year
     type: singlevaluelist
@@ -2829,7 +3033,7 @@ ReportDefinitions:
     source: pt
     wrapper: true
     isMandatory: false
-    searchClause: AND concat(to_char((To_timestamp(fromperiod/1000) at time Zone 'Asia/Kolkata'),'YYYY'),'-',to_char((To_timestamp(toperiod/1000) at time Zone 'Asia/Kolkata'),'YY')) = $financialyear
+    searchClause: AND concat(to_char((To_timestamp(get_fromperiod(pd.billid)/1000) at time Zone 'Asia/Kolkata'),'YYYY'),'-', to_char((To_timestamp(get_toperiod(pd.billid)/1000) at time Zone 'Asia/Kolkata'),'YY')) = $financialyear
   - name: usage
     label: Usage
     type: singlevaluelist
@@ -2837,22 +3041,27 @@ ReportDefinitions:
     source: pt
     wrapper: true
     isMandatory: false
-    searchClause: AND eg_pt_property.usagecategory = $usage
+    searchClause: AND pt.usagecategory = $usage
   query: |
     SELECT 
-      initcap(split_part(payment.tenantid, '.', 2)) as tenantid, 
-      COUNT(paymentmode) AS totalassessments, 
-      SUM(payment.totalamountpaid) AS totalamountpaid, 
-      SUM(CASE WHEN paymentmode='ONLINE' THEN totalamountpaid ELSE 0 END) AS totalonline, 
-      SUM(CASE WHEN paymentmode='ONLINE' THEN 1 ELSE 0 END) AS countonline,
-      SUM(CASE WHEN paymentmode!='ONLINE' THEN totalamountpaid ELSE 0 END) AS totaloffline,
-      SUM(CASE WHEN paymentmode!='ONLINE' THEN 1 ELSE 0 END) AS countoffline
-    FROM  egcl_paymentdetail as pd
-    inner join egcl_payment as payment on payment.id=pd.paymentid
-    inner join egcl_bill bill on bill.id=pd.billid
-    inner join eg_pt_property on eg_pt_property.propertyid=bill.consumercode
-    inner join egcl_billdetial billd on billd.billid=bill.id
-    WHERE payment.paymentstatus!='CANCELLED' and pd.businessservice='PT' and payment.tenantid !='pb.testing'
+        initcap(split_part(payment.tenantid, '.', 2)) as tenantid, 
+        sum(payment.totalamountpaid) as totalamountpaid,
+        count(payment.totalamountpaid) as totalassessments,
+        sum(case when payment.paymentmode='ONLINE' then payment.totalamountpaid else 0 end) as "totalonline",
+        sum(case when payment.paymentmode='ONLINE' then 1 else 0 end) as "countonline",
+        sum(case when payment.paymentmode='CASH' then payment.totalamountpaid else 0 end) +
+        sum(case when payment.paymentmode='CHEQUE' then payment.totalamountpaid else 0 end) +
+        sum(case when payment.paymentmode='DD' then payment.totalamountpaid else 0 end) +
+        sum(case when payment.paymentmode='CARD' then payment.totalamountpaid else 0 end) + 
+        sum(case when payment.paymentmode='OFFLINE_RTGS' then payment.totalamountpaid else 0 end) +
+        sum(case when payment.paymentmode='OFFLINE_NEFT' then payment.totalamountpaid else 0 end) +
+        sum(case when payment.paymentmode='POTAL_ORDER' then payment.totalamountpaid else 0 end) as "totaloffline",
+        sum(case when payment.paymentmode!='ONLINE' then 1 else 0 end) as "countoffline"
+        --concat(to_char((To_timestamp(get_fromperiod(pd.billid)/1000) at time Zone 'Asia/Kolkata'),'YYYY'),'-', to_char((To_timestamp(get_toperiod(pd.billid)/1000) at time Zone 'Asia/Kolkata'),'YY')) as financialyear
+      FROM egcl_paymentdetail pd Left outer join eg_user on eg_user.id = pd.createdby::INTEGER, egcl_payment payment, eg_pt_property as pt, egcl_bill bill,
+      (select string_agg(distinct propertyid,',') as propertyid, string_agg(distinct locality,',') as locality from eg_pt_address where tenantid!='pb.testing' group by propertyid ) pt_addr
+      where pd.paymentid=payment.id and bill.id=pd.billid and payment.paymentstatus != 'CANCELLED' and pd.businessservice='PT' and payment.tenantid!='pb.testing'
+      and pt.propertyid = bill.consumercode and pt.status!='INACTIVE' and pt_addr.propertyid=pt.id
   groupby: GROUP BY payment.tenantid 
   orderby: ORDER BY payment.tenantid, totalamountpaid DESC NULLS LAST
   
@@ -2898,13 +3107,13 @@ ReportDefinitions:
     type: epoch
     source: pt
     isMandatory: false
-    searchClause: AND payment.createdtime >= $fromDate
+    searchClause: AND pd.receiptdate >= $fromDate
   - name: toDate
     label: reports.pt.toDate
     type: epoch
     source: pt
     isMandatory: false
-    searchClause: AND payment.createdtime <= $toDate
+    searchClause: AND pd.receiptdate <= $toDate
   - name: financialyear
     label: Financial Year
     type: singlevaluelist
@@ -2912,7 +3121,7 @@ ReportDefinitions:
     source: pt
     wrapper: true
     isMandatory: false
-    searchClause: AND concat(to_char((To_timestamp(fromperiod/1000) at time Zone 'Asia/Kolkata'),'YYYY'),'-',to_char((To_timestamp(toperiod/1000) at time Zone 'Asia/Kolkata'),'YY')) = $financialyear
+    searchClause: AND concat(to_char((To_timestamp(get_fromperiod(pd.billid)/1000) at time Zone 'Asia/Kolkata'),'YYYY'),'-', to_char((To_timestamp(get_toperiod(pd.billid)/1000) at time Zone 'Asia/Kolkata'),'YY')) = $financialyear
   - name: usage
     label: Usage
     type: singlevaluelist
@@ -2920,27 +3129,28 @@ ReportDefinitions:
     source: pt
     wrapper: true
     isMandatory: false
-    searchClause: AND eg_pt_property.usagecategory = $usage
+    searchClause: AND pt.usagecategory = $usage
   query: |
     SELECT 
-      initcap(split_part(payment.tenantid, '.', 2)) as tenantid, 
-      COUNT(paymentmode) AS totalassessments, 
-      SUM(payment.totalamountpaid) AS totalamountpaid, 
-      SUM(CASE WHEN paymentmode='ONLINE' THEN totalamountpaid ELSE 0 END) AS totalonline, 
-      SUM(CASE WHEN paymentmode='ONLINE' THEN 1 ELSE 0 END) AS countonline,
-      SUM(CASE WHEN paymentmode!='ONLINE' THEN totalamountpaid ELSE 0 END) AS totaloffline,
-      SUM(CASE WHEN paymentmode!='ONLINE' THEN 1 ELSE 0 END) AS countoffline
-    FROM  egcl_paymentdetail as pd
-    inner join egcl_payment as payment on payment.id=pd.paymentid
-    inner join egcl_bill bill on bill.id=pd.billid
-    inner join eg_pt_property on eg_pt_property.propertyid=bill.consumercode
-    inner join egcl_billdetial billd on billd.billid=bill.id
-    WHERE payment.tenantid = $tenantid
-    and payment.paymentstatus!='CANCELLED'
-    and pd.businessservice='PT'
-    --and payment.createdtime>='1577817000000' and payment.createdtime<='1580495399000'
-  groupby: GROUP BY payment.tenantid 
-  orderby: ORDER BY payment.tenantid, totalamountpaid DESC NULLS LAST
+        --initcap(split_part(payment.tenantid, '.', 2)) as tenantid, 
+        sum(payment.totalamountpaid) as totalamountpaid,
+        count(payment.totalamountpaid) as totalassessments,
+        sum(case when payment.paymentmode='ONLINE' then payment.totalamountpaid else 0 end) as "totalonline",
+        sum(case when payment.paymentmode='ONLINE' then 1 else 0 end) as "countonline",
+        sum(case when payment.paymentmode='CASH' then payment.totalamountpaid else 0 end) +
+        sum(case when payment.paymentmode='CHEQUE' then payment.totalamountpaid else 0 end) +
+        sum(case when payment.paymentmode='DD' then payment.totalamountpaid else 0 end) +
+        sum(case when payment.paymentmode='CARD' then payment.totalamountpaid else 0 end) + 
+        sum(case when payment.paymentmode='OFFLINE_RTGS' then payment.totalamountpaid else 0 end) +
+        sum(case when payment.paymentmode='OFFLINE_NEFT' then payment.totalamountpaid else 0 end) +
+        sum(case when payment.paymentmode='POTAL_ORDER' then payment.totalamountpaid else 0 end) as "totaloffline",
+        sum(case when payment.paymentmode!='ONLINE' then 1 else 0 end) as "countoffline"
+        --concat(to_char((To_timestamp(get_fromperiod(pd.billid)/1000) at time Zone 'Asia/Kolkata'),'YYYY'),'-', to_char((To_timestamp(get_toperiod(pd.billid)/1000) at time Zone 'Asia/Kolkata'),'YY')) as financialyear
+      FROM egcl_paymentdetail pd Left outer join eg_user on eg_user.id = pd.createdby::INTEGER, egcl_payment payment, eg_pt_property as pt, egcl_bill bill,
+      (select string_agg(distinct propertyid,',') as propertyid, string_agg(distinct locality,',') as locality from eg_pt_address where tenantid=$tenantid group by propertyid ) pt_addr
+      where pd.paymentid=payment.id and bill.id=pd.billid and payment.paymentstatus != 'CANCELLED' and pd.businessservice='PT' and payment.tenantid=$tenantid  
+      and pt.propertyid = bill.consumercode and pt.status!='INACTIVE' and pt_addr.propertyid=pt.id
+
 
 - reportName: ReceiptRegisterShort_V2
   decryptionPathId: ReceiptRegisterShort_V2
@@ -3063,7 +3273,8 @@ ReportDefinitions:
         payment.totalamountpaid as amount, 	
         payment.paymentmode as instrumenttype, 	
         payment.transactionnumber as transactionnumber,	
-        concat(to_char((To_timestamp(bd.fromperiod/1000) at time Zone 'Asia/Kolkata'),'YYYY'),'-', to_char((To_timestamp(bd.toperiod/1000) at time Zone 'Asia/Kolkata'),'YYYY')) AS financialyear,  
+        --concat(to_char((To_timestamp(bd.fromperiod/1000) at time Zone 'Asia/Kolkata'),'YYYY'),'-', to_char((To_timestamp(bd.toperiod/1000) at time Zone 'Asia/Kolkata'),'YYYY')) AS financialyear,
+        concat(to_char((To_timestamp(get_fromperiod(pd.billid)/1000) at time Zone 'Asia/Kolkata'),'YYYY'),'-', to_char((To_timestamp(get_toperiod(pd.billid)/1000) at time Zone 'Asia/Kolkata'),'YY')) as financialyear,
         (case when eg_user.name is null then '30048|23/xn3x2FAxn8vYAN0IdplsOxaE=' else eg_user.name end)  as collectorname,
         --receipt_breakup.*,	
         to_char((To_timestamp(pd.manualreceiptdate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY') AS g8issuedate, 	
@@ -3076,6 +3287,136 @@ ReportDefinitions:
       where pd.paymentid=payment.id and bd.billid=pd.billid and payment.paymentstatus != 'CANCELLED' and pd.businessservice='PT' and payment.tenantid=$tenantid 
       and pt.propertyid = bd.consumercodei and pt.status!='INACTIVE' 
       and pt_addr.propertyid=pt.id 
+  orderby: ORDER BY pd.receiptdate DESC;
+  
+  
+- reportName: ReceiptRegisterShort_WithoutLocality_V2
+  decryptionPathId: ReceiptRegisterShort_V2
+  summary: Receipt Register
+  version: 1.0.0
+  moduleName: rainmaker-pt
+  additionalConfig:
+    print:
+      pdfPageSize: "Legal"
+  sourceColumns:
+  - name: receiptnumber
+    label: reports.pt.receiptNo
+    type: string
+    source: pt
+    total: false
+  - name: transactiondate
+    label: reports.pt.receiptDate
+    type: string
+    source: pt
+    total: false
+  - name: g8receiptno
+    label: reports.pt.g8book
+    type: string
+    source: pt
+    total: false
+  - name: g8issuedate
+    label: reports.pt.g8dated
+    type: string
+    source: pt
+    total: false
+  - name: propertyid
+    label: reports.pt.ptrId
+    type: string
+    source: pt
+    total: false
+  - name: financialyear
+    label: reports.pt.financialYear
+    type: string
+    source: pt
+    total: false
+  - name: instrumenttype
+    label: reports.pt.paymentMode
+    type: string
+    source: pt
+    total: false
+  - name: amount
+    label: reports.pt.taxamount
+    type: string
+    source: pt
+    total: true
+  - name: transactionnumber
+    label: reports.pt.ddChequeNo
+    type: string
+    source: pt
+    total: false
+  - name: bankname
+    label: reports.pt.bankName
+    type: string
+    source: pt
+    total: false
+  - name: collectorname
+    label: reports.pt.collectorname
+    type: string
+    source: pt
+    total: false
+  - name: remarks
+    label: reports.pt.remarks
+    type: string
+    source: pt
+    total: false
+  searchParams:
+  - name: fromDate
+    label: reports.pt.fromDate
+    type: epoch
+    source: pt
+    isMandatory: true
+    searchClause: AND pd.receiptdate >= $fromDate
+  - name: toDate
+    label: reports.pt.toDate
+    type: epoch
+    source: pt
+    isMandatory: true
+    searchClause: AND pd.receiptdate <= $toDate
+  - name: paymentMode
+    label: Payment Mode
+    type: singlevaluelist
+    pattern: 'list://CARD:Card,CASH:Cash,CHEQUE:Cheque,DD:DD,OFFLINE_NEFT:NEFT,OFFLINE_RTGS:RTGS,ONLINE:Online,POSTAL_ORDER:PostalOrder'
+    source: pt
+    isMandatory: false
+    searchClause: AND payment.paymentmode = $paymentMode
+  - name: financialyear
+    label: Financial Year
+    type: singlevaluelist
+    pattern: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?tenantId=$tenantid&moduleName=egf-master&masterName=FinancialYear|$.MdmsRes.egf-master.FinancialYear.[?(@.module=='PT')].code|$.MdmsRes.egf-master.FinancialYear.[?(@.module=='PT')].name
+    source: pt
+    wrapper: true
+    isMandatory: false
+    searchClause: AND concat(to_char((To_timestamp(bd.fromperiod/1000) at time Zone 'Asia/Kolkata'),'YYYY'),'-', to_char((To_timestamp(bd.toperiod/1000) at time Zone 'Asia/Kolkata'),'YY')) = $financialyear
+  - name: collectorname
+    label: reports.pt.collectorname
+    type: singlevaluelist
+    pattern: http://egov-hrms:8080/egov-hrms/employees/_search?tenantId=$tenantid&roles=PTCEMP|$.Employees[*].user.id|$.Employees[*].user.name
+    source: pt
+    wrapper: true
+    isMandatory: false
+    searchClause: AND eg_user.id = $collectorname::INTEGER
+  query: |
+      -- Use CTE to force query plan, compute & use CTE later
+      SELECT 	
+        pt.propertyid as propertyid,
+        to_char((To_timestamp(pd.receiptdate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY') as transactiondate,
+        payment.ifsccode AS bankname,
+        receiptnumber,
+        payment.totalamountpaid as amount,
+        payment.paymentmode as instrumenttype,
+        payment.transactionnumber as transactionnumber,
+        --concat(to_char((To_timestamp(bd.fromperiod/1000) at time Zone 'Asia/Kolkata'),'YYYY'),'-', to_char((To_timestamp(bd.toperiod/1000) at time Zone 'Asia/Kolkata'),'YYYY')) AS financialyear,
+        concat(to_char((To_timestamp(get_fromperiod(pd.billid)/1000) at time Zone 'Asia/Kolkata'),'YYYY'),'-', to_char((To_timestamp(get_toperiod(pd.billid)/1000) at time Zone 'Asia/Kolkata'),'YY')) as financialyear,
+        (case when eg_user.name is null then '30048|23/xn3x2FAxn8vYAN0IdplsOxaE=' else eg_user.name end)  as collectorname,
+        --receipt_breakup.*,
+        to_char((To_timestamp(pd.manualreceiptdate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY') AS g8issuedate, 
+        manualreceiptnumber as g8receiptno,
+        'NA' as remarks
+      FROM egcl_paymentdetail pd Left outer join eg_user on eg_user.id = pd.createdby::INTEGER, egcl_payment payment, eg_pt_property as pt, 
+      (select bill.id as billid, bill.consumercode as consumercodei, min(bd.fromperiod) fromperiod, max(bd.toperiod) toperiod from egcl_billdetial bd, egcl_bill bill 
+      where bill.id=bd.billid and bill.tenantid = $tenantid group by bill.id) bd
+      where pd.paymentid=payment.id and bd.billid=pd.billid and payment.paymentstatus != 'CANCELLED' and pd.businessservice='PT' and payment.tenantid=$tenantid 
+      and pt.propertyid = bd.consumercodei and pt.status!='INACTIVE'
   orderby: ORDER BY pd.receiptdate DESC;
 
 
@@ -3281,7 +3622,7 @@ ReportDefinitions:
     inner join egcl_bill as bill on bill.id = payd.billid 
     inner join egcl_billdetial as billd on billd.billid=bill.id		 
     inner join eg_pt_property    as pt on pt.propertyid = bill.consumercode
-    inner join eg_pt_owner as po on po.propertyid = pt.id
+    inner join eg_pt_owner as po on po.propertyid = pt.id  and po.status='ACTIVE'
     inner join eg_user as eu on eu.uuid     = po.userid
     inner join eg_pt_address    as pta on pta.propertyid = pt.id
     left outer join eg_bndry_mohalla as localnames on pta.locality=localnames.localitycode
@@ -3854,6 +4195,26 @@ ReportDefinitions:
     type: string
     source: pt
     total: true
+  - name: card
+    label: reports.pt.card
+    type: string
+    source: pt
+    total: true
+  - name: neft
+    label: reports.pt.neft
+    type: string
+    source: pt
+    total: true
+  - name: rtgs
+    label: reports.pt.rtgs
+    type: string
+    source: pt
+    total: true
+  - name: po
+    label: reports.pt.po
+    type: string
+    source: pt
+    total: true
   searchParams:
   - name: fromDate
     label: reports.pt.fromDate
@@ -3875,30 +4236,162 @@ ReportDefinitions:
     searchClause: AND pt_addr.locality IN ($localityArray)
   query: |
       -- Use CTE to force query plan, compute & use CTE later
-      SELECT
-        concat(to_char((To_timestamp(billd.fromperiod/1000) at time Zone 'Asia/Kolkata'),'YYYY'),'-',to_char((To_timestamp(billd.toperiod/1000) at time Zone 'Asia/Kolkata'),'YYYY')) AS "financialyear",
+      SELECT 
+        sum(payment.totalamountpaid) as totalamount,
+        count(payment.totalamountpaid) as totalcount,
+        sum(case when payment.paymentmode='ONLINE' then payment.totalamountpaid else 0 end) as "online",
+        sum(case when payment.paymentmode='CASH' then payment.totalamountpaid else 0 end) as "cash",
+        sum(case when payment.paymentmode='CHEQUE' then payment.totalamountpaid else 0 end) as "cheque",
+        sum(case when payment.paymentmode='DD' then payment.totalamountpaid else 0 end) as "dd",
+        sum(case when payment.paymentmode='CARD' then payment.totalamountpaid else 0 end) as "card",
+        sum(case when payment.paymentmode='OFFLINE_RTGS' then payment.totalamountpaid else 0 end) as "rtgs",
+        sum(case when payment.paymentmode='OFFLINE_NEFT' then payment.totalamountpaid else 0 end) as "neft",
+        sum(case when payment.paymentmode='POTAL_ORDER' then payment.totalamountpaid else 0 end) as "po",
         sum(case when split_part(pt.usagecategory, '.', 1)='RESIDENTIAL' then payment.totalamountpaid else 0 end) as "residential",
         sum(case when split_part(pt.usagecategory, '.', 1)='RESIDENTIAL' then 1 else 0 end) as "countresidential",
         sum(case when split_part(pt.usagecategory, '.', 1) = 'NONRESIDENTIAL' then payment.totalamountpaid else 0 end) as "nonresidential",
         sum(case when pt.usagecategory like 'NONRESIDENTIAL%' then 1 else 0 end) as "countnonresidential",
         sum(case when pt.usagecategory='MIXED' then payment.totalamountpaid else 0 end) as "mixed",
         sum(case when pt.usagecategory='MIXED' then 1 else 0 end) as "countmixed",
+        concat(to_char((To_timestamp(get_fromperiod(pd.billid)/1000) at time Zone 'Asia/Kolkata'),'YYYY'),'-', to_char((To_timestamp(get_toperiod(pd.billid)/1000) at time Zone 'Asia/Kolkata'),'YY')) as financialyear
+      FROM egcl_paymentdetail pd Left outer join eg_user on eg_user.id = pd.createdby::INTEGER, egcl_payment payment, eg_pt_property as pt, egcl_bill bill,
+      (select string_agg(distinct propertyid,',') as propertyid, string_agg(distinct locality,',') as locality from eg_pt_address where tenantid=$tenantid group by propertyid ) pt_addr
+      where pd.paymentid=payment.id and bill.id=pd.billid and payment.paymentstatus != 'CANCELLED' and pd.businessservice='PT' and payment.tenantid=$tenantid
+      and pt.propertyid = bill.consumercode and pt.status!='INACTIVE' and pt_addr.propertyid=pt.id
+  groupby: GROUP BY financialyear
+  orderby: ORDER BY financialyear
+  
+- reportName: FYCollectionsReport_WithoutLocality_V2
+  summary: FY Collections
+  version: 1.0.0
+  moduleName: rainmaker-pt
+  additionalConfig:
+    print:
+      pdfPageSize: "Legal"
+  sourceColumns:
+  - name: financialyear
+    label: reports.pt.financialyear
+    type: string
+    source: pt
+    total: false
+  - name: residential
+    label: reports.pt.residential
+    type: string
+    source: pt
+    total: true
+  - name: countresidential
+    label: reports.pt.countresidential
+    type: string
+    source: pt
+    total: true  
+  - name: nonresidential
+    label: reports.pt.nonresidential
+    type: string
+    source: pt
+    total: true
+  - name: countnonresidential
+    label: reports.pt.countnonresidential
+    type: string
+    source: pt
+    total: true
+  - name: mixed
+    label: reports.pt.mixed
+    type: string
+    source: pt
+    total: true
+  - name: countmixed
+    label: reports.pt.countmixed
+    type: string
+    source: pt
+    total: true
+  - name: totalamount
+    label: reports.pt.totalamount
+    type: string
+    source: pt
+    total: true
+  - name: totalcount
+    label: reports.pt.totalcount
+    type: string
+    source: pt
+    total: true    
+  - name: online
+    label: reports.pt.online
+    type: string
+    source: pt
+    total: true
+  - name: cash
+    label: reports.pt.cash
+    type: string
+    source: pt
+    total: true
+  - name: cheque
+    label: reports.pt.cheque
+    type: string
+    source: pt
+    total: true
+  - name: dd
+    label: reports.pt.dd
+    type: string
+    source: pt
+    total: true
+  - name: card
+    label: reports.pt.card
+    type: string
+    source: pt
+    total: true
+  - name: neft
+    label: reports.pt.neft
+    type: string
+    source: pt
+    total: true
+  - name: rtgs
+    label: reports.pt.rtgs
+    type: string
+    source: pt
+    total: true
+  - name: po
+    label: reports.pt.po
+    type: string
+    source: pt
+    total: true
+  searchParams:
+  - name: fromDate
+    label: reports.pt.fromDate
+    type: epoch
+    source: pt
+    isMandatory: false
+    searchClause: AND pd.receiptdate >= $fromDate
+  - name: toDate
+    label: reports.pt.toDate
+    type: epoch
+    source: pt
+    isMandatory: false
+    searchClause: AND pd.receiptdate <= $toDate
+  query: |
+      -- Use CTE to force query plan, compute & use CTE later
+      SELECT 
         sum(payment.totalamountpaid) as totalamount,
         count(payment.totalamountpaid) as totalcount,
         sum(case when payment.paymentmode='ONLINE' then payment.totalamountpaid else 0 end) as "online",
         sum(case when payment.paymentmode='CASH' then payment.totalamountpaid else 0 end) as "cash",
         sum(case when payment.paymentmode='CHEQUE' then payment.totalamountpaid else 0 end) as "cheque",
-        sum(case when payment.paymentmode='DD' then payment.totalamountpaid else 0 end) as "dd"
-      FROM egcl_paymentdetail AS pd
-      join egcl_payment as payment on payment.id = pd.paymentid
-      join egcl_bill as bill on bill.id = pd.billid
-      join egcl_billdetial as billd on billd.billid = bill.id
-      JOIN eg_pt_property pt ON pt.propertyid = bill.consumercode
-      inner JOIN eg_pt_address  as pt_addr ON pt_addr.propertyid = pt.id 
-      LEFT OUTER JOIN eg_user ON eg_user.id = pd.createdby::INTEGER
-      WHERE pd.tenantid = $tenantid and payment.paymentstatus != 'CANCELLED' and pt.status!='INACTIVE'
+        sum(case when payment.paymentmode='DD' then payment.totalamountpaid else 0 end) as "dd",
+        sum(case when payment.paymentmode='CARD' then payment.totalamountpaid else 0 end) as "card",
+        sum(case when payment.paymentmode='OFFLINE_RTGS' then payment.totalamountpaid else 0 end) as "rtgs",
+        sum(case when payment.paymentmode='OFFLINE_NEFT' then payment.totalamountpaid else 0 end) as "neft",
+        sum(case when payment.paymentmode='POTAL_ORDER' then payment.totalamountpaid else 0 end) as "po",
+        sum(case when split_part(pt.usagecategory, '.', 1)='RESIDENTIAL' then payment.totalamountpaid else 0 end) as "residential",
+        sum(case when split_part(pt.usagecategory, '.', 1)='RESIDENTIAL' then 1 else 0 end) as "countresidential",
+        sum(case when split_part(pt.usagecategory, '.', 1) = 'NONRESIDENTIAL' then payment.totalamountpaid else 0 end) as "nonresidential",
+        sum(case when pt.usagecategory like 'NONRESIDENTIAL%' then 1 else 0 end) as "countnonresidential",
+        sum(case when pt.usagecategory='MIXED' then payment.totalamountpaid else 0 end) as "mixed",
+        sum(case when pt.usagecategory='MIXED' then 1 else 0 end) as "countmixed",
+        concat(to_char((To_timestamp(get_fromperiod(pd.billid)/1000) at time Zone 'Asia/Kolkata'),'YYYY'),'-', to_char((To_timestamp(get_toperiod(pd.billid)/1000) at time Zone 'Asia/Kolkata'),'YY')) as financialyear
+      FROM egcl_paymentdetail pd Left outer join eg_user on eg_user.id = pd.createdby::INTEGER, egcl_payment payment, eg_pt_property as pt, egcl_bill bill
+      where pd.paymentid=payment.id and bill.id=pd.billid and payment.paymentstatus != 'CANCELLED' and pd.businessservice='PT' and payment.tenantid=$tenantid
+      and pt.propertyid = bill.consumercode and pt.status!='INACTIVE'
   groupby: GROUP BY financialyear
-  orderby: ORDER BY financialyear  
+  orderby: ORDER BY financialyear
 
 - reportName: ULBDEFAULTERPTREPORT_V2
   decryptionPathId: ULBDEFAULTERPTREPORT_V2
@@ -4003,15 +4496,186 @@ ReportDefinitions:
      inner join egcl_bill as bill on bill.id = payd.billid 
      inner join egcl_billdetial as billd on billd.billid=bill.id		 
      inner join eg_pt_property    as pt on pt.propertyid = bill.consumercode
-     inner join eg_pt_owner as po on po.propertyid = pt.id
+     inner join eg_pt_owner as po on po.propertyid = pt.id  and po.status='ACTIVE'
      inner join eg_user as eu on eu.uuid     = po.userid
      inner join eg_pt_address    as pta on pta.propertyid = pt.id
      left outer join eg_pt_unit_v2_ot as pot on pot.propertyid = pt.id   
      where payd.tenantid = $tenantid 
      and bill.consumercode not in (select consumercode from egcl_bill where tenantid=$tenantid and businessservice='PT' and id in (select billid from egcl_billdetial where tenantid=$tenantid and concat(to_char((To_timestamp(fromperiod/1000) at time Zone 'Asia/Kolkata'),'YYYY'),'-',to_char((To_timestamp(toperiod/1000) at time Zone 'Asia/Kolkata'),'YY')) ='2020-21'))
-     and pt.status!='INACTIVE' 
+     and pt.status!='INACTIVE'
      
-    
+- reportName: ULBDEFAULTERPTREPORT_NEW_V2
+  decryptionPathId: ULBDEFAULTERPTREPORT_V2
+  summary: ULB Defaulter Pt report
+  version: 1.0.0
+  moduleName: rainmaker-pt
+  sourceColumns:
+  - name: propertytaxuniqueid
+    label: reports.pt.propertytaxuniqueid
+    type: string
+    source: pt
+    total: false  
+  - name: existingpropertyid
+    label: reports.pt.existingpropertyid
+    type: string
+    source: pt
+    total: false
+  - name: ownername
+    label: reports.pt.ownername
+    type: string
+    source: pt
+    total: false  
+  - name: propertytype
+    label: reports.pt.propertytype
+    type: string
+    source: pt
+    total: false  
+  - name: mobileno
+    label: reports.pt.mobileno
+    type: string
+    source: pt
+    total: false   
+  - name: address
+    label: reports.pt.address
+    type: string
+    source: pt
+    total: false
+  searchParams:
+  - name: localityArray
+    label: reports.pt.zoneList
+    type: boundarylist
+    source: pt
+    isMandatory: false
+    searchClause: AND pta.locality IN ($localityArray)
+  query: |
+   --S.no    Service Name	ULB    Property Tax Unique ID    Date Of Transcation    Receipt Number	Existing Property ID    Type Of Property	Mobile Number   	Address
+    with eg_pt_unit_v2_ot as (
+      select 
+        propertyid, 
+        string_agg(distinct pu.occupancytype, ',') as occupancytype, 
+        --string_agg(distinct coalesce(usagecategory), ',') as propertytype 
+        string_agg(distinct Initcap(case when usagecategory like '%.%' then split_part(usagecategory,'.',2) else usagecategory end),',') as propertytype
+      from eg_pt_unit as pu
+      where  pu.tenantid = $tenantid
+      group by propertyid
+      )
+    select
+      --distinct on (payd.receiptnumber)
+      --initcap(split_part(payd.tenantid, '.', 2)) as "ulb",
+      --split_part(consumercode, ':', 1) as "propertytaxuniqueid",
+      --to_char((To_timestamp(payd.receiptdate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY')  AS  "transcationdate",
+      --payd.receiptnumber    as "receiptnumber",
+      pt.propertyid as "propertytaxuniqueid",
+      string_agg(pt.oldpropertyid,',') as "existingpropertyid",
+      --concat(to_char((To_timestamp(billd.fromperiod/1000) at time Zone 'Asia/Kolkata'),'YYYY'),'-',to_char((To_timestamp(billd.toperiod/1000) at time Zone 'Asia/Kolkata'),'YY'))  AS "financialyear",
+      split_part(string_agg(eu."name",','),',',1)  as "ownername", --first owner
+      --eu.guardian  as "guardianname",
+      string_agg(pot.propertytype,',')  as "propertytype",
+      split_part(string_agg(eu.mobilenumber,','),',',1) as "mobileno",     
+      --string_agg(distinct REGEXP_REPLACE(REGEXP_REPLACE(CONCAT(pta.doorno, ',', pta.buildingname, ',',pta.street,',', pta.pincode), ',+', ','), '^,|,$', ''),',') as "address",
+      string_agg(distinct concat(pta.doorno,',',pta.plotno,',',pta.buildingname,',',pta.street,',',pta.landmark,',',eg_bndry_mohalla.localityname,',',pta.city),',') as "address"
+    from eg_pt_property pt
+    --inner join egcl_payment as payment on payment.id = payd.paymentid        
+    --inner join egcl_bill as bill on bill.id = payd.billid 
+    --inner join egcl_billdetial as billd on billd.billid=bill.id		 
+    --inner join     as pt on pt.propertyid = bill.consumercode
+    inner join eg_pt_owner as po on po.propertyid = pt.id  and po.status='ACTIVE' 
+    inner join eg_user as eu on eu.uuid = po.userid
+    inner join eg_pt_address    as pta on pta.propertyid = pt.id
+    inner join eg_pt_unit_v2_ot as pot on pot.propertyid = pt.id 
+    inner join eg_bndry_mohalla on eg_bndry_mohalla.localitycode=pta.locality
+    where pt.tenantid = $tenantid
+    --and bill.consumercode not in (select consumercode from egcl_bill where tenantid=$tenantid and businessservice='PT' and id in (select billid from egcl_billdetial where tenantid=$tenantid and concat(to_char((To_timestamp(fromperiod/1000) at time Zone 'Asia/Kolkata'),'YYYY'),'-',to_char((To_timestamp(toperiod/1000) at time Zone 'Asia/Kolkata'),'YY')) ='2020-21'))
+    and pt.status!='INACTIVE'
+    and pt.propertyid not in (select consumercode from egcl_bill where tenantid=$tenantid and businessservice='PT' and id in (select billid from egcl_billdetial where tenantid=$tenantid and concat(to_char((To_timestamp(fromperiod/1000) at time Zone 'Asia/Kolkata'),'YYYY'),'-',to_char((To_timestamp(toperiod/1000) at time Zone 'Asia/Kolkata'),'YY')) ='2020-21'))
+  groupby: group by pt.propertyid
+  
+- reportName: ULBDEFAULTERPTREPORT_MINI_STATE_V2
+  decryptionPathId: ULBDEFAULTERPTREPORT_V2
+  summary: ULB Defaulter Pt report
+  version: 1.0.0
+  moduleName: rainmaker-pt
+  sourceColumns:
+  - name: propertytaxuniqueid
+    label: reports.pt.propertytaxuniqueid
+    type: string
+    source: pt
+    total: false  
+  - name: existingpropertyid
+    label: reports.pt.existingpropertyid
+    type: string
+    source: pt
+    total: false
+  - name: ownername
+    label: reports.pt.ownername
+    type: string
+    source: pt
+    total: false  
+  - name: propertytype
+    label: reports.pt.propertytype
+    type: string
+    source: pt
+    total: false  
+  - name: mobileno
+    label: reports.pt.mobileno
+    type: string
+    source: pt
+    total: false   
+  - name: address
+    label: reports.pt.address
+    type: string
+    source: pt
+    total: false
+  searchParams:
+  - name: ulb
+    label: ULB
+    type: singlevaluelist
+    pattern: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?tenantId=$tenantid&moduleName=tenant&masterName=tenants|$.MdmsRes.tenant.tenants.*.code|$.MdmsRes.tenant.tenants.*.name
+    source: pt
+    wrapper: true
+    isMandatory: false
+    searchClause: AND tenantid = $ulb
+  query: |
+   --S.no    Service Name	ULB    Property Tax Unique ID    Date Of Transcation    Receipt Number	Existing Property ID    Type Of Property	Mobile Number   	Address
+    with eg_pt_unit_v2_ot as (
+      select 
+        propertyid, 
+        string_agg(distinct pu.occupancytype, ',') as occupancytype, 
+        --string_agg(distinct coalesce(usagecategory), ',') as propertytype 
+        string_agg(distinct Initcap(case when usagecategory like '%.%' then split_part(usagecategory,'.',2) else usagecategory end),',') as propertytype
+      from eg_pt_unit as pu
+      where  pu.tenantid = $ulb
+      group by propertyid
+      )
+    select
+      --distinct on (payd.receiptnumber)
+      --initcap(split_part(payd.tenantid, '.', 2)) as "ulb",
+      --split_part(consumercode, ':', 1) as "propertytaxuniqueid",
+      --to_char((To_timestamp(payd.receiptdate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY')  AS  "transcationdate",
+      --payd.receiptnumber    as "receiptnumber",
+      pt.propertyid as "propertytaxuniqueid",
+      string_agg(pt.oldpropertyid,',') as "existingpropertyid",
+      --concat(to_char((To_timestamp(billd.fromperiod/1000) at time Zone 'Asia/Kolkata'),'YYYY'),'-',to_char((To_timestamp(billd.toperiod/1000) at time Zone 'Asia/Kolkata'),'YY'))  AS "financialyear",
+      split_part(string_agg(eu."name",','),',',1)  as "ownername", 
+      --eu.guardian  as "guardianname",
+      string_agg(pot.propertytype,',')  as "propertytype",
+      split_part(string_agg(eu.mobilenumber,','),',',1) as "mobileno",     
+      string_agg(distinct REGEXP_REPLACE(REGEXP_REPLACE(CONCAT(pta.doorno, ',', pta.buildingname, ',',pta.street,',', pta.pincode), ',+', ','), '^,|,$', ''),',') as "address"
+    from eg_pt_property pt
+    --inner join egcl_payment as payment on payment.id = payd.paymentid        
+    --inner join egcl_bill as bill on bill.id = payd.billid 
+    --inner join egcl_billdetial as billd on billd.billid=bill.id		 
+    --inner join     as pt on pt.propertyid = bill.consumercode
+    inner join eg_pt_owner as po on po.propertyid = pt.id  and po.status='ACTIVE' 
+    inner join eg_user as eu on eu.uuid     = po.userid
+    inner join eg_pt_address    as pta on pta.propertyid = pt.id
+    inner join eg_pt_unit_v2_ot as pot on pot.propertyid = pt.id   
+    where pt.tenantid = $ulb
+    --and bill.consumercode not in (select consumercode from egcl_bill where tenantid=$ulb and businessservice='PT' and id in (select billid from egcl_billdetial where tenantid=$ulb and concat(to_char((To_timestamp(fromperiod/1000) at time Zone 'Asia/Kolkata'),'YYYY'),'-',to_char((To_timestamp(toperiod/1000) at time Zone 'Asia/Kolkata'),'YY')) ='2020-21'))
+    and pt.status!='INACTIVE'
+    and pt.propertyid not in (select consumercode from egcl_bill where tenantid=$ulb and businessservice='PT' and id in (select billid from egcl_billdetial where tenantid=$ulb and concat(to_char((To_timestamp(fromperiod/1000) at time Zone 'Asia/Kolkata'),'YYYY'),'-',to_char((To_timestamp(toperiod/1000) at time Zone 'Asia/Kolkata'),'YY')) ='2020-21'))
+  groupby: group by pt.propertyid
+        
 - reportName: ZoneFYReport_V2
   summary: Zone FY Collection
   version: 1.0.0
@@ -4129,191 +4793,159 @@ ReportDefinitions:
    --S.no    Service Name ULB    Property Tax Unique ID    Date Of Transcation    Receipt Number Existing Property ID    Type Of Property Mobile Number    Address
     with fy2013 as
     (
-    SELECT
-      zonecode,
-      string_agg(distinct zonename,',') as zonename,
-      string_agg(distinct concat(to_char((To_timestamp(billd.fromperiod/1000) at time Zone 'Asia/Kolkata'),'YYYY'),'-',to_char((To_timestamp(billd.toperiod/1000) at time Zone 'Asia/Kolkata'),'YY')),',') AS "financialyear",
-      count(*) as totalptr,
-      sum(payment.totalamountpaid) as amountcollected
-    FROM egcl_paymentdetail AS pd
-    join egcl_payment as payment on payment.id = pd.paymentid
-    join egcl_bill as bill on bill.id = pd.billid
-    join egcl_billdetial as billd on billd.billid = bill.id
-    JOIN eg_pt_property pt ON pt.propertyid = bill.consumercode	
-    inner JOIN eg_pt_address  as pt_addr ON pt_addr.propertyid = pt.id
-    inner JOIN eg_bndry_mohalla on eg_bndry_mohalla.localitycode= pt_addr.locality
-    WHERE pd.tenantid = 'pb.amritsar' and payment.paymentstatus != 'CANCELLED' and pt.status!='INACTIVE'
-    and concat(to_char((To_timestamp(billd.fromperiod/1000) at time Zone 'Asia/Kolkata'),'YYYY'),'-',to_char((To_timestamp(billd.toperiod/1000) at time Zone 'Asia/Kolkata'),'YY'))='2013-14'
-    GROUP BY zonecode
-
+      SELECT 
+        zonecode,
+        sum(payment.totalamountpaid) as amount,
+        count(payment.totalamountpaid) as totalcount,
+        concat(to_char((To_timestamp(get_fromperiod(pd.billid)/1000) at time Zone 'Asia/Kolkata'),'YYYY'),'-', to_char((To_timestamp(get_toperiod(pd.billid)/1000) at time Zone 'Asia/Kolkata'),'YY')) as financialyear
+      FROM egcl_paymentdetail pd Left outer join eg_user on eg_user.id = pd.createdby::INTEGER, egcl_payment payment, eg_pt_property as pt, egcl_bill bill,
+      (select string_agg(distinct propertyid,',') as propertyid, string_agg(distinct locality,',') as locality from eg_pt_address where tenantid=$tenantid group by propertyid ) pt_addr
+      INNER JOIN eg_bndry_mohalla on eg_bndry_mohalla.localitycode= pt_addr.locality and eg_bndry_mohalla.tenantid=$tenantid
+      where pd.paymentid=payment.id and bill.id=pd.billid and payment.paymentstatus != 'CANCELLED' and pd.businessservice='PT' and payment.tenantid=$tenantid
+      and pt.propertyid = bill.consumercode and pt.status!='INACTIVE' and pt_addr.propertyid=pt.id
+      and concat(to_char((To_timestamp(get_fromperiod(pd.billid)/1000) at time Zone 'Asia/Kolkata'),'YYYY'),'-', to_char((To_timestamp(get_toperiod(pd.billid)/1000) at time Zone 'Asia/Kolkata'),'YY'))='2013-14'
+      and pd.receiptdate>=$fromDate and pd.receiptdate<=$toDate
+      GROUP BY financialyear,zonecode
+  
     ), 
     fy2014 as
     (
-    SELECT
-      zonecode,
-      string_agg(distinct zonename,',') as zonename,
-      string_agg(distinct concat(to_char((To_timestamp(billd.fromperiod/1000) at time Zone 'Asia/Kolkata'),'YYYY'),'-',to_char((To_timestamp(billd.toperiod/1000) at time Zone 'Asia/Kolkata'),'YY')),',') AS "financialyear",
-      count(*) as totalptr,
-      sum(payment.totalamountpaid) as amountcollected
-    FROM egcl_paymentdetail AS pd
-    join egcl_payment as payment on payment.id = pd.paymentid
-    join egcl_bill as bill on bill.id = pd.billid
-    join egcl_billdetial as billd on billd.billid = bill.id
-    JOIN eg_pt_property pt ON pt.propertyid = bill.consumercode	
-    inner JOIN eg_pt_address  as pt_addr ON pt_addr.propertyid = pt.id
-    inner JOIN eg_bndry_mohalla on eg_bndry_mohalla.localitycode= pt_addr.locality
-    WHERE pd.tenantid = 'pb.amritsar' and payment.paymentstatus != 'CANCELLED' and pt.status!='INACTIVE' 
-    and concat(to_char((To_timestamp(billd.fromperiod/1000) at time Zone 'Asia/Kolkata'),'YYYY'),'-',to_char((To_timestamp(billd.toperiod/1000) at time Zone 'Asia/Kolkata'),'YY'))='2014-15'
-    GROUP BY zonecode
-
+      SELECT 
+        zonecode,
+        sum(payment.totalamountpaid) as amount,
+        count(payment.totalamountpaid) as totalcount,
+        concat(to_char((To_timestamp(get_fromperiod(pd.billid)/1000) at time Zone 'Asia/Kolkata'),'YYYY'),'-', to_char((To_timestamp(get_toperiod(pd.billid)/1000) at time Zone 'Asia/Kolkata'),'YY')) as financialyear
+      FROM egcl_paymentdetail pd Left outer join eg_user on eg_user.id = pd.createdby::INTEGER, egcl_payment payment, eg_pt_property as pt, egcl_bill bill,
+      (select string_agg(distinct propertyid,',') as propertyid, string_agg(distinct locality,',') as locality from eg_pt_address where tenantid=$tenantid group by propertyid ) pt_addr
+      INNER JOIN eg_bndry_mohalla on eg_bndry_mohalla.localitycode= pt_addr.locality and eg_bndry_mohalla.tenantid=$tenantid
+      where pd.paymentid=payment.id and bill.id=pd.billid and payment.paymentstatus != 'CANCELLED' and pd.businessservice='PT' and payment.tenantid=$tenantid
+      and pt.propertyid = bill.consumercode and pt.status!='INACTIVE' and pt_addr.propertyid=pt.id
+      and concat(to_char((To_timestamp(get_fromperiod(pd.billid)/1000) at time Zone 'Asia/Kolkata'),'YYYY'),'-', to_char((To_timestamp(get_toperiod(pd.billid)/1000) at time Zone 'Asia/Kolkata'),'YY'))='2014-15'
+      and pd.receiptdate>=$fromDate and pd.receiptdate<=$toDate
+      GROUP BY financialyear,zonecode
     ), 
     fy2015 as
     (
-    SELECT
-      zonecode,
-      string_agg(distinct zonename,',') as zonename,
-      string_agg(distinct concat(to_char((To_timestamp(billd.fromperiod/1000) at time Zone 'Asia/Kolkata'),'YYYY'),'-',to_char((To_timestamp(billd.toperiod/1000) at time Zone 'Asia/Kolkata'),'YY')),',') AS "financialyear",
-      count(*) as totalptr,
-      sum(payment.totalamountpaid) as amountcollected
-    FROM egcl_paymentdetail AS pd
-    join egcl_payment as payment on payment.id = pd.paymentid
-    join egcl_bill as bill on bill.id = pd.billid
-    join egcl_billdetial as billd on billd.billid = bill.id
-    JOIN eg_pt_property pt ON pt.propertyid = bill.consumercode	
-    inner JOIN eg_pt_address  as pt_addr ON pt_addr.propertyid = pt.id
-    inner JOIN eg_bndry_mohalla on eg_bndry_mohalla.localitycode= pt_addr.locality
-    WHERE pd.tenantid = 'pb.amritsar' and payment.paymentstatus != 'CANCELLED' and pt.status!='INACTIVE' 
-    and concat(to_char((To_timestamp(billd.fromperiod/1000) at time Zone 'Asia/Kolkata'),'YYYY'),'-',to_char((To_timestamp(billd.toperiod/1000) at time Zone 'Asia/Kolkata'),'YY'))='2015-16'
-    GROUP BY zonecode
-
+      SELECT 
+        zonecode,
+        sum(payment.totalamountpaid) as amount,
+        count(payment.totalamountpaid) as totalcount,
+        concat(to_char((To_timestamp(get_fromperiod(pd.billid)/1000) at time Zone 'Asia/Kolkata'),'YYYY'),'-', to_char((To_timestamp(get_toperiod(pd.billid)/1000) at time Zone 'Asia/Kolkata'),'YY')) as financialyear
+      FROM egcl_paymentdetail pd Left outer join eg_user on eg_user.id = pd.createdby::INTEGER, egcl_payment payment, eg_pt_property as pt, egcl_bill bill,
+      (select string_agg(distinct propertyid,',') as propertyid, string_agg(distinct locality,',') as locality from eg_pt_address where tenantid=$tenantid group by propertyid ) pt_addr
+      INNER JOIN eg_bndry_mohalla on eg_bndry_mohalla.localitycode= pt_addr.locality and eg_bndry_mohalla.tenantid=$tenantid
+      where pd.paymentid=payment.id and bill.id=pd.billid and payment.paymentstatus != 'CANCELLED' and pd.businessservice='PT' and payment.tenantid=$tenantid
+      and pt.propertyid = bill.consumercode and pt.status!='INACTIVE' and pt_addr.propertyid=pt.id
+      and concat(to_char((To_timestamp(get_fromperiod(pd.billid)/1000) at time Zone 'Asia/Kolkata'),'YYYY'),'-', to_char((To_timestamp(get_toperiod(pd.billid)/1000) at time Zone 'Asia/Kolkata'),'YY'))='2015-16'
+      and pd.receiptdate>=$fromDate and pd.receiptdate<=$toDate
+      GROUP BY financialyear,zonecode
     ), 
     fy2016 as
     (
-    SELECT
-      zonecode,
-      string_agg(distinct zonename,',') as zonename,
-      string_agg(distinct concat(to_char((To_timestamp(billd.fromperiod/1000) at time Zone 'Asia/Kolkata'),'YYYY'),'-',to_char((To_timestamp(billd.toperiod/1000) at time Zone 'Asia/Kolkata'),'YY')),',') AS "financialyear",
-      count(*) as totalptr,
-      sum(payment.totalamountpaid) as amountcollected
-    FROM egcl_paymentdetail AS pd
-    join egcl_payment as payment on payment.id = pd.paymentid
-    join egcl_bill as bill on bill.id = pd.billid
-    join egcl_billdetial as billd on billd.billid = bill.id
-    JOIN eg_pt_property pt ON pt.propertyid = bill.consumercode	
-    inner JOIN eg_pt_address  as pt_addr ON pt_addr.propertyid = pt.id
-    inner JOIN eg_bndry_mohalla on eg_bndry_mohalla.localitycode= pt_addr.locality
-    WHERE pd.tenantid = 'pb.amritsar' and payment.paymentstatus != 'CANCELLED' and pt.status!='INACTIVE' 
-    and concat(to_char((To_timestamp(billd.fromperiod/1000) at time Zone 'Asia/Kolkata'),'YYYY'),'-',to_char((To_timestamp(billd.toperiod/1000) at time Zone 'Asia/Kolkata'),'YY'))='2016-17'
-    GROUP BY zonecode
-
-
+      SELECT 
+        zonecode,
+        sum(payment.totalamountpaid) as amount,
+        count(payment.totalamountpaid) as totalcount,
+        concat(to_char((To_timestamp(get_fromperiod(pd.billid)/1000) at time Zone 'Asia/Kolkata'),'YYYY'),'-', to_char((To_timestamp(get_toperiod(pd.billid)/1000) at time Zone 'Asia/Kolkata'),'YY')) as financialyear
+      FROM egcl_paymentdetail pd Left outer join eg_user on eg_user.id = pd.createdby::INTEGER, egcl_payment payment, eg_pt_property as pt, egcl_bill bill,
+      (select string_agg(distinct propertyid,',') as propertyid, string_agg(distinct locality,',') as locality from eg_pt_address where tenantid=$tenantid group by propertyid ) pt_addr
+      inner JOIN eg_bndry_mohalla on eg_bndry_mohalla.localitycode= pt_addr.locality
+      where pd.paymentid=payment.id and bill.id=pd.billid and payment.paymentstatus != 'CANCELLED' and pd.businessservice='PT' and payment.tenantid=$tenantid
+      and pt.propertyid = bill.consumercode and pt.status!='INACTIVE' and pt_addr.propertyid=pt.id
+      and concat(to_char((To_timestamp(get_fromperiod(pd.billid)/1000) at time Zone 'Asia/Kolkata'),'YYYY'),'-', to_char((To_timestamp(get_toperiod(pd.billid)/1000) at time Zone 'Asia/Kolkata'),'YY'))='2016-17'
+      and pd.receiptdate>=$fromDate and pd.receiptdate<=$toDate
+      GROUP BY financialyear,zonecode
     ), 
     fy2017 as
     (
-    SELECT
-      zonecode,
-      string_agg(distinct zonename,',') as zonename,
-      string_agg(distinct concat(to_char((To_timestamp(billd.fromperiod/1000) at time Zone 'Asia/Kolkata'),'YYYY'),'-',to_char((To_timestamp(billd.toperiod/1000) at time Zone 'Asia/Kolkata'),'YY')),',') AS "financialyear",
-      count(*) as totalptr,
-      sum(payment.totalamountpaid) as amountcollected
-    FROM egcl_paymentdetail AS pd
-    join egcl_payment as payment on payment.id = pd.paymentid
-    join egcl_bill as bill on bill.id = pd.billid
-    join egcl_billdetial as billd on billd.billid = bill.id
-    JOIN eg_pt_property pt ON pt.propertyid = bill.consumercode	
-    inner JOIN eg_pt_address  as pt_addr ON pt_addr.propertyid = pt.id
-    inner JOIN eg_bndry_mohalla on eg_bndry_mohalla.localitycode= pt_addr.locality
-    WHERE pd.tenantid = 'pb.amritsar' and payment.paymentstatus != 'CANCELLED' and pt.status!='INACTIVE' 
-    and concat(to_char((To_timestamp(billd.fromperiod/1000) at time Zone 'Asia/Kolkata'),'YYYY'),'-',to_char((To_timestamp(billd.toperiod/1000) at time Zone 'Asia/Kolkata'),'YY'))='2017-18'
-    GROUP BY zonecode
-
+      SELECT 
+        zonecode,
+        sum(payment.totalamountpaid) as amount,
+        count(payment.totalamountpaid) as totalcount,
+        concat(to_char((To_timestamp(get_fromperiod(pd.billid)/1000) at time Zone 'Asia/Kolkata'),'YYYY'),'-', to_char((To_timestamp(get_toperiod(pd.billid)/1000) at time Zone 'Asia/Kolkata'),'YY')) as financialyear
+      FROM egcl_paymentdetail pd Left outer join eg_user on eg_user.id = pd.createdby::INTEGER, egcl_payment payment, eg_pt_property as pt, egcl_bill bill,
+      (select string_agg(distinct propertyid,',') as propertyid, string_agg(distinct locality,',') as locality from eg_pt_address where tenantid=$tenantid group by propertyid ) pt_addr
+      INNER JOIN eg_bndry_mohalla on eg_bndry_mohalla.localitycode= pt_addr.locality and eg_bndry_mohalla.tenantid=$tenantid
+      where pd.paymentid=payment.id and bill.id=pd.billid and payment.paymentstatus != 'CANCELLED' and pd.businessservice='PT' and payment.tenantid=$tenantid
+      and pt.propertyid = bill.consumercode and pt.status!='INACTIVE' and pt_addr.propertyid=pt.id
+      and concat(to_char((To_timestamp(get_fromperiod(pd.billid)/1000) at time Zone 'Asia/Kolkata'),'YYYY'),'-', to_char((To_timestamp(get_toperiod(pd.billid)/1000) at time Zone 'Asia/Kolkata'),'YY'))='2017-18'
+      and pd.receiptdate>=$fromDate and pd.receiptdate<=$toDate
+      GROUP BY financialyear,zonecode
     ),
     fy2018 as
     (
-    SELECT
-      zonecode,
-      string_agg(distinct zonename,',') as zonename,
-      string_agg(distinct concat(to_char((To_timestamp(billd.fromperiod/1000) at time Zone 'Asia/Kolkata'),'YYYY'),'-',to_char((To_timestamp(billd.toperiod/1000) at time Zone 'Asia/Kolkata'),'YY')),',') AS "financialyear",
-      count(*) as totalptr,
-      sum(payment.totalamountpaid) as amountcollected
-    FROM egcl_paymentdetail AS pd
-    join egcl_payment as payment on payment.id = pd.paymentid
-    join egcl_bill as bill on bill.id = pd.billid
-    join egcl_billdetial as billd on billd.billid = bill.id
-    JOIN eg_pt_property pt ON pt.propertyid = bill.consumercode	
-    inner JOIN eg_pt_address  as pt_addr ON pt_addr.propertyid = pt.id
-    inner JOIN eg_bndry_mohalla on eg_bndry_mohalla.localitycode= pt_addr.locality
-    WHERE pd.tenantid = 'pb.amritsar' and payment.paymentstatus != 'CANCELLED' and pt.status!='INACTIVE' 
-    and concat(to_char((To_timestamp(billd.fromperiod/1000) at time Zone 'Asia/Kolkata'),'YYYY'),'-',to_char((To_timestamp(billd.toperiod/1000) at time Zone 'Asia/Kolkata'),'YY'))='2018-19'
-    GROUP BY zonecode
-
+      SELECT 
+        zonecode,
+        sum(payment.totalamountpaid) as amount,
+        count(payment.totalamountpaid) as totalcount,
+        concat(to_char((To_timestamp(get_fromperiod(pd.billid)/1000) at time Zone 'Asia/Kolkata'),'YYYY'),'-', to_char((To_timestamp(get_toperiod(pd.billid)/1000) at time Zone 'Asia/Kolkata'),'YY')) as financialyear
+      FROM egcl_paymentdetail pd Left outer join eg_user on eg_user.id = pd.createdby::INTEGER, egcl_payment payment, eg_pt_property as pt, egcl_bill bill,
+      (select string_agg(distinct propertyid,',') as propertyid, string_agg(distinct locality,',') as locality from eg_pt_address where tenantid=$tenantid group by propertyid ) pt_addr
+      INNER JOIN eg_bndry_mohalla on eg_bndry_mohalla.localitycode= pt_addr.locality and eg_bndry_mohalla.tenantid=$tenantid
+      where pd.paymentid=payment.id and bill.id=pd.billid and payment.paymentstatus != 'CANCELLED' and pd.businessservice='PT' and payment.tenantid=$tenantid
+      and pt.propertyid = bill.consumercode and pt.status!='INACTIVE' and pt_addr.propertyid=pt.id
+      and concat(to_char((To_timestamp(get_fromperiod(pd.billid)/1000) at time Zone 'Asia/Kolkata'),'YYYY'),'-', to_char((To_timestamp(get_toperiod(pd.billid)/1000) at time Zone 'Asia/Kolkata'),'YY'))='2018-19'
+      and pd.receiptdate>=$fromDate and pd.receiptdate<=$toDate
+      GROUP BY financialyear,zonecode
     ),
     fy2019 as
     (
-    SELECT
-      zonecode,
-      string_agg(distinct zonename,',') as zonename,
-      string_agg(distinct concat(to_char((To_timestamp(billd.fromperiod/1000) at time Zone 'Asia/Kolkata'),'YYYY'),'-',to_char((To_timestamp(billd.toperiod/1000) at time Zone 'Asia/Kolkata'),'YY')),',') AS "financialyear",
-      count(*) as totalptr,
-      sum(payment.totalamountpaid) as amountcollected
-    FROM egcl_paymentdetail AS pd
-    join egcl_payment as payment on payment.id = pd.paymentid
-    join egcl_bill as bill on bill.id = pd.billid
-    join egcl_billdetial as billd on billd.billid = bill.id
-    JOIN eg_pt_property pt ON pt.propertyid = bill.consumercode	
-    inner JOIN eg_pt_address  as pt_addr ON pt_addr.propertyid = pt.id
-    inner JOIN eg_bndry_mohalla on eg_bndry_mohalla.localitycode= pt_addr.locality
-    WHERE pd.tenantid = 'pb.amritsar' and payment.paymentstatus != 'CANCELLED' and pt.status!='INACTIVE' 
-    and concat(to_char((To_timestamp(billd.fromperiod/1000) at time Zone 'Asia/Kolkata'),'YYYY'),'-',to_char((To_timestamp(billd.toperiod/1000) at time Zone 'Asia/Kolkata'),'YY'))='2019-20'
-    GROUP BY zonecode
+      SELECT 
+        zonecode,
+        sum(payment.totalamountpaid) as amount,
+        count(payment.totalamountpaid) as totalcount,
+        concat(to_char((To_timestamp(get_fromperiod(pd.billid)/1000) at time Zone 'Asia/Kolkata'),'YYYY'),'-', to_char((To_timestamp(get_toperiod(pd.billid)/1000) at time Zone 'Asia/Kolkata'),'YY')) as financialyear
+      FROM egcl_paymentdetail pd Left outer join eg_user on eg_user.id = pd.createdby::INTEGER, egcl_payment payment, eg_pt_property as pt, egcl_bill bill,
+      (select string_agg(distinct propertyid,',') as propertyid, string_agg(distinct locality,',') as locality from eg_pt_address where tenantid=$tenantid group by propertyid ) pt_addr
+      INNER JOIN eg_bndry_mohalla on eg_bndry_mohalla.localitycode= pt_addr.locality and eg_bndry_mohalla.tenantid=$tenantid
+      where pd.paymentid=payment.id and bill.id=pd.billid and payment.paymentstatus != 'CANCELLED' and pd.businessservice='PT' and payment.tenantid=$tenantid
+      and pt.propertyid = bill.consumercode and pt.status!='INACTIVE' and pt_addr.propertyid=pt.id
+      and concat(to_char((To_timestamp(get_fromperiod(pd.billid)/1000) at time Zone 'Asia/Kolkata'),'YYYY'),'-', to_char((To_timestamp(get_toperiod(pd.billid)/1000) at time Zone 'Asia/Kolkata'),'YY'))='2019-20'
+      and pd.receiptdate>=$fromDate and pd.receiptdate<=$toDate
+      GROUP BY financialyear,zonecode
     ),
     fy2020 as
     (
-    SELECT
-      zonecode,
-      string_agg(distinct zonename,',') as zonename,
-      string_agg(distinct concat(to_char((To_timestamp(billd.fromperiod/1000) at time Zone 'Asia/Kolkata'),'YYYY'),'-',to_char((To_timestamp(billd.toperiod/1000) at time Zone 'Asia/Kolkata'),'YY')),',') AS "financialyear",
-      count(*) as totalptr,
-      sum(payment.totalamountpaid) as amountcollected
-    FROM egcl_paymentdetail AS pd
-    join egcl_payment as payment on payment.id = pd.paymentid
-    join egcl_bill as bill on bill.id = pd.billid
-    join egcl_billdetial as billd on billd.billid = bill.id
-    JOIN eg_pt_property pt ON pt.propertyid = bill.consumercode	
-    inner JOIN eg_pt_address  as pt_addr ON pt_addr.propertyid = pt.id
-    inner JOIN eg_bndry_mohalla on eg_bndry_mohalla.localitycode= pt_addr.locality
-    WHERE pd.tenantid = 'pb.amritsar' and payment.paymentstatus != 'CANCELLED' and pt.status!='INACTIVE' 
-    and concat(to_char((To_timestamp(billd.fromperiod/1000) at time Zone 'Asia/Kolkata'),'YYYY'),'-',to_char((To_timestamp(billd.toperiod/1000) at time Zone 'Asia/Kolkata'),'YY'))='2020-21'
-    GROUP BY zonecode
-
-
+      SELECT 
+        zonecode,
+        sum(payment.totalamountpaid) as amount,
+        count(payment.totalamountpaid) as totalcount,
+        concat(to_char((To_timestamp(get_fromperiod(pd.billid)/1000) at time Zone 'Asia/Kolkata'),'YYYY'),'-', to_char((To_timestamp(get_toperiod(pd.billid)/1000) at time Zone 'Asia/Kolkata'),'YY')) as financialyear
+      FROM egcl_paymentdetail pd Left outer join eg_user on eg_user.id = pd.createdby::INTEGER, egcl_payment payment, eg_pt_property as pt, egcl_bill bill,
+      (select string_agg(distinct propertyid,',') as propertyid, string_agg(distinct locality,',') as locality from eg_pt_address where tenantid=$tenantid group by propertyid ) pt_addr
+      INNER JOIN eg_bndry_mohalla on eg_bndry_mohalla.localitycode= pt_addr.locality and eg_bndry_mohalla.tenantid=$tenantid
+      where pd.paymentid=payment.id and bill.id=pd.billid and payment.paymentstatus != 'CANCELLED' and pd.businessservice='PT' and payment.tenantid=$tenantid
+      and pt.propertyid = bill.consumercode and pt.status!='INACTIVE' and pt_addr.propertyid=pt.id
+      and concat(to_char((To_timestamp(get_fromperiod(pd.billid)/1000) at time Zone 'Asia/Kolkata'),'YYYY'),'-', to_char((To_timestamp(get_toperiod(pd.billid)/1000) at time Zone 'Asia/Kolkata'),'YY'))='2020-21'
+      and pd.receiptdate>=$fromDate and pd.receiptdate<=$toDate
+      GROUP BY financialyear,zonecode
     ),
     zones as
     (
-    select distinct zonecode,string_agg(distinct zonename,',') as zname from eg_bndry_mohalla where tenantid='pb.amritsar' group by zonecode
+    select zonecode,string_agg(distinct zonename,',') as zname from eg_bndry_mohalla where tenantid=$tenantid group by zonecode
     )
     SELECT 
       zones.zonecode as zonecode,
       zones.zname as zonename,
-      coalesce(fy2013.totalptr,0) as "2013_14PTR",
-      coalesce(fy2013.amountcollected,0) as "2013_14Collection",
-      coalesce(fy2014.totalptr,0) as "2014_15PTR",
-      coalesce(fy2014.amountcollected,0) as "2014_15Collection",
-      coalesce(fy2015.totalptr,0) as "2015_16PTR",
-      coalesce(fy2015.amountcollected,0) as "2015_16Collection",
-      coalesce(fy2016.totalptr,0) as "2016_17PTR",
-      coalesce(fy2016.amountcollected,0) as "2016_17Collection",
-      coalesce(fy2017.totalptr,0) as "2017_18PTR",
-      coalesce(fy2017.amountcollected,0) as "2017_18Collection",
-      coalesce(fy2018.totalptr,0) as "2018_19PTR",
-      coalesce(fy2018.amountcollected,0) as "2018_19Collection",
-      coalesce(fy2019.totalptr,0) as "2019_20PTR",
-      coalesce(fy2019.amountcollected,0) as "2019_20Collection",
-      coalesce(fy2020.totalptr,0) as "2020_21PTR",
-      coalesce(fy2020.amountcollected,0) as "2020_21Collection",
-      coalesce(fy2013.totalptr,0)+coalesce(fy2014.totalptr,0)+coalesce(fy2015.totalptr,0)+coalesce(fy2016.totalptr,0)+coalesce(fy2017.totalptr,0)+coalesce(fy2018.totalptr,0)+coalesce(fy2019.totalptr,0)+coalesce(fy2020.totalptr,0) as "totalptr",
-      coalesce(fy2013.amountcollected,0)+coalesce(fy2014.amountcollected,0)+coalesce(fy2015.amountcollected,0)+coalesce(fy2016.amountcollected,0)+coalesce(fy2017.amountcollected,0)+coalesce(fy2018.amountcollected,0)+coalesce(fy2019.amountcollected,0)+coalesce(fy2020.amountcollected,0) as "totalcollection"
-    from zones 
+      coalesce(fy2013.totalcount,0) as "2013_14PTR",
+      coalesce(fy2013.amount,0) as "2013_14Collection",
+      coalesce(fy2014.totalcount,0) as "2014_15PTR",
+      coalesce(fy2014.amount,0) as "2014_15Collection",
+      coalesce(fy2015.totalcount,0) as "2015_16PTR",
+      coalesce(fy2015.amount,0) as "2015_16Collection",
+      coalesce(fy2016.totalcount,0) as "2016_17PTR",
+      coalesce(fy2016.amount,0) as "2016_17Collection",
+      coalesce(fy2017.totalcount,0) as "2017_18PTR",
+      coalesce(fy2017.amount,0) as "2017_18Collection",
+      coalesce(fy2018.totalcount,0) as "2018_19PTR",
+      coalesce(fy2018.amount,0) as "2018_19Collection",
+      coalesce(fy2019.totalcount,0) as "2019_20PTR",
+      coalesce(fy2019.amount,0) as "2019_20Collection",
+      coalesce(fy2020.totalcount,0) as "2020_21PTR",
+      coalesce(fy2020.amount,0) as "2020_21Collection",
+      coalesce(fy2013.totalcount,0)+coalesce(fy2014.totalcount,0)+coalesce(fy2015.totalcount,0)+coalesce(fy2016.totalcount,0)+coalesce(fy2017.totalcount,0)+coalesce(fy2018.totalcount,0)+coalesce(fy2019.totalcount,0)+coalesce(fy2020.totalcount,0) as "totalptr",
+      coalesce(fy2013.amount,0)+coalesce(fy2014.amount,0)+coalesce(fy2015.amount,0)+coalesce(fy2016.amount,0)+coalesce(fy2017.amount,0)+coalesce(fy2018.amount,0)+coalesce(fy2019.amount,0)+coalesce(fy2020.amount,0) as "totalcollection"
+    from  zones
     left outer join fy2013 on fy2013.zonecode=zones.zonecode
     left outer join fy2014 on fy2014.zonecode=zones.zonecode
     left outer join fy2015 on fy2015.zonecode=zones.zonecode
@@ -4441,195 +5073,161 @@ ReportDefinitions:
     searchClause: AND 1=1
   query: |
    --S.no    Service Name ULB    Property Tax Unique ID    Date Of Transcation    Receipt Number Existing Property ID    Type Of Property Mobile Number    Address
-   with fy2013 as
+    with fy2013 as
     (
-    SELECT
+    SELECT 
         blockcode,
-        string_agg(distinct blockname,',') as blockname,
-        string_agg(distinct concat(to_char((To_timestamp(billd.fromperiod/1000) at time Zone 'Asia/Kolkata'),'YYYY'),'-',to_char((To_timestamp(billd.toperiod/1000) at time Zone 'Asia/Kolkata'),'YY')),',') AS "financialyear",
-        count(*) as totalptr,
-        sum(payment.totalamountpaid) as amountcollected
-      FROM egcl_paymentdetail AS pd
-      join egcl_payment as payment on payment.id = pd.paymentid
-      join egcl_bill as bill on bill.id = pd.billid
-      join egcl_billdetial as billd on billd.billid = bill.id
-      JOIN eg_pt_property pt ON pt.propertyid = bill.consumercode	
-      inner JOIN eg_pt_address  as pt_addr ON pt_addr.propertyid = pt.id
-      inner JOIN eg_bndry_mohalla on eg_bndry_mohalla.localitycode= pt_addr.locality
-      WHERE pd.tenantid = 'pb.amritsar' and payment.paymentstatus != 'CANCELLED' and pt.status!='INACTIVE' 
-      and concat(to_char((To_timestamp(billd.fromperiod/1000) at time Zone 'Asia/Kolkata'),'YYYY'),'-',to_char((To_timestamp(billd.toperiod/1000) at time Zone 'Asia/Kolkata'),'YY'))='2019-20'
-      GROUP BY blockcode
-
+        sum(payment.totalamountpaid) as amount,
+        count(payment.totalamountpaid) as totalcount,
+        concat(to_char((To_timestamp(get_fromperiod(pd.billid)/1000) at time zone 'Asia/Kolkata'),'YYYY'),'-', to_char((To_timestamp(get_toperiod(pd.billid)/1000) at time zone 'Asia/Kolkata'),'YY')) as financialyear
+      FROM egcl_paymentdetail pd Left outer join eg_user on eg_user.id = pd.createdby::INTEGER, egcl_payment payment, eg_pt_property as pt, egcl_bill bill,
+      (select string_agg(distinct propertyid,',') as propertyid, string_agg(distinct locality,',') as locality from eg_pt_address where tenantid=$tenantid group by propertyid ) pt_addr
+      INNER JOIN eg_bndry_mohalla on eg_bndry_mohalla.localitycode= pt_addr.locality and eg_bndry_mohalla.tenantid=$tenantid
+      where pd.paymentid=payment.id and bill.id=pd.billid and payment.paymentstatus != 'CANCELLED' and pd.businessservice='PT' and payment.tenantid=$tenantid
+      and pt.propertyid = bill.consumercode and pt.status!='INACTIVE' and pt_addr.propertyid=pt.id
+      and concat(to_char((To_timestamp(get_fromperiod(pd.billid)/1000) at time zone 'Asia/Kolkata'),'YYYY'),'-', to_char((To_timestamp(get_toperiod(pd.billid)/1000) at time zone 'Asia/Kolkata'),'YY'))='2013-14'
+      and pd.receiptdate>=$fromDate and pd.receiptdate<=$toDate
+      GROUP BY financialyear,blockcode
+  
     ), 
     fy2014 as
     (
-      SELECT
+    SELECT 
         blockcode,
-        string_agg(distinct blockname,',') as blockname,
-        string_agg(distinct concat(to_char((To_timestamp(billd.fromperiod/1000) at time Zone 'Asia/Kolkata'),'YYYY'),'-',to_char((To_timestamp(billd.toperiod/1000) at time Zone 'Asia/Kolkata'),'YY')),',') AS "financialyear",
-        count(*) as totalptr,
-        sum(payment.totalamountpaid) as amountcollected
-      FROM egcl_paymentdetail AS pd
-      join egcl_payment as payment on payment.id = pd.paymentid
-      join egcl_bill as bill on bill.id = pd.billid
-      join egcl_billdetial as billd on billd.billid = bill.id
-      JOIN eg_pt_property pt ON pt.propertyid = bill.consumercode	
-      inner JOIN eg_pt_address  as pt_addr ON pt_addr.propertyid = pt.id 
-      inner JOIN eg_bndry_mohalla on eg_bndry_mohalla.localitycode= pt_addr.locality 
-      WHERE pd.tenantid = 'pb.amritsar' and payment.paymentstatus != 'CANCELLED' and pt.status!='INACTIVE' 
-      and concat(to_char((To_timestamp(billd.fromperiod/1000) at time Zone 'Asia/Kolkata'),'YYYY'),'-',to_char((To_timestamp(billd.toperiod/1000) at time Zone 'Asia/Kolkata'),'YY'))='2014-15'
-      GROUP BY blockcode
-
+        sum(payment.totalamountpaid) as amount,
+        count(payment.totalamountpaid) as totalcount,
+        concat(to_char((To_timestamp(get_fromperiod(pd.billid)/1000) at time zone 'Asia/Kolkata'),'YYYY'),'-', to_char((To_timestamp(get_toperiod(pd.billid)/1000) at time zone 'Asia/Kolkata'),'YY')) as financialyear
+      FROM egcl_paymentdetail pd Left outer join eg_user on eg_user.id = pd.createdby::INTEGER, egcl_payment payment, eg_pt_property as pt, egcl_bill bill,
+      (select string_agg(distinct propertyid,',') as propertyid, string_agg(distinct locality,',') as locality from eg_pt_address where tenantid=$tenantid group by propertyid ) pt_addr
+      INNER JOIN eg_bndry_mohalla on eg_bndry_mohalla.localitycode= pt_addr.locality and eg_bndry_mohalla.tenantid=$tenantid
+      where pd.paymentid=payment.id and bill.id=pd.billid and payment.paymentstatus != 'CANCELLED' and pd.businessservice='PT' and payment.tenantid=$tenantid
+      and pt.propertyid = bill.consumercode and pt.status!='INACTIVE' and pt_addr.propertyid=pt.id
+      and concat(to_char((To_timestamp(get_fromperiod(pd.billid)/1000) at time zone 'Asia/Kolkata'),'YYYY'),'-', to_char((To_timestamp(get_toperiod(pd.billid)/1000) at time zone 'Asia/Kolkata'),'YY'))='2014-15'
+      and pd.receiptdate>=$fromDate and pd.receiptdate<=$toDate
+      GROUP BY financialyear,blockcode
     ), 
     fy2015 as
     (
-      SELECT
+    SELECT 
         blockcode,
-        string_agg(distinct blockname,',') as blockname,
-        string_agg(distinct concat(to_char((To_timestamp(billd.fromperiod/1000) at time Zone 'Asia/Kolkata'),'YYYY'),'-',to_char((To_timestamp(billd.toperiod/1000) at time Zone 'Asia/Kolkata'),'YY')),',') AS "financialyear",
-        count(*) as totalptr,
-        sum(payment.totalamountpaid) as amountcollected
-      FROM egcl_paymentdetail AS pd
-      join egcl_payment as payment on payment.id = pd.paymentid
-      join egcl_bill as bill on bill.id = pd.billid
-      join egcl_billdetial as billd on billd.billid = bill.id
-      JOIN eg_pt_property pt ON pt.propertyid = bill.consumercode	
-      inner JOIN eg_pt_address  as pt_addr ON pt_addr.propertyid = pt.id
-      inner JOIN eg_bndry_mohalla on eg_bndry_mohalla.localitycode= pt_addr.locality
-      WHERE pd.tenantid = 'pb.amritsar' and payment.paymentstatus != 'CANCELLED' and pt.status!='INACTIVE' 
-      and concat(to_char((To_timestamp(billd.fromperiod/1000) at time Zone 'Asia/Kolkata'),'YYYY'),'-',to_char((To_timestamp(billd.toperiod/1000) at time Zone 'Asia/Kolkata'),'YY'))='2015-16' 
-      GROUP BY blockcode
-
+        sum(payment.totalamountpaid) as amount,
+        count(payment.totalamountpaid) as totalcount,
+        concat(to_char((To_timestamp(get_fromperiod(pd.billid)/1000) at time zone 'Asia/Kolkata'),'YYYY'),'-', to_char((To_timestamp(get_toperiod(pd.billid)/1000) at time zone 'Asia/Kolkata'),'YY')) as financialyear
+      FROM egcl_paymentdetail pd Left outer join eg_user on eg_user.id = pd.createdby::INTEGER, egcl_payment payment, eg_pt_property as pt, egcl_bill bill,
+      (select string_agg(distinct propertyid,',') as propertyid, string_agg(distinct locality,',') as locality from eg_pt_address where tenantid=$tenantid group by propertyid ) pt_addr
+      INNER JOIN eg_bndry_mohalla on eg_bndry_mohalla.localitycode= pt_addr.locality and eg_bndry_mohalla.tenantid=$tenantid
+      where pd.paymentid=payment.id and bill.id=pd.billid and payment.paymentstatus != 'CANCELLED' and pd.businessservice='PT' and payment.tenantid=$tenantid
+      and pt.propertyid = bill.consumercode and pt.status!='INACTIVE' and pt_addr.propertyid=pt.id
+      and concat(to_char((To_timestamp(get_fromperiod(pd.billid)/1000) at time zone 'Asia/Kolkata'),'YYYY'),'-', to_char((To_timestamp(get_toperiod(pd.billid)/1000) at time zone 'Asia/Kolkata'),'YY'))='2015-16'
+      and pd.receiptdate>=$fromDate and pd.receiptdate<=$toDate
+      GROUP BY financialyear,blockcode
     ), 
     fy2016 as
     (
-      SELECT
+    SELECT 
         blockcode,
-        string_agg(distinct blockname,',') as blockname,
-        string_agg(distinct concat(to_char((To_timestamp(billd.fromperiod/1000) at time Zone 'Asia/Kolkata'),'YYYY'),'-',to_char((To_timestamp(billd.toperiod/1000) at time Zone 'Asia/Kolkata'),'YY')),',') AS "financialyear",
-        count(*) as totalptr,
-        sum(payment.totalamountpaid) as amountcollected
-      FROM egcl_paymentdetail AS pd
-      join egcl_payment as payment on payment.id = pd.paymentid
-      join egcl_bill as bill on bill.id = pd.billid
-      join egcl_billdetial as billd on billd.billid = bill.id
-      JOIN eg_pt_property pt ON pt.propertyid = bill.consumercode 
-      inner JOIN eg_pt_address  as pt_addr ON pt_addr.propertyid = pt.id 
-      inner JOIN eg_bndry_mohalla on eg_bndry_mohalla.localitycode= pt_addr.locality 
-      WHERE pd.tenantid = 'pb.amritsar' and payment.paymentstatus != 'CANCELLED' and pt.status!='INACTIVE' 
-      and concat(to_char((To_timestamp(billd.fromperiod/1000) at time Zone 'Asia/Kolkata'),'YYYY'),'-',to_char((To_timestamp(billd.toperiod/1000) at time Zone 'Asia/Kolkata'),'YY'))='2016-17' 
-      GROUP BY blockcode
-
-
+        sum(payment.totalamountpaid) as amount,
+        count(payment.totalamountpaid) as totalcount,
+        concat(to_char((To_timestamp(get_fromperiod(pd.billid)/1000) at time zone 'Asia/Kolkata'),'YYYY'),'-', to_char((To_timestamp(get_toperiod(pd.billid)/1000) at time zone 'Asia/Kolkata'),'YY')) as financialyear
+      FROM egcl_paymentdetail pd Left outer join eg_user on eg_user.id = pd.createdby::INTEGER, egcl_payment payment, eg_pt_property as pt, egcl_bill bill,
+      (select string_agg(distinct propertyid,',') as propertyid, string_agg(distinct locality,',') as locality from eg_pt_address where tenantid=$tenantid group by propertyid ) pt_addr
+      inner JOIN eg_bndry_mohalla on eg_bndry_mohalla.localitycode= pt_addr.locality
+      where pd.paymentid=payment.id and bill.id=pd.billid and payment.paymentstatus != 'CANCELLED' and pd.businessservice='PT' and payment.tenantid=$tenantid
+      and pt.propertyid = bill.consumercode and pt.status!='INACTIVE' and pt_addr.propertyid=pt.id
+      and concat(to_char((To_timestamp(get_fromperiod(pd.billid)/1000) at time zone 'Asia/Kolkata'),'YYYY'),'-', to_char((To_timestamp(get_toperiod(pd.billid)/1000) at time zone 'Asia/Kolkata'),'YY'))='2016-17'
+      and pd.receiptdate>=$fromDate and pd.receiptdate<=$toDate
+      GROUP BY financialyear,blockcode
     ), 
     fy2017 as
     (
-      SELECT
+    SELECT 
         blockcode,
-        string_agg(distinct blockname,',') as blockname,
-        string_agg(distinct concat(to_char((To_timestamp(billd.fromperiod/1000) at time Zone 'Asia/Kolkata'),'YYYY'),'-',to_char((To_timestamp(billd.toperiod/1000) at time Zone 'Asia/Kolkata'),'YY')),',') AS "financialyear",
-        count(*) as totalptr,
-        sum(payment.totalamountpaid) as amountcollected
-      FROM egcl_paymentdetail AS pd
-      join egcl_payment as payment on payment.id = pd.paymentid
-      join egcl_bill as bill on bill.id = pd.billid
-      join egcl_billdetial as billd on billd.billid = bill.id
-      JOIN eg_pt_property pt ON pt.propertyid = bill.consumercode 
-      inner JOIN eg_pt_address  as pt_addr ON pt_addr.propertyid = pt.id 
-      inner JOIN eg_bndry_mohalla on eg_bndry_mohalla.localitycode= pt_addr.locality 
-      WHERE pd.tenantid = 'pb.amritsar' and payment.paymentstatus != 'CANCELLED' and pt.status!='INACTIVE' 
-      and concat(to_char((To_timestamp(billd.fromperiod/1000) at time Zone 'Asia/Kolkata'),'YYYY'),'-',to_char((To_timestamp(billd.toperiod/1000) at time Zone 'Asia/Kolkata'),'YY'))='2017-18' 
-      GROUP BY blockcode
-
+        sum(payment.totalamountpaid) as amount,
+        count(payment.totalamountpaid) as totalcount,
+        concat(to_char((To_timestamp(get_fromperiod(pd.billid)/1000) at time zone 'Asia/Kolkata'),'YYYY'),'-', to_char((To_timestamp(get_toperiod(pd.billid)/1000) at time zone 'Asia/Kolkata'),'YY')) as financialyear
+      FROM egcl_paymentdetail pd Left outer join eg_user on eg_user.id = pd.createdby::INTEGER, egcl_payment payment, eg_pt_property as pt, egcl_bill bill,
+      (select string_agg(distinct propertyid,',') as propertyid, string_agg(distinct locality,',') as locality from eg_pt_address where tenantid=$tenantid group by propertyid ) pt_addr
+      INNER JOIN eg_bndry_mohalla on eg_bndry_mohalla.localitycode= pt_addr.locality and eg_bndry_mohalla.tenantid=$tenantid
+      where pd.paymentid=payment.id and bill.id=pd.billid and payment.paymentstatus != 'CANCELLED' and pd.businessservice='PT' and payment.tenantid=$tenantid
+      and pt.propertyid = bill.consumercode and pt.status!='INACTIVE' and pt_addr.propertyid=pt.id
+      and concat(to_char((To_timestamp(get_fromperiod(pd.billid)/1000) at time zone 'Asia/Kolkata'),'YYYY'),'-', to_char((To_timestamp(get_toperiod(pd.billid)/1000) at time zone 'Asia/Kolkata'),'YY'))='2017-18'
+      and pd.receiptdate>=$fromDate and pd.receiptdate<=$toDate
+      GROUP BY financialyear,blockcode
     ),
     fy2018 as
     (
-      SELECT
+    SELECT 
         blockcode,
-        string_agg(distinct blockname,',') as blockname,
-        string_agg(distinct concat(to_char((To_timestamp(billd.fromperiod/1000) at time Zone 'Asia/Kolkata'),'YYYY'),'-',to_char((To_timestamp(billd.toperiod/1000) at time Zone 'Asia/Kolkata'),'YY')),',') AS "financialyear",
-        count(*) as totalptr,
-        sum(payment.totalamountpaid) as amountcollected
-      FROM egcl_paymentdetail AS pd
-      join egcl_payment as payment on payment.id = pd.paymentid
-      join egcl_bill as bill on bill.id = pd.billid
-      join egcl_billdetial as billd on billd.billid = bill.id
-      JOIN eg_pt_property pt ON pt.propertyid = bill.consumercode 
-      inner JOIN eg_pt_address  as pt_addr ON pt_addr.propertyid = pt.id 
-      inner JOIN eg_bndry_mohalla on eg_bndry_mohalla.localitycode= pt_addr.locality 
-      WHERE pd.tenantid = 'pb.amritsar' and payment.paymentstatus != 'CANCELLED' and pt.status!='INACTIVE' 
-      and concat(to_char((To_timestamp(billd.fromperiod/1000) at time Zone 'Asia/Kolkata'),'YYYY'),'-',to_char((To_timestamp(billd.toperiod/1000) at time Zone 'Asia/Kolkata'),'YY'))='2018-19' 
-      GROUP BY blockcode
-
+        sum(payment.totalamountpaid) as amount,
+        count(payment.totalamountpaid) as totalcount,
+        concat(to_char((To_timestamp(get_fromperiod(pd.billid)/1000) at time zone 'Asia/Kolkata'),'YYYY'),'-', to_char((To_timestamp(get_toperiod(pd.billid)/1000) at time zone 'Asia/Kolkata'),'YY')) as financialyear
+      FROM egcl_paymentdetail pd Left outer join eg_user on eg_user.id = pd.createdby::INTEGER, egcl_payment payment, eg_pt_property as pt, egcl_bill bill,
+      (select string_agg(distinct propertyid,',') as propertyid, string_agg(distinct locality,',') as locality from eg_pt_address where tenantid=$tenantid group by propertyid ) pt_addr
+      INNER JOIN eg_bndry_mohalla on eg_bndry_mohalla.localitycode= pt_addr.locality and eg_bndry_mohalla.tenantid=$tenantid
+      where pd.paymentid=payment.id and bill.id=pd.billid and payment.paymentstatus != 'CANCELLED' and pd.businessservice='PT' and payment.tenantid=$tenantid
+      and pt.propertyid = bill.consumercode and pt.status!='INACTIVE' and pt_addr.propertyid=pt.id
+      and concat(to_char((To_timestamp(get_fromperiod(pd.billid)/1000) at time zone 'Asia/Kolkata'),'YYYY'),'-', to_char((To_timestamp(get_toperiod(pd.billid)/1000) at time zone 'Asia/Kolkata'),'YY'))='2018-19'
+      and pd.receiptdate>=$fromDate and pd.receiptdate<=$toDate
+      GROUP BY financialyear,blockcode
     ),
     fy2019 as
     (
-      SELECT 
+    SELECT 
         blockcode,
-        string_agg(distinct blockname,',') as blockname,
-        string_agg(distinct concat(to_char((To_timestamp(billd.fromperiod/1000) at time Zone 'Asia/Kolkata'),'YYYY'),'-',to_char((To_timestamp(billd.toperiod/1000) at time Zone 'Asia/Kolkata'),'YY')),',') AS "financialyear", 
-        count(*) as totalptr, 
-        sum(payment.totalamountpaid) as amountcollected
-      FROM egcl_paymentdetail AS pd
-      join egcl_payment as payment on payment.id = pd.paymentid
-      join egcl_bill as bill on bill.id = pd.billid
-      join egcl_billdetial as billd on billd.billid = bill.id
-      JOIN eg_pt_property pt ON pt.propertyid = bill.consumercode 
-      inner JOIN eg_pt_address  as pt_addr ON pt_addr.propertyid = pt.id
-      inner JOIN eg_bndry_mohalla on eg_bndry_mohalla.localitycode= pt_addr.locality 
-      WHERE pd.tenantid = 'pb.amritsar' and payment.paymentstatus != 'CANCELLED' and pt.status!='INACTIVE' 
-      and concat(to_char((To_timestamp(billd.fromperiod/1000) at time Zone 'Asia/Kolkata'),'YYYY'),'-',to_char((To_timestamp(billd.toperiod/1000) at time Zone 'Asia/Kolkata'),'YY'))='2019-20' 
-      GROUP BY blockcode
-
-
+        sum(payment.totalamountpaid) as amount,
+        count(payment.totalamountpaid) as totalcount,
+        concat(to_char((To_timestamp(get_fromperiod(pd.billid)/1000) at time zone 'Asia/Kolkata'),'YYYY'),'-', to_char((To_timestamp(get_toperiod(pd.billid)/1000) at time zone 'Asia/Kolkata'),'YY')) as financialyear
+      FROM egcl_paymentdetail pd Left outer join eg_user on eg_user.id = pd.createdby::INTEGER, egcl_payment payment, eg_pt_property as pt, egcl_bill bill,
+      (select string_agg(distinct propertyid,',') as propertyid, string_agg(distinct locality,',') as locality from eg_pt_address where tenantid=$tenantid group by propertyid ) pt_addr
+      INNER JOIN eg_bndry_mohalla on eg_bndry_mohalla.localitycode= pt_addr.locality and eg_bndry_mohalla.tenantid=$tenantid
+      where pd.paymentid=payment.id and bill.id=pd.billid and payment.paymentstatus != 'CANCELLED' and pd.businessservice='PT' and payment.tenantid=$tenantid
+      and pt.propertyid = bill.consumercode and pt.status!='INACTIVE' and pt_addr.propertyid=pt.id
+      and concat(to_char((To_timestamp(get_fromperiod(pd.billid)/1000) at time zone 'Asia/Kolkata'),'YYYY'),'-', to_char((To_timestamp(get_toperiod(pd.billid)/1000) at time zone 'Asia/Kolkata'),'YY'))='2019-20'
+      and pd.receiptdate>=$fromDate and pd.receiptdate<=$toDate
+      GROUP BY financialyear,blockcode
     ),
     fy2020 as
     (
-      SELECT 
+    SELECT 
         blockcode,
-        string_agg(distinct blockname,',') as blockname,
-        string_agg(distinct concat(to_char((To_timestamp(billd.fromperiod/1000) at time Zone 'Asia/Kolkata'),'YYYY'),'-',to_char((To_timestamp(billd.toperiod/1000) at time Zone 'Asia/Kolkata'),'YY')),',') AS "financialyear", 
-        count(*) as totalptr,
-        sum(payment.totalamountpaid) as amountcollected
-      FROM egcl_paymentdetail AS pd
-      join egcl_payment as payment on payment.id = pd.paymentid
-      join egcl_bill as bill on bill.id = pd.billid
-      join egcl_billdetial as billd on billd.billid = bill.id
-      JOIN eg_pt_property pt ON pt.propertyid = bill.consumercode 
-      inner JOIN eg_pt_address  as pt_addr ON pt_addr.propertyid = pt.id 
-      inner JOIN eg_bndry_mohalla on eg_bndry_mohalla.localitycode= pt_addr.locality 
-      WHERE pd.tenantid = 'pb.amritsar' and payment.paymentstatus != 'CANCELLED' and pt.status!='INACTIVE' 
-      and concat(to_char((To_timestamp(billd.fromperiod/1000) at time Zone 'Asia/Kolkata'),'YYYY'),'-',to_char((To_timestamp(billd.toperiod/1000) at time Zone 'Asia/Kolkata'),'YY'))='2020-21' 
-      GROUP BY blockcode
-
-
+        sum(payment.totalamountpaid) as amount,
+        count(payment.totalamountpaid) as totalcount,
+        concat(to_char((To_timestamp(get_fromperiod(pd.billid)/1000) at time zone 'Asia/Kolkata'),'YYYY'),'-', to_char((To_timestamp(get_toperiod(pd.billid)/1000) at time zone 'Asia/Kolkata'),'YY')) as financialyear
+      FROM egcl_paymentdetail pd Left outer join eg_user on eg_user.id = pd.createdby::INTEGER, egcl_payment payment, eg_pt_property as pt, egcl_bill bill,
+      (select string_agg(distinct propertyid,',') as propertyid, string_agg(distinct locality,',') as locality from eg_pt_address where tenantid=$tenantid group by propertyid ) pt_addr
+      INNER JOIN eg_bndry_mohalla on eg_bndry_mohalla.localitycode= pt_addr.locality and eg_bndry_mohalla.tenantid=$tenantid
+      where pd.paymentid=payment.id and bill.id=pd.billid and payment.paymentstatus != 'CANCELLED' and pd.businessservice='PT' and payment.tenantid=$tenantid
+      and pt.propertyid = bill.consumercode and pt.status!='INACTIVE' and pt_addr.propertyid=pt.id
+      and concat(to_char((To_timestamp(get_fromperiod(pd.billid)/1000) at time zone 'Asia/Kolkata'),'YYYY'),'-', to_char((To_timestamp(get_toperiod(pd.billid)/1000) at time zone 'Asia/Kolkata'),'YY'))='2020-21'
+      and pd.receiptdate>=$fromDate and pd.receiptdate<=$toDate
+      GROUP BY financialyear,blockcode
     ),
     blocks as
     (
-    select distinct blockcode,string_agg(distinct blockname,',') as zname from eg_bndry_mohalla where tenantid='pb.amritsar' group by blockcode
+    select blockcode,string_agg(distinct blockname,',') as zname from eg_bndry_mohalla where tenantid=$tenantid group by blockcode
     )
-    SELECT
+    SELECT 
       blocks.blockcode as blockcode,
       blocks.zname as blockname,
-      coalesce(fy2013.totalptr,0) as "2013_14PTR",
-      coalesce(fy2013.amountcollected,0) as "2013_14Collection",
-      coalesce(fy2014.totalptr,0) as "2014_15PTR",
-      coalesce(fy2014.amountcollected,0) as "2014_15Collection",
-      coalesce(fy2015.totalptr,0) as "2015_16PTR",
-      coalesce(fy2015.amountcollected,0) as "2015_16Collection",
-      coalesce(fy2016.totalptr,0) as "2016_17PTR",
-      coalesce(fy2016.amountcollected,0) as "2016_17Collection",
-      coalesce(fy2017.totalptr,0) as "2017_18PTR",
-      coalesce(fy2017.amountcollected,0) as "2017_18Collection",
-      coalesce(fy2018.totalptr,0) as "2018_19PTR",
-      coalesce(fy2018.amountcollected,0) as "2018_19Collection",
-      coalesce(fy2019.totalptr,0) as "2019_20PTR",
-      coalesce(fy2019.amountcollected,0) as "2019_20Collection",
-      coalesce(fy2020.totalptr,0) as "2020_21PTR",
-      coalesce(fy2020.amountcollected,0) as "2020_21Collection", 
-      coalesce(fy2013.totalptr,0)+coalesce(fy2014.totalptr,0)+coalesce(fy2015.totalptr,0)+coalesce(fy2016.totalptr,0)+coalesce(fy2017.totalptr,0)+coalesce(fy2018.totalptr,0)+coalesce(fy2019.totalptr,0)+coalesce(fy2020.totalptr,0) as "totalptr", 
-      coalesce(fy2013.amountcollected,0)+coalesce(fy2014.amountcollected,0)+coalesce(fy2015.amountcollected,0)+coalesce(fy2016.amountcollected,0)+coalesce(fy2017.amountcollected,0)+coalesce(fy2018.amountcollected,0)+coalesce(fy2019.amountcollected,0)+coalesce(fy2020.amountcollected,0) as "totalcollection" 
-    from blocks 
+      coalesce(fy2013.totalcount,0) as "2013_14PTR",
+      coalesce(fy2013.amount,0) as "2013_14Collection",
+      coalesce(fy2014.totalcount,0) as "2014_15PTR",
+      coalesce(fy2014.amount,0) as "2014_15Collection",
+      coalesce(fy2015.totalcount,0) as "2015_16PTR",
+      coalesce(fy2015.amount,0) as "2015_16Collection",
+      coalesce(fy2016.totalcount,0) as "2016_17PTR",
+      coalesce(fy2016.amount,0) as "2016_17Collection",
+      coalesce(fy2017.totalcount,0) as "2017_18PTR",
+      coalesce(fy2017.amount,0) as "2017_18Collection",
+      coalesce(fy2018.totalcount,0) as "2018_19PTR",
+      coalesce(fy2018.amount,0) as "2018_19Collection",
+      coalesce(fy2019.totalcount,0) as "2019_20PTR",
+      coalesce(fy2019.amount,0) as "2019_20Collection",
+      coalesce(fy2020.totalcount,0) as "2020_21PTR",
+      coalesce(fy2020.amount,0) as "2020_21Collection",
+      coalesce(fy2013.totalcount,0)+coalesce(fy2014.totalcount,0)+coalesce(fy2015.totalcount,0)+coalesce(fy2016.totalcount,0)+coalesce(fy2017.totalcount,0)+coalesce(fy2018.totalcount,0)+coalesce(fy2019.totalcount,0)+coalesce(fy2020.totalcount,0) as "totalptr",
+      coalesce(fy2013.amount,0)+coalesce(fy2014.amount,0)+coalesce(fy2015.amount,0)+coalesce(fy2016.amount,0)+coalesce(fy2017.amount,0)+coalesce(fy2018.amount,0)+coalesce(fy2019.amount,0)+coalesce(fy2020.amount,0) as "totalcollection"
+    from  blocks
     left outer join fy2013 on fy2013.blockcode=blocks.blockcode
     left outer join fy2014 on fy2014.blockcode=blocks.blockcode
     left outer join fy2015 on fy2015.blockcode=blocks.blockcode
@@ -4637,6 +5235,6 @@ ReportDefinitions:
     left outer join fy2017 on fy2017.blockcode=blocks.blockcode
     left outer join fy2018 on fy2018.blockcode=blocks.blockcode
     left outer join fy2019 on fy2019.blockcode=blocks.blockcode
-    left outer join fy2020 on fy2020.blockcode=blocks.blockcode 
+    left outer join fy2020 on fy2020.blockcode=blocks.blockcode
     where 1=1
   orderby: order by blockname
