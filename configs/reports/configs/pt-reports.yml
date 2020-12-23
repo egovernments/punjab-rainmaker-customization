@@ -4007,7 +4007,7 @@ ReportDefinitions:
         sum(case when payment.paymentmode='CHEQUE' then bad.adjustedamount else 0 end) as sumcheque,
         count (distinct  case when payment.paymentmode='CHEQUE' then concat(payment.paymentmode) end) as countcheque,
         sum(case when payment.paymentmode='ONLINE' then bad.adjustedamount else 0 end) as sumonline,
-        (CASE WHEN collectiontype='COUNTER' THEN eg_user.name ELSE '30048|23/xn3x2FAxn8vYAN0IdplsOxaE=' END) as collectorname, --for Online collecion show None as collectorname
+        (CASE WHEN payment.paymentmode!='ONLINE' THEN eg_user.name ELSE '30048|23/xn3x2FAxn8vYAN0IdplsOxaE=' END) as collectorname, --for Online collecion show None as collectorname
         sum(adjustedamount) as totalamount
       FROM egcl_billaccountdetail as bad
       INNER JOIN egcl_billdetial as bd on bd.id = bad.billdetailid
