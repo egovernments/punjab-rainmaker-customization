@@ -196,7 +196,7 @@
               "style": "receipt-table"
             },
             {
-              "text": " ",
+              "text": "{{payer_name}}",
               "border": [
                 false,
                 false,
@@ -206,7 +206,7 @@
               "style": "receipt-table-value"
             },
             {
-              "text": " ",
+              "text": "{{payerName}}",
               "border": [
                 false,
                 false,
@@ -967,7 +967,7 @@
         "style":"block-head"
      },
      {
-      "style": "next-noc-table",
+      "style": "next-noc-table2",
       "table": {
         "widths": [
           "25%",
@@ -1144,6 +1144,39 @@
           }
         ]
       },
+	     {
+        "style": "receipt-approver2",
+        "columns": [
+          {
+            "text": [
+              {
+                "text": "Approved By ",
+                "bold": true
+              },
+              {
+                "text": "{{approvedBy}}",
+                "bold": false
+              }
+            ],
+            "alignment": "left"
+          },
+          {
+            "text": [
+              {
+                "text": " ",
+                "bold": true
+              }
+            ],
+            "alignment": "right",
+            "margin": [
+                0,
+                0,
+               0,
+                0
+            ]
+          }
+        ]
+      },
       {
         "style": "pt-disclaimer",
         "stack": [
@@ -1231,6 +1264,15 @@
         -22,
         -8
       ]
+    }, "next-noc-table2": {
+      "fontSize": 7,
+      "color": "#000000",
+      "margin": [
+        -25,
+        10,
+        -22,
+        0
+      ]
     },
      "receipt-table-value": {
       "color": "#000000",
@@ -1285,7 +1327,17 @@
       "bold": true,
       "margin": [
         -27,
-        20,
+        7,
+        -10,
+        0
+      ],
+      "color": "#484848"
+    },"receipt-approver2": {
+      "fontSize": 7,
+      "bold": true,
+      "margin": [
+        -27,
+        1,
         -10,
         0
       ],
