@@ -917,6 +917,61 @@
         "body": ["{{#var_owners}}[{\"text\":\"Owner Name\",\"border\":[true,true,false,true],\"style\":\"receipt-table-key\"},{\"text\":\"{{name2}}\",\"border\":[false,true,true,true]},{\"text\":\"Father/Husband Name\",\"border\":[true,true,false,true],\"style\":\"receipt-table-key\"},{\"text\":\"{{fatherOrHusbandName2}}\",\"border\":[false,true,true,true]}]{{/var_owners}}"]
       },
       "layout": {}
+    }, {
+      "style": "next-noc-table",
+      "table": {
+        "widths": [
+          "25%",
+          "25%",
+          "25%",
+          "25%"
+        ],
+        "body": [
+          [
+            {
+              "text": "Name of Institution",
+              "border": [
+                true,
+                true,
+                false,
+                true
+              ],
+              "style": "receipt-table-value"
+            },
+            {
+              "text": "{{institutionName}}",
+              "border": [
+                false,
+                true,
+                false,
+                true
+              ],
+              "style": "receipt-table"
+            },
+            {
+              "text": " ",
+              "border": [
+                false,
+                true,
+                false,
+                true
+              ],
+              "style": "receipt-table-value"
+            },
+            {
+              "text": " ",
+              "border": [
+                false,
+                true,
+                true,
+                true
+              ],
+              "style": "receipt-table"
+            }
+          ]
+        ]
+      },
+      "layout": {}
     },
     {
        "text":"BUILT-UP AREA DETAILS",
