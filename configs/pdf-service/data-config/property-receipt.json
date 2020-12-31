@@ -615,7 +615,9 @@
                 "queryParam": "propertyIds=$.paymentDetails[0].bill.consumerCode,tenantId=$.tenantId",
                 "apiRequest": null,
                 "responseMapping":[
-                 
+                  { "variable":"institutionName",
+                  "value":"$.Properties[0].institution.name"
+                },
                   {             
                     "variable":"vasikaNo",
                     "value":"$.Properties[0].additionalDetails.vasikaNo"
