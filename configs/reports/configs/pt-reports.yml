@@ -5291,7 +5291,6 @@ ReportDefinitions:
     searchClause: AND egcl_billdetial.tenantid=$ulb
   query: |
    --S.no    Service Name	ULB    Property Tax Unique ID    Date Of Transcation    Receipt Number	Existing Property ID    Type Of Property	Mobile Number   	Address
-   - query: |
     select 
       billid,
       amountpaid,
