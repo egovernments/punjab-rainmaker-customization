@@ -57,6 +57,8 @@ serviceMaps:
       - jsonPath: $.Licenses.*.applicationType
 
       - jsonPath: $.Licenses.*.workflowCode
+      
+      - jsonPath: $.Licenses.*.isLegacy
 
 
     - query: INSERT INTO eg_tl_tradelicensedetail( id, surveyno, subownershipcategory, channel, additionaldetail, tradelicenseid,structureType,operationalArea,noOfEmployees,adhocExemption,adhocPenalty,adhocExemptionReason,adhocPenaltyReason, createdby, lastmodifiedby, createdtime, lastmodifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?, ?, ?, ?);
