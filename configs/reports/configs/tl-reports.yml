@@ -2596,6 +2596,7 @@ ReportDefinitions:
         licensenumber,
         to_char((To_timestamp(issueddate / 1000) at time Zone 'Asia/Kolkata'), 'DD/MM/YYYY') as formattedIssuedDate,
         tl.tradeName,
+        tl.tenantid,
         tradeTypeName,   
         acc, 
         name,
@@ -2606,7 +2607,7 @@ ReportDefinitions:
       INNER JOIN eg_tl_tradelicensedetail tld ON tld.tradelicenseid = tl.id 
       INNER JOIN (
                 select tradelicensedetailid, array_to_string(array_agg(message.message),', ') as locality,array_to_string(array_agg(locality),', ') as localitycode from eg_tl_address as tla
-                LEFT OUTER JOIN message on code=CONCAT(UPPER(REGEXP_REPLACE( $tenantid , '[^A-Za-z0-9]','_', 'g')),'_REVENUE_', REGEXP_REPLACE( locality , '[^A-Za-z0-9]','_', 'g')) 
+                LEFT OUTER JOIN message on code=CONCAT(UPPER(REGEXP_REPLACE(  '[^A-Za-z0-9]','_', 'g')),'_REVENUE_', REGEXP_REPLACE( locality , '[^A-Za-z0-9]','_', 'g')) 
                 AND message.locale = 'en_IN' group by 1) locality_tlb ON  locality_tlb.tradelicensedetailid = tld.id
       INNER JOIN eg_tl_owner tlowner ON tlowner.tradelicensedetailid = tld.id 
       INNER JOIN (
@@ -2621,7 +2622,7 @@ ReportDefinitions:
         SELECT tradelicensedetailid,array_to_string(array_agg(message.message),',') AS acc FROM eg_tl_accessory
         LEFT OUTER JOIN message ON code=CONCAT('TRADELICENSE_ACCESSORIESCATEGORY_', REGEXP_REPLACE(accessorycategory, '[^A-Za-z0-9]','_', 'g')) AND message.locale = 'en_IN' GROUP BY 1 ) tlacc ON tlacc.tradelicensedetailid = tld.id
       WHERE tl.tenantid!='pb.testing'
-  orderby: order by tenantid    
+  orderby: order by tl.tenantid     
     
     
     
