@@ -5308,7 +5308,7 @@ ReportDefinitions:
       (SELECT propertyid , locality,doorno,street,buildingname, max(createdtime) 
       from eg_pt_address group by propertyid, locality, doorno,street,buildingname) addr ON eg_pt_property.id=addr.propertyid 
     inner join eg_bndry_mohalla on eg_bndry_mohalla.localitycode=addr.locality
-    inner join (SELECT DISTINCT ON (propertyid) propertyid ,username As userName , mobilenumber As Mobilenumber
+    inner join (SELECT DISTINCT ON (propertyid) propertyid ,name As userName , mobilenumber As Mobilenumber
     FROM eg_pt_owner , eg_user 
     WHERE  uuid = userid 
     AND status = 'ACTIVE'
