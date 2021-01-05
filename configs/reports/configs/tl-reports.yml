@@ -2486,7 +2486,7 @@ ReportDefinitions:
     and tenantid = $tenantid
     
 - reportName: StateTradeLicenseDetailsReport_v2
-  decryptionPathId: StateTradeLicenseDetailsReport_v2                   
+  decryptionPathId: TradeLicenseDetailsReport_v2                   
   summary: State Trade License Details Report
   version: 1.0.0
   moduleName: rainmaker-tl
