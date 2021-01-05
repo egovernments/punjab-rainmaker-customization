@@ -2556,6 +2556,11 @@ ReportDefinitions:
     type: string
     source: tl
     total: true
+  - name: tenantid
+    label: report.tl.tenantid
+    type: string
+    source: tl
+    total: false
   - name: locality
     label: report.tl.locality
     type: string
