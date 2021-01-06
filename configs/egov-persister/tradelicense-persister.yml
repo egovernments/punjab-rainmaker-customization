@@ -7,7 +7,7 @@ serviceMaps:
     isTransaction: true
     queryMaps:
 
-    - query: INSERT INTO eg_tl_tradelicense( id, accountid,tenantid,tradeName, validfrom,validto,licensetype,applicationNumber, licenseNumber, oldlicensenumber, propertyid, oldpropertyid, applicationdate, commencementdate, financialyear, action, status, createdby, lastmodifiedby, createdtime, lastmodifiedtime, businessservice, applicationtype, workflowcode, islegacy) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? , ?);
+    - query: INSERT INTO eg_tl_tradelicense( id, accountid,tenantid,tradeName, validfrom,validto,licensetype,applicationNumber, licenseNumber, oldlicensenumber, propertyid, oldpropertyid, applicationdate, commencementdate, financialyear, action, status, createdby, lastmodifiedby, createdtime, lastmodifiedtime, businessservice, applicationtype, workflowcode) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
       basePath: Licenses.*
       jsonMaps:
       - jsonPath: $.Licenses.*.id
@@ -57,9 +57,6 @@ serviceMaps:
       - jsonPath: $.Licenses.*.applicationType
 
       - jsonPath: $.Licenses.*.workflowCode
-      
-      - jsonPath: $.Licenses.*.isLegacy
-
 
     - query: INSERT INTO eg_tl_tradelicensedetail( id, surveyno, subownershipcategory, channel, additionaldetail, tradelicenseid,structureType,operationalArea,noOfEmployees,adhocExemption,adhocPenalty,adhocExemptionReason,adhocPenaltyReason, createdby, lastmodifiedby, createdtime, lastmodifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?, ?, ?, ?);
       basePath: Licenses.*.tradeLicenseDetail
