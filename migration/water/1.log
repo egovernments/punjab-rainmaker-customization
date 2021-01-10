@@ -1,0 +1,5 @@
+Successfully connected to the database 
+/home/walkingtree/Desktop/egov/new-dss-workspace/punjab-rainmaker-customization/migration/ws/uploader
+/home/walkingtree/Desktop/egov/new-dss-workspace/punjab-rainmaker-customization/migration/ws/uploader/../sql/water_search.sql
+Exception occurred while pushing data to API.+ 
+HTTPSConnectionPool(host='egov-micro-uat.egovernments.org', port=443): Max retries exceeded with url: /user/oauth/token (Caused by NewConnectionError('<urllib3.connection.HTTPSConnection object at 0x7fbc3b18f748>: Failed to establish a new connection: [Errno -3] Temporary failure in name resolution',))

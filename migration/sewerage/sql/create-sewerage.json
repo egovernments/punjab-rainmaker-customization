@@ -1,0 +1,171 @@
+{
+  "RequestInfo": {
+    "apiId": "Rainmaker",
+    "ver": ".01",
+    "action": "",
+    "did": "1",
+    "key": "",
+    "msgId": "20170310130900|en_IN",
+    "requesterId": "",
+    "authToken": "c403260c-8e71-46b2-9c10-d02431431858"
+  },
+  "SewerageConnection": {
+    "water": false,
+    "sewerage": true,
+    "property": {
+      "id": "c7ec0397-555d-4b12-bd80-931f4a3f7d1f",
+      "propertyId": "PG-PT-2020-07-23-001659",
+      "surveyId": null,
+      "linkedProperties": null,
+      "tenantId": "pg.citya",
+      "accountId": "f9065e25-ece0-4bb6-828e-bf1ebb6fbda9",
+      "oldPropertyId": null,
+      "status": "INWORKFLOW",
+      "address": {
+        "tenantId": "pg.citya",
+        "doorNo": "12",
+        "plotNo": null,
+        "id": "8fcadf4d-bd7e-41e3-98a1-994751f08e94",
+        "landmark": null,
+        "city": "citya",
+        "district": null,
+        "region": null,
+        "state": null,
+        "country": null,
+        "pincode": null,
+        "buildingName": "test",
+        "street": null,
+        "locality": {
+          "code": "JLC476",
+          "name": "Main Road Abadpura",
+          "label": "Locality",
+          "latitude": null,
+          "longitude": null,
+          "area": "Area1",
+          "children": [],
+          "materializedPath": null
+        },
+        "geoLocation": {
+          "latitude": 0,
+          "longitude": 0
+        },
+        "additionalDetails": null
+      },
+      "acknowldgementNumber": "PG-AC-2020-07-23-001677",
+      "propertyType": "BUILTUP.SHAREDPROPERTY",
+      "ownershipCategory": "INDIVIDUAL.SINGLEOWNER",
+      "owners": [
+        {
+          "id": null,
+          "uuid": "8bf9053c-5361-4d0c-bbc7-d2f04ed9968f",
+          "userName": "338d4d99-f411-4260-960d-e2073b43104b",
+          "password": null,
+          "salutation": null,
+          "name": "test",
+          "gender": "FEMALE",
+          "mobileNumber": "9738010951",
+          "emailId": null,
+          "altContactNumber": null,
+          "pan": null,
+          "aadhaarNumber": null,
+          "permanentAddress": null,
+          "permanentCity": null,
+          "permanentPinCode": null,
+          "correspondenceCity": null,
+          "correspondencePinCode": null,
+          "correspondenceAddress": "12, 12, Main Road Abadpura, citya",
+          "active": true,
+          "dob": null,
+          "pwdExpiryDate": 1600770925000,
+          "locale": null,
+          "type": "CITIZEN",
+          "signature": null,
+          "accountLocked": false,
+          "roles": [
+            {
+              "id": null,
+              "name": "Citizen",
+              "code": "CITIZEN",
+              "tenantId": "pg"
+            }
+          ],
+          "fatherOrHusbandName": "test",
+          "bloodGroup": null,
+          "identificationMark": null,
+          "photo": null,
+          "createdBy": "1742",
+          "createdDate": 1592994925000,
+          "lastModifiedBy": "1",
+          "lastModifiedDate": 1595502997000,
+          "tenantId": "pg",
+          "ownerInfoUuid": "926462f8-5abb-4c9f-8e57-88799d0507aa",
+          "isPrimaryOwner": null,
+          "ownerShipPercentage": null,
+          "ownerType": "NONE",
+          "institutionId": null,
+          "status": "ACTIVE",
+          "documents": null,
+          "relationship": "FATHER"
+        }
+      ],
+      "institution": null,
+      "creationReason": "CREATE",
+      "usageCategory": "NONRESIDENTIAL.INSTITUTIONAL",
+      "noOfFloors": 1,
+      "landArea": 234,
+      "superBuiltUpArea": null,
+      "source": "MUNICIPAL_RECORDS",
+      "channel": "SYSTEM",
+      "documents": null,
+      "units": [
+        {
+          "id": "8ae7ee52-2c08-4ac2-83be-a5c45db8dd15",
+          "tenantId": null,
+          "floorNo": 0,
+          "unitType": null,
+          "usageCategory": "NONRESIDENTIAL.INSTITUTIONAL.OTHERINSTITUTIONALSUBMINOR.OTHERINSTITUTIONAL",
+          "occupancyType": "SELFOCCUPIED",
+          "active": true,
+          "occupancyDate": 0,
+          "constructionDetail": {
+            "carpetArea": null,
+            "builtUpArea": null,
+            "plinthArea": null,
+            "superBuiltUpArea": null,
+            "constructionType": null,
+            "constructionDate": 0,
+            "dimensions": null
+          },
+          "additionalDetails": null,
+          "auditDetails": null,
+          "arv": null
+        }
+      ],
+      "additionalDetails": null,
+      "auditDetails": {
+        "createdBy": "f9065e25-ece0-4bb6-828e-bf1ebb6fbda9",
+        "lastModifiedBy": "f9065e25-ece0-4bb6-828e-bf1ebb6fbda9",
+        "createdTime": 1595482928742,
+        "lastModifiedTime": 1595482928742
+      },
+      "workflow": null
+    },
+    "proposedWaterClosets": 14,
+    "proposedToilets": 8,
+    "service": "Sewerage",
+    "roadCuttingArea": null,
+    "noOfTaps": null,
+    "noOfWaterClosets": null,
+    "noOfToilets": null,
+    "proposedTaps": null,
+    "propertyId": "c7ec0397-555d-4b12-bd80-931f4a3f7d1f",
+    "additionalDetails": {
+      "initialMeterReading": null,
+      "detailsProvidedBy": ""
+    },
+    "tenantId": "pg.citya",
+    "processInstance": {
+      "action": "INITIATE"
+    }
+  }
+}
