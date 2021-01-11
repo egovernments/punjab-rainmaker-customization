@@ -5250,11 +5250,6 @@ ReportDefinitions:
     print:
       pdfPageSize: "A1"
   sourceColumns:
-  - name: tenantid
-    label: reports.pt.tenantid
-    type: string
-    source: pt
-    total: false
   - name: propertyid
     label: reports.pt.propertyid
     type: string
@@ -5270,11 +5265,6 @@ ReportDefinitions:
     type: string
     source: pt
     total: false
-  - name: source
-    label: reports.pt.source
-    type: string
-    source: pt
-    total: false
   - name: channel
     label: reports.pt.channel
     type: string
@@ -5287,6 +5277,16 @@ ReportDefinitions:
     total: false
   - name: collectorname
     label: reports.pt.createdby
+    type: string
+    source: pt
+    total: false
+  - name: localitycode
+    label: reports.pt.localitycode
+    type: string
+    source: pt
+    total: false
+  - name: localityname
+    label: reports.pt.localityname
     type: string
     source: pt
     total: false
@@ -5311,11 +5311,13 @@ ReportDefinitions:
   query: |
       -- Use CTE to force query plan, compute & use CTE later
       SELECT 
-        propety.tenantid AS tenantid, propety.propertyid, propety.acknowldgementnumber as applicationnumber, propety.usagecategory, propety.source, propety.channel,
+        propety.propertyid, propety.acknowldgementnumber as applicationnumber, propety.usagecategory, propety.channel,
         to_char((To_timestamp(propety.createdtime/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY')  AS createdtime,
-        (case when eg_user.name is null then '30048|21Fj+c3k2ldB0X3AzIh7atXB' else eg_user.name end)  as collectorname, propety.status
+        (case when eg_user.name is null then '30048|21Fj+c3k2ldB0X3AzIh7atXB' else eg_user.name end)  as collectorname, pta.locality as localitycode, localnames.localityname as localityname, propety.status
       FROM eg_pt_property as propety
         Left outer join eg_user on eg_user.uuid = propety.createdby
+        inner join eg_pt_address    as pta on pta.propertyid = propety.id
+        left outer join eg_bndry_mohalla as localnames on pta.locality=localnames.localitycode
         WHERE propety.tenantid=$tenantid AND propety.acknowldgementnumber NOTNULL
   orderby: ORDER BY propety.createdtime DESC;
 
