@@ -5285,7 +5285,7 @@ ReportDefinitions:
     type: string
     source: pt
     total: false
-  - name: createdby
+  - name: collectorname
     label: reports.pt.createdby
     type: string
     source: pt
@@ -5313,7 +5313,7 @@ ReportDefinitions:
       SELECT 
         propety.tenantid AS tenantid, propety.propertyid, propety.acknowldgementnumber as applicationnumber, propety.usagecategory, propety.source, propety.channel,
         to_char((To_timestamp(propety.createdtime/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY')  AS createdtime,
-        (case when eg_user.name is null then '30048|21Fj+c3k2ldB0X3AzIh7atXB' else eg_user.name end)  as createdby, propety.status
+        (case when eg_user.name is null then '30048|21Fj+c3k2ldB0X3AzIh7atXB' else eg_user.name end)  as collectorname, propety.status
       FROM eg_pt_property as propety
         Left outer join eg_user on eg_user.uuid = propety.createdby
   orderby: ORDER BY propety.createdtime DESC;
