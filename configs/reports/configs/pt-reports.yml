@@ -5316,5 +5316,6 @@ ReportDefinitions:
         (case when eg_user.name is null then '30048|21Fj+c3k2ldB0X3AzIh7atXB' else eg_user.name end)  as collectorname, propety.status
       FROM eg_pt_property as propety
         Left outer join eg_user on eg_user.uuid = propety.createdby
+        WHERE propety.tenantid=$tenantid AND propety.acknowldgementnumber NOTNULL
   orderby: ORDER BY propety.createdtime DESC;
 
