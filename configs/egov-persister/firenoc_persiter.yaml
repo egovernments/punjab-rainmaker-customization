@@ -557,7 +557,7 @@ serviceMaps:
           
           - jsonPath: $.FireNOCs.*.fireNOCDetails.propertyDetails.address.subDistrict
 
-          - jsonPath: $.FireNOCs.*.fireNOCDetails.propertyDetails.address.id
+          - jsonPath: $.FireNOCs.*.fireNOCDetails.propertyDetails.id
           
          
 
