@@ -5301,19 +5301,20 @@ ReportDefinitions:
     type: epoch
     source: pt
     isMandatory: true
-    searchClause: AND pt.createdtime >= $fromDate
+    searchClause: AND propety.createdtime >= $fromDate
   - name: toDate
     label: reports.pt.toDate
     type: epoch
     source: pt
     isMandatory: true
-    searchClause: AND pt.createdtime <= $toDate
+    searchClause: AND propety.createdtime <= $toDate
   query: |
       -- Use CTE to force query plan, compute & use CTE later
       SELECT 
-        pt.tenantid AS tenantid, pt.propertyid, pt.acknowldgementnumber as applicationnumber, pt.usagecategory, pt.source, pt.channel,
-        to_char((To_timestamp(pt.createdtime/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY')  AS createdtime, 
-      FROM eg_pt_property as pt
-        Left outer join eg_user on eg_user.uuid = pt.createdby
-  orderby: ORDER BY pt.createdtime DESC;
+        propety.tenantid AS tenantid, propety.propertyid, propety.acknowldgementnumber as applicationnumber, propety.usagecategory, propety.source, propety.channel,
+        to_char((To_timestamp(propety.createdtime/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY')  AS createdtime,
+        (case when eg_user.name is null then '30048|21Fj+c3k2ldB0X3AzIh7atXB' else eg_user.name end)  as createdby, propety.status
+      FROM eg_pt_property as propety
+        Left outer join eg_user on eg_user.uuid = propety.createdby
+  orderby: ORDER BY propety.createdtime DESC;
 
