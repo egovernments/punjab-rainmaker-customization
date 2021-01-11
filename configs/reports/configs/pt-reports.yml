@@ -5250,58 +5250,48 @@ ReportDefinitions:
     print:
       pdfPageSize: "A1"
   sourceColumns:
-  - name: receiptnumber
-    label: reports.pt.receiptNo
+  - name: tenantid
+    label: reports.pt.tenantid
     type: string
     source: pt
     total: false
-  - name: receiptdate
-    label: reports.pt.receiptDate
+  - name: propertyid
+    label: reports.pt.propertyid
     type: string
     source: pt
     total: false
-  - name: amount
-    label: reports.pt.amount
-    type: string
-    source: pt
-    total: true
-  - name: pendingamount
-    label: reports.pt.pendingamount
-    type: string
-    source: pt
-    total: true
-  - name: consumercode
-    label: reports.pt.propertyId
+  - name: applicationnumber
+    label: reports.pt.applicationnumber
     type: string
     source: pt
     total: false
-  - name: usagetype
-    label: reports.pt.usagetype
+  - name: usagecategory
+    label: reports.pt.usagecategory
     type: string
     source: pt
     total: false
-  - name: instrumenttype
-    label: reports.pt.paymentMode
+  - name: source
+    label: reports.pt.source
     type: string
     source: pt
     total: false
-  - name: transactionnumber
-    label: reports.pt.ddChequeTransactionNo
+  - name: channel
+    label: reports.pt.channel
     type: string
     source: pt
     total: false
-  - name: transactiondate
-    label: reports.pt.ddChequeTransactionDate
+  - name: createdtime
+    label: reports.pt.createdtime
     type: string
     source: pt
     total: false
-  - name: collectorname
-    label: reports.pt.collectorname
+  - name: createdby
+    label: reports.pt.createdby
     type: string
     source: pt
     total: false
-  - name: financialyear
-    label: reports.pt.financialyear
+  - name: status
+    label: reports.pt.status
     type: string
     source: pt
     total: false
@@ -5311,42 +5301,19 @@ ReportDefinitions:
     type: epoch
     source: pt
     isMandatory: true
-    searchClause: AND pd.receiptdate >= $fromDate
+    searchClause: AND pt.createdtime >= $fromDate
   - name: toDate
     label: reports.pt.toDate
     type: epoch
     source: pt
     isMandatory: true
-    searchClause: AND pd.receiptdate <= $toDate
-  - name: financialyear
-    label: Financial Year
-    type: singlevaluelist
-    pattern: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?tenantId=$tenantid&moduleName=egf-master&masterName=FinancialYear|$.MdmsRes.egf-master.FinancialYear.[?(@.module=='PT')].code|$.MdmsRes.egf-master.FinancialYear.[?(@.module=='PT')].name
-    source: pt
-    wrapper: true
-    isMandatory: false
-    searchClause: AND concat(to_char((To_timestamp(get_fromperiod(pd.billid)/1000) at time Zone 'Asia/Kolkata'),'YYYY'),'-', to_char((To_timestamp(get_toperiod(pd.billid)/1000) at time Zone 'Asia/Kolkata'),'YY')) = $financialyear
+    searchClause: AND pt.createdtime <= $toDate
   query: |
       -- Use CTE to force query plan, compute & use CTE later
       SELECT 
-        pd.tenantid AS tenantid,
-        pd.id,
-        pt.propertyid as consumercode,
-        to_char((To_timestamp(pd.receiptdate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY')  AS receiptdate,
-        payment.ifsccode AS bankname, 
-        receiptnumber,
-        payment.totalamountpaid as amount, 
-        payment.paymentmode as instrumenttype, 
-        payment.transactionnumber,
-        concat(to_char((To_timestamp(get_fromperiod(pd.billid)/1000) at time Zone 'Asia/Kolkata'),'YYYY'),'-', to_char((To_timestamp(get_toperiod(pd.billid)/1000) at time Zone 'Asia/Kolkata'),'YY')) as financialyear, 
-        to_char((To_timestamp(payment.transactiondate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY') AS transactiondate, 
-        payment.totaldue - payment.totalamountpaid AS pendingamount,
-        Initcap(case when pt.usagecategory like '%.%' then split_part(pt.usagecategory,'.',2) else pt.usagecategory end) as usagetype,
-        (case when eg_user.name is null then '30048|21Fj+c3k2ldB0X3AzIh7atXB' else eg_user.name end)  as collectorname,
-        (case when pt.status='ACTIVE' then 'APPROVED' else pt.status end) as status
-      FROM egcl_paymentdetail pd Left outer join eg_user on eg_user.id = pd.createdby::INTEGER, egcl_payment payment, eg_pt_property as pt, egcl_bill bill,
-      (select string_agg(distinct propertyid,',') as propertyid, string_agg(distinct locality,',') as locality from eg_pt_address where tenantid=$tenantid group by propertyid ) pt_addr
-      where pd.paymentid=payment.id and bill.id=pd.billid and payment.paymentstatus != 'CANCELLED' and pd.businessservice='PT' and payment.tenantid=$tenantid 
-      and pt.propertyid = bill.consumercode and pt.status!='INACTIVE' 
-      and pt_addr.propertyid=pt.id 
-  orderby: ORDER BY pd.receiptdate DESC;
+        pt.tenantid AS tenantid, pt.propertyid, pt.acknowldgementnumber as applicationnumber, pt.usagecategory, pt.source, pt.channel,
+        to_char((To_timestamp(pt.createdtime/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY')  AS createdtime, 
+      FROM eg_pt_property as pt
+        Left outer join eg_user on eg_user.uuid = pt.createdby
+  orderby: ORDER BY pt.createdtime DESC;
+
