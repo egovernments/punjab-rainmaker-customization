@@ -12,10 +12,10 @@ dbpassword = os.getenv("DB_PASSWORD", "postgres")
 host = os.getenv("DB_HOST", "localhost")
 schema_name = os.getenv("schema_name", "generic")
 batch = os.getenv("BATCH_NAME", "1")
-default_phone = os.getenv("DEFAULT_PHONE", "9999999999")
+default_phone = os.getenv("DEFAULT_PHONE", "6364021789")
 batch_size = os.getenv("BATCH_SIZE", "100")
 table_name = os.getenv("TABLE_NAME", "public.egpt_stg_property")
-tenant_id = os.getenv("TENANT_ID","pb.sunam")
+tenant_id = os.getenv("TENANT_ID", "pg.citya")
 
 connection = None
 cursor = None
@@ -48,7 +48,7 @@ def main():
             set_path = """set search_path to {}""".format(schema_name)
             cursor.execute(set_path)
             my_path = os.path.abspath(os.path.dirname(__file__))
-            print(my_path)
+            # print(my_path)
             path = os.path.join(my_path, "../sql/water_search.sql")
             print(path)
             sql = open(path, mode='r', encoding='utf-8-sig').read()
@@ -74,7 +74,7 @@ def main():
                     water = WaterConnectionRequest()
                     water.prepare_water_connection(json_data, tenant_id, property_id)
                     request, response = water.upload_water_connection(access_token)
-                    # print("property created", json.dumps(response))
+                    print("Water connection created", json.dumps(response))
                     time_taken = time.time() - start
 
     except Exception as ex:

@@ -5,8 +5,11 @@ import psycopg2
 import sys
 from typing import Optional, List
 from json import JSONEncoder
-
-from uploader.parsers.utils import WaterEncoder, convert_json, underscore_to_camel
+import requests
+from urllib.parse import urljoin
+from config import config
+from uploader.parsers.utils import WaterConnectionRequestEncoder, convert_json, underscore_to_camel
+import jsonpickle
 
 
 class Document:
@@ -95,9 +98,9 @@ class WaterConnectionRequest:
         self.waterSource = "GROUND.WELL"
         self.meterId = None
         self.meterInstallationDate = 0
-        self.proposedPipeSize = json_data["proposedPipeSize"]
+        self.proposedPipeSize = json_data["actualPipeSize"]
         self.actualPipeSize = json_data["actualPipeSize"]
-        self.proposedTaps = json_data["proposedTaps"]
+        self.proposedTaps = json_data["actualTaps"]
         self.actualTaps = json_data["actualTaps"]
         self.service = 'Water'
         self.processInstance = self.prepare_process_instance()
@@ -112,13 +115,20 @@ class WaterConnectionRequest:
         # print("Water Json : ", self.get_water_json())
         request_data = {
             "RequestInfo": {
+                "apiId": "Rainmaker",
+                "ver": ".01",
+                "action": "",
+                "did": "1",
+                "key": "",
+                "msgId": "20170310130900|en_IN",
+                "requesterId": "",
                 "authToken": access_token
             },
-            "WaterConnection": [
-                self.get_water_json()
-            ]
+            "WaterConnection":  self.to_json()
+
         }
-        # print(request_data)
+        print(request_data)
+        print(urljoin(config.HOST, "/ws-services/wc/_create?"))
         response = requests.post(urljoin(config.HOST, "/ws-services/wc/_create?"), json=request_data)
         res = response.json()
         return request_data, res
@@ -127,5 +137,14 @@ class WaterConnectionRequest:
     # return json.dumps(self.__dict__)
 
     def get_water_json(self):
-        water_encoder = WaterEncoder().encode(self)
+        print("Printing JSON Object")
+        print(WaterConnectionRequestEncoder().encode(self))
+        water_encoder = WaterConnectionRequestEncoder().encode(self)
         return convert_json(json.loads(water_encoder), underscore_to_camel)
+
+    def to_json(self):
+        json_obj_encode = jsonpickle.encode(self, unpicklable=False)
+        json_data = json.dumps(json_obj_encode, indent=4)
+        json_obj_decode = json.loads(jsonpickle.decode(json_data))
+        print(json_obj_decode)
+        return json_obj_decode
