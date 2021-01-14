@@ -5295,7 +5295,7 @@ ReportDefinitions:
     type: string
     source: pt
     total: false
-  - name: collectorname
+  - name: approvedby
     label: reports.pt.approvedby
     type: string
     source: pt
@@ -5328,16 +5328,17 @@ ReportDefinitions:
       SELECT 
         propety.propertyid, propety.acknowldgementnumber as applicationnumber, propety.usagecategory, propety.channel,
         to_char((To_timestamp(propety.createdtime/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY') AS createdtime,
-        (case when eg_user.name is null then '30048|21Fj+c3k2ldB0X3AzIh7atXB' else eg_user.name end) AS collectorname, 
+        (case when eu.name is null then '30048|21Fj+c3k2ldB0X3AzIh7atXB' else eu.name end) AS collectorname, 
         pta.locality AS localitycode, localnames.localityname as localityname,
         REGEXP_REPLACE(REGEXP_REPLACE(CONCAT(pta.doorno, ',', pta.buildingname, ',',pta.street,',', pta.pincode), ',+', ','), '^,|,$', '') as "address", pt_detail.financialyear, propety.status, bill.totalamount, 
-        (case when propety.status = 'INWORKFLOW' then 'null' else euser.name end) as collectorname
+        (case when propety.status = 'INWORKFLOW' then 'null' else euser.name end) as approvedby
       FROM eg_pt_property as propety
         Left outer join eg_user as eu on eu.uuid = propety.createdby
         Left outer join eg_user as euser on euser.uuid = propety.lastmodifiedby
-        Left outer join eg_pt_address    as pta on pta.propertyid = propety.id
+        Left outer join eg_pt_address as pta on pta.propertyid = propety.id
         Left outer join eg_pt_propertydetail_v2 pt_detail ON pt_detail.property  = propety.propertyid
         Left outer join egcl_bill as bill on bill.consumercode = propety.propertyid
+        Left outer join eg_bndry_mohalla as localnames on pta.locality=localnames.localitycode
         WHERE propety.tenantid=$tenantid AND propety.acknowldgementnumber NOTNULL
   orderby: ORDER BY propety.createdtime DESC;
 
