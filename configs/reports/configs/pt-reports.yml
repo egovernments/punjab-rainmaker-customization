@@ -5328,7 +5328,7 @@ ReportDefinitions:
       SELECT 
         propety.propertyid, propety.acknowldgementnumber as applicationnumber, propety.usagecategory, propety.channel,
         to_char((To_timestamp(propety.createdtime/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY') AS createdtime,
-        (case when eu.name is null then '30048|21Fj+c3k2ldB0X3AzIh7atXB' else eu.name end) AS collectorname, 
+        (case when eu.name is null then '30048|21Fj+c3k2ldB0X3AzIh7atXB' else eu.name end) AS createdby, 
         pta.locality AS localitycode, localnames.localityname as localityname,
         REGEXP_REPLACE(REGEXP_REPLACE(CONCAT(pta.doorno, ',', pta.buildingname, ',',pta.street,',', pta.pincode), ',+', ','), '^,|,$', '') as "address", pt_detail.financialyear, propety.status, bill.totalamount, 
         (case when propety.status = 'INWORKFLOW' then 'null' else euser.name end) as approvedby
