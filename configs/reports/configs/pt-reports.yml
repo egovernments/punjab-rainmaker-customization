@@ -5275,7 +5275,7 @@ ReportDefinitions:
     type: string
     source: pt
     total: false
-  - name: collectorname
+  - name: createdby
     label: reports.pt.createdby
     type: string
     source: pt
