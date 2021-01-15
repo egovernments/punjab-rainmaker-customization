@@ -5280,13 +5280,13 @@ ReportDefinitions:
     type: string
     source: pt
     total: false
-  - name: zonecode
-    label: reports.pt.zonecode
+  - name: zone
+    label: reports.pt.zone
     type: string
     source: pt
     total: false
-  - name: blockcode
-    label: reports.pt.blockcode
+  - name: block
+    label: reports.pt.block
     type: string
     source: pt
     total: false
@@ -5331,10 +5331,10 @@ ReportDefinitions:
   query: |
       -- Use CTE to force query plan, compute & use CTE later
       SELECT 
-        propety.propertyid, propety.acknowldgementnumber as applicationnumber, propety.usagecategory, propety.channel,
+        propety.propertyid, propety.acknowldgementnumber as applicationnumber, propety.usagecategory,
         to_char((To_timestamp(propety.createdtime/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY') AS createdtime,
-        (case when eu.name is null then '30048|21Fj+c3k2ldB0X3AzIh7atXB' else eu.name end) AS createdby, 
-        localnames.zonecode, localnames.blockcode, localnames.localityname,
+        (case when eu.name is null then '30048|21Fj+c3k2ldB0X3AzIh7atXB' else eu.name end) AS createdby,
+        localnames.zonecode AS zone, localnames.blockcode AS block, localnames.localityname AS localityname,
         REGEXP_REPLACE(REGEXP_REPLACE(CONCAT(pta.doorno, ',', pta.buildingname, ',',pta.street,',', pta.pincode), ',+', ','), '^,|,$', '') as "address", pt_detail.financialyear, propety.status, bill.totalamount, 
         (case when propety.status = 'INWORKFLOW' then 'null' else euser.name end) as approvedby
       FROM eg_pt_property as propety
