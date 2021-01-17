@@ -106,7 +106,7 @@ serviceMaps:
        - jsonPath: $.WaterConnection.additionalDetails.adhocRebateReason
 
        - jsonPath: $.WaterConnection.additionalDetails.adhocRebateComment
-       
+
        - jsonPath: $.WaterConnection.additionalDetails.billingType
 
        - jsonPath: $.WaterConnection.additionalDetails.billingAmount
