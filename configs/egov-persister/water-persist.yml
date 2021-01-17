@@ -77,7 +77,7 @@ serviceMaps:
    fromTopic: update-ws-connection
    isTransaction: true
    queryMaps:
-    - query: UPDATE eg_ws_connection SET applicationstatus=?, status=?, connectionno=?, oldconnectionno=?, action=?, roadCuttingArea=?, roadType=?, adhocpenalty=?, adhocrebate=?, adhocpenaltyreason=?, adhocpenaltycomment=?, adhocrebatereason=?, adhocrebatecomment=?, lastModifiedBy=?, lastModifiedTime=? WHERE id=?;
+    - query: UPDATE eg_ws_connection SET applicationstatus=?, status=?, connectionno=?, oldconnectionno=?, action=?, roadCuttingArea=?, roadType=?, adhocpenalty=?, adhocrebate=?, adhocpenaltyreason=?, adhocpenaltycomment=?, adhocrebatereason=?, adhocrebatecomment=?, billing_type=?, billing_amount=?, connection_category=?, ledger_id=?, average_make=?, meter_make=?, lastModifiedBy=?, lastModifiedTime=? WHERE id=?;
       basePath: $.WaterConnection
       jsonMaps:
 
@@ -106,6 +106,18 @@ serviceMaps:
        - jsonPath: $.WaterConnection.additionalDetails.adhocRebateReason
 
        - jsonPath: $.WaterConnection.additionalDetails.adhocRebateComment
+       
+       - jsonPath: $.WaterConnection.additionalDetails.billingType
+
+       - jsonPath: $.WaterConnection.additionalDetails.billingAmount
+
+       - jsonPath: $.WaterConnection.additionalDetails.connectionCategory
+
+       - jsonPath: $.WaterConnection.additionalDetails.ledgerId
+
+       - jsonPath: $.WaterConnection.additionalDetails.averageMake
+
+       - jsonPath: $.WaterConnection.additionalDetails.meterMake
 
        - jsonPath: $.WaterConnection.auditDetails.lastModifiedBy
 
