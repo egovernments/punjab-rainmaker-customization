@@ -7,7 +7,7 @@ serviceMaps:
    fromTopic: save-ws-connection
    isTransaction: true
    queryMaps:
-    - query: INSERT INTO eg_ws_connection (id, tenantid, property_id, applicationno, applicationstatus, status, connectionno, oldconnectionno,roadcuttingarea,action,roadtype, createdby, lastmodifiedby, createdtime, lastmodifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?,?,?,?,?,?,?);
+    - query: INSERT INTO eg_ws_connection (id, tenantid, property_id, applicationno, applicationstatus, status, connectionno, oldconnectionno,roadcuttingarea,action,roadtype, createdby, lastmodifiedby, createdtime, lastmodifiedtime,additionaldetails) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?,?,?,?,?,?,?,?);
       basePath: $.WaterConnection
       jsonMaps:
        - jsonPath: $.WaterConnection.id
@@ -39,6 +39,10 @@ serviceMaps:
        - jsonPath: $.WaterConnection.auditDetails.createdTime
 
        - jsonPath: $.WaterConnection.auditDetails.lastModifiedTime
+       
+       - jsonPath: $.WaterConnection.additionalDetails
+         type: JSON
+         dbType: JSONB
 
 
     - query: INSERT INTO eg_ws_service(connection_id,connectionCategory,connectionType,waterSource,meterId,meterInstallationDate,pipeSize,noOfTaps,connectionexecutiondate,proposedPipeSize,proposedTaps, appCreatedDate) VALUES(?,?,?,?,?,?,?,?,?,?,?, ?);
@@ -77,7 +81,7 @@ serviceMaps:
    fromTopic: update-ws-connection
    isTransaction: true
    queryMaps:
-    - query: UPDATE eg_ws_connection SET applicationstatus=?, status=?, connectionno=?, oldconnectionno=?, action=?, roadCuttingArea=?, roadType=?, adhocpenalty=?, adhocrebate=?, adhocpenaltyreason=?, adhocpenaltycomment=?, adhocrebatereason=?, adhocrebatecomment=?, billing_type=?, billing_amount=?, connection_category=?, ledger_id=?, average_make=?, meter_make=?, lastModifiedBy=?, lastModifiedTime=? WHERE id=?;
+    - query: UPDATE eg_ws_connection SET applicationstatus=?, status=?, connectionno=?, oldconnectionno=?, action=?, roadCuttingArea=?, roadType=?, adhocpenalty=?, adhocrebate=?, adhocpenaltyreason=?, adhocpenaltycomment=?, adhocrebatereason=?, adhocrebatecomment=?, billing_type=?, billing_amount=?, connection_category=?, ledger_id=?, average_make=?, meter_make=?, lastModifiedBy=?, lastModifiedTime=?,additionaldetails=? WHERE id=?;
       basePath: $.WaterConnection
       jsonMaps:
 
@@ -122,6 +126,11 @@ serviceMaps:
        - jsonPath: $.WaterConnection.auditDetails.lastModifiedBy
 
        - jsonPath: $.WaterConnection.auditDetails.lastModifiedTime
+       
+       - jsonPath: $.WaterConnection.additionalDetails
+         type: JSON
+         dbType: JSONB
+       
 
        - jsonPath: $.WaterConnection.id
 
