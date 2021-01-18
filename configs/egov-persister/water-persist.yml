@@ -81,7 +81,7 @@ serviceMaps:
    fromTopic: update-ws-connection
    isTransaction: true
    queryMaps:
-    - query: UPDATE eg_ws_connection SET applicationstatus=?, status=?, connectionno=?, oldconnectionno=?, action=?, roadCuttingArea=?, roadType=?, adhocpenalty=?, adhocrebate=?, adhocpenaltyreason=?, adhocpenaltycomment=?, adhocrebatereason=?, adhocrebatecomment=?, billing_type=?, billing_amount=?, connection_category=?, ledger_id=?, average_make=?, meter_make=?, lastModifiedBy=?, lastModifiedTime=?,additionaldetails=? WHERE id=?;
+    - query: UPDATE eg_ws_connection SET applicationstatus=?, status=?, connectionno=?, oldconnectionno=?, action=?, roadCuttingArea=?, roadType=?, adhocpenalty=?, adhocrebate=?, adhocpenaltyreason=?, adhocpenaltycomment=?, adhocrebatereason=?, adhocrebatecomment=? lastModifiedBy=?, lastModifiedTime=?,additionaldetails=? WHERE id=?;
       basePath: $.WaterConnection
       jsonMaps:
 
@@ -111,18 +111,6 @@ serviceMaps:
 
        - jsonPath: $.WaterConnection.additionalDetails.adhocRebateComment
 
-       - jsonPath: $.WaterConnection.additionalDetails.billingType
-
-       - jsonPath: $.WaterConnection.additionalDetails.billingAmount
-
-       - jsonPath: $.WaterConnection.additionalDetails.connectionCategory
-
-       - jsonPath: $.WaterConnection.additionalDetails.ledgerId
-
-       - jsonPath: $.WaterConnection.additionalDetails.averageMake
-
-       - jsonPath: $.WaterConnection.additionalDetails.meterMake
-
        - jsonPath: $.WaterConnection.auditDetails.lastModifiedBy
 
        - jsonPath: $.WaterConnection.auditDetails.lastModifiedTime
@@ -131,7 +119,6 @@ serviceMaps:
          type: JSON
          dbType: JSONB
        
-
        - jsonPath: $.WaterConnection.id
 
     - query: UPDATE eg_ws_service SET connectionCategory=?,connectionType=?,waterSource=?,meterId=?,meterInstallationDate=?,pipeSize=?,noOfTaps=?,proposedPipeSize=?,proposedTaps=?, initialmeterreading = ?, connectionexecutiondate = ?, detailsprovidedby = ?, estimationfileStoreId = ?, sanctionfileStoreId = ? WHERE connection_id=?;
