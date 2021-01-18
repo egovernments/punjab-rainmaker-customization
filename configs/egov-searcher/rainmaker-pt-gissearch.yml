@@ -12,7 +12,8 @@ SearchDefinitions:
           pt.propertyid as propertyid,
           pt.oldpropertyid as oldpropertyid,
           pd.receiptnumber as receiptnumber,
-          pt.tenantid as tenantid
+          pt.tenantid as tenantid,
+          pd.receiptdate::varchar as receiptdate
         from
         egcl_paymentdetail AS pd
         INNER JOIN egcl_bill on pd.billid=egcl_bill.id
@@ -25,11 +26,11 @@ SearchDefinitions:
    searchParams:
     condition: AND
     params:
-    - name: pd.receiptdate::varchar
+    - name: receiptdate
       isMandatory: false
       jsonPath: $.searchCriteria.fromDate
       operator: GE
-    - name: pd.receiptdate::varchar
+    - name: receiptdate
       isMandatory: false
       jsonPath: $.searchCriteria.toDate
       operator: LE
