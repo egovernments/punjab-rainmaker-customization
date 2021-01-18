@@ -7,7 +7,7 @@ serviceMaps:
    fromTopic: save-sw-connection
    isTransaction: true
    queryMaps:
-    - query: INSERT INTO eg_sw_connection (id, tenantid, property_id, applicationno, applicationstatus, status, connectionno, oldconnectionno,roadcuttingarea,action,roadtype, createdby, lastmodifiedby, createdtime, lastmodifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?,?,?,?,?,?,?);
+    - query: INSERT INTO eg_sw_connection (id, tenantid, property_id, applicationno, applicationstatus, status, connectionno, oldconnectionno,roadcuttingarea,action,roadtype, createdby, lastmodifiedby, createdtime, lastmodifiedtime,additionaldetails) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?,?,?,?,?,?,?,?);
       basePath: $.SewerageConnection
       jsonMaps:
        - jsonPath: $.SewerageConnection.id
@@ -39,6 +39,10 @@ serviceMaps:
        - jsonPath: $.SewerageConnection.auditDetails.createdTime
 
        - jsonPath: $.SewerageConnection.auditDetails.lastModifiedTime
+       
+       - jsonPath: $.SewerageConnection.additionalDetails
+         type: JSON
+         dbType: JSONB
 
     - query: INSERT INTO eg_sw_service(connection_id,connectionExecutionDate,noOfWaterClosets,noOfToilets,connectiontype,proposedWaterClosets,proposedToilets, appCreatedDate, createdby, lastmodifiedby, createdtime, lastmodifiedtime) VALUES(?,?,?,?,?,?,?,?,?,?,?,?);
       basePath: $.SewerageConnection
@@ -67,6 +71,9 @@ serviceMaps:
        - jsonPath: $.SewerageConnection.auditDetails.createdTime
 
        - jsonPath: $.SewerageConnection.auditDetails.lastModifiedTime
+       
+       
+       
 
 
  - version: 1.0
@@ -75,7 +82,7 @@ serviceMaps:
    fromTopic: update-sw-connection
    isTransaction: true
    queryMaps:
-    - query: UPDATE eg_sw_connection SET applicationstatus=?, status=?, connectionno=?, oldconnectionno=?, action=?, roadCuttingArea=?, roadType=?, adhocpenalty=?, adhocrebate=?, adhocpenaltyreason=?, adhocpenaltycomment=?, adhocrebatereason=?, adhocrebatecomment=?, lastmodifiedby=?, lastmodifiedtime=? WHERE id=?;
+    - query: UPDATE eg_sw_connection SET applicationstatus=?, status=?, connectionno=?, oldconnectionno=?, action=?, roadCuttingArea=?, roadType=?, adhocpenalty=?, adhocrebate=?, adhocpenaltyreason=?, adhocpenaltycomment=?, adhocrebatereason=?, adhocrebatecomment=?, lastmodifiedby=?, lastmodifiedtime=?,additionaldetails=? WHERE id=?;
       basePath: $.SewerageConnection
       jsonMaps:
 
@@ -108,6 +115,10 @@ serviceMaps:
        - jsonPath: $.SewerageConnection.auditDetails.lastModifiedBy
 
        - jsonPath: $.SewerageConnection.auditDetails.lastModifiedTime
+       
+       - jsonPath: $.SewerageConnection.additionalDetails
+         type: JSON
+         dbType: JSONB
 
        - jsonPath: $.SewerageConnection.id
 
