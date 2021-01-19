@@ -2328,6 +2328,11 @@ ReportDefinitions:
     type: string
     source: pt
     total: true
+  - name: paidpropertytax
+    label: reports.pt.propertyTax
+    type: string
+    source: pt
+    total: true
   - name: firecess
     label: reports.pt.fireCess
     type: string
