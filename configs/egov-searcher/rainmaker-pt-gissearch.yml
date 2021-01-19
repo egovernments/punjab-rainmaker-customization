@@ -26,11 +26,11 @@ SearchDefinitions:
    searchParams:
     condition: AND
     params:
-    - name: pd.receiptdate
+    - name: pd.receiptfromdate
       isMandatory: false
       jsonPath: $.searchCriteria.fromDate
       operator: GE
-    - name: pd.receiptdate
+    - name: pd.receipttodate
       isMandatory: false
       jsonPath: $.searchCriteria.toDate
       operator: LE
