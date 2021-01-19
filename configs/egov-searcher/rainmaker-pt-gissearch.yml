@@ -18,8 +18,7 @@ SearchDefinitions:
         INNER JOIN egcl_bill on pd.billid=egcl_bill.id
         INNER JOIN eg_pt_property AS pt ON pt.propertyid = egcl_bill.consumercode
         AND pt.oldpropertyid IS NOT NULL
-        AND
-        pt.oldpropertyid != '' $where) data
+        AND pt.oldpropertyid != '' and pd.receiptdate between 1542267174557 AND 1585670998438 $where) data
     groupBy:
     orderBy:
    searchParams:
