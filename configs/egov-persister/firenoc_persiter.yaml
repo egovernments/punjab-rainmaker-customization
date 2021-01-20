@@ -62,7 +62,7 @@ serviceMaps:
 
           - jsonPath: $.FireNOCs.*.fireNOCDetails.noOfBuildings
 
-          - jsonPath: $.FireNOCs.*.fireNOCDetails.tenantId
+          - jsonPath: $.FireNOCs.*.tenantId
 
           - jsonPath: $.FireNOCs.*.fireNOCDetails.additionalDetail
             type: JSON
