@@ -13,14 +13,14 @@ SearchDefinitions:
           pt.oldpropertyid as oldpropertyid,
           pd.receiptnumber as receiptnumber,
           pt.tenantid as tenantid,
-          pd.receiptdate as receiptdate
-        from
-        egcl_paymentdetail AS pd
+          pd.receiptdate as receiptdate, 
+          bn.blockname
+        from egcl_paymentdetail AS pd
         INNER JOIN egcl_bill on pd.billid=egcl_bill.id
-        INNER JOIN eg_pt_property AS pt ON pt.propertyid = egcl_bill.consumercode
-        AND pt.oldpropertyid IS NOT NULL
-        AND
-        pt.oldpropertyid != '' $where) data
+        INNER JOIN eg_pt_property AS pt ON pt.propertyid = egcl_bill.consumercode AND pt.oldpropertyid IS NOT NULL
+        AND pt.oldpropertyid != ''
+        INNER JOIN eg_pt_address As ad ON ad.propertyid=pt.id and ad.lastmodifiedtime in (select max(lastmodifiedtime) from eg_pt_address where propertyid=pt.id)
+        INNER JOIN  eg_bndry_mohalla  As bn ON ad.locality=bn.localitycode and ad.tenantid=bn.tenantid $where) data
     groupBy:
     orderBy:
    searchParams:
@@ -37,6 +37,10 @@ SearchDefinitions:
     - name: pt.tenantid
       isMandatory: true
       jsonPath: $.searchCriteria.tenantId
+      operator: =
+    - name: bn.blockname
+      isMandatory: false
+      jsonPath: $.searchCriteria.blockcode
       operator: =
 
 
