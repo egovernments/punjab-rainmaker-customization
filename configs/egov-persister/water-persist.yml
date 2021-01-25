@@ -72,7 +72,24 @@ serviceMaps:
 
        - jsonPath: $.WaterConnection.additionalDetails.appCreatedDate
 
+    - query: INSERT INTO eg_ws_connectionholder(tenantid, connectionid, status, userid, createdby, createdtime, lastmodifiedby, lastmodifiedtime) VALUES(?,?,?,?,?,?,?,?);
+      basePath: $.WaterConnection
+      jsonMaps:
 
+       - jsonPath: $.WaterConnection.connectionHolders.*.tenantId
+       - jsonPath: $.WaterConnection.id
+
+       - jsonPath: $.WaterConnection.connectionHolders.*.status
+
+       - jsonPath: $.WaterConnection.connectionHolders.*.id
+
+       - jsonPath: $.WaterConnection.connectionHolders.*.createdBy
+
+       - jsonPath: $.WaterConnection.connectionHolders.*.createdDate
+
+       - jsonPath: $.WaterConnection.connectionHolders.*.lastModifiedBy
+
+       - jsonPath: $.WaterConnection.connectionHolders.*.lastModifiedDate
 
 
  - version: 1.0
@@ -225,6 +242,21 @@ serviceMaps:
 
           - jsonPath: $.WaterConnection.plumberInfo.*.relationship
 
+    - query: UPDATE eg_ws_connectionholder set tenantid=?, status=?, userid=?, lastmodifiedby=?, lastmodifiedtime=? where connectionid=?;
+      basePath: $.WaterConnection
+      jsonMaps:
+
+       - jsonPath: $.WaterConnection.connectionHolders.*.tenantId
+
+       - jsonPath: $.WaterConnection.connectionHolders.*.status
+
+       - jsonPath: $.WaterConnection.connectionHolders.*.id
+
+       - jsonPath: $.WaterConnection.connectionHolders.*.lastModifiedBy
+
+       - jsonPath: $.WaterConnection.connectionHolders.*.lastModifiedDate
+
+       - jsonPath: $.WaterConnection.id
 
 
  - version: 1.0
