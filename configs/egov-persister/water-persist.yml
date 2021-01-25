@@ -81,7 +81,7 @@ serviceMaps:
 
        - jsonPath: $.WaterConnection.connectionHolders.*.status
 
-       - jsonPath: $.WaterConnection.connectionHolders.*.id
+       - jsonPath: $.WaterConnection.connectionHolders.*.uuid
 
        - jsonPath: $.WaterConnection.connectionHolders.*.createdBy
 
@@ -250,7 +250,7 @@ serviceMaps:
 
        - jsonPath: $.WaterConnection.connectionHolders.*.status
 
-       - jsonPath: $.WaterConnection.connectionHolders.*.id
+       - jsonPath: $.WaterConnection.connectionHolders.*.uuid
 
        - jsonPath: $.WaterConnection.connectionHolders.*.lastModifiedBy
 
