@@ -73,7 +73,7 @@ serviceMaps:
        - jsonPath: $.WaterConnection.additionalDetails.appCreatedDate
 
     - query: INSERT INTO eg_ws_connectionholder(tenantid, connectionid, status, userid, createdby, createdtime, lastmodifiedby, lastmodifiedtime) VALUES(?,?,?,?,?,?,?,?);
-      basePath: $.WaterConnection
+      basePath: $.WaterConnection.connectionHolders.*
       jsonMaps:
 
        - jsonPath: $.WaterConnection.connectionHolders.*.tenantId
@@ -243,7 +243,7 @@ serviceMaps:
           - jsonPath: $.WaterConnection.plumberInfo.*.relationship
 
     - query: UPDATE eg_ws_connectionholder set tenantid=?, status=?, userid=?, lastmodifiedby=?, lastmodifiedtime=? where connectionid=?;
-      basePath: $.WaterConnection
+      basePath: $.WaterConnection.connectionHolders.*
       jsonMaps:
 
        - jsonPath: $.WaterConnection.connectionHolders.*.tenantId
