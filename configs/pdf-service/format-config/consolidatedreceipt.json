@@ -334,8 +334,98 @@
                 "style": "receipt-table-value"
               },
               {
-
                 "text": "{{paymentMode}}",
+
+                "border": [
+                  false,
+                  false,
+                  true,
+                  false
+                ],
+                "style": "receipt-table"
+              }
+            ],
+            [
+              {
+                "text": "Tax Amount",
+                "border": [
+                  true,
+                  false,
+                  false,
+                  false
+                ],
+                "style": "receipt-table-value"
+              },
+              {
+                "text": "₹ {{taxAmount}}",
+                "border": [
+                  false,
+                  false,
+                  false,
+                  false
+                ],
+                "style": "receipt-table"
+              },
+              {
+
+                "text": "Field Fee",
+
+                "border": [
+                  false,
+                  false,
+                  false,
+                  false
+                ],
+                "style": "receipt-table-value"
+              },
+              {
+
+                "text": "{{fieldFee}}",
+
+                "border": [
+                  false,
+                  false,
+                  true,
+                  false
+                ],
+                "style": "receipt-table"
+              }
+            ],[
+              {
+                "text": "CGST(if applicable)",
+                "border": [
+                  true,
+                  false,
+                  false,
+                  false
+                ],
+                "style": "receipt-table-value"
+              },
+              {
+                "text": "₹ {{cgst}}",
+                "border": [
+                  false,
+                  false,
+                  false,
+                  false
+                ],
+                "style": "receipt-table"
+              },
+              {
+
+                "text": "SGST(if applicable)",
+
+                "border": [
+                  false,
+                  false,
+                  false,
+                  false
+                ],
+                "style": "receipt-table-value"
+              },
+              {
+
+                "text": "₹ {{sgst}}",
 
                 "border": [
                   false,
@@ -904,6 +994,96 @@
                 ],
                 "style": "receipt-table"
               }
+            ], [
+              {
+                "text": "Tax Amount",
+                "border": [
+                  true,
+                  false,
+                  false,
+                  false
+                ],
+                "style": "receipt-table-value"
+              },
+              {
+                "text": "₹ {{taxAmount}}",
+                "border": [
+                  false,
+                  false,
+                  false,
+                  false
+                ],
+                "style": "receipt-table"
+              },
+              {
+
+                "text": "Field Fee",
+
+                "border": [
+                  false,
+                  false,
+                  false,
+                  false
+                ],
+                "style": "receipt-table-value"
+              },
+              {
+
+                "text": "{{fieldFee}}",
+
+                "border": [
+                  false,
+                  false,
+                  true,
+                  false
+                ],
+                "style": "receipt-table"
+              }
+            ],[
+              {
+                "text": "CGST(if applicable)",
+                "border": [
+                  true,
+                  false,
+                  false,
+                  false
+                ],
+                "style": "receipt-table-value"
+              },
+              {
+                "text": "₹ {{cgst}}",
+                "border": [
+                  false,
+                  false,
+                  false,
+                  false
+                ],
+                "style": "receipt-table"
+              },
+              {
+
+                "text": "SGST(if applicable)",
+
+                "border": [
+                  false,
+                  false,
+                  false,
+                  false
+                ],
+                "style": "receipt-table-value"
+              },
+              {
+
+                "text": "₹ {{sgst}}",
+
+                "border": [
+                  false,
+                  false,
+                  true,
+                  false
+                ],
+                "style": "receipt-table"
+              }
             ],
             [
               {
@@ -1201,7 +1381,7 @@
       "bold": true,
       "margin": [
         -27,
-        5,
+        3,
         -10,
         0
       ]
@@ -1210,7 +1390,7 @@
       "fontSize": 8,
       "margin": [
         -27,
-        5,
+        3,
         -10,
         0
       ]
@@ -1219,7 +1399,7 @@
       "fontSize": 8,
       "margin": [
         -27,
-        5,
+        3,
         -10,
         0
       ]
@@ -1228,7 +1408,7 @@
       "fontSize": 8,
       "margin": [
         2,
-        2,
+        1,
         0,
         0
       ]
