@@ -67,6 +67,27 @@
                   "path": "$.paymentDetails[0].totalAmountPaid"
                 }
               },
+              {
+                "variable": "fieldFee", 
+                "value": {
+                  "path": "$.paymentDetails[0].bill.billDetails[0].billAccountDetails[?(@.taxHeadCode == 'RT.LAND_RENT_FIELD_FEE')].amount"
+                }
+              }, {
+                "variable": "taxAmount", 
+                "value": {
+                  "path": "$.paymentDetails[0].bill.billDetails[0].billAccountDetails[?(@.taxHeadCode == 'RT.LAND_RENT_TAX')].amount"
+                }
+              }, {
+                "variable": "cgst", 
+                "value": {
+                  "path": "$.paymentDetails[0].bill.billDetails[0].billAccountDetails[?(@.taxHeadCode == 'RT.LAND_RENT_CGST')].amount"
+                }
+              }, {
+                "variable": "sgst", 
+                "value": {
+                  "path": "$.paymentDetails[0].bill.billDetails[0].billAccountDetails[?(@.taxHeadCode == 'RT.LAND_RENT_SGST')].amount"
+                }
+              },
 
               {
                 "variable": "fromPeriod", 
