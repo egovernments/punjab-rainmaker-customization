@@ -12,39 +12,37 @@
 
 package io.swagger.client.model;
 
-import java.util.Objects;
-import java.util.Arrays;
-import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.JsonAdapter;
-import com.google.gson.annotations.SerializedName;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-import io.swagger.client.model.AuditDetails;
-import io.swagger.client.model.Document;
-import io.swagger.client.model.PlumberInfo;
-import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.google.gson.TypeAdapter;
+import com.google.gson.annotations.JsonAdapter;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
+
+import io.swagger.v3.oas.annotations.media.Schema;
 /**
  * This is lightweight property object that can be used as reference by definitions needing property linking. Actual Property Object extends this to include more elaborate attributes of the property.
  */
 @Schema(description = "This is lightweight property object that can be used as reference by definitions needing property linking. Actual Property Object extends this to include more elaborate attributes of the property.")
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2021-01-26T12:10:41.195Z[GMT]")
 public class Connection {
-  @SerializedName("id")
+  @JsonProperty("id")
   private String id = null;
 
-  @SerializedName("tenantId")
+  @JsonProperty("tenantId")
   private String tenantId = null;
 
-  @SerializedName("propertyId")
+  @JsonProperty("propertyId")
   private String propertyId = null;
 
-  @SerializedName("applicationNo")
+  @JsonProperty("applicationNo")
   private String applicationNo = null;
 
-  @SerializedName("applicationStatus")
+  @JsonProperty("applicationStatus")
   private String applicationStatus = null;
 
   /**
@@ -88,40 +86,40 @@ public class Connection {
         return StatusEnum.fromValue(String.valueOf(value));
       }
     }
-  }  @SerializedName("status")
+  }  @JsonProperty("status")
   private StatusEnum status = null;
 
-  @SerializedName("connectionNo")
+  @JsonProperty("connectionNo")
   private String connectionNo = null;
 
-  @SerializedName("oldConnectionNo")
+  @JsonProperty("oldConnectionNo")
   private String oldConnectionNo = null;
 
-  @SerializedName("documents")
+  @JsonProperty("documents")
   private List<Document> documents = null;
 
-  @SerializedName("plumberInfo")
+  @JsonProperty("plumberInfo")
   private List<PlumberInfo> plumberInfo = null;
 
-  @SerializedName("roadType")
+  @JsonProperty("roadType")
   private String roadType = null;
 
-  @SerializedName("roadCuttingArea")
+  @JsonProperty("roadCuttingArea")
   private Float roadCuttingArea = null;
 
-  @SerializedName("connectionExecutionDate")
+  @JsonProperty("connectionExecutionDate")
   private Long connectionExecutionDate = null;
 
-  @SerializedName("connectionCategory")
+  @JsonProperty("connectionCategory")
   private String connectionCategory = null;
 
-  @SerializedName("connectionType")
+  @JsonProperty("connectionType")
   private String connectionType = null;
 
-  @SerializedName("additionalDetails")
+  @JsonProperty("additionalDetails")
   private Object additionalDetails = null;
 
-  @SerializedName("auditDetails")
+  @JsonProperty("auditDetails")
   private AuditDetails auditDetails = null;
 
    /**

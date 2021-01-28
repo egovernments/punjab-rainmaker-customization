@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import com.google.gson.annotations.SerializedName;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 /**
@@ -25,31 +25,31 @@ import io.swagger.v3.oas.annotations.media.Schema;
 
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2021-01-26T12:10:41.195Z[GMT]")
 public class WaterConnection extends Connection {
-  @SerializedName("rainWaterHarvesting")
+  @JsonProperty("rainWaterHarvesting")
   private Boolean rainWaterHarvesting = null;
 
-  @SerializedName("waterSource")
+  @JsonProperty("waterSource")
   private String waterSource = null;
 
-  @SerializedName("meterId")
+  @JsonProperty("meterId")
   private String meterId = null;
 
-  @SerializedName("meterInstallationDate")
+  @JsonProperty("meterInstallationDate")
   private Long meterInstallationDate = null;
 
-  @SerializedName("proposedPipeSize")
+  @JsonProperty("proposedPipeSize")
   private Double proposedPipeSize = null;
 
-  @SerializedName("actualPipeSize")
+  @JsonProperty("actualPipeSize")
   private Double actualPipeSize = null;
 
-  @SerializedName("proposedTaps")
+  @JsonProperty("proposedTaps")
   private Double proposedTaps = null;
 
-  @SerializedName("actualTaps")
+  @JsonProperty("actualTaps")
   private Double actualTaps = null;
   
- @SerializedName("processInstance")
+ @JsonProperty("processInstance")
   private ProcessInstance processInstance = null;
  
   public ProcessInstance getProcessInstance() {
@@ -64,7 +64,7 @@ public Boolean getRainWaterHarvesting() {
 	return rainWaterHarvesting;
 }
 
-@SerializedName("documents")
+@JsonProperty("documents")
   private List<Document> documents = null;
 
   public WaterConnection rainWaterHarvesting(Boolean rainWaterHarvesting) {

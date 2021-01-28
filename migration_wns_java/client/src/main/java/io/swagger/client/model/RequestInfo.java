@@ -14,6 +14,8 @@ package io.swagger.client.model;
 
 import java.util.Objects;
 import java.util.Arrays;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.gson.TypeAdapter;
 import com.google.gson.annotations.JsonAdapter;
 import com.google.gson.annotations.SerializedName;
@@ -28,37 +30,37 @@ import java.io.IOException;
 @Schema(description = "RequestInfo should be used to carry meta information about the requests to the server as described in the fields below. All eGov APIs will use requestinfo as a part of the request body to carry this meta information. Some of this information will be returned back from the server as part of the ResponseInfo in the response body to ensure correlation.")
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2021-01-26T12:10:41.195Z[GMT]")
 public class RequestInfo {
-  @SerializedName("apiId")
+  @JsonProperty("apiId")
   private String apiId = null;
 
-  @SerializedName("ver")
+  @JsonProperty("ver")
   private String ver = null;
 
-  @SerializedName("ts")
+  @JsonProperty("ts")
   private Long ts = null;
 
-  @SerializedName("action")
+  @JsonProperty("action")
   private String action = null;
 
-  @SerializedName("did")
+  @JsonProperty("did")
   private String did = null;
 
-  @SerializedName("key")
+  @JsonProperty("key")
   private String key = null;
 
-  @SerializedName("msgId")
+  @JsonProperty("msgId")
   private String msgId = null;
 
-  @SerializedName("requesterId")
+  @JsonProperty("requesterId")
   private String requesterId = null;
 
-  @SerializedName("authToken")
+  @JsonProperty("authToken")
   private String authToken = null;
 
-  @SerializedName("userInfo")
+  @JsonProperty("userInfo")
   private UserInfo userInfo = null;
 
-  @SerializedName("correlationId")
+  @JsonProperty("correlationId")
   private String correlationId = null;
 
   public RequestInfo apiId(String apiId) {

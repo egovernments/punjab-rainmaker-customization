@@ -12,37 +12,28 @@
 
 package io.swagger.client.model;
 
-import java.util.Objects;
-import java.util.Arrays;
-import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.JsonAdapter;
-import com.google.gson.annotations.SerializedName;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-import io.swagger.client.model.AuditDetails;
-import io.swagger.client.model.Connection;
-import io.swagger.client.model.Document;
-import io.swagger.client.model.PlumberInfo;
-import io.swagger.v3.oas.annotations.media.Schema;
-import java.io.IOException;
 import java.math.BigDecimal;
-import java.util.List;
+import java.util.Objects;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import io.swagger.v3.oas.annotations.media.Schema;
 /**
  * SewerageConnection
  */
 
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2021-01-26T12:10:41.195Z[GMT]")
 public class SewerageConnection extends Connection {
-  @SerializedName("noOfWaterClosets")
+  @JsonProperty("noOfWaterClosets")
   private BigDecimal noOfWaterClosets = null;
 
-  @SerializedName("proposedWaterClosets")
+  @JsonProperty("proposedWaterClosets")
   private BigDecimal proposedWaterClosets = null;
 
-  @SerializedName("noOfToilets")
+  @JsonProperty("noOfToilets")
   private BigDecimal noOfToilets = null;
 
-  @SerializedName("proposedToilets")
+  @JsonProperty("proposedToilets")
   private BigDecimal proposedToilets = null;
 
   public SewerageConnection noOfWaterClosets(BigDecimal noOfWaterClosets) {

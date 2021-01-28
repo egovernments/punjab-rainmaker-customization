@@ -9,12 +9,14 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import io.swagger.client.model.Demand;
 import io.swagger.client.model.ProcessInstance;
 import io.swagger.client.model.RequestInfo;
 import io.swagger.client.model.WaterConnection;
@@ -22,6 +24,7 @@ import io.swagger.client.model.WaterConnectionRequest;
 import io.swagger.client.model.WaterConnectionResponse;
 
 @Service
+@Transactional
 public class ConnectionService {
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
@@ -41,7 +44,7 @@ public class ConnectionService {
 	@Autowired
 	private PropertyService propertyService;
 
-	public void migrate(String tenantId, String requestInfo) {
+	public void migrate(String tenantId, RequestInfo requestInfo) {
 
 		jdbcTemplate.execute("set search_path to " + tenantId);
 
@@ -51,16 +54,17 @@ public class ConnectionService {
 
 			try {
 				WaterConnection conn = objectMapper.readValue(json, WaterConnection.class);
-				String str = requestInfo.replace("\"RequestInfo\":", "");
-				RequestInfo info = objectMapper.readValue(str, RequestInfo.class);
+//				String str = requestInfo.replace("\"RequestInfo\":", "");
+//				RequestInfo info = objectMapper.readValue(str, RequestInfo.class);
 				conn.setPropertyId(propertyService.findProperty(conn));
+				conn.setTenantId(requestInfo.getUserInfo().getTenantId());
 				WaterConnectionRequest wcr = new WaterConnectionRequest();
 				ProcessInstance ps = new ProcessInstance();
 				ps.setAction("INITIATE");
 				conn.setProcessInstance(ps);
 
 				wcr.setWaterConnection(conn);
-				wcr.setRequestInfo(info);
+				wcr.setRequestInfo(requestInfo);
 
 				String ss = "{" + requestInfo + ", \"waterConnection\": " + json + " }";
 
@@ -77,6 +81,8 @@ public class ConnectionService {
 				WaterConnectionResponse waterResponse=	objectMapper.readValue(response, WaterConnectionResponse.class);
 
 				System.out.println("waterResponse" + waterResponse);
+				
+				Demand demand = new Demand();
 
 			} catch (JsonMappingException e) {
 				 System.err.println(e.getMessage());

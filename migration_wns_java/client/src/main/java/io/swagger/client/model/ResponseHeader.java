@@ -12,29 +12,29 @@
 
 package io.swagger.client.model;
 
+import java.io.IOException;
 import java.util.Objects;
-import java.util.Arrays;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.gson.TypeAdapter;
 import com.google.gson.annotations.JsonAdapter;
-import com.google.gson.annotations.SerializedName;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
-import io.swagger.client.model.Error;
+
 import io.swagger.v3.oas.annotations.media.Schema;
-import java.io.IOException;
 /**
  * ResponseHeader should be used to carry metadata information about the response from the server. apiId, ver and msgId in ResponseHeader should always correspond to the same values in respective request&#x27;s RequestHeader.
  */
 @Schema(description = "ResponseHeader should be used to carry metadata information about the response from the server. apiId, ver and msgId in ResponseHeader should always correspond to the same values in respective request's RequestHeader.")
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2021-01-26T12:10:41.195Z[GMT]")
 public class ResponseHeader {
-  @SerializedName("ts")
+  @JsonProperty("ts")
   private Long ts = null;
 
-  @SerializedName("resMsgId")
+  @JsonProperty("resMsgId")
   private String resMsgId = null;
 
-  @SerializedName("msgId")
+  @JsonProperty("msgId")
   private String msgId = null;
 
   /**
@@ -79,22 +79,22 @@ public class ResponseHeader {
         return StatusEnum.fromValue(String.valueOf(value));
       }
     }
-  }  @SerializedName("status")
+  }  @JsonProperty("status")
   private StatusEnum status = null;
 
-  @SerializedName("signature")
+  @JsonProperty("signature")
   private String signature = null;
 
-  @SerializedName("error")
+  @JsonProperty("error")
   private Error error = null;
 
-  @SerializedName("information")
+  @JsonProperty("information")
   private Object information = null;
 
-  @SerializedName("debug")
+  @JsonProperty("debug")
   private Object debug = null;
 
-  @SerializedName("additionalInfo")
+  @JsonProperty("additionalInfo")
   private Object additionalInfo = null;
 
   public ResponseHeader ts(Long ts) {

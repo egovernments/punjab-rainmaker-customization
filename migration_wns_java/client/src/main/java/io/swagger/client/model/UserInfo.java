@@ -12,50 +12,44 @@
 
 package io.swagger.client.model;
 
-import java.util.Objects;
-import java.util.Arrays;
-import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.JsonAdapter;
-import com.google.gson.annotations.SerializedName;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-import io.swagger.client.model.Role;
-import io.swagger.client.model.TenantRole;
-import io.swagger.v3.oas.annotations.media.Schema;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import io.swagger.v3.oas.annotations.media.Schema;
 /**
  * This is acting ID token of the authenticated user on the server. Any value provided by the clients will be ignored and actual user based on authtoken will be used on the server.
  */
 @Schema(description = "This is acting ID token of the authenticated user on the server. Any value provided by the clients will be ignored and actual user based on authtoken will be used on the server.")
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2021-01-26T12:10:41.195Z[GMT]")
 public class UserInfo {
-  @SerializedName("tenantId")
+  @JsonProperty("tenantId")
   private String tenantId = null;
 
-  @SerializedName("uuid")
+  @JsonProperty("uuid")
   private String uuid = null;
 
-  @SerializedName("userName")
+  @JsonProperty("userName")
   private String userName = null;
 
-  @SerializedName("password")
+  @JsonProperty("password")
   private String password = null;
 
-  @SerializedName("idToken")
+  @JsonProperty("idToken")
   private String idToken = null;
 
-  @SerializedName("mobile")
+  @JsonProperty("mobile")
   private String mobile = null;
 
-  @SerializedName("email")
+  @JsonProperty("email")
   private String email = null;
 
-  @SerializedName("primaryrole")
+  @JsonProperty("primaryrole")
   private List<Role> primaryrole = new ArrayList<Role>();
 
-  @SerializedName("additionalroles")
+  @JsonProperty("additionalroles")
   private List<TenantRole> additionalroles = null;
 
   public UserInfo tenantId(String tenantId) {

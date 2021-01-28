@@ -12,29 +12,23 @@
 
 package io.swagger.client.model;
 
-import java.util.Objects;
-import java.util.Arrays;
-import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.JsonAdapter;
-import com.google.gson.annotations.SerializedName;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-import io.swagger.client.model.ResponseInfo;
-import io.swagger.client.model.WaterConnection;
-import io.swagger.v3.oas.annotations.media.Schema;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import io.swagger.v3.oas.annotations.media.Schema;
 /**
  * Contains the ResponseHeader and the created/updated property
  */
 @Schema(description = "Contains the ResponseHeader and the created/updated property")
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2021-01-26T12:10:41.195Z[GMT]")
 public class WaterConnectionResponse {
-  @SerializedName("ResponseInfo")
+  @JsonProperty("ResponseInfo")
   private ResponseInfo responseInfo = null;
 
-  @SerializedName("WaterConnection")
+  @JsonProperty("WaterConnection")
   private List<WaterConnection> WaterConnection = null;
 
   public WaterConnectionResponse responseInfo(ResponseInfo responseInfo) {

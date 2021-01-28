@@ -1,0 +1,46 @@
+{
+	"info": {
+		"_postman_id": "b12e0bc8-cc0b-4331-be1c-fa9829eded95",
+		"name": "WnS Migration",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "migration water connection",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"RequestInfo\": {\n        \"apiId\": \"Rainmaker\",\n        \"ver\": \".01\",\n        \"action\": \"_update\",\n        \"did\": \"1\",\n        \"key\": \"\",\n        \"msgId\": \"20170310130900|en_IN\",\n        \"requesterId\": \"\",\n        \"authToken\": \"e64431f2-bc82-40e9-b467-9ee42e8ae023\",\n        \"userInfo\": {\n            \"uuid\": \"3283157d-4219-4b97-ba29-8e7f97c35478\",\n            \"userName\":\"EMP-0-000121\",\n            \"password\": \"eGov@123\",\n            \"tenantId\":\"pb.amritsar\"\n        }\n    }\n}"
+				},
+				"url": {
+					"raw": "localhost:8280/migrate/water/connection?tenantId=amritsar",
+					"host": [
+						"localhost"
+					],
+					"port": "8280",
+					"path": [
+						"migrate",
+						"water",
+						"connection"
+					],
+					"query": [
+						{
+							"key": "tenantId",
+							"value": "amritsar"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

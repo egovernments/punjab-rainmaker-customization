@@ -12,41 +12,41 @@
 
 package io.swagger.client.model;
 
+import java.io.IOException;
 import java.util.Objects;
-import java.util.Arrays;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.gson.TypeAdapter;
 import com.google.gson.annotations.JsonAdapter;
-import com.google.gson.annotations.SerializedName;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
-import io.swagger.client.model.AuditDetails;
+
 import io.swagger.v3.oas.annotations.media.Schema;
-import java.io.IOException;
 /**
  * PlumberInfo
  */
 
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2021-01-26T12:10:41.195Z[GMT]")
 public class PlumberInfo {
-  @SerializedName("tenantId")
+  @JsonProperty("tenantId")
   private String tenantId = null;
 
-  @SerializedName("name")
+  @JsonProperty("name")
   private String name = null;
 
-  @SerializedName("licenseNo")
+  @JsonProperty("licenseNo")
   private String licenseNo = null;
 
-  @SerializedName("mobileNumber")
+  @JsonProperty("mobileNumber")
   private String mobileNumber = null;
 
-  @SerializedName("gender")
+  @JsonProperty("gender")
   private String gender = null;
 
-  @SerializedName("fatherOrHusbandName")
+  @JsonProperty("fatherOrHusbandName")
   private String fatherOrHusbandName = null;
 
-  @SerializedName("correspondenceAddress")
+  @JsonProperty("correspondenceAddress")
   private String correspondenceAddress = null;
 
   /**
@@ -90,13 +90,13 @@ public class PlumberInfo {
         return RelationshipEnum.fromValue(String.valueOf(value));
       }
     }
-  }  @SerializedName("relationship")
+  }  @JsonProperty("relationship")
   private RelationshipEnum relationship = null;
 
-  @SerializedName("additionalDetails")
+  @JsonProperty("additionalDetails")
   private Object additionalDetails = null;
 
-  @SerializedName("auditDetails")
+  @JsonProperty("auditDetails")
   private AuditDetails auditDetails = null;
 
   public PlumberInfo tenantId(String tenantId) {

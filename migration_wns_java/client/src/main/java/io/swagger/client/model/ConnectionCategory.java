@@ -13,24 +13,20 @@
 package io.swagger.client.model;
 
 import java.util.Objects;
-import java.util.Arrays;
-import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.JsonAdapter;
-import com.google.gson.annotations.SerializedName;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import io.swagger.v3.oas.annotations.media.Schema;
-import java.io.IOException;
 /**
  * ConnectionCategory
  */
 
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2021-01-26T12:10:41.195Z[GMT]")
 public class ConnectionCategory {
-  @SerializedName("code")
+  @JsonProperty("code")
   private String code = null;
 
-  @SerializedName("active")
+  @JsonProperty("active")
   private Boolean active = null;
 
   public ConnectionCategory code(String code) {

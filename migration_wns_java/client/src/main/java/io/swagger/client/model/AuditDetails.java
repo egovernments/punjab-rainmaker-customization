@@ -14,6 +14,8 @@ package io.swagger.client.model;
 
 import java.util.Objects;
 import java.util.Arrays;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.gson.TypeAdapter;
 import com.google.gson.annotations.JsonAdapter;
 import com.google.gson.annotations.SerializedName;
@@ -27,16 +29,16 @@ import java.io.IOException;
 @Schema(description = "Collection of audit related fields used by most models")
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2021-01-26T12:10:41.195Z[GMT]")
 public class AuditDetails {
-  @SerializedName("createdBy")
+  @JsonProperty("createdBy")
   private String createdBy = null;
 
-  @SerializedName("lastModifiedBy")
+  @JsonProperty("lastModifiedBy")
   private String lastModifiedBy = null;
 
-  @SerializedName("createdTime")
+  @JsonProperty("createdTime")
   private Long createdTime = null;
 
-  @SerializedName("lastModifiedTime")
+  @JsonProperty("lastModifiedTime")
   private Long lastModifiedTime = null;
 
   public AuditDetails createdBy(String createdBy) {
