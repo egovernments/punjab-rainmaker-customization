@@ -246,7 +246,7 @@ serviceMaps:
 
           - jsonPath: $.WaterConnection.plumberInfo.*.relationship
 
-    - query: UPDATE eg_ws_connectionholder set tenantid=?, status=?, userid=?, lastmodifiedby=?, lastmodifiedtime=? where connectionid=?;
+    - query: UPDATE eg_ws_connectionholder set tenantid=?, status=?, userid=?,connectionholdertype=?,relationship=?, lastmodifiedby=?, lastmodifiedtime=? where connectionid=?;
       basePath: $.WaterConnection.connectionHolders.*
       jsonMaps:
 
@@ -255,6 +255,10 @@ serviceMaps:
        - jsonPath: $.WaterConnection.connectionHolders.*.status
 
        - jsonPath: $.WaterConnection.connectionHolders.*.uuid
+       
+       - jsonPath: $.WaterConnection.connectionHolders.*.ownerType
+       
+       - jsonPath: $.WaterConnection.connectionHolders.*.relationship
 
        - jsonPath: $.WaterConnection.connectionHolders.*.lastModifiedBy
 
