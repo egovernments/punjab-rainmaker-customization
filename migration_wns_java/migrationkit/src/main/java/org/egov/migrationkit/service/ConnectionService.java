@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -29,6 +30,7 @@ public class ConnectionService {
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
 
+	@JsonProperty("host")
 	@Value("${egov.services.hosturl}")
 	private String host = null;
 
@@ -43,10 +45,14 @@ public class ConnectionService {
 
 	@Autowired
 	private PropertyService propertyService;
+	@Autowired
+	private RecordService recordService;
 
 	public void migrate(String tenantId, RequestInfo requestInfo) {
 
 		jdbcTemplate.execute("set search_path to " + tenantId);
+		
+		jdbcTemplate.execute(Sqls.waterRecord_table);
 
 		List<String> queryForList = jdbcTemplate.queryForList(Sqls.waterQuery, String.class);
 
@@ -54,9 +60,12 @@ public class ConnectionService {
 
 			try {
 				WaterConnection conn = objectMapper.readValue(json, WaterConnection.class);
+ 
 //				String str = requestInfo.replace("\"RequestInfo\":", "");
 //				RequestInfo info = objectMapper.readValue(str, RequestInfo.class);
-				conn.setPropertyId(propertyService.findProperty(conn));
+ 
+				recordService.recordWaterMigration(conn);
+ 				conn.setPropertyId(propertyService.findProperty(conn));
 				conn.setTenantId(requestInfo.getUserInfo().getTenantId());
 				WaterConnectionRequest wcr = new WaterConnectionRequest();
 				ProcessInstance ps = new ProcessInstance();
@@ -79,7 +88,8 @@ public class ConnectionService {
 				System.out.println("Response=" + response);
 
 				WaterConnectionResponse waterResponse=	objectMapper.readValue(response, WaterConnectionResponse.class);
-
+		       
+				recordService.updateWaterMigration(waterResponse.getWaterConnection().get(0));
 				System.out.println("waterResponse" + waterResponse);
 				
 				Demand demand = new Demand();
@@ -91,6 +101,7 @@ public class ConnectionService {
 			}
 
 		}
+		System.out.println("Migration completed for "+tenantId);
 	}
 
 	private String getRequestInfoString() {
@@ -99,6 +110,11 @@ public class ConnectionService {
 
 		return "";
 
+	}
+
+	public void migratev2(String tenantId, RequestInfo requestInfo) {
+		 
+		
 	}
 
 }

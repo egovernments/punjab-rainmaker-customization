@@ -16,29 +16,18 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
- 
 import com.fasterxml.jackson.annotation.JsonProperty;
- 
- 
-
- 
-
-import io.swagger.v3.oas.annotations.media.Schema;
 /**
  * Contains the ResponseHeader and the created/updated property
  */
-@Schema(description = "Contains the ResponseHeader and the created/updated property")
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2021-01-26T12:10:41.195Z[GMT]")
-public class WaterConnectionResponse {
+public class SewerageConnectionResponse {
   @JsonProperty("ResponseInfo")
   private ResponseInfo responseInfo = null;
 
- 
-  @JsonProperty("WaterConnection")
-  private List<WaterConnection> waterConnection = null;
- 
+  @JsonProperty("SewerageConnections")
+  private List<SewerageConnection> sewerageConnections = null;
 
-  public WaterConnectionResponse responseInfo(ResponseInfo responseInfo) {
+  public SewerageConnectionResponse responseInfo(ResponseInfo responseInfo) {
     this.responseInfo = responseInfo;
     return this;
   }
@@ -47,7 +36,6 @@ public class WaterConnectionResponse {
    * Get responseInfo
    * @return responseInfo
   **/
-  @Schema(description = "")
   public ResponseInfo getResponseInfo() {
     return responseInfo;
   }
@@ -56,30 +44,29 @@ public class WaterConnectionResponse {
     this.responseInfo = responseInfo;
   }
 
-  public WaterConnectionResponse waterConnection(List<WaterConnection> waterConnection) {
-    this.waterConnection = waterConnection;
+  public SewerageConnectionResponse sewerageConnections(List<SewerageConnection> sewerageConnections) {
+    this.sewerageConnections = sewerageConnections;
     return this;
   }
 
-  public WaterConnectionResponse addWaterConnectionItem(WaterConnection waterConnectionItem) {
-    if (this.waterConnection == null) {
-      this.waterConnection = new ArrayList<WaterConnection>();
+  public SewerageConnectionResponse addSewerageConnectionsItem(SewerageConnection sewerageConnectionsItem) {
+    if (this.sewerageConnections == null) {
+      this.sewerageConnections = new ArrayList<SewerageConnection>();
     }
-    this.waterConnection.add(waterConnectionItem);
+    this.sewerageConnections.add(sewerageConnectionsItem);
     return this;
   }
 
    /**
-   * Get waterConnection
-   * @return waterConnection
+   * Get sewerageConnections
+   * @return sewerageConnections
   **/
-  @Schema(description = "")
-  public List<WaterConnection> getWaterConnection() {
-    return waterConnection;
+  public List<SewerageConnection> getSewerageConnections() {
+    return sewerageConnections;
   }
 
-  public void setWaterConnection(List<WaterConnection> waterConnection) {
-    this.waterConnection = waterConnection;
+  public void setSewerageConnections(List<SewerageConnection> sewerageConnections) {
+    this.sewerageConnections = sewerageConnections;
   }
 
 
@@ -91,24 +78,24 @@ public class WaterConnectionResponse {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    WaterConnectionResponse waterConnectionResponse = (WaterConnectionResponse) o;
-    return Objects.equals(this.responseInfo, waterConnectionResponse.responseInfo) &&
-        Objects.equals(this.waterConnection, waterConnectionResponse.waterConnection);
+    SewerageConnectionResponse sewerageConnectionResponse = (SewerageConnectionResponse) o;
+    return Objects.equals(this.responseInfo, sewerageConnectionResponse.responseInfo) &&
+        Objects.equals(this.sewerageConnections, sewerageConnectionResponse.sewerageConnections);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(responseInfo, waterConnection);
+    return Objects.hash(responseInfo, sewerageConnections);
   }
 
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class WaterConnectionResponse {\n");
+    sb.append("class SewerageConnectionResponse {\n");
     
     sb.append("    responseInfo: ").append(toIndentedString(responseInfo)).append("\n");
-    sb.append("    waterConnection: ").append(toIndentedString(waterConnection)).append("\n");
+    sb.append("    sewerageConnections: ").append(toIndentedString(sewerageConnections)).append("\n");
     sb.append("}");
     return sb.toString();
   }

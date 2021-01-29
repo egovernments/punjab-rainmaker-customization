@@ -48,8 +48,8 @@ public class ResponseInfo {
    */
   @JsonAdapter(StatusEnum.Adapter.class)
   public enum StatusEnum {
-    SUCCESSFUL("SUCCESSFUL"),
-    FAILED("FAILED");
+    SUCCESSFUL("successful"),
+    FAILED("failed");
 
     private String value;
 

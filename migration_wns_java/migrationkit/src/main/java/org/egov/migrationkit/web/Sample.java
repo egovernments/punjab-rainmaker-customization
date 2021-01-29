@@ -1,11 +1,4 @@
 package org.egov.migrationkit.web;
-import io.swagger.client.*;
-import io.swagger.client.auth.*;
-import io.swagger.client.model.*;
-import io.swagger.client.api.SewerageApi;
-
-import java.io.File;
-import java.util.*;
 
 public class Sample {
 	  public static void main(String[] args) {

@@ -16,27 +16,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
- 
 import com.fasterxml.jackson.annotation.JsonProperty;
- 
- 
-
- 
-
-import io.swagger.v3.oas.annotations.media.Schema;
 /**
  * Contains the ResponseHeader and the created/updated property
  */
-@Schema(description = "Contains the ResponseHeader and the created/updated property")
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2021-01-26T12:10:41.195Z[GMT]")
 public class WaterConnectionResponse {
   @JsonProperty("ResponseInfo")
   private ResponseInfo responseInfo = null;
 
- 
   @JsonProperty("WaterConnection")
   private List<WaterConnection> waterConnection = null;
- 
 
   public WaterConnectionResponse responseInfo(ResponseInfo responseInfo) {
     this.responseInfo = responseInfo;
@@ -47,7 +36,6 @@ public class WaterConnectionResponse {
    * Get responseInfo
    * @return responseInfo
   **/
-  @Schema(description = "")
   public ResponseInfo getResponseInfo() {
     return responseInfo;
   }
@@ -73,7 +61,6 @@ public class WaterConnectionResponse {
    * Get waterConnection
    * @return waterConnection
   **/
-  @Schema(description = "")
   public List<WaterConnection> getWaterConnection() {
     return waterConnection;
   }
