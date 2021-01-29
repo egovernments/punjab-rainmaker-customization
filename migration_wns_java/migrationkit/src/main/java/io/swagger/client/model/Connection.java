@@ -17,9 +17,20 @@ import java.util.List;
 import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 /**
  * This is lightweight property object that can be used as reference by definitions needing property linking. Actual Property Object extends this to include more elaborate attributes of the property.
  */
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
+@Setter
+@SuperBuilder
 public class Connection {
   @JsonProperty("id")
   private String id = null;
