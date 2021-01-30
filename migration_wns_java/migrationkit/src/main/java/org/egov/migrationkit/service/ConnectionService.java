@@ -47,6 +47,7 @@ public class ConnectionService {
 	private PropertyService propertyService;
 	@Autowired
 	private RecordService recordService;
+	
 
 	public void migrate(String tenantId, RequestInfo requestInfo) {
 
@@ -60,28 +61,16 @@ public class ConnectionService {
 
 			try {
 				WaterConnection conn = objectMapper.readValue(json, WaterConnection.class);
- 
-//				String str = requestInfo.replace("\"RequestInfo\":", "");
-//				RequestInfo info = objectMapper.readValue(str, RequestInfo.class);
- 
-				recordService.recordWaterMigration(conn);
- 				conn.setPropertyId(propertyService.findProperty(conn));
+ 				recordService.recordWaterMigration(conn);
+ 				WaterConnectionRequest wcr = new WaterConnectionRequest();
 				conn.setTenantId(requestInfo.getUserInfo().getTenantId());
-				WaterConnectionRequest wcr = new WaterConnectionRequest();
 				ProcessInstance ps = new ProcessInstance();
 				ps.setAction("INITIATE");
 				conn.setProcessInstance(ps);
-
 				wcr.setWaterConnection(conn);
 				wcr.setRequestInfo(requestInfo);
-
-				String ss = "{" + requestInfo + ", \"waterConnection\": " + json + " }";
-
-				HttpHeaders headers = new HttpHeaders();
-				headers.setContentType(MediaType.APPLICATION_JSON);
-				HttpEntity<String> requests = new HttpEntity<String>(ss, headers);
-				System.out.println("request: " + ss);
-				Object[] o = new Object[1];
+				conn.setPropertyId(propertyService.findProperty(wcr,json));
+				
 
 				String response = restTemplate.postForObject(host + "/" + waterUrl, wcr, String.class);
 

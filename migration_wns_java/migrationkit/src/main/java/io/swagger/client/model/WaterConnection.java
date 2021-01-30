@@ -200,12 +200,14 @@ public Boolean getRainWaterHarvesting() {
     this.actualTaps = actualTaps;
   }
 
-  public WaterConnection documents(List<Document> documents) {
+  @Override
+public WaterConnection documents(List<Document> documents) {
     this.documents = documents;
     return this;
   }
 
-  public WaterConnection addDocumentsItem(Document documentsItem) {
+  @Override
+public WaterConnection addDocumentsItem(Document documentsItem) {
     if (this.documents == null) {
       this.documents = new ArrayList<Document>();
     }
@@ -217,11 +219,13 @@ public Boolean getRainWaterHarvesting() {
    * The documents attached by owner for exemption.
    * @return documents
   **/
-  public List<Document> getDocuments() {
+  @Override
+public List<Document> getDocuments() {
     return documents;
   }
 
-  public void setDocuments(List<Document> documents) {
+  @Override
+public void setDocuments(List<Document> documents) {
     this.documents = documents;
   }
 
