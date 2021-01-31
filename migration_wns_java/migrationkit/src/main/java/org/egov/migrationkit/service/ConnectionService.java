@@ -51,6 +51,7 @@ public class ConnectionService {
 	private PropertyService propertyService;
 	@Autowired
 	private RecordService recordService;
+	
 
 	public void migrate(String tenantId, RequestInfo requestInfo) {
 
@@ -67,20 +68,17 @@ public class ConnectionService {
 				Map data = objectMapper.readValue(json, Map.class);
 				
 				WaterConnection connection = mapWaterConnection(data);
-				connection.setPropertyId(propertyService.findProperty(connection));
+
 				connection.setTenantId(requestInfo.getUserInfo().getTenantId());
 				connection.setProcessInstance(ProcessInstance.builder().action("INITIATE").build());
 				
-//				String str = requestInfo.replace("\"RequestInfo\":", "");
-//				RequestInfo info = objectMapper.readValue(str, RequestInfo.class);
- 
 				recordService.recordWaterMigration(connection);
  				
 				WaterConnectionRequest waterRequest = new WaterConnectionRequest();
 				
-
 				waterRequest.setWaterConnection(connection);
 				waterRequest.setRequestInfo(requestInfo);
+				connection.setPropertyId(propertyService.findProperty(waterRequest,json));
 
 				String ss = "{" + requestInfo + ", \"waterConnection\": " + waterRequest + " }";
 
@@ -92,12 +90,12 @@ public class ConnectionService {
 
 				String response = restTemplate.postForObject(host + "/" + waterUrl, waterRequest, String.class);
 
-				System.out.println("Response=" + response);
+				log.info("Response=" + response);
 
 				WaterConnectionResponse waterResponse=	objectMapper.readValue(response, WaterConnectionResponse.class);
 		       
 				recordService.updateWaterMigration(waterResponse.getWaterConnection().get(0));
-				System.out.println("waterResponse" + waterResponse);
+				log.info("waterResponse" + waterResponse);
 				
 				Demand demand = new Demand();
 
@@ -108,7 +106,7 @@ public class ConnectionService {
 			}
 
 		}
-		System.out.println("Migration completed for "+tenantId);
+		log.info("Migration completed for "+tenantId);
 	}
 
 	private String getRequestInfoString() {
