@@ -22,7 +22,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * OwnerInfo
  */
 
-public class OwnerInfo {
+public class OwnerInfo extends User{
   @JsonProperty("name")
   private String name = null;
 

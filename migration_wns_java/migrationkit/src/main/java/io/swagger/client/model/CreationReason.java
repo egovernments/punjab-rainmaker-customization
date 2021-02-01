@@ -12,11 +12,6 @@
 
 package io.swagger.client.model;
 
-import java.io.IOException;
-
-import net.minidev.json.reader.JsonWriter;
-import net.minidev.json.writer.JsonReader;
-
 /**
  * New property comes into system either property is newly constructed or existing property got sub divided. Here the reason for creation will be captured.
  */

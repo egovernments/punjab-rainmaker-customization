@@ -46,20 +46,19 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-@Getter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Setter
 @Builder
-public class DemandRequest {
+public class DemandResponse {
 
-	@JsonProperty("RequestInfo")
-	private RequestInfo requestInfo;
-	
+	@JsonProperty("ResponseInfo")
+	private ResponseInfo responseInfo;
+
 	@JsonProperty("Demands")
 	private List<Demand> demands = new ArrayList<>();
+
 }

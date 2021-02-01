@@ -1,5 +1,6 @@
 package org.egov.migrationkit.service;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -20,11 +21,14 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.swagger.client.model.Demand;
+import io.swagger.client.model.DemandRequest;
 import io.swagger.client.model.ProcessInstance;
 import io.swagger.client.model.RequestInfo;
 import io.swagger.client.model.WaterConnection;
 import io.swagger.client.model.WaterConnectionRequest;
 import io.swagger.client.model.WaterConnectionResponse;
+import io.swagger.client.model.Property;
+
 import lombok.extern.slf4j.Slf4j;
 
 @Service
@@ -52,6 +56,9 @@ public class ConnectionService {
 	@Autowired
 	private RecordService recordService;
 	
+	@Autowired
+	private DemandService demandService;
+	
 
 	public void migrate(String tenantId, RequestInfo requestInfo) {
 
@@ -78,15 +85,12 @@ public class ConnectionService {
 				
 				waterRequest.setWaterConnection(connection);
 				waterRequest.setRequestInfo(requestInfo);
-				connection.setPropertyId(propertyService.findProperty(waterRequest,json));
+				Property property = propertyService.findProperty(waterRequest,json);
+				connection.setPropertyId(property.getId());
 
 				String ss = "{" + requestInfo + ", \"waterConnection\": " + waterRequest + " }";
 
-				HttpHeaders headers = new HttpHeaders();
-				headers.setContentType(MediaType.APPLICATION_JSON);
-				HttpEntity<String> requests = new HttpEntity<String>(ss, headers);
 				log.info("request: " + ss);
-				Object[] o = new Object[1];
 
 				String response = restTemplate.postForObject(host + "/" + waterUrl, waterRequest, String.class);
 
@@ -94,10 +98,29 @@ public class ConnectionService {
 
 				WaterConnectionResponse waterResponse=	objectMapper.readValue(response, WaterConnectionResponse.class);
 		       
-				recordService.updateWaterMigration(waterResponse.getWaterConnection().get(0));
-				log.info("waterResponse" + waterResponse);
+				WaterConnection wtrConnResp = null;
+				if(waterResponse!=null && waterResponse.getWaterConnection() != null 
+						&& !waterResponse.getWaterConnection().isEmpty()) {
+					
+					wtrConnResp = waterResponse.getWaterConnection().get(0);
+					
+					String consumerCode = wtrConnResp.getConnectionNo() !=null ? wtrConnResp.getConnectionNo()
+							: wtrConnResp.getApplicationNo();
+					
+					List<Demand> demandRequestList = demandService.prepareDemandRequest(data, WSConstants.WATER_BUSINESS_SERVICE, 
+							consumerCode, requestInfo.getUserInfo().getTenantId(), property.getOwners().get(0));
+					
+					List demandResponseList = demandService.saveDemand(requestInfo, demandRequestList);
+					
+					log.info("Demand Create Request: ", demandRequestList);
+					log.info("Demand Create Respone: ", demandResponseList);
+					if(!demandRequestList.isEmpty())
+						demandService.fetchBill(demandRequestList, requestInfo);
+					
+					recordService.updateWaterMigration(wtrConnResp);
+					log.info("waterResponse" + waterResponse);
+				}
 				
-				Demand demand = new Demand();
 
 			} catch (JsonMappingException e) {
 				log.error(e.getMessage());
@@ -141,10 +164,8 @@ public class ConnectionService {
 
 		}
 
-//		.propertyId()
-//		.connectionNo()
 		return waterConnection;
 
 	}
-
+	
 }

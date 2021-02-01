@@ -6,11 +6,22 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 /**
  * A Object which holds the basic info about the revenue assessment for which the demand is generated like module name, consumercode, owner, etc.
  */
 
 
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
+@Setter
+@Builder
 public class Demand   {
 	
         @JsonProperty("id")
@@ -56,158 +67,7 @@ public class Demand   {
         private Boolean isPaymentCompleted = false;
         
         
-
-        public String getId() {
-			return id;
-		}
-
-
-		public String getTenantId() {
-			return tenantId;
-		}
-
-
-		public String getConsumerCode() {
-			return consumerCode;
-		}
-
-
-		public String getConsumerType() {
-			return consumerType;
-		}
-
-
-		public String getBusinessService() {
-			return businessService;
-		}
-
-
-		public User getPayer() {
-			return payer;
-		}
-
-
-		public Long getTaxPeriodFrom() {
-			return taxPeriodFrom;
-		}
-
-
-		public Long getTaxPeriodTo() {
-			return taxPeriodTo;
-		}
-
-
-		public List<DemandDetail> getDemandDetails() {
-			return demandDetails;
-		}
-
-
-		public AuditDetails getAuditDetails() {
-			return auditDetails;
-		}
-
-
-		public Long getBillExpiryTime() {
-			return billExpiryTime;
-		}
-
-
-		public Object getAdditionalDetails() {
-			return additionalDetails;
-		}
-
-
-		public BigDecimal getMinimumAmountPayable() {
-			return minimumAmountPayable;
-		}
-
-
-		public Boolean getIsPaymentCompleted() {
-			return isPaymentCompleted;
-		}
-
-
-		public StatusEnum getStatus() {
-			return status;
-		}
-
-
-		public void setId(String id) {
-			this.id = id;
-		}
-
-
-		public void setTenantId(String tenantId) {
-			this.tenantId = tenantId;
-		}
-
-
-		public void setConsumerCode(String consumerCode) {
-			this.consumerCode = consumerCode;
-		}
-
-
-		public void setConsumerType(String consumerType) {
-			this.consumerType = consumerType;
-		}
-
-
-		public void setBusinessService(String businessService) {
-			this.businessService = businessService;
-		}
-
-
-		public void setPayer(User payer) {
-			this.payer = payer;
-		}
-
-
-		public void setTaxPeriodFrom(Long taxPeriodFrom) {
-			this.taxPeriodFrom = taxPeriodFrom;
-		}
-
-
-		public void setTaxPeriodTo(Long taxPeriodTo) {
-			this.taxPeriodTo = taxPeriodTo;
-		}
-
-
-		public void setDemandDetails(List<DemandDetail> demandDetails) {
-			this.demandDetails = demandDetails;
-		}
-
-
-		public void setAuditDetails(AuditDetails auditDetails) {
-			this.auditDetails = auditDetails;
-		}
-
-
-		public void setBillExpiryTime(Long billExpiryTime) {
-			this.billExpiryTime = billExpiryTime;
-		}
-
-
-		public void setAdditionalDetails(Object additionalDetails) {
-			this.additionalDetails = additionalDetails;
-		}
-
-
-		public void setMinimumAmountPayable(BigDecimal minimumAmountPayable) {
-			this.minimumAmountPayable = minimumAmountPayable;
-		}
-
-
-		public void setIsPaymentCompleted(Boolean isPaymentCompleted) {
-			this.isPaymentCompleted = isPaymentCompleted;
-		}
-
-
-		public void setStatus(StatusEnum status) {
-			this.status = status;
-		}
-
-
-			/**
+ /**
    * Gets or Sets status
    */
   public enum StatusEnum {

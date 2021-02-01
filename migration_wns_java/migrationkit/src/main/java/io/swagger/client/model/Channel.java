@@ -12,11 +12,6 @@
 
 package io.swagger.client.model;
 
-import java.io.IOException;
-
-import net.minidev.json.reader.JsonWriter;
-import net.minidev.json.writer.JsonReader;
-
 /**
  * constructionDetail details can be created from different channels Eg. System (properties created by ULB officials), CFC Counter (From citizen faciliation counters) etc. Here we are defining some known channels, there can be more client to client.
  */
