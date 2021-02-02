@@ -380,7 +380,7 @@
               },
               {
 
-                "text": "{{fieldFee}}",
+                "text": "₹ {{fieldFee}}",
 
                 "border": [
                   false,
@@ -1003,7 +1003,7 @@
               },
               {
 
-                "text": "{{fieldFee}}",
+                "text": "₹ {{fieldFee}}",
 
                 "border": [
                   false,
