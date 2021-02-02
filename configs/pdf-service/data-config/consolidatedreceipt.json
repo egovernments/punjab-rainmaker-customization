@@ -70,22 +70,22 @@
               {
                 "variable": "fieldFee", 
                 "value": {
-                  "path": "$.paymentDetails[0].bill.billDetails[0].billAccountDetails[?(@.taxHeadCode == 'RT.LAND_RENT_FIELD_FEE')].amount"
+                  "path": "$.paymentDetails[0].additionalDetails.fieldfee"
                 }
               }, {
                 "variable": "taxAmount", 
                 "value": {
-                  "path": "$.paymentDetails[0].bill.billDetails[0].billAccountDetails[?(@.taxHeadCode == 'RT.LAND_RENT_TAX')].amount"
+                  "path": "$.paymentDetails[0].additionalDetails.tax"
                 }
               }, {
                 "variable": "cgst", 
                 "value": {
-                  "path": "$.paymentDetails[0].bill.billDetails[0].billAccountDetails[?(@.taxHeadCode == 'RT.LAND_RENT_CGST')].amount"
+                  "path": "$.paymentDetails[0].additionalDetails.cgst"
                 }
               }, {
                 "variable": "sgst", 
                 "value": {
-                  "path": "$.paymentDetails[0].bill.billDetails[0].billAccountDetails[?(@.taxHeadCode == 'RT.LAND_RENT_SGST')].amount"
+                  "path": "$.paymentDetails[0].additionalDetails.sgst"
                 }
               },
 
