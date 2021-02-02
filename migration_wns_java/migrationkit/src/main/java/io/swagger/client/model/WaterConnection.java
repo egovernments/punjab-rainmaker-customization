@@ -55,6 +55,11 @@ public class WaterConnection extends Connection {
 
   @JsonProperty("actualTaps")
   private Double actualTaps = null;
+  @JsonProperty("applicantaddress")
+  private Address applicantAddress=null;
+  
+  @JsonProperty("propertyType")
+  private String propertyType=null;
   
  @JsonProperty("processInstance")
   private ProcessInstance processInstance = null;
@@ -295,5 +300,21 @@ public void setDocuments(List<Document> documents) {
     }
     return o.toString().replace("\n", "\n    ");
   }
+
+public Address getApplicantAddress() {
+	return applicantAddress;
+}
+
+public void setApplicantAddress(Address applicantAddress) {
+	this.applicantAddress = applicantAddress;
+}
+
+public String getPropertyType() {
+	return propertyType;
+}
+
+public void setPropertyType(String propertyType) {
+	this.propertyType = propertyType;
+}
 
 }

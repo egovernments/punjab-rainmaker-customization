@@ -18,6 +18,7 @@ package io.swagger.client.model;
  
 public enum Status {
   ACTIVE("ACTIVE"),
+  INWORKFLOW("INWORKFLOW"),
   INACTIVE("INACTIVE");
 
   private String value;

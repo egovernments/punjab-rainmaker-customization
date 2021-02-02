@@ -85,9 +85,20 @@ public class Property {
 
   @JsonProperty("unit")
   private Unit unit = null;
+  
+  	@JsonProperty("units")
+	private List<Unit> units;
 
   @JsonProperty("additionalDetails")
   private Object additionalDetails = null;
+  
+
+  @JsonProperty("totalConstructedArea")
+  private BigDecimal totalConstructedArea = null;
+  
+  @JsonProperty("usageCategory")
+  private String usageCategory = null;
+
 
   public Property id(String id) {
     this.id = id;
@@ -557,5 +568,29 @@ public class Property {
     }
     return o.toString().replace("\n", "\n    ");
   }
+
+public BigDecimal getTotalConstructedArea() {
+	return totalConstructedArea;
+}
+
+public void setTotalConstructedArea(BigDecimal totalConstructedArea) {
+	this.totalConstructedArea = totalConstructedArea;
+}
+
+public String getUsageCategory() {
+	return usageCategory;
+}
+
+public void setUsageCategory(String usageCategory) {
+	this.usageCategory = usageCategory;
+}
+
+public List<Unit> getUnits() {
+	return units;
+}
+
+public void setUnits(List<Unit> units) {
+	this.units = units;
+}
 
 }

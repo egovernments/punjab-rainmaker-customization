@@ -19,7 +19,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * Representation of a address. Indiavidual APIs may choose to extend from this using allOf if more details needed to be added in their case.
  */
 public class Address {
-  @JsonProperty("tenantId")
+  
+@JsonProperty("tenantId")
   private String tenantId = null;
 
   @JsonProperty("doorNo")

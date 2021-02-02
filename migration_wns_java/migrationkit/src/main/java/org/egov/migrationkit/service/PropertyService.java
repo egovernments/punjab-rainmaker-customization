@@ -1,5 +1,10 @@
 package org.egov.migrationkit.service;
 
+import java.math.BigDecimal;
+import java.security.acl.Owner;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -7,12 +12,21 @@ import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import io.swagger.client.model.Channel;
+import io.swagger.client.model.CreationReason;
 import io.swagger.client.model.OwnerInfo;
 import io.swagger.client.model.Property;
 import io.swagger.client.model.PropertyRequest;
+import io.swagger.client.model.PropertyResponse;
 import io.swagger.client.model.PropertySearchResponse;
+import io.swagger.client.model.Source;
+import io.swagger.client.model.Status;
+import io.swagger.client.model.Unit;
+import io.swagger.client.model.WaterConnection;
 import io.swagger.client.model.WaterConnectionRequest;
+import lombok.extern.slf4j.Slf4j;
 @Service
+@Slf4j
 public class PropertyService {
 	
 	
@@ -36,9 +50,15 @@ public class PropertyService {
 		
 	 
 		Property property=searchPtRecord(wcr,json);
+		
 			
 		if(property==null)
-		  property=createProperty(wcr,json);
+		{
+		  log.info("Propery not found creating new property");
+			property=createProperty(wcr,json);
+		  
+		}
+		
 			
 		return property;
 	}
@@ -48,59 +68,50 @@ public class PropertyService {
 		 PropertyRequest prequest=new PropertyRequest();
 		 prequest.setRequestInfo(wcr.getRequestInfo());
 		 Property property=new Property();
+		 WaterConnection conn=	 wcr.getWaterConnection();
 		 //set all property values
+		
+		 property.setAddress(conn.getApplicantAddress());
+		 property.setChannel(Channel.SYSTEM);
+		// property.setInstitution(null);
+		 property.setLandArea(BigDecimal.valueOf(50));
+		 property.setNoOfFloors(Long.valueOf(1));
+		 property.setOldPropertyId(conn.getPropertyId());
+		 property.setOwners(null);
+		 //fix this
+		 property.setOwnershipCategory("INDIVIDUAL.SINGLEOWNER");
+		 property.setPropertyType("VACANT");
+		 property.setSource(Source.MUNICIPAL_RECORDS);
+		// property.setUsageCategory(usageCategory);
+		 property.setTotalConstructedArea(BigDecimal.valueOf(190));
+		 property.setStatus(Status.ACTIVE);
+		  List<Unit> units=new ArrayList<>();
+		  //units.add(new Unit());
+		 property.setUnits(units);
+		 OwnerInfo owner=new OwnerInfo();
+		 owner.setName(conn.getApplicantname());
+		 owner.setMobileNumber(conn.getMobilenumber());
+		 owner.setFatherOrHusbandName(conn.getGuardianname());
+		 owner.setOwnerType("NONE");
+		 property.creationReason(CreationReason.CREATE);
 		 
-//		 property.setProperties.settenantId() = wcr.getWaterConnection().gettenantId();
-		 //property.setProperties.setaddress().setlocality = 							;
-//		 property.setProperties.setpropertyDetail().setusageCategoryMajor() = wcr.getWaterConnection().getconnectionCategory();
-		 
-//		 if (property.setProperties.setpropertyDetail().setusageCategoryMajor()=='Commercial')          
-			 //property.setProperties.setpropertyDetail().setbusinessName();
-		 		 
-//		 property.setProperties.setpropertyDetail().setpropertytype()= wcr.getWaterConnection().getconnectionType();
-		 
+		 List<OwnerInfo> owners=new ArrayList<>();
+		 owners.add(owner);
+		 property.setOwners(owners);
+ 
+		 property.setTenantId(conn.getTenantId());
+		 prequest.setProperty(property);
+		 PropertyResponse res=	 restTemplate.postForObject(host + "/" + ptcreatehurl, prequest, PropertyResponse.class);
+ 		
+ 		 if(res!=null && res.getProperty()!=null )
+ 		 {
+ 			uuid= res.getProperty().getId();
+ 		 }else
+ 		 {
+ 			property.setId("0af72ed5-0df3-41de-8749-7275fbfacfe2"); 
+ 		 }
+ 			 
 
-//	     if (property.setProperties.setpropertyDetail().setpropertytype() == "Flat/Part of the building") {
-//	    	 property.setProperties.setpropertyDetail().setunits.setunitType() = wcr.getWaterConnection().getconnectionCategory();
-//	    	 //property.setProperties.setpropertyDetail().setunits.setusageCategoryMinor()= 
-//	    	 property.setProperties.setpropertyDetail().setunits.setoccupancyType()= "Self-Occupied";
-//	    	 property.setProperties.setpropertyDetail().setunits.setunitArea()= 50;
-//	    	 property.setProperties.setpropertyDetail().setunits.setfloorNo()=	"Ground Floor";
-//	    			 
-//	    			 
-//	     }
-//	     if (property.setProperties.setpropertyDetail().setpropertytype() =="Independent Building") {
-//	    	 //property.setProperties.setpropertyDetail().setbuildUpArea()=
-//	    	 property.setProperties.setpropertyDetail().setnoOfFloors()=	1;	 
-//	    	 
-//	     }
-//	     
-//	     if (property.setProperties.setpropertyDetail().setpropertytype()=="Vacant Land") {
-//	    	//property.setProperties.setpropertyDetail().setbuildUpArea()=
-//	     }
-//	     
-//	     
-//	    	 
-//	    	 
-//	    	 
-//	     property.setProperties.setpropertyDetail().setownershipCategory()== "Single"
-//	    		property.setProperties.setpropertyDetail().setowners.setname() = wcr.getWaterConnection().getplumberInfo().getname();	 	
-//	     		property.setProperties.setpropertyDetail().setowners.setmobileNumber() = wcr.getWaterConnection().getplumberInfo().getmobileNumber();
-//	     		property.setProperties.setpropertyDetail().setowners.setgender() = wcr.getWaterConnection().getplumberInfo().gender();
-//	     		property.setProperties.setpropertyDetail().setowners.setfatherOrHusbandName() = wcr.getWaterConnection().getplumberInfo().getfatherOrHusbandName();
-//	     		property.setProperties.setpropertyDetail().setowners.setrelationship() = wcr.getWaterConnection().getplumberInfo().getrelationship();
-//	     		 
-//
-//		 //if required information not found write query to find data from erp system 
-//		// property.setLandArea(landArea);  fill this
-//		 
-//		 PropertyResponse res=	 restTemplate.postForObject(host + "/" + ptcreatehurl, prequest, PropertyResponse.class);
-//		
-//		 if(res!=null)
-//		 {
-//			uuid= res.getProperty().getPropertyId();
-//		 }
-//		 
 		 return property;
 		 
 	}
@@ -109,12 +120,13 @@ public class PropertyService {
 		 
 		PropertyRequest pr=new PropertyRequest();
 		pr.setRequestInfo(conn.getRequestInfo());
-		String pt_search=ptseachurl+"?tenantId="+conn.getRequestInfo().getUserInfo().getTenantId()+
-				"&mobileNumber=6364021789";
-//				"&mobileNumber="+conn.getWaterConnection().getMobilenumber();
-		
-		
-		PropertySearchResponse response = restTemplate.postForObject(host + "/" + pt_search, pr, PropertySearchResponse.class);
+ 
+		ptseachurl=ptseachurl+"?tenantId="+conn.getRequestInfo().getUserInfo().getTenantId()+
+//				"&mobileNumber=6364021789";
+				"&mobileNumber="+conn.getWaterConnection().getMobilenumber();
+ 
+ 
+		PropertySearchResponse response = restTemplate.postForObject(host + "/" + ptseachurl, pr, PropertySearchResponse.class);
 		
   
 	//	String response = restTemplate.postForObject(host + "/" + ptseachurl, pr, String.class);
@@ -124,13 +136,21 @@ public class PropertyService {
 		//if property found compare with owner name,father name etc.
 		if(response!=null && response.getProperties()!=null && response.getProperties().size() >=1 )
 		{
+			log.info("found properties"+response.getProperties().size());
 			for(Property property:response.getProperties())
 			{
+				log.info("status"+property.getPropertyId()+"---"+property.getStatus());
 				for(OwnerInfo owner:property.getOwners())
 				{
-					if( !owner.getName().equalsIgnoreCase(conn.getWaterConnection().getApplicantname())
-							&&
-						!owner.getFatherOrHusbandName().equalsIgnoreCase(conn.getWaterConnection().getGuardianname()))
+					if( 
+						owner.getName().equalsIgnoreCase(conn.getWaterConnection().getApplicantname())
+					    &&
+						owner.getFatherOrHusbandName().equalsIgnoreCase(conn.getWaterConnection().getGuardianname())
+						&&
+						property.getStatus().equals(Status.ACTIVE)
+					 
+						)
+ 
 						
 						return property;
 					

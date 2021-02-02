@@ -1,15 +1,12 @@
 package org.egov.migrationkit.service;
 
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
 import org.egov.migrationkit.constants.WSConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,15 +17,15 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import io.swagger.client.model.Address;
 import io.swagger.client.model.Demand;
-import io.swagger.client.model.DemandRequest;
+import io.swagger.client.model.Locality;
 import io.swagger.client.model.ProcessInstance;
+import io.swagger.client.model.Property;
 import io.swagger.client.model.RequestInfo;
 import io.swagger.client.model.WaterConnection;
 import io.swagger.client.model.WaterConnectionRequest;
 import io.swagger.client.model.WaterConnectionResponse;
-import io.swagger.client.model.Property;
-
 import lombok.extern.slf4j.Slf4j;
 
 @Service
@@ -74,7 +71,30 @@ public class ConnectionService {
 				
 				Map data = objectMapper.readValue(json, Map.class);
 				
-				WaterConnection connection = mapWaterConnection(data);
+			//	WaterConnection connection = mapWaterConnection(data);
+				WaterConnection connection=	objectMapper.readValue(json, WaterConnection.class);
+				
+				List<Map> roadCategoryList = (List<Map>) data.get("road_category");
+				if (roadCategoryList != null) {
+					String roadCategory = (String) roadCategoryList.get(0).get("road_name");
+					connection.setRoadType(WSConstants.DIGIT_ROAD_CATEGORIES.get(roadCategory));
+					connection.setRoadCuttingArea(Float.valueOf((Integer)roadCategoryList.get(0).get("road_area")));
+
+				}
+					String addressQuery=	Sqls.address;
+					Integer id =(Integer) data.get("applicantaddress.id");
+					addressQuery=addressQuery.replace(":id",id.toString() );
+				@SuppressWarnings("deprecation")
+				Address address = (Address) jdbcTemplate.queryForObject(addressQuery,new BeanPropertyRowMapper(Address.class));  
+				
+				Locality locality=new Locality();
+				//locality.setCode((String)data.get("locality"));
+				//use the map here 
+				locality.setCode("ALOC4");
+				address.setLocality(locality);
+				
+			 
+				connection.setApplicantAddress(address);
 
 				connection.setTenantId(requestInfo.getUserInfo().getTenantId());
 				connection.setProcessInstance(ProcessInstance.builder().action("INITIATE").build());
@@ -86,7 +106,7 @@ public class ConnectionService {
 				waterRequest.setWaterConnection(connection);
 				waterRequest.setRequestInfo(requestInfo);
 				Property property = propertyService.findProperty(waterRequest,json);
-				connection.setPropertyId(property.getId());
+				connection.setPropertyId(property.getId()); 
 
 				String ss = "{" + requestInfo + ", \"waterConnection\": " + waterRequest + " }";
 
@@ -155,6 +175,8 @@ public class ConnectionService {
 				//.connectionNo((String) data.get("consumercode"))
 				.connectionCategory((String) data.get("propertytype"))
 				.connectionExecutionDate((Long)data.get("executiondate"))
+				.mobilenumber((String) data.get("mobilenumber")) 
+				.applicantname((String)data.get("applicantname"))
 				.build();
 		List<Map> roadCategoryList = (List<Map>) data.get("road_category");
 		if (roadCategoryList != null) {

@@ -17,6 +17,7 @@ package io.swagger.client.model;
  */
 public enum OccupancyType2 {
   OWNER("OWNER"),
+  SELFOCCUPIED("SELFOCCUPIED"),
   TENANT("TENANT");
 
   private String value;
