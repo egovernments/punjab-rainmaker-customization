@@ -10,7 +10,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.client.model.OwnerInfo;
 import io.swagger.client.model.Property;
 import io.swagger.client.model.PropertyRequest;
-import io.swagger.client.model.PropertyResponse;
 import io.swagger.client.model.PropertySearchResponse;
 import io.swagger.client.model.WaterConnectionRequest;
 @Service
@@ -110,17 +109,17 @@ public class PropertyService {
 		 
 		PropertyRequest pr=new PropertyRequest();
 		pr.setRequestInfo(conn.getRequestInfo());
-		ptseachurl=ptseachurl+"?tenantId="+conn.getRequestInfo().getUserInfo().getTenantId()+
+		String pt_search=ptseachurl+"?tenantId="+conn.getRequestInfo().getUserInfo().getTenantId()+
 				"&mobileNumber=6364021789";
 //				"&mobileNumber="+conn.getWaterConnection().getMobilenumber();
 		
 		
-		PropertySearchResponse response = restTemplate.postForObject(host + "/" + ptseachurl, pr, PropertySearchResponse.class);
+		PropertySearchResponse response = restTemplate.postForObject(host + "/" + pt_search, pr, PropertySearchResponse.class);
 		
   
 	//	String response = restTemplate.postForObject(host + "/" + ptseachurl, pr, String.class);
 		
-	System.out.println("response"+response);
+		System.out.println("response"+response);
 		
 		//if property found compare with owner name,father name etc.
 		if(response!=null && response.getProperties()!=null && response.getProperties().size() >=1 )
@@ -129,9 +128,9 @@ public class PropertyService {
 			{
 				for(OwnerInfo owner:property.getOwners())
 				{
-					if( owner.getName().equalsIgnoreCase(conn.getWaterConnection().getApplicantname())
+					if( !owner.getName().equalsIgnoreCase(conn.getWaterConnection().getApplicantname())
 							&&
-						owner.getFatherOrHusbandName().equalsIgnoreCase(conn.getWaterConnection().getGuardianname()))
+						!owner.getFatherOrHusbandName().equalsIgnoreCase(conn.getWaterConnection().getGuardianname()))
 						
 						return property;
 					

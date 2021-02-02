@@ -27,7 +27,7 @@ public class WSConstants {
     public static final String SEWERAGE_BUSINESS_SERVICE="SW";
     
     public static final List EXCLUDE_TAX_HEAD_MASTERS = Collections.unmodifiableList(
-    		Arrays.asList("WS_OTHER_FEE", "WS_ROAD_CUTTING_CHARGE", "WS_SECURITY_DEPOSIT"));
+    		Arrays.asList("WS_OTHER_FEE", "WS_ROAD_CUTTING_CHARGE", "WS_FORM_FEE", "WS_SECURITY_DEPOSIT"));
 	
 	public static final HashMap<String, String> DIGIT_ROAD_CATEGORIES = new HashMap<>();
 	public static final HashMap<String, String> TIME_PERIOD_MAP = new HashMap<>();

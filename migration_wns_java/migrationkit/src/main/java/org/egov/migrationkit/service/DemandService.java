@@ -94,6 +94,7 @@ public class DemandService {
 //					.taxPeriodTo(ddList.get(0).getToDate())
 					.taxPeriodFrom(1554076800000l)
 					.taxPeriodTo(1617175799000l)
+					.minimumAmountPayable(BigDecimal.ZERO)
 					.consumerType("waterConnection")
 					.status(StatusEnum.valueOf("ACTIVE"))
 					.build());	
@@ -110,21 +111,21 @@ public class DemandService {
      * @param demands The demands to be created
      * @return The list of demand created
      */
-    public List<Demand> saveDemand(RequestInfo requestInfo, List<Demand> demands){
+    public Boolean saveDemand(RequestInfo requestInfo, List<Demand> demands){
         String url = billingServiceHost + demandCreateEndPoint;
         DemandRequest request = new DemandRequest(requestInfo,demands);
         Object result = restTemplate.postForObject(url , request, String.class);
         try{
-           return  objectMapper.convertValue(result,DemandResponse.class).getDemands();
+        	log.info("Demand Create Request: " + request + "Demand Create Respone: " + result);
         }
         catch(IllegalArgumentException e){
-            log.error("PARSING_ERROR","Failed to parse response of create demand");
+            log.error("PARSING_ERROR","Failed to parse response of create demand " + e);
+            return Boolean.FALSE;
         }
-		return demands;
+		return Boolean.TRUE;
     }
     
-    public boolean fetchBill(List<Demand> demandResponse, RequestInfo requestInfo) {
-		boolean notificationSent = false;
+    public Boolean fetchBill(List<Demand> demandResponse, RequestInfo requestInfo) {
 		for (Demand demand : demandResponse) {
 			try {
 
@@ -132,15 +133,14 @@ public class DemandService {
 				RequestInfoWrapper request = RequestInfoWrapper.builder().requestInfo(requestInfo).build();
 				
 				Object result = restTemplate.postForObject(url , request, String.class);
+				log.info("Bill Request URL: " + url + "Bill RequestInfo: " + request + "Bill Response: " + result);
 				
-				HashMap<String, Object> billResponse = new HashMap<>();
-				billResponse.put("requestInfo", requestInfo);
-				billResponse.put("billResponse", result);
 			} catch (Exception ex) {
 				log.error("Fetch Bill Error", ex);
+				return Boolean.FALSE;
 			}
 		}
-		return notificationSent;
+		return Boolean.TRUE;
 	}
     
 	/**

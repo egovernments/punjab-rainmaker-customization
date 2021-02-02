@@ -109,16 +109,16 @@ public class ConnectionService {
 					
 					List<Demand> demandRequestList = demandService.prepareDemandRequest(data, WSConstants.WATER_BUSINESS_SERVICE, 
 							consumerCode, requestInfo.getUserInfo().getTenantId(), property.getOwners().get(0));
+					if(!demandRequestList.isEmpty()) {
+						
+						Boolean isDemandCreated = demandService.saveDemand(requestInfo, demandRequestList);
+						
+						Boolean isBillCreated = demandService.fetchBill(demandRequestList, requestInfo);
+						
+						recordService.updateWaterMigration(wtrConnResp);
+						log.info("waterResponse" + waterResponse);                                
 					
-					List demandResponseList = demandService.saveDemand(requestInfo, demandRequestList);
-					
-					log.info("Demand Create Request: ", demandRequestList);
-					log.info("Demand Create Respone: ", demandResponseList);
-					if(!demandRequestList.isEmpty())
-						demandService.fetchBill(demandRequestList, requestInfo);
-					
-					recordService.updateWaterMigration(wtrConnResp);
-					log.info("waterResponse" + waterResponse);
+				}
 				}
 				
 
