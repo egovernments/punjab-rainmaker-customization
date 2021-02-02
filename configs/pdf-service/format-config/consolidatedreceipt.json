@@ -380,7 +380,7 @@
               },
               {
 
-                "text": "{{fieldFee}}",
+                "text": "₹ {{fieldFee}}",
 
                 "border": [
                   false,
@@ -620,32 +620,6 @@
                 1
             ]
           }
-        ]
-      },
-      {
-        "style": "pt-disclaimer",
-        "stack": [
-          {
-            "text": "{{disclamer}}",
-            "bold": true,
-            "style": "pt-disclaimer-value"
-          },
-          {
-            "text": "{{disclamer_1}}",
-            "bold": false,
-            "style": "pt-disclaimer-value"
-          },
-          {
-            "text": "{{disclamer_2}}",
-            "bold": false,
-            "style": "pt-disclaimer-value"
-          },
-          {
-            "text": "{{disclamer_3}}",
-            "bold": false,
-            "style": "pt-disclaimer-value"
-          }, {
-            "text":"Now log a complaint from WhatsApp, give a missed call on 8750975975 or send a Hi message on WhatsApp to this number", "bold": true, "fontSize": 8, "color": "blue", "decoration": "underline"}
         ]
       },
       {
@@ -1029,7 +1003,7 @@
               },
               {
 
-                "text": "{{fieldFee}}",
+                "text": "₹ {{fieldFee}}",
 
                 "border": [
                   false,
