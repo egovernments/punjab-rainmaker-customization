@@ -2484,3 +2484,94 @@ ReportDefinitions:
     ) tlown ON tlown.tradelicensedetailid = tld.id
     where validto < extract (epoch from NOW())*1000 and licensenumber is not null and licensenumber not in (select oldlicensenumber from eg_tl_tradelicense where oldlicensenumber is not null)
     and tenantid = $tenantid
+  
+  
+  
+- reportName: TradeLicensePendencyReport_v2
+  decryptionPathId: TradeLicensePendencyReport_v2                   
+  summary: Trade License Pendency Report
+  version: 1.0.0
+  moduleName: rainmaker-tl
+  sourceColumns:
+  - name: applicationnumber
+    label: report.tl.applicationnumber
+    type: string
+    source: tl
+    total: false
+  - name: tradename
+    label: report.tl.tradename
+    type: string
+    source: tl
+    total: false
+  - name: financialyear
+    label: report.tl.financialyear
+    type: string
+    source: tl
+    total: false
+  - name: licensetype
+    label: report.tl.licensetype
+    type: string
+    source: tl
+    total: false
+  - name: licensenumber
+    label: report.tl.licensenumber
+    type: string
+    source: tl
+    total: false
+  - name: name
+    label: report.tl.user.name
+    type: string
+    source: tl
+    total: false
+  - name: totalamount
+    label: report.tl.totalamount
+    type: string
+    source: tl
+    total: true
+  - name: status
+    label: report.tl.status
+    type: string
+    source: tl
+    total: false
+  - name: assignee
+    lable: report.tl.assignee
+    type: string
+    source: tl
+    total: false
+  searchParams:
+  - name: fromDate
+    label: reports.tl.fromDate
+    type: epoch
+    source: tl
+    isMandatory: false
+    searchClause: AND applicationdate >= $fromDate
+  - name: toDate
+    label: reports.tl.toDate
+    type: epoch
+    source: tl
+    isMandatory: false
+    searchClause: AND applicationdate <= $toDate 
+ 
+  query: |
+    SELECT  
+      t.applicationnumber as applicationnumber,
+      t.tradeName as tradename,
+      financialyear,
+        (case when oldlicensenumber is null then 'New' else 'Renewal' end) AS licensetype,
+        licensenumber,
+        name,
+        paydetail.amountpaid as totalamount,
+        t.status as status,
+        W.assignee as assignee
+    FROM eg_tl_tradelicense t INNER JOIN eg_tl_tradelicensedetail td ON td.tradelicenseid = t.id 
+    INNER JOIN 
+    eg_tl_owner O ON O.tradelicensedetailid = td.id
+      INNER JOIN eg_user u ON u.uuid = O.id 
+      LEFT OUTER JOIN egcl_bill bill ON bill.consumercode = t.applicationnumber 
+      LEFT OUTER JOIN egcl_paymentdetail as paydetail on paydetail.billid=bill.id 
+      INNER JOIN eg_wf_processinstance_v2 AS WFP ON WFP.businessid=t.applicationnumber and WFP.lastmodifiedtime
+      in (select max(lastmodifiedtime) from eg_wf_processinstance_v2 where businessid=t.applicationnumber)
+      INNER JOIN eg_wf_assignee_v2 as W ON W.processinstanceid=WFP.id
+    WHERE t.status NOT IN ('APPROVED','CANCELLED','REJECTED','PENDINGPAYMENT','INITIATED') 
+    and t.tenantid=$tenantid
+  order by: ORDER BY t.applicationnumber DESC;
