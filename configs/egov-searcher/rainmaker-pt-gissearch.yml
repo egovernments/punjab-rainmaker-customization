@@ -13,7 +13,9 @@ SearchDefinitions:
           pt.oldpropertyid as oldpropertyid,
           pd.receiptnumber as receiptnumber,
           pt.tenantid as tenantid,
-          pd.receiptdate as receiptdate, 
+          pd.receiptdate as receiptdate,
+          pd.receiptnumber as receiptnumber,
+          pd.amountpaid as amount,
           bn.blockname
         from egcl_paymentdetail AS pd
         INNER JOIN egcl_bill on pd.billid=egcl_bill.id
