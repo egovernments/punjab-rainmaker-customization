@@ -16,6 +16,7 @@ SearchDefinitions:
           pd.receiptdate as receiptdate,
           pd.receiptnumber as receiptnumber,
           pd.amountpaid as amount,
+          getfinancialyear(pd.billid) as financialyear,
           bn.blockname
         from egcl_paymentdetail AS pd
         INNER JOIN egcl_bill on pd.billid=egcl_bill.id
