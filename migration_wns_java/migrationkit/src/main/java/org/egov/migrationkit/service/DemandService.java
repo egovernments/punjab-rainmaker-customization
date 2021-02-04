@@ -59,9 +59,6 @@ public class DemandService {
 		for (Map dcbData : dcbDataList) {
 			
 			String taxHeadMaster = WSConstants.TAX_HEAD_MAP.get((String)dcbData.get("demand_reason"));
-			if(WSConstants.EXCLUDE_TAX_HEAD_MASTERS.contains(taxHeadMaster)) {
-				continue;
-			}
 			DemandDetail dd = DemandDetail.builder()
 					.taxAmount(BigDecimal.valueOf((Integer)dcbData.get("amount")))
 					.taxHeadMasterCode(taxHeadMaster)
@@ -73,33 +70,53 @@ public class DemandService {
 			
 			Integer installmentId = (Integer)dcbData.get("insta_id");
 			if(instaWiseDemandMap.containsKey(installmentId)) {
-				instaWiseDemandMap.get(installmentId).add(dd);
+				
+					instaWiseDemandMap.get(installmentId).add(dd);
+
 			} else {
 				List<DemandDetail> ddList = new ArrayList<>();
+				
 				ddList.add(dd);
 				instaWiseDemandMap.put(installmentId, ddList);
 			}
 				
 		}
 		instaWiseDemandMap.forEach((insta_id, ddList) -> {
-			
-			demands.add(Demand.builder()
-					.businessService(businessService)
-					.consumerCode(consumerCode)
-					.demandDetails(ddList)
-					.payer(User.builder().uuid(owner.getUuid()).name(owner.getName()).build())
-					.tenantId(tenantId)
-//					There is no tax periods configured for all the previous year in PB QA environments as of now giving dummy configured tax period. 
-//					.taxPeriodFrom(ddList.get(0).getFromDate())
-//					.taxPeriodTo(ddList.get(0).getToDate())
-					.taxPeriodFrom(1554076800000l)
-					.taxPeriodTo(1617175799000l)
-					.minimumAmountPayable(BigDecimal.ZERO)
-					.consumerType("waterConnection")
-					.status(StatusEnum.valueOf("ACTIVE"))
-					.build());	
-			
-		});
+			if(!ddList.isEmpty() && WSConstants.ONE_TIME_TAX_HEAD_MASTERS.contains(ddList.get(0).getTaxHeadMasterCode())) {
+				demands.add(Demand.builder()
+						.businessService(businessService + WSConstants.ONE_TIME_FEE_CONST)
+						.consumerCode(consumerCode)
+						.demandDetails(ddList)
+						.payer(User.builder().uuid(owner.getUuid()).name(owner.getName()).build())
+						.tenantId(tenantId)
+//						There is no tax periods configured for all the previous year in PB QA environments as of now giving dummy configured tax period. 
+//						.taxPeriodFrom(ddList.get(0).getFromDate())
+//						.taxPeriodTo(ddList.get(0).getToDate())
+						.taxPeriodFrom(1554076800000l)
+						.taxPeriodTo(1617175799000l)
+						.minimumAmountPayable(BigDecimal.ZERO)
+						.consumerType("waterConnection")
+						.status(StatusEnum.valueOf("ACTIVE"))
+						.build());	
+			}else {
+				demands.add(Demand.builder()
+						.businessService(businessService)
+						.consumerCode(consumerCode)
+						.demandDetails(ddList)
+						.payer(User.builder().uuid(owner.getUuid()).name(owner.getName()).build())
+						.tenantId(tenantId)
+//						There is no tax periods configured for all the previous year in PB QA environments as of now giving dummy configured tax period. 
+//						.taxPeriodFrom(ddList.get(0).getFromDate())
+//						.taxPeriodTo(ddList.get(0).getToDate())
+						.taxPeriodFrom(1554076800000l)
+						.taxPeriodTo(1617175799000l)
+						.minimumAmountPayable(BigDecimal.ZERO)
+						.consumerType("waterConnection")
+						.status(StatusEnum.valueOf("ACTIVE"))
+						.build());	
+			}
+				
+			});
 
 		return demands;
 		

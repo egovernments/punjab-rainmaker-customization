@@ -12,6 +12,8 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import io.swagger.client.model.User;
 
 @Service
@@ -25,8 +27,25 @@ public class UserService {
 
 	@Value("${egov.user.token.url}")
 	private String userTokenEndpoint = null;
+	
+	@Autowired
+	private ObjectMapper objectMapper;
 
 
+	public String getAccessToken(String superUsername, String superUserPassword, String tenantId) {
+
+		String access_token = null;
+		Object record = getAccess(superUsername, superUserPassword, tenantId);
+		Map tokenObject = objectMapper.convertValue(record, Map.class);
+
+		if (tokenObject.containsKey("access_token")) {
+			access_token = (String) tokenObject.get("access_token");
+			System.out.println("Access token: " + access_token);
+		}
+
+		return access_token;
+
+	}
 	
     public Object getAccess(String userName, String password, String tenantId) {
        System.out.println("Fetch access token for register with login flow");

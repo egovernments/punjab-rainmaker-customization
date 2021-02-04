@@ -35,8 +35,6 @@ public class Migration {
 	@Autowired
 	private UserService userService;
 
-	@Autowired
-	private ObjectMapper objectMapper;
 
 	@PostMapping("/water/connection")
 	@ResponseStatus(HttpStatus.CREATED)
@@ -46,10 +44,10 @@ public class Migration {
 		try {
 
 			UserInfo userInfo = waterMigrateRequest.getRequestInfo().getUserInfo();
-			String accessToken = getAccessToken(userInfo.getUserName(), userInfo.getPassword(), userInfo.getTenantId());
+			String accessToken = userService.getAccessToken(userInfo.getUserName(), userInfo.getPassword(), userInfo.getTenantId());
 			if (accessToken != null) {
 				waterMigrateRequest.getRequestInfo().setAuthToken(accessToken);
-				service.migrate(tenantId, waterMigrateRequest.getRequestInfo());
+				service.migrateWtrConnection(tenantId, waterMigrateRequest.getRequestInfo());
 
 			} else {
 				return new ResponseEntity(HttpStatus.UNAUTHORIZED);
@@ -76,19 +74,30 @@ public class Migration {
 		return new ResponseEntity(HttpStatus.CREATED);
 	}
 
-	public String getAccessToken(String superUsername, String superUserPassword, String tenantId) {
 
-		String access_token = null;
-		Object record = userService.getAccess(superUsername, superUserPassword, tenantId);
-		Map tokenObject = objectMapper.convertValue(record, Map.class);
+	
+	@PostMapping("/water/connection/collection")
+	@ResponseStatus(HttpStatus.CREATED)
+	public ResponseEntity migrateWaterCollection(@RequestParam String tenantId,
+			@RequestBody RequestInfoWrapper waterMigrateRequest,BindingResult result) {
 
-		if (tokenObject.containsKey("access_token")) {
-			access_token = (String) tokenObject.get("access_token");
-			System.out.println("Access token: " + access_token);
+		try {
+
+			UserInfo userInfo = waterMigrateRequest.getRequestInfo().getUserInfo();
+			String accessToken = userService.getAccessToken(userInfo.getUserName(), userInfo.getPassword(), userInfo.getTenantId());
+			if (accessToken != null) {
+				waterMigrateRequest.getRequestInfo().setAuthToken(accessToken);
+				service.migrateWtrCollection(tenantId, waterMigrateRequest.getRequestInfo());
+
+			} else {
+				return new ResponseEntity(HttpStatus.UNAUTHORIZED);
+			}
+
+		} catch (Exception e) {
+
+			e.printStackTrace();
 		}
-
-		return access_token;
-
+		return new ResponseEntity(HttpStatus.CREATED);
 	}
 
 }

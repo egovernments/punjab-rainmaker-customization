@@ -26,8 +26,10 @@ public class WSConstants {
     
     public static final String SEWERAGE_BUSINESS_SERVICE="SW";
     
-    public static final List EXCLUDE_TAX_HEAD_MASTERS = Collections.unmodifiableList(
+    public static final List<String> ONE_TIME_TAX_HEAD_MASTERS = Collections.unmodifiableList(
     		Arrays.asList("WS_OTHER_FEE", "WS_ROAD_CUTTING_CHARGE", "WS_FORM_FEE", "WS_SECURITY_DEPOSIT"));
+    
+    public static final String ONE_TIME_FEE_CONST = ".ONE_TIME_FEE";
 	
 	public static final HashMap<String, String> DIGIT_ROAD_CATEGORIES = new HashMap<>();
 	public static final HashMap<String, String> TIME_PERIOD_MAP = new HashMap<>();

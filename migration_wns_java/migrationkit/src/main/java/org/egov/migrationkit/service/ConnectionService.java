@@ -57,7 +57,7 @@ public class ConnectionService {
 	private DemandService demandService;
 	
 
-	public void migrate(String tenantId, RequestInfo requestInfo) {
+	public void migrateWtrConnection(String tenantId, RequestInfo requestInfo) {
 
 		jdbcTemplate.execute("set search_path to " + tenantId);
 		
@@ -189,5 +189,31 @@ public class ConnectionService {
 		return waterConnection;
 
 	}
+	
+	
+	public void migrateWtrCollection(String tenantId, RequestInfo requestInfo) {
+
+		jdbcTemplate.execute("set search_path to " + tenantId);
+		
+		jdbcTemplate.execute(Sqls.WATER_COLLECTION_TABLE);
+
+		List<String> queryForList = jdbcTemplate.queryForList(Sqls.waterQuery, String.class);
+
+		for (String json : queryForList) {
+
+			try {			
+		
+				recordService.recordWtrCollMigration(null);
+				recordService.updateWtrCollMigration(null);
+				log.info("waterResponse" + null);                                
+
+			} catch (Exception e) {
+				log.error(e.getMessage()); 
+			}
+
+		}
+		log.info("Migration completed for "+tenantId);
+	}
+
 	
 }
