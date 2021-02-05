@@ -12,7 +12,7 @@
 
 package io.swagger.client.model;
 
-import java.util.Objects;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -24,8 +24,8 @@ public class PropertyResponse {
 	@JsonProperty("ResponseInfo")
 	private ResponseInfo responseInfo = null;
 
-	@JsonProperty("Property")
-	private Property property = null;
+	@JsonProperty("Properties")
+	private List<Property> properties = null;
 
 	public ResponseInfo getResponseInfo() {
 		return responseInfo;
@@ -35,12 +35,14 @@ public class PropertyResponse {
 		this.responseInfo = responseInfo;
 	}
 
-	public Property getProperty() {
-		return property;
+	public List<Property> getProperties() {
+		return properties;
 	}
 
-	public void setProperty(Property property) {
-		this.property = property;
+	public void setProperties(List<Property> properties) {
+		this.properties = properties;
 	}
+
+	 
 
 }

@@ -18,11 +18,13 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.swagger.client.model.Address;
+import io.swagger.client.model.Connection.StatusEnum;
 import io.swagger.client.model.Demand;
 import io.swagger.client.model.Locality;
 import io.swagger.client.model.ProcessInstance;
 import io.swagger.client.model.Property;
 import io.swagger.client.model.RequestInfo;
+import io.swagger.client.model.Status;
 import io.swagger.client.model.WaterConnection;
 import io.swagger.client.model.WaterConnectionRequest;
 import io.swagger.client.model.WaterConnectionResponse;
@@ -69,6 +71,8 @@ public class ConnectionService {
 
 			try {
 				
+				
+				//IS_EXTERNAL_WORKFLOW_ENABLED
 				Map data = objectMapper.readValue(json, Map.class);
 				
 			//	WaterConnection connection = mapWaterConnection(data);
@@ -92,12 +96,14 @@ public class ConnectionService {
 				//use the map here 
 				locality.setCode("ALOC4");
 				address.setLocality(locality);
-				
+				connection.setStatus(StatusEnum.Active);
+				connection.setConnectionNo((String)data.get("consumerCode"));
+				connection.setApplicationStatus("CONNECTION_ACTIVATED");
 			 
 				connection.setApplicantAddress(address);
 
 				connection.setTenantId(requestInfo.getUserInfo().getTenantId());
-				connection.setProcessInstance(ProcessInstance.builder().action("INITIATE").build());
+				connection.setProcessInstance(ProcessInstance.builder().action("CONNECTION_ACTIVATED").build());
 				
 				recordService.recordWaterMigration(connection);
  				
