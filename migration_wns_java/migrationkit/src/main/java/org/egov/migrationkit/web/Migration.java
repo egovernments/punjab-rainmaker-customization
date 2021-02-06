@@ -28,9 +28,13 @@ public class Migration {
 
 	@Value("${egov.services.water.url}")
 	private String waterUrl = null;
-
+	
+	
 	@Autowired
 	private ConnectionService service;
+	
+	//@Autowired
+	//private SewarageService serviceSewarage;
 
 	@Autowired
 	private UserService userService;
@@ -99,5 +103,31 @@ public class Migration {
 		}
 		return new ResponseEntity(HttpStatus.CREATED);
 	}
+	
+	@PostMapping("/sewerage/connection")
+	@ResponseStatus(HttpStatus.CREATED)
+	public ResponseEntity sewerageConnection(@RequestParam String tenantId,
+			@RequestBody RequestInfoWrapper sewerageConnectionRequest,BindingResult result) {
+
+		try {
+
+			UserInfo userInfo = sewerageConnectionRequest.getRequestInfo().getUserInfo();
+			String accessToken = userService.getAccessToken(userInfo.getUserName(), userInfo.getPassword(), userInfo.getTenantId());
+			if (accessToken != null) {
+				sewerageConnectionRequest.getRequestInfo().setAuthToken(accessToken);
+				service.createSewerageConnection(tenantId, sewerageConnectionRequest.getRequestInfo());
+
+			} else {
+				return new ResponseEntity(HttpStatus.UNAUTHORIZED);
+			}
+
+		} catch (Exception e) {
+
+			e.printStackTrace();
+		}
+		return new ResponseEntity(HttpStatus.CREATED);
+	}
+	
+	
 
 }

@@ -1,7 +1,8 @@
 package org.egov.migrationkit.service;
 
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.log;
+
 import java.math.BigDecimal;
-import java.security.acl.Owner;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,6 +20,7 @@ import io.swagger.client.model.Property;
 import io.swagger.client.model.PropertyRequest;
 import io.swagger.client.model.PropertyResponse;
 import io.swagger.client.model.PropertySearchResponse;
+import io.swagger.client.model.SewerageConnectionRequest;
 import io.swagger.client.model.Source;
 import io.swagger.client.model.Status;
 import io.swagger.client.model.Unit;
@@ -62,7 +64,25 @@ public class PropertyService {
 			
 		return property;
 	}
+	
 
+	public Property findProperty(SewerageConnectionRequest swg,String json)
+	{
+		
+	 
+		Property property=searchswPtRecord(swg,json);
+		
+			
+		if(property==null)
+		{
+		  log.info("Propery not found creating new property");
+			property=createProperty(swg,json);
+		  
+		}
+		
+			
+		return property;
+	}
 	private Property createProperty(WaterConnectionRequest wcr, String json) {
 		String uuid=null;
 		 PropertyRequest prequest=new PropertyRequest();
@@ -124,6 +144,53 @@ public class PropertyService {
 		ptseachurl=ptseachurl+"?tenantId="+conn.getRequestInfo().getUserInfo().getTenantId()+
 //				"&mobileNumber=6364021789";
 				"&mobileNumber="+conn.getWaterConnection().getMobilenumber();
+ 
+ 
+		PropertySearchResponse response = restTemplate.postForObject(host + "/" + ptseachurl, pr, PropertySearchResponse.class);
+		
+  
+	//	String response = restTemplate.postForObject(host + "/" + ptseachurl, pr, String.class);
+		
+		System.out.println("response"+response);
+		
+		//if property found compare with owner name,father name etc.
+		if(response!=null && response.getProperties()!=null && response.getProperties().size() >=1 )
+		{
+			log.info("found properties"+response.getProperties().size());
+			for(Property property:response.getProperties())
+			{
+				log.info("status"+property.getPropertyId()+"---"+property.getStatus());
+				for(OwnerInfo owner:property.getOwners())
+				{
+					if( 
+						owner.getName().equalsIgnoreCase(conn.getWaterConnection().getApplicantname())
+					    &&
+						owner.getFatherOrHusbandName().equalsIgnoreCase(conn.getWaterConnection().getGuardianname())
+						&&
+						property.getStatus().equals(Status.ACTIVE)
+					 
+						)
+ 
+						
+						return property;
+					
+				}
+			}
+		}
+		
+			
+			return null;
+		 
+		
+	}
+	private Property searchswPtRecord(SewerageConnectionRequest conn,String json) {
+		 
+		PropertyRequest pr=new PropertyRequest();
+		pr.setRequestInfo(conn.getRequestInfo());
+ 
+		ptseachurl=ptseachurl+"?tenantId="+conn.getRequestInfo().getUserInfo().getTenantId()+
+//				"&mobileNumber=6364021789";
+				"&mobileNumber="+conn.getSewerageConnection().getMobilenumber();
  
  
 		PropertySearchResponse response = restTemplate.postForObject(host + "/" + ptseachurl, pr, PropertySearchResponse.class);
