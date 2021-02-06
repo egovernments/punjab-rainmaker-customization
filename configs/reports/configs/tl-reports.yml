@@ -2561,7 +2561,7 @@ ReportDefinitions:
       split_part(string_agg(name,','),',',1) as name, -- string_agg(name,',') as name,
       string_agg(distinct paydetail.amountpaid::varchar,',') as totalamount,
       string_agg(distinct t.status,',') as status,
-      string_agg(distinct W.assignee,',') as assignee
+      split_part(string_agg(distinct W.assignee,','),',',1) as assignee
     FROM eg_tl_tradelicense t INNER JOIN eg_tl_tradelicensedetail td ON td.tradelicenseid = t.id 
     INNER JOIN eg_tl_owner O ON O.tradelicensedetailid = td.id
     INNER JOIN eg_user u ON u.uuid = O.id 
@@ -2573,4 +2573,4 @@ ReportDefinitions:
     WHERE t.status NOT IN ('APPROVED','CANCELLED','REJECTED','PENDINGPAYMENT','INITIATED') 
     and t.tenantid=$tenantid
   groupby: GROUP BY O.tradelicensedetailid
-  orderby: ORDER BY applicationnumber DESC;
+  orderby: ORDER BY applicationnumber DESC
