@@ -2558,10 +2558,10 @@ ReportDefinitions:
       string_agg(DISTINCT financialyear,',') as financialyear,
       string_agg(DISTINCT(case when oldlicensenumber is null then 'New' else 'Renewal' end),',') AS licensetype,
       string_agg(distinct licensenumber,',') as licensenumber,
-      split_part(string_agg(name,','),',',1) as name, -- string_agg(name,',') as name,
+      split_part(string_agg(u.name,','),',',1) as name, -- string_agg(name,',') as name,
       string_agg(distinct paydetail.amountpaid::varchar,',') as totalamount,
       string_agg(distinct t.status,',') as status,
-      split_part(string_agg(distinct W.assignee,','),',',1) as assignee
+      split_part(string_agg(distinct us.name,','),',',1) as assignee
     FROM eg_tl_tradelicense t INNER JOIN eg_tl_tradelicensedetail td ON td.tradelicenseid = t.id 
     INNER JOIN eg_tl_owner O ON O.tradelicensedetailid = td.id
     INNER JOIN eg_user u ON u.uuid = O.id 
@@ -2570,6 +2570,7 @@ ReportDefinitions:
     INNER JOIN eg_wf_processinstance_v2 AS WFP ON WFP.businessid=t.applicationnumber and WFP.lastmodifiedtime
     in (select max(lastmodifiedtime) from eg_wf_processinstance_v2 where businessid=t.applicationnumber)
     INNER JOIN eg_wf_assignee_v2 as W ON W.processinstanceid=WFP.id
+    INNER JOIN eg_user us ON us.uuid = W.assignee 
     WHERE t.status NOT IN ('APPROVED','CANCELLED','REJECTED','PENDINGPAYMENT','INITIATED') 
     and t.tenantid=$tenantid
   groupby: GROUP BY O.tradelicensedetailid
