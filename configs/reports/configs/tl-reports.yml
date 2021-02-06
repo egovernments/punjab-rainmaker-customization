@@ -2488,7 +2488,6 @@ ReportDefinitions:
   
   
 - reportName: TradeLicensePendencyReport_v2
-  decryptionPathId: TradeLicensePendencyReport_v2
   summary: Trade License Pendency Report
   version: 1.0.0
   moduleName: rainmaker-tl
