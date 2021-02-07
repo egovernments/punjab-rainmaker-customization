@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.swagger.client.model.Channel;
 import io.swagger.client.model.CreationReason;
@@ -45,6 +46,9 @@ public class PropertyService {
 	
 	@Autowired
 	private RestTemplate restTemplate;
+	
+	@Autowired
+	private ObjectMapper objectMapper;
 	
 	
 	public Property findProperty(WaterConnectionRequest wcr,String json)
@@ -100,9 +104,9 @@ public class PropertyService {
 		 property.setOwners(null);
 		 //fix this
 		 property.setOwnershipCategory("INDIVIDUAL.SINGLEOWNER");
-		 property.setPropertyType("VACANT");
+		 property.setPropertyType("BUILTUP.INDEPENDENTPROPERTY");
 		 property.setSource(Source.MUNICIPAL_RECORDS);
-		// property.setUsageCategory(usageCategory);
+	 
 		 property.setTotalConstructedArea(BigDecimal.valueOf(190));
 		 property.setStatus(Status.ACTIVE);
 		  List<Unit> units=new ArrayList<>();
@@ -114,6 +118,7 @@ public class PropertyService {
 		 owner.setFatherOrHusbandName(conn.getGuardianname());
 		 owner.setOwnerType("NONE");
 		 property.creationReason(CreationReason.CREATE);
+		 property.setUsageCategory("RESIDENTIAL");
 		 
 		 List<OwnerInfo> owners=new ArrayList<>();
 		 owners.add(owner);
@@ -122,17 +127,9 @@ public class PropertyService {
 		 property.setTenantId(conn.getTenantId());
 		 prequest.setProperty(property);
 		 PropertyResponse res=	 restTemplate.postForObject(host + "/" + ptcreatehurl, prequest, PropertyResponse.class);
- 		
- 		 if(res!=null && res.getProperty()!=null )
- 		 {
- 			uuid= res.getProperty().getId();
- 		 }else
- 		 {
- 			property.setId("0af72ed5-0df3-41de-8749-7275fbfacfe2"); 
- 		 }
- 			 
+		 log.info(res.toString());
 
-		 return property;
+		 return res.getProperties().get(0);
 		 
 	}
 
@@ -142,7 +139,7 @@ public class PropertyService {
 		pr.setRequestInfo(conn.getRequestInfo());
  
 		ptseachurl=ptseachurl+"?tenantId="+conn.getRequestInfo().getUserInfo().getTenantId()+
-//				"&mobileNumber=6364021789";
+
 				"&mobileNumber="+conn.getWaterConnection().getMobilenumber();
  
  
@@ -210,9 +207,9 @@ public class PropertyService {
 				for(OwnerInfo owner:property.getOwners())
 				{
 					if( 
-						owner.getName().equalsIgnoreCase(conn.getWaterConnection().getApplicantname())
+						owner.getName().equalsIgnoreCase(conn.getSewerageConnection().getApplicantname())
 					    &&
-						owner.getFatherOrHusbandName().equalsIgnoreCase(conn.getWaterConnection().getGuardianname())
+						owner.getFatherOrHusbandName().equalsIgnoreCase(conn.getSewerageConnection().getGuardianname())
 						&&
 						property.getStatus().equals(Status.ACTIVE)
 					 
