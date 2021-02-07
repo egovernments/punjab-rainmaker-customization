@@ -32,6 +32,17 @@ public class SewerageConnection extends Connection {
 
   @JsonProperty("proposedToilets")
   private BigDecimal proposedToilets = null;
+  
+  @JsonProperty("processInstance")
+  private ProcessInstance processInstance = null;
+ 
+  public ProcessInstance getProcessInstance() {
+	return processInstance;
+}
+
+public void setProcessInstance(ProcessInstance processInstance) {
+	this.processInstance = processInstance;
+}
 
   public SewerageConnection noOfWaterClosets(BigDecimal noOfWaterClosets) {
     this.noOfWaterClosets = noOfWaterClosets;

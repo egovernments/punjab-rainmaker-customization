@@ -28,6 +28,9 @@ public class Property {
 
   @JsonProperty("propertyId")
   private String propertyId = null;
+  
+  @JsonProperty("uuid")
+  private String uuid = null;
 
   @JsonProperty("tenantId")
   private String tenantId = null;
@@ -591,6 +594,14 @@ public List<Unit> getUnits() {
 
 public void setUnits(List<Unit> units) {
 	this.units = units;
+}
+
+public String getUuid() {
+	return uuid;
+}
+
+public void setUuid(String uuid) {
+	this.uuid = uuid;
 }
 
 }
