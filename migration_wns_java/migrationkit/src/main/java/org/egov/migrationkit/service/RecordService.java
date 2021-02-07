@@ -5,6 +5,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import io.swagger.client.model.CollectionPayment;
 import io.swagger.client.model.WaterConnection;
 @Transactional
 @Service
@@ -35,19 +36,19 @@ public class RecordService {
 	qry=qry.replace(":erpconn", "'"+conn.getConnectionNo()+"'");
 	qry=qry.replace(":status", "'saved'");
 	qry=qry.replace(":tenantId", "'"+conn.getTenantId()+"'");
-	qry=qry.replace(":digitconn", conn.getConnectionNo()==null?"'null'":conn.getConnectionNo());
+	qry=qry.replace(":digitconn", conn.getConnectionNo()==null?"'null'":"'"+conn.getConnectionNo()+"'");
 	qry=qry.replace(":digitpt","'"+conn.getPropertyId()+"'");
 	jdbcTemplate.execute(qry);
 		
 	}
 	
-	public void recordWtrCollMigration(WaterConnection conn)
+	public void recordWtrCollMigration(CollectionPayment conn)
 	{
 		
 	String qry=	Sqls.WATER_COLLECTION_INSERT;
 	qry=qry.replace(":erpid", "'"+conn.getId()+"'");
-	qry=qry.replace(":erpconn", "'"+conn.getConnectionNo()+"'");
-	qry=qry.replace(":erppt", "'"+conn.getPropertyId()+"'");
+	qry=qry.replace(":erpconn", "'"+conn.getConsumerCode()+"'");
+	qry=qry.replace(":erppt", "'"+conn.getBusinessService()+"'");
 	qry=qry.replace(":status", "'pushed'");
 	qry=qry.replace(":tenantId", "'"+conn.getTenantId()+"'");
 	qry=qry.replace(":digitconn", "'null'");
@@ -57,15 +58,15 @@ public class RecordService {
 		
 	}
 	
-	public void updateWtrCollMigration(WaterConnection conn)
+	public void updateWtrCollMigration(CollectionPayment conn)
 	{
 		
 	String qry=	Sqls.WATER_COLLECTION_UPDATE;
-	qry=qry.replace(":erpconn", "'"+conn.getConnectionNo()+"'");
+	qry=qry.replace(":erpconn", "'"+conn.getConsumerCode()+"'");
 	qry=qry.replace(":status", "'saved'");
 	qry=qry.replace(":tenantId", "'"+conn.getTenantId()+"'");
-	qry=qry.replace(":digitconn", conn.getConnectionNo()==null?"'null'":conn.getConnectionNo());
-	qry=qry.replace(":digitpt","'"+conn.getPropertyId()+"'");
+	qry=qry.replace(":digitconn", conn.getConsumerCode()==null?"'null'":conn.getConsumerCode());
+	qry=qry.replace(":digitpt","'"+conn.getBusinessService()+"'");
 	jdbcTemplate.execute(qry);
 		
 	}

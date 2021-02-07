@@ -66,6 +66,11 @@ public class Demand   {
         
         private Boolean isPaymentCompleted = false;
         
+        /**
+         * This is used to migrate the collection
+         */
+        private BigDecimal totalAmountPaid = BigDecimal.ZERO;;
+        
         
  /**
    * Gets or Sets status

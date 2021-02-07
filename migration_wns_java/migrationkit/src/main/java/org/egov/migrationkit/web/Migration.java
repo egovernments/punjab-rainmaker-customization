@@ -1,7 +1,6 @@
 package org.egov.migrationkit.web;
 
-import java.util.Map;
-
+import org.egov.migrationkit.service.CollectionService;
 import org.egov.migrationkit.service.ConnectionService;
 import org.egov.migrationkit.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,8 +13,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.swagger.client.model.RequestInfoWrapper;
 import io.swagger.client.model.UserInfo;
@@ -34,6 +31,9 @@ public class Migration {
 
 	@Autowired
 	private UserService userService;
+	
+	@Autowired
+	private CollectionService collectionService;
 
 
 	@PostMapping("/water/connection")
@@ -87,10 +87,10 @@ public class Migration {
 			String accessToken = userService.getAccessToken(userInfo.getUserName(), userInfo.getPassword(), userInfo.getTenantId());
 			if (accessToken != null) {
 				waterMigrateRequest.getRequestInfo().setAuthToken(accessToken);
-				service.migrateWtrCollection(tenantId, waterMigrateRequest.getRequestInfo());
+				collectionService.migrateWtrCollection(tenantId, waterMigrateRequest.getRequestInfo());
 
 			} else {
-				return new ResponseEntity(HttpStatus.UNAUTHORIZED);
+				return new ResponseEntity(HttpStatus.BAD_REQUEST);
 			}
 
 		} catch (Exception e) {

@@ -2,7 +2,6 @@ package org.egov.migrationkit.service;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -15,13 +14,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import io.swagger.client.model.Demand;
 import io.swagger.client.model.Demand.StatusEnum;
 import io.swagger.client.model.DemandDetail;
 import io.swagger.client.model.DemandRequest;
-import io.swagger.client.model.DemandResponse;
 import io.swagger.client.model.OwnerInfo;
 import io.swagger.client.model.RequestInfo;
 import io.swagger.client.model.RequestInfoWrapper;
@@ -34,16 +30,13 @@ import lombok.extern.slf4j.Slf4j;
 public class DemandService {
 	
 	@Autowired
-	private ObjectMapper objectMapper;
+	private CommonService commonService;
 	
 	@Value("${egov.billingservice.host}")
 	private String billingServiceHost;
 	
 	@Value("${egov.demand.create.url}")
 	private String demandCreateEndPoint;
-	
-	@Value("${egov.bill.fetch.endpoint}")
-	private String fetchBillEndPoint;
 	
 	@Autowired
 	private RestTemplate restTemplate;
@@ -62,7 +55,8 @@ public class DemandService {
 			DemandDetail dd = DemandDetail.builder()
 					.taxAmount(BigDecimal.valueOf((Integer)dcbData.get("amount")))
 					.taxHeadMasterCode(taxHeadMaster)
-					.collectionAmount(BigDecimal.valueOf((Integer)dcbData.get("collected_amount")))
+					.collectionAmount(BigDecimal.ZERO)
+					.amountPaid(BigDecimal.valueOf((Integer)dcbData.get("collected_amount")))
 //					.fromDate((Long)dcbData.get("from_date"))
 //					.toDate((Long)dcbData.get("to_date"))
 					.tenantId(tenantId)
@@ -82,6 +76,11 @@ public class DemandService {
 				
 		}
 		instaWiseDemandMap.forEach((insta_id, ddList) -> {
+			BigDecimal totalAmountPaid = BigDecimal.ZERO;
+			for (DemandDetail demandDetail : ddList) {
+				totalAmountPaid = totalAmountPaid.add(demandDetail.getAmountPaid());	
+			}
+
 			if(!ddList.isEmpty() && WSConstants.ONE_TIME_TAX_HEAD_MASTERS.contains(ddList.get(0).getTaxHeadMasterCode())) {
 				demands.add(Demand.builder()
 						.businessService(businessService + WSConstants.ONE_TIME_FEE_CONST)
@@ -97,6 +96,7 @@ public class DemandService {
 						.minimumAmountPayable(BigDecimal.ZERO)
 						.consumerType("waterConnection")
 						.status(StatusEnum.valueOf("ACTIVE"))
+						.totalAmountPaid(totalAmountPaid)
 						.build());	
 			}else {
 				demands.add(Demand.builder()
@@ -113,6 +113,7 @@ public class DemandService {
 						.minimumAmountPayable(BigDecimal.ZERO)
 						.consumerType("waterConnection")
 						.status(StatusEnum.valueOf("ACTIVE"))
+						.totalAmountPaid(totalAmountPaid)
 						.build());	
 			}
 				
@@ -129,24 +130,27 @@ public class DemandService {
      * @return The list of demand created
      */
     public Boolean saveDemand(RequestInfo requestInfo, List<Demand> demands){
-        String url = billingServiceHost + demandCreateEndPoint;
+    	try{
+    		
+    	String url = billingServiceHost + demandCreateEndPoint;
         DemandRequest request = new DemandRequest(requestInfo,demands);
         Object result = restTemplate.postForObject(url , request, String.class);
-        try{
+        
         	log.info("Demand Create Request: " + request + "Demand Create Respone: " + result);
         }
-        catch(IllegalArgumentException e){
-            log.error("PARSING_ERROR","Failed to parse response of create demand " + e);
+        catch(Exception e){
+            log.error("Demand PARSING_ERROR: "+demands,"Failed to parse response of create demand " + e);
             return Boolean.FALSE;
         }
 		return Boolean.TRUE;
     }
     
-    public Boolean fetchBill(List<Demand> demandResponse, RequestInfo requestInfo) {
-		for (Demand demand : demandResponse) {
+    public Boolean fetchBill(List<Demand> demands, RequestInfo requestInfo) {
+		for (Demand demand : demands) {
 			try {
 
-				String url = getFetchBillURL(demand.getTenantId(), demand.getConsumerCode()).toString();
+				String url = commonService.getFetchBillURL(demand.getTenantId(), demand.getConsumerCode()
+						, demand.getBusinessService()).toString();
 				RequestInfoWrapper request = RequestInfoWrapper.builder().requestInfo(requestInfo).build();
 				
 				Object result = restTemplate.postForObject(url , request, String.class);
@@ -160,22 +164,4 @@ public class DemandService {
 		return Boolean.TRUE;
 	}
     
-	/**
-	 * 
-	 * @param tenantId
-	 *            Tenant Id
-	 * @param consumerCode
-	 *            Consumer Code
-	 * @return uri of fetch bill
-	 */
-	public StringBuilder getFetchBillURL(String tenantId, String consumerCode) {
-
-		return new StringBuilder().append(billingServiceHost)
-				.append(fetchBillEndPoint).append(WSConstants.URL_PARAMS_SEPARATER)
-				.append(WSConstants.TENANT_ID_FIELD_FOR_SEARCH_URL).append(tenantId)
-				.append(WSConstants.SEPARATER).append(WSConstants.CONSUMER_CODE_SEARCH_FIELD_NAME)
-				.append(consumerCode).append(WSConstants.SEPARATER)
-				.append(WSConstants.BUSINESSSERVICE_FIELD_FOR_SEARCH_URL)
-				.append(WSConstants.WATER_TAX_SERVICE_CODE);
-	}
 }

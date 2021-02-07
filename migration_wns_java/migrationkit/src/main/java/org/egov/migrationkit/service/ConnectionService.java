@@ -73,6 +73,11 @@ public class ConnectionService {
 				
 			//	WaterConnection connection = mapWaterConnection(data);
 				WaterConnection connection=	objectMapper.readValue(json, WaterConnection.class);
+				/**
+				 * Setting If consumer number is null then, assigning application number of ERP. 
+				 */
+				String connectionNo = connection.getConnectionNo() != null ? connection.getConnectionNo() : (String) data.get("applicationnumber");
+				connection.setConnectionNo(connectionNo);
 				
 				List<Map> roadCategoryList = (List<Map>) data.get("road_category");
 				if (roadCategoryList != null) {
@@ -132,8 +137,12 @@ public class ConnectionService {
 					if(!demandRequestList.isEmpty()) {
 						
 						Boolean isDemandCreated = demandService.saveDemand(requestInfo, demandRequestList);
+						if(isDemandCreated){
+							Boolean isBillCreated = demandService.fetchBill(demandRequestList, requestInfo);
+
+							
+						}
 						
-						Boolean isBillCreated = demandService.fetchBill(demandRequestList, requestInfo);
 						
 						recordService.updateWaterMigration(wtrConnResp);
 						log.info("waterResponse" + waterResponse);                                
@@ -172,7 +181,7 @@ public class ConnectionService {
 				.proposedPipeSize((Double)data.get("proposedPipeSize"))
 				.actualPipeSize((Double)data.get("actualPipeSize"))
 				.waterSource((String) data.get("waterSource"))
-				//.connectionNo((String) data.get("consumercode"))
+				.connectionNo((String) data.get("consumercode"))
 				.connectionCategory((String) data.get("propertytype"))
 				.connectionExecutionDate((Long)data.get("executiondate"))
 				.mobilenumber((String) data.get("mobilenumber")) 
@@ -190,30 +199,5 @@ public class ConnectionService {
 
 	}
 	
-	
-	public void migrateWtrCollection(String tenantId, RequestInfo requestInfo) {
-
-		jdbcTemplate.execute("set search_path to " + tenantId);
-		
-		jdbcTemplate.execute(Sqls.WATER_COLLECTION_TABLE);
-
-		List<String> queryForList = jdbcTemplate.queryForList(Sqls.waterQuery, String.class);
-
-		for (String json : queryForList) {
-
-			try {			
-		
-				recordService.recordWtrCollMigration(null);
-				recordService.updateWtrCollMigration(null);
-				log.info("waterResponse" + null);                                
-
-			} catch (Exception e) {
-				log.error(e.getMessage()); 
-			}
-
-		}
-		log.info("Migration completed for "+tenantId);
-	}
-
 	
 }

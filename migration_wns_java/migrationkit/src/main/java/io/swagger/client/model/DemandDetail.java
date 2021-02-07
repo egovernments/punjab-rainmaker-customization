@@ -50,6 +50,12 @@ public class DemandDetail   {
 
         @JsonProperty("toDate")
         private Long toDate;
+        
+        /**
+         * This is used to migrate the collection migration
+         */
+        @JsonProperty("amountPaid")
+        private BigDecimal amountPaid;
 
         
 }
