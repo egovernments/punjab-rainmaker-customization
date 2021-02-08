@@ -5422,3 +5422,66 @@ ReportDefinitions:
     and egcl_bill.status='ACTIVE'
     --and billid='00088a80-5671-408d-8494-2fb83b91b04f'    
   orderby: order by amountpaid desc
+ 
+- reportName: PendingPTApplicationsReport
+  summary: ULB-wise PT Collection
+  version: 1.0.0
+  moduleName: rainmaker-pt
+  sourceColumns:
+  - name: tenantid
+    label: reports.pt.tenantid
+    type: string
+    source: pt
+    total: false
+  - name: propertyid
+    label: reports.pt.propertyid
+    type: string
+    source: pt
+    total: false
+  - name: applicationnumber
+    label: reports.pt.applicationnumber
+    type: string
+    source: pt
+    total: false
+  - name: oldpropertyid
+    label: reports.pt.oldpropertyid
+    type: string
+    source: pt
+    total: false
+  - name: status
+    label: reports.pt.status
+    type: string
+    source: pt
+    total: false
+  - name: propertytype
+    label: reports.pt.propertytype
+    type: string
+    source: pt
+    total: false
+  - name: usagecategory
+    label: reports.pt.usagecategory
+    type: string
+    source: pt
+    total: false
+  - name: channel
+    label: reports.pt.channel
+    type: string
+    source: pt
+    total: false
+  - name: createdon
+    label: reports.pt.createdon
+    type: string
+    source: pt
+    total: false
+  query: |
+    select
+      tenantid,
+      propertyid,
+      acknowldgementnumber as applicationnumber,
+      oldpropertyid,
+      status,
+      propertytype,
+      usagecategory,
+      channel,
+      to_char((To_timestamp(createdtime/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY') as createdon
+    from eg_pt_property where status='INWORKFLOW' and tenantid=$tenantid
