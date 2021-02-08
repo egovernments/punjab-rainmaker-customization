@@ -2534,7 +2534,7 @@ ReportDefinitions:
     source: tl
     total: false
   - name: assignee
-    lable: report.tl.assignee
+    label: report.tl.assignee
     type: string
     source: tl
     total: false
