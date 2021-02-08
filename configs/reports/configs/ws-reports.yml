@@ -78,7 +78,6 @@ ReportDefinitions:
     type: string
     source: ws
     total: true
-  searchParams:
   query: |
       -- Use CTE to force query plan, compute & use CTE later
       SELECT
