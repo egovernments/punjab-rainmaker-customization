@@ -101,4 +101,4 @@ ReportDefinitions:
                   INNER JOIN egcl_paymentdetail as pd on pd.billid = bd.billid
                   INNER JOIN egcl_payment as payment on pd.paymentid=payment.id
                   WHERE payment.tenantid = $tenantid and payment.paymentstatus != 'CANCELLED' and  pd.businessservice like 'SW%'
-                  GROUP BY pdid
+  groupby: GROUP BY pdid
