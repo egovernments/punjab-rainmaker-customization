@@ -77,7 +77,7 @@ public class RecordService {
 		
 		
 	jdbcTemplate.execute("set search_path to " + tenantId);
-	jdbcTemplate.execute("drop table if exists egwtr_migration" + tenantId);
+	//jdbcTemplate.execute("drop table if exists egwtr_migration" + tenantId);
 	jdbcTemplate.execute(Sqls.waterRecord_table);
 	}
 	public void recordError(String module,String message, String id) {
