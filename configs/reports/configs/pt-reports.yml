@@ -5486,7 +5486,7 @@ ReportDefinitions:
       to_char((To_timestamp(createdtime/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY') as createdon
     from eg_pt_property where status='INWORKFLOW' and tenantid=$tenantid
     
-    - reportName: StatusReport_V2
+- reportName: StatusReport_V2
   decryptionPathId: StatusReport_V2
   summary: Status Report
   version: 1.0.0
