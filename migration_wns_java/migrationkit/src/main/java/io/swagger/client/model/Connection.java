@@ -91,7 +91,7 @@ public class Connection {
 	private String roadType = null;
 
 	@JsonProperty("roadCuttingArea")
-	private Float roadCuttingArea = null;
+	private Double roadCuttingArea = null;
 
 	@JsonProperty("connectionExecutionDate")
 	private Long connectionExecutionDate = null;
@@ -282,24 +282,12 @@ public class Connection {
 		this.roadType = roadType;
 	}
 
-	public Connection roadCuttingArea(Float roadCuttingArea) {
+	public Connection roadCuttingArea(Double roadCuttingArea) {
 		this.roadCuttingArea = roadCuttingArea;
 		return this;
 	}
 
-	/**
-	 * Capture the road cutting area in sqft.
-	 * 
-	 * @return roadCuttingArea
-	 **/
-	public Float getRoadCuttingArea() {
-		return roadCuttingArea;
-	}
-
-	public void setRoadCuttingArea(Float roadCuttingArea) {
-		this.roadCuttingArea = roadCuttingArea;
-	}
-
+	 
 	/**
 	 * Get connectionExecutionDate
 	 * 

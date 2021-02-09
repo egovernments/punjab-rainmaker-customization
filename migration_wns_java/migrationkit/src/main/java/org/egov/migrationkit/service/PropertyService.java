@@ -52,15 +52,20 @@ public class PropertyService {
 	public Property findProperty(WaterConnectionRequest wcr,String json)
 	{
 		
-	 
-		Property property=searchPtRecord(wcr,json);
-		
+		 
+		Property property=null;
+		try {
+			property = searchPtRecord(wcr,json);
 			
-		if(property==null)
-		{
-		  log.info("Propery not found creating new property");
-			property=createProperty(wcr,json);
-		  
+				
+			if(property==null)
+			{
+			  log.info("Propery not found creating new property");
+				property=createProperty(wcr,json);
+			  
+			}
+		} catch (Exception e) {
+			log.error("error while finding or creating property",e.getMessage());
 		}
 		
 			

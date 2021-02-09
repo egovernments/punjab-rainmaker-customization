@@ -6,10 +6,12 @@ import java.util.Map;
 import org.egov.migrationkit.constants.WSConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -33,8 +35,8 @@ import io.swagger.client.model.WaterConnectionResponse;
 import lombok.extern.slf4j.Slf4j;
 
 @Service
-@Transactional
 @Slf4j
+
 public class ConnectionService {
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
@@ -66,10 +68,11 @@ public class ConnectionService {
 
 	public void migrateWtrConnection(String tenantId, RequestInfo requestInfo) {
 
-		jdbcTemplate.execute("set search_path to " + tenantId);
+	    recordService.initiate(tenantId);
 		
-		jdbcTemplate.execute(Sqls.waterRecord_table);
-
+		String searchPath = jdbcTemplate.queryForObject("show search_path",String.class);	
+		log.info(searchPath);
+		 
 		List<String> queryForList = jdbcTemplate.queryForList(Sqls.waterQuery, String.class);
 
 		for (String json : queryForList) {
@@ -88,11 +91,24 @@ public class ConnectionService {
 				String connectionNo = connection.getConnectionNo() != null ? connection.getConnectionNo() : (String) data.get("applicationnumber");
 				connection.setConnectionNo(connectionNo);
 				
+				log.info("mobile number : "+connection.getMobilenumber());
+				log.info("getApplicantname ; "+connection.getApplicantname());
+				log.info("connectionNo; "+connection.getConnectionNo());
+				log.info("Connection Category : "+connection.getConnectionCategory());
+				log.info("Connection Type :"+connection.getConnectionType());
+				
 				List<Map> roadCategoryList = (List<Map>) data.get("road_category");
 				if (roadCategoryList != null) {
 					String roadCategory = (String) roadCategoryList.get(0).get("road_name");
 					connection.setRoadType(WSConstants.DIGIT_ROAD_CATEGORIES.get(roadCategory));
-					connection.setRoadCuttingArea(Float.valueOf((Integer)roadCategoryList.get(0).get("road_area")));
+					try {
+						Integer area = (Integer) roadCategoryList.get(0).get("road_area");
+
+						connection.setRoadCuttingArea(Double.valueOf(area));
+					} catch (Exception e) {
+						Double area = (Double) roadCategoryList.get(0).get("road_area");
+						connection.setRoadCuttingArea(area);
+					}  
 
 				}
 					String addressQuery=	Sqls.address;
@@ -101,19 +117,25 @@ public class ConnectionService {
 				@SuppressWarnings("deprecation")
 				Address address = (Address) jdbcTemplate.queryForObject(addressQuery,new BeanPropertyRowMapper(Address.class));  
 				
-				Locality locality=new Locality();
-				//locality.setCode((String)data.get("locality"));
-				//use the map here 
-				locality.setCode("ALOC4");
+				Locality locality = new Locality();
+				// locality.setCode((String)data.get("locality"));
+				// use the map here
+				String localityCode = findLocality((String) data.get("locality"));
+				if (localityCode == null) {
+					recordService.recordError("water","Error In finding Locality", connection.getId());
+					continue;
+				}
+
+				locality.setCode(localityCode);
 				address.setLocality(locality);
 				connection.setStatus(StatusEnum.Active);
-				connection.setConnectionNo((String)data.get("consumerCode"));
+				connection.setConnectionNo((String)data.get("consumercode"));
 				connection.setApplicationStatus("CONNECTION_ACTIVATED");
 			 
 				connection.setApplicantAddress(address);
 
 				connection.setTenantId(requestInfo.getUserInfo().getTenantId());
-				connection.setProcessInstance(ProcessInstance.builder().action("CONNECTION_ACTIVATED").build());
+				connection.setProcessInstance(ProcessInstance.builder().action("INITIATE").build());
 				
 				recordService.recordWaterMigration(connection);
  				
@@ -122,13 +144,21 @@ public class ConnectionService {
 				waterRequest.setWaterConnection(connection);
 				waterRequest.setRequestInfo(requestInfo);
 				Property property = propertyService.findProperty(waterRequest,json);
+				if(property==null)
+					continue;
 				connection.setPropertyId(property.getId()); 
 
 				String ss = "{" + requestInfo + ", \"waterConnection\": " + waterRequest + " }";
 
 				log.info("request: " + ss);
 
-				String response = restTemplate.postForObject(host + "/" + waterUrl, waterRequest, String.class);
+				String response=null;
+				try {
+					response = restTemplate.postForObject(host + "/" + waterUrl, waterRequest, String.class);
+				} catch (RestClientException e) {
+					log.error(e.getMessage(),e);
+					continue;
+				}
 
 				log.info("Response=" + response);
 
@@ -179,36 +209,28 @@ public class ConnectionService {
 		return "";
 
 	}
+	
+	private String findLocality(String code) {
+		log.info("Seraching  for digit locality maping " + code);
+		String digitcode = null;
+		try {
+			digitcode = jdbcTemplate.queryForObject("select digitcode as digitCode from finallocation where code=?",
+					new Object[] { code }, String.class);
+		} catch (DataAccessException e) {
+			log.error("digit Location code is not mapped for " + code);
+			digitcode = "SUN97";
+		}
+		log.info("returning  " + digitcode);
+		return digitcode;
+	}
+
 
 	public void migratev2(String tenantId, RequestInfo requestInfo) {
 		 
 		
 	}
 	
-	private WaterConnection mapWaterConnection(Map data) {
-		WaterConnection waterConnection = WaterConnection.builder()
-				.actualTaps(Double.valueOf((Integer)data.get("actualTaps")))
-				.proposedTaps(Double.valueOf((Integer)data.get("proposedTaps")))
-				.proposedPipeSize((Double)data.get("proposedPipeSize"))
-				.actualPipeSize((Double)data.get("actualPipeSize"))
-				.waterSource((String) data.get("waterSource"))
-				.connectionNo((String) data.get("consumercode"))
-				.connectionCategory((String) data.get("propertytype"))
-				.connectionExecutionDate((Long)data.get("executiondate"))
-				.mobilenumber((String) data.get("mobilenumber")) 
-				.applicantname((String)data.get("applicantname"))
-				.build();
-		List<Map> roadCategoryList = (List<Map>) data.get("road_category");
-		if (roadCategoryList != null) {
-			String roadCategory = (String) roadCategoryList.get(0).get("road_name");
-			waterConnection.setRoadType(WSConstants.DIGIT_ROAD_CATEGORIES.get(roadCategory));
-			waterConnection.setRoadCuttingArea(Float.valueOf((Integer)roadCategoryList.get(0).get("road_area")));
-
-		}
-
-		return waterConnection;
-
-	}
+	 
 	
 	public void createSewerageConnection(String tenantId, RequestInfo requestInfo) {
 
