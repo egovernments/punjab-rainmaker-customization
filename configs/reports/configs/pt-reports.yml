@@ -5341,10 +5341,10 @@ ReportDefinitions:
         Left outer join eg_user as eu on eu.uuid = propety.createdby
         Left outer join eg_user as euser on euser.uuid = propety.lastmodifiedby
         Left outer join eg_pt_address as pta on pta.propertyid = propety.id
-        Left outer join eg_pt_propertydetail_v2 pt_detail ON pt_detail.property  = propety.propertyid
+        INNER join eg_pt_propertydetail_v2 pt_detail ON pt_detail.property  = propety.propertyid
         Left outer join egcl_bill as bill on bill.consumercode = propety.propertyid
         Left outer join eg_bndry_mohalla as localnames on pta.locality=localnames.localitycode
-        WHERE propety.tenantid=$tenantid AND propety.acknowldgementnumber NOTNULL
+        WHERE propety.tenantid=$tenantid AND propety.acknowldgementnumber NOTNULL AND propety.status='ACTIVE'
   orderby: ORDER BY propety.createdtime DESC;
 
 - reportName: PendingPTApplicationsReport
