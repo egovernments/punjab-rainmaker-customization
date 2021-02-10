@@ -166,7 +166,7 @@ public class RecordService {
 		else if(module.equalsIgnoreCase("sewerage"))
 			tableName="egsw_migration";
 			
-		jdbcTemplate.execute("update "+tableName+" set error='" +message+ " ' where erpid='"+id+"'"); 
+		jdbcTemplate.execute("update "+tableName+" set errorMessage='" +message+ " ' where erpid='"+id+"'"); 
 		
 	} 
 

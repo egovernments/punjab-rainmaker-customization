@@ -84,7 +84,7 @@ public class Sqls {
 	
 	
 	public static final String waterRecord_table="create table if not exists egwtr_migration "
-			+ " ( erpid varchar(64),erpconn varchar(64) ,digitconn varchar(64) ,erppt varchar(64),digitpt varchar(64),status varchar(64),tenantId varchar(64),additiondetails varchar(1000),error varchar(4000) );"
+			+ " ( erpid varchar(64),erpconn varchar(64) ,digitconn varchar(64) ,erppt varchar(64),digitpt varchar(64),status varchar(64),tenantId varchar(64),additiondetails varchar(1000),errorMessage varchar(4000) );"
 			+ "";
 	
 	public static final String waterRecord_insert="insert into egwtr_migration "
@@ -156,7 +156,7 @@ public class Sqls {
 	
 	
 	public static final String SEWERAGE_CONNECTION_TABLE="create table  if not exists  egsw_migration "
-			+ " ( erpid varchar(64),erpconn varchar(64) ,digitconn varchar(64) ,erppt varchar(64),digitpt varchar(64),status varchar(64),tenantId varchar(64),additiondetails varchar(1000),error varchar(4000)  );"
+			+ " ( erpid varchar(64),erpconn varchar(64) ,digitconn varchar(64) ,erppt varchar(64),digitpt varchar(64),status varchar(64),tenantId varchar(64),additiondetails varchar(1000),errorMessage varchar(4000)  );"
 			+ "";
 	
 	public static final String sewerageRecord_insert="insert into  egsw_migration  "
