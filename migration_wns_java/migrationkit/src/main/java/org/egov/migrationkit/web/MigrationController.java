@@ -128,6 +128,30 @@ public class MigrationController {
 		return new ResponseEntity(HttpStatus.CREATED);
 	}
 	
+	@PostMapping("/sewerage/connection/collection")
+	@ResponseStatus(HttpStatus.CREATED)
+	public ResponseEntity migrateSewerageCollection(@RequestParam String tenantId,
+			@RequestBody RequestInfoWrapper sewerageMigrateRequest,BindingResult result) {
+
+		try {
+
+			UserInfo userInfo = sewerageMigrateRequest.getRequestInfo().getUserInfo();
+			String accessToken = userService.getAccessToken(userInfo.getUserName(), userInfo.getPassword(), userInfo.getTenantId());
+			if (accessToken != null) {
+				sewerageMigrateRequest.getRequestInfo().setAuthToken(accessToken);
+				collectionService.migrateSwgCollection(tenantId, sewerageMigrateRequest.getRequestInfo());
+
+			} else {
+				return new ResponseEntity(HttpStatus.BAD_REQUEST);
+			}
+
+		} catch (Exception e) {
+
+			e.printStackTrace();
+		}
+		return new ResponseEntity(HttpStatus.CREATED);
+	}
+	
 	
 
 }

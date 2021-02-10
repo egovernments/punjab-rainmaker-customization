@@ -13,9 +13,18 @@
 package io.swagger.client.model;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+
+//import io.swagger.client.model.WaterConnection.WaterConnectionBuilder;
+//import io.swagger.client.model.WaterConnection.WaterConnectionBuilderImpl;
+//import lombok.AllArgsConstructor;
+//import lombok.Getter;
+//import lombok.NoArgsConstructor;
+//import lombok.Setter;
+//import lombok.experimental.SuperBuilder;
 /**
  * SewerageConnection
  */
@@ -35,6 +44,9 @@ public class SewerageConnection extends Connection {
   
   @JsonProperty("processInstance")
   private ProcessInstance processInstance = null;
+  
+  @JsonProperty("applicantaddress")
+  private Address applicantAddress=null;
  
   public ProcessInstance getProcessInstance() {
 	return processInstance;
@@ -158,5 +170,13 @@ public void setProcessInstance(ProcessInstance processInstance) {
     }
     return o.toString().replace("\n", "\n    ");
   }
+  
+  public Address getApplicantAddress() {
+		return applicantAddress;
+	}
+
+	public void setApplicantAddress(Address applicantAddress) {
+		this.applicantAddress = applicantAddress;
+	}
 
 }

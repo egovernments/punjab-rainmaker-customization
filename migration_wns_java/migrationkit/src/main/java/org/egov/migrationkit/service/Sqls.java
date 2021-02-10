@@ -119,7 +119,7 @@ public class Sqls {
 			+ "'connectionstatus', conn.status,\n"
 			+ "'createddate', to_timestamp(to_char(conn.createddate::timestamp without time zone, 'YYYY-MM-DD'),'YYYY-MM-DDTHH24:MI:SSZ'),\n"
 			+ "'servicetype', 'Sewerage Charges',\n"
-			+ "'autoverifieddate', (select lastmodifieddate from eg_wf_state_history statehist where statehist.state_id=appdetails.state_id and lastmodifiedby=(select id from eg_user where username='system')),\n"
+			+ "'autoverifieddate', (select lastmodifieddate from eg_wf_state_history statehist where statehist.state_id=appdetails.state_id and lastmodifiedby IN (select id from eg_user where username='system') LIMIT 1),\n"
 			+ "'guardianname', usr.guardian,\n"
 			+ "'channel', CASE WHEN appdetails.source is not null THEN appdetails.source ELSE 'COUNTER' END,\n"
 			+ "'applicationtype', apptype.name,\n"
@@ -163,20 +163,21 @@ public class Sqls {
 //			+ "(erpid ,erpconn  ,digitconn  ,erppt ,digitpt ,status ,tenantId ,additiondetails ) values (:erpid,:erpconn,:digitconn,:erppt,:digitpt,:status"
 //			+ ", :tenantId,:addtionaldetails);";
 //	
-//	public static final String sewerageRecord_update="update  egsw_migration  "+
-//			"set digitconn=:digitconn , digitpt=:digitpt,status=:status where erpconn=:erpconn and tenantId=:tenantId";
-//		
+	public static final String sewerageRecord_update="update  egsw_migration  "+
+			"set digitconn=:digitconn , digitpt=:digitpt,status=:status where erpconn=:erpconn and tenantId=:tenantId";
+		
 //	public static final String address="select id,housenobldgapt as plotno,landmark,citytownvillage as city,district,arealocalitysector as region,state,country,pincode, buildingName,streetroadline as street from eg_address where id=:id ;";
 //	
-//	public static final String SEWERAGE_COLLECTION_TABLE="create table  if not exists  egwtr_cl_migration "
-//			+ " ( erpid varchar(64),erpconn varchar(64) ,digitconn varchar(64) ,erppt varchar(64),digitpt varchar(64),status varchar(64),tenantId varchar(64),additiondetails varchar(1000) );"
-//			+ "";
-//	
-//	public static final String SEWERAGE_COLLECTION_INSERT="insert into  egwtr_cl_migration  "
-//			+ "(erpid ,erpconn  ,digitconn  ,erppt ,digitpt ,status ,tenantId ,additiondetails ) values (:erpid,:erpconn,:digitconn,:erppt,:digitpt,:status"
-//			+ ", :tenantId,:addtionaldetails);";
-//	
-//	public static final String SEWERAGE_COLLECTION_UPDATE="update  egsw_cl_migration  "+
-//			"set digitconn=:digitconn , digitpt=:digitpt,status=:status where erpconn=:erpconn and tenantId=:tenantId";
+	public static final String SEWERAGE_COLLECTION_TABLE="create table  if not exists  egsw_cl_migration "
+			+ " ( erpid varchar(64),erpconn varchar(64) ,digitconn varchar(64) ,erppt varchar(64),digitpt varchar(64),status varchar(64),tenantId varchar(64),additiondetails varchar(1000) );"
+			+ "";
+	public static final String SEWERAGE_COLLECTION_QUERY="";
+	
+	public static final String SEWERAGE_COLLECTION_INSERT="insert into  egsw_cl_migration  "
+			+ "(erpid ,erpconn  ,digitconn  ,erppt ,digitpt ,status ,tenantId ,additiondetails ) values (:erpid,:erpconn,:digitconn,:erppt,:digitpt,:status"
+			+ ", :tenantId,:addtionaldetails);";
+	
+	public static final String SEWERAGE_COLLECTION_UPDATE="update  egsw_cl_migration  "+
+			"set digitconn=:digitconn , digitpt=:digitpt,status=:status where erpconn=:erpconn and tenantId=:tenantId";
 	
 }

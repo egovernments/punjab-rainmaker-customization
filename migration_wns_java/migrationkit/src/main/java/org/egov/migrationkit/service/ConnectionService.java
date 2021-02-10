@@ -282,9 +282,11 @@ public class ConnectionService {
 				sewerageRequest.setSewerageConnection(connection2);
 				sewerageRequest.setRequestInfo(requestInfo);
 				Property property = propertyService.findProperty(sewerageRequest,json);
-				connection2.setPropertyId(property.getId()); 
+				//connection2.setPropertyId(property.getId()); 
 				//Search the connection value
-				
+				if(property==null)
+					continue;
+				connection2.setPropertyId(property.getId()); 
 				//String ss = "{" + requestInfo + ", \"waterConnection\": " + sewerageRequest + " }";
 
 				//log.info("request: " + ss);
@@ -303,19 +305,20 @@ public class ConnectionService {
 					
 					String consumerCode = srgConnResp.getConnectionNo() !=null ? srgConnResp.getConnectionNo()
 							: srgConnResp.getApplicationNo();
-//					
-//					List<Demand> demandRequestList = demandService.prepareDemandRequest(data, WSConstants.WATER_BUSINESS_SERVICE, 
-//							consumerCode, requestInfo.getUserInfo().getTenantId(), property.getOwners().get(0));
-//					if(!demandRequestList.isEmpty()) {
-//						
-//						Boolean isDemandCreated = demandService.saveDemand(requestInfo, demandRequestList);
-//						
-//						Boolean isBillCreated = demandService.fetchBill(demandRequestList, requestInfo);
-//						
-//						recordService.updateWaterMigration(wtrConnResp);
-//						log.info("waterResponse" + waterResponse);                                
-//					
-//				}
+					
+					List<Demand> demandRequestList = demandService.prepareDemandRequest(data, WSConstants.SEWERAGE_BUSINESS_SERVICE, 
+							consumerCode, requestInfo.getUserInfo().getTenantId(), property.getOwners().get(0));
+					if(!demandRequestList.isEmpty()) {
+						
+						Boolean isDemandCreated = demandService.saveDemand(requestInfo, demandRequestList);
+						if (isDemandCreated) {
+							Boolean isBillCreated = demandService.fetchBill(demandRequestList, requestInfo);
+						}
+						recordService.updateSewerageMigration(srgConnResp);
+						log.info("sewerageResponse" + sewerageResponse);                                
+					
+				}
+
 			}
 				
 

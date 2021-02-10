@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import io.swagger.client.model.CollectionPayment;
 import io.swagger.client.model.WaterConnection;
+import io.swagger.client.model.SewerageConnection;
 @Transactional
 @Service
 public class RecordService {
@@ -41,6 +42,21 @@ public class RecordService {
 	jdbcTemplate.execute(qry);
 		
 	}
+	
+	@Transactional
+	public void updateSewerageMigration(SewerageConnection conn)
+	{
+		
+	String qry=	Sqls.sewerageRecord_update;
+	qry=qry.replace(":erpid", "'"+conn.getId()+"'");
+	qry=qry.replace(":status", "'saved'");
+	qry=qry.replace(":tenantId", "'"+conn.getTenantId()+"'");
+	qry=qry.replace(":digitconn", conn.getConnectionNo()==null?"'null'":"'"+conn.getConnectionNo()+"'");
+	qry=qry.replace(":digitpt","'"+conn.getPropertyId()+"'");
+	jdbcTemplate.execute(qry);
+		
+	}
+	
 	@Transactional
 	public void recordWtrCollMigration(CollectionPayment conn)
 	{
@@ -57,11 +73,42 @@ public class RecordService {
 	jdbcTemplate.execute(qry); 
 		
 	}
+	
+	@Transactional
+	public void recordSwgCollMigration(CollectionPayment conn)
+	{
+		
+	String qry=	Sqls.SEWERAGE_COLLECTION_INSERT;
+	qry=qry.replace(":erpid", "'"+conn.getId()+"'");
+	qry=qry.replace(":erpconn", "'"+conn.getConsumerCode()+"'");
+	qry=qry.replace(":erppt", "'"+conn.getBusinessService()+"'");
+	qry=qry.replace(":status", "'pushed'");
+	qry=qry.replace(":tenantId", "'"+conn.getTenantId()+"'");
+	qry=qry.replace(":digitconn", "'null'");
+	qry=qry.replace(":digitpt", "'null'");
+	qry=qry.replace(":addtionaldetails", "'null'");
+	jdbcTemplate.execute(qry); 
+		
+	}
 	@Transactional
 	public void updateWtrCollMigration(CollectionPayment conn)
 	{
 		
 	String qry=	Sqls.WATER_COLLECTION_UPDATE;
+	qry=qry.replace(":erpconn", "'"+conn.getConsumerCode()+"'");
+	qry=qry.replace(":status", "'saved'");
+	qry=qry.replace(":tenantId", "'"+conn.getTenantId()+"'");
+	qry=qry.replace(":digitconn", conn.getConsumerCode()==null?"'null'":conn.getConsumerCode());
+	qry=qry.replace(":digitpt","'"+conn.getBusinessService()+"'");
+	jdbcTemplate.execute(qry);
+		
+	}
+	
+	@Transactional
+	public void updateSwgCollMigration(CollectionPayment conn)
+	{
+		
+	String qry=	Sqls.SEWERAGE_COLLECTION_UPDATE;
 	qry=qry.replace(":erpconn", "'"+conn.getConsumerCode()+"'");
 	qry=qry.replace(":status", "'saved'");
 	qry=qry.replace(":tenantId", "'"+conn.getTenantId()+"'");

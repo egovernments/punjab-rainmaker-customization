@@ -19,6 +19,7 @@ import io.swagger.client.model.Property;
 import io.swagger.client.model.PropertyRequest;
 import io.swagger.client.model.PropertyResponse;
 import io.swagger.client.model.PropertySearchResponse;
+import io.swagger.client.model.SewerageConnection;
 import io.swagger.client.model.SewerageConnectionRequest;
 import io.swagger.client.model.Source;
 import io.swagger.client.model.Status;
@@ -75,18 +76,22 @@ public class PropertyService {
 
 	public Property findProperty(SewerageConnectionRequest swg,String json)
 	{
+		Property property=null;
+		try {
 		
-	 
-		Property property=searchswPtRecord(swg,json);
+			property=searchswPtRecord(swg,json);
 		
 			
-		if(property==null)
-		{
-		  log.info("Propery not found creating new property");
-			property=createProperty(null,json);
+			if(property==null)
+			{
+				log.info("Propery not found creating new property");
+				property=createSProperty(null,json);
 		  
+			}
+		} catch (Exception e) {
+			log.error("error while finding or creating property",e.getMessage());
+			log.error("Display proper message: " + e);
 		}
-		
 			
 		return property;
 	}
@@ -96,6 +101,52 @@ public class PropertyService {
 		 prequest.setRequestInfo(wcr.getRequestInfo());
 		 Property property=new Property();
 		 WaterConnection conn=	 wcr.getWaterConnection();
+		 //set all property values
+		
+		 property.setAddress(conn.getApplicantAddress());
+		 property.setChannel(Channel.SYSTEM);
+		// property.setInstitution(null);
+		 property.setLandArea(BigDecimal.valueOf(50));
+		 property.setNoOfFloors(Long.valueOf(1));
+		 property.setOldPropertyId(conn.getPropertyId());
+		 property.setOwners(null);
+		 //fix this
+		 property.setOwnershipCategory("INDIVIDUAL.SINGLEOWNER");
+		 property.setPropertyType("BUILTUP.INDEPENDENTPROPERTY");
+		 property.setSource(Source.MUNICIPAL_RECORDS);
+	 
+		 property.setTotalConstructedArea(BigDecimal.valueOf(190));
+		 property.setStatus(Status.ACTIVE);
+		  List<Unit> units=new ArrayList<>();
+		  //units.add(new Unit());
+		 property.setUnits(units);
+		 OwnerInfo owner=new OwnerInfo();
+		 owner.setName(conn.getApplicantname());
+		 owner.setMobileNumber(conn.getMobilenumber());
+		 owner.setFatherOrHusbandName(conn.getGuardianname());
+		 owner.setOwnerType("NONE");
+		 property.creationReason(CreationReason.CREATE);
+		 property.setUsageCategory("RESIDENTIAL");
+		 
+		 List<OwnerInfo> owners=new ArrayList<>();
+		 owners.add(owner);
+		 property.setOwners(owners);
+ 
+		 property.setTenantId(conn.getTenantId());
+		 prequest.setProperty(property);
+		 PropertyResponse res=	 restTemplate.postForObject(host + "/" + ptcreatehurl, prequest, PropertyResponse.class);
+		 log.info(res.toString());
+
+		 return res.getProperties().get(0);
+		 
+	}
+	
+	private Property createSProperty(SewerageConnectionRequest swg, String json) {
+		String uuid=null;
+		 PropertyRequest prequest=new PropertyRequest();
+		 prequest.setRequestInfo(swg.getRequestInfo());
+		 Property property=new Property();
+		 SewerageConnection conn=	 swg.getSewerageConnection();
 		 //set all property values
 		
 		 property.setAddress(conn.getApplicantAddress());

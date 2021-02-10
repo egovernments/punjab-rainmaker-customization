@@ -131,5 +131,68 @@ public class CollectionService {
 		}
 		return bills;
 	}
+	
+	public void migrateSwgCollection(String tenantId, RequestInfo requestInfo) {
+
+		jdbcTemplate.execute("set search_path to " + tenantId);
+
+		jdbcTemplate.execute(Sqls.SEWERAGE_COLLECTION_TABLE);
+
+		String digitTenantId = requestInfo.getUserInfo().getTenantId();
+
+		List<String> queryForList = jdbcTemplate.queryForList(Sqls.SEWERAGE_COLLECTION_QUERY, String.class);
+
+		for (String json : queryForList) {
+
+			try {
+				CollectionPayment payment = objectMapper.readValue(json, CollectionPayment.class);
+				payment.setTenantId(digitTenantId);
+				payment.getPaymentDetails().get(0).setTenantId(digitTenantId);
+				recordService.recordSwgCollMigration(payment);
+				List<BillV2> bills = null;
+				try {
+
+					bills = fetchBill(requestInfo, digitTenantId, payment.getBusinessService(), payment.getConsumerCode());
+
+				}catch(Exception exception) {
+					log.error("Exception occurred while fetching the bills with business service:"+payment.getBusinessService()+ " and consumer code: " + payment.getConsumerCode());
+
+				}
+				if(bills != null && !bills.isEmpty() && !payment.getPaymentDetails().isEmpty()) {
+					payment.getPaymentDetails().get(0).setBillId(bills.get(0).getId());
+					CollectionPaymentRequest paymentRequest = CollectionPaymentRequest.builder()
+							.requestInfo(requestInfo).payment(payment).build();
+
+					String uri = collectionserviceHost + paymentCreatePath;
+					Optional<Object> response =  Optional.ofNullable(restTemplate.postForObject(uri, paymentRequest, JsonNode.class));
+					if(response.isPresent()) {
+						try {
+							CollectionPaymentResponse paymentResponse = objectMapper.convertValue(response.get(), CollectionPaymentResponse.class);
+							if(!CollectionUtils.isEmpty(paymentResponse.getPayments()))
+								log.info("Collection migration done for consumer code: "+ payment.getConsumerCode());
+							else
+								log.error("Failed to register this payment at collection-service for consumer code: "+ payment.getConsumerCode());						
+						}catch(Exception e) {
+							log.error("Failed to register this payment for consumer code: "+ payment.getConsumerCode(), e);						
+
+						}
+
+					}else {
+						log.error("Failed to register this payment at collection-service");
+					}
+
+					recordService.updateSwgCollMigration(payment);
+					log.info("sewerageResponse" + response); 
+				}
+
+
+
+			} catch (Exception e) {
+				log.error(e.getMessage()); 
+			}
+
+		}
+		log.info("Collection Migration is completed for "+tenantId);
+	}
 
 }
