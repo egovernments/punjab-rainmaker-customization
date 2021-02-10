@@ -3,6 +3,7 @@ package org.egov.migrationkit.service;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -49,24 +50,28 @@ public class PropertyService {
 	@Autowired
 	private ObjectMapper objectMapper;
 	
+	@Autowired
+	private RecordService recordService;
 	
-	public Property findProperty(WaterConnectionRequest wcr,String json)
+	
+	public Property findProperty(WaterConnectionRequest wcr,Map data)
 	{
 		
 		 
 		Property property=null;
 		try {
-			property = searchPtRecord(wcr,json);
+			property = searchPtRecord(wcr,data);
 			
 				
 			if(property==null)
 			{
 			  log.info("Propery not found creating new property");
-				property=createProperty(wcr,json);
+				property=createProperty(wcr,data);
 			  
 			}
 		} catch (Exception e) {
 			log.error("error while finding or creating property",e.getMessage());
+			recordService.recordError("water", e.getMessage(), wcr.getWaterConnection().getId());
 		}
 		
 			
@@ -91,11 +96,12 @@ public class PropertyService {
 		} catch (Exception e) {
 			log.error("error while finding or creating property",e.getMessage());
 			log.error("Display proper message: " + e);
+			recordService.recordError("sewerage", e.getMessage(), swg.getSewerageConnection().getId());
 		}
 			
 		return property;
 	}
-	private Property createProperty(WaterConnectionRequest wcr, String json) {
+	private Property createProperty(WaterConnectionRequest wcr, Map data ) {
 		String uuid=null;
 		 PropertyRequest prequest=new PropertyRequest();
 		 prequest.setRequestInfo(wcr.getRequestInfo());
@@ -126,7 +132,7 @@ public class PropertyService {
 		 owner.setFatherOrHusbandName(conn.getGuardianname());
 		 owner.setOwnerType("NONE");
 		 property.creationReason(CreationReason.CREATE);
-		 property.setUsageCategory("RESIDENTIAL");
+		 property.setUsageCategory((String) data.get("connectionCategory"));
 		 
 		 List<OwnerInfo> owners=new ArrayList<>();
 		 owners.add(owner);
@@ -187,38 +193,38 @@ public class PropertyService {
 		 
 	}
 
-	private Property searchPtRecord(WaterConnectionRequest conn,String json) {
+	private Property searchPtRecord(WaterConnectionRequest conn,Map data) {
 		 
 		PropertyRequest pr=new PropertyRequest();
 		pr.setRequestInfo(conn.getRequestInfo());
-		String mobileNumber = conn.getWaterConnection().getMobilenumber() != null || conn.getWaterConnection().getMobilenumber() != "" ? conn.getWaterConnection().getMobilenumber() : "9876543210";
+	//	String mobileNumber = conn.getWaterConnection().getMobilenumber() != null || conn.getWaterConnection().getMobilenumber() != "" ? conn.getWaterConnection().getMobilenumber() : "9876543210";
  
 		String propertySeachURL=ptseachurl+"?tenantId="+conn.getRequestInfo().getUserInfo().getTenantId()+
-//				"&mobileNumber=6364021789";
-				"&mobileNumber="+mobileNumber;
+				"&mobileNumber="+conn.getWaterConnection().getMobilenumber();
  
 		PropertySearchResponse response = restTemplate.postForObject(host + "/" + propertySeachURL, pr, PropertySearchResponse.class);
+
+				//if property found compare with owner name,father name etc.
 		
-  
-	//	String response = restTemplate.postForObject(host + "/" + ptseachurl, pr, String.class);
-		
-		System.out.println("response"+response);
-		
-		//if property found compare with owner name,father name etc.
+		//&& property.getStatus().equals(Status.ACTIVE) not used
 		if(response!=null && response.getProperties()!=null && response.getProperties().size() >=1 )
 		{
 			log.info("found properties"+response.getProperties().size());
 			for(Property property:response.getProperties())
 			{
 				log.info("status"+property.getPropertyId()+"---"+property.getStatus());
+				
+				
 				for(OwnerInfo owner:property.getOwners())
 				{
+					log.info("owner.getName() : "+owner.getName() );
+					log.info("owner.getFatherOrHusbandName() : "+owner.getFatherOrHusbandName());
+					
 					if( 
 						owner.getName().equalsIgnoreCase(conn.getWaterConnection().getApplicantname())
 					    &&
 						owner.getFatherOrHusbandName().equalsIgnoreCase(conn.getWaterConnection().getGuardianname())
-						&&
-						property.getStatus().equals(Status.ACTIVE)
+						
 					 
 						)
  
@@ -227,6 +233,9 @@ public class PropertyService {
 					
 				}
 			}
+		}else
+		{
+			log.info("no  property found in digit system for mobilenumber"+conn.getWaterConnection().getMobilenumber());
 		}
 		
 			

@@ -455,12 +455,12 @@ public class Connection {
 	}
 
 	public void setApplicantname(String applicantname) {
-		this.applicantname = applicantname;
+		this.applicantname = applicantname; 
 	}
 
 	public String getGuardianname() {
 		return guardianname;
-	}
+	} 
 
 	public void setGuardianname(String guardianname) {
 		this.guardianname = guardianname;
