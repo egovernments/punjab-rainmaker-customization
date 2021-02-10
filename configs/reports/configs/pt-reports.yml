@@ -4673,7 +4673,7 @@ ReportDefinitions:
                  having sum(dd.taxamount - dd.collectionamount)=0) b
                  where a.consumercode=b.consumercode and a.taxperiodfrom=b.maxperiod
                  ) collection ON collection.consumercode = pt.propertyid
-    inner join (SELECT DISTINCT ON (propertyid) propertyid ,username as name , mobilenumber
+    inner join (SELECT DISTINCT ON (propertyid) propertyid ,name as name , mobilenumber
                  FROM eg_pt_owner , eg_user
                  WHERE  uuid = userid
                  AND status = 'ACTIVE'
