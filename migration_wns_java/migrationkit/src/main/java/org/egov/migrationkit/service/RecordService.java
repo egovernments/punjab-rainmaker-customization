@@ -58,6 +58,23 @@ public class RecordService {
 	}
 	
 	@Transactional
+	public void recordSewerageMigration(SewerageConnection conn)
+	{
+		
+	String qry=	Sqls.sewerageRecord_insert;
+	qry=qry.replace(":erpid", "'"+conn.getId()+"'");
+	qry=qry.replace(":erpconn", "'"+conn.getConnectionNo()+"'");
+	qry=qry.replace(":erppt", "'"+conn.getPropertyId()+"'");
+	qry=qry.replace(":status", "'pushed'");
+	qry=qry.replace(":tenantId", "'"+conn.getTenantId()+"'");
+	qry=qry.replace(":digitconn", "'null'");
+	qry=qry.replace(":digitpt", "'null'");
+	qry=qry.replace(":addtionaldetails", "'null'");
+	jdbcTemplate.execute(qry); 
+		
+	}
+	
+	@Transactional
 	public void recordWtrCollMigration(CollectionPayment conn)
 	{
 		
@@ -127,11 +144,29 @@ public class RecordService {
 	//jdbcTemplate.execute("drop table if exists egwtr_migration" + tenantId);
 	jdbcTemplate.execute(Sqls.waterRecord_table);
 	}
+	
+	
+	@Transactional
+	public void initiateSewrage(String tenantId)
+	{
+		
+		
+		
+	jdbcTemplate.execute("set search_path to " + tenantId);
+	//jdbcTemplate.execute("drop table if exists egwtr_migration" + tenantId);
+	jdbcTemplate.execute(Sqls.SEWERAGE_CONNECTION_TABLE);
+	}
+
+	
+	@Transactional
 	public void recordError(String module,String message, String id) {
 		String tableName=null;
 		if(module.equalsIgnoreCase("water"))
 			tableName="egwtr_migration";
-		jdbcTemplate.execute("update "+tableName+" set error= '" +message+"' where erpid='"+id+"'"); 
+		else if(module.equalsIgnoreCase("sewerage"))
+			tableName="egsw_migration";
+			
+		jdbcTemplate.execute("update "+tableName+" set error='" +message+ " ' where erpid='"+id+"'"); 
 		
 	} 
 

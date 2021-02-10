@@ -233,11 +233,9 @@ public class ConnectionService {
 	 
 	
 	public void createSewerageConnection(String tenantId, RequestInfo requestInfo) {
-
-		jdbcTemplate.execute("set search_path to " + tenantId);
+ 
+      recordService.initiateSewrage(tenantId);
 		
-		jdbcTemplate.execute(Sqls.SEWERAGE_CONNECTION_TABLE);
-
 		List<String> queryForList = jdbcTemplate.queryForList(Sqls.sewerageQuery, String.class);
 
 		for (String json : queryForList) {
@@ -245,60 +243,49 @@ public class ConnectionService {
 			try {
 				
 				Map data = objectMapper.readValue(json, Map.class);
-				
-			//	WaterConnection connection = mapWaterConnection(data);
-			
-				SewerageConnection connection2=	objectMapper.readValue(json, SewerageConnection.class);
-				
-//				List<Map> roadCategoryList = (List<Map>) data.get("road_category");
-//				if (roadCategoryList != null) {
-//					String roadCategory = (String) roadCategoryList.get(0).get("road_name");
-//					connection.setRoadType(WSConstants.DIGIT_ROAD_CATEGORIES.get(roadCategory));
-//					connection.setRoadCuttingArea(Float.valueOf((Integer)roadCategoryList.get(0).get("road_area")));
-//
-//				}
-//					String addressQuery=	Sqls.address;
-//					Integer id =(Integer) data.get("applicantaddress.id");
-//					addressQuery=addressQuery.replace(":id",id.toString() );
-//				@SuppressWarnings("deprecation")
-//				Address address = (Address) jdbcTemplate.queryForObject(addressQuery,new BeanPropertyRowMapper(Address.class));  
-//				
-//				Locality locality=new Locality();
-//				//locality.setCode((String)data.get("locality"));
-//				//use the map here 
-//				locality.setCode("ALOC4");
-//				address.setLocality(locality);
-//				
-			 
+				SewerageConnection swConnection=	objectMapper.readValue(json, SewerageConnection.class);
 				//connection.setApplicantAddress(address);
 
-				connection2.setTenantId(requestInfo.getUserInfo().getTenantId());
-				connection2.setProcessInstance(ProcessInstance.builder().action("INITIATE").build());
+				swConnection.setTenantId(requestInfo.getUserInfo().getTenantId());
+				swConnection.setProcessInstance(ProcessInstance.builder().action("INITIATE").build());
 				
-				//recordService.recordWaterMigration(connection);
+				recordService.recordSewerageMigration(swConnection);
  				
 				SewerageConnectionRequest sewerageRequest = new SewerageConnectionRequest();
 				
-				sewerageRequest.setSewerageConnection(connection2);
+				log.info("mobile number : "+swConnection.getMobilenumber());
+				log.info("getApplicantname ; "+swConnection.getApplicantname());
+				log.info("connectionNo; "+swConnection.getConnectionNo());
+				log.info("Connection Category : "+swConnection.getConnectionCategory());
+				log.info("Connection Type :"+swConnection.getConnectionType());
+				
+				
+				if(swConnection.getMobilenumber()==null|| swConnection.getMobilenumber().isEmpty())
+				{
+					recordService.recordError("sewerage", "Mobile number not found for the record  ", swConnection.getId());
+					continue;
+				}	
+				
+				sewerageRequest.setSewerageConnection(swConnection);
 				sewerageRequest.setRequestInfo(requestInfo);
 				Property property = propertyService.findProperty(sewerageRequest,json);
-				//connection2.setPropertyId(property.getId()); 
-				//Search the connection value
+				
+			
+					
 				if(property==null)
+				{
+					recordService.recordError("sewerage", "Property not found or cannot be created  for the record  ", swConnection.getId());
 					continue;
-				connection2.setPropertyId(property.getId()); 
-				//String ss = "{" + requestInfo + ", \"waterConnection\": " + sewerageRequest + " }";
-
-				//log.info("request: " + ss);
-
+				}
+				swConnection.setPropertyId(property.getId()); 
 				String response = restTemplate.postForObject(host + "/" + sewerageUrl, sewerageRequest, String.class);
-
-				//log.info("Response=" + response);
-
+ 
 				SewerageConnectionResponse sewerageResponse=	objectMapper.readValue(response, SewerageConnectionResponse.class);
 		       
 				SewerageConnection srgConnResp = null;
-				if(srgConnResp!=null && sewerageResponse.getSewerageConnections() != null 
+		
+				//this will be uncomented after the searage request is completed
+				/*	if(srgConnResp!=null && sewerageResponse.getSewerageConnections() != null 
 						&& !sewerageResponse.getSewerageConnections().isEmpty()) {
 					
 					srgConnResp = sewerageResponse.getSewerageConnections().get(0);
@@ -319,7 +306,7 @@ public class ConnectionService {
 					
 				}
 
-			}
+			}*/
 				
 
 			} catch (JsonMappingException e) {

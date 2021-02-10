@@ -85,7 +85,7 @@ public class PropertyService {
 			if(property==null)
 			{
 				log.info("Propery not found creating new property");
-				property=createSProperty(null,json);
+				property=createSProperty(swg,json);
 		  
 			}
 		} catch (Exception e) {
@@ -239,12 +239,11 @@ public class PropertyService {
 		PropertyRequest pr=new PropertyRequest();
 		pr.setRequestInfo(conn.getRequestInfo());
  
-		ptseachurl=ptseachurl+"?tenantId="+conn.getRequestInfo().getUserInfo().getTenantId()+
-//				"&mobileNumber=6364021789";
+		String ptseachurlStr=ptseachurl+"?tenantId="+conn.getRequestInfo().getUserInfo().getTenantId()+
 				"&mobileNumber="+conn.getSewerageConnection().getMobilenumber();
  
  
-		PropertySearchResponse response = restTemplate.postForObject(host + "/" + ptseachurl, pr, PropertySearchResponse.class);
+		PropertySearchResponse response = restTemplate.postForObject(host + "/" + ptseachurlStr, pr, PropertySearchResponse.class);
 		
   
 	//	String response = restTemplate.postForObject(host + "/" + ptseachurl, pr, String.class);

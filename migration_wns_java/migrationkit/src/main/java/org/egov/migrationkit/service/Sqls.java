@@ -84,7 +84,7 @@ public class Sqls {
 	
 	
 	public static final String waterRecord_table="create table if not exists egwtr_migration "
-			+ " ( erpid varchar(64),erpconn varchar(64) ,digitconn varchar(64) ,erppt varchar(64),digitpt varchar(64),status varchar(64),tenantId varchar(64),additiondetails varchar(1000) );"
+			+ " ( erpid varchar(64),erpconn varchar(64) ,digitconn varchar(64) ,erppt varchar(64),digitpt varchar(64),status varchar(64),tenantId varchar(64),additiondetails varchar(1000),error varchar(4000) );"
 			+ "";
 	
 	public static final String waterRecord_insert="insert into egwtr_migration "
@@ -153,18 +153,18 @@ public class Sqls {
 			+ "ownerinfo.connection=conn.id and usr.id=ownerinfo.owner and\n"
 			+ "address.id=conn.address and status.id=appdetails.status and conn.legacy=false ;";
 	
-	public static final String SEWERAGE_CONNECTION_TABLE="";
-//	
-//	public static final String sewerageRecord_table="create table  if not exists  egswr_migration "
-//			+ " ( erpid varchar(64),erpconn varchar(64) ,digitconn varchar(64) ,erppt varchar(64),digitpt varchar(64),status varchar(64),tenantId varchar(64),additiondetails varchar(1000) );"
-//			+ "";
-//	
-//	public static final String sewerageRecord_insert="insert into  egsw_migration  "
-//			+ "(erpid ,erpconn  ,digitconn  ,erppt ,digitpt ,status ,tenantId ,additiondetails ) values (:erpid,:erpconn,:digitconn,:erppt,:digitpt,:status"
-//			+ ", :tenantId,:addtionaldetails);";
-//	
+	
+	
+	public static final String SEWERAGE_CONNECTION_TABLE="create table  if not exists  egsw_migration "
+			+ " ( erpid varchar(64),erpconn varchar(64) ,digitconn varchar(64) ,erppt varchar(64),digitpt varchar(64),status varchar(64),tenantId varchar(64),additiondetails varchar(1000),error varchar(4000)  );"
+			+ "";
+	
+	public static final String sewerageRecord_insert="insert into  egsw_migration  "
+			+ "(erpid ,erpconn  ,digitconn  ,erppt ,digitpt ,status ,tenantId ,additiondetails ) values (:erpid,:erpconn,:digitconn,:erppt,:digitpt,:status"
+			+ ", :tenantId,:addtionaldetails);";
+	
 	public static final String sewerageRecord_update="update  egsw_migration  "+
-			"set digitconn=:digitconn , digitpt=:digitpt,status=:status where erpconn=:erpconn and tenantId=:tenantId";
+			"set digitconn=:digitconn , digitpt=:digitpt,status=:status where erpid=:erpid and tenantId=:tenantId";
 		
 //	public static final String address="select id,housenobldgapt as plotno,landmark,citytownvillage as city,district,arealocalitysector as region,state,country,pincode, buildingName,streetroadline as street from eg_address where id=:id ;";
 //	
