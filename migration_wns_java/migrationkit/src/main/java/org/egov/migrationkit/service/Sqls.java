@@ -79,7 +79,7 @@ public class Sqls {
 			+ " usage.id=conndetails.usagetype and block.id=conn.block and locality.id=conn.locality and zone.id=conn.zone and"
 			+ " conndetails.propertytype=proptype.id and conndetails.category=wtrctgy.id and ownerinfo.connection=conn.id "
 			+ " and usr.id=ownerinfo.owner and address.id=conn.address and status.id=conndetails.statusid and conndetails.legacy=false   "
-			+ " and conndetails.id not in (select erpid::bigint from egwtr_migration where status='Saved' ) and usr.mobilenumber='8837543702' ";
+			+ " and conndetails.id not in (select erpid::bigint from egwtr_migration where status='Saved' )  ";
 	
 	
 	
