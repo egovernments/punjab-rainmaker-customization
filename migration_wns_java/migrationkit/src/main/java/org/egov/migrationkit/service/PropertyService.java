@@ -235,7 +235,7 @@ public class PropertyService {
 			}
 		}else
 		{
-			log.info("no  property found in digit system for mobilenumber"+conn.getWaterConnection().getMobilenumber());
+			log.info("no  property found in digit system for mobilenumber--"+conn.getWaterConnection().getMobilenumber());
 		}
 		
 			
@@ -282,6 +282,9 @@ public class PropertyService {
 					
 				}
 			}
+		}else
+		{
+			log.info("no  property found in digit system for mobilenumber--"+conn.getSewerageConnection().getMobilenumber());
 		}
 		
 			

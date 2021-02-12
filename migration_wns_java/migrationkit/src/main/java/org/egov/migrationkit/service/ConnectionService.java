@@ -281,45 +281,49 @@ public class ConnectionService {
 					continue;
 				}
 				swConnection.setPropertyId(property.getId());
-				String response = restTemplate.postForObject(host + "/" + sewerageUrl, sewerageRequest, String.class);
+				
+				String response = null;
+				try {
+					response = restTemplate.postForObject(host + "/" + sewerageUrl, sewerageRequest, String.class);
+				} catch (RestClientException e) {
+					log.error(e.getMessage(), e);
+					recordService.recordError("water", "Error in creating water connection record :"+e.getMessage(), swConnection.getId());
+					continue;
+				}
 
-				SewerageConnectionResponse sewerageResponse = objectMapper.readValue(response,
-						SewerageConnectionResponse.class);
+				log.info("Response=" + response);
+				
+				
+
+				SewerageConnectionResponse sewerageResponse = objectMapper.readValue(response,SewerageConnectionResponse.class);
 
 				SewerageConnection srgConnResp = null;
 
 				// this will be uncomented after the searage request is
 				// completed
-				/*
-				 * if(srgConnResp!=null &&
-				 * sewerageResponse.getSewerageConnections() != null &&
-				 * !sewerageResponse.getSewerageConnections().isEmpty()) {
-				 * 
-				 * srgConnResp =
-				 * sewerageResponse.getSewerageConnections().get(0);
-				 * 
-				 * String consumerCode = srgConnResp.getConnectionNo() !=null ?
-				 * srgConnResp.getConnectionNo() :
-				 * srgConnResp.getApplicationNo();
-				 * 
-				 * List<Demand> demandRequestList =
-				 * demandService.prepareDemandRequest(data,
-				 * WSConstants.SEWERAGE_BUSINESS_SERVICE, consumerCode,
-				 * requestInfo.getUserInfo().getTenantId(),
-				 * property.getOwners().get(0));
-				 * if(!demandRequestList.isEmpty()) {
-				 * 
-				 * Boolean isDemandCreated =
-				 * demandService.saveDemand(requestInfo, demandRequestList); if
-				 * (isDemandCreated) { Boolean isBillCreated =
-				 * demandService.fetchBill(demandRequestList, requestInfo); }
-				 * recordService.updateSewerageMigration(srgConnResp);
-				 * log.info("sewerageResponse" + sewerageResponse);
-				 * 
-				 * }
-				 * 
-				 * }
-				 */
+				
+				  if(sewerageResponse!=null && sewerageResponse.getSewerageConnections() != null && !sewerageResponse.getSewerageConnections().isEmpty()) {
+				  
+				  srgConnResp = sewerageResponse.getSewerageConnections().get(0);
+				  
+				  String consumerCode = srgConnResp.getConnectionNo() !=null ? srgConnResp.getConnectionNo() : srgConnResp.getApplicationNo();
+				  
+				  List<Demand> demandRequestList = demandService.prepareDemandRequest(data, WSConstants.SEWERAGE_BUSINESS_SERVICE, consumerCode, requestInfo.getUserInfo().getTenantId(), property.getOwners().get(0));
+				  
+				  if(!demandRequestList.isEmpty()) {
+				  
+					  Boolean isDemandCreated = demandService.saveDemand(requestInfo, demandRequestList); 
+					  if (isDemandCreated) {
+						  Boolean isBillCreated = demandService.fetchBill(demandRequestList, requestInfo);
+					  
+					  }
+					  recordService.updateSewerageMigration(srgConnResp);
+					  log.info("sewerageResponse" + sewerageResponse);
+				  
+				  }
+				  
+				  }
+				 
 
 			} catch (JsonMappingException e) {
 				log.error(e.getMessage());

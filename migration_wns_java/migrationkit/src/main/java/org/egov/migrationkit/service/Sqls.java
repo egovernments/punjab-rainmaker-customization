@@ -155,29 +155,29 @@ public class Sqls {
 	
 	
 	
-	public static final String SEWERAGE_CONNECTION_TABLE="create table  if not exists  egsw_migration "
+	public static final String SEWERAGE_CONNECTION_TABLE="create table  if not exists  egswtax_migration "
 			+ " ( erpid varchar(64),erpconn varchar(64) ,digitconn varchar(64) ,erppt varchar(64),digitpt varchar(64),status varchar(64),tenantId varchar(64),additiondetails varchar(1000),errorMessage varchar(4000)  );"
 			+ "";
 	
-	public static final String sewerageRecord_insert="insert into  egsw_migration  "
+	public static final String sewerageRecord_insert="insert into  egswtax_migration  "
 			+ "(erpid ,erpconn  ,digitconn  ,erppt ,digitpt ,status ,tenantId ,additiondetails ) values (:erpid,:erpconn,:digitconn,:erppt,:digitpt,:status"
 			+ ", :tenantId,:addtionaldetails);";
 	
-	public static final String sewerageRecord_update="update  egsw_migration  "+
+	public static final String sewerageRecord_update="update  egswtax_migration  "+
 			"set digitconn=:digitconn , digitpt=:digitpt,status=:status where erpid=:erpid and tenantId=:tenantId";
 		
 //	public static final String address="select id,housenobldgapt as plotno,landmark,citytownvillage as city,district,arealocalitysector as region,state,country,pincode, buildingName,streetroadline as street from eg_address where id=:id ;";
 //	
-	public static final String SEWERAGE_COLLECTION_TABLE="create table  if not exists  egsw_cl_migration "
+	public static final String SEWERAGE_COLLECTION_TABLE="create table  if not exists  egswtax_cl_migration "
 			+ " ( erpid varchar(64),erpconn varchar(64) ,digitconn varchar(64) ,erppt varchar(64),digitpt varchar(64),status varchar(64),tenantId varchar(64),additiondetails varchar(1000) );"
 			+ "";
 	public static final String SEWERAGE_COLLECTION_QUERY="";
 	
-	public static final String SEWERAGE_COLLECTION_INSERT="insert into  egsw_cl_migration  "
+	public static final String SEWERAGE_COLLECTION_INSERT="insert into  egswtax_cl_migration  "
 			+ "(erpid ,erpconn  ,digitconn  ,erppt ,digitpt ,status ,tenantId ,additiondetails ) values (:erpid,:erpconn,:digitconn,:erppt,:digitpt,:status"
 			+ ", :tenantId,:addtionaldetails);";
 	
-	public static final String SEWERAGE_COLLECTION_UPDATE="update  egsw_cl_migration  "+
+	public static final String SEWERAGE_COLLECTION_UPDATE="update  egswtax_cl_migration  "+
 			"set digitconn=:digitconn , digitpt=:digitpt,status=:status where erpconn=:erpconn and tenantId=:tenantId";
 	
 }
