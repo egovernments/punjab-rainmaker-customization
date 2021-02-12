@@ -5451,13 +5451,6 @@ ReportDefinitions:
     type: string
     source: pt
     total: false
-  searchParams:
-  - name: localityArray
-    label: reports.pt.zoneList
-    type: boundarylist
-    source: pt
-    isMandatory: false
-    searchClause: AND pta.locality IN ($localityArray)
   query: |
    --S.no    Service Name	ULB    Property Tax Unique ID    Date Of Transcation    Receipt Number	Existing Property ID    Type Of Property	Mobile Number   	Address
    with props as 
