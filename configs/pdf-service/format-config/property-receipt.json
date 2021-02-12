@@ -196,7 +196,7 @@
               "style": "receipt-table"
             },
             {
-              "text": " ",
+              "text": "Survey Id/UID",
               "border": [
                 false,
                 false,
@@ -206,7 +206,7 @@
               "style": "receipt-table-value"
             },
             {
-              "text": " ",
+              "text": "{{surveyId}}",
               "border": [
                 false,
                 false,
