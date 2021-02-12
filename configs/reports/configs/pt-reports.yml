@@ -5423,7 +5423,7 @@ ReportDefinitions:
     --and billid='00088a80-5671-408d-8494-2fb83b91b04f'    
   orderby: order by amountpaid desc
  
-- reportName: PendingPTApplicationsReport
+- reportName: PendingPTApplicationsReport_V2
   summary: ULB-wise PT Collection
   version: 1.0.0
   moduleName: rainmaker-pt
