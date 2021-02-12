@@ -164,4 +164,86 @@ public class DemandService {
 		return Boolean.TRUE;
 	}
     
+public List<Demand> prepareSwDemandRequest(Map data, String businessService, String consumerCode, String tenantId, OwnerInfo owner) {
+		
+		
+		Map<Integer, List<DemandDetail>> instaWiseDemandMap = new HashMap<>();
+		List<Map> dcbDataList = (List) data.get("dcb") != null ? (List) data.get("dcb") : new ArrayList<Map>();
+		List<Demand> demands = new LinkedList<>();
+		
+//		dcbDataList
+		for (Map dcbData : dcbDataList) {
+			
+			String taxHeadMaster = WSConstants.TAX_HEAD_MAP.get((String)dcbData.get("demand_reason"));
+			DemandDetail dd = DemandDetail.builder()
+					.taxAmount(BigDecimal.valueOf((Integer)dcbData.get("amount")))
+					.taxHeadMasterCode(taxHeadMaster)
+					.collectionAmount(BigDecimal.ZERO)
+					.amountPaid(BigDecimal.valueOf((Integer)dcbData.get("collected_amount")))
+//					.fromDate((Long)dcbData.get("from_date"))
+//					.toDate((Long)dcbData.get("to_date"))
+					.tenantId(tenantId)
+					.build();
+			
+			Integer installmentId = (Integer)dcbData.get("insta_id");
+			if(instaWiseDemandMap.containsKey(installmentId)) {
+				
+					instaWiseDemandMap.get(installmentId).add(dd);
+
+			} else {
+				List<DemandDetail> ddList = new ArrayList<>();
+				
+				ddList.add(dd);
+				instaWiseDemandMap.put(installmentId, ddList);
+			}
+				
+		}
+		instaWiseDemandMap.forEach((insta_id, ddList) -> {
+			BigDecimal totalAmountPaid = BigDecimal.ZERO;
+			for (DemandDetail demandDetail : ddList) {
+				totalAmountPaid = totalAmountPaid.add(demandDetail.getAmountPaid());	
+			}
+
+			if(!ddList.isEmpty() && WSConstants.ONE_TIME_TAX_HEAD_MASTERS.contains(ddList.get(0).getTaxHeadMasterCode())) {
+				demands.add(Demand.builder()
+						.businessService(businessService + WSConstants.ONE_TIME_FEE_CONST)
+						.consumerCode(consumerCode)
+						.demandDetails(ddList)
+						.payer(User.builder().uuid(owner.getUuid()).name(owner.getName()).build())
+						.tenantId(tenantId)
+//						There is no tax periods configured for all the previous year in PB QA environments as of now giving dummy configured tax period. 
+//						.taxPeriodFrom(ddList.get(0).getFromDate())
+//						.taxPeriodTo(ddList.get(0).getToDate())
+						.taxPeriodFrom(1554076800000l)
+						.taxPeriodTo(1617175799000l)
+						.minimumAmountPayable(BigDecimal.ZERO)
+						.consumerType("sewerageConnection")
+						.status(StatusEnum.valueOf("ACTIVE"))
+						.totalAmountPaid(totalAmountPaid)
+						.build());	
+			}else {
+				demands.add(Demand.builder()
+						.businessService(businessService)
+						.consumerCode(consumerCode)
+						.demandDetails(ddList)
+						.payer(User.builder().uuid(owner.getUuid()).name(owner.getName()).build())
+						.tenantId(tenantId)
+//						There is no tax periods configured for all the previous year in PB QA environments as of now giving dummy configured tax period. 
+//						.taxPeriodFrom(ddList.get(0).getFromDate())
+//						.taxPeriodTo(ddList.get(0).getToDate())
+						.taxPeriodFrom(1554076800000l)
+						.taxPeriodTo(1617175799000l)
+						.minimumAmountPayable(BigDecimal.ZERO)
+						.consumerType("sewerageConnection")
+						.status(StatusEnum.valueOf("ACTIVE"))
+						.totalAmountPaid(totalAmountPaid)
+						.build());	
+			}
+				
+			});
+
+		return demands;
+		
+	}
+    
 }

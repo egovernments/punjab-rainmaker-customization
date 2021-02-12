@@ -310,7 +310,9 @@ public class ConnectionService {
 				  
 				  String consumerCode = srgConnResp.getConnectionNo() !=null ? srgConnResp.getConnectionNo() : srgConnResp.getApplicationNo();
 				  
-				  List<Demand> demandRequestList = demandService.prepareDemandRequest(data, WSConstants.SEWERAGE_BUSINESS_SERVICE, consumerCode, requestInfo.getUserInfo().getTenantId(), property.getOwners().get(0));
+				  List<Demand> demandRequestList = demandService.prepareSwDemandRequest(data, WSConstants.SEWERAGE_BUSINESS_SERVICE, consumerCode, requestInfo.getUserInfo().getTenantId(), property.getOwners().get(0));
+				  
+				  log.info("Demand Request=" + demandRequestList);
 				  
 				  if(!demandRequestList.isEmpty()) {
 				  
