@@ -296,6 +296,8 @@ public class ConnectionService {
 				
 
 				SewerageConnectionResponse sewerageResponse = objectMapper.readValue(response,SewerageConnectionResponse.class);
+				
+				log.info("Sewerage Response=" + sewerageResponse);
 
 				SewerageConnection srgConnResp = null;
 
