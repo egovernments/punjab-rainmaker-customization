@@ -4641,31 +4641,26 @@ ReportDefinitions:
     type: string
     source: pt
     total: false
-  searchParams:
-  - name: localityArray
-    label: reports.pt.zoneList
-    type: boundarylist
-    source: pt
-    isMandatory: false
-    searchClause: AND pta.locality IN ($localityArray)
   query: |
    --S.no    Service Name	ULB    Property Tax Unique ID    Date Of Transcation    Receipt Number	Existing Property ID    Type Of Property	Mobile Number   	Address
-    select pt.propertyid as "propertytaxuniqueid",
-      string_agg(collection.finyear, ', ') as "financailyear" ,
-      string_agg(collection.taxpaid::varchar, ', ') as "amountcollected" ,
-      string_agg(pt.oldpropertyid,',') as "existingpropertyid",
-      split_part(string_agg(eu."name",','),',',1) as "ownername",
-      string_agg(pot.propertytype,',') as "propertytype",
-      split_part(string_agg(eu.mobilenumber,','),',',1) as "mobileno",
-      string_agg(distinct REGEXP_REPLACE(REGEXP_REPLACE(CONCAT(pta.doorno, ',', pta.buildingname, ',',pta.street,',',pta.localityname,',', pta.pincode), ',+', ','), '^,|,$', ''),',') as "address"
-    from eg_pt_property pt
-    inner join (select a.consumercode, to_char((To_timestamp(a.taxperiodfrom/1000) at time Zone 'Asia/Kolkata'),'YYYY')||'-'||to_char((To_timestamp(a.taxperiodfrom/1000) at time Zone 'Asia/Kolkata'),'YYYY')::int+1 as finyear, a.tax, a.taxpaid from (select d.consumercode, d.taxperiodfrom, sum(dd.taxamount) tax, sum(dd.collectionamount) as taxpaid
+    with props as 
+     (select 
+       pt.propertyid as "propertytaxuniqueid",
+       string_agg(collection.finyear, ', ') as "financailyear" ,
+       string_agg(collection.taxpaid::varchar, ', ') as "amountcollected" ,
+       string_agg(pt.oldpropertyid,',') as "existingpropertyid",
+       split_part(string_agg(eu."name",','),',',1) as "ownername",
+       string_agg(pot.propertytype,',') as "propertytype",
+       split_part(string_agg(eu.mobilenumber,','),',',1) as "mobileno",
+       string_agg(distinct REGEXP_REPLACE(REGEXP_REPLACE(CONCAT(pta.doorno, ',', pta.buildingname, ',',pta.street,',',pta.localityname,',', pta.pincode), ',+', ','), '^,|,$', ''),',') as "address"
+     from eg_pt_property pt
+     inner join (select a.consumercode, to_char((To_timestamp(a.taxperiodfrom/1000) at time Zone 'Asia/Kolkata'),'YYYY')||'-'||to_char((To_timestamp(a.taxperiodfrom/1000) at time Zone 'Asia/Kolkata'),'YYYY')::int+1 as finyear, a.tax, a.taxpaid from (select d.consumercode, d.taxperiodfrom, sum(dd.taxamount) tax, sum(dd.collectionamount) as taxpaid
                  from egbs_demanddetail_v1 dd, egbs_demand_v1 d
-               where dd.demandid=d.id
-               and d.status!='CANCELLED' and dd.tenantid=$tenantid and d.tenantid=$tenantid
-               group by d.consumercode, d.taxperiodfrom
-               having sum(dd.taxamount - dd.collectionamount)=0) a,
-               (select d.consumercode, max(d.taxperiodfrom) maxperiod
+                 where dd.demandid=d.id
+                 and d.status!='CANCELLED' and dd.tenantid=$tenantid and d.tenantid=$tenantid
+                 group by d.consumercode, d.taxperiodfrom
+                 having sum(dd.taxamount - dd.collectionamount)=0) a,
+                 (select d.consumercode, max(d.taxperiodfrom) maxperiod
                  from egbs_demanddetail_v1 dd, egbs_demand_v1 d
                  where dd.demandid=d.id
                  and d.status!='CANCELLED'  and dd.tenantid=$tenantid and d.tenantid=$tenantid
@@ -4689,13 +4684,27 @@ ReportDefinitions:
                   group by propertyid) pot ON pot.propertyid = pt.id
     where pt.tenantid = $tenantid
     and pt.status!='INACTIVE'
-    and pt.propertyid not in (select consumercode from egcl_bill
-                               where tenantid=$tenantid
-                               and businessservice='PT'
-                               and id in (select billid 
-                             from egcl_billdetial
-                             where tenantid=$tenantid and concat(to_char((To_timestamp(fromperiod/1000) at time Zone 'Asia/Kolkata'),'YYYY'),'-',to_char((To_timestamp(toperiod/1000) at time Zone 'Asia/Kolkata'),'YY')) ='2020-21'))
-  groupby: group by pt.propertyid
+    and pt.propertyid not in (
+                            select consumercode from egcl_bill
+                              where tenantid=$tenantid
+                              and businessservice='PT'
+                              and id in (select billid
+                            from egcl_billdetial
+                            where tenantid=$tenantid and concat(to_char((To_timestamp(fromperiod/1000) at time Zone 'Asia/Kolkata'),'YYYY'),'-',to_char((To_timestamp(toperiod/1000) at time Zone 'Asia/Kolkata'),'YY')) ='2020-21'))
+                            group by pt.propertyid
+                            ),
+        prop2019 as
+        (
+        select 
+           oldpropertyid as oldpropertyid,
+           pt.propertyid as propertyid
+        from eg_pt_property pt
+        inner join eg_pt_assessment as assessment on assessment.propertyid=pt.propertyid and assessment.assessmentyear='2019-20' and assessment.tenantid=$tenantid
+        where pt.tenantid=$tenantid
+        group by pt.propertyid,oldpropertyid
+        )
+        select * from props
+        where propertytaxuniqueid not in (select propertyid from prop2019 where oldpropertyid in (select concat('RID',previous_returnid) from ikon_2020_21_non_migrated_records where tenantid=$tenantid))
 
 
 - reportName: ULBDEFAULTERPTREPORT_MINI_STATE_V2
