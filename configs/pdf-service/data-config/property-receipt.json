@@ -166,7 +166,14 @@
                 "value": {
                   "path": "$.paymentDetails[0].bill.totalAmount"
                 }
-              }, {
+              },  
+              {
+                "variable": "approvedBy", 
+                "value": {
+                  "path": "$.paymentDetails[0].bill.additionalDetails.lastModifier"
+                }
+              },
+              {
                 "variable": "penaltyReason", 
                 "value": {
                   "path": "$.paymentDetails[0].bill.additionalDetails.adhocPenaltyReason"
@@ -616,10 +623,7 @@
                   {             
                     "variable":"vasikaNo",
                     "value":"$.Properties[0].additionalDetails.vasikaNo"
-                  }, {             
-                    "variable":"approvedBy",
-                    "value":"$.Properties[0].additionalDetails.lastModifiedBy"
-                  }, {             
+                  },{             
                     "variable":"vasikaDate",
                     "value":"$.Properties[0].additionalDetails.vasikaDate",
                     "type":"date"
