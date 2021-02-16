@@ -203,4 +203,4 @@ ReportDefinitions:
       --and pt_addr.propertyid=pt.id 
       --and pt.propertyid='PT-1012-978737'
       --and receiptnumber='PT/1012/2020-21/001021'
-  groupby: GROUP BY pdid
+  orderby: ORDER BY pd.receiptdate DESC;
