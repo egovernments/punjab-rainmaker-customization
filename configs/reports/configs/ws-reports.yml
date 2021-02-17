@@ -8,8 +8,63 @@ ReportDefinitions:
     print:
       pdfPageSize: "A1"
   sourceColumns:
-  - name: pdid
-    label: reports.ws.pdid
+  - name: connectionno
+    label: reports.ws.connectionno
+    type: string
+    source: ws
+    total: false
+  - name: consumercode
+    label: reports.ws.consumercode
+    type: string
+    source: ws
+    total: false
+  - name: receiptdate
+    label: reports.ws.receiptdate
+    type: string
+    source: ws
+    total: false
+  - name: receiptnumber
+    label: reports.ws.receiptnumber
+    type: string
+    source: ws
+    total: false
+  - name: instrumenttype
+    label: reports.ws.instrumenttype
+    type: string
+    source: ws
+    total: false
+  - name: bankname
+    label: reports.ws.bankname
+    type: string
+    source: ws
+    total: false
+  - name: transactionnumber
+    label: reports.ws.transactionnumber
+    type: string
+    source: ws
+    total: false
+  - name: transactiondate
+    label: reports.ws.transactiondate
+    type: string
+    source: ws
+    total: false
+  - name: billperiod
+    label: reports.ws.billperiod
+    type: string
+    source: ws
+    total: false
+  - name: amount
+    label: reports.ws.amount
+    type: string
+    source: ws
+    total: true
+  - name: pendingamount
+    label: reports.ws.pendingamount
+    type: string
+    source: ws
+    total: true
+  - name: usagetype
+    label: reports.ws.usagetype
     type: string
     source: ws
     total: false
@@ -17,22 +72,22 @@ ReportDefinitions:
     label: reports.ws.adhocpenalty
     type: string
     source: ws
-    total: false
+    total: true
   - name: adhocrebate
     label: reports.ws.adhocrebate
     type: string
     source: ws
-    total: false
+    total: true
   - name: compositionfee
     label: reports.ws.compositionfee
     type: string
     source: ws
-    total: false
+    total: true
   - name: connectionfee
     label: reports.ws.connectionfee
     type: string
     source: ws
-    total: false
+    total: true
   - name: roundoff
     label: reports.ws.roundoff
     type: string
@@ -53,13 +108,18 @@ ReportDefinitions:
     type: string
     source: ws
     total: true
+  - name: otherfee
+    label: reports.ws.otherfee
+    type: string
+    source: ws
+    total: true
   - name: roadcuttingcharge
     label: reports.ws.roadcuttingcharge
     type: string
     source: ws
     total: true
-  - name: scrutinyfee
-    label: reports.ws.scrutinyfee
+  - name: securityfee
+    label: reports.ws.securityfee
     type: string
     source: ws
     total: true
@@ -78,27 +138,69 @@ ReportDefinitions:
     type: string
     source: ws
     total: true
+  - name: g8issuedate
+    label: reports.ws.g8issuedate
+    type: string
+    source: ws
+    total: false
+  - name: g8receiptno
+    label: reports.ws.g8receiptno
+    type: string
+    source: ws
+    total: false
   query: |
-      -- Use CTE to force query plan, compute & use CTE later
-      SELECT
-                    pd.id as pdid,
-                    SUM(CASE WHEN taxheadcode LIKE 'SW_ADHOC_PENALTY' THEN adjustedamount ELSE 0 END) as adhocpenalty, 
-                    SUM(CASE WHEN taxheadcode LIKE 'SW_ADHOC_REBATE' THEN adjustedamount ELSE 0 END) as adhocrebate, 
-                    SUM(CASE WHEN taxheadcode LIKE 'SW_COMPOSITION_FEE' THEN adjustedamount ELSE 0 END) as compositionfee, 
-                    SUM(CASE WHEN taxheadcode LIKE 'SW_CONNECTION_FEE' THEN adjustedamount ELSE 0 END) as connectionfee, 
-                    SUM(CASE WHEN taxheadcode LIKE 'SW_FEE_ROUND_OFF' THEN adjustedamount ELSE 0 END) as roundoff, 
-                    SUM(CASE WHEN taxheadcode LIKE 'SW_FORM_FEE' THEN adjustedamount ELSE 0 END) as formfee, 
-                    SUM(CASE WHEN taxheadcode LIKE 'SW_ONE_TIME_FEE' THEN adjustedamount ELSE 0 END) as onetimefee,
-                    SUM(CASE WHEN taxheadcode LIKE 'SW_OTHER_CHARGE' THEN bad.amount ELSE 0 END) as othercharge,
-                    SUM(CASE WHEN taxheadcode LIKE 'SW_OTHER_FEE' THEN adjustedamount ELSE 0 END) as otherfee, 
-                    SUM(CASE WHEN taxheadcode LIKE 'SW_ROAD_CUTTING_CHARGE' THEN bad.amount ELSE 0 END) as roadcuttingcharge,
-                    SUM(CASE WHEN taxheadcode LIKE 'SW_SCRUTINY_FEE' THEN bad.amount ELSE 0 END)  as scrutinyfee,
-                    SUM(CASE WHEN taxheadcode LIKE 'SW_SECURITY_CHARGE' THEN adjustedamount ELSE 0 END) as securitycharge,
-                    SUM(CASE WHEN taxheadcode LIKE 'SW_TAX_AND_CESS' THEN adjustedamount ELSE 0 END) as taxandcess,
-                    SUM(CASE WHEN taxheadcode LIKE 'SW_USER_CHARGE' THEN adjustedamount ELSE 0 END) as usercharge				 
-                  FROM egcl_billaccountdetail as bad
-                  INNER JOIN egcl_billdetial as bd on bd.id = bad.billdetailid
-                  INNER JOIN egcl_paymentdetail as pd on pd.billid = bd.billid
-                  INNER JOIN egcl_payment as payment on pd.paymentid=payment.id
-                  WHERE payment.tenantid = $tenantid and payment.paymentstatus != 'CANCELLED' and  pd.businessservice like 'SW%'
-  groupby: GROUP BY pdid
+    -- Use CTE to force query plan, compute & use CTE later
+    WITH receipt_breakup AS 
+    (
+        SELECT
+            pd.id as pdid,
+            SUM(CASE WHEN taxheadcode LIKE 'SW_ADHOC_PENALTY' THEN adjustedamount ELSE 0 END) as adhocpenalty, 
+            SUM(CASE WHEN taxheadcode LIKE 'SW_ADHOC_REBATE' THEN adjustedamount ELSE 0 END) as adhocrebate, 
+            SUM(CASE WHEN taxheadcode LIKE 'SW_COMPOSITION_FEE' THEN adjustedamount ELSE 0 END) as compositionfee, 
+            SUM(CASE WHEN taxheadcode LIKE 'SW_CONNECTION_FEE' THEN adjustedamount ELSE 0 END) as connectionfee, 
+            SUM(CASE WHEN taxheadcode LIKE 'SW_FEE_ROUND_OFF' THEN adjustedamount ELSE 0 END) as roundoff, 
+            SUM(CASE WHEN taxheadcode LIKE 'SW_FORM_FEE' THEN adjustedamount ELSE 0 END) as formfee, 
+            SUM(CASE WHEN taxheadcode LIKE 'SW_ONE_TIME_FEE' THEN adjustedamount ELSE 0 END) as onetimefee,
+            SUM(CASE WHEN taxheadcode LIKE 'SW_OTHER_CHARGE' THEN bad.amount ELSE 0 END) as othercharge,
+            SUM(CASE WHEN taxheadcode LIKE 'SW_OTHER_FEE' THEN adjustedamount ELSE 0 END) as otherfee, 
+            SUM(CASE WHEN taxheadcode LIKE 'SW_ROAD_CUTTING_CHARGE' THEN bad.amount ELSE 0 END) as roadcuttingcharge,
+            SUM(CASE WHEN taxheadcode LIKE 'SW_SCRUTINY_FEE' THEN bad.amount ELSE 0 END)  as scrutinyfee,
+            SUM(CASE WHEN taxheadcode LIKE 'SW_SECURITY_CHARGE' THEN adjustedamount ELSE 0 END) as securitycharge,
+            SUM(CASE WHEN taxheadcode LIKE 'SW_TAX_AND_CESS' THEN adjustedamount ELSE 0 END) as taxandcess,
+            SUM(CASE WHEN taxheadcode LIKE 'SW_USER_CHARGE' THEN adjustedamount ELSE 0 END) as usercharge				 
+        FROM egcl_billaccountdetail as bad
+        INNER JOIN egcl_billdetial as bd on bd.id = bad.billdetailid
+        INNER JOIN egcl_paymentdetail as pd on pd.billid = bd.billid
+        INNER JOIN egcl_payment as payment on pd.paymentid=payment.id
+        WHERE payment.tenantid = $tenantid and payment.paymentstatus != 'CANCELLED' and  pd.businessservice like 'SW%'
+        group by pdid
+    )
+    SELECT
+        --count(*)	
+        pd.tenantid AS tenantid,
+        pd.id,
+        pt.propertyid as consumercode,
+        to_char((To_timestamp(pd.receiptdate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY')  AS receiptdate,
+        payment.ifsccode AS bankname, 
+        receiptnumber,
+        payment.totalamountpaid as amount, 
+        payment.paymentmode as instrumenttype, 
+        payment.transactionnumber,
+        concat(to_char((To_timestamp(get_fromperiod(pd.billid)/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY'),'-', to_char((To_timestamp(get_toperiod(pd.billid)/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY')) as billperiod, 
+        to_char((To_timestamp(payment.transactiondate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY') AS transactiondate, 
+        payment.totaldue - payment.totalamountpaid AS pendingamount,
+        Initcap(case when pt.usagecategory like '%.%' then split_part(pt.usagecategory,'.',2) else pt.usagecategory end) as usagetype,
+        (case when eg_user.name is null then '30048|21Fj+c3k2ldB0X3AzIh7atXB' else eg_user.name end)  as collectorname,
+        receipt_breakup.*,
+        to_char((To_timestamp(pd.manualreceiptdate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY') AS g8issuedate, 
+        manualreceiptnumber as g8receiptno
+      FROM egcl_paymentdetail pd Left outer join eg_user on eg_user.id = pd.createdby::INTEGER, egcl_payment payment, eg_pt_property as pt, receipt_breakup, egcl_bill bill, eg_sw_connection
+      --(select string_agg(distinct propertyid,',') as propertyid, string_agg(distinct locality,',') as locality from eg_pt_address where tenantid=$tenantid group by propertyid ) pt_addr
+      where pd.paymentid=payment.id and bill.id=pd.billid and payment.paymentstatus != 'CANCELLED' and pd.businessservice like 'SW%' and payment.tenantid=$tenantid 
+      and pt.id = eg_sw_connection.property_id 
+      and receipt_breakup.pdid=pd.id  
+      and pt.status!='INACTIVE' 
+      --and pt_addr.propertyid=pt.id 
+      --and pt.propertyid='PT-1012-978737'
+      --and receiptnumber='PT/1012/2020-21/001021'
+  orderby: ORDER BY pd.receiptdate DESC;
