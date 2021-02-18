@@ -463,6 +463,12 @@
                 }
               },
               {
+                "variable": "tenant",
+                "value": {
+                  "path": "$.tenantId"
+                }
+              },
+              {
                 "variable": "nameAddress",
                 "value": {
                   "path": "$.payerAddress"
