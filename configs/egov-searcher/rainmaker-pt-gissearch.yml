@@ -11,6 +11,7 @@ SearchDefinitions:
         select
           pt.propertyid as propertyid,
           pt.oldpropertyid as oldpropertyid,
+          pt.surveyid as surveyid,
           pd.receiptnumber as receiptnumber,
           pt.tenantid as tenantid,
           pd.receiptdate as receiptdate,
