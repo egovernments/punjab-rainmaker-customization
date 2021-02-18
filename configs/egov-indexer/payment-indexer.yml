@@ -112,7 +112,7 @@ ServiceMaps:
     - name: paymentsindex-v1
       type: payments
       id: $.id
-      isBulk: true
+      isBulk: false
       timeStampField: $.auditDetails.createdTime
       jsonPath: $.Payments.*
       customJsonMapping:
@@ -163,9 +163,9 @@ ServiceMaps:
     - name: paymentsindex-v1
       type: payments
       id: $.id
-      isBulk: true
+      isBulk: false
       timeStampField: $.auditDetails.createdTime
-      jsonPath: $.Payments.*
+      jsonPath: $.Payment
       customJsonMapping:
         indexMapping: {"Data":{"tenantId":"","id":"","transactionNumber":"","transactionDate":1,"paymentMode":"","paymentStatus":"","payer":{"id":"","name":""},"paidBy":"","paymentDetails":{},"auditDetails":{},"additionalDetails":{},"tenantData":{},"@timestamp":"timestamp"}}
         fieldMapping:
@@ -180,7 +180,7 @@ ServiceMaps:
         - inJsonPath: $.paymentMode
           outJsonPath: $.Data.paymentMode
         - inJsonPath: $.paymentStatus
-          outJsonPath: $.Data.paymentStatus
+          outJsonPath: $.Data.paymentStatus	
         - inJsonPath: $.payerId
           outJsonPath: $.Data.payer.id
         - inJsonPath: $.payerName
@@ -207,5 +207,6 @@ ServiceMaps:
           uriResponseMapping:
           - inJsonPath: $.MdmsRes.tenant.tenants
             outJsonPath: $.Data.tenantData
+
 
    
