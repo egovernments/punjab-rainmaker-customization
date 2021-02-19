@@ -297,4 +297,4 @@ ReportDefinitions:
        left outer join eg_user as userowner on ptowner.owneruserid=userowner.uuid
 
        inner join ptaddress on ptaddress.propertyid=pt.id
-       INNER JOIN eg_bndry_mohalla on eg_bndry_mohalla.localitycode=ptaddress.locality;
+       INNER JOIN eg_bndry_mohalla on eg_bndry_mohalla.localitycode=ptaddress.locality
