@@ -17,13 +17,13 @@
                         [
                             {
                                 "image": "{{logoImage}}",
-                                "width": 50,
-                                "height": 61.25,
+                                "width": 40,
+                                "height": 43,
                                 "margin": [
                                     12,
-                                    10,
+                                    5,
                                     12,
-                                    10
+                                    5
                                 ]
                             },
                             {
@@ -33,13 +33,14 @@
                                         "style": "receipt-logo-header"
                                     },
                                     {
-                                        "text": "{{logo_sub_header}}"
+                                        "text": "{{logo_sub_header}}",
+                                        "fontSize": 10
                                     }
                                 ],
                                 "alignment": "left",
                                 "margin": [
                                     10,
-                                    30,
+                                    10,
                                     0,
                                     0
                                 ]
@@ -52,36 +53,16 @@
             {
                 "columns": [
                     {
-                        "text": "{{sewerage_application}}",
-                        "style": "ws-header"
-                    },
-                    {
-                        "text": "{{application_no}}",
-                        "alignment": "right",
+                        "text": "Sewerage Application No. :  {{applicationNo}}",
+                        "fontSize":10,
+                        "alignment": "left",
                         "margin": [
+                            -23,
                             0,
-                            2,
-                            -50,
-                            0
-                        ]
-                    },
-                    {
-                        "text": "{{applicationNo}}",
-                        "alignment": "right",
-                        "bold": true,
-                        "margin": [
-                            -150,
-                            2,
-                            -20,
+                            0,
                             0
                         ]
                     }
-                ],
-                "margin": [
-                    -26,
-                    10,
-                    0,
-                    0
                 ]
             },
             {
@@ -511,7 +492,7 @@
                                         "25%"
                                     ],
                                     "body": [
-                                        "{{#variable13}}[{\"text\":\"{{owner_name}}\", \"border\":[ false, false, false, false ], \"style\": \"ws-sub-table\" }, { \"text\":\"{{email_label}}\", \"border\":[ false, false, false, false ], \"style\": \"ws-sub-table\", \"fontSize\": 11 }, { \"text\":\"{{gender_label}}\", \"border\":[ false, false, false, false ], \"style\": \"ws-sub-table\" }, { \"text\":\"{{dob_label}}\", \"border\":[ false, false, false, false ], \"style\": \"ws-sub-table\" } ], [ { \"text\":\"{{ownerName}}\", \"border\":[ false, false, false, false ], \"style\": \"ws-sub-table-value\" }, { \"text\":\"{{ownerEmailId}}\", \"border\":[ false, false, false, false ], \"style\": \"ws-sub-table-value\" }, { \"text\":\"{{gender}}\", \"border\":[ false, false, false, false ], \"style\": \"ws-sub-table-value\" }, { \"text\":\"{{ownerDob}}\", \"border\":[ false, false, false, false ], \"style\": \"ws-sub-table-value\" } ], [ { \"text\":\"{{guardian_name}}\", \"border\":[ false, false, false, false ], \"style\": \"ws-sub-table\" }, { \"text\":\"{{relationship_label}}\", \"border\":[ false, false, false, false ], \"style\": \"ws-sub-table\", \"fontSize\": 11 }, { \"text\":\"{{correspondence_address}}\", \"border\":[ false, false, false, false ], \"style\": \"ws-sub-table\" }, { \"text\":\"{{special_applicant_category}}\", \"border\":[ false, false, false, false ], \"style\": \"ws-sub-table\" } ], [ { \"text\":\"{{guardianName}}\", \"border\":[ false, false, false, false ], \"style\": \"ws-sub-table-value\" }, { \"text\":\"{{relationshipLabel}}\", \"border\":[ false, false, false, false ], \"style\": \"ws-sub-table-value\" }, { \"text\":\"{{correspondenceAddress}}\", \"border\":[ false, false, false, false ], \"style\": \"ws-sub-table-value\" }, { \"text\":\"{{specialApplicantCategory}}\", \"border\":[ false, false, false, false ], \"style\": \"ws-sub-table-value\" } ]{{/variable13}}"
+                                        "{{#variable13}}[{\"text\":\"{{owner_name}}\", \"border\":[ false, false, false, false ], \"style\": \"ws-sub-table\" }, { \"text\":\"{{email_label}}\", \"border\":[ false, false, false, false ], \"style\": \"ws-sub-table\", \"fontSize\": 8 }, { \"text\":\"{{gender_label}}\", \"border\":[ false, false, false, false ], \"style\": \"ws-sub-table\" }, { \"text\":\"{{dob_label}}\", \"border\":[ false, false, false, false ], \"style\": \"ws-sub-table\" } ], [ { \"text\":\"{{ownerName}}\", \"border\":[ false, false, false, false ], \"style\": \"ws-sub-table-value\" }, { \"text\":\"{{ownerEmailId}}\", \"border\":[ false, false, false, false ], \"style\": \"ws-sub-table-value\" }, { \"text\":\"{{gender}}\", \"border\":[ false, false, false, false ], \"style\": \"ws-sub-table-value\" }, { \"text\":\"{{ownerDob}}\", \"border\":[ false, false, false, false ], \"style\": \"ws-sub-table-value\" } ], [ { \"text\":\"{{guardian_name}}\", \"border\":[ false, false, false, false ], \"style\": \"ws-sub-table\" }, { \"text\":\"{{relationship_label}}\", \"border\":[ false, false, false, false ], \"style\": \"ws-sub-table\", \"fontSize\": 8 }, { \"text\":\"{{correspondence_address}}\", \"border\":[ false, false, false, false ], \"style\": \"ws-sub-table\" }, { \"text\":\"{{special_applicant_category}}\", \"border\":[ false, false, false, false ], \"style\": \"ws-sub-table\" } ], [ { \"text\":\"{{guardianName}}\", \"border\":[ false, false, false, false ], \"style\": \"ws-sub-table-value\" }, { \"text\":\"{{relationshipLabel}}\", \"border\":[ false, false, false, false ], \"style\": \"ws-sub-table-value\" }, { \"text\":\"{{correspondenceAddress}}\", \"border\":[ false, false, false, false ], \"style\": \"ws-sub-table-value\" }, { \"text\":\"{{specialApplicantCategory}}\", \"border\":[ false, false, false, false ], \"style\": \"ws-sub-table-value\" } ]{{/variable13}}"
                                     ]
                                 },
                                 "border": [
@@ -688,7 +669,7 @@
                                                             false
                                                         ],
                                                         "style": "ws-sub-table",
-                                                        "fontSize": 11
+                                                        "fontSize": 8
                                                     },
                                                     {
                                                         "text": "{{electricty_bill}}",
@@ -699,7 +680,7 @@
                                                             false
                                                         ],
                                                         "style": "ws-sub-table",
-                                                        "fontSize": 11
+                                                        "fontSize": 8
                                                     }
                                                 ],
                                                 [
@@ -733,27 +714,7 @@
                                                         ],
                                                         "style": "ws-sub-table-value"
                                                     }
-                                                ]
-                                            ]
-                                        },
-                                        "border": [
-                                            true,
-                                            true,
-                                            true,
-                                            false
-                                        ]
-                                    }
-                                ],
-                                [
-                                    {
-                                        "table": {
-                                            "widths": [
-                                                "33%",
-                                                "33%",
-                                                "33%",
-                                                "1%"
-                                            ],
-                                            "body": [
+                                                ],
                                                 [
                                                     {
                                                         "text": "{{plumber_report}}",
@@ -765,7 +726,7 @@
                                                         ],
                                                         "style": "ws-sub-table"
                                                     },
-                                                    {
+                                                      {
                                                         "text": "{{building_plan}}",
                                                         "border": [
                                                             false,
@@ -774,7 +735,7 @@
                                                             false
                                                         ],
                                                         "style": "ws-sub-table",
-                                                        "fontSize": 11
+                                                        "fontSize": 8
                                                     },
                                                     {
                                                         "text": "{{property_tax_reciept}}",
@@ -785,7 +746,7 @@
                                                             false
                                                         ],
                                                         "style": "ws-sub-table",
-                                                        "fontSize": 11
+                                                        "fontSize": 8
                                                     }
                                                 ],
                                                 [
@@ -822,140 +783,19 @@
                                                 ]
                                             ]
                                         },
-                                        "border": [
+                                        "border" : [
                                             true,
-                                            false,
+                                            true,
                                             true,
                                             true
                                         ]
                                     }
                                 ]
-                            ],
-                            "unbreakable": true
-                        },
-                        "layout": {}
+                            ]
+                        }
                     }
-                ],
-                "unbreakable": true
-            },
-            {
-                "text": "{{additional_connection_details_header}}",
-                "style": "header"
-            },
-            {
-                "style": "ws-table",
-                "table": {
-                    "widths": [
-                        "103%"
-                    ],
-                    "body": [
-                        [
-                            {
-                                "table": {
-                                    "widths": [
-                                        "25%",
-                                        "25%",
-                                        "25%",
-                                        "25%"
-                                    ],
-                                    "body": [
-                                        [
-                                            {
-                                                "text": "{{connection_type}}",
-                                                "border": [
-                                                    false,
-                                                    false,
-                                                    false,
-                                                    false
-                                                ],
-                                                "style": "ws-sub-table"
-                                            },
-                                            {
-                                                "text": "{{no_of_water_closets}}",
-                                                "border": [
-                                                    false,
-                                                    false,
-                                                    false,
-                                                    false
-                                                ],
-                                                "style": "ws-sub-table"
-                                            },
-                                            {
-                                                "text": "{{no_of_toilets}}",
-                                                "border": [
-                                                    false,
-                                                    false,
-                                                    false,
-                                                    false
-                                                ],
-                                                "style": "ws-sub-table"
-                                            },
-                                            {
-                                                "text": " ",
-                                                "border": [
-                                                    false,
-                                                    false,
-                                                    false,
-                                                    false
-                                                ],
-                                                "style": "ws-sub-table"
-                                            }
-                                        ],
-                                        [
-                                            {
-                                                "text": "{{connectionType}}",
-                                                "border": [
-                                                    false,
-                                                    false,
-                                                    false,
-                                                    false
-                                                ],
-                                                "style": "ws-sub-table-value"
-                                            },
-                                            {
-                                                "text": "{{noOfWaterClosets}}",
-                                                "border": [
-                                                    false,
-                                                    false,
-                                                    false,
-                                                    false
-                                                ],
-                                                "style": "ws-sub-table-value"
-                                            },
-                                            {
-                                                "text": "{{noOfToilets}}",
-                                                "border": [
-                                                    false,
-                                                    false,
-                                                    false,
-                                                    false
-                                                ],
-                                                "style": "ws-sub-table-value"
-                                            },
-                                            {
-                                                "text": " ",
-                                                "border": [
-                                                    false,
-                                                    false,
-                                                    false,
-                                                    false
-                                                ],
-                                                "style": "ws-sub-table-value"
-                                            }
-                                        ]
-                                    ]
-                                },
-                                "border": [
-                                    true,
-                                    true,
-                                    true,
-                                    true
-                                ]
-                            }
-                        ]
-                    ]
-                },
-                "layout": {}
+                ]
+
             },
             {
                 "text": "{{plumber_details_header}}",
@@ -1228,38 +1068,6 @@
                                                 "style": "ws-sub-table"
                                             },
                                             {
-                                                "text": " ",
-                                                "border": [
-                                                    false,
-                                                    false,
-                                                    false,
-                                                    false
-                                                ],
-                                                "style": "ws-sub-table"
-                                            },
-                                            {
-                                                "text": " ",
-                                                "border": [
-                                                    false,
-                                                    false,
-                                                    false,
-                                                    false
-                                                ],
-                                                "style": "ws-sub-table"
-                                            },
-                                            {
-                                                "text": " ",
-                                                "border": [
-                                                    false,
-                                                    false,
-                                                    false,
-                                                    false
-                                                ],
-                                                "style": "ws-sub-table"
-                                            }
-                                        ],
-                                        [
-                                            {
                                                 "text": "{{connectionExecutionDate}}",
                                                 "border": [
                                                     false,
@@ -1267,7 +1075,7 @@
                                                     false,
                                                     false
                                                 ],
-                                                "style": "ws-sub-table-value"
+                                                "style": "ws-sub-table"
                                             },
                                             {
                                                 "text": " ",
@@ -1277,7 +1085,7 @@
                                                     false,
                                                     false
                                                 ],
-                                                "style": "ws-sub-table-value"
+                                                "style": "ws-sub-table"
                                             },
                                             {
                                                 "text": " ",
@@ -1287,17 +1095,7 @@
                                                     false,
                                                     false
                                                 ],
-                                                "style": "ws-sub-table-value"
-                                            },
-                                            {
-                                                "text": " ",
-                                                "border": [
-                                                    false,
-                                                    false,
-                                                    false,
-                                                    false
-                                                ],
-                                                "style": "ws-sub-table-value"
+                                                "style": "ws-sub-table"
                                             }
                                         ]
                                     ]
@@ -1327,59 +1125,59 @@
             "receipt-logo-header": {
                 "color": "#000000",
                 "fontFamily": "Cambay",
-                "fontSize": 14,
+                "fontSize": 10,
                 "bold": true,
-                "letterSpacing": 0.74,
+                "letterSpacing": 0.5,
                 "margin": [
                     0,
                     -10,
                     0,
-                    5
+                    0
                 ]
             },
             "ws-table": {
-                "fontSize": 12,
+                "fontSize": 9,
                 "color": "#484848",
                 "margin": [
                     -25,
-                    18,
+                    0,
                     -8,
-                    10
+                    0
                 ]
             },
             "header": {
                 "color": "#000000",
                 "textTransform": "uppercase",
                 "bold": true,
-                "fontSize": 12,
+                "fontSize": 9,
                 "fontWeight": 500,
                 "margin": [
                     -25,
-                    15,
+                    1,
                     0,
-                    -10
+                    1
                 ]
             },
             "ws-sub-table-value": {
                 "color": "#000000",
                 "bold": true,
-                "fontSize": 12,
+                "fontSize": 9,
                 "fontWeight": 500,
                 "margin": [
                     3,
                     0,
                     0,
-                    10
+                    0
                 ]
             },
             "ws-sub-table": {
                 "color": "#484848",
                 "bold": true,
-                "fontSize": 12,
+                "fontSize": 9,
                 "fontWeight": 400,
                 "margin": [
                     3,
-                    8,
+                    0,
                     0,
                     0
                 ]
@@ -1398,7 +1196,7 @@
             "receipt-table-value-total": {
                 "color": "#000000",
                 "bold": true,
-                "fontSize": 12,
+                "fontSize": 9,
                 "fontWeight": 500,
                 "alignment": "right",
                 "margin": [

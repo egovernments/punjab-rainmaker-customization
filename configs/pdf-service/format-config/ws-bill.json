@@ -587,16 +587,16 @@
                 ],
                 "margin": [
                   9,
-                  10,
+                  2,
                   0,
-                  5
+                  2
                 ],
                 "style": "receipt-table-value"
               }
             ],
             [
               {
-                "text": "{{payment_received}}",
+                "text": "1. Online payment can be done for water charges payment.",
                 "border": [
                   true,
                   false,
@@ -604,16 +604,16 @@
                   false
                 ],
                 "margin": [
-                  8,
+                  4,
                   0,
                   0,
-                  3
+                  2
                 ]
               }
             ],
             [
               {
-                "text": "{{this_document}}",
+                "text": "2. If last day to pay bill is a holiday. Kindly pay your bills either online or offline on previous working day to avoid penalty.",
                 "border": [
                   true,
                   false,
@@ -621,16 +621,16 @@
                   false
                 ],
                 "margin": [
-                  8,
+                  4,
                   0,
                   0,
-                  3
+                  2
                 ]
               }
             ],
             [
               {
-                "text": "{{this_is_a}}",
+                "text": "3. Payment mode available: Cash/Cheque at office counter,Online: Credit/Debit Card/PayTM/FreeCharge/BBPS/Airtel/SewaKendra.",
                 "border": [
                   true,
                   false,
@@ -638,16 +638,16 @@
                   false
                 ],
                 "margin": [
-                  8,
+                  4,
                   0,
                   0,
-                  3
+                  2
                 ]
               }
             ],
             [
               {
-                "text": "{{assessment_payment}}",
+                "text": "4. Please bring this bill while making payment at office counter.",
                 "border": [
                   true,
                   false,
@@ -655,16 +655,16 @@
                   false
                 ],
                 "margin": [
-                  8,
+                  4,
                   0,
                   0,
-                  3
+                  2
                 ]
               } 
             ],
             [
               {
-                "text": "{{please_deposit}}",
+                "text": "5. Late payment charges will be applied after due date",
                 "border": [
                   true,
                   false,
@@ -672,16 +672,16 @@
                   false
                 ],
                 "margin": [
-                  8,
+                  4,
                   0,
                   0,
-                  3
+                  2
                 ]
               }
             ],
             [
               {
-                "text": "{{if_the_tax}}",
+                "text": "6. Interest & late payment charges calculated based on the payment date will reflect in next bill ",
                 "border": [
                   true,
                   false,
@@ -689,10 +689,10 @@
                   true
                 ],
                 "margin": [
-                  8,
+                  4,
                   0,
                   0,
-                  5
+                  2
                 ]
               }
             ]
@@ -893,17 +893,17 @@
           0,
           -10,
           0,
-          5
+          2
         ]
       },
       "receipt-logo-sub-header": {
         "color": "#484848",
         "fontFamily": "Roboto",
-        "fontSize": 13,
+        "fontSize": 12,
         "letterSpacing": 0.6
       },
       "noc-table": {
-        "fontSize": 12,
+        "fontSize": 10,
         "color": "#484848",
         "margin": [
           -25,
@@ -913,17 +913,17 @@
         ]
       },
       "noc-table4": {
-        "fontSize": 12,
+        "fontSize": 10,
         "color": "#484848",
         "margin": [
           -25,
-          75,
+          40,
           -8,
           -8
         ]
       },
       "noc-table2": {
-        "fontSize": 12,
+        "fontSize": 10,
         "color": "#484848",
         "margin": [
           -25,
@@ -933,7 +933,7 @@
         ]
       },
       "noc-table3": {
-        "fontSize": 12,
+        "fontSize": 10,
         "color": "#484848",
         "margin": [
           -25,
@@ -945,11 +945,11 @@
       "receipt-table-value": {
         "color": "#000000",
         "bold": true,
-        "fontSize": 12,
+        "fontSize": 10,
         "fontWeight": 500,
         "margin": [
           8,
-          5,
+          3,
           0,
           0
         ]
@@ -957,11 +957,11 @@
       "receipt-table-value2": {
         "color": "#000000",
         "bold": true,
-        "fontSize": 12,
+        "fontSize": 10,
         "fontWeight": 500,
         "margin": [
           3,
-          5,
+          3,
           0,
           0
         ]
@@ -969,11 +969,11 @@
       "receipt-table": {
         "color": "#484848",
         "bold": true,
-        "fontSize": 12,
+        "fontSize": 10,
         "fontWeight": 400,
         "margin": [
           -30,
-          5,
+          3,
           0,
           0
         ]
@@ -981,7 +981,7 @@
       "receipt-table2": {
         "color": "#484848",
         "bold": true,
-        "fontSize": 11,
+        "fontSize": 10,
         "fontWeight": 400,
         "margin": [
           3,
@@ -993,7 +993,7 @@
       "right-receipt-table": {
         "color": "#000000",
         "bold": true,
-        "fontSize": 12,
+        "fontSize": 10,
         "fontWeight": 500,
         "margin": [
           8,
@@ -1005,7 +1005,7 @@
       "right-receipt-table2": {
         "color": "#484848",
         "bold": true,
-        "fontSize": 12,
+        "fontSize": 10,
         "fontWeight": 400,
         "margin": [
           -30,
@@ -1015,7 +1015,7 @@
         ]
       },
       "receipt-approver": {
-        "fontSize": 12,
+        "fontSize": 10,
         "bold": true,
         "margin": [
           -27,
@@ -1026,7 +1026,7 @@
         "color": "#484848"
       },
       "no-signature": {
-        "fontSize": 12,
+        "fontSize": 10,
         "margin": [
           -27,
           35,
@@ -1036,13 +1036,13 @@
         "color": "#484848"
       },
       "amount-due": {
-        "fontSize": 30,
+        "fontSize": 20,
         "color": "#FC8019",
         "bold": true,
         "fontWeight": 700
       },
       "pt-disclaimer": {
-        "fontSize": 12,
+        "fontSize": 8,
         "margin": [
           -27,
           30,
@@ -1052,7 +1052,7 @@
         "color": "#484848"
       },
       "pt-disclaimer-value": {
-        "fontSize": 12,
+        "fontSize": 8,
         "margin": [
           0,
           5,
@@ -1085,7 +1085,7 @@
       "footer-header": {
         "margin": [
           0,
-          15,
+          5,
           0,
           -40
         ],
@@ -1096,7 +1096,7 @@
       "footer-bottom": {
         "margin": [
           0,
-          50,
+          25,
           0,
           0
         ],
