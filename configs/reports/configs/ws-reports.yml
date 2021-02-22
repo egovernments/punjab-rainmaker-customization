@@ -257,12 +257,12 @@ ReportDefinitions:
     label: reports.ws.ownerid
     type: string
     source: ws
-    total: true
+    total: false
   - name: ownername
     label: reports.ws.ownername
     type: string
     source: ws
-    total: true
+    total: false
   - name: contact
     label: reports.ws.contact
     type: string
