@@ -8,6 +8,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -132,7 +133,14 @@ public class PropertyService {
 		 owner.setFatherOrHusbandName(conn.getGuardianname());
 		 owner.setOwnerType("NONE");
 		 property.creationReason(CreationReason.CREATE);
-		 property.setUsageCategory((String) data.get("connectionCategory"));
+		 log.info("conn.getPropertyType() :"+conn.getPropertyType());
+		 if(conn.getPropertyType()!=null)
+		 {
+		 property.setUsageCategory(conn.getPropertyType().toUpperCase().replace(" " , ""));
+		 }else
+		 {
+			 property.setUsageCategory("RESIDENTIAL") ;
+		 }
 		 
 		 List<OwnerInfo> owners=new ArrayList<>();
 		 owners.add(owner);
@@ -186,10 +194,17 @@ public class PropertyService {
  
 		 property.setTenantId(conn.getTenantId());
 		 prequest.setProperty(property);
-		 PropertyResponse res=	 restTemplate.postForObject(host + "/" + ptcreatehurl, prequest, PropertyResponse.class);
-		 log.info(res.toString());
+		 PropertyResponse res=null;
+		try {
+			res = restTemplate.postForObject(host + "/" + ptcreatehurl, prequest, PropertyResponse.class);
+			 return res.getProperties().get(0);
+		} catch (RestClientException e) {
+			e.printStackTrace();
+			recordService.recordError("sewerage",e.getMessage(), conn.getId());
+		}
+		 
 
-		 return res.getProperties().get(0);
+		return null;
 		 
 	}
 
@@ -212,7 +227,7 @@ public class PropertyService {
 			log.info("found properties"+response.getProperties().size());
 			for(Property property:response.getProperties())
 			{
-				log.info("status"+property.getPropertyId()+"---"+property.getStatus());
+				log.info("status"+property.getPropertyId()+"---"+property.getStatus() +" Usage :" +property.getUsageCategory());
 				
 				
 				for(OwnerInfo owner:property.getOwners())
@@ -227,9 +242,12 @@ public class PropertyService {
 						
 					 
 						)
- 
+					{
+						 
+							recordService.recordError("water", "Found Property in digit :" +property.getId(), conn.getWaterConnection().getId());
 						
 						return property;
+					}
 					
 				}
 			}
@@ -272,13 +290,15 @@ public class PropertyService {
 						owner.getName().equalsIgnoreCase(conn.getSewerageConnection().getApplicantname())
 					    &&
 						owner.getFatherOrHusbandName().equalsIgnoreCase(conn.getSewerageConnection().getGuardianname())
-						&&
-						property.getStatus().equals(Status.ACTIVE)
+						 
 					 
 						)
+					{
  
-						
+						recordService.recordError("sewerage", "Found Property in digit :" +property.getId(), conn.getSewerageConnection().getId());	
 						return property;
+						
+					}
 					
 				}
 			}

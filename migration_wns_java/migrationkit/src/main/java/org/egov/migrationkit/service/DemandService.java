@@ -18,6 +18,7 @@ import io.swagger.client.model.Demand;
 import io.swagger.client.model.Demand.StatusEnum;
 import io.swagger.client.model.DemandDetail;
 import io.swagger.client.model.DemandRequest;
+import io.swagger.client.model.DemandResponse;
 import io.swagger.client.model.OwnerInfo;
 import io.swagger.client.model.RequestInfo;
 import io.swagger.client.model.RequestInfoWrapper;
@@ -97,6 +98,7 @@ public class DemandService {
 						.consumerType("waterConnection")
 						.status(StatusEnum.valueOf("ACTIVE"))
 						.totalAmountPaid(totalAmountPaid)
+						.isPaymentCompleted(false)
 						.build());	
 			}else {
 				demands.add(Demand.builder()
@@ -114,6 +116,7 @@ public class DemandService {
 						.consumerType("waterConnection")
 						.status(StatusEnum.valueOf("ACTIVE"))
 						.totalAmountPaid(totalAmountPaid)
+						.isPaymentCompleted(false)
 						.build());	
 			}
 				
@@ -132,17 +135,18 @@ public class DemandService {
     public Boolean saveDemand(RequestInfo requestInfo, List<Demand> demands){
     	try{
     		
-    	String url = billingServiceHost + demandCreateEndPoint;
+    	String url = billingServiceHost + demandCreateEndPoint+requestInfo.getUserInfo().getTenantId();
         DemandRequest request = new DemandRequest(requestInfo,demands);
-        Object result = restTemplate.postForObject(url , request, String.class);
+        DemandResponse response = restTemplate.postForObject(url , request, DemandResponse.class);
         
-        	log.info("Demand Create Request: " + request + "Demand Create Respone: " + result);
+        	log.info("Demand Create Request: " + request + "Demand Create Respone: " + response);
         }
         catch(Exception e){
-            log.error("Demand PARSING_ERROR: "+demands,"Failed to parse response of create demand " + e);
+        	e.printStackTrace();
+            log.error("Demand PARSING_ERROR: "+demands,"Failed to parse response of create demand " + e.getMessage());
             return Boolean.FALSE;
         }
-		return Boolean.TRUE;
+		return Boolean.TRUE;  
     }
     
     public Boolean fetchBill(List<Demand> demands, RequestInfo requestInfo) {
@@ -166,83 +170,84 @@ public class DemandService {
     
 public List<Demand> prepareSwDemandRequest(Map data, String businessService, String consumerCode, String tenantId, OwnerInfo owner) {
 		
+	Map<Integer, List<DemandDetail>> instaWiseDemandMap = new HashMap<>();
+	List<Map> dcbDataList = (List) data.get("dcb") != null ? (List) data.get("dcb") : new ArrayList<Map>();
+	List<Demand> demands = new LinkedList<>();
+	
+//	dcbDataList
+	for (Map dcbData : dcbDataList) {
 		
-		Map<Integer, List<DemandDetail>> instaWiseDemandMap = new HashMap<>();
-		List<Map> dcbDataList = (List) data.get("dcb") != null ? (List) data.get("dcb") : new ArrayList<Map>();
-		List<Demand> demands = new LinkedList<>();
+		String taxHeadMaster = WSConstants.TAX_HEAD_MAP.get((String)dcbData.get("demand_reason"));
+		DemandDetail dd = DemandDetail.builder()
+				.taxAmount(BigDecimal.valueOf((Integer)dcbData.get("amount")))
+				.taxHeadMasterCode(taxHeadMaster)
+				.collectionAmount(BigDecimal.ZERO)
+				.amountPaid(BigDecimal.valueOf((Integer)dcbData.get("collected_amount")))
+//				.fromDate((Long)dcbData.get("from_date"))
+//				.toDate((Long)dcbData.get("to_date"))
+				.tenantId(tenantId)
+				.build();
 		
-//		dcbDataList
-		for (Map dcbData : dcbDataList) {
+		Integer installmentId = (Integer)dcbData.get("insta_id");
+		if(instaWiseDemandMap.containsKey(installmentId)) {
 			
-			String taxHeadMaster = WSConstants.TAX_HEAD_MAP.get((String)dcbData.get("demand_reason"));
-			DemandDetail dd = DemandDetail.builder()
-					.taxAmount(BigDecimal.valueOf((Integer)dcbData.get("amount")))
-					.taxHeadMasterCode(taxHeadMaster)
-					.collectionAmount(BigDecimal.ZERO)
-					.amountPaid(BigDecimal.valueOf((Integer)dcbData.get("collected_amount")))
-//					.fromDate((Long)dcbData.get("from_date"))
-//					.toDate((Long)dcbData.get("to_date"))
-					.tenantId(tenantId)
-					.build();
-			
-			Integer installmentId = (Integer)dcbData.get("insta_id");
-			if(instaWiseDemandMap.containsKey(installmentId)) {
-				
-					instaWiseDemandMap.get(installmentId).add(dd);
+				instaWiseDemandMap.get(installmentId).add(dd);
 
-			} else {
-				List<DemandDetail> ddList = new ArrayList<>();
-				
-				ddList.add(dd);
-				instaWiseDemandMap.put(installmentId, ddList);
-			}
-				
+		} else {
+			List<DemandDetail> ddList = new ArrayList<>();
+			
+			ddList.add(dd);
+			instaWiseDemandMap.put(installmentId, ddList);
 		}
-		instaWiseDemandMap.forEach((insta_id, ddList) -> {
-			BigDecimal totalAmountPaid = BigDecimal.ZERO;
-			for (DemandDetail demandDetail : ddList) {
-				totalAmountPaid = totalAmountPaid.add(demandDetail.getAmountPaid());	
-			}
+			
+	}
+	instaWiseDemandMap.forEach((insta_id, ddList) -> {
+		BigDecimal totalAmountPaid = BigDecimal.ZERO;
+		for (DemandDetail demandDetail : ddList) {
+			totalAmountPaid = totalAmountPaid.add(demandDetail.getAmountPaid());	
+		}
 
-			if(!ddList.isEmpty() && WSConstants.ONE_TIME_TAX_HEAD_MASTERS.contains(ddList.get(0).getTaxHeadMasterCode())) {
-				demands.add(Demand.builder()
-						.businessService(businessService + WSConstants.ONE_TIME_FEE_CONST)
-						.consumerCode(consumerCode)
-						.demandDetails(ddList)
-						.payer(User.builder().uuid(owner.getUuid()).name(owner.getName()).build())
-						.tenantId(tenantId)
-//						There is no tax periods configured for all the previous year in PB QA environments as of now giving dummy configured tax period. 
-//						.taxPeriodFrom(ddList.get(0).getFromDate())
-//						.taxPeriodTo(ddList.get(0).getToDate())
-						.taxPeriodFrom(1554076800000l)
-						.taxPeriodTo(1617175799000l)
-						.minimumAmountPayable(BigDecimal.ZERO)
-						.consumerType("sewerageConnection")
-						.status(StatusEnum.valueOf("ACTIVE"))
-						.totalAmountPaid(totalAmountPaid)
-						.build());	
-			}else {
-				demands.add(Demand.builder()
-						.businessService(businessService)
-						.consumerCode(consumerCode)
-						.demandDetails(ddList)
-						.payer(User.builder().uuid(owner.getUuid()).name(owner.getName()).build())
-						.tenantId(tenantId)
-//						There is no tax periods configured for all the previous year in PB QA environments as of now giving dummy configured tax period. 
-//						.taxPeriodFrom(ddList.get(0).getFromDate())
-//						.taxPeriodTo(ddList.get(0).getToDate())
-						.taxPeriodFrom(1554076800000l)
-						.taxPeriodTo(1617175799000l)
-						.minimumAmountPayable(BigDecimal.ZERO)
-						.consumerType("sewerageConnection")
-						.status(StatusEnum.valueOf("ACTIVE"))
-						.totalAmountPaid(totalAmountPaid)
-						.build());	
-			}
-				
-			});
+		if(!ddList.isEmpty() && WSConstants.ONE_TIME_TAX_HEAD_MASTERS.contains(ddList.get(0).getTaxHeadMasterCode())) {
+			demands.add(Demand.builder()
+					.businessService(businessService + WSConstants.ONE_TIME_FEE_CONST)
+					.consumerCode(consumerCode)
+					.demandDetails(ddList)
+					.payer(User.builder().uuid(owner.getUuid()).name(owner.getName()).build())
+					.tenantId(tenantId)
+//					There is no tax periods configured for all the previous year in PB QA environments as of now giving dummy configured tax period. 
+					.taxPeriodFrom(ddList.get(0).getFromDate())
+					.taxPeriodTo(ddList.get(0).getToDate())
+//					.taxPeriodFrom(1554076800000l)
+//					.taxPeriodTo(1617175799000l)
+					.minimumAmountPayable(BigDecimal.ZERO)
+					.consumerType("sewerageConnection")
+					.status(StatusEnum.valueOf("ACTIVE"))
+					.totalAmountPaid(totalAmountPaid)
+					.isPaymentCompleted(false)
+					.build());	
+		}else {
+			demands.add(Demand.builder()
+					.businessService(businessService)
+					.consumerCode(consumerCode)
+					.demandDetails(ddList)
+					.payer(User.builder().uuid(owner.getUuid()).name(owner.getName()).build())
+					.tenantId(tenantId)
+//					There is no tax periods configured for all the previous year in PB QA environments as of now giving dummy configured tax period. 
+ 					.taxPeriodFrom(ddList.get(0).getFromDate())
+ 				.taxPeriodTo(ddList.get(0).getToDate())
+//					.taxPeriodFrom(1554076800000l)
+//					.taxPeriodTo(1617175799000l)
+					.minimumAmountPayable(BigDecimal.ZERO)
+					.consumerType("sewerageConnection")
+					.status(StatusEnum.valueOf("ACTIVE"))
+					.totalAmountPaid(totalAmountPaid)
+					.isPaymentCompleted(false)
+					.build());	
+		}
+			
+		});
 
-		return demands;
+	return demands;
 		
 	}
     

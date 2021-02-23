@@ -68,6 +68,15 @@ public class ConnectionService {
 	public void migrateWtrConnection(String tenantId, RequestInfo requestInfo) {
 
 		recordService.initiate(tenantId);
+		Map data = null;
+		WaterConnection connection = null;
+		List<Map> roadCategoryList = null;
+		Integer area = null;
+		Double areaDouble = null;
+		Address address = null;
+		Locality locality = null;
+		String locCode = null;
+		String localityCode = null;
 
 		String searchPath = jdbcTemplate.queryForObject("show search_path", String.class);
 		log.info(searchPath);
@@ -79,10 +88,10 @@ public class ConnectionService {
 			try {
 
 				// IS_EXTERNAL_WORKFLOW_ENABLED
-				Map data = objectMapper.readValue(json, Map.class);
+				data = objectMapper.readValue(json, Map.class);
 
 				// WaterConnection connection = mapWaterConnection(data);
-				WaterConnection connection = objectMapper.readValue(json, WaterConnection.class);
+				connection = objectMapper.readValue(json, WaterConnection.class);
 				/**
 				 * Setting If consumer number is null then, assigning
 				 * application number of ERP.
@@ -99,45 +108,53 @@ public class ConnectionService {
 				log.info("Connection Type :" + connection.getConnectionType());
 				log.info("ConnectionDetail id :" + connection.getId());
 
-				//ToDo: populate connectionHolders
-				
-				List<Map> roadCategoryList = (List<Map>) data.get("road_category");
+				// ToDo: populate connectionHolders
+
+				roadCategoryList = (List<Map>) data.get("road_category");
 				if (roadCategoryList != null) {
 					String roadCategory = (String) roadCategoryList.get(0).get("road_name");
 					connection.setRoadType(WSConstants.DIGIT_ROAD_CATEGORIES.get(roadCategory));
 					try {
-						Integer area = (Integer) roadCategoryList.get(0).get("road_area");
+						area = (Integer) roadCategoryList.get(0).get("road_area");
 
 						connection.setRoadCuttingArea(Double.valueOf(area));
 					} catch (Exception e) {
-						Double area = (Double) roadCategoryList.get(0).get("road_area");
-						connection.setRoadCuttingArea(area);
+						areaDouble = (Double) roadCategoryList.get(0).get("road_area");
+						connection.setRoadCuttingArea(areaDouble);
 					}
 
 				}
 				String addressQuery = Sqls.address;
 				Integer id = (Integer) data.get("applicantaddress.id");
 				addressQuery = addressQuery.replace(":id", id.toString());
-				@SuppressWarnings("deprecation")
-				Address address = (Address) jdbcTemplate.queryForObject(addressQuery,
-						new BeanPropertyRowMapper(Address.class));
+
+				address = (Address) jdbcTemplate.queryForObject(addressQuery, new BeanPropertyRowMapper(Address.class));
 
 				recordService.recordWaterMigration(connection);
 				
-				Locality locality = new Locality();
+				
+				if(connection.getMobilenumber()==null || connection.getMobilenumber().isEmpty())
+				{
+					recordService.recordError("water", "Mobile Number is null ", connection.getId());
+					recordService.setStatus("water", "Incompatible", connection.getId());
+					continue;
+				}
+
+				locality = new Locality();
 				// locality.setCode((String)data.get("locality"));
 				// use the map here
-				String locCode=(String) data.get("locality");
-				String localityCode = findLocality(locCode);
+				locCode = (String) data.get("locality");
+				localityCode = findLocality(locCode);
 				if (localityCode == null) {
-					recordService.recordError("water", "No Mapping for Locality: "+locCode, connection.getId());
+					recordService.recordError("water", "No Mapping for Locality: " + locCode, connection.getId());
 					continue;
 				}
 
 				locality.setCode(localityCode);
 				address.setLocality(locality);
 				connection.setStatus(StatusEnum.Active);
-				//connection.setConnectionNo((String) data.get("consumercode"));
+				// connection.setConnectionNo((String)
+				// data.get("consumercode"));
 				connection.setApplicationStatus("CONNECTION_ACTIVATED");
 
 				connection.setApplicantAddress(address);
@@ -145,15 +162,12 @@ public class ConnectionService {
 				connection.setTenantId(requestInfo.getUserInfo().getTenantId());
 				connection.setProcessInstance(ProcessInstance.builder().action("INITIATE").build());
 
-			
-
 				WaterConnectionRequest waterRequest = new WaterConnectionRequest();
 
 				waterRequest.setWaterConnection(connection);
 				waterRequest.setRequestInfo(requestInfo);
 				Property property = propertyService.findProperty(waterRequest, data);
-				if (property == null)
-				{
+				if (property == null) {
 					recordService.recordError("water", "Error in while find or create property:", connection.getId());
 					continue;
 				}
@@ -168,7 +182,8 @@ public class ConnectionService {
 					response = restTemplate.postForObject(host + "/" + waterUrl, waterRequest, String.class);
 				} catch (RestClientException e) {
 					log.error(e.getMessage(), e);
-					recordService.recordError("water", "Error in creating water connection record :"+e.getMessage(), connection.getId());
+					recordService.recordError("water", "Error in creating water connection record :" + e.getMessage(),
+							connection.getId());
 					continue;
 				}
 
@@ -181,7 +196,7 @@ public class ConnectionService {
 						&& !waterResponse.getWaterConnection().isEmpty()) {
 
 					wtrConnResp = waterResponse.getWaterConnection().get(0);
-
+					recordService.updateWaterMigration(wtrConnResp, connection.getId());
 					String consumerCode = wtrConnResp.getConnectionNo() != null ? wtrConnResp.getConnectionNo()
 							: wtrConnResp.getApplicationNo();
 
@@ -193,19 +208,30 @@ public class ConnectionService {
 						Boolean isDemandCreated = demandService.saveDemand(requestInfo, demandRequestList);
 						if (isDemandCreated) {
 							Boolean isBillCreated = demandService.fetchBill(demandRequestList, requestInfo);
+							log.info("Bill created" + isBillCreated + " isDemandCreated" + isDemandCreated);
 
 						}
 
-						recordService.updateWaterMigration(wtrConnResp);
+						recordService.setStatus("water", "Demand_Created", connection.getId());
 						log.info("waterResponse" + waterResponse);
+						log.info("completed for " + connection.getMobilenumber());
 
 					}
 				}
 
 			} catch (JsonMappingException e) {
-				log.error(e.getMessage());
+				log.error(e.getMessage(), e);
+				recordService.recordError("water", e.getMessage(), connection.getId());
 			} catch (JsonProcessingException e) {
-				log.error(e.getMessage());
+				recordService.recordError("water", e.getMessage(), connection.getId());
+				log.error(e.getMessage(), e);
+			}
+
+			catch (Exception e) {
+				log.error(e.getMessage(), e);
+				recordService.recordError("water", e.getMessage(), connection.getId());
+				return;
+
 			}
 
 		}
@@ -228,7 +254,7 @@ public class ConnectionService {
 					new Object[] { code }, String.class);
 		} catch (DataAccessException e) {
 			log.error("digit Location code is not mapped for " + code);
-			digitcode = "SUN97";
+			digitcode = "NSR_112";
 		}
 		log.info("returning  " + digitcode);
 		return digitcode;
@@ -241,6 +267,14 @@ public class ConnectionService {
 	public void createSewerageConnection(String tenantId, RequestInfo requestInfo) {
 
 		recordService.initiateSewrage(tenantId);
+		SewerageConnection swConnection=null;
+		Address address = null;
+		Locality locality = null;
+		String locCode = null;
+		String localityCode = null;
+		
+		
+		
 
 		List<String> queryForList = jdbcTemplate.queryForList(Sqls.sewerageQuery, String.class);
 
@@ -249,14 +283,35 @@ public class ConnectionService {
 			try {
 
 				Map data = objectMapper.readValue(json, Map.class);
-				SewerageConnection swConnection = objectMapper.readValue(json, SewerageConnection.class);
+				swConnection = objectMapper.readValue(json, SewerageConnection.class);
 				// connection.setApplicantAddress(address);
 
 				swConnection.setTenantId(requestInfo.getUserInfo().getTenantId());
 				swConnection.setProcessInstance(ProcessInstance.builder().action("INITIATE").build());
 
 				recordService.recordSewerageMigration(swConnection);
+				
+				
+				String addressQuery = Sqls.address;
+				Integer id = (Integer) data.get("applicantaddress.id");
+				addressQuery = addressQuery.replace(":id", id.toString());
 
+				address = (Address) jdbcTemplate.queryForObject(addressQuery, new BeanPropertyRowMapper(Address.class));
+				
+
+				locality = new Locality();
+				// locality.setCode((String)data.get("locality"));
+				// use the map here
+				locCode = (String) data.get("locality");
+				localityCode = findLocality(locCode);
+				if (localityCode == null) {
+					recordService.recordError("sewerage", "No Mapping for Locality: " + locCode, swConnection.getId());
+					continue;
+				}
+
+				locality.setCode(localityCode);
+				address.setLocality(locality);
+				swConnection.setApplicantAddress(address);
 				SewerageConnectionRequest sewerageRequest = new SewerageConnectionRequest();
 
 				log.info("mobile number : " + swConnection.getMobilenumber());
@@ -264,10 +319,12 @@ public class ConnectionService {
 				log.info("connectionNo; " + swConnection.getConnectionNo());
 				log.info("Connection Category : " + swConnection.getConnectionCategory());
 				log.info("Connection Type :" + swConnection.getConnectionType());
+				log.info("Connection id :" + swConnection.getId());
 
-				if (swConnection.getMobilenumber() == null || swConnection.getMobilenumber().isEmpty()) {
-					recordService.recordError("sewerage", "Mobile number not found for the record  ",
-							swConnection.getId());
+				if(swConnection.getMobilenumber()==null || swConnection.getMobilenumber().isEmpty())
+				{
+					recordService.recordError("water", "Mobile Number is null ", swConnection.getId());
+					recordService.setStatus("water", "Incompatible", swConnection.getId());
 					continue;
 				}
 
@@ -281,58 +338,71 @@ public class ConnectionService {
 					continue;
 				}
 				swConnection.setPropertyId(property.getId());
-				
+
 				String response = null;
 				try {
 					response = restTemplate.postForObject(host + "/" + sewerageUrl, sewerageRequest, String.class);
+					recordService.setStatus("sewerage", "Saved", swConnection.getId());
+				
 				} catch (RestClientException e) {
 					log.error(e.getMessage(), e);
-					recordService.recordError("water", "Error in creating water connection record :"+e.getMessage(), swConnection.getId());
+					recordService.recordError("water", "Error in creating water connection record :" + e.getMessage(),
+							swConnection.getId());
 					continue;
 				}
 
 				log.info("Response=" + response);
-				
-				
 
-				SewerageConnectionResponse sewerageResponse = objectMapper.readValue(response,SewerageConnectionResponse.class);
-				
+				SewerageConnectionResponse sewerageResponse = objectMapper.readValue(response,
+						SewerageConnectionResponse.class);
+
 				log.info("Sewerage Response=" + sewerageResponse);
 
 				SewerageConnection srgConnResp = null;
 
 				// this will be uncomented after the searage request is
 				// completed
-				
-				  if(sewerageResponse!=null && sewerageResponse.getSewerageConnections() != null && !sewerageResponse.getSewerageConnections().isEmpty()) {
-				  
-				  srgConnResp = sewerageResponse.getSewerageConnections().get(0);
-				  
-				  String consumerCode = srgConnResp.getConnectionNo() !=null ? srgConnResp.getConnectionNo() : srgConnResp.getApplicationNo();
-				  
-				  List<Demand> demandRequestList = demandService.prepareSwDemandRequest(data, WSConstants.SEWERAGE_BUSINESS_SERVICE, consumerCode, requestInfo.getUserInfo().getTenantId(), property.getOwners().get(0));
-				  
-				  log.info("Demand Request=" + demandRequestList);
-				  
-				  if(!demandRequestList.isEmpty()) {
-				  
-					  Boolean isDemandCreated = demandService.saveDemand(requestInfo, demandRequestList); 
-					  if (isDemandCreated) {
-						  Boolean isBillCreated = demandService.fetchBill(demandRequestList, requestInfo);
-					  
-					  }
-					  recordService.updateSewerageMigration(srgConnResp);
-					  log.info("sewerageResponse" + sewerageResponse);
-				  
-				  }
-				  
-				  }
-				 
+
+				if (sewerageResponse != null && sewerageResponse.getSewerageConnections() != null
+						&& !sewerageResponse.getSewerageConnections().isEmpty()) {
+
+					srgConnResp = sewerageResponse.getSewerageConnections().get(0);
+					
+					  recordService.updateSewerageMigration(srgConnResp,swConnection.getId());
+
+					String consumerCode = srgConnResp.getConnectionNo() != null ? srgConnResp.getConnectionNo()
+							: srgConnResp.getApplicationNo();
+
+					List<Demand> demandRequestList = demandService.prepareSwDemandRequest(data,
+							WSConstants.SEWERAGE_BUSINESS_SERVICE, consumerCode,
+							requestInfo.getUserInfo().getTenantId(), property.getOwners().get(0));
+
+					log.info("Demand Request=" + demandRequestList);
+
+					if (!demandRequestList.isEmpty()) {
+
+						Boolean isDemandCreated = demandService.saveDemand(requestInfo, demandRequestList);
+						if (isDemandCreated) {
+							Boolean isBillCreated = demandService.fetchBill(demandRequestList, requestInfo);
+							recordService.setStatus("sewerage", "Demand_Created", swConnection.getId());
+
+						}
+						 
+						log.info("sewerageResponse" + sewerageResponse);
+
+					}
+
+				}
 
 			} catch (JsonMappingException e) {
 				log.error(e.getMessage());
 			} catch (JsonProcessingException e) {
 				log.error(e.getMessage());
+			}
+			catch (Exception e) {
+				log.error(e.getMessage(), e);
+				recordService.recordError("water", e.getMessage(), swConnection.getId());
+				return;
 			}
 
 		}

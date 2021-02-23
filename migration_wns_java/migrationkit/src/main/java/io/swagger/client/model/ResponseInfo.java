@@ -42,7 +42,7 @@ public class ResponseInfo {
 	 * INPROGRESS
 	 */
 
-	public enum StatusEnum {
+/*	public enum StatusEnum {
 		successful("successful"), failed("failed");
 
 		private String value;
@@ -55,10 +55,10 @@ public class ResponseInfo {
 			return value;
 		}
 
-	}
+	}*/
 
 	@JsonProperty("status")
-	private StatusEnum status = null;
+	private String status = null;
 
 	public ResponseInfo apiId(String apiId) {
 		this.apiId = apiId;
@@ -151,7 +151,7 @@ public class ResponseInfo {
 		this.msgId = msgId;
 	}
 
-	public ResponseInfo status(StatusEnum status) {
+	public ResponseInfo status(String status) {
 		this.status = status;
 		return this;
 	}
@@ -162,11 +162,11 @@ public class ResponseInfo {
 	 * 
 	 * @return status
 	 **/
-	public StatusEnum getStatus() {
+	public String getStatus() {
 		return status;
 	}
 
-	public void setStatus(StatusEnum status) {
+	public void setStatus(String status) {
 		this.status = status;
 	}
 

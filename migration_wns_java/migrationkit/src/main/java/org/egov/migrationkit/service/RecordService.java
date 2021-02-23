@@ -30,25 +30,26 @@ public class RecordService {
 		
 	}
 	@Transactional
-	public void updateWaterMigration(WaterConnection conn)
+	public void updateWaterMigration(WaterConnection conn, String erpId)
 	{
 		
 	String qry=	Sqls.waterRecord_update;
-	qry=qry.replace(":erpid", "'"+conn.getId()+"'");
-	qry=qry.replace(":status", "'saved'");
+	qry=qry.replace(":erpid", "'"+erpId+"'");
+	qry=qry.replace(":status", "'Saved'");
 	qry=qry.replace(":tenantId", "'"+conn.getTenantId()+"'");
-	qry=qry.replace(":digitconn", conn.getConnectionNo()==null?"'null'":"'"+conn.getConnectionNo()+"'");
+	String connNo=conn.getConnectionNo()==null?conn.getApplicationNo():conn.getConnectionNo();
+	qry=qry.replace(":digitconn", "'"+connNo+"'");
 	qry=qry.replace(":digitpt","'"+conn.getPropertyId()+"'");
 	jdbcTemplate.execute(qry);
 		
 	}
 	
 	@Transactional
-	public void updateSewerageMigration(SewerageConnection conn)
+	public void updateSewerageMigration(SewerageConnection conn,String erpId)
 	{
 		
 	String qry=	Sqls.sewerageRecord_update;
-	qry=qry.replace(":erpid", "'"+conn.getId()+"'");
+	qry=qry.replace(":erpid", "'"+erpId+"'");
 	qry=qry.replace(":status", "'saved'");
 	qry=qry.replace(":tenantId", "'"+conn.getTenantId()+"'");
 	qry=qry.replace(":digitconn", conn.getConnectionNo()==null?"'null'":"'"+conn.getConnectionNo()+"'");
@@ -149,9 +150,6 @@ public class RecordService {
 	@Transactional
 	public void initiateSewrage(String tenantId)
 	{
-		
-		
-		
 	jdbcTemplate.execute("set search_path to " + tenantId);
 	//jdbcTemplate.execute("drop table if exists egwtr_migration" + tenantId);
 	jdbcTemplate.execute(Sqls.SEWERAGE_CONNECTION_TABLE);
@@ -164,9 +162,21 @@ public class RecordService {
 		if(module.equalsIgnoreCase("water"))
 			tableName="egwtr_migration";
 		else if(module.equalsIgnoreCase("sewerage"))
-			tableName="egsw_migration";
+			tableName="egswtax_migration";
+		
+		String cleanedMessage=message.replace("'", "");
 			
-		jdbcTemplate.execute("update "+tableName+" set errorMessage='" +message+ " ' where erpid='"+id+"'"); 
+		jdbcTemplate.execute("update "+tableName+" set errorMessage=errorMessage || '" +cleanedMessage+ "' where erpid='"+id+"'"); 
+		
+	}
+	@Transactional
+	public void setStatus(String module ,String status, String id) {
+		String tableName=null;
+		if(module.equalsIgnoreCase("water"))
+			tableName="egwtr_migration";
+		else if(module.equalsIgnoreCase("sewerage"))
+			tableName="egswtax_migration";
+		jdbcTemplate.execute("update "+tableName+" set status='" +status+ "' where erpid='"+id+"'"); 
 		
 	} 
 

@@ -78,8 +78,8 @@ public class Sqls {
 			"  egw_status status where conn.id=conndetails.connection and apptype.id=conndetails.applicationtype and"
 			+ " usage.id=conndetails.usagetype and block.id=conn.block and locality.id=conn.locality and zone.id=conn.zone and"
 			+ " conndetails.propertytype=proptype.id and conndetails.category=wtrctgy.id and ownerinfo.connection=conn.id "
-			+ " and usr.id=ownerinfo.owner and address.id=conn.address and status.id=conndetails.statusid and conndetails.legacy=false   "
-			+ " and conndetails.id not in (select erpid::bigint from egwtr_migration where status='Saved' )  ";
+			+ " and usr.id=ownerinfo.owner and address.id=conn.address and status.id=conndetails.statusid   "
+			+ " and conndetails.id not in (select erpid::bigint from egwtr_migration where status in ('Saved','Demand_Created' ) ) order by conndetails.id ";   
 	
 	
 	
@@ -92,7 +92,7 @@ public class Sqls {
 			+ ", :tenantId,:addtionaldetails);";
 	
 	public static final String waterRecord_update="update  egwtr_migration  "+
-			"set digitconn=:digitconn , digitpt=:digitpt,status=:status where erpid=:erpid and tenantId=:tenantId";
+			"set digitconn=:digitconn , digitpt=:digitpt,status=:status where erpid=:erpid ";
 		
 	public static final String address="select id,housenobldgapt as plotno,landmark,citytownvillage as city,district,arealocalitysector as region,state,country,pincode, buildingName,streetroadline as street from eg_address where id=:id ;";
 	
@@ -110,11 +110,11 @@ public class Sqls {
 	public static final String WATER_COLLECTION_QUERY = "select json_build_object( 'paymentMode','cash', 'paymentStatus', 'New', 'businessService', 'WS', 'transactionNumber',ih.transactionnumber, 'transactionDate', (select extract(epoch from ih.transactiondate) * 1000), 'paidBy', ch.payeename, 'mobileNumber', owner.mobilenumber, 'payerName', owner.name, 'consumerCode', ch.consumercode, 'payerEmail', owner.emailid, 'payerId', owner.id, 'totalAmountPaid', ch.totalamount, 'totalDue', ch.totalamount, 'instrumentDate', (select extract(epoch from ih.instrumentdate) * 1000) , 'instrumentNumber', ih.instrumentNumber, 'instrumentStatus', status.code, 'paymentDetails', (json_agg(json_build_object('totalDue', ch.totalamount, 'totalAmountPaid' , ch.totalamount, 'businessService', 'WS')ORDER BY ch.id ) ) ) as payments_info from egcl_collectionheader ch INNER JOIN egcl_servicedetails billingservice ON ch.servicedetails=billingservice.id and billingservice.code !='STAX' INNER JOIN egcl_collectioninstrument ci ON ch.id=ci.collectionheader INNER JOIN egf_instrumentheader ih ON ci.instrumentheader=ih.id INNER JOIN egf_instrumenttype it ON ih.instrumenttype=it.id INNER JOIN egw_status status ON ch.status=status.id and ch.status in (select id from egw_status where moduletype='ReceiptHeader' and code not in ('PENDING','FAILED')) INNER JOIN egwtr_connection wtrcon ON ch.consumercode=wtrcon.consumercode INNER JOIN egwtr_connection_owner_info connowner ON wtrcon.id=connowner.connection INNER JOIN egwtr_connectiondetails conndetails ON wtrcon.id=conndetails.connection INNER JOIN eg_user owner ON owner.id=connowner.owner GROUP BY it.type,ih.transactionnumber, ih.transactiondate, ch.payeename, owner.mobilenumber, owner.name, ch.consumercode, owner.emailid, owner.id,ch.totalamount, ih.instrumentdate, ih.instrumentNumber,status.code UNION ALL select json_build_object( 'paymentMode','cash', 'paymentStatus', 'New', 'businessService', 'WS.ONE_TIME_FEE', 'transactionNumber',ih.transactionnumber, 'transactionDate', (select extract(epoch from ih.transactiondate) * 1000), 'paidBy', ch.payeename, 'mobileNumber', owner.mobilenumber, 'payerName', owner.name, 'consumerCode', CASE WHEN wtrcon.consumercode is not null THEN wtrcon.consumercode ELSE conndetails.applicationnumber END, 'payerEmail', owner.emailid, 'payerId', owner.id, 'totalAmountPaid', ch.totalamount, 'totalDue', ch.totalamount, 'instrumentDate', (select extract(epoch from ih.instrumentdate) * 1000) , 'instrumentNumber', ih.instrumentNumber, 'instrumentStatus', status.code, 'paymentDetails', (json_agg(json_build_object('totalDue', ch.totalamount, 'totalAmountPaid' , ch.totalamount, 'businessService', 'WS.ONE_TIME_FEE')ORDER BY ch.id ) ) ) as payments_info from egcl_collectionheader ch INNER JOIN egcl_servicedetails billingservice ON ch.servicedetails=billingservice.id and billingservice.code !='STAX' INNER JOIN egcl_collectioninstrument ci ON ch.id=ci.collectionheader INNER JOIN egf_instrumentheader ih ON ci.instrumentheader=ih.id INNER JOIN egf_instrumenttype it ON ih.instrumenttype=it.id INNER JOIN egw_status status ON ch.status=status.id and ch.status in (select id from egw_status where moduletype='ReceiptHeader' and code not in ('PENDING','FAILED')) INNER JOIN egwtr_connectiondetails conndetails ON ch.consumercode=conndetails.applicationnumber INNER JOIN egwtr_connection wtrcon ON wtrcon.id=conndetails.connection INNER JOIN egwtr_connection_owner_info connowner ON wtrcon.id=connowner.connection INNER JOIN eg_user owner ON owner.id=connowner.owner GROUP BY it.type,ih.transactionnumber, ih.transactiondate, ch.payeename, owner.mobilenumber, owner.name, ch.consumercode, owner.emailid, owner.id,ch.totalamount, ih.instrumentdate, ih.instrumentNumber,status.code,conndetails.applicationnumber, wtrcon.consumercode ";
 	
 	
-	public static final String sewerageQuery="select json_build_object(\n"
+	public static final String sewerageQuery="select json_build_object("
 			+ "'cityname', (SELECT CASE WHEN name like '%UAT%' THEN (SELECT split_part(name,'-',1) from eg_city) ELSE (select name from eg_city) END from eg_city),\n"
 			+ "'zone', zone.name,\n"
 			+ "'consumercode', conn.shsc_number,\n"
-			+ "'id', (select code from eg_city)||'-'||conndetails.id||'-SC',\n"
+			+ "'id', conndetails.id,\n"
 			+ "'applicantname', usr.name,\n"
 			+ "'connectionstatus', conn.status,\n"
 			+ "'createddate', to_timestamp(to_char(conn.createddate::timestamp without time zone, 'YYYY-MM-DD'),'YYYY-MM-DDTHH24:MI:SSZ'),\n"
@@ -132,12 +132,30 @@ public class Sqls {
 			+ "'usage', usage.name,\n"
 			+ "'applicationdate', appdetails.applicationdate,\n"
 			+ "'districtname', (select districtname from eg_city),\n"
-			+ "'applicationstatus', status.description,\n"
+			+ "'applicationstatus', status.description,\n" 
+			+ "'applicantaddress.id',	 address.id		,\n" 
 			+ "'mobilenumber', usr.mobilenumber,\n"
 			+ "'citygrade', (select grade from eg_city),\n"
 			+ "'noofseatsresidential',conndetails.noofclosets_residential,\n"
 			+ "'noofseatsnonresidential', conndetails.noofclosets_nonresidential,\n"
-			+ "'doorno', replace(address.housenobldgapt,'/','\\'))\n"
+			+ "'doorno', replace(address.housenobldgapt,'/','\\') ,\n" +
+			"  'dcb',	 (SELECT json_agg(dcb) FROM ( select to_char(inst.start_date	,	 "+
+			"  'YYYY-MM-DD') \"from_date\"	,		 "+
+			"  to_char(inst.end_date	,		 "+
+			"  'YYYY-MM-DD') \"to_date\"	,		 "+
+			"  inst.id \"insta_id\"		,	 "+
+			"  d.is_history \"is_history\"		,	 "+
+			"  drm.code \"demand_reason\"	,		 "+
+			"  dd.amount \"amount\"			, "+
+			"  dd.amt_collected \"collected_amount\"		,	 "+
+			"  inst.financial_year \"financial_year\" from egswtax_demand_connection cdemand	,		 "+
+			"  eg_demand d		,	 "+
+			"  eg_demand_details dd	,		 "+
+			"  eg_installment_master inst	,		 "+
+			"  eg_demand_reason_master drm		,	 "+
+			"  eg_demand_reason dr where appdetails.id=cdemand.applicationdetail and appdetails.connectiondetail=conndetails.id and cdemand.demand=d.id and d.id=dd.id_demand "+
+		    " and dr.id_installment=inst.id and dd.id_demand_reason=dr.id and dr.id_demand_reason_master=drm.id and inst.id=dr.id_installment "+
+		    " and d.is_history='N' order by inst.start_date ) dcb )	)	 "
 			+ "from egswtax_connection conn, egswtax_connectiondetail conndetails,\n"
 			+ "egswtax_applicationdetails appdetails,\n"
 			+ "egswtax_application_type apptype,\n"
@@ -146,12 +164,13 @@ public class Sqls {
 			+ "eg_boundary block, egswtax_connection_owner_info ownerinfo,\n"
 			+ "eg_user usr, eg_address address, egw_status status\n"
 			+ "where appdetails.connection=conn.id and\n"
-			+ "appdetails.connectiondetail=conndetails.id and\n"
+			+ "appdetails.connectiondetail=conndetails.id and \n"
 			+ "apptype.id=appdetails.applicationtype and\n"
 			+ "usage.id=conndetails.usagetype and block.id=conn.block and\n"
 			+ "locality.id=conn.locality and zone.id=conn.zone and\n"
 			+ "ownerinfo.connection=conn.id and usr.id=ownerinfo.owner and\n"
-			+ "address.id=conn.address and status.id=appdetails.status and conn.legacy=false ;";
+			+ " address.id=conn.address and status.id=appdetails.status  "
+			+ " and conndetails.id not in (select erpid::bigint from egswtax_migration where status in ('Saved','Demand_Created' ) ) order by conndetails.id;";
 	
 	
 	
@@ -164,7 +183,7 @@ public class Sqls {
 			+ ", :tenantId,:addtionaldetails);";
 	
 	public static final String sewerageRecord_update="update  egswtax_migration  "+
-			"set digitconn=:digitconn , digitpt=:digitpt,status=:status where erpid=:erpid and tenantId=:tenantId";
+			"set digitconn=:digitconn , digitpt=:digitpt,status=:status where erpid=:erpid ";
 		
 //	public static final String address="select id,housenobldgapt as plotno,landmark,citytownvillage as city,district,arealocalitysector as region,state,country,pincode, buildingName,streetroadline as street from eg_address where id=:id ;";
 //	
