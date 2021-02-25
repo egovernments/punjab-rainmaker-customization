@@ -22,7 +22,15 @@ public class Sqls {
 			"  'guardianname',	 usr.guardian	,	 "+
 			"  'channel'	, CASE WHEN conndetails.source is not null THEN conndetails.source ELSE 'COUNTER' END	,	 "+
 			"  'applicationType',	 apptype.name	,	 "+
-			"  'biilingType',	 conndetails.biilingType	,	 "+
+			"  'billingType',	 conndetails.billingtype	,	 "+
+			"  'billingAmount',	 conndetails.billingamount ,	"+
+			"	'estimationLetterDate', conndetails.estimationnoticedate"+
+			"	'estimationFileStoreId',conndetails.estimationnoticefilestoreid"+
+			"	'averageMake',conndetails.averagemeterreading"+
+			"	'initialMeterReading',egwtr_meter_details.initialmeterreading"+
+			"	'meterMake',egwtr_meter_details.metermake"+
+			"	'othersFee',egwtr_connection_conversion_type.otherfee"+
+			"	'ledgerId',egwtr_stg_connection.ledgerid"+
 			"  'locality',	 locality.code	,	 "+
 			"  'pwssb'	, CASE (select value from eg_appconfig_values where key_id in (select id from eg_appconfig where key_name ='IS_PWSSB_ULB')) WHEN 'YES' THEN true ELSE false END	,	 "+
 			"  'block',	 block.name		, "+
@@ -76,6 +84,9 @@ public class Sqls {
 			"  egwtr_connection_owner_info ownerinfo	,		 "+
 			"  eg_user usr	,		 "+
 			"  eg_address address	,		 "+
+			"	egwtr_meter_details,"+
+			"	egwtr_stg_connection,"+
+			"	egwtr_connection_conversion_type,"+
 			"  egw_status status where conn.id=conndetails.connection and apptype.id=conndetails.applicationtype and"
 			+ " usage.id=conndetails.usagetype and block.id=conn.block and locality.id=conn.locality and zone.id=conn.zone and"
 			+ " conndetails.propertytype=proptype.id and conndetails.category=wtrctgy.id and ownerinfo.connection=conn.id "
@@ -83,6 +94,16 @@ public class Sqls {
 			+ " and conndetails.id not in (select erpid::bigint from egwtr_migration where status in ('Saved','Demand_Created','Incompatible' ) ) order by conndetails.id ";   
 	
 	
+	//public static final String ledgerId= "Select ledgerid as ledgerId from  egwtr_stg_connection;";
+	//public static final String meterMake= "Select metermake as meterMake from egwtr_meter_details;";
+	//public static final String initialMeterReading= "Select initialmeterreading as initialMeterReading from egwtr_meter_details;";
+	//public static final String othersFee= "Select otherfee as othersFee from egwtr_connection_conversion_type;";
+	//public static final String connectionCategory= "Select connectiontype as connectionCategory from egwtr_connectiondetails;";
+	//public static final String billingType= "Select billingtype as billingType from egwtr_connectiondetails;";
+	//public static final String billingAmount= "Select billamount as billingAmount from egwtr_connectiondetails;";
+	//public static final String estimationLetterDate= "Select estimationnoticedate as estimationLetterDate from egwtr_connectiondetails;";
+	//public static final String estimationFileStoreId= "Select estimationnoticefilestoreid as estimationFileStoreId   from egwtr_connectiondetails;";
+	//public static final String averageMake= "Select averagemeterreading as averageMake from egwtr_connectiondetails;";
 	
 	public static final String waterRecord_table="create table if not exists egwtr_migration "
 			+ " ( erpid varchar(64),erpconn varchar(64) ,digitconn varchar(64) ,erppt varchar(64),digitpt varchar(64),status varchar(64),tenantId varchar(64),additiondetails varchar(1000),errorMessage varchar(4000) );"
@@ -96,6 +117,8 @@ public class Sqls {
 			"set digitconn=:digitconn , digitpt=:digitpt,status=:status where erpid=:erpid ";
 		
 	public static final String address="select id,housenobldgapt as plotno,landmark,citytownvillage as city,district,arealocalitysector as region,state,country,pincode, buildingName,streetroadline as street from eg_address where id=:id ;";
+	
+
 	
 	public static final String WATER_COLLECTION_TABLE="create table  if not exists  egwtr_cl_migration "
 			+ " ( erpid varchar(64),erpconn varchar(64) ,digitconn varchar(64) ,erppt varchar(64),digitpt varchar(64),status varchar(64),tenantId varchar(64),additiondetails varchar(1000) );"
@@ -295,5 +318,20 @@ public class Sqls {
 	
 	public static final String SEWERAGE_COLLECTION_UPDATE="update  egswtax_cl_migration  "+
 			"set digitconn=:digitconn , digitpt=:digitpt,status=:status where erpconn=:erpconn and tenantId=:tenantId";
+	
+	
+	
+	
+//	public static final String additional_details= "Select id, ledgerid as ledgerId, connectiontype as connectionCategory, billingtype as billingType, billamount as billingAmount, estimationnoticedate as estimationLetterDate, estimationFileStoreId as estimationnoticefilestoreid, averagemeterreading as averageMake, metermake as meterMake, initialmeterreading as initialMeterReading, otherfee as othersFee \n"
+//	+ "\n"
+//	+ "from egwtr_connectiondetails,egwtr_meter_details,egwtr_stg_connection,egwtr_connection_conversion_type\n"
+//	+ "\n"
+//	+ "where id=:id;";
+	
+	
+	
+	
+	
+	
 	
 }

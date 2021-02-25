@@ -20,6 +20,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.swagger.client.model.Address;
+import io.swagger.client.model.AdditionalDetails;
 import io.swagger.client.model.Connection.StatusEnum;
 import io.swagger.client.model.Demand;
 import io.swagger.client.model.Document;
@@ -75,6 +76,16 @@ public class ConnectionService {
 		Integer area = null;
 		Double areaDouble = null;
 		Address address = null;
+//		AdditionalDetails ledgerId=null;
+//		AdditionalDetails meterMake=null;
+//		AdditionalDetails initialMeterReading=null;
+//		AdditionalDetails othersFee=null;
+//		//AdditionalDetails connectionCategory=null;
+//		AdditionalDetails billingType=null;
+//		AdditionalDetails billingAmount=null;
+//		AdditionalDetails estimationLetterDate=null;
+//		AdditionalDetails estimationFileStoreId=null;
+//		AdditionalDetails averageMake=null;
 		Locality locality = null;
 		String locCode = null;
 		String localityCode = null;
@@ -130,7 +141,46 @@ public class ConnectionService {
 				addressQuery = addressQuery.replace(":id", id.toString());
 
 				address = (Address) jdbcTemplate.queryForObject(addressQuery, new BeanPropertyRowMapper(Address.class));
+				
+				
 
+//				String ledgerIdQuery = Sqls.ledgerId;
+//				ledgerId = (AdditionalDetails) jdbcTemplate.queryForObject(ledgerIdQuery, new BeanPropertyRowMapper(AdditionalDetails.class));
+//				
+//				String meterMakeQuery = Sqls.meterMake;
+//				meterMake = (AdditionalDetails) jdbcTemplate.queryForObject(meterMakeQuery, new BeanPropertyRowMapper(AdditionalDetails.class));
+//				
+//				String initialMeterReadingQuery = Sqls.initialMeterReading;
+//				initialMeterReading = (AdditionalDetails) jdbcTemplate.queryForObject(initialMeterReadingQuery, new BeanPropertyRowMapper(AdditionalDetails.class));
+//				
+//				String othersFeeQuery = Sqls.othersFee;
+//				othersFee = (AdditionalDetails) jdbcTemplate.queryForObject(othersFeeQuery, new BeanPropertyRowMapper(AdditionalDetails.class));
+//				
+//				//String connectionCategoryQuery = Sqls.connectionCategory;
+//				//connectionCategory = (AdditionalDetails) jdbcTemplate.queryForObject(connectionCategoryQuery, new BeanPropertyRowMapper(AdditionalDetails.class));
+//				
+//				String billingTypeQuery = Sqls.billingType;
+//				billingType = (AdditionalDetails) jdbcTemplate.queryForObject(billingTypeQuery, new BeanPropertyRowMapper(AdditionalDetails.class));
+//				
+//				String billingAmountQuery = Sqls.billingAmount;
+//				billingAmount = (AdditionalDetails) jdbcTemplate.queryForObject(billingAmountQuery, new BeanPropertyRowMapper(AdditionalDetails.class));
+//				
+//				String estimationLetterDateQuery = Sqls.estimationLetterDate;
+//				estimationLetterDate = (AdditionalDetails) jdbcTemplate.queryForObject(estimationLetterDateQuery, new BeanPropertyRowMapper(AdditionalDetails.class));
+//				
+//				String estimationFileStoreIdQuery = Sqls.estimationFileStoreId;
+//				estimationFileStoreId = (AdditionalDetails) jdbcTemplate.queryForObject(estimationFileStoreIdQuery, new BeanPropertyRowMapper(AdditionalDetails.class));
+//				
+//				String averageMakeQuery = Sqls.averageMake;
+//				averageMake = (AdditionalDetails) jdbcTemplate.queryForObject(averageMakeQuery, new BeanPropertyRowMapper(AdditionalDetails.class));
+//				
+//				
+				
+				
+				
+				
+				
+				
 				recordService.recordWaterMigration(connection);
 				
 				
@@ -160,7 +210,20 @@ public class ConnectionService {
 
 				connection.setApplicantAddress(address);
 				
-				
+//<<<<<<< Updated upstream
+//				
+//=======
+////				connection.setLedgerId(ledgerId);
+////				connection.setMeterMake(meterMake);
+////				connection.setInitialMeterReading(initialMeterReading);
+////				connection.setOthersFee(othersFee);
+////				connection.setBillingType(billingType);
+////				connection.setBillingAmount(billingAmount);
+////				connection.setEstimationLetterDate(estimationLetterDate);
+////				connection.setEstimationFileStoreId(estimationFileStoreId);
+////				connection.setAverageMake(averageMake);
+//
+//>>>>>>> Stashed changes
 				connection.setTenantId(requestInfo.getUserInfo().getTenantId());
 				connection.setProcessInstance(ProcessInstance.builder().action("INITIATE").build());
 
@@ -171,8 +234,36 @@ public class ConnectionService {
 				connection.setDocuments(getDocuments(waterRequest, data));
 				StringBuilder additionalDetail=new StringBuilder();
 				additionalDetail.append("\"locality\":").append("\"").append(localityCode).append("\"");
+				
 				String billingType = (String) data.get("billingType");
 				additionalDetail.append(",").append("\"billingType\":").append("\"").append(billingType).append("\"");
+				
+				String billingAmount = (String) data.get("billingAmount");
+				additionalDetail.append(",").append("\"billingAmount\":").append("\"").append(billingAmount).append("\"");
+				
+				String estimationLetterDate = (String) data.get("estimationLetterDate");
+				additionalDetail.append(",").append("\"estimationLetterDate\":").append("\"").append(estimationLetterDate).append("\"");
+				
+				String estimationFileStoreId = (String) data.get("estimationFileStoreId");
+				additionalDetail.append(",").append("\"estimationFileStoreId\":").append("\"").append(estimationFileStoreId).append("\"");
+				
+				String averageMake = (String) data.get("averageMake");
+				additionalDetail.append(",").append("\"averageMake\":").append("\"").append(averageMake).append("\"");
+				
+				String initialMeterReading = (String) data.get("initialMeterReading");
+				additionalDetail.append(",").append("\"initialMeterReading\":").append("\"").append(initialMeterReading).append("\"");
+				
+				String meterMake = (String) data.get("meterMake");
+				additionalDetail.append(",").append("\"meterMake\":").append("\"").append(meterMake).append("\"");
+				
+				String othersFee = (String) data.get("othersFee");
+				additionalDetail.append(",").append("\"othersFee\":").append("\"").append(othersFee).append("\"");
+				
+				String ledgerId = (String) data.get("ledgerId");
+				additionalDetail.append(",").append("\"ledgerId\":").append("\"").append(ledgerId).append("\"");
+				
+				
+				
 				
 				//connection.setAdditionalDetails(additionalDetail.toString());
 
@@ -321,6 +412,7 @@ public class ConnectionService {
 				}
 				
 				String addressQuery = Sqls.address;
+				
 				Integer id = (Integer) data.get("applicantaddress.id");
 				addressQuery = addressQuery.replace(":id", id.toString());
 
