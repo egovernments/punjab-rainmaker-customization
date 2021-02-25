@@ -170,7 +170,9 @@ public class ConnectionService {
 				waterRequest.setRequestInfo(requestInfo);
 				connection.setDocuments(getDocuments(waterRequest, data));
 				StringBuilder additionalDetail=new StringBuilder();
-				additionalDetail.append("locality:").append(localityCode);
+				additionalDetail.append("\"locality\":").append("\"").append(localityCode).append("\"");
+				String billingType = (String) data.get("billingType");
+				additionalDetail.append(",").append("\"billingType\":").append("\"").append(billingType).append("\"");
 				
 				//connection.setAdditionalDetails(additionalDetail.toString());
 

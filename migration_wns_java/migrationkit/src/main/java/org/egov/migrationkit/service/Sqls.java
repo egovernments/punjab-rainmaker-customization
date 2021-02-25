@@ -22,6 +22,7 @@ public class Sqls {
 			"  'guardianname',	 usr.guardian	,	 "+
 			"  'channel'	, CASE WHEN conndetails.source is not null THEN conndetails.source ELSE 'COUNTER' END	,	 "+
 			"  'applicationType',	 apptype.name	,	 "+
+			"  'biilingType',	 conndetails.biilingType	,	 "+
 			"  'locality',	 locality.code	,	 "+
 			"  'pwssb'	, CASE (select value from eg_appconfig_values where key_id in (select id from eg_appconfig where key_name ='IS_PWSSB_ULB')) WHEN 'YES' THEN true ELSE false END	,	 "+
 			"  'block',	 block.name		, "+
