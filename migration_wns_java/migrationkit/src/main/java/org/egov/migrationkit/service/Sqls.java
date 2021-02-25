@@ -24,13 +24,13 @@ public class Sqls {
 			"  'applicationType',	 apptype.name	,	 "+
 			"  'billingType',	 conndetails.billingtype	,	 "+
 			"  'billingAmount',	 conndetails.billingamount ,	"+
-			"	'estimationLetterDate', conndetails.estimationnoticedate"+
-			"	'estimationFileStoreId',conndetails.estimationnoticefilestoreid"+
-			"	'averageMake',conndetails.averagemeterreading"+
-			"	'initialMeterReading',egwtr_meter_details.initialmeterreading"+
-			"	'meterMake',egwtr_meter_details.metermake"+
-			"	'othersFee',egwtr_connection_conversion_type.otherfee"+
-			"	'ledgerId',egwtr_stg_connection.ledgerid"+
+			"	'estimationLetterDate', conndetails.estimationnoticedate,"+
+			"	'estimationFileStoreId',conndetails.estimationnoticefilestoreid,"+
+			"	'averageMake',conndetails.averagemeterreading,"+
+			"	'initialMeterReading',egwtr_meter_details.initialmeterreading,"+
+			"	'meterMake',egwtr_meter_details.metermake,"+
+			"	'othersFee',egwtr_connection_conversion_type.otherfee,"+
+			"	'ledgerId',egwtr_stg_connection.ledgerid,"+
 			"  'locality',	 locality.code	,	 "+
 			"  'pwssb'	, CASE (select value from eg_appconfig_values where key_id in (select id from eg_appconfig where key_name ='IS_PWSSB_ULB')) WHEN 'YES' THEN true ELSE false END	,	 "+
 			"  'block',	 block.name		, "+
