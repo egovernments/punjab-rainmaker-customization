@@ -52,13 +52,14 @@ public class CollectionService {
 
 	public void migrateWtrCollection(String tenantId, RequestInfo requestInfo) {
 
-		jdbcTemplate.execute("set search_path to " + tenantId);
-
+		//jdbcTemplate.execute("set search_path to " + tenantId);
+		recordService.initiateCollection(tenantId);
+		
 		jdbcTemplate.execute(Sqls.WATER_COLLECTION_TABLE);
 
 		String digitTenantId = requestInfo.getUserInfo().getTenantId();
 
-		List<String> queryForList = jdbcTemplate.queryForList(Sqls.WATER_COLLECTION_QUERY, String.class);
+		List<String> queryForList = jdbcTemplate.queryForList(Sqls.SEWERAGE_COLLECTION_QUERY, String.class);
 
 		for (String json : queryForList) {
 
@@ -127,7 +128,7 @@ public class CollectionService {
 			return waterResponse.getBill();
 
 		} catch (Exception ex) {
-			log.error("Fetch Bill Error", ex);
+			//log.error("Fetch Bill Error", ex);
 		}
 		return bills;
 	}

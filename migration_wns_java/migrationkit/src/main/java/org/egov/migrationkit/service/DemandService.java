@@ -41,6 +41,10 @@ public class DemandService {
 	
 	@Autowired
 	private RestTemplate restTemplate;
+	
+	@Autowired
+	private RecordService recordService;
+ 
 
 	public List<Demand> prepareDemandRequest(Map data, String businessService, String consumerCode, String tenantId, OwnerInfo owner) {
 		
@@ -58,8 +62,8 @@ public class DemandService {
 					.taxHeadMasterCode(taxHeadMaster)
 					.collectionAmount(BigDecimal.ZERO)
 					.amountPaid(BigDecimal.valueOf((Integer)dcbData.get("collected_amount")))
-//					.fromDate((Long)dcbData.get("from_date"))
-//					.toDate((Long)dcbData.get("to_date"))
+					.fromDate(WSConstants.TIME_PERIOD_MAP.get((String)dcbData.get("from_date")))
+					.toDate(WSConstants.TIME_PERIOD_MAP.get((String)dcbData.get("to_date")))
 					.tenantId(tenantId)
 					.build();
 			
@@ -90,10 +94,10 @@ public class DemandService {
 						.payer(User.builder().uuid(owner.getUuid()).name(owner.getName()).build())
 						.tenantId(tenantId)
 //						There is no tax periods configured for all the previous year in PB QA environments as of now giving dummy configured tax period. 
-//						.taxPeriodFrom(ddList.get(0).getFromDate())
-//						.taxPeriodTo(ddList.get(0).getToDate())
-						.taxPeriodFrom(1554076800000l)
-						.taxPeriodTo(1617175799000l)
+						.taxPeriodFrom(ddList.get(0).getFromDate())
+						.taxPeriodTo(ddList.get(0).getToDate())
+//						.taxPeriodFrom(1554076800000l)
+//						.taxPeriodTo(1617175799000l)
 						.minimumAmountPayable(BigDecimal.ZERO)
 						.consumerType("waterConnection")
 						.status(StatusEnum.valueOf("ACTIVE"))
@@ -108,10 +112,10 @@ public class DemandService {
 						.payer(User.builder().uuid(owner.getUuid()).name(owner.getName()).build())
 						.tenantId(tenantId)
 //						There is no tax periods configured for all the previous year in PB QA environments as of now giving dummy configured tax period. 
-//						.taxPeriodFrom(ddList.get(0).getFromDate())
-//						.taxPeriodTo(ddList.get(0).getToDate())
-						.taxPeriodFrom(1554076800000l)
-						.taxPeriodTo(1617175799000l)
+						.taxPeriodFrom(ddList.get(0).getFromDate())
+						.taxPeriodTo(ddList.get(0).getToDate())
+					//	.taxPeriodFrom(1554076800000l)
+					//	.taxPeriodTo(1617175799000l)
 						.minimumAmountPayable(BigDecimal.ZERO)
 						.consumerType("waterConnection")
 						.status(StatusEnum.valueOf("ACTIVE"))
@@ -132,7 +136,7 @@ public class DemandService {
      * @param demands The demands to be created
      * @return The list of demand created
      */
-    public Boolean saveDemand(RequestInfo requestInfo, List<Demand> demands){
+    public Boolean saveDemand(RequestInfo requestInfo, List<Demand> demands,String erpId){
     	try{
     		
     	String url = billingServiceHost + demandCreateEndPoint+requestInfo.getUserInfo().getTenantId();
@@ -142,8 +146,9 @@ public class DemandService {
         	log.info("Demand Create Request: " + request + "Demand Create Respone: " + response);
         }
         catch(Exception e){
-        	e.printStackTrace();
-            log.error("Demand PARSING_ERROR: "+demands,"Failed to parse response of create demand " + e.getMessage());
+        	 
+        	recordService.recordError("sewerage", e.getMessage(), erpId);
+            log.error("Error while Saving demands" + e.getMessage());
             return Boolean.FALSE;
         }
 		return Boolean.TRUE;  
@@ -183,8 +188,10 @@ public List<Demand> prepareSwDemandRequest(Map data, String businessService, Str
 				.taxHeadMasterCode(taxHeadMaster)
 				.collectionAmount(BigDecimal.ZERO)
 				.amountPaid(BigDecimal.valueOf((Integer)dcbData.get("collected_amount")))
-//				.fromDate((Long)dcbData.get("from_date"))
-//				.toDate((Long)dcbData.get("to_date"))
+			.fromDate(WSConstants.TIME_PERIOD_MAP.get((String)dcbData.get("from_date")))
+			.toDate(WSConstants.TIME_PERIOD_MAP.get((String)dcbData.get("to_date")))
+//			.fromDate(1554076800000l)
+//			.toDate(1617175799000l)
 				.tenantId(tenantId)
 				.build();
 		
@@ -234,7 +241,7 @@ public List<Demand> prepareSwDemandRequest(Map data, String businessService, Str
 					.tenantId(tenantId)
 //					There is no tax periods configured for all the previous year in PB QA environments as of now giving dummy configured tax period. 
  					.taxPeriodFrom(ddList.get(0).getFromDate())
- 				.taxPeriodTo(ddList.get(0).getToDate())
+  				.taxPeriodTo(ddList.get(0).getToDate())
 //					.taxPeriodFrom(1554076800000l)
 //					.taxPeriodTo(1617175799000l)
 					.minimumAmountPayable(BigDecimal.ZERO)

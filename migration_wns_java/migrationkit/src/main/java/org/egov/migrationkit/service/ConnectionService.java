@@ -1,5 +1,6 @@
 package org.egov.migrationkit.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -10,7 +11,6 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
@@ -22,6 +22,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.client.model.Address;
 import io.swagger.client.model.Connection.StatusEnum;
 import io.swagger.client.model.Demand;
+import io.swagger.client.model.Document;
 import io.swagger.client.model.Locality;
 import io.swagger.client.model.ProcessInstance;
 import io.swagger.client.model.Property;
@@ -158,7 +159,8 @@ public class ConnectionService {
 				connection.setApplicationStatus("CONNECTION_ACTIVATED");
 
 				connection.setApplicantAddress(address);
-
+				
+				
 				connection.setTenantId(requestInfo.getUserInfo().getTenantId());
 				connection.setProcessInstance(ProcessInstance.builder().action("INITIATE").build());
 
@@ -166,6 +168,12 @@ public class ConnectionService {
 
 				waterRequest.setWaterConnection(connection);
 				waterRequest.setRequestInfo(requestInfo);
+				connection.setDocuments(getDocuments(waterRequest, data));
+				StringBuilder additionalDetail=new StringBuilder();
+				additionalDetail.append("locality:").append(localityCode);
+				
+				//connection.setAdditionalDetails(additionalDetail.toString());
+
 				Property property = propertyService.findProperty(waterRequest, data);
 				if (property == null) {
 					recordService.recordError("water", "Error in while find or create property:", connection.getId());
@@ -205,7 +213,7 @@ public class ConnectionService {
 							property.getOwners().get(0));
 					if (!demandRequestList.isEmpty()) {
 
-						Boolean isDemandCreated = demandService.saveDemand(requestInfo, demandRequestList);
+						Boolean isDemandCreated = demandService.saveDemand(requestInfo, demandRequestList,connection.getId());
 						if (isDemandCreated) {
 							Boolean isBillCreated = demandService.fetchBill(demandRequestList, requestInfo);
 							log.info("Bill created" + isBillCreated + " isDemandCreated" + isDemandCreated);
@@ -238,6 +246,16 @@ public class ConnectionService {
 		log.info("Migration completed for " + tenantId);
 	}
 
+	private List<Document> getDocuments(WaterConnectionRequest waterRequest, Map data) {
+		List<Document> documents=new ArrayList<>();
+		Document doc=new Document();
+		doc.setFileStore("34dc69f0-c5f2-483e-a0ac-e3555dffd5b1");
+		doc.setDocumentType("Sample");
+		documents.add(doc);
+		return documents;
+		
+	}
+
 	private String getRequestInfoString() {
 
 		StringBuffer buf = new StringBuffer(1000);
@@ -254,7 +272,9 @@ public class ConnectionService {
 					new Object[] { code }, String.class);
 		} catch (DataAccessException e) {
 			log.error("digit Location code is not mapped for " + code);
-			digitcode = "NSR_112";
+			//digitcode = "ALOC3"; //for Amritsar
+			//digitcode = "SUN158"; //for Sunam
+			digitcode = "NSR_112"; //for Sunam
 		}
 		log.info("returning  " + digitcode);
 		return digitcode;
@@ -291,6 +311,12 @@ public class ConnectionService {
 
 				recordService.recordSewerageMigration(swConnection);
 				
+				if(swConnection.getMobilenumber()==null || swConnection.getMobilenumber().isEmpty())
+				{
+					recordService.recordError("sewerage", "Mobile Number is null ", swConnection.getId());
+					recordService.setStatus("sewerage", "Incompatible", swConnection.getId());
+					continue;
+				}
 				
 				String addressQuery = Sqls.address;
 				Integer id = (Integer) data.get("applicantaddress.id");
@@ -321,16 +347,12 @@ public class ConnectionService {
 				log.info("Connection Type :" + swConnection.getConnectionType());
 				log.info("Connection id :" + swConnection.getId());
 
-				if(swConnection.getMobilenumber()==null || swConnection.getMobilenumber().isEmpty())
-				{
-					recordService.recordError("water", "Mobile Number is null ", swConnection.getId());
-					recordService.setStatus("water", "Incompatible", swConnection.getId());
-					continue;
-				}
+				
 
 				sewerageRequest.setSewerageConnection(swConnection);
 				sewerageRequest.setRequestInfo(requestInfo);
 				Property property = propertyService.findProperty(sewerageRequest, json);
+				
 
 				if (property == null) {
 					recordService.recordError("sewerage", "Property not found or cannot be created  for the record  ",
@@ -338,6 +360,7 @@ public class ConnectionService {
 					continue;
 				}
 				swConnection.setPropertyId(property.getId());
+				swConnection.setDocuments(getDocuments(null, data));
 
 				String response = null;
 				try {
@@ -377,11 +400,11 @@ public class ConnectionService {
 							WSConstants.SEWERAGE_BUSINESS_SERVICE, consumerCode,
 							requestInfo.getUserInfo().getTenantId(), property.getOwners().get(0));
 
-					log.info("Demand Request=" + demandRequestList);
+				//	log.info("Demand Request=" + demandRequestList.size());
 
 					if (!demandRequestList.isEmpty()) {
 
-						Boolean isDemandCreated = demandService.saveDemand(requestInfo, demandRequestList);
+						Boolean isDemandCreated = demandService.saveDemand(requestInfo, demandRequestList,swConnection.getId());
 						if (isDemandCreated) {
 							Boolean isBillCreated = demandService.fetchBill(demandRequestList, requestInfo);
 							recordService.setStatus("sewerage", "Demand_Created", swConnection.getId());

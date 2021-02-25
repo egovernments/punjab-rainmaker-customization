@@ -157,14 +157,24 @@ public class RecordService {
 
 	
 	@Transactional
+	public void initiateCollection(String tenantId)
+	{
+	jdbcTemplate.execute("set search_path to " + tenantId);
+	//jdbcTemplate.execute("drop table if exists egwtr_migration" + tenantId);
+	jdbcTemplate.execute(Sqls.WATER_COLLECTION_TABLE);
+	}
+
+	
+	@Transactional
 	public void recordError(String module,String message, String id) {
 		String tableName=null;
 		if(module.equalsIgnoreCase("water"))
 			tableName="egwtr_migration";
 		else if(module.equalsIgnoreCase("sewerage"))
 			tableName="egswtax_migration";
-		
-		String cleanedMessage=message.replace("'", "");
+		String cleanedMessage="";
+		if(message!=null)
+		 cleanedMessage=message.replace("'", "");
 			
 		jdbcTemplate.execute("update "+tableName+" set errorMessage=errorMessage || '" +cleanedMessage+ "' where erpid='"+id+"'"); 
 		
