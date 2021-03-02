@@ -67,6 +67,27 @@
                   "path": "$.paymentDetails[0].totalAmountPaid"
                 }
               },
+              {
+                "variable": "fieldFee", 
+                "value": {
+                  "path": "$.paymentDetails[0].additionalDetails.fieldfee"
+                }
+              }, {
+                "variable": "taxAmount", 
+                "value": {
+                  "path": "$.paymentDetails[0].additionalDetails.tax"
+                }
+              }, {
+                "variable": "cgst", 
+                "value": {
+                  "path": "$.paymentDetails[0].additionalDetails.cgst"
+                }
+              }, {
+                "variable": "sgst", 
+                "value": {
+                  "path": "$.paymentDetails[0].additionalDetails.sgst"
+                }
+              },
 
               {
                 "variable": "fromPeriod", 
@@ -93,6 +114,18 @@
                 "variable": "payerAddress", 
                 "value": {
                    "path": "$.paymentDetails[0].bill.billDetails[0].additionalDetails.address"
+                }
+              },
+              {
+                "variable": "oldPayerAddress", 
+                "value": {
+                   "path": "$.payerAddress"
+                }
+              }, 
+              {
+                "variable": "oldComments", 
+                "value": {
+                   "path": "$.additionalDetails.comment"
                 }
               },
               {
@@ -131,6 +164,21 @@
                   "path": "$.paymentDetails[0].receiptDate"
                 },
                 "type": "date"
+              }, {
+                "variable": "bankName",
+                "value": {
+                  "path": "$.additionalDetails[0].bankName"
+                }
+              },  {
+                "variable": "branchName",
+                "value": {
+                  "path": "$.additionalDetails[0].branchName"
+                }
+              }, {
+                "variable": "ifsc",
+                "value": {
+                  "path": "$.ifscCode"
+                }
               },
               {
                 "variable": "paymentDate", 
