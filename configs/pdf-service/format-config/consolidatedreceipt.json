@@ -334,8 +334,98 @@
                 "style": "receipt-table-value"
               },
               {
-
                 "text": "{{paymentMode}}",
+
+                "border": [
+                  false,
+                  false,
+                  true,
+                  false
+                ],
+                "style": "receipt-table"
+              }
+            ],
+            [
+              {
+                "text": "Tax Amount",
+                "border": [
+                  true,
+                  false,
+                  false,
+                  false
+                ],
+                "style": "receipt-table-value"
+              },
+              {
+                "text": "₹ {{taxAmount}}",
+                "border": [
+                  false,
+                  false,
+                  false,
+                  false
+                ],
+                "style": "receipt-table"
+              },
+              {
+
+                "text": "Field Fee",
+
+                "border": [
+                  false,
+                  false,
+                  false,
+                  false
+                ],
+                "style": "receipt-table-value"
+              },
+              {
+
+                "text": "₹ {{fieldFee}}",
+
+                "border": [
+                  false,
+                  false,
+                  true,
+                  false
+                ],
+                "style": "receipt-table"
+              }
+            ],[
+              {
+                "text": "CGST(if applicable)",
+                "border": [
+                  true,
+                  false,
+                  false,
+                  false
+                ],
+                "style": "receipt-table-value"
+              },
+              {
+                "text": "₹ {{cgst}}",
+                "border": [
+                  false,
+                  false,
+                  false,
+                  false
+                ],
+                "style": "receipt-table"
+              },
+              {
+
+                "text": "SGST(if applicable)",
+
+                "border": [
+                  false,
+                  false,
+                  false,
+                  false
+                ],
+                "style": "receipt-table-value"
+              },
+              {
+
+                "text": "₹ {{sgst}}",
 
                 "border": [
                   false,
@@ -379,6 +469,48 @@
               },
               {
                 "text": "{{chequeDDDate}}",
+                "border": [
+                  false,
+                  false,
+                  true,
+                  false
+                ],
+                "style": "receipt-table"
+                
+              }
+            ],   [
+              {
+                "text": "Bank Name",
+                "border": [
+                  true,
+                  false,
+                  false,
+                  false
+                ],
+                "style": "receipt-table-value"
+              },
+              {
+                "text": "{{bankName}},{{branchName}}",
+                "border": [
+                  false,
+                  false,
+                  false,
+                  false
+                ],
+                "style": "receipt-table"
+              },
+              {
+                "text": "IFSC Code",
+                "border": [
+                  false,
+                  false,
+                  false,
+                  false
+                ],
+                "style": "receipt-table-value"
+              },
+              {
+                "text": "{{ifsc}}",
                 "border": [
                   false,
                   false,
@@ -487,31 +619,6 @@
                -10,
                 1
             ]
-          }
-        ]
-      },
-      {
-        "style": "pt-disclaimer",
-        "stack": [
-          {
-            "text": "{{disclamer}}",
-            "bold": true,
-            "style": "pt-disclaimer-value"
-          },
-          {
-            "text": "{{disclamer_1}}",
-            "bold": false,
-            "style": "pt-disclaimer-value"
-          },
-          {
-            "text": "{{disclamer_2}}",
-            "bold": false,
-            "style": "pt-disclaimer-value"
-          },
-          {
-            "text": "{{disclamer_3}}",
-            "bold": false,
-            "style": "pt-disclaimer-value"
           }
         ]
       },
@@ -861,6 +968,96 @@
                 ],
                 "style": "receipt-table"
               }
+            ], [
+              {
+                "text": "Tax Amount",
+                "border": [
+                  true,
+                  false,
+                  false,
+                  false
+                ],
+                "style": "receipt-table-value"
+              },
+              {
+                "text": "₹ {{taxAmount}}",
+                "border": [
+                  false,
+                  false,
+                  false,
+                  false
+                ],
+                "style": "receipt-table"
+              },
+              {
+
+                "text": "Field Fee",
+
+                "border": [
+                  false,
+                  false,
+                  false,
+                  false
+                ],
+                "style": "receipt-table-value"
+              },
+              {
+
+                "text": "₹ {{fieldFee}}",
+
+                "border": [
+                  false,
+                  false,
+                  true,
+                  false
+                ],
+                "style": "receipt-table"
+              }
+            ],[
+              {
+                "text": "CGST(if applicable)",
+                "border": [
+                  true,
+                  false,
+                  false,
+                  false
+                ],
+                "style": "receipt-table-value"
+              },
+              {
+                "text": "₹ {{cgst}}",
+                "border": [
+                  false,
+                  false,
+                  false,
+                  false
+                ],
+                "style": "receipt-table"
+              },
+              {
+
+                "text": "SGST(if applicable)",
+
+                "border": [
+                  false,
+                  false,
+                  false,
+                  false
+                ],
+                "style": "receipt-table-value"
+              },
+              {
+
+                "text": "₹ {{sgst}}",
+
+                "border": [
+                  false,
+                  false,
+                  true,
+                  false
+                ],
+                "style": "receipt-table"
+              }
             ],
             [
               {
@@ -895,6 +1092,48 @@
               },
               {
                 "text": "{{chequeDDDate}}",
+                "border": [
+                  false,
+                  false,
+                  true,
+                  false
+                ],
+                "style": "receipt-table"
+                
+              }
+            ],[
+              {
+                "text": "Bank Name",
+                "border": [
+                  true,
+                  false,
+                  false,
+                  false
+                ],
+                "style": "receipt-table-value"
+              },
+              {
+                "text": "{{bankName}},{{branchName}}",
+                "border": [
+                  false,
+                  false,
+                  false,
+                  false
+                ],
+                "style": "receipt-table"
+              },
+              {
+                "text": "IFSC Code",
+                "border": [
+                  false,
+                  false,
+                  false,
+                  false
+                ],
+                "style": "receipt-table-value"
+              },
+              {
+                "text": "{{ifsc}}",
                 "border": [
                   false,
                   false,
@@ -1028,7 +1267,8 @@
             "text": "{{disclamer_3}}",
             "bold": false,
             "style": "pt-disclaimer-value"
-          }
+          }, {
+            "text":"Now log a complaint from WhatsApp, give a missed call on 8750975975 or send a Hi message on WhatsApp to this number", "bold": true, "fontSize": 8, "color": "blue", "decoration": "underline"}
         ]
       }
     ],
@@ -1115,7 +1355,7 @@
       "bold": true,
       "margin": [
         -27,
-        5,
+        3,
         -10,
         0
       ]
@@ -1124,7 +1364,7 @@
       "fontSize": 8,
       "margin": [
         -27,
-        5,
+        3,
         -10,
         0
       ]
@@ -1133,7 +1373,7 @@
       "fontSize": 8,
       "margin": [
         -27,
-        5,
+        3,
         -10,
         0
       ]
@@ -1142,7 +1382,7 @@
       "fontSize": 8,
       "margin": [
         2,
-        2,
+        1,
         0,
         0
       ]
