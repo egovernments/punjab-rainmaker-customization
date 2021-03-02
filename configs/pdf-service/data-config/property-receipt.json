@@ -32,6 +32,12 @@
                   "path": "$.mobileNumber"
                 }
               },
+		{
+                "variable": "paymentStatus", 
+                "value": {
+                  "path": "$.paymentStatus"
+                }
+              },
               {
                 "variable": "receiptNo", 
                 "value": {
@@ -52,7 +58,28 @@
               {
                 "variable": "paidAmount", 
                 "value": {
-                  "path": "$.paymentDetails[0].totalAmountPaid"
+                  "path": "$.totalAmountPaid"
+                }
+              }, 
+              {
+                "variable": "assessmentYear", 
+                "value": {
+                  "path": "$.paymentDetails[0].additionalDetails.assessmentYears"
+                }
+              },  {
+                "variable": "ifsc", 
+                "value": {
+                  "path": "$.ifscCode"
+                }
+              },{
+                "variable": "bank", 
+                "value": {
+                  "path": "$.additionalDetails[0].bankName"
+                }
+              },{
+                "variable": "branch", 
+                "value": {
+                  "path": "$.additionalDetails[0].branchName"
                 }
               },
               {
@@ -125,120 +152,142 @@
               {
                 "variable": "transactionID", 
                 "value": {
-                  "path": "$.transactionNumber"
+                  "path": "$.instrumentNumber"
                 }
+              }, {
+                "variable": "transactionDate", 
+                "value": {
+                  "path": "$.instrumentDate"
+                },
+                "type": "date"
               },
               {
                 "variable": "dueAmount", 
                 "value": {
-                  "path": "$.paymentDetails[0].totalDue"
+                  "path": "$.paymentDetails[0].bill.totalAmount"
+                }
+              }, {
+                "variable": "approvedBy", 
+                "value": {
+                  "path": "$.paymentDetails[0].bill.additionalDetails.lastModifier"
+                }
+              }, {
+                "variable": "penaltyReason", 
+                "value": {
+                  "path": "$.paymentDetails[0].bill.additionalDetails.adhocPenaltyReason"
+                }
+              },
+              {
+                "variable": "rebateReason", 
+                "value": {
+                  "path": "$.paymentDetails[0].bill.additionalDetails.adhocRebateReason"
                 }
               },
               {
                 "variable": "PropertyTax", 
                 "value": {
-                  "path": "$.paymentDetails[0].bill.billDetails[0].billAccountDetails[?(@.taxHeadCode=='PT_TAX')].adjustedAmount"
+                  "path": "$.paymentDetails[0].bill.billDetails[0].billAccountDetails[?(@.taxHeadCode=='PT_TAX')].amount"
                 }
               },
               {
                 "variable": "FireCess", 
                 "value": {
-                  "path": "$.paymentDetails[0].bill.billDetails[0].billAccountDetails[?(@.taxHeadCode=='PT_FIRE_CESS')].adjustedAmount"
+                  "path": "$.paymentDetails[0].bill.billDetails[0].billAccountDetails[?(@.taxHeadCode=='PT_FIRE_CESS')].amount"
                 }
               },
               {
                 "variable": "CancerCess", 
                 "value": {
-                  "path": "$.paymentDetails[0].bill.billDetails[0].billAccountDetails[?(@.taxHeadCode=='PT_CANCER_CESS')].adjustedAmount"
+                  "path": "$.paymentDetails[0].bill.billDetails[0].billAccountDetails[?(@.taxHeadCode=='PT_CANCER_CESS')].amount"
                 }
               },
               {
                 "variable": "Penalty", 
                 "value": {
-                  "path": "$.paymentDetails[0].bill.billDetails[0].billAccountDetails[?(@.taxHeadCode=='PT_TIME_PENALTY')].adjustedAmount"
+                  "path": "$.paymentDetails[0].bill.billDetails[0].billAccountDetails[?(@.taxHeadCode=='PT_TIME_PENALTY')].amount"
                 }
               },
 		 {
                 "variable": "Arrears1", 
                 "value": {
-                  "path": "$.paymentDetails[0].bill.billDetails[1].amountPaid"
+                  "path": "$.paymentDetails[0].bill.billDetails[1].amount"
                 }
               },  {
                 "variable": "Arrears2", 
                 "value": {
-                  "path": "$.paymentDetails[0].bill.billDetails[2].amountPaid"
+                  "path": "$.paymentDetails[0].bill.billDetails[2].amount"
                 }
               },  {
                 "variable": "Arrears3", 
                 "value": {
-                  "path": "$.paymentDetails[0].bill.billDetails[3].amountPaid"
+                  "path": "$.paymentDetails[0].bill.billDetails[3].amount"
                 }
               },  {
                 "variable": "Arrears4", 
                 "value": {
-                  "path": "$.paymentDetails[0].bill.billDetails[4].amountPaid"
+                  "path": "$.paymentDetails[0].bill.billDetails[4].amount"
                 }
               },  {
                 "variable": "Arrears5", 
                 "value": {
-                  "path": "$.paymentDetails[0].bill.billDetails[5].amountPaid"
+                  "path": "$.paymentDetails[0].bill.billDetails[5].amount"
                 }
               },  {
                 "variable": "Arrears6", 
                 "value": {
-                  "path": "$.paymentDetails[0].bill.billDetails[6].amountPaid"
+                  "path": "$.paymentDetails[0].bill.billDetails[6].amount"
                 }
               },  {
                 "variable": "Arrears7", 
                 "value": {
-                  "path": "$.paymentDetails[0].bill.billDetails[7].amountPaid"
+                  "path": "$.paymentDetails[0].bill.billDetails[7].amount"
                 }
               },  {
                 "variable": "Arrears8", 
                 "value": {
-                  "path": "$.paymentDetails[0].bill.billDetails[8].amountPaid"
+                  "path": "$.paymentDetails[0].bill.billDetails[8].amount"
                 }
               },    
 		{
                 "variable": "adhocPenalty", 
                 "value": {
-                  "path": "$.paymentDetails[0].bill.billDetails[0].billAccountDetails[?(@.taxHeadCode=='PT_ADHOC_PENALTY')].adjustedAmount"
+                  "path": "$.paymentDetails[0].bill.billDetails[0].billAccountDetails[?(@.taxHeadCode=='PT_ADHOC_PENALTY')].amount"
                 }
               },
               {
                 "variable": "adhocRebate", 
                 "value": {
-                  "path": "$.paymentDetails[0].bill.billDetails[0].billAccountDetails[?(@.taxHeadCode=='PT_ADHOC_REBATE')].adjustedAmount"
+                  "path": "$.paymentDetails[0].bill.billDetails[0].billAccountDetails[?(@.taxHeadCode=='PT_ADHOC_REBATE')].amount"
                 }
               },
               {
                 "variable": "Rebate", 
                 "value": {
-                  "path": "$.paymentDetails[0].bill.billDetails[0].billAccountDetails[?(@.taxHeadCode=='PT_TIME_REBATE')].adjustedAmount"
+                  "path": "$.paymentDetails[0].bill.billDetails[0].billAccountDetails[?(@.taxHeadCode=='PT_TIME_REBATE')].amount"
                 }
               },
               {
                 "variable": "Interest", 
                 "value": {
-                  "path": "$.paymentDetails[0].bill.billDetails[0].billAccountDetails[?(@.taxHeadCode=='PT_TIME_INTEREST')].adjustedAmount"
+                  "path": "$.paymentDetails[0].bill.billDetails[0].billAccountDetails[?(@.taxHeadCode=='PT_TIME_INTEREST')].amount"
                 }
               },
               {
                 "variable": "UsageExemption", 
                 "value": {
-                  "path": "$.paymentDetails[0].bill.billDetails[0].billAccountDetails[?(@.taxHeadCode=='PT_UNIT_USAGE_EXEMPTION')].adjustedAmount"
+                  "path": "$.paymentDetails[0].bill.billDetails[0].billAccountDetails[?(@.taxHeadCode=='PT_UNIT_USAGE_EXEMPTION')].amount"
                 }
               },
               {
                 "variable": "SpecialCategoryExemption", 
                 "value": {
-                  "path": "$.paymentDetails[0].bill.billDetails[0].billAccountDetails[?(@.taxHeadCode=='PT_OWNER_EXEMPTION')].adjustedAmount"
+                  "path": "$.paymentDetails[0].bill.billDetails[0].billAccountDetails[?(@.taxHeadCode=='PT_OWNER_EXEMPTION')].amount"
                 }
               },
               {
                 "variable": "RoundOff", 
                 "value": {
-                  "path": "$.paymentDetails[0].bill.billDetails[0].billAccountDetails[?(@.taxHeadCode=='PT_ROUNDOFF')].adjustedAmount"
+                  "path": "$.paymentDetails[0].bill.billDetails[0].billAccountDetails[?(@.taxHeadCode=='PT_ROUNDOFF')].amount"
                 }
               },
               {
@@ -304,6 +353,18 @@
                 "variable": "payer_contact",
                 "value": {
                   "path": "PDF_STATIC_LABEL_CONSOLIDATED_RECEIPT_PAYER_CONTACT"
+                },
+                "type": "label",
+                "localisation":{
+                  "required":true,
+                  "prefix": null,
+                  "module":"rainmaker-common"
+               }
+              },
+		{
+                "variable": "payment_status",
+                "value": {
+                  "path": "PDF_STATIC_LABEL_CONSOLIDATED_RECEIPT_PAYMENT_STATUS"
                 },
                 "type": "label",
                 "localisation":{
@@ -443,7 +504,7 @@
                   "prefix": null,
                   "module":"rainmaker-common"
                }
-              },
+              }, 
               {
                 "variable": "disclamer",
                 "value": {
@@ -554,9 +615,40 @@
                 "queryParam": "propertyIds=$.paymentDetails[0].bill.consumerCode,tenantId=$.tenantId",
                 "apiRequest": null,
                 "responseMapping":[
+                  { "variable":"institutionName",
+                  "value":"$.Properties[0].institution.name"
+                },
                   {             
+                    "variable":"vasikaNo",
+                    "value":"$.Properties[0].additionalDetails.vasikaNo"
+                  },  {             
+                    "variable":"vasikaDate",
+                    "value":"$.Properties[0].additionalDetails.vasikaDate",
+                    "type":"date"
+                  },  {             
+                    "variable":"allotmentNo",
+                    "value":"$.Properties[0].additionalDetails.allotmentNo"
+                  },  {             
+                    "variable":"allotmentDate",
+                    "value":"$.Properties[0].additionalDetails.allotmentDate",
+                    "type":"date"
+                  },  {             
+                    "variable":"businessName",
+                    "value":"$.Properties[0].additionalDetails.businessName"
+                  },  {             
+                    "variable":"remarks",
+                    "value":"$.Properties[0].additionalDetails.remrks"
+                  },  {             
                     "variable":"fatherHusbandName",
                     "value":"$.Properties[0].owners[0].fatherOrHusbandName"
+                  }, {             
+                    "variable":"propertyUsage",
+                    "value":"$.Properties[0].usageCategory", 
+		      "localisation": {
+                      "required": true,
+                      "prefix": "COMMON_PROPUSGTYPE",
+                      "module": "rainmaker-pt"
+                      }
                   },
                   {             
                     "variable":"doorNo",
@@ -590,6 +682,10 @@
                   {             
                     "variable":"oldPropertyId",
                     "value":"$.Properties[0].oldPropertyId"
+                  }, 
+		  {             
+                    "variable":"surveyId",
+                    "value":"$.Properties[0].surveyId"
                   },
                   {             
                     "variable":"ownerMobileNumber",
@@ -629,14 +725,24 @@
                             }
                           },
                           {
-                             "variable":"usage_category",
+                            "variable":"usage_category",
+                            "value":"usageCategory",
+                            "localisation": {
+                             "required": true,
+                             "prefix": "COMMON_PROPUSGTYPE",
+                             "module": "rainmaker-pt"
+                             }
+                         },
+                          {
+                             "variable":"sub_usage_category",
                              "value":"usageCategory",
                              "localisation": {
                               "required": true,
                               "prefix": "COMMON_PROPSUBUSGTYPE",
-                              "module": "rainmaker-pt"
+                              "module": "rainmaker-pt",
+                              "isSubTypeRequired":true
                             }
-                          },
+			  },
                           {
                             "variable":"occupancy_type",
                             "value":"occupancyType"
@@ -652,7 +758,8 @@
                          {
                            "variable":"additional_details",
                            "value":"additionalDetails"
-                         }
+                         }                         
+                       
                         ]
                    } 
                 }
