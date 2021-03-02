@@ -23,7 +23,7 @@
               {
                 "stack": [
                   {
-                    "text": "{{logo-header}} {{Municipal_Corporation}}",
+                    "text": "{{mcGrade}} {{logo-header}}",
                     "style": "receipt-logo-header"
                   },
                   {
@@ -191,7 +191,7 @@
                 "style": "receipt-table"
               },
               {
-                "text": "Owner Contact",
+                "text": "Payer Contact",
                 "border": [
                   false,
                   true,
@@ -234,7 +234,7 @@
                 "style": "receipt-table"
               },
               {
-                "text": "Owner Name",
+                "text": "Payer Name",
                 "border": [
                   false,
                   false,
@@ -266,7 +266,7 @@
                 "style": "receipt-table-value"
               },
               {
-                "text": "{{payerAddress}}",
+                "text": "{{tradeDoor || ' '}}  {{tradeBuilding || ''}}   {{tradeStreet || ''}} {{mohalla}},{{logo-header}}",
                 "border": [
                   false,
                   false,
@@ -393,12 +393,31 @@
                 ],
                 "style": "receipt-table"
               }
-            ],
-            [
+            ], [
+              {
+                "text": "{{payment_mode}}",
+                "border": [
+                  true,
+                  false,
+                  false,
+                  false
+                ],
+                "style": "receipt-table-value"
+              },
+              {
+                "text": "{{paymentMode}}",
+                "border": [
+                  false,
+                  false,
+                  false,
+                  false
+                ],
+                "style": "receipt-table"
+              },
               {
                 "text": "{{paid_amount}}",
                 "border": [
-                  true,
+                  false,
                   false,
                   false,
                   false
@@ -410,13 +429,35 @@
                 "border": [
                   false,
                   false,
+                  true,
+                  false
+                ],
+                "style": "receipt-table"
+              }
+            ],
+            [
+              {
+                "text": "{{pending_amount}}",
+                "border": [
+                  true,
+                  false,
+                  false,
+                  false
+                ],
+                "style": "receipt-table-value"
+              },
+              {
+                "text": "₹ {{pendingAmount}}",
+                "border": [
+                  false,
+                  false,
                   false,
                   false
                 ],
                 "style": "receipt-table"
               },
               {
-                "text": "{{pending_amount}}",
+                "text": "Trade License Fee",
                 "border": [
                   false,
                   false,
@@ -426,7 +467,7 @@
                 "style": "receipt-table-value"
               },
               {
-                "text": "₹ {{pendingAmount}}",
+                "text": "₹ {{tradeFee}}",
                 "border": [
                   false,
                   false,
@@ -564,48 +605,6 @@
             ],
             [
               {
-                "text": "{{payment_mode}}",
-                "border": [
-                  true,
-                  false,
-                  false,
-                  false
-                ],
-                "style": "receipt-table-value"
-              },
-              {
-                "text": "{{paymentMode}}",
-                "border": [
-                  false,
-                  false,
-                  false,
-                  false
-                ],
-                "style": "receipt-table"
-              },
-              {
-                "text": "  ",
-                "border": [
-                  false,
-                  false,
-                  false,
-                  false
-                ],
-                "style": "receipt-table-value"
-              },
-              {
-                "text": "  ",
-                "border": [
-                  false,
-                  false,
-                  true,
-                  false
-                ],
-                "style": "receipt-table"
-              }
-            ],
-            [
-              {
                 "text": "Cheque/DD/PO/Transaction No.",
                 "border": [
                   true,
@@ -645,6 +644,47 @@
                 ],
                 "style": "receipt-table"
               }
+            ],[	
+              {	
+                "text": "IFSC Code",	
+                "border": [	
+                  true,	
+                  false,	
+                  false,	
+                  false	
+                ],	
+                "style": "receipt-table-value"	
+              },	
+              {	
+                "text": "{{ifsc}}",	
+                "border": [	
+                  false,	
+                  false,	
+                  false,	
+                  false	
+                ],	
+                "style": "receipt-table"	
+              },	
+              {	
+                "text": "Bank/Branch Name",	
+                "border": [	
+                  false,	
+                  false,	
+                  false,	
+                  false	
+                ],	
+                "style": "receipt-table-value"	
+              },	
+              {	
+                "text": "{{bank}},{{branch}}",	
+                "border": [	
+                  false,	
+                  false,	
+                  true,	
+                  false	
+                ],	
+                "style": "receipt-table"	
+              }	
             ],
             [
               {
@@ -757,6 +797,35 @@
            },  "layout": {}
 
 
+      },{
+        "style": "next-noc-table",
+        "table": {
+          "widths": [
+            "55%",
+            "*",
+            "15%"
+          ],
+          "body":             
+            [
+              [
+                {
+                  "text": "Owner Name",
+                  "style": "receipt-table-value"
+                },
+                {
+                  "text": "Father/Husband Name",
+                  "style": "receipt-table-value"
+                },
+                {
+                  "text": "Mobile Number",
+                  "style": "receipt-table-value"
+                }
+              ],
+            "{{#variable_owners}}[{ \"text\":\"{{name}}\", \"border\":[ true, false, true, true ], \"style\": \"receipt-table\" }, { \"text\":\"{{fatherOrHusbandName}}\", \"border\":[ false, false, true, true ], \"style\": \"receipt-table\" }, { \"text\":\"{{mobileNumber}}\", \"border\":[ false, false, true, true ], \"style\": \"receipt-table\" }]{{/variable_owners}}" 
+            ]
+           },  "layout": {}
+
+
       },
       {
         "style": "receipt-approver",
@@ -775,7 +844,7 @@
             "alignment": "left"
           },
           {
-            "text": [
+            "text": [ 
               {
                 "text": "Authorised Signatory",
                 "bold": true
@@ -810,7 +879,9 @@
               "Payment received by Cheque/DD shall be subject to realization",
               "This document is not a proof of property ownership" 
             ]
-          }
+          },
+          {
+            "text":"Now log a complaint from WhatsApp, give a missed call on 8750975975 or send a Hi message on WhatsApp to this number", "bold": true, "fontSize": 8, "color": "blue", "decoration": "underline"}
         ]
       }
     ],
