@@ -35,7 +35,7 @@
                           "stack": 
                           [
                          {
-                           "text":"{{municipal_corportaion}},{{city}}",
+                           "text":"{{mcGrade}},{{city}}",
                            "style":"receipt-logo-header"
                          },
                          {
@@ -441,6 +441,35 @@
                           true,
                           false
                         ]
+                    }, {
+                      "style": "noc-head2",
+                      "table": {
+                        "widths": [
+                          "50%",
+                          "*",
+                          "15%"
+                        ],
+                        "body":             
+                          [
+                            [
+                              {
+                                "text": "Owner Name",
+                                "style": "receipt-table-value2"
+                              },
+                              {
+                                "text": "Father/Husband Name",
+                                "style": "receipt-table-value"
+                              },
+                              {
+                                "text": "Mobile Number",
+                                "style": "receipt-table-value"
+                              }
+                            ],
+                          "{{#variable_owners}}[{ \"text\":\"{{name}}\", \"border\":[ true, false, true, true ], \"style\": \"receipt-table3\" }, { \"text\":\"{{fatherOrHusbandName}}\", \"border\":[ false, false, true, true ], \"style\": \"receipt-table2\" }, { \"text\":\"{{mobileNumber}}\", \"border\":[ false, false, true, true ], \"style\": \"receipt-table2\" }]{{/variable_owners}}" 
+                          ]
+                         },  "layout": {}
+              
+              
                     }
 
                        ],
