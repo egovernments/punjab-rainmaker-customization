@@ -51,7 +51,7 @@ public class RecordService {
 	String qry=	Sqls.sewerageRecord_update;
 	qry=qry.replace(":schema_tenantId",tenantId );
 	qry=qry.replace(":erpid", "'"+erpId+"'");
-	qry=qry.replace(":status", "'saved'");
+	qry=qry.replace(":status", "'Saved'");
 	qry=qry.replace(":tenantId", "'"+conn.getTenantId()+"'");
 	qry=qry.replace(":digitconn", conn.getConnectionNo()==null?"'null'":"'"+conn.getConnectionNo()+"'");
 	qry=qry.replace(":digitpt","'"+conn.getPropertyId()+"'");
@@ -68,7 +68,7 @@ public class RecordService {
 	qry=qry.replace(":erpid", "'"+conn.getId()+"'");
 	qry=qry.replace(":erpconn", "'"+conn.getConnectionNo()+"'");
 	qry=qry.replace(":erppt", "'"+conn.getPropertyId()+"'");
-	qry=qry.replace(":status", "'pushed'");
+	qry=qry.replace(":status", "'initiated'");
 	qry=qry.replace(":tenantId", "'"+conn.getTenantId()+"'");
 	qry=qry.replace(":digitconn", "'null'");
 	qry=qry.replace(":digitpt", "'null'");
@@ -87,7 +87,7 @@ public class RecordService {
 	qry=qry.replace(":erpid", "'"+conn.getId()+"'");
 	qry=qry.replace(":erpconn", "'"+conn.getConsumerCode()+"'");
 	qry=qry.replace(":erppt", "'"+conn.getBusinessService()+"'");
-	qry=qry.replace(":status", "'pushed'");
+	qry=qry.replace(":status", "'initiated'");
 	qry=qry.replace(":tenantId", "'"+conn.getTenantId()+"'");
 	qry=qry.replace(":digitconn", "'null'");
 	qry=qry.replace(":digitpt", "'null'");
@@ -105,7 +105,7 @@ public class RecordService {
 	qry=qry.replace(":erpid", "'"+conn.getId()+"'");
 	qry=qry.replace(":erpconn", "'"+conn.getConsumerCode()+"'");
 	qry=qry.replace(":erppt", "'"+conn.getBusinessService()+"'");
-	qry=qry.replace(":status", "'pushed'");
+	qry=qry.replace(":status", "'initiated'");
 	qry=qry.replace(":tenantId", "'"+conn.getTenantId()+"'");
 	qry=qry.replace(":digitconn", "'null'");
 	qry=qry.replace(":digitpt", "'null'");
@@ -121,7 +121,7 @@ public class RecordService {
 	
 	qry=qry.replace(":schema", tenantId);
 	qry=qry.replace(":erpconn", "'"+conn.getConsumerCode()+"'");
-	qry=qry.replace(":status", "'saved'");
+	qry=qry.replace(":status", "'Saved'");
 	qry=qry.replace(":tenantId", "'"+conn.getTenantId()+"'");
 	qry=qry.replace(":digitconn", conn.getConsumerCode()==null?"'null'":conn.getConsumerCode());
 	qry=qry.replace(":digitpt","'"+conn.getBusinessService()+"'");
@@ -135,7 +135,7 @@ public class RecordService {
 		
 	String qry=	Sqls.SEWERAGE_COLLECTION_UPDATE;
 	qry=qry.replace(":erpconn", "'"+conn.getConsumerCode()+"'");
-	qry=qry.replace(":status", "'saved'");
+	qry=qry.replace(":status", "'Saved'");
 	qry=qry.replace(":tenantId", "'"+conn.getTenantId()+"'");
 	qry=qry.replace(":digitconn", conn.getConsumerCode()==null?"'null'":conn.getConsumerCode());
 	qry=qry.replace(":digitpt","'"+conn.getBusinessService()+"'");
