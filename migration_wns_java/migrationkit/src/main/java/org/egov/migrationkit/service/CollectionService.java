@@ -25,7 +25,6 @@ import io.swagger.client.model.RequestInfoWrapper;
 import lombok.extern.slf4j.Slf4j;
 
 @Service
-@Transactional
 @Slf4j
 public class CollectionService {
 	@Autowired
@@ -59,7 +58,7 @@ public class CollectionService {
 
 		String digitTenantId = requestInfo.getUserInfo().getTenantId();
 
-		List<String> queryForList = jdbcTemplate.queryForList(Sqls.SEWERAGE_COLLECTION_QUERY, String.class);
+		List<String> queryForList = jdbcTemplate.queryForList(Sqls.WATER_COLLECTION_QUERY, String.class);
 
 		for (String json : queryForList) {
 
@@ -67,7 +66,7 @@ public class CollectionService {
 				CollectionPayment payment = objectMapper.readValue(json, CollectionPayment.class);
 				payment.setTenantId(digitTenantId);
 				payment.getPaymentDetails().get(0).setTenantId(digitTenantId);
-				recordService.recordWtrCollMigration(payment);
+				recordService.recordWtrCollMigration(payment,tenantId);
 				List<BillV2> bills = null;
 				try {
 
@@ -100,7 +99,7 @@ public class CollectionService {
 						log.error("Failed to register this payment at collection-service");
 					}
 
-					recordService.updateWtrCollMigration(payment);
+					recordService.updateWtrCollMigration(payment,tenantId);
 					log.info("waterResponse" + response); 
 				}
 
@@ -128,7 +127,7 @@ public class CollectionService {
 			return waterResponse.getBill();
 
 		} catch (Exception ex) {
-			//log.error("Fetch Bill Error", ex);
+			log.error("Fetch Bill Error", ex);
 		}
 		return bills;
 	}
@@ -149,7 +148,7 @@ public class CollectionService {
 				CollectionPayment payment = objectMapper.readValue(json, CollectionPayment.class);
 				payment.setTenantId(digitTenantId);
 				payment.getPaymentDetails().get(0).setTenantId(digitTenantId);
-				recordService.recordSwgCollMigration(payment);
+				recordService.recordSwgCollMigration(payment,tenantId);
 				List<BillV2> bills = null;
 				try {
 

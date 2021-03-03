@@ -18,7 +18,8 @@ package io.swagger.client.model;
  
 public enum Source {
   MUNICIPAL_RECORDS("MUNICIPAL_RECORDS"),
-  FIELD_SURVEY("FIELD_SURVEY");
+  FIELD_SURVEY("FIELD_SURVEY"),
+  WATER_CHARGES("WATER_CHARGES");
 
   private String value;
 

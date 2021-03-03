@@ -55,24 +55,24 @@ public class PropertyService {
 	private RecordService recordService;
 	
 	
-	public Property findProperty(WaterConnectionRequest wcr,Map data)
+	public Property findProperty(WaterConnectionRequest wcr,Map data,String tenantId)
 	{
 		
 		 
 		Property property=null;
 		try {
-			property = searchPtRecord(wcr,data);
+			property = searchPtRecord(wcr,data,tenantId);
 			
 				
 			if(property==null)
 			{
 			  log.info("Propery not found creating new property");
-				property=createProperty(wcr,data);
+				property=createProperty(wcr,data,tenantId);
 			  
 			}
 		} catch (Exception e) {
 			log.error("error while finding or creating property",e.getMessage());
-			recordService.recordError("water", e.getMessage(), wcr.getWaterConnection().getId());
+			recordService.recordError("water",tenantId, e.getMessage(), wcr.getWaterConnection().getId());
 		}
 		
 			
@@ -80,29 +80,29 @@ public class PropertyService {
 	}
 	
 
-	public Property findProperty(SewerageConnectionRequest swg,String json)
+	public Property findProperty(SewerageConnectionRequest swg,String json,String tenantId)
 	{
 		Property property=null;
 		try {
 		
-			property=searchswPtRecord(swg,json);
+			property=searchswPtRecord(swg,json,tenantId);
 		
 			
 			if(property==null)
 			{
 				log.info("Propery not found creating new property");
-				property=createSProperty(swg,json);
+				property=createSProperty(swg,json,tenantId);
 		  
 			}
 		} catch (Exception e) {
 			log.error("error while finding or creating property",e.getMessage());
 			log.error("Display proper message: " + e);
-			recordService.recordError("sewerage", e.getMessage(), swg.getSewerageConnection().getId());
+			recordService.recordError("sewerage",tenantId, e.getMessage(), swg.getSewerageConnection().getId());
 		}
 			
 		return property;
 	}
-	private Property createProperty(WaterConnectionRequest wcr, Map data ) {
+	private Property createProperty(WaterConnectionRequest wcr, Map data,String tenantId) {
 		String uuid=null;
 		 PropertyRequest prequest=new PropertyRequest();
 		 prequest.setRequestInfo(wcr.getRequestInfo());
@@ -112,6 +112,7 @@ public class PropertyService {
 		
 		 property.setAddress(conn.getApplicantAddress());
 		 property.setChannel(Channel.SYSTEM);
+		 property.setSource(Source.WATER_CHARGES);
 		// property.setInstitution(null);
 		 property.setLandArea(BigDecimal.valueOf(50));
 		 property.setNoOfFloors(Long.valueOf(1));
@@ -155,7 +156,7 @@ public class PropertyService {
 		 
 	}
 	
-	private Property createSProperty(SewerageConnectionRequest swg, String json) {
+	private Property createSProperty(SewerageConnectionRequest swg, String json,String tenantId) {
 		String uuid=null;
 		 PropertyRequest prequest=new PropertyRequest();
 		 prequest.setRequestInfo(swg.getRequestInfo());
@@ -199,8 +200,8 @@ public class PropertyService {
 			res = restTemplate.postForObject(host + "/" + ptcreatehurl, prequest, PropertyResponse.class);
 			 return res.getProperties().get(0);
 		} catch (RestClientException e) {
-			e.printStackTrace();
-			recordService.recordError("sewerage",e.getMessage(), conn.getId());
+			//e.printStackTrace();
+			recordService.recordError("sewerage",tenantId,e.getMessage(), conn.getId());
 		}
 		 
 
@@ -208,7 +209,7 @@ public class PropertyService {
 		 
 	}
 
-	private Property searchPtRecord(WaterConnectionRequest conn,Map data) {
+	private Property searchPtRecord(WaterConnectionRequest conn,Map data,String tenantId) {
 		 
 		PropertyRequest pr=new PropertyRequest();
 		pr.setRequestInfo(conn.getRequestInfo());
@@ -244,7 +245,7 @@ public class PropertyService {
 						)
 					{
 						 
-							recordService.recordError("water", "Found Property in digit :" +property.getId(), conn.getWaterConnection().getId());
+							recordService.recordError("water", tenantId,"Found Property in digit :" +property.getId(), conn.getWaterConnection().getId());
 						
 						return property;
 					}
@@ -261,7 +262,7 @@ public class PropertyService {
 		 
 		
 	}
-	private Property searchswPtRecord(SewerageConnectionRequest conn,String json) {
+	private Property searchswPtRecord(SewerageConnectionRequest conn,String json,String tenantId) {
 		 
 		PropertyRequest pr=new PropertyRequest();
 		pr.setRequestInfo(conn.getRequestInfo());
@@ -295,7 +296,7 @@ public class PropertyService {
 						)
 					{
  
-						recordService.recordError("sewerage", "Found Property in digit :" +property.getId(), conn.getSewerageConnection().getId());	
+						recordService.recordError("sewerage",tenantId, "Found Property in digit :" +property.getId(), conn.getSewerageConnection().getId());	
 						return property;
 						
 					}

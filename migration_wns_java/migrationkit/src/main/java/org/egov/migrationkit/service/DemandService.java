@@ -66,6 +66,11 @@ public class DemandService {
 					.toDate(WSConstants.TIME_PERIOD_MAP.get((String)dcbData.get("to_date")))
 					.tenantId(tenantId)
 					.build();
+		
+			
+			log.info("@taxHeadMaster " +taxHeadMaster);
+			log.info("from_date" +(String)dcbData.get("from_date") + "  and epoc" +WSConstants.TIME_PERIOD_MAP.get((String)dcbData.get("from_date")));
+			log.info("to_date" +(String)dcbData.get("to_date") + "  and epoc" +WSConstants.TIME_PERIOD_MAP.get((String)dcbData.get("to_date")));
 			
 			Integer installmentId = (Integer)dcbData.get("insta_id");
 			if(instaWiseDemandMap.containsKey(installmentId)) {
@@ -136,9 +141,21 @@ public class DemandService {
      * @param demands The demands to be created
      * @return The list of demand created
      */
-    public Boolean saveDemand(RequestInfo requestInfo, List<Demand> demands,String erpId){
+    public Boolean saveDemand(RequestInfo requestInfo, List<Demand> demands,String erpId,String tenantId){
     	try{
-    		
+    /*	for(Demand d:demands)
+    	{
+    	log.info(d.getConsumerCode());	
+    	for(DemandDetail dd:d.getDemandDetails())
+    	{
+    		log.info("getTaxHeadMasterCode " +dd.getTaxHeadMasterCode());
+    		log.info("getFromDate " +dd.getFromDate());
+    		log.info("getToDate " +dd.getToDate());
+    		log.info("getTaxAmount " +dd.getTaxAmount());
+    	}
+    	}*/
+    	
+    	 
     	String url = billingServiceHost + demandCreateEndPoint+requestInfo.getUserInfo().getTenantId();
         DemandRequest request = new DemandRequest(requestInfo,demands);
         DemandResponse response = restTemplate.postForObject(url , request, DemandResponse.class);
@@ -147,7 +164,7 @@ public class DemandService {
         }
         catch(Exception e){
         	 
-        	recordService.recordError("sewerage", e.getMessage(), erpId);
+        	recordService.recordError("sewerage",tenantId, e.getMessage(), erpId);
             log.error("Error while Saving demands" + e.getMessage());
             return Boolean.FALSE;
         }
@@ -181,8 +198,12 @@ public List<Demand> prepareSwDemandRequest(Map data, String businessService, Str
 	
 //	dcbDataList
 	for (Map dcbData : dcbDataList) {
-		
-		String taxHeadMaster = WSConstants.TAX_HEAD_MAP.get((String)dcbData.get("demand_reason"));
+		String taxHeadMaster="";
+		String taxhead= 		(String)dcbData.get("demand_reason");
+		if(taxhead.equalsIgnoreCase("PENALTY"))
+			taxHeadMaster="SW_TIME_PENALTY";
+			else
+		 taxHeadMaster = WSConstants.TAX_HEAD_MAP.get(taxhead);
 		DemandDetail dd = DemandDetail.builder()
 				.taxAmount(BigDecimal.valueOf((Integer)dcbData.get("amount")))
 				.taxHeadMasterCode(taxHeadMaster)
@@ -194,6 +215,11 @@ public List<Demand> prepareSwDemandRequest(Map data, String businessService, Str
 //			.toDate(1617175799000l)
 				.tenantId(tenantId)
 				.build();
+	
+		log.info("@taxHeadMaster " +taxHeadMaster +"demand_reason "+(String)dcbData.get("demand_reason"));
+		log.info("from_date" +(String)dcbData.get("from_date") + "  and epoc" +WSConstants.TIME_PERIOD_MAP.get((String)dcbData.get("from_date")));
+		log.info("to_date" +(String)dcbData.get("to_date") + "  and epoc" +WSConstants.TIME_PERIOD_MAP.get((String)dcbData.get("to_date")));
+
 		
 		Integer installmentId = (Integer)dcbData.get("insta_id");
 		if(instaWiseDemandMap.containsKey(installmentId)) {

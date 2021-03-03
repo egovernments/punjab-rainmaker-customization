@@ -23,14 +23,14 @@ public class Sqls {
 			"  'channel'	, CASE WHEN conndetails.source is not null THEN conndetails.source ELSE 'COUNTER' END	,	 "+
 			"  'applicationType',	 apptype.name	,	 "+
 			"  'billingType',	 conndetails.billingtype	,	 "+
-			"  'billingAmount',	 conndetails.billingamount ,	"+
+			"  'billingAmount',	 conndetails.billamount ,	"+
 			"	'estimationLetterDate', conndetails.estimationnoticedate,"+
 			"	'estimationFileStoreId',conndetails.estimationnoticefilestoreid,"+
 			"	'averageMake',conndetails.averagemeterreading,"+
-			"	'initialMeterReading',egwtr_meter_details.initialmeterreading,"+
-			"	'meterMake',egwtr_meter_details.metermake,"+
-			"	'othersFee',egwtr_connection_conversion_type.otherfee,"+
-			"	'ledgerId',egwtr_stg_connection.ledgerid,"+
+			"	'initialMeterReading','null',"+
+			"	'meterMake','null' ,"+
+			"	'othersFee','null', "+
+			"	'ledgerId','null',"+
 			"  'locality',	 locality.code	,	 "+
 			"  'pwssb'	, CASE (select value from eg_appconfig_values where key_id in (select id from eg_appconfig where key_name ='IS_PWSSB_ULB')) WHEN 'YES' THEN true ELSE false END	,	 "+
 			"  'block',	 block.name		, "+
@@ -83,10 +83,7 @@ public class Sqls {
 			"  egwtr_category wtrctgy	,		 "+
 			"  egwtr_connection_owner_info ownerinfo	,		 "+
 			"  eg_user usr	,		 "+
-			"  eg_address address	,		 "+
-			"	egwtr_meter_details,"+
-			"	egwtr_stg_connection,"+
-			"	egwtr_connection_conversion_type,"+
+			"  eg_address address	,		 "+ 
 			"  egw_status status where conn.id=conndetails.connection and apptype.id=conndetails.applicationtype and"
 			+ " usage.id=conndetails.usagetype and block.id=conn.block and locality.id=conn.locality and zone.id=conn.zone and"
 			+ " conndetails.propertytype=proptype.id and conndetails.category=wtrctgy.id and ownerinfo.connection=conn.id "
@@ -116,20 +113,18 @@ public class Sqls {
 	public static final String waterRecord_update="update  egwtr_migration  "+
 			"set digitconn=:digitconn , digitpt=:digitpt,status=:status where erpid=:erpid ";
 		
-	public static final String address="select id,housenobldgapt as plotno,landmark,citytownvillage as city,district,arealocalitysector as region,state,country,pincode, buildingName,streetroadline as street from eg_address where id=:id ;";
+	public static final String address="select id,housenobldgapt as plotno,landmark,citytownvillage as city,district,arealocalitysector as region,state,country,pincode, buildingName,streetroadline as street from :schema_tenantId.eg_address where id=:id ;";
 	
 
 	
-	public static final String WATER_COLLECTION_TABLE="create table  if not exists  egwtr_cl_migration "
-			+ " ( erpid varchar(64),erpconn varchar(64) ,digitconn varchar(64) ,erppt varchar(64),digitpt varchar(64),status varchar(64),tenantId varchar(64),additiondetails varchar(1000) );"
+	public static final String WATER_COLLECTION_TABLE="create table  if not exists  egwtr_cl_migration(erpid varchar(64),erpconn varchar(64) ,digitconn varchar(64) ,erppt varchar(64),digitpt varchar(64),status varchar(64),tenantId varchar(64),additiondetails varchar(1000) );"
 			+ "";
 	
-	public static final String WATER_COLLECTION_INSERT="insert into  egwtr_cl_migration  "
-			+ "(erpid ,erpconn  ,digitconn  ,erppt ,digitpt ,status ,tenantId ,additiondetails ) values (:erpid,:erpconn,:digitconn,:erppt,:digitpt,:status"
-			+ ", :tenantId,:addtionaldetails);";
+	public static final String WATER_COLLECTION_INSERT="insert into  :schema.egwtr_cl_migration(erpid ,erpconn  ,digitconn  ,erppt ,digitpt ,status ,tenantId ,additiondetails ) values (:erpid,:erpconn,:digitconn,:erppt,:digitpt,:status"
+			+ ", :tenantId,:addtionaldetails)";
 	
-	public static final String WATER_COLLECTION_UPDATE="update  egwtr_cl_migration  "+
-			"set digitconn=:digitconn , digitpt=:digitpt,status=:status where erpconn=:erpconn and tenantId=:tenantId";
+	public static final String WATER_COLLECTION_UPDATE="update  :schema.egwtr_cl_migration"+
+			" set digitconn=:digitconn , digitpt=:digitpt,status=:status where erpconn=:erpconn and tenantId=:tenantId";
 		
 	public static final String WATER_COLLECTION_QUERY = "select json_build_object( 'paymentMode','cash', "
 			+ "'paymentStatus', 'New', 'businessService', 'WS', 'transactionNumber',ih.transactionnumber, 'transactionDate', "
@@ -228,7 +223,7 @@ public class Sqls {
 			+ "locality.id=conn.locality and zone.id=conn.zone and\n"
 			+ "ownerinfo.connection=conn.id and usr.id=ownerinfo.owner and\n"
 			+ " address.id=conn.address and status.id=appdetails.status  "
-			+ " and conndetails.id not in (select erpid::bigint from egswtax_migration where status in ('Saved','Demand_Created','Incompatible' ) ) order by conndetails.id;";
+			+ " and conndetails.id not in (select erpid::bigint from egswtax_migration where status in ('pushed','Saved','saved','Demand_Created','Incompatible' ) ) order by conndetails.id;";
 	
 	
 	
@@ -236,11 +231,11 @@ public class Sqls {
 			+ " ( erpid varchar(64),erpconn varchar(64) ,digitconn varchar(64) ,erppt varchar(64),digitpt varchar(64),status varchar(64),tenantId varchar(64),additiondetails varchar(1000),errorMessage varchar(4000)  );"
 			+ "";
 	
-	public static final String sewerageRecord_insert="insert into  egswtax_migration  "
+	public static final String sewerageRecord_insert="insert into  :schema_tenantId.egswtax_migration  "
 			+ "(erpid ,erpconn  ,digitconn  ,erppt ,digitpt ,status ,tenantId ,additiondetails ) values (:erpid,:erpconn,:digitconn,:erppt,:digitpt,:status"
 			+ ", :tenantId,:addtionaldetails);";
 	
-	public static final String sewerageRecord_update="update  egswtax_migration  "+
+	public static final String sewerageRecord_update="update  :schema_tenantId.egswtax_migration  "+
 			"set digitconn=:digitconn , digitpt=:digitpt,status=:status where erpid=:erpid ";
 		
 //	public static final String address="select id,housenobldgapt as plotno,landmark,citytownvillage as city,district,arealocalitysector as region,state,country,pincode, buildingName,streetroadline as street from eg_address where id=:id ;";
@@ -312,11 +307,11 @@ public class Sqls {
 			+ " where  conndetails.id in (select erpid::bigint from egwtr_migration where status in ('Demand_Created') ) "
 			+ "GROUP BY it.type,ih.transactionnumber, ih.transactiondate, ch.payeename, owner.mobilenumber, owner.name, ch.consumercode, owner.emailid, owner.id,ch.totalamount, ih.instrumentdate, ih.instrumentNumber,status.code,conndetails.applicationnumber,  wtrcon.shsc_number;";
 	
-	public static final String SEWERAGE_COLLECTION_INSERT="insert into  egswtax_cl_migration  "
+	public static final String SEWERAGE_COLLECTION_INSERT="insert into  :schema.egswtax_cl_migration  "
 			+ "(erpid ,erpconn  ,digitconn  ,erppt ,digitpt ,status ,tenantId ,additiondetails ) values (:erpid,:erpconn,:digitconn,:erppt,:digitpt,:status"
 			+ ", :tenantId,:addtionaldetails);";
 	
-	public static final String SEWERAGE_COLLECTION_UPDATE="update  egswtax_cl_migration  "+
+	public static final String SEWERAGE_COLLECTION_UPDATE="update  :schema.egswtax_cl_migration  "+
 			"set digitconn=:digitconn , digitpt=:digitpt,status=:status where erpconn=:erpconn and tenantId=:tenantId";
 	
 	
