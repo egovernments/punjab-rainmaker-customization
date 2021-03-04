@@ -61,10 +61,10 @@ public class PropertyService {
 
 		Property property = null;
 		try {
-			property = searchPtRecord(wcr, data, tenantId);
+			//property = searchPtRecord(wcr, data, tenantId);
 
 			if (property == null) {
-				log.info("Propery not found creating new property");
+				log.debug("Propery not found creating new property");
 				property = createProperty(wcr, data, tenantId);
 
 			}
@@ -81,7 +81,7 @@ public class PropertyService {
 		try {
 			property = searchswPtRecord(swg, json, tenantId);
 			if (property == null) {
-				log.info("Propery not found creating new property");
+				log.debug("Propery not found creating new property");
 				property = createSProperty(swg, json, tenantId);
 			}
 		} catch (Exception e) {
@@ -103,7 +103,6 @@ public class PropertyService {
 		property.setAddress(conn.getApplicantAddress());
 		property.setChannel(Channel.SYSTEM);
 		property.setSource(Source.WATER_CHARGES);
-		// property.setInstitution(null);
 		property.setLandArea(BigDecimal.valueOf(50));
 		property.setNoOfFloors(Long.valueOf(1));
 		property.setOldPropertyId(conn.getPropertyId());
@@ -111,7 +110,6 @@ public class PropertyService {
 		// fix this
 		property.setOwnershipCategory("INDIVIDUAL.SINGLEOWNER");
 		property.setPropertyType("BUILTUP.INDEPENDENTPROPERTY");
-		property.setSource(Source.MUNICIPAL_RECORDS);
 
 		property.setTotalConstructedArea(BigDecimal.valueOf(190));
 		property.setStatus(Status.ACTIVE);
@@ -143,9 +141,10 @@ public class PropertyService {
 
 		PropertyResponse res = restTemplate.postForObject(host + "/" + ptcreatehurl, prequest, PropertyResponse.class);
 
-		// log.info(res.toString());
+		 log.info(res.getProperties().get(0).getSource() +"   "+res.getProperties().get(0).getAcknowldgementNumber());
 
 		Property property2 = res.getProperties().get(0);
+		property2.setSource(Source.WATER_CHARGES);
 		ProcessInstance workflow = new ProcessInstance();
 		workflow.setBusinessService("PT.CREATEWITHWNS");
 		workflow.setAction("SUBMIT");
@@ -155,6 +154,7 @@ public class PropertyService {
 		property2.setWorkflow(workflow);
 		prequest.setProperty(property2);
 		PropertyResponse res2 = restTemplate.postForObject(host + "/" + ptupdatehurl, prequest, PropertyResponse.class);
+		log.info("newly created pt"+res2.getProperties().get(0).getPropertyId() +" id    "+res2.getProperties().get(0).getStatus());
 		return res2.getProperties().get(0);
 
 	}

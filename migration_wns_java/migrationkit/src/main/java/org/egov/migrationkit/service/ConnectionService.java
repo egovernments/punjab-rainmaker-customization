@@ -222,12 +222,13 @@ public class ConnectionService {
 				log.debug("Response=" + response);
 
 				WaterConnectionResponse waterResponse = objectMapper.readValue(response, WaterConnectionResponse.class);
-
+            
 				WaterConnection wtrConnResp = null;
 				if (waterResponse != null && waterResponse.getWaterConnection() != null
 						&& !waterResponse.getWaterConnection().isEmpty()) {
 
 					wtrConnResp = waterResponse.getWaterConnection().get(0);
+					log.info("status"+wtrConnResp.getStatus() +" application status" +wtrConnResp.getApplicationStatus());
 					recordService.updateWaterMigration(wtrConnResp, connection.getId(),tenantId);
 					String consumerCode = wtrConnResp.getConnectionNo() != null ? wtrConnResp.getConnectionNo()
 							: wtrConnResp.getApplicationNo();
@@ -289,18 +290,18 @@ public class ConnectionService {
 	}
 
 	private String findLocality(String code) {
-		log.info("Seraching  for digit locality maping " + code);
+		log.debug("Seraching  for digit locality maping " + code);
 		String digitcode = null;
 		try {
 			digitcode = jdbcTemplate.queryForObject("select digitcode as digitCode from finallocation where code=?",
 					new Object[] { code }, String.class);
 		} catch (DataAccessException e) {
 			log.error("digit Location code is not mapped for " + code);
-			digitcode = "ALOC1"; //for Amritsar
+			//digitcode = "ALOC1"; //for Amritsar
 			//digitcode = "SUN158"; //for Sunam
-			//digitcode = "NSR_112"; //for Nawashahr
+			digitcode = "NSR_112"; //for Nawashahr
 		}
-		log.info("returning  " + digitcode);
+		log.debug("returning  " + digitcode);
 		return digitcode;
 	}
 
