@@ -1,5 +1,5 @@
 {
-  "key": "bill-amendment-credit-note",
+  "key": "sw-bill-amendment-credit-note",
   "config": {
     "defaultStyle": {
       "font": "Cambay"
@@ -221,11 +221,11 @@
                         "alignment": "center"
                       },
                       {
-                        "text": "{{water_tax}}",
+                        "text": "{{sewerage_charge}}",
                         "alignment": "left"
                       },
                       {
-                        "text": "{{waterTax}}",
+                        "text": "{{sewerageCharge}}",
                         "alignment": "right"
                       }
                     ],
@@ -235,11 +235,11 @@
                         "alignment": "center"
                       },
                       {
-                        "text": "{{water_cess}}",
+                        "text": "{{interest}}",
                         "alignment": "left"
                       },
                       {
-                        "text": "{{waterCess}}",
+                        "text": "{{sewerageInterest}}",
                         "alignment": "right"
                       }
                     ],
@@ -249,39 +249,11 @@
                         "alignment": "center"
                       },
                       {
-                        "text": "{{interest}}",
-                        "alignment": "left"
-                      },
-                      {
-                        "text": "{{interestAmount}}",
-                        "alignment": "right"
-                      }
-                    ],
-                    [
-                      {
-                        "text": "4.",
-                        "alignment": "center"
-                      },
-                      {
                         "text": "{{penalty}}",
                         "alignment": "left"
                       },
                       {
-                        "text": "{{penaltyAmount}}",
-                        "alignment": "right"
-                      }
-                    ],
-                    [
-                      {
-                        "text": "5.",
-                        "alignment": "center"
-                      },
-                      {
-                        "text": "{{arrears}}",
-                        "alignment": "left"
-                      },
-                      {
-                        "text": "{{arrearsAmount}}",
+                        "text": "{{seweragePenalty}}",
                         "alignment": "right"
                       }
                     ],

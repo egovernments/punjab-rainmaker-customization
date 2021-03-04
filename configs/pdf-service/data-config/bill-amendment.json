@@ -1,5 +1,5 @@
 {
-  "key": "bill-amendment-credit-note",
+  "key": "bill-amendment-summary",
   "DataConfigs": {
     "serviceName": "rainmaker-common",
     "version": "1.0.0",
@@ -19,27 +19,9 @@
                 }
               },
               {
-                "variable": "applicationNo",
-                "value": {
-                  "path": "$.consumerCode"
-                }
-              },
-              {
                 "variable": "user-name",
                 "value": {
-                  "path": "$.additionalDetails.ownerName"
-                }
-              },
-              {
-                "variable": "permanentAddress",
-                "value": {
-                  "path": "$.additionalDetails.ownerAddress"
-                }
-              },
-              {
-                "variable": "date",
-                "value": {
-                  "path": "$.userInfo.createdDate"
+                  "path": "$.userInfo.name"
                 },
                 "type":"selectFromRequestInfo"
               },
@@ -59,6 +41,18 @@
                 "variable": "receiptNo",
                 "value": {
                   "path": "$.paymentDetails[0].receiptNumber"
+                }
+              },
+              {
+                "variable": "bill_amendment_adjusted_amount",
+                "value": {
+                  "path": "PDF_STATIC_LABEL_BILL_AMENDMENT_ADJUSTED_AMOUNT"
+                },
+                "type": "label",
+                "localisation": {
+                  "required": true,
+                  "prefix": null,
+                  "module": "rainmaker-common"
                 }
               },
               {
@@ -109,45 +103,9 @@
                 }
               },
               {
-                "variable": "generated_by",
-                "value": {
-                  "path": "PDF_STATIC_LABEL_CONSOLIDATED_RECEIPT_GENERATED_BY"
-                },
-                "type": "label",
-                "localisation":{
-                  "required":true,
-                  "prefix": null,
-                  "module":"rainmaker-common"
-                }
-              },
-              {
-                "variable": "commissioner/eo",
-                "value": {
-                  "path": "PDF_STATIC_LABEL_CONSOLIDATED_RECEIPT_COMMISSIONER_EO"
-                },
-                "type": "label",
-                "localisation":{
-                  "required":true,
-                  "prefix": null,
-                  "module":"rainmaker-common"
-                }
-              },
-              {
                 "variable": "interestAmount",
                 "value": {
                   "path": "$.demandDetails[?(@.taxHeadMasterCode == 'WS_TIME_INTEREST')].taxAmount"
-                }
-              },
-              {
-                "variable": "no_signature",
-                "value": {
-                  "path": "PDF_STATIC_LABEL_CONSOLIDATED_RECEIPT_NO_SIGNATURE"
-                },
-                "type": "label",
-                "localisation":{
-                  "required":true,
-                  "prefix": null,
-                  "module":"rainmaker-common"
                 }
               },
               {
@@ -289,102 +247,6 @@
                 }
               },
               {
-                "variable": "note_id",
-                "value": {
-                  "path": "PDF_STATIC_LABEL_BILL_AMENDMENT_NOTE_ID"
-                },
-                "type": "label",
-                "localisation": {
-                  "required": true,
-                  "prefix": null,
-                  "module": "rainmaker-common"
-                }
-              },
-              {
-                "variable": "note_date",
-                "value": {
-                  "path": "PDF_STATIC_LABEL_BILL_AMENDMENT_NOTE_DATE"
-                },
-                "type": "label",
-                "localisation": {
-                  "required": true,
-                  "prefix": null,
-                  "module": "rainmaker-common"
-                }
-              },
-              {
-                "variable": "against",
-                "value": {
-                  "path": "PDF_STATIC_LABEL_BILL_AMENDMENT_NOTE_AGAINST"
-                },
-                "type": "label",
-                "localisation": {
-                  "required": true,
-                  "prefix": null,
-                  "module": "rainmaker-common"
-                }
-              },
-              {
-                "variable": "adjustment_amount_details",
-                "value": {
-                  "path": "PDF_STATIC_LABEL_BILL_AMENDMENT_NOTE_ADJUSTMENT_AMOUNT_DETAILS"
-                },
-                "type": "label",
-                "localisation": {
-                  "required": true,
-                  "prefix": null,
-                  "module": "rainmaker-common"
-                }
-              },
-              {
-                "variable": "total_amount",
-                "value": {
-                  "path": "PDF_STATIC_LABEL_BILL_AMENDMENT_NOTE_TOTAL_AMOUNT"
-                },
-                "type": "label",
-                "localisation": {
-                  "required": true,
-                  "prefix": null,
-                  "module": "rainmaker-common"
-                }
-              },
-              {
-                "variable": "rs",
-                "value": {
-                  "path": "PDF_STATIC_LABEL_BILL_AMENDMENT_NOTE_RS"
-                },
-                "type": "label",
-                "localisation": {
-                  "required": true,
-                  "prefix": null,
-                  "module": "rainmaker-common"
-                }
-              },
-              {
-                "variable": "box_note",
-                "value": {
-                  "path": "PDF_STATIC_LABEL_BILL_AMENDMENT_NOTE_BOX_NOTE"
-                },
-                "type": "label",
-                "localisation": {
-                  "required": true,
-                  "prefix": null,
-                  "module": "rainmaker-common"
-                }
-              },
-              {
-                "variable": "box_validity",
-                "value": {
-                  "path": "PDF_STATIC_LABEL_BILL_AMENDMENT_NOTE_BOX_VALIDITY"
-                },
-                "type": "label",
-                "localisation": {
-                  "required": true,
-                  "prefix": null,
-                  "module": "rainmaker-common"
-                }
-              },
-              {
                 "variable": "self_declaration",
                 "value": {
                   "path": "PDF_STATIC_LABEL_BILL_AMENDMENT_SELF_DECLARATION"
@@ -490,17 +352,6 @@
                 "localisation": {
                   "required": true,
                   "prefix": null,
-                  "module": "rainmaker-common"
-                }
-              },
-              {
-                "variable": "note_type",
-                "value": {
-                  "path": "$.additionalDetails.noteType"
-                },
-                "localisation": {
-                  "required": true,
-                  "prefix": "PDF_STATIC_LABEL_BILL_AMENDMENT",
                   "module": "rainmaker-common"
                 }
               },

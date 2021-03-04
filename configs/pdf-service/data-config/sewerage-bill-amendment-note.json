@@ -1,5 +1,5 @@
 {
-  "key": "bill-amendment-credit-note",
+  "key": "sw-bill-amendment-credit-note",
   "DataConfigs": {
     "serviceName": "rainmaker-common",
     "version": "1.0.0",
@@ -73,9 +73,9 @@
                 }
               },
               {
-                "variable": "waterTax",
+                "variable": "sewerageInterest",
                 "value": {
-                  "path": "$.demandDetails[?(@.taxHeadMasterCode == 'OM.WATER_CONNECTION/DISCONNECTION_FEES_TAX')].taxAmount"
+                  "path": "$.demandDetails[?(@.taxHeadMasterCode == 'SW_TIME_INTEREST')].taxAmount"
                 }
               },
               {
@@ -88,12 +88,6 @@
                   "required": true,
                   "prefix": null,
                   "module": "rainmaker-common"
-                }
-              },
-              {
-                "variable": "waterCess",
-                "value": {
-                  "path": "$.demandDetails[?(@.taxHeadMasterCode == 'WS_WATER_CESS')].taxAmount"
                 }
               },
               {
@@ -133,12 +127,6 @@
                 }
               },
               {
-                "variable": "interestAmount",
-                "value": {
-                  "path": "$.demandDetails[?(@.taxHeadMasterCode == 'WS_TIME_INTEREST')].taxAmount"
-                }
-              },
-              {
                 "variable": "no_signature",
                 "value": {
                   "path": "PDF_STATIC_LABEL_CONSOLIDATED_RECEIPT_NO_SIGNATURE"
@@ -163,9 +151,21 @@
                 }
               },
               {
-                "variable": "penaltyAmount",
+                "variable": "sewerage_charge",
                 "value": {
-                  "path": "$.demandDetails[?(@.taxHeadMasterCode == 'WS_ADHOC_PENALTY')].taxAmount"
+                  "path": "PDF_STATIC_LABEL_BILL_AMENDMENT_SEWERAGE_CHARGE"
+                },
+                "type": "label",
+                "localisation": {
+                  "required": true,
+                  "prefix": null,
+                  "module": "rainmaker-common"
+                }
+              },
+              {
+                "variable": "seweragePenalty",
+                "value": {
+                  "path": "$.demandDetails[?(@.taxHeadMasterCode == 'SW_TIME_PENALTY')].taxAmount"
                 }
               },
               {
@@ -181,9 +181,9 @@
                 }
               },
               {
-                "variable": "arrearsAmount",
+                "variable": "sewerageCharge",
                 "value": {
-                  "path": "$.demandDetails[?(@.taxHeadMasterCode == 'ARREARS_AMOUNT')].taxAmount"
+                  "path": "$.demandDetails[?(@.taxHeadMasterCode == 'SW_CHARGE')].taxAmount"
                 }
               },
               {
@@ -534,7 +534,7 @@
             "derived": [
               {
                 "variable": "totalAmount",
-                "formula": "{{arrearsAmount}}+{{penaltyAmount}}+{{interestAmount}}+{{waterCess}}+{{waterTax}}"
+                "formula": "{{sewerageCharge}}+{{sewerageInterest}}+{{seweragePenalty}}"
               }
             ]
           },

@@ -1,5 +1,5 @@
 {
-  "key": "bill-amendment-credit-note",
+  "key": "bill-amendment-summary",
   "config": {
     "defaultStyle": {
       "font": "Cambay"
@@ -29,7 +29,7 @@
                     "style": "receipt-logo-header"
                   },
                   {
-                    "text": "{{note_type}}",
+                    "text": "{{serviceType}} department",
                     "style": "receipt-logo-sub-header"
                   }
                 ],
@@ -72,115 +72,52 @@
       },
 
       {
-        "style": "note-info",
         "columns": [
           {
-            "text": [
-              {
-                "text": "{{note_id}} ",
-                "bold": true
-              },
-              {
-                "text": "{{applicationNo}}",
-                "bold": false
-              }
-            ],
-            "alignment": "left"
+            "text": "{{bill_amendment_application}}",
+            "style": "ws-header",
+            "margin": [
+              0,
+              0,
+              10,
+              10
+            ]
           },
           {
-            "text": [
-              {
-                "text": "{{note_date}}",
-                "bold": true
-              },
-              {
-                "text": "{{date}}",
-                "bold": false
-              }
-            ],
+            "text": "{{bill_amendment_application_number}}",
             "alignment": "right",
             "margin": [
               0,
               0,
-              -10,
-              1
+              -50,
+              10
+            ]
+          },
+          {
+            "text": "{{applicationNo}}",
+            "alignment": "right",
+            "bold": true,
+            "margin": [
+              -150,
+              0,
+              -20,
+              0
             ]
           }
+        ],
+        "margin": [
+          -26,
+          10,
+          0,
+          0
         ]
       },
 
       {
-        "style": "header",
         "columns": [
           {
-            "text": [
-              {
-                "text": "{{against}}",
-                "bold": true
-              }
-            ],
-            "alignment": "left"
-          }
-        ]
-      },
-      {
-        "style": "header-1",
-        "text": "{{user-name}}",
-        "alignment": "left"
-      },
-      {
-        "style": "header-1",
-        "text": "{{permanentAddress}}",
-        "alignment": "left"
-      },
-      {
-        "style": "header",
-        "text": " ",
-        "alignment": "left"
-      },
-
-      {
-        "style": "note-info-1",
-        "columns": [
-          {
-            "text": [
-              {
-                "text": "{{adjustment_amount_details}}",
-                "bold": true
-              }
-            ],
-            "alignment": "left"
-          },
-          {
-            "text": [
-              {
-                "text": "{{total_amount}}",
-                "bold": true
-              }
-            ],
-            "alignment": "right",
-            "margin": [
-              0,
-              0,
-              -200,
-              1
-            ]
-          },
-          {
-            "text": [
-              {
-                "text": "{{rs}} {{totalAmount}}",
-                "bold": true
-              }
-            ],
-            "alignment": "right",
-            "fontSize": 20,
-            "margin": [
-              0,
-              25,
-              -10,
-              1
-            ]
+            "text": "{{adjustment_amount_details}}",
+            "style": "header"
           }
         ]
       },
@@ -189,7 +126,7 @@
         "style": "ws-table",
         "table": {
           "widths": [
-            "70%"
+            "102%"
           ],
           "body": [
             [
@@ -197,8 +134,8 @@
                 "table": {
                   "widths": [
                     "10%",
-                    "30%",
-                    "30%"
+                    "45%",
+                    "45%"
                   ],
                   "body": [
                     [
@@ -208,11 +145,11 @@
                       },
                       {
                         "text": "{{tax_heads}}",
-                        "alignment": "left"
+                        "alignment": "center"
                       },
                       {
                         "text": "{{reduced_amount}}",
-                        "alignment": "right"
+                        "alignment": "center"
                       }
                     ],
                     [
@@ -312,34 +249,105 @@
         },
         "layout": {}
       },
-
       {
-        "style": "ws-table-1",
+        "text": "{{demand_revision_basis_details}}",
+        "bold": true,
+        "alignment": "left",
+        "style": "header"
+      },
+      {
+        "style": "ws-table",
         "table": {
           "widths": [
-            "130%"
+            "102%"
           ],
           "body": [
             [
               {
                 "table": {
                   "widths": [
-                    "120%"
+                    "33%",
+                    "33%",
+                    "33%"
                   ],
                   "body": [
                     [
                       {
-                        "text": "{{box_note}}",
-                        "alignment": "left"
+                        "text": "{{demand_revision_basis}}",
+                        "alignment": "center",
+                        "border": [
+                          false,
+                          false,
+                          false,
+                          false
+                        ],
+                        "style": "ws-sub-table"
+                      },
+                      {
+                        "text": "{{court_order_no}}",
+                        "alignment": "center",
+                        "border": [
+                          false,
+                          false,
+                          false,
+                          false
+                        ],
+                        "style": "ws-sub-table"
+                      },
+                      {
+                        "text": "{{with_effect_from}}",
+                        "alignment": "center",
+                        "border": [
+                          false,
+                          false,
+                          false,
+                          false
+                        ],
+                        "style": "ws-sub-table"
+                      }
+                    ],
+                    [
+                      {
+                        "text": "{{demandRevisionBasis}}",
+                        "alignment": "center",
+                        "border": [
+                          false,
+                          false,
+                          false,
+                          false
+                        ],
+                        "style": "ws-sub-table-value"
+                      },
+                      {
+                        "text": "{{courtOrderNo}}",
+                        "alignment": "center",
+                        "border": [
+                          false,
+                          false,
+                          false,
+                          false
+                        ],
+                        "style": "ws-sub-table-value"
+                      },
+                      {
+                        "text": "{{withEffectFrom}}",
+                        "alignment": "center",
+                        "border": [
+                          false,
+                          false,
+                          false,
+                          false
+                        ],
+                        "style": "ws-sub-table-value"
                       }
                     ]
                   ]
                 },
                 "border": [
-                  false,
-                  false,
-                  false,
-                  false
+                  true,
+                  true,
+                  true,
+                  true
                 ]
               }
             ]
@@ -347,55 +355,109 @@
         },
         "layout": {}
       },
-
       {
-        "style": "header",
-        "text": " ",
-        "alignment": "left"
+        "text": "Documents",
+        "style": "header"
       },
-
       {
-        "style": "receipt-approver",
-        "columns": [
-          {
-            "text": [
+        "style": "ws-table",
+        "table": {
+          "widths": [
+            "102%"
+          ],
+          "body": [
+            [
               {
-                "text": "{{generated_by}}: ",
-                "bold": true
-              },
-              {
-                "text": "{{user-name}}",
-                "bold": false
+                "table": {
+                  "widths": [
+                    "33%",
+                    "33%",
+                    "33%"
+                  ],
+                  "body": [
+                    [
+                      {
+                        "text": "{{court_order}}",
+                        "alignment": "center",
+                        "border": [
+                          false,
+                          false,
+                          false,
+                          false
+                        ],
+                        "style": "ws-sub-table"
+                      },
+                      {
+                        "text": "{{self_declaration}}",
+                        "alignment": "center",
+                        "border": [
+                          false,
+                          false,
+                          false,
+                          false
+                        ],
+                        "style": "ws-sub-table"
+                      },
+                      {
+                        "text": "{{past_bills}}",
+                        "alignment": "center",
+                        "border": [
+                          false,
+                          false,
+                          false,
+                          false
+                        ],
+                        "style": "ws-sub-table"
+                      }
+                    ],
+                    [
+                      {
+                        "text": "{{courtOrder}}",
+                        "alignment": "center",
+                        "border": [
+                          false,
+                          false,
+                          false,
+                          false
+                        ],
+                        "style": "ws-sub-table-value"
+                      },
+                      {
+                        "text": "{{selfDeclaration}}",
+                        "alignment": "center",
+                        "border": [
+                          false,
+                          false,
+                          false,
+                          false
+                        ],
+                        "style": "ws-sub-table-value"
+                      },
+                      {
+                        "text": "{{pastBills}}",
+                        "alignment": "center",
+                        "border": [
+                          false,
+                          false,
+                          false,
+                          false
+                        ],
+                        "style": "ws-sub-table-value"
+                      }
+                    ]
+                  ]
+                },
+                "border": [
+                  true,
+                  true,
+                  true,
+                  true
+                ]
               }
-            ],
-            "alignment": "left"
-          },
-          {
-            "text": [
-              {
-                "text": "{{commissioner/eo}}",
-                "bold": true
-              }
-            ],
-            "alignment": "right",
-            "margin": [
-              0,
-              0,
-              -10,
-              1
             ]
-          }
-        ]
-      },
-
-      {
-        "style": "no-signature",
-        "text": "{{no_signature}}"
-      },
-
-      {
-        "style": "no-signature",
-        "text": "{{box_validity}}"
+          ]
+        },
+        "layout": {}
       }
     ],
 
@@ -435,16 +497,6 @@
           -25,
           18,
           -8,
-          10
-        ]
-      },
-      "ws-table-1": {
-        "fontSize": 12,
-        "color": "#000000",
-        "margin": [
-          380,
-          -120,
-          20,
           10
         ]
       },
@@ -488,61 +540,6 @@
           0,
           -10
         ]
-      },
-      "header-1": {
-        "color": "#000000",
-        "bold": false,
-        "fontSize": 12,
-        "fontWeight": 500,
-        "margin": [
-          -25,
-          15,
-          0,
-          -10
-        ]
-      },
-      "receipt-approver": {
-        "fontSize": 12,
-        "bold": true,
-        "margin": [
-          -27,
-          50,
-          -10,
-          0
-        ],
-        "color": "#484848"
-      },
-      "note-info": {
-        "fontSize": 12,
-        "bold": true,
-        "margin": [
-          -27,
-          10,
-          -10,
-          0
-        ],
-        "color": "#000000"
-      },
-      "note-info-1": {
-        "fontSize": 12,
-        "bold": true,
-        "margin": [
-          -27,
-          10,
-          -10,
-          -45
-        ],
-        "color": "#000000"
-      },
-      "no-signature": {
-        "fontSize": 12,
-        "margin": [
-          -27,
-          10,
-          -10,
-          0
-        ],
-        "color": "#484848"
       }
     }
   }
