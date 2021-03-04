@@ -14,10 +14,11 @@ public class RecordService {
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
 	@Transactional
-	public void recordWaterMigration(WaterConnection conn)
+	public void recordWaterMigration(WaterConnection conn,String tenantId)
 	{
 		
 	String qry=	Sqls.waterRecord_insert;
+	qry=qry.replace(":schema",tenantId);
 	qry=qry.replace(":erpid", "'"+conn.getId()+"'");
 	qry=qry.replace(":erpconn", "'"+conn.getConnectionNo()+"'");
 	qry=qry.replace(":erppt", "'"+conn.getPropertyId()+"'");
@@ -30,10 +31,11 @@ public class RecordService {
 		
 	}
 	@Transactional
-	public void updateWaterMigration(WaterConnection conn, String erpId)
+	public void updateWaterMigration(WaterConnection conn, String erpId,String tenantId)
 	{
 		
 	String qry=	Sqls.waterRecord_update;
+	qry=qry.replace(":schema",tenantId);
 	qry=qry.replace(":erpid", "'"+erpId+"'");
 	qry=qry.replace(":status", "'Saved'");
 	qry=qry.replace(":tenantId", "'"+conn.getTenantId()+"'");

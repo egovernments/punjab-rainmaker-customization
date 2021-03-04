@@ -88,27 +88,19 @@ public class ConnectionService {
 		for (String json : queryForList) {
 
 			try {
-
-				// IS_EXTERNAL_WORKFLOW_ENABLED
-				data = objectMapper.readValue(json, Map.class);
-
-				// WaterConnection connection = mapWaterConnection(data);
-				connection = objectMapper.readValue(json, WaterConnection.class);
-				/**
-				 * Setting If consumer number is null then, assigning
-				 * application number of ERP.
-				 */
+ 				data = objectMapper.readValue(json, Map.class);
+ 				connection = objectMapper.readValue(json, WaterConnection.class);
 				String connectionNo = connection.getConnectionNo() != null ? connection.getConnectionNo()
 						: (String) data.get("applicationnumber");
 				connection.setConnectionNo(connectionNo);
 				log.info("\n\n initiating migration for  " + connection.getMobilenumber());
-				log.info("mobile number : " + connection.getMobilenumber());
-				log.info("getApplicantname ; " + connection.getApplicantname());
-				log.info("Guardian name :" + connection.getGuardianname());
-				log.info("connectionNo; " + connection.getConnectionNo());
-				log.info("Connection Category : " + connection.getConnectionCategory());
-				log.info("Connection Type :" + connection.getConnectionType());
-				log.info("ConnectionDetail id :" + connection.getId());
+				log.debug("mobile number : " + connection.getMobilenumber());
+				log.debug("getApplicantname ; " + connection.getApplicantname());
+				log.debug("Guardian name :" + connection.getGuardianname());
+				log.debug("connectionNo; " + connection.getConnectionNo());
+				log.debug("Connection Category : " + connection.getConnectionCategory());
+				log.debug("Connection Type :" + connection.getConnectionType());
+				log.debug("ConnectionDetail id :" + connection.getId());
 
 				// ToDo: populate connectionHolders
 
@@ -133,15 +125,7 @@ public class ConnectionService {
 
 				address = (Address) jdbcTemplate.queryForObject(addressQuery, new BeanPropertyRowMapper(Address.class));
 				
-				
-
- 	
-				
-				
-				
-				
-				
-				recordService.recordWaterMigration(connection);
+				recordService.recordWaterMigration(connection,tenantId);
 				
 				
 				if(connection.getMobilenumber()==null || connection.getMobilenumber().isEmpty())
@@ -172,7 +156,7 @@ public class ConnectionService {
 				//connection.setSource();
  
 				connection.setTenantId(requestInfo.getUserInfo().getTenantId());
-				connection.setProcessInstance(ProcessInstance.builder().action("INITIATE").build());
+				connection.setProcessInstance(ProcessInstance.builder().action("SUBMIT").build());
 
 				WaterConnectionRequest waterRequest = new WaterConnectionRequest();
 
@@ -182,7 +166,7 @@ public class ConnectionService {
 				StringBuilder additionalDetail=new StringBuilder();
 				Map addtionals=new HashMap<String,String>();
 				addtionals.put("locality",localityCode);
-				additionalDetail.append("\"locality\":").append("\"").append(localityCode).append("\"");
+				 
 				
 				/*String billingType = (String) data.get("billingType");
 				additionalDetail.append(",").append("\"billingType\":").append("\"").append(billingType).append("\"");
@@ -219,13 +203,11 @@ public class ConnectionService {
 				Property property = propertyService.findProperty(waterRequest, data,tenantId);
 				if (property == null) {
 					recordService.recordError("water",tenantId, "Error in while find or create property:", connection.getId());
+					/*property=new Property();
+					property.setId("cb2ab407-7536-4ed1-a4ec-d4edc10f96c1");*/
 					continue;
 				}
 				connection.setPropertyId(property.getId());
-
-				String ss = "{" + requestInfo + ", \"waterConnection\": " + waterRequest + " }";
-
-				log.info("request: " + ss);
 
 				String response = null;
 				try {
@@ -237,7 +219,7 @@ public class ConnectionService {
 					continue;
 				}
 
-				log.info("Response=" + response);
+				log.debug("Response=" + response);
 
 				WaterConnectionResponse waterResponse = objectMapper.readValue(response, WaterConnectionResponse.class);
 
@@ -246,7 +228,7 @@ public class ConnectionService {
 						&& !waterResponse.getWaterConnection().isEmpty()) {
 
 					wtrConnResp = waterResponse.getWaterConnection().get(0);
-					recordService.updateWaterMigration(wtrConnResp, connection.getId());
+					recordService.updateWaterMigration(wtrConnResp, connection.getId(),tenantId);
 					String consumerCode = wtrConnResp.getConnectionNo() != null ? wtrConnResp.getConnectionNo()
 							: wtrConnResp.getApplicationNo();
 
@@ -263,7 +245,7 @@ public class ConnectionService {
 						}
 
 						recordService.setStatus("water",tenantId, "Demand_Created", connection.getId());
-						log.info("waterResponse" + waterResponse);
+						log.debug("waterResponse" + waterResponse);
 						log.info("completed for " + connection.getMobilenumber());
 
 					}
@@ -314,9 +296,9 @@ public class ConnectionService {
 					new Object[] { code }, String.class);
 		} catch (DataAccessException e) {
 			log.error("digit Location code is not mapped for " + code);
-			//digitcode = "ALOC3"; //for Amritsar
+			digitcode = "ALOC1"; //for Amritsar
 			//digitcode = "SUN158"; //for Sunam
-			digitcode = "NSR_112"; //for Nawashahr
+			//digitcode = "NSR_112"; //for Nawashahr
 		}
 		log.info("returning  " + digitcode);
 		return digitcode;
@@ -346,27 +328,18 @@ public class ConnectionService {
 
 				Map data = objectMapper.readValue(json, Map.class);
 				swConnection = objectMapper.readValue(json, SewerageConnection.class);
-				// connection.setApplicantAddress(address);
-
 				swConnection.setTenantId(requestInfo.getUserInfo().getTenantId());
-				swConnection.setProcessInstance(ProcessInstance.builder().action("INITIATE").build());
-
+				swConnection.setProcessInstance(ProcessInstance.builder().action("SUBMIT").build());
 				String connectionNo = swConnection.getConnectionNo() != null ? swConnection.getConnectionNo()
 						: (String) data.get("applicationnumber");
 				swConnection.setConnectionNo(connectionNo);
-				
-				log.info("mobile number : " + swConnection.getMobilenumber());
-				log.info("getApplicantname ; " + swConnection.getApplicantname());
-				log.info("connectionNo; " + swConnection.getConnectionNo());
-				log.info("Connection Category : " + swConnection.getConnectionCategory());
-				log.info("Connection Type :" + swConnection.getConnectionType());
-				log.info("Connection id :" + swConnection.getId());
-				
-				
-			
-				
+				log.info("initiating for mobile number : " + swConnection.getMobilenumber());
+				log.debug("getApplicantname ; " + swConnection.getApplicantname());
+				log.debug("connectionNo; " + swConnection.getConnectionNo());
+				log.debug("Connection Category : " + swConnection.getConnectionCategory());
+				log.debug("Connection Type :" + swConnection.getConnectionType());
+				log.debug("Connection id :" + swConnection.getId());
 				recordService.recordSewerageMigration(swConnection,tenantId);
-				
 				
 				if(swConnection.getMobilenumber()==null || swConnection.getMobilenumber().isEmpty())
 				{
@@ -399,10 +372,7 @@ public class ConnectionService {
 				address.setLocality(locality);
 				swConnection.setApplicantAddress(address);
 				SewerageConnectionRequest sewerageRequest = new SewerageConnectionRequest();
-
-
-				
-
+ 
 				sewerageRequest.setSewerageConnection(swConnection);
 				sewerageRequest.setRequestInfo(requestInfo);
 				Property property = propertyService.findProperty(sewerageRequest, json,tenantId);
@@ -428,12 +398,12 @@ public class ConnectionService {
 					continue;
 				}
 
-				log.info("Response=" + response);
+				log.debug("Response=" + response);
 
 				SewerageConnectionResponse sewerageResponse = objectMapper.readValue(response,
 						SewerageConnectionResponse.class);
 
-				log.info("Sewerage Response=" + sewerageResponse);
+				//log.debug("Sewerage Response=" + sewerageResponse);
 
 				SewerageConnection srgConnResp = null;
 

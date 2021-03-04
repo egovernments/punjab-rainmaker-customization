@@ -100,7 +100,7 @@ public class CollectionService {
 					}
 
 					recordService.updateWtrCollMigration(payment,tenantId);
-					log.info("waterResponse" + response); 
+					log.debug("waterResponse" + response); 
 				}
 
 
@@ -121,7 +121,7 @@ public class CollectionService {
 			RequestInfoWrapper request = RequestInfoWrapper.builder().requestInfo(requestInfo).build();
 
 			String response = restTemplate.postForObject(url , request, String.class);
-			log.info("Bill Request URL: " + url + "Bill RequestInfo: " + request + "Bill Response: " + response);
+			log.debug("Bill Request URL: " + url + "Bill RequestInfo: " + request + "Bill Response: " + response);
 			BillResponseV2 waterResponse=	objectMapper.readValue(response, BillResponseV2.class);
 
 			return waterResponse.getBill();
@@ -182,7 +182,7 @@ public class CollectionService {
 					}
 
 					recordService.updateSwgCollMigration(payment);
-					log.info("sewerageResponse" + response); 
+					log.debug("sewerageResponse" + response); 
 				}
 
 

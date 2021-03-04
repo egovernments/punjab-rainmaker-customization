@@ -89,6 +89,8 @@ public class Property {
   @JsonProperty("unit")
   private Unit unit = null;
   
+  private String acknowldgementNumber=null;
+  
   	@JsonProperty("units")
 	private List<Unit> units;
 
@@ -101,8 +103,13 @@ public class Property {
   
   @JsonProperty("usageCategory")
   private String usageCategory = null;
+  
+  @JsonProperty("subUsageCategory")
+  private String subUsageCategory = "";
 
-
+@JsonProperty("workflow")
+private ProcessInstance workflow;
+  
   public Property id(String id) {
     this.id = id;
     return this;
@@ -602,6 +609,30 @@ public String getUuid() {
 
 public void setUuid(String uuid) {
 	this.uuid = uuid;
+}
+
+public ProcessInstance getWorkflow() {
+	return workflow;
+}
+
+public void setWorkflow(ProcessInstance workflow) {
+	this.workflow = workflow;
+}
+
+public String getAcknowldgementNumber() {
+	return acknowldgementNumber;
+}
+
+public void setAcknowldgementNumber(String acknowldgementNumber) {
+	this.acknowldgementNumber = acknowldgementNumber;
+}
+
+public String getSubUsageCategory() {
+	return subUsageCategory;
+}
+
+public void setSubUsageCategory(String subUsageCategory) {
+	this.subUsageCategory = subUsageCategory;
 }
 
 }

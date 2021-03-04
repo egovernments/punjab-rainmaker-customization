@@ -88,7 +88,7 @@ public class Sqls {
 			+ " usage.id=conndetails.usagetype and block.id=conn.block and locality.id=conn.locality and zone.id=conn.zone and"
 			+ " conndetails.propertytype=proptype.id and conndetails.category=wtrctgy.id and ownerinfo.connection=conn.id "
 			+ " and usr.id=ownerinfo.owner and address.id=conn.address and status.id=conndetails.statusid   "
-			+ " and conndetails.id not in (select erpid::bigint from egwtr_migration where status in ('Saved','Demand_Created','Incompatible' ) ) order by conndetails.id ";   
+			+ " and conndetails.id not in (select erpid::bigint from egwtr_migration where status in ('initiated','Saved','Demand_Created','Incompatible' ) ) order by conndetails.id ";   
 	
 	
 	//public static final String ledgerId= "Select ledgerid as ledgerId from  egwtr_stg_connection;";
@@ -106,11 +106,11 @@ public class Sqls {
 			+ " ( erpid varchar(64),erpconn varchar(64) ,digitconn varchar(64) ,erppt varchar(64),digitpt varchar(64),status varchar(64),tenantId varchar(64),additiondetails varchar(1000),errorMessage varchar(4000) );"
 			+ "";
 	
-	public static final String waterRecord_insert="insert into egwtr_migration "
+	public static final String waterRecord_insert="insert into :schema.egwtr_migration "
 			+ "(erpid ,erpconn  ,digitconn  ,erppt ,digitpt ,status ,tenantId ,additiondetails ) values (:erpid,:erpconn,:digitconn,:erppt,:digitpt,:status"
 			+ ", :tenantId,:addtionaldetails);";
 	
-	public static final String waterRecord_update="update  egwtr_migration  "+
+	public static final String waterRecord_update="update  :schema.egwtr_migration  "+
 			"set digitconn=:digitconn , digitpt=:digitpt,status=:status where erpid=:erpid ";
 		
 	public static final String address="select id,housenobldgapt as plotno,landmark,citytownvillage as city,district,arealocalitysector as region,state,country,pincode, buildingName,streetroadline as street from :schema_tenantId.eg_address where id=:id ;";
@@ -140,7 +140,10 @@ public class Sqls {
 			+ "  where moduletype='ReceiptHeader' and code not in ('PENDING','FAILED')) INNER JOIN egwtr_connection wtrcon ON "
 			+ " ch.consumercode=wtrcon.consumercode INNER JOIN egwtr_connection_owner_info connowner ON wtrcon.id=connowner.connection "
 			+ " INNER JOIN egwtr_connectiondetails conndetails ON wtrcon.id=conndetails.connection INNER JOIN eg_user owner "
-			+ " ON owner.id=connowner.owner GROUP BY it.type,ih.transactionnumber, ih.transactiondate, ch.payeename, owner.mobilenumber, "
+			+ " ON owner.id=connowner.owner"
+			+ " and conndetails.id in (select erpid::bigint from egwtr_migration where status in ('Demand_Created') )"
+			+ " and conndetails.id not in (select erpid::bigint from egwtr_cl_migration )"
+			+ " GROUP BY it.type,ih.transactionnumber, ih.transactiondate, ch.payeename, owner.mobilenumber, "
 			+ " owner.name, ch.consumercode, owner.emailid, owner.id,ch.totalamount, ih.instrumentdate, ih.instrumentNumber,status.code"
 			+ " UNION ALL select json_build_object( 'paymentMode','cash', 'paymentStatus', 'New', 'businessService', 'WS.ONE_TIME_FEE', "
 			+ " 'transactionNumber',ih.transactionnumber, 'transactionDate', (select extract(epoch from ih.transactiondate) * 1000), 'paidBy',"
@@ -157,7 +160,8 @@ public class Sqls {
 			+ " ON ch.consumercode=conndetails.applicationnumber INNER JOIN egwtr_connection wtrcon ON wtrcon.id=conndetails.connection "
 			+ " INNER JOIN egwtr_connection_owner_info connowner ON wtrcon.id=connowner.connection INNER JOIN eg_user owner ON "
 			+ " owner.id=connowner.owner "
-			+ " and conndetails.id in (select erpid::bigint from egwtr_migration where status in ('Demand_Created') )"
+			+ " and conndetails.id in (select erpid::bigint from egswtax_migration where status in ('Demand_Created') )"
+			+ " and conndetails.id not in (select erpid::bigint from egwtr_cl_migration )"
 			+ " GROUP BY it.type,ih.transactionnumber, ih.transactiondate, ch.payeename, owner.mobilenumber, "
 			+ " owner.name, ch.consumercode, owner.emailid, owner.id,ch.totalamount, ih.instrumentdate, ih.instrumentNumber,status.code,"
 			+ " conndetails.applicationnumber, wtrcon.consumercode ";
@@ -223,7 +227,7 @@ public class Sqls {
 			+ "locality.id=conn.locality and zone.id=conn.zone and\n"
 			+ "ownerinfo.connection=conn.id and usr.id=ownerinfo.owner and\n"
 			+ " address.id=conn.address and status.id=appdetails.status  "
-			+ " and conndetails.id not in (select erpid::bigint from egswtax_migration where status in ('pushed','Saved','saved','Demand_Created','Incompatible' ) ) order by conndetails.id;";
+			+ " and conndetails.id not in (select erpid::bigint from egswtax_migration where status in ('initiated','Saved','Demand_Created','Incompatible' ) ) order by conndetails.id;";
 	
 	
 	
