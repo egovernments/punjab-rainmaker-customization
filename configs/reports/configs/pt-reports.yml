@@ -4711,6 +4711,7 @@ ReportDefinitions:
         )
         select * from props
         where propertytaxuniqueid not in (select propertyid from prop2019 where oldpropertyid in (select concat('RID',previous_returnid) from ikon_2020_21_non_migrated_records where tenantid=$tenantid))
+        and   propertytaxuniqueid not in (select propertyid from ikon_amritsar_manual_ptids)
 
 
 - reportName: ULBDEFAULTERPTREPORT_MINI_STATE_V2
