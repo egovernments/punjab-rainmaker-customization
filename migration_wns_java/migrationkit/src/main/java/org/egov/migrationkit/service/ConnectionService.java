@@ -145,69 +145,85 @@ public class ConnectionService {
 					continue;
 				}
 
+				//connection.setDocuments(documents);
 				locality.setCode(localityCode);
 				address.setLocality(locality);
 				connection.setStatus(StatusEnum.Active);
 				// connection.setConnectionNo((String)
 				// data.get("consumercode"));
 				connection.setApplicationStatus("CONNECTION_ACTIVATED");
+				//connection.setActualPipeSize(pipeSize);
 
 				connection.setApplicantAddress(address);
 				//connection.setSource();
- 
+				connection.setApplicationType("NEW_WATER_CONNECTION");
 				connection.setTenantId(requestInfo.getUserInfo().getTenantId());
-				connection.setProcessInstance(ProcessInstance.builder().action("SUBMIT").build());
-
+				ProcessInstance workflow = new ProcessInstance();
+				workflow.setBusinessService("NewWS1");
+				workflow.setAction("ACTIVATE_CONNECTION");
+				workflow.setTenantId(connection.getTenantId());
+				workflow.setModuleName("ws-services");
+				//workflow.setBusinessId(property2.getPropertyId());
+				connection.setProcessInstance(workflow);
+				
 				WaterConnectionRequest waterRequest = new WaterConnectionRequest();
 
 				waterRequest.setWaterConnection(connection);
 				waterRequest.setRequestInfo(requestInfo);
 				connection.setDocuments(getDocuments(waterRequest, data));
 				StringBuilder additionalDetail=new StringBuilder();
-				Map addtionals=new HashMap<String,String>();
+				Map addtionals=new HashMap<String,String>(); 
 				addtionals.put("locality",localityCode);
-				 
+				addtionals.put("billingType",(String) data.get("billingType"));
+				addtionals.put("billingAmount",(String) data.get("billingAmount"));
+				addtionals.put("estimationLetterDate",(String) data.get("estimationLetterDate"));
+				addtionals.put("connectionCategory",(String) data.get("connectionCategory"));
+				addtionals.put("meterId",(String) data.get("meterId"));
+				addtionals.put("ledgerId",(String) data.get("ledgerId"));
+				addtionals.put("pipeSize",(Double) data.get("pipeSize"));
+				addtionals.put("estimationFileStoreId",(String) data.get("estimationFileStoreId"));
+				addtionals.put("meterMake",(String) data.get("meterMake"));
 				
-				/*String billingType = (String) data.get("billingType");
-				additionalDetail.append(",").append("\"billingType\":").append("\"").append(billingType).append("\"");
-				
-				String billingAmount = (String) data.get("billingAmount");
-				additionalDetail.append(",").append("\"billingAmount\":").append("\"").append(billingAmount).append("\"");
-				
-				String estimationLetterDate = (String) data.get("estimationLetterDate");
-				additionalDetail.append(",").append("\"estimationLetterDate\":").append("\"").append(estimationLetterDate).append("\"");
-				
-				String estimationFileStoreId = (String) data.get("estimationFileStoreId");
-				additionalDetail.append(",").append("\"estimationFileStoreId\":").append("\"").append(estimationFileStoreId).append("\"");
-				
-				String averageMake = (String) data.get("averageMake");
-				additionalDetail.append(",").append("\"averageMake\":").append("\"").append(averageMake).append("\"");
-				
-				String initialMeterReading = (String) data.get("initialMeterReading");
-				additionalDetail.append(",").append("\"initialMeterReading\":").append("\"").append(initialMeterReading).append("\"");
-				
-				String meterMake = (String) data.get("meterMake");
-				additionalDetail.append(",").append("\"meterMake\":").append("\"").append(meterMake).append("\"");
-				
-				String othersFee = (String) data.get("othersFee");
-				additionalDetail.append(",").append("\"othersFee\":").append("\"").append(othersFee).append("\"");
-				
-				String ledgerId = (String) data.get("ledgerId");
-				additionalDetail.append(",").append("\"ledgerId\":").append("\"").append(ledgerId).append("\"");
-				*/
-				
+				if(data.get("averageMeterReading")!=null)
+				{
+				try {
+					Integer	averageMeterReading = (Integer) data.get("averageMeterReading");
+
+					addtionals.put("averageMeterReading",Double.valueOf(averageMeterReading));
+				} catch (Exception e) {
+					Double	averageMeterReading = (Double) data.get("averageMeterReading");
+					addtionals.put("averageMeterReading",averageMeterReading);
+					 
+				}
+				}else
+					addtionals.put("averageMeterReading",0);
+				if(data.get("initialMeterReading")!=null)
+				{
+				try {
+					Integer	initialMeterReading = (Integer) data.get("initialMeterReading");
+
+					addtionals.put("initialMeterReading",Double.valueOf(initialMeterReading));
+				} catch (Exception e) {
+					Double	initialMeterReading = (Double) data.get("initialMeterReading");
+					addtionals.put("initialMeterReading",initialMeterReading);
+					 
+				}
+				}else
+					addtionals.put("initialMeterReading",0);
 				
 				
 				connection.setAdditionalDetails(addtionals);
 
 				Property property = propertyService.findProperty(waterRequest, data,tenantId);
 				if (property == null) {
-					recordService.recordError("water",tenantId, "Error in while find or create property:", connection.getId());
+					//recordService.recordError("water",tenantId, "Error in while find or create property:", connection.getId());
 					/*property=new Property();
 					property.setId("cb2ab407-7536-4ed1-a4ec-d4edc10f96c1");*/
 					continue;
 				}
 				connection.setPropertyId(property.getId());
+				connection.setOldApplication(true);
+				connection.setOldConnectionNo(connectionNo);
 
 				String response = null;
 				try {
@@ -229,7 +245,7 @@ public class ConnectionService {
 
 					wtrConnResp = waterResponse.getWaterConnection().get(0);
 					log.info("status"+wtrConnResp.getStatus() +" application status" +wtrConnResp.getApplicationStatus());
-					recordService.updateWaterMigration(wtrConnResp, connection.getId(),tenantId);
+					recordService.updateWaterMigration(wtrConnResp, connection.getId(),tenantId,requestInfo.getUserInfo().getUuid());
 					String consumerCode = wtrConnResp.getConnectionNo() != null ? wtrConnResp.getConnectionNo()
 							: wtrConnResp.getApplicationNo();
 
@@ -238,7 +254,7 @@ public class ConnectionService {
 							property.getOwners().get(0));
 					if (!demandRequestList.isEmpty()) {
 
-						Boolean isDemandCreated = demandService.saveDemand(requestInfo, demandRequestList,connection.getId(),tenantId);
+						Boolean isDemandCreated = demandService.saveDemand(requestInfo, demandRequestList,connection.getId(),tenantId,"water");
 						if (isDemandCreated) {
 							Boolean isBillCreated = demandService.fetchBill(demandRequestList, requestInfo);
 							log.info("Bill created" + isBillCreated + " isDemandCreated" + isDemandCreated);
@@ -299,7 +315,9 @@ public class ConnectionService {
 			log.error("digit Location code is not mapped for " + code);
 			//digitcode = "ALOC1"; //for Amritsar
 			//digitcode = "SUN158"; //for Sunam
-			digitcode = "NSR_112"; //for Nawashahr
+			//digitcode = "NSR_112"; //for Nawashahr
+			//digitcode="LC-137"; // for Fazilka
+			digitcode="MH38"; //for mohali
 		}
 		log.debug("returning  " + digitcode);
 		return digitcode;
@@ -330,7 +348,7 @@ public class ConnectionService {
 				Map data = objectMapper.readValue(json, Map.class);
 				swConnection = objectMapper.readValue(json, SewerageConnection.class);
 				swConnection.setTenantId(requestInfo.getUserInfo().getTenantId());
-				swConnection.setProcessInstance(ProcessInstance.builder().action("SUBMIT").build());
+			 
 				String connectionNo = swConnection.getConnectionNo() != null ? swConnection.getConnectionNo()
 						: (String) data.get("applicationnumber");
 				swConnection.setConnectionNo(connectionNo);
@@ -374,6 +392,10 @@ public class ConnectionService {
 				swConnection.setApplicantAddress(address);
 				SewerageConnectionRequest sewerageRequest = new SewerageConnectionRequest();
  
+				Map addtionals=new HashMap<String,String>(); 
+				addtionals.put("locality",localityCode);
+				swConnection.setAdditionalDetails(addtionals);
+				
 				sewerageRequest.setSewerageConnection(swConnection);
 				sewerageRequest.setRequestInfo(requestInfo);
 				Property property = propertyService.findProperty(sewerageRequest, json,tenantId);
@@ -386,6 +408,15 @@ public class ConnectionService {
 				}
 				swConnection.setPropertyId(property.getId());
 				swConnection.setDocuments(getDocuments(null, data));
+				
+				swConnection.setTenantId(requestInfo.getUserInfo().getTenantId());
+				ProcessInstance workflow = new ProcessInstance();
+				workflow.setBusinessService("NewSW1");
+				workflow.setAction("ACTIVATE_CONNECTION");
+				workflow.setTenantId(swConnection.getTenantId());
+				workflow.setModuleName("sw-services");
+				//workflow.setBusinessId(property2.getPropertyId());
+				swConnection.setProcessInstance(workflow);
 
 				String response = null;
 				try {
@@ -416,7 +447,7 @@ public class ConnectionService {
 
 					srgConnResp = sewerageResponse.getSewerageConnections().get(0);
 					
-					  recordService.updateSewerageMigration(srgConnResp,swConnection.getId(),tenantId);
+					  recordService.updateSewerageMigration(srgConnResp,swConnection.getId(),tenantId,requestInfo.getUserInfo().getUuid());
 
 					String consumerCode = srgConnResp.getConnectionNo() != null ? srgConnResp.getConnectionNo()
 							: srgConnResp.getApplicationNo();
@@ -429,7 +460,7 @@ public class ConnectionService {
 
 					if (!demandRequestList.isEmpty()) {
 
-						Boolean isDemandCreated = demandService.saveDemand(requestInfo, demandRequestList,swConnection.getId(),tenantId);
+						Boolean isDemandCreated = demandService.saveDemand(requestInfo, demandRequestList,swConnection.getId(),tenantId,"sewerage");
 						if (isDemandCreated) {
 							Boolean isBillCreated = demandService.fetchBill(demandRequestList, requestInfo);
 							recordService.setStatus("sewerage",tenantId, "Demand_Created", swConnection.getId());

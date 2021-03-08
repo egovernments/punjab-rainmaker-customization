@@ -48,6 +48,9 @@ public class Connection {
 
 	@JsonProperty("applicationStatus")
 	private String applicationStatus = null;
+	
+	@JsonProperty("oldApplication")
+	private Boolean oldApplication = false;
 
 	/**
 	 * Gets or Sets status

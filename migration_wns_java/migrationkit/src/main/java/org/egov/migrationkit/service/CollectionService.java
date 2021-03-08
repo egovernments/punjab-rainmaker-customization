@@ -63,7 +63,9 @@ public class CollectionService {
 		for (String json : queryForList) {
 
 			try {
+			
 				CollectionPayment payment = objectMapper.readValue(json, CollectionPayment.class);
+				log.info("initiating  for"+payment.getConsumerCode());
 				payment.setTenantId(digitTenantId);
 				payment.getPaymentDetails().get(0).setTenantId(digitTenantId);
 				recordService.recordWtrCollMigration(payment,tenantId);

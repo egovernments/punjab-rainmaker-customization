@@ -61,7 +61,7 @@ public class PropertyService {
 
 		Property property = null;
 		try {
-			//property = searchPtRecord(wcr, data, tenantId);
+			property = searchPtRecord(wcr, data, tenantId);
 
 			if (property == null) {
 				log.debug("Propery not found creating new property");
@@ -121,6 +121,7 @@ public class PropertyService {
 		owner.setMobileNumber(conn.getMobilenumber());
 		owner.setFatherOrHusbandName(conn.getGuardianname());
 		owner.setOwnerType("NONE");
+		
 		property.creationReason(CreationReason.CREATE);
 		log.info("conn.getPropertyType() :" + conn.getPropertyType());
 		if (conn.getPropertyType() != null) {
@@ -135,6 +136,7 @@ public class PropertyService {
 
 		property.setTenantId(conn.getTenantId());
 		prequest.setProperty(property);
+		 
 
 		// String response2= restTemplate.postForObject(host + "/" +
 		// ptcreatehurl, prequest, String.class);
@@ -142,13 +144,14 @@ public class PropertyService {
 		PropertyResponse res = restTemplate.postForObject(host + "/" + ptcreatehurl, prequest, PropertyResponse.class);
 
 		 log.info(res.getProperties().get(0).getSource() +"   "+res.getProperties().get(0).getAcknowldgementNumber());
+		//return res.getProperties().get(0);
 
 		Property property2 = res.getProperties().get(0);
 		property2.setSource(Source.WATER_CHARGES);
 		ProcessInstance workflow = new ProcessInstance();
 		workflow.setBusinessService("PT.CREATEWITHWNS");
 		workflow.setAction("SUBMIT");
-		workflow.setTenantId(tenantId);
+		workflow.setTenantId(conn.getTenantId());
 		workflow.setModuleName("PT");
 		workflow.setBusinessId(property2.getPropertyId());
 		property2.setWorkflow(workflow);
@@ -156,7 +159,7 @@ public class PropertyService {
 		PropertyResponse res2 = restTemplate.postForObject(host + "/" + ptupdatehurl, prequest, PropertyResponse.class);
 		log.info("newly created pt"+res2.getProperties().get(0).getPropertyId() +" id    "+res2.getProperties().get(0).getStatus());
 		return res2.getProperties().get(0);
-
+ 
 	}
 
 	private Property createSProperty(SewerageConnectionRequest swg, String json, String tenantId) {
@@ -207,7 +210,7 @@ public class PropertyService {
 			ProcessInstance workflow = new ProcessInstance();
 			workflow.setBusinessService("PT.CREATEWITHWNS");
 			workflow.setAction("SUBMIT");
-			workflow.setTenantId(tenantId);
+			workflow.setTenantId(conn.getTenantId());
 			workflow.setModuleName("PT");
 			workflow.setBusinessId(property2.getPropertyId());
 			property2.setWorkflow(workflow);
@@ -218,7 +221,7 @@ public class PropertyService {
 		} catch (RestClientException e) {
 			recordService.recordError("sewerage", tenantId, e.getMessage(), conn.getId());
 		}
-
+		
 		return null;
 
 	}
@@ -241,14 +244,14 @@ public class PropertyService {
 
 		// && property.getStatus().equals(Status.ACTIVE) not used
 		if (response != null && response.getProperties() != null && response.getProperties().size() >= 1) {
-			log.info("found properties" + response.getProperties().size());
+			log.debug("found properties" + response.getProperties().size());
 			for (Property property : response.getProperties()) {
-				log.info("status" + property.getPropertyId() + "---" + property.getStatus() + " Usage :"
+				log.debug("status" + property.getPropertyId() + "---" + property.getStatus() + " Usage :"
 						+ property.getUsageCategory());
 
 				for (OwnerInfo owner : property.getOwners()) {
-					log.info("owner.getName() : " + owner.getName());
-					log.info("owner.getFatherOrHusbandName() : " + owner.getFatherOrHusbandName());
+					log.debug("owner.getName() : " + owner.getName());
+					log.debug("owner.getFatherOrHusbandName() : " + owner.getFatherOrHusbandName());
 
 					if (owner.getName().equalsIgnoreCase(conn.getWaterConnection().getApplicantname()) && owner
 							.getFatherOrHusbandName().equalsIgnoreCase(conn.getWaterConnection().getGuardianname())
@@ -257,7 +260,8 @@ public class PropertyService {
 
 						recordService.recordError("water", tenantId, "Found Property in digit :" + property.getId(),
 								conn.getWaterConnection().getId());
-
+						log.info("no  property found in digit system for mobilenumber--"
+								+ conn.getWaterConnection().getMobilenumber());
 						return property;
 					}
 

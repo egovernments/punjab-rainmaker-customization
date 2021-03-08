@@ -1,5 +1,7 @@
 package org.egov.migrationkit.service;
 
+import java.util.UUID;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
@@ -31,7 +33,7 @@ public class RecordService {
 		
 	}
 	@Transactional
-	public void updateWaterMigration(WaterConnection conn, String erpId,String tenantId)
+	public void updateWaterMigration(WaterConnection conn, String erpId,String tenantId,String uuid)
 	{
 		
 	String qry=	Sqls.waterRecord_update;
@@ -43,11 +45,27 @@ public class RecordService {
 	qry=qry.replace(":digitconn", "'"+connNo+"'");
 	qry=qry.replace(":digitpt","'"+conn.getPropertyId()+"'");
 	jdbcTemplate.execute(qry);
+	
+	String sql2=Sqls.ProcessContent;
+	sql2=sql2.replaceAll(":id",UUID.randomUUID().toString());
+	sql2=sql2.replaceAll(":tenantId", conn.getTenantId());
+	sql2=sql2.replaceAll(":businessService", "NewWS1");
+	sql2=sql2.replaceAll(":businessId", conn.getApplicationNo());
+	
+	sql2=sql2.replaceAll(":moduleName", "ws-services");
+	sql2=sql2.replaceAll(":userUUID", uuid);
+	long epoch=System.currentTimeMillis();
+	sql2=sql2.replaceAll(":epocnow", String.valueOf(epoch));
+	
+	String sql3=Sqls.PROCESSINSERT;
+	sql3=sql3.replaceAll(":val",sql2 );
+	sql3=sql3.replaceAll(":schema",tenantId ); 
+	jdbcTemplate.execute(sql3);
 		
 	}
 	
 	@Transactional
-	public void updateSewerageMigration(SewerageConnection conn,String erpId,String tenantId)
+	public void updateSewerageMigration(SewerageConnection conn,String erpId,String tenantId,String uuid)
 	{
 		
 	String qry=	Sqls.sewerageRecord_update;
@@ -58,7 +76,23 @@ public class RecordService {
 	qry=qry.replace(":digitconn", conn.getConnectionNo()==null?"'null'":"'"+conn.getConnectionNo()+"'");
 	qry=qry.replace(":digitpt","'"+conn.getPropertyId()+"'");
 	jdbcTemplate.execute(qry);
-		
+	String sql2=Sqls.ProcessContent;
+	sql2=sql2.replaceAll(":id",UUID.randomUUID().toString());
+	sql2=sql2.replaceAll(":tenantId", conn.getTenantId());
+	sql2=sql2.replaceAll(":businessService", "NewSW1");
+	sql2=sql2.replaceAll(":businessId", conn.getApplicationNo());
+	sql2=sql2.replaceAll(":moduleName", "sw-services");
+	sql2=sql2.replaceAll(":userUUID", uuid);
+	long epoch=System.currentTimeMillis();
+	sql2=sql2.replaceAll(":epocnow", String.valueOf(epoch));
+	
+	String sql3=Sqls.PROCESSINSERT;
+	sql3=sql3.replaceAll(":schema",tenantId );
+	 
+	sql3=sql3.replaceAll(":val",sql2 );
+	 
+	jdbcTemplate.execute(sql3);
+	
 	}
 	
 	@Transactional
@@ -149,8 +183,10 @@ public class RecordService {
 	{
 		
 	jdbcTemplate.execute("set search_path to " + tenantId);
+	
 	//jdbcTemplate.execute("drop table if exists egwtr_migration" + tenantId);
 	jdbcTemplate.execute(Sqls.waterRecord_table);
+	jdbcTemplate.execute(Sqls.PROCESSINSERTTABLE);
 	}
 	
 	
@@ -160,6 +196,7 @@ public class RecordService {
 	jdbcTemplate.execute("set search_path to " + tenantId);
 	//jdbcTemplate.execute("drop table if exists egwtr_migration" + tenantId);
 	jdbcTemplate.execute(Sqls.SEWERAGE_CONNECTION_TABLE);
+	jdbcTemplate.execute(Sqls.PROCESSINSERTTABLE);
 	}
 
 	

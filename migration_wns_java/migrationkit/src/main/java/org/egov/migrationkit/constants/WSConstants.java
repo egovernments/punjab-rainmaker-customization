@@ -51,6 +51,7 @@ public class WSConstants {
         
         TAX_HEAD_MAP.put("METERCHARGES", "WS_METER_TESTING_FEE");
         TAX_HEAD_MAP.put("PENALTY", "WS_TIME_PENALTY");
+        TAX_HEAD_MAP.put("BREAKDOWN_PENALTY", "WS_TIME_PENALTY");
         TAX_HEAD_MAP.put("INTEREST", "WS_TIME_INTEREST");
         TAX_HEAD_MAP.put("WTAXCHARGES", "WS_CHARGE");
         TAX_HEAD_MAP.put("METERRENT", "WS_OTHER_FEE");

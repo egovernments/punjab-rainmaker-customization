@@ -68,7 +68,7 @@ public class DemandService {
 					.build();
 		
 			
-			log.info("@taxHeadMaster " +taxHeadMaster);
+			log.info("from db :"+(String)dcbData.get("demand_reason") +"   @taxHeadMaster " +taxHeadMaster);
 			log.info("from_date" +(String)dcbData.get("from_date") + "  and epoc" +WSConstants.TIME_PERIOD_MAP.get((String)dcbData.get("from_date")));
 			log.info("to_date" +(String)dcbData.get("to_date") + "  and epoc" +WSConstants.TIME_PERIOD_MAP.get((String)dcbData.get("to_date")));
 			
@@ -141,30 +141,20 @@ public class DemandService {
      * @param demands The demands to be created
      * @return The list of demand created
      */
-    public Boolean saveDemand(RequestInfo requestInfo, List<Demand> demands,String erpId,String tenantId){
+    public Boolean saveDemand(RequestInfo requestInfo, List<Demand> demands,String erpId,String tenantId,String service){
     	try{
-    /*	for(Demand d:demands)
-    	{
-    	log.info(d.getConsumerCode());	
-    	for(DemandDetail dd:d.getDemandDetails())
-    	{
-    		log.info("getTaxHeadMasterCode " +dd.getTaxHeadMasterCode());
-    		log.info("getFromDate " +dd.getFromDate());
-    		log.info("getToDate " +dd.getToDate());
-    		log.info("getTaxAmount " +dd.getTaxAmount());
-    	}
-    	}*/
+    
     	
     	 
     	String url = billingServiceHost + demandCreateEndPoint+requestInfo.getUserInfo().getTenantId();
         DemandRequest request = new DemandRequest(requestInfo,demands);
         DemandResponse response = restTemplate.postForObject(url , request, DemandResponse.class);
         
-        	log.info("Demand Create Request: " + request + "Demand Create Respone: " + response);
+        	//log.info("Demand Create Request: " + request + "Demand Create Respone: " + response);
         }
         catch(Exception e){
-        	 
-        	recordService.recordError("sewerage",tenantId, e.getMessage(), erpId);
+         
+        	recordService.recordError(service,tenantId, e.getMessage(), erpId);
             log.error("Error while Saving demands" + e.getMessage());
             return Boolean.FALSE;
         }
@@ -180,7 +170,7 @@ public class DemandService {
 				RequestInfoWrapper request = RequestInfoWrapper.builder().requestInfo(requestInfo).build();
 				
 				Object result = restTemplate.postForObject(url , request, String.class);
-				log.info("Bill Request URL: " + url + "Bill RequestInfo: " + request + "Bill Response: " + result);
+				//log.info("Bill Request URL: " + url + "Bill RequestInfo: " + request + "Bill Response: " + result);
 				
 			} catch (Exception ex) {
 				log.error("Fetch Bill Error", ex);
@@ -200,7 +190,7 @@ public List<Demand> prepareSwDemandRequest(Map data, String businessService, Str
 	for (Map dcbData : dcbDataList) {
 		String taxHeadMaster="";
 		String taxhead= 		(String)dcbData.get("demand_reason");
-		if(taxhead.equalsIgnoreCase("PENALTY"))
+		if(taxhead.contains("PENALTY"))
 			taxHeadMaster="SW_TIME_PENALTY";
 			else
 		 taxHeadMaster = WSConstants.TAX_HEAD_MAP.get(taxhead);
@@ -216,7 +206,7 @@ public List<Demand> prepareSwDemandRequest(Map data, String businessService, Str
 				.tenantId(tenantId)
 				.build();
 	
-		log.info("@taxHeadMaster " +taxHeadMaster +"demand_reason "+(String)dcbData.get("demand_reason"));
+		log.info("from db :"+(String)dcbData.get("demand_reason") +"  @taxHeadMaster " +taxHeadMaster );
 		log.info("from_date" +(String)dcbData.get("from_date") + "  and epoc" +WSConstants.TIME_PERIOD_MAP.get((String)dcbData.get("from_date")));
 		log.info("to_date" +(String)dcbData.get("to_date") + "  and epoc" +WSConstants.TIME_PERIOD_MAP.get((String)dcbData.get("to_date")));
 

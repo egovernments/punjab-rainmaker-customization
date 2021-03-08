@@ -48,18 +48,21 @@ public class WaterConnection extends Connection {
   private Double proposedPipeSize = null;
 
   @JsonProperty("actualPipeSize")
-  private Double actualPipeSize = null;
+  private Double pipeSize = null;
 
   @JsonProperty("proposedTaps")
   private Double proposedTaps = null;
 
-  @JsonProperty("actualTaps")
-  private Double actualTaps = null;
+  @JsonProperty("noOfTaps")
+  private Double noOfTaps = null;
   @JsonProperty("applicantaddress")
   private Address applicantAddress=null;
   
   @JsonProperty("propertyType")
   private String propertyType=null;
+  
+  @JsonProperty("applicationType")
+	private String applicationType = null;
   
  @JsonProperty("processInstance")
   private ProcessInstance processInstance = null;
@@ -164,22 +167,12 @@ public Boolean getRainWaterHarvesting() {
     this.proposedPipeSize = proposedPipeSize;
   }
 
-  public WaterConnection actualPipeSize(Double actualPipeSize) {
-    this.actualPipeSize = actualPipeSize;
-    return this;
-  }
-
+  
    /**
    * Actual pipe size which used in the water connection.
    * @return actualPipeSize
   **/
-  public Double getActualPipeSize() {
-    return actualPipeSize;
-  }
-
-  public void setActualPipeSize(Double actualPipeSize) {
-    this.actualPipeSize = actualPipeSize;
-  }
+  
 
   public WaterConnection proposedTaps(Double proposedTaps) {
     this.proposedTaps = proposedTaps;
@@ -198,23 +191,12 @@ public Boolean getRainWaterHarvesting() {
     this.proposedTaps = proposedTaps;
   }
 
-  public WaterConnection actualTaps(Double actualTaps) {
-    this.actualTaps = actualTaps;
-    return this;
-  }
-
+  
    /**
    * Actual number of the taps
    * @return actualTaps
   **/
-  public Double getActualTaps() {
-    return actualTaps;
-  }
-
-  public void setActualTaps(Double actualTaps) {
-    this.actualTaps = actualTaps;
-  }
-
+  
   @Override
 public WaterConnection documents(List<Document> documents) {
     this.documents = documents;
@@ -259,16 +241,16 @@ public void setDocuments(List<Document> documents) {
         Objects.equals(this.meterId, waterConnection.meterId) &&
         Objects.equals(this.meterInstallationDate, waterConnection.meterInstallationDate) &&
         Objects.equals(this.proposedPipeSize, waterConnection.proposedPipeSize) &&
-        Objects.equals(this.actualPipeSize, waterConnection.actualPipeSize) &&
+        Objects.equals(this.pipeSize, waterConnection.pipeSize) &&
         Objects.equals(this.proposedTaps, waterConnection.proposedTaps) &&
-        Objects.equals(this.actualTaps, waterConnection.actualTaps) &&
+        Objects.equals(this.noOfTaps, waterConnection.noOfTaps) &&
         Objects.equals(this.documents, waterConnection.documents) &&
         super.equals(o);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(rainWaterHarvesting, waterSource, meterId, meterInstallationDate, proposedPipeSize, actualPipeSize, proposedTaps, actualTaps, documents, super.hashCode());
+    return Objects.hash(rainWaterHarvesting, waterSource, meterId, meterInstallationDate, proposedPipeSize, pipeSize, proposedTaps, noOfTaps, documents, super.hashCode());
   }
 
 
@@ -282,9 +264,9 @@ public void setDocuments(List<Document> documents) {
     sb.append("    meterId: ").append(toIndentedString(meterId)).append("\n");
     sb.append("    meterInstallationDate: ").append(toIndentedString(meterInstallationDate)).append("\n");
     sb.append("    proposedPipeSize: ").append(toIndentedString(proposedPipeSize)).append("\n");
-    sb.append("    actualPipeSize: ").append(toIndentedString(actualPipeSize)).append("\n");
+    sb.append("    actualPipeSize: ").append(toIndentedString(pipeSize)).append("\n");
     sb.append("    proposedTaps: ").append(toIndentedString(proposedTaps)).append("\n");
-    sb.append("    actualTaps: ").append(toIndentedString(actualTaps)).append("\n");
+    sb.append("    actualTaps: ").append(toIndentedString(noOfTaps)).append("\n");
     sb.append("    documents: ").append(toIndentedString(documents)).append("\n");
     sb.append("}");
     return sb.toString();
