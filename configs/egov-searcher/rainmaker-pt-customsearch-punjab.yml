@@ -8,7 +8,7 @@ SearchDefinitions:
     baseQuery: |
       select 
         array_to_json(array_agg(row_to_json(vasika_results))) 
-      from (select propertyid from eg_pt_property_v2
+      from (select propertyid from eg_pt_property
       $where and
         additionaldetails is not null and additionaldetails !='null'
       ) vasika_results
@@ -39,7 +39,7 @@ SearchDefinitions:
             from (
             select distinct locality from eg_tl_address $where
       union
-      select distinct locality from eg_pt_address_v2 $where
+      select distinct locality from eg_pt_address $where
       ) as localities
     groupBy:    
     orderBy: 
@@ -80,21 +80,20 @@ SearchDefinitions:
     baseQuery: |
       select array_to_json(array_agg(row_to_json(data))) from (
         select
-          property as propertyid,
-          assessmentnumber,
+          propertyid,
           receiptnumber,
-          amount,
-          pt_detail.financialyear
-        from eg_pt_propertydetail_v2 as pt_detail
-        left outer join egcl_receiptheader rh ON CONCAT(pt_detail.property, ':', pt_detail.assessmentnumber) = rh.consumercode
-        left outer JOIN egcl_receiptinstrument_v1 AS ri ON rh.id = ri.receiptheader
-        left outer JOIN egcl_instrumentheader_v1 AS ih ON ih.id = ri.instrumentheader $where) data
+          amountpaid,
+          getfinancialyear(bill.id)
+        from eg_pt_property as pt
+        inner join egcl_bill as bill on bill.consumercode=pt.propertyid
+        inner join egcl_paymentdetail as pd ON pd.billid=bill.id
+        $where) data
     groupBy:
     orderBy:
    searchParams:
     condition: AND
     params:
-    - name: pt_detail.property
+    - name: pt.propertyid
       isMandatory: true
       jsonPath: $.searchCriteria.propertyid
       operator: =
