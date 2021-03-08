@@ -179,6 +179,8 @@ public class RecordService {
 			tableName="egwtr_migration";
 		else if(module.equalsIgnoreCase("sewerage"))
 			tableName="egswtax_migration";
+		else if(module.equalsIgnoreCase("collection"))
+			tableName="egwtr_cl_migration";
 		String cleanedMessage="";
 		if(message!=null)
 		 cleanedMessage=message.replace("'", "");

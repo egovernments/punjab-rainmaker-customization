@@ -74,7 +74,7 @@ public class CollectionService {
 
 				}catch(Exception exception) {
 					log.error("Exception occurred while fetching the bills with business service:"+payment.getBusinessService()+ " and consumer code: " + payment.getConsumerCode());
-
+					recordService.recordError("collection",digitTenantId, "Error while fetching bill:"+ exception.getMessage(), payment.getId());
 				}
 				if(bills != null && !bills.isEmpty() && !payment.getPaymentDetails().isEmpty()) {
 					payment.getPaymentDetails().get(0).setBillId(bills.get(0).getId());
@@ -89,14 +89,17 @@ public class CollectionService {
 							if(!CollectionUtils.isEmpty(paymentResponse.getPayments()))
 								log.info("Collection migration done for consumer code: "+ payment.getConsumerCode());
 							else
-								log.error("Failed to register this payment at collection-service for consumer code: "+ payment.getConsumerCode());						
+								log.error("Failed to register this payment at collection-service for consumer code: "+ payment.getConsumerCode());	
+								recordService.recordError("collection",digitTenantId, "Failed to register this payment at collection-service for consumer code: "+ payment.getConsumerCode(), payment.getId());
 						}catch(Exception e) {
-							log.error("Failed to register this payment for consumer code: "+ payment.getConsumerCode(), e);						
+							log.error("Failed to register this payment for consumer code: "+ payment.getConsumerCode(), e);		
+							recordService.recordError("collection",digitTenantId, e.getMessage(), payment.getId());
 
 						}
 
 					}else {
 						log.error("Failed to register this payment at collection-service");
+						recordService.recordError("collection",digitTenantId, "Failed to register this payment at collection-service", payment.getId());
 					}
 
 					recordService.updateWtrCollMigration(payment,tenantId);
@@ -107,6 +110,7 @@ public class CollectionService {
 
 			} catch (Exception e) {
 				log.error(e.getMessage()); 
+				
 			}
 
 		}

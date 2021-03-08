@@ -117,7 +117,7 @@ public class Sqls {
 	
 
 	
-	public static final String WATER_COLLECTION_TABLE="create table  if not exists  egwtr_cl_migration(erpid varchar(64),erpconn varchar(64) ,digitconn varchar(64) ,erppt varchar(64),digitpt varchar(64),status varchar(64),tenantId varchar(64),additiondetails varchar(1000) );"
+	public static final String WATER_COLLECTION_TABLE="create table  if not exists  egwtr_cl_migration(erpid varchar(64),erpconn varchar(64) ,digitconn varchar(64) ,erppt varchar(64),digitpt varchar(64),status varchar(64),tenantId varchar(64),additiondetails varchar(1000),errorMessage varchar(4000) );"
 			+ "";
 	
 	public static final String WATER_COLLECTION_INSERT="insert into  :schema.egwtr_cl_migration(erpid ,erpconn  ,digitconn  ,erppt ,digitpt ,status ,tenantId ,additiondetails ) values (:erpid,:erpconn,:digitconn,:erppt,:digitpt,:status"
@@ -164,7 +164,7 @@ public class Sqls {
 			+ " and conndetails.id not in (select erpid::bigint from egwtr_cl_migration )"
 			+ " GROUP BY it.type,ih.transactionnumber, ih.transactiondate, ch.payeename, owner.mobilenumber, "
 			+ " owner.name, ch.consumercode, owner.emailid, owner.id,ch.totalamount, ih.instrumentdate, ih.instrumentNumber,status.code,"
-			+ " conndetails.applicationnumber, wtrcon.consumercode ";
+			+ " conndetails.applicationnumber, wtrcon.consumercode ;";
 	
 	
 	public static final String sewerageQuery="select json_build_object("
@@ -245,7 +245,7 @@ public class Sqls {
 //	public static final String address="select id,housenobldgapt as plotno,landmark,citytownvillage as city,district,arealocalitysector as region,state,country,pincode, buildingName,streetroadline as street from eg_address where id=:id ;";
 //	
 	public static final String SEWERAGE_COLLECTION_TABLE="create table  if not exists  egswtax_cl_migration "
-			+ " ( erpid varchar(64),erpconn varchar(64) ,digitconn varchar(64) ,erppt varchar(64),digitpt varchar(64),status varchar(64),tenantId varchar(64),additiondetails varchar(1000) );"
+			+ " ( erpid varchar(64),erpconn varchar(64) ,digitconn varchar(64) ,erppt varchar(64),digitpt varchar(64),status varchar(64),tenantId varchar(64),additiondetails varchar(1000),errorMessage varchar(4000) );"
 			+ "";
 	public static final String SEWERAGE_COLLECTION_QUERY="select json_build_object(\n"
 			+ "'paymentMode','cash',\n"
