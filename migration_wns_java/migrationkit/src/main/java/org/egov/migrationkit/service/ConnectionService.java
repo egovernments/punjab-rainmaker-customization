@@ -317,7 +317,8 @@ public class ConnectionService {
 			//digitcode = "SUN158"; //for Sunam
 			//digitcode = "NSR_112"; //for Nawashahr
 			//digitcode="LC-137"; // for Fazilka
-			digitcode="MH38"; //for mohali
+			//digitcode="MH38"; //for mohali
+			digitcode="LC-99"; // for Fazilka
 		}
 		log.debug("returning  " + digitcode);
 		return digitcode;
@@ -391,10 +392,53 @@ public class ConnectionService {
 				address.setLocality(locality);
 				swConnection.setApplicantAddress(address);
 				SewerageConnectionRequest sewerageRequest = new SewerageConnectionRequest();
- 
+				
+				StringBuilder additionalDetail=new StringBuilder();
 				Map addtionals=new HashMap<String,String>(); 
 				addtionals.put("locality",localityCode);
+				addtionals.put("billingType",(String) data.get("billingType"));
+				addtionals.put("billingAmount",(String) data.get("billingAmount"));
+				addtionals.put("estimationLetterDate",(String) data.get("estimationLetterDate"));
+				//addtionals.put("connectionCategory",(String) data.get("connectionCategory"));
+				//addtionals.put("meterId",(String) data.get("meterId"));
+				//addtionals.put("ledgerId",(String) data.get("ledgerId"));
+				//addtionals.put("pipeSize",(Double) data.get("pipeSize"));
+				addtionals.put("estimationFileStoreId",(String) data.get("estimationFileStoreId"));
+				//addtionals.put("meterMake",(String) data.get("meterMake"));
+				
+//				if(data.get("averageMeterReading")!=null)
+//				{
+//				try {
+//					Integer	averageMeterReading = (Integer) data.get("averageMeterReading");
+//
+//					addtionals.put("averageMeterReading",Double.valueOf(averageMeterReading));
+//				} catch (Exception e) {
+//					Double	averageMeterReading = (Double) data.get("averageMeterReading");
+//					addtionals.put("averageMeterReading",averageMeterReading);
+//					 
+//				}
+//				}else
+//					addtionals.put("averageMeterReading",0);
+//				if(data.get("initialMeterReading")!=null)
+//				{
+//				try {
+//					Integer	initialMeterReading = (Integer) data.get("initialMeterReading");
+//
+//					addtionals.put("initialMeterReading",Double.valueOf(initialMeterReading));
+//				} catch (Exception e) {
+//					Double	initialMeterReading = (Double) data.get("initialMeterReading");
+//					addtionals.put("initialMeterReading",initialMeterReading);
+//					 
+//				}
+//				}else
+//					addtionals.put("initialMeterReading",0);
+//				
+				
 				swConnection.setAdditionalDetails(addtionals);
+				
+//				Map addtionals=new HashMap<String,String>(); 
+//				addtionals.put("locality",localityCode);
+//				swConnection.setAdditionalDetails(addtionals);
 				
 				sewerageRequest.setSewerageConnection(swConnection);
 				sewerageRequest.setRequestInfo(requestInfo);
