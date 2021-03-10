@@ -71,10 +71,10 @@ public class Sqls {
 			"  (SELECT json_agg(road_category) FROM ( SELECT road_category.name \"road_name\"		,	 "+
 			"  estimatedetails.area \"road_area\"	,		 "+
 			"  estimatedetails.unitrate \"unitrate\"	,		 "+
-			"  estimatedetails.amount \"amount\" from egwtr_estimation_details estimatedetails	,		 "+
+			"  estimatedetails.amount \"amount\"  from egwtr_estimation_details estimatedetails	,		 "+
 			"  egwtr_road_category road_category WHERE conndetails.id=estimatedetails.connectiondetailsid and " +
 		    " estimatedetails.roadcategory=road_category.id ) road_category ) ) from egwtr_connection conn	,		 "+
-			"  egwtr_connectiondetails conndetails	,		 "+
+			"  egwtr_connectiondetails conndetails left outer join egwtr_meter_details mtr on mtr.connectiondetails=conndetails.id	,		 "+
 			"  egwtr_application_type apptype	,		 "+
 			"  egwtr_usage_type usage		,	 "+
 			"  eg_boundary locality		,	 "+
@@ -84,16 +84,14 @@ public class Sqls {
 			"  egwtr_category wtrctgy	,		 "+
 			"  egwtr_connection_owner_info ownerinfo	,		 "+
 			"  eg_user usr	,		 "+
-			"  eg_address address	,	egwtr_meter_details mtr,	 "+ 
+			"  eg_address address	,	 	 "+ 
 			"  egw_status status where conn.id=conndetails.connection and apptype.id=conndetails.applicationtype and"
 			+ " usage.id=conndetails.usagetype and block.id=conn.block and locality.id=conn.locality and zone.id=conn.zone and"
 			+ " conndetails.propertytype=proptype.id and conndetails.category=wtrctgy.id and ownerinfo.connection=conn.id "
 			+ " and usr.id=ownerinfo.owner and address.id=conn.address and status.id=conndetails.statusid   "
-			+"  and mtr.connectiondetails=conndetails.id "
 			+ " and conndetails.id not in (select erpid::bigint from egwtr_migration where status in "
-			+ "('initiated','Saved','Demand_Created','Incompatible' ) ) "
-			//+" and locality.code='MCML5' and usr.mobilenumber is not null "
-			+ "order by conndetails.id ";   
+			+ "('initiated','Saved','Demand_Created','Incompatible' ) )  "
+			+ " order by conndetails.id  ; ";   
 	
 	
 	//public static final String ledgerId= "Select ledgerid as ledgerId from  egwtr_stg_connection;";
@@ -175,7 +173,7 @@ public class Sqls {
 	public static final String sewerageQuery="select json_build_object("
 			+ "'cityname', (SELECT CASE WHEN name like '%UAT%' THEN (SELECT split_part(name,'-',1) from eg_city) ELSE (select name from eg_city) END from eg_city),\n"
 			+ "'zone', zone.name,\n"
-			+ "'consumercode', conn.shsc_number,\n"
+			+ "'connectionNo', conn.shsc_number,\n"
 			+ "'id', conndetails.id,\n"
 			+ "'applicantname', usr.name,\n"
 			+ "'connectionstatus', conn.status,\n"
@@ -186,24 +184,16 @@ public class Sqls {
 			+ "'channel', CASE WHEN appdetails.source is not null THEN appdetails.source ELSE 'COUNTER' END,\n"
 			+ "'applicationtype', apptype.name,\n"
 			+ "'billingType',	 conndetails.billingtype	,\n"
-			+ "'locality', locality.name,\n"
+			+ "'locality', locality.code,\n"
 			+ "'billingAmount',	 conndetails.billamount ,\n"	
 			+ " 'estimationLetterDate', appdetails.estimationdate,\n"
 			+ " 'estimationFileStoreId',appdetails.filestoreid, \n"
-		//	+  "'averageMeterReading','null',\n"
-		//	+  "'initialMeterReading','null',\n"
-		//	+  "'meterId','null',\n"
-		//	+  "'meterMake','null' ,\n"
-//			+  "'userCharges','null' ,\n"
-//			+  "'compositionFee','null' ,\n"
-//			+  "'connectionCategory','null' ,\n"
-//			+  "'waterSubUsageType','null' ,\n"
 			+  "'othersFee','null', \n"
 			+  "'ledgerId',conndetails.ledgernumber,\n"
 			+ "'block', block.name,\n"
 			+ "'citycode', (select code from eg_city),\n"
 			+ "'emailid', usr.emailid,\n"
-			+ "'applicationnumber', appdetails.applicationnumber,\n"
+			+ "'applicatioNumber', appdetails.applicationnumber,\n"
 			+ "'disposaldate', appdetails.disposalDate,\n"
 			+ "'usage', usage.name,\n"
 			+ "'applicationdate', appdetails.applicationdate,\n"
@@ -212,7 +202,8 @@ public class Sqls {
 			+ "'applicantaddress.id',	 address.id		,\n" 
 			+ "'mobilenumber', usr.mobilenumber,\n"
 			+ "'citygrade', (select grade from eg_city),\n"
-			+ "'noofseatsresidential',conndetails.noofclosets_residential,\n"
+			+ "'noOfWaterClosets',(select case when conndetails.noofclosets_residential is not null then conndetails.noofclosets_residential "
+			+ " else  conndetails.noofclosets_nonresidential end ) ,\n"
 			+ "'noofseatsnonresidential', conndetails.noofclosets_nonresidential,\n"
 			+ "'doorno', replace(address.housenobldgapt,'/','\\') ,\n" +
 			"  'dcb',	 (SELECT json_agg(dcb) FROM ( select to_char(inst.start_date	,	 "+
@@ -245,10 +236,11 @@ public class Sqls {
 			+ "usage.id=conndetails.usagetype and block.id=conn.block and\n"
 			+ "locality.id=conn.locality and zone.id=conn.zone and\n"
 			+ " ownerinfo.connection=conn.id and usr.id=ownerinfo.owner and\n"
-		//	+"  locality.code='MCML5' and usr.mobilenumber is not null and "
+	
 			+ "  address.id=conn.address and status.id=appdetails.status  "
+		  +   " and conn.shsc_number is not null "
 			+ " and conndetails.id not in (select erpid::bigint from egswtax_migration where status"
-			+ " in ('initiated','Saved','Demand_Created','Incompatible' ) ) order by conndetails.id  ;";
+			+ " in ('initiated','Saved','Demand_Created','Incompatible' ) ) order by conndetails.id limit 1 ;";
 	
 	
 	

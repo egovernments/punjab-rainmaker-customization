@@ -68,11 +68,11 @@ public class DemandService {
 					.build();
 		
 			
-			log.info("from db :"+(String)dcbData.get("demand_reason") +"   @taxHeadMaster " +taxHeadMaster);
+/*			log.info("from db :"+(String)dcbData.get("demand_reason") +"   @taxHeadMaster " +taxHeadMaster);
 			log.info("from_date" +(String)dcbData.get("from_date") + "  and epoc" +WSConstants.TIME_PERIOD_MAP.get((String)dcbData.get("from_date")));
 			log.info("to_date" +(String)dcbData.get("to_date") + "  and epoc" +WSConstants.TIME_PERIOD_MAP.get((String)dcbData.get("to_date")));
 			
-			Integer installmentId = (Integer)dcbData.get("insta_id");
+		*/	Integer installmentId = (Integer)dcbData.get("insta_id");
 			if(instaWiseDemandMap.containsKey(installmentId)) {
 				
 					instaWiseDemandMap.get(installmentId).add(dd);
@@ -156,6 +156,17 @@ public class DemandService {
          
         	recordService.recordError(service,tenantId, e.getMessage(), erpId);
             log.error("Error while Saving demands" + e.getMessage());
+            for(Demand demand:demands )
+            {
+            	log.info(demand.getConsumerCode() +""+demand.getBusinessService());
+            	for(DemandDetail dd:demand.getDemandDetails())
+            	{
+            		log.info(dd.getTaxHeadMasterCode());
+            		log.info("from date: "+dd.getFromDate());
+            		log.info("to date: "+dd.getToDate());
+            		
+            	}
+            }
             return Boolean.FALSE;
         }
 		return Boolean.TRUE;  
@@ -173,6 +184,7 @@ public class DemandService {
 				//log.info("Bill Request URL: " + url + "Bill RequestInfo: " + request + "Bill Response: " + result);
 				
 			} catch (Exception ex) {
+				
 				log.error("Fetch Bill Error", ex);
 				return Boolean.FALSE;
 			}
@@ -203,12 +215,12 @@ public List<Demand> prepareSwDemandRequest(Map data, String businessService, Str
 			.toDate(WSConstants.TIME_PERIOD_MAP.get((String)dcbData.get("to_date")))
 //			.fromDate(1554076800000l)
 //			.toDate(1617175799000l)
-				.tenantId(tenantId)
+				.tenantId(tenantId)  
 				.build();
 	
-		log.info("from db :"+(String)dcbData.get("demand_reason") +"  @taxHeadMaster " +taxHeadMaster );
-		log.info("from_date" +(String)dcbData.get("from_date") + "  and epoc" +WSConstants.TIME_PERIOD_MAP.get((String)dcbData.get("from_date")));
-		log.info("to_date" +(String)dcbData.get("to_date") + "  and epoc" +WSConstants.TIME_PERIOD_MAP.get((String)dcbData.get("to_date")));
+	//	log.info("from db :"+(String)dcbData.get("demand_reason") +"  @taxHeadMaster " +taxHeadMaster );
+	//	log.info("from_date" +(String)dcbData.get("from_date") + "  and epoc" +WSConstants.TIME_PERIOD_MAP.get((String)dcbData.get("from_date")));
+	//	log.info("to_date" +(String)dcbData.get("to_date") + "  and epoc" +WSConstants.TIME_PERIOD_MAP.get((String)dcbData.get("to_date")));
 
 		
 		Integer installmentId = (Integer)dcbData.get("insta_id");

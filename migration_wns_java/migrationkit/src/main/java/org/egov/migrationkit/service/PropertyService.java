@@ -64,7 +64,7 @@ public class PropertyService {
 			property = searchPtRecord(wcr, data, tenantId);
 
 			if (property == null) {
-				log.debug("Propery not found creating new property");
+				//log.debug("Propery not found creating new property");
 				property = createProperty(wcr, data, tenantId);
 
 			}
@@ -81,7 +81,7 @@ public class PropertyService {
 		try {
 			property = searchswPtRecord(swg, json, tenantId);
 			if (property == null) {
-				log.debug("Propery not found creating new property");
+			//	log.debug("Propery not found creating new property");
 				property = createSProperty(swg, json, tenantId);
 			}
 		} catch (Exception e) {
@@ -123,7 +123,7 @@ public class PropertyService {
 		owner.setOwnerType("NONE");
 		
 		property.creationReason(CreationReason.CREATE);
-		log.info("conn.getPropertyType() :" + conn.getPropertyType());
+		//log.info("conn.getPropertyType() :" + conn.getPropertyType());
 		if (conn.getPropertyType() != null) {
 			property.setUsageCategory(conn.getPropertyType().toUpperCase().replace(" ", ""));
 		} else {
@@ -143,7 +143,7 @@ public class PropertyService {
 
 		PropertyResponse res = restTemplate.postForObject(host + "/" + ptcreatehurl, prequest, PropertyResponse.class);
 
-		 log.info(res.getProperties().get(0).getSource() +"   "+res.getProperties().get(0).getAcknowldgementNumber());
+		// log.info(res.getProperties().get(0).getSource() +"   "+res.getProperties().get(0).getAcknowldgementNumber());
 		//return res.getProperties().get(0);
 
 		Property property2 = res.getProperties().get(0);
@@ -244,14 +244,14 @@ public class PropertyService {
 
 		// && property.getStatus().equals(Status.ACTIVE) not used
 		if (response != null && response.getProperties() != null && response.getProperties().size() >= 1) {
-			log.debug("found properties" + response.getProperties().size());
+			//log.debug("found properties" + response.getProperties().size());
 			for (Property property : response.getProperties()) {
-				log.debug("status" + property.getPropertyId() + "---" + property.getStatus() + " Usage :"
+			/*	log.debug("status" + property.getPropertyId() + "---" + property.getStatus() + " Usage :"
 						+ property.getUsageCategory());
-
+*/
 				for (OwnerInfo owner : property.getOwners()) {
-					log.debug("owner.getName() : " + owner.getName());
-					log.debug("owner.getFatherOrHusbandName() : " + owner.getFatherOrHusbandName());
+					//log.debug("owner.getName() : " + owner.getName());
+					//log.debug("owner.getFatherOrHusbandName() : " + owner.getFatherOrHusbandName());
 
 					if (owner.getName().equalsIgnoreCase(conn.getWaterConnection().getApplicantname()) && owner
 							.getFatherOrHusbandName().equalsIgnoreCase(conn.getWaterConnection().getGuardianname())
@@ -260,16 +260,16 @@ public class PropertyService {
 
 						recordService.recordError("water", tenantId, "Found Property in digit :" + property.getId(),
 								conn.getWaterConnection().getId());
-						log.info("no  property found in digit system for mobilenumber--"
-								+ conn.getWaterConnection().getMobilenumber());
+					//	log.info("no  property found in digit system for mobilenumber--"
+						//		+ conn.getWaterConnection().getMobilenumber());
 						return property;
 					}
 
 				}
 			}
 		} else {
-			log.info("no  property found in digit system for mobilenumber--"
-					+ conn.getWaterConnection().getMobilenumber());
+			/*log.info("no  property found in digit system for mobilenumber--"
+					+ conn.getWaterConnection().getMobilenumber());*/
 		}
 
 		return null;
@@ -290,13 +290,13 @@ public class PropertyService {
 		// String response = restTemplate.postForObject(host + "/" + ptseachurl,
 		// pr, String.class);
 
-		System.out.println("response" + response);
+	//	System.out.println("response" + response);
 
 		// if property found compare with owner name,father name etc.
 		if (response != null && response.getProperties() != null && response.getProperties().size() >= 1) {
-			log.info("found properties" + response.getProperties().size());
+		//	log.info("found properties" + response.getProperties().size());
 			for (Property property : response.getProperties()) {
-				log.info("status" + property.getPropertyId() + "---" + property.getStatus());
+			//	log.info("status" + property.getPropertyId() + "---" + property.getStatus());
 				for (OwnerInfo owner : property.getOwners()) {
 					if (owner.getName().equalsIgnoreCase(conn.getSewerageConnection().getApplicantname()) && owner
 							.getFatherOrHusbandName().equalsIgnoreCase(conn.getSewerageConnection().getGuardianname())
@@ -312,8 +312,8 @@ public class PropertyService {
 				}
 			}
 		} else {
-			log.info("no  property found in digit system for mobilenumber--"
-					+ conn.getSewerageConnection().getMobilenumber());
+		/*	log.info("no  property found in digit system for mobilenumber--"
+					+ conn.getSewerageConnection().getMobilenumber());*/
 		}
 
 		return null;
