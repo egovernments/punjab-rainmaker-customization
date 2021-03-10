@@ -298,3 +298,132 @@ ReportDefinitions:
 
        inner join ptaddress on ptaddress.propertyid=pt.id
        INNER JOIN eg_bndry_mohalla on eg_bndry_mohalla.localitycode=ptaddress.locality
+      
+- reportName: FieldCollectionSearchReportWS
+  summary: Field Collection Search Report WS
+  version: 1.0.0
+  moduleName: rainmaker-ws
+  additionalConfig:
+    print:
+      pdfPageSize: "A1"
+  sourceColumns:
+  - name: receiptnumber
+    label: reports.ws.receiptnumber
+    type: string
+    source: ws
+    total: false
+  - name: receiptdate
+    label: reports.ws.receiptdate
+    type: string
+    source: ws
+    total: false
+  - name: businessservice
+    label: reports.ws.businessservice
+    type: string
+    source: ws
+    total: false
+  - name: amountpaid
+    label: reports.ws.amountpaid
+    type: string
+    source: ws
+    total: true
+  - name: consumercode
+    label: reports.ws.consumercode
+    source: ws
+    total: false
+  - name: paymentstatus
+    label: reports.ws.paymentstatus
+    type: string
+    source: ws
+    total: false
+  - name: paymentmode
+    label: reports.ws.paymentmode
+    type: string
+    source: ws
+    total: false
+  - name: name
+    label: reports.ws.name
+    type: string
+    source: ws
+    total: false
+  - name: mobilenumber
+    label: reports.ws.mobilenumber
+    type: string
+    source: ws
+    total: false
+  query: |
+    -- Use CTE to force query plan, compute & use CTE later
+    select receiptnumber,receiptdate,pd.businessservice,pd.amountpaid,consumercode,paymentstatus,paymentmode,usr.name,usr.mobilenumber
+    from egcl_paymentdetail pd
+    inner join egcl_bill as bill on bill.id=pd.billid
+    INNER join egcl_payment as payment on payment.id=pd.paymentid
+    inner join eg_user as usr on usr.id=payment.createdby::integer
+    where bill.businessservice like 'SW%'
+  orderby: ORDER BY pd.receiptdate DESC;
+
+- reportName: FieldCollectionSearchReceiptWS
+  summary: Field Collection Search Receipt WS
+  version: 1.0.0
+  moduleName: rainmaker-ws
+  additionalConfig:
+    print:
+      pdfPageSize: "A1"
+  sourceColumns:
+  - name: receiptnumber
+    label: reports.ws.receiptnumber
+    type: string
+    source: ws
+    total: false
+  - name: receiptdate
+    label: reports.ws.receiptdate
+    type: string
+    source: ws
+    total: false
+  - name: manualreceiptnumber
+    label: reports.ws.manualreceiptnumber
+    type: string
+    source: ws
+    total: false
+  - name: businessservice
+    label: reports.ws.businessservice
+    type: string
+    source: ws
+    total: false
+  - name: amountpaid
+    label: reports.ws.amountpaid
+    type: string
+    source: ws
+    total: true
+  - name: consumercode
+    label: reports.ws.consumercode
+    source: ws
+    total: false
+  - name: paymentstatus
+    label: reports.ws.paymentstatus
+    type: string
+    source: ws
+    total: false
+  - name: paymentmode
+    label: reports.ws.paymentmode
+    type: string
+    source: ws
+    total: false
+  - name: billnumber
+    label: reports.ws.billnumber
+    type: string
+    source: ws
+    total: false
+  - name: billdescription
+    label: reports.ws.billdescription
+    type: string
+    source: ws
+    total: false
+  query: |
+    -- Use CTE to force query plan, compute & use CTE later
+    select receiptnumber,manualreceiptnumber,receiptdate,pd.businessservice , billnumber , billdescription, consumercode , pd.amountpaid,paymentmode, paymentstatus
+    from egcl_paymentdetail pd
+    inner join egcl_bill as bill on bill.id=pd.billid
+    inner join egcl_billdetial as billd on billd.billid=pd.billid
+    INNER join egcl_payment as payment on payment.id=pd.paymentid
+    where bill.businessservice like 'SW%';
+  orderby: ORDER BY pd.receiptdate DESC;
