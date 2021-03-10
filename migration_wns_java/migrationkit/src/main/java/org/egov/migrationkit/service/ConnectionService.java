@@ -177,6 +177,8 @@ public class ConnectionService {
 				connection.setDocuments(getDocuments(waterRequest, data));
 				StringBuilder additionalDetail = new StringBuilder();
 				Map addtionals = new HashMap<String, String>();
+				
+				addtionals.put("propertyId", (String) data.get("id"));
 				addtionals.put("locality", localityCode);
 				addtionals.put("billingType", (String) data.get("billingType"));
 				addtionals.put("billingAmount", (String) data.get("billingAmount"));
@@ -397,6 +399,7 @@ public class ConnectionService {
 
 				StringBuilder additionalDetail = new StringBuilder();
 				Map addtionals = new HashMap<String, String>();
+				addtionals.put("propertyId", (String) data.get("id"));
 				addtionals.put("locality", localityCode);
 				addtionals.put("billingType", (String) data.get("billingType"));
 				addtionals.put("billingAmount", (String) data.get("billingAmount"));
