@@ -425,7 +425,7 @@ ReportDefinitions:
     inner join egcl_bill as bill on bill.id=pd.billid
     inner join egcl_billdetial as billd on billd.billid=pd.billid
     INNER join egcl_payment as payment on payment.id=pd.paymentid
-    where bill.businessservice like 'SW%';
+    where bill.businessservice like 'SW%'
   orderby: ORDER BY pd.receiptdate DESC;
   
 - reportName: SearchOnlineReceiptsWS
@@ -477,8 +477,8 @@ ReportDefinitions:
     from egcl_paymentdetail pd
     inner join egcl_bill as bill on bill.id=pd.billid
     INNER join egcl_payment as payment on payment.id=pd.paymentid
-    where bill.businessservice like 'SW%';
-  orderby: ORDER BY payment.transactiondate DESC;  
+    where bill.businessservice like 'SW%'
+  orderby: ORDER BY payment.transactiondate DESC;
   
   
   
