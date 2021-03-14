@@ -235,5 +235,15 @@ public class RecordService {
 		jdbcTemplate.execute("update "+tenantId+"."+tableName+" set status='" +status+ "' where erpid='"+id+"'"); 
 		
 	} 
+	@Transactional
+	public void setMob(String module ,String tenantId , Long mob,String id) {
+		String tableName=null;
+		if(module.equalsIgnoreCase("water"))
+			tableName="egwtr_migration";
+		else if(module.equalsIgnoreCase("sewerage"))
+			tableName="egswtax_migration";
+		jdbcTemplate.execute("update "+tenantId+"."+tableName+" set mob='" + mob + "' where erpid='"+id+"'"); 
+		
+	} 
 
 }

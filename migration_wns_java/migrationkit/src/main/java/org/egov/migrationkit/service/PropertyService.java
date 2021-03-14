@@ -235,7 +235,8 @@ public class PropertyService {
 		// conn.getWaterConnection().getMobilenumber() : "9876543210";
 
 		String propertySeachURL = ptseachurl + "?tenantId=" + conn.getRequestInfo().getUserInfo().getTenantId()
-				+ "&mobileNumber=" + conn.getWaterConnection().getMobilenumber();
+				+ "&mobileNumber=" + conn.getWaterConnection().getMobilenumber()
+				+ "&applicantName=" + conn.getWaterConnection().getApplicantname();
 
 		PropertySearchResponse response = restTemplate.postForObject(host + "/" + propertySeachURL, pr,
 				PropertySearchResponse.class);
@@ -282,7 +283,8 @@ public class PropertyService {
 		pr.setRequestInfo(conn.getRequestInfo());
 
 		String ptseachurlStr = ptseachurl + "?tenantId=" + conn.getRequestInfo().getUserInfo().getTenantId()
-				+ "&mobileNumber=" + conn.getSewerageConnection().getMobilenumber();
+				+ "&mobileNumber=" + conn.getSewerageConnection().getMobilenumber()
+				+ "&applicantName=" + conn.getSewerageConnection().getApplicantname();
 
 		PropertySearchResponse response = restTemplate.postForObject(host + "/" + ptseachurlStr, pr,
 				PropertySearchResponse.class);

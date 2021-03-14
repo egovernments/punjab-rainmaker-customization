@@ -74,11 +74,13 @@ public class ConnectionService {
 		WaterConnection connection = null;
 		List<Map> roadCategoryList = null;
 		Integer area = null;
+		Long mob = 3000000000L;
 		Double areaDouble = null;
 		Address address = null;
 		Locality locality = null;
 		String locCode = null;
 		String localityCode = null;
+		
 
 		String searchPath = jdbcTemplate.queryForObject("show search_path", String.class);
 		log.info(searchPath);
@@ -116,8 +118,11 @@ public class ConnectionService {
 
 				if (connection.getMobilenumber() == null || connection.getMobilenumber().isEmpty()) {
 					recordService.recordError("water", tenantId, "Mobile Number is null ", connection.getId());
+					recordService.setMob ("water", tenantId, mob, connection.getId());
+					mob = mob + 1;
+					
 					recordService.setStatus("water", tenantId, "Incompatible", connection.getId());
-					continue;
+					//continue;
 				}
 
 				String addressQuery = Sqls.address;
@@ -178,7 +183,7 @@ public class ConnectionService {
 				StringBuilder additionalDetail = new StringBuilder();
 				Map addtionals = new HashMap<String, String>();
 				
-				addtionals.put("propertyId", (String) data.get("id"));
+				addtionals.put("propertyId", data.get("id"));
 				addtionals.put("locality", localityCode);
 				addtionals.put("billingType", (String) data.get("billingType"));
 				addtionals.put("billingAmount", (String) data.get("billingAmount"));
@@ -288,7 +293,7 @@ public class ConnectionService {
 	private List<Document> getDocuments(WaterConnectionRequest waterRequest, Map data) {
 		List<Document> documents = new ArrayList<>();
 		Document doc = new Document();
-		doc.setDocumentCode("OWNER.IDENTITYPROOF.AADHAAR");
+		//doc.setDocumentCode("OWNER.IDENTITYPROOF.AADHAAR");
 		//doc.setFileName("0a5b93d4-9eaa-4605-aaf1-970026ec3606.png");
 		//doc.setFileUrl("");
 		doc.setFileStore("34dc69f0-c5f2-483e-a0ac-e3555dffd5b1");
@@ -337,6 +342,7 @@ public class ConnectionService {
 
 		recordService.initiateSewrage(tenantId);
 		SewerageConnection swConnection = null;
+		Long mob = 3000000000L;
 		Address address = null;
 		Locality locality = null;
 		String locCode = null;
@@ -368,8 +374,10 @@ public class ConnectionService {
 
 				if (swConnection.getMobilenumber() == null || swConnection.getMobilenumber().isEmpty()) {
 					recordService.recordError("sewerage", tenantId, "Mobile Number is null ", swConnection.getId());
+					recordService.setMob ("sewerage", tenantId, mob, swConnection.getId());
+					mob = mob + 1;
 					recordService.setStatus("sewerage", tenantId, "Incompatible", swConnection.getId());
-					continue;
+					//continue;
 				}
 
 				String addressQuery = Sqls.address;
@@ -399,7 +407,7 @@ public class ConnectionService {
 
 				StringBuilder additionalDetail = new StringBuilder();
 				Map addtionals = new HashMap<String, String>();
-				addtionals.put("propertyId", (String) data.get("id"));
+				addtionals.put("propertyId", data.get("id"));
 				addtionals.put("locality", localityCode);
 				addtionals.put("billingType", (String) data.get("billingType"));
 				addtionals.put("billingAmount", (String) data.get("billingAmount"));
