@@ -5,11 +5,11 @@
 --=CONCATENATE("'",TRIM(AJ1),"'")
 --);
 
-set search_path to mohali;
+set search_path to ahmedgarh;
 create table if not exists tmp_boundary (digitname varchar(1000),digitcode varchar(64),erpname  varchar(1000),erpcode varchar(64)
 ,loc varchar(150),block varchar(50)
 );
-\i mohali_boundary.sql
+\i ahmedgarh_boundary.sql
 
 
 --select code,name from eg_boundary where upper(name) in (select upper(substr(digitname,1,position('-' in digitname)-2)) from tmp_boundary);
