@@ -1,0 +1,416 @@
+{
+	"info": {
+		"_postman_id": "57777f39-db0a-4b1c-a5ba-f8a7feff31bf",
+		"name": "pb",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "pb-pt",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "authority",
+						"value": "egov-micro-qa.egovernments.org"
+					},
+					{
+						"key": "accept",
+						"value": "application/json, text/plain, */*"
+					},
+					{
+						"key": "user-agent",
+						"value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.121 Safari/537.36"
+					},
+					{
+						"key": "content-type",
+						"value": "application/json;charset=UTF-8"
+					},
+					{
+						"key": "origin",
+						"value": "https://egov-micro-qa.egovernments.org"
+					},
+					{
+						"key": "sec-fetch-site",
+						"value": "same-origin"
+					},
+					{
+						"key": "sec-fetch-mode",
+						"value": "cors"
+					},
+					{
+						"key": "sec-fetch-dest",
+						"value": "empty"
+					},
+					{
+						"key": "referer",
+						"value": "https://egov-micro-qa.egovernments.org/employee/pt-mutation/apply?consumerCode=PB-PT-2020-09-23-006934&tenantId=pb.amritsar"
+					},
+					{
+						"key": "accept-language",
+						"value": "en-US,en;q=0.9"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t    \"RequestInfo\": {\n\t\t\"apiId\": \"Rainmaker\",\n\t\t\"ver\": \".01\",\n\t\t\"action\": \"_update\",\n\t\t\"did\": \"1\",\n\t\t\"key\": \"\",\n\t\t\"msgId\": \"20170310130900|en_IN\",\n\t\t\"requesterId\": \"\",\n\t\t\"authToken\": \"7b5afaab-60a0-461c-895a-c073379cd15a\",\n\t\t\"userInfo\":{\n\t\t    \"uuid\":\"4d9b0e12-6ad2-4d9c-950d-2624c3fc6e65\"\n\t\t}\n\t    }\n\t}"
+				},
+				"url": {
+					"raw": "localhost:8280/property-services/property/_migration?tenantIdList=pb.jalandhar",
+					"host": [
+						"localhost"
+					],
+					"port": "8280",
+					"path": [
+						"property-services",
+						"property",
+						"_migration"
+					],
+					"query": [
+						{
+							"key": "tenantIdList",
+							"value": "pb.jalandhar"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8280/water/connection?tenantId=amritsar",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": " {\n     \"RequestInfo\": {\n\t\t\"apiId\": \"Rainmaker\",\n\t\t\"ver\": \".01\",\n\t\t\"action\": \"_update\",\n\t\t\"did\": \"1\",\n\t\t\"key\": \"\",\n\t\t\"msgId\": \"20170310130900|en_IN\",\n\t\t\"requesterId\": \"\",\n\t\t\"authToken\": \"4a5fe562-c60c-4dfe-8978-b812cb1d1d9a\",\n\t\t \"userInfo\":{\n\t\t    \"uuid\":\"3283157d-4219-4b97-ba29-8e7f97c35478\",\n            \"tenantId\":\"pb.amritsar\",\n            \"userName\":\"WSCE\",\n            \"password\":\"eGov@123\"\n\t\t}\n\t    }\n }\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8280/migrate/water/connection?tenantId=amritsar",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8280",
+					"path": [
+						"migrate",
+						"water",
+						"connection"
+					],
+					"query": [
+						{
+							"key": "tenantId",
+							"value": "amritsar"
+						}
+					]
+				},
+				"description": "water migration"
+			},
+			"response": []
+		},
+		{
+			"name": "collection_migration",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": " {\n     \"RequestInfo\": {\n\t\t\"apiId\": \"Rainmaker\",\n\t\t\"ver\": \".01\",\n\t\t\"action\": \"_update\",\n\t\t\"did\": \"1\",\n\t\t\"key\": \"\",\n\t\t\"msgId\": \"20170310130900|en_IN\",\n\t\t\"requesterId\": \"\",\n\t\t\"authToken\": \"4a5fe562-c60c-4dfe-8978-b812cb1d1d9a\",\n\t\t \"userInfo\":{\n\t\t    \"uuid\":\"a51dbc2d-01ba-462c-b604-749d3a84c790\",\n            \"tenantId\":\"pb.fazilka\",\n            \"userName\":\"EMP-WS-MIGRATOR\",\n            \"password\":\"eGov@123\"\n\t\t}\n\t    }\n }\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8280/migrate/water/connection/collection?tenantId=fazilka",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8280",
+					"path": [
+						"migrate",
+						"water",
+						"connection",
+						"collection"
+					],
+					"query": [
+						{
+							"key": "tenantId",
+							"value": "fazilka"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "geteGovUser_Authtoken",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "User-Agent",
+						"value": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:74.0) Gecko/20100101 Firefox/74.0"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json, text/plain, */*"
+					},
+					{
+						"key": "Accept-Language",
+						"value": "en-US,en;q=0.5"
+					},
+					{
+						"key": "Referer",
+						"value": "https://mseva-qa.lgpunjab.gov.in/employee/user/login"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded"
+					},
+					{
+						"key": "Authorization",
+						"value": "Basic ZWdvdi11c2VyLWNsaWVudDplZ292LXVzZXItc2VjcmV0"
+					},
+					{
+						"key": "Origin",
+						"value": "https://mseva-qa.lgpunjab.gov.in"
+					},
+					{
+						"key": "Connection",
+						"value": "keep-alive"
+					},
+					{
+						"key": "TE",
+						"value": "Trailers"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "username",
+							"value": "eGov",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "eGov@123",
+							"type": "text"
+						},
+						{
+							"key": "grant_type",
+							"value": "password",
+							"type": "text"
+						},
+						{
+							"key": "scope",
+							"value": "read",
+							"type": "text"
+						},
+						{
+							"key": "tenantId",
+							"value": "pb.punjab",
+							"type": "text"
+						},
+						{
+							"key": "userType",
+							"value": "EMPLOYEE",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://mseva-qa.lgpunjab.gov.in/user/oauth/token",
+					"protocol": "https",
+					"host": [
+						"mseva-qa",
+						"lgpunjab",
+						"gov",
+						"in"
+					],
+					"path": [
+						"user",
+						"oauth",
+						"token"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create employee",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "User-Agent",
+						"value": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:74.0) Gecko/20100101 Firefox/74.0"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json, text/plain, */*"
+					},
+					{
+						"key": "Accept-Language",
+						"value": "en-US,en;q=0.5"
+					},
+					{
+						"key": "Referer",
+						"value": "https://mseva-qa.lgpunjab.gov.in/employee/hrms/create"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json;charset=utf-8"
+					},
+					{
+						"key": "Origin",
+						"value": "https://mseva-qa.lgpunjab.gov.in"
+					},
+					{
+						"key": "Connection",
+						"value": "keep-alive"
+					},
+					{
+						"key": "TE",
+						"value": "Trailers"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"RequestInfo\": {\n        \"apiId\": \"Rainmaker\",\n        \"ver\": \".01\",\n        \"action\": \"\",\n        \"did\": \"1\",\n        \"key\": \"\",\n        \"msgId\": \"20170310130900|en_IN\",\n        \"requesterId\": \"\",\n        \"authToken\": \"aba7576f-a47f-4d31-b8c0-71ade7260f59\"\n    },\n    \"Employees\": [\n        {\n            \"employeeStatus\": \"EMPLOYED\",\n            \"user\": {\n                \"name\": \"EMP-WS-MIGRATOR\",\n                \"mobileNumber\": \"8105735295\",\n                \"fatherOrHusbandName\": \"WS\",\n                \"relationship\": \"FATHER\",\n                \"gender\": \"MALE\",\n                \"dob\": 568319400000,\n                \"roles\": [\n                    {\n                        \"code\": \"WS_APPROVER\",\n                        \"name\": \"ACCESSCONTROL_ROLES_ROLES_WS_APPROVER\"\n                    },\n                    {\n                        \"code\": \"WS_CEMP\",\n                        \"name\": \"ACCESSCONTROL_ROLES_ROLES_WS_CEMP\"\n                    },\n                    {\n                        \"code\": \"WS_CLERK\",\n                        \"name\": \"ACCESSCONTROL_ROLES_ROLES_WS_CLERK\"\n                    },\n                    {\n                        \"code\": \"WS_DOC_VERIFIER\",\n                        \"name\": \"ACCESSCONTROL_ROLES_ROLES_WS_DOC_VERIFIER\"\n                    },\n                    {\n                        \"code\": \"WS_FIELD_INSPECTOR\",\n                        \"name\": \"ACCESSCONTROL_ROLES_ROLES_WS_FIELD_INSPECTOR\"\n                    },\n                    {\n                        \"code\": \"SW_APPROVER\",\n                        \"name\": \"ACCESSCONTROL_ROLES_ROLES_SW_APPROVER\"\n                    },\n                    {\n                        \"code\": \"SW_CEMP\",\n                        \"name\": \"ACCESSCONTROL_ROLES_ROLES_SW_CEMP\"\n                    },\n                    {\n                        \"code\": \"SW_CLERK\",\n                        \"name\": \"ACCESSCONTROL_ROLES_ROLES_SW_CLERK\"\n                    },\n                    {\n                        \"code\": \"SW_DOC_VERIFIER\",\n                        \"name\": \"ACCESSCONTROL_ROLES_ROLES_SW_DOC_VERIFIER\"\n                    },\n                    {\n                        \"code\": \"SW_FIELD_INSPECTOR\",\n                        \"name\": \"ACCESSCONTROL_ROLES_ROLES_SW_FIELD_INSPECTOR\"\n                    },\n                    {\n                        \"code\": \"COLL_RECEIPT_CREATOR\",\n                        \"name\": \"ACCESSCONTROL_ROLES_ROLES_COLL_RECEIPT_CREATOR\"\n                    },\n                    {\n                        \"code\": \"COLL_REMIT_TO_BANK\",\n                        \"name\": \"ACCESSCONTROL_ROLES_ROLES_COLL_REMIT_TO_BANK\"\n                    },\n                    {\n                        \"code\": \"PT_APPROVER\",\n                        \"name\": \"ACCESSCONTROL_ROLES_ROLES_PT_APPROVER\"\n                    },\n                    {\n                        \"code\": \"PT_DOC_VERIFIER\",\n                        \"name\": \"ACCESSCONTROL_ROLES_ROLES_PT_DOC_VERIFIER\"\n                    },\n                    {\n                        \"code\": \"PT_FIELD_INSPECTOR\",\n                        \"name\": \"ACCESSCONTROL_ROLES_ROLES_PT_FIELD_INSPECTOR\"\n                    },\n                    {\n                        \"code\": \"PTCEMP\",\n                        \"name\": \"ACCESSCONTROL_ROLES_ROLES_PTCEMP\"\n                    },\n                    {\n                        \"code\": \"PTFEMP\",\n                        \"name\": \"ACCESSCONTROL_ROLES_ROLES_PTFEMP\"\n                    },\n                    {\n                        \"code\": \"PTSTADMIN\",\n                        \"name\": \"ACCESSCONTROL_ROLES_ROLES_PTSTADMIN\"\n                    },\n                    {\n                        \"code\": \"PTULBADMIN\",\n                        \"name\": \"ACCESSCONTROL_ROLES_ROLES_PTULBADMIN\"\n                    },\n                    {\n                        \"code\": \"DSS_CITY_ADMIN\",\n                        \"name\": \"ACCESSCONTROL_ROLES_ROLES_DSS_CITY_ADMIN\"\n                    },\n                    {\n                        \"code\": \"DSS_STATE_ADMIN\",\n                        \"name\": \"ACCESSCONTROL_ROLES_ROLES_DSS_STATE_ADMIN\"\n                    },\n                    {\n                        \"code\": \"EGF_ADMINISTRATOR\",\n                        \"name\": \"ACCESSCONTROL_ROLES_ROLES_EGF_ADMINISTRATOR\"\n                    },\n                    {\n                        \"code\": \"EGF_BILL_APPROVER\",\n                        \"name\": \"ACCESSCONTROL_ROLES_ROLES_EGF_BILL_APPROVER\"\n                    },\n                    {\n                        \"code\": \"EGF_BILL_CREATOR\",\n                        \"name\": \"ACCESSCONTROL_ROLES_ROLES_EGF_BILL_CREATOR\"\n                    },\n                    {\n                        \"code\": \"EGF_MASTER_ADMIN\",\n                        \"name\": \"ACCESSCONTROL_ROLES_ROLES_EGF_MASTER_ADMIN\"\n                    },\n                    {\n                        \"code\": \"EGF_PAYMENT_APPROVER\",\n                        \"name\": \"ACCESSCONTROL_ROLES_ROLES_EGF_PAYMENT_APPROVER\"\n                    },\n                    {\n                        \"code\": \"EGF_PAYMENT_CREATOR\",\n                        \"name\": \"ACCESSCONTROL_ROLES_ROLES_EGF_PAYMENT_CREATOR\"\n                    },\n                    {\n                        \"code\": \"EGF_REPORT_VIEW\",\n                        \"name\": \"ACCESSCONTROL_ROLES_ROLES_EGF_REPORT_VIEW\"\n                    },\n                    {\n                        \"code\": \"EGF_VOUCHER_CREATOR\",\n                        \"name\": \"ACCESSCONTROL_ROLES_ROLES_EGF_VOUCHER_CREATOR\"\n                    },\n                    {\n                        \"code\": \"EGF_VOUCHER_APPROVER\",\n                        \"name\": \"ACCESSCONTROL_ROLES_ROLES_EGF_VOUCHER_APPROVER\"\n                    },\n                    {\n                        \"code\": \"SYS_INTEGRATOR_FINANCE\",\n                        \"name\": \"ACCESSCONTROL_ROLES_ROLES_SYS_INTEGRATOR_FINANCE\"\n                    },\n                    {\n                        \"code\": \"SYS_INTEGRATOR_WATER_SEW\",\n                        \"name\": \"ACCESSCONTROL_ROLES_ROLES_SYS_INTEGRATOR_WATER_SEW\"\n                    }\n                ],\n                \"tenantId\": \"pb.fazilka\"\n            },\n            \"code\": \"EMP-WS-MIGRATOR\",\n            \"dateOfAppointment\": 1612117800000,\n            \"employeeType\": \"PERMANENT\",\n            \"jurisdictions\": [\n                {\n                    \"hierarchy\": \"REVENUE\",\n                    \"boundaryType\": \"City\",\n                    \"boundary\": \"pb.punjab\",\n                    \"tenantId\": \"pb.punjab\"\n                }\n            ],\n            \"assignments\": [\n                {\n                    \"fromDate\": 1612117800000,\n                    \"toDate\": null,\n                    \"isCurrentAssignment\": true,\n                    \"department\": \"DEPT_41\",\n                    \"designation\": \"DESIG_97\",\n                    \"isHOD\": true\n                }\n            ],\n            \"serviceHistory\": [],\n            \"education\": [],\n            \"tests\": [],\n            \"tenantId\": \"pb.punjab\"\n        }\n    ]\n}"
+				},
+				"url": {
+					"raw": "https://mseva-qa.lgpunjab.gov.in/egov-hrms/employees/_create?tenantId=pb.fazilka",
+					"protocol": "https",
+					"host": [
+						"mseva-qa",
+						"lgpunjab",
+						"gov",
+						"in"
+					],
+					"path": [
+						"egov-hrms",
+						"employees",
+						"_create"
+					],
+					"query": [
+						{
+							"key": "tenantId",
+							"value": "pb.fazilka"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "sample_WS_create",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"RequestInfo\": {\n    \"apiId\": \"Rainmaker\",\n    \"ver\": \".01\",\n    \"action\": \"\",\n    \"did\": \"1\",\n    \"key\": \"\",\n    \"msgId\": \"20170310130900|en_IN\",\n    \"requesterId\": \"\",\n    \"authToken\": \"0f5153ff-cf94-4f73-991b-4c203b22333b\",\n    \"userInfo\": {\n      \"id\": 24226,\n      \"uuid\": \"11b0e02b-0145-4de2-bc42-c97b96264807\",\n      \"userName\": \"amr001\",\n      \"name\": \"leela\",\n      \"mobileNumber\": \"9814424443\",\n      \"emailId\": \"leela@llgmail.com\",\n      \"locale\": null,\n      \"type\": \"EMPLOYEE\",\n      \"roles\": [\n      \t{\n          \"name\": \"CITIZEN\",\n          \"code\": \"CITIZEN\",\n          \"tenantId\": \"pb\"\n        },\n        {\n          \"name\": \"WS Document Verifier\",\n          \"code\": \"WS_DOC_VERIFIER\",\n          \"tenantId\": \"pb\"\n        },\n        {\n          \"name\": \"WS Approver\",\n          \"code\": \"WS_APPROVER\",\n          \"tenantId\": \"pb\"\n        },\n         {\n          \"name\": \"WS CLARK\",\n          \"code\": \"WS_CLERK\",\n          \"tenantId\": \"pb\"\n        },\n        {\n          \"name\": \"Employee\",\n          \"code\": \"EMPLOYEE\",\n          \"tenantId\": \"pb\"\n        },\n        {\n          \"name\": \"WS Counter Employee\",\n          \"code\": \"WS_CEMP\",\n          \"tenantId\": \"pb\"\n        },\n        {\n          \"name\": \"WS Field Inspector\",\n          \"code\": \"WS_FIELD_INSPECTOR\",\n          \"tenantId\": \"pb\"\n        }\n        ,\n        {\n          \"name\": \"WS Junior Engineer\",\n          \"code\": \"WS_JUNIOR_ENGINEER\",\n          \"tenantId\": \"pb\"\n        }\n      ],\n      \"active\": true,\n      \"tenantId\": \"pb.amritsar\"\n    }\n  },\n  \"WaterConnection\": {\n  \t\"propertyId\":\"78322cb7-82f7-4b54-96c0-f101ce166915\",\n\t\"tenantId\":\"pb.amritsar\",\n    \"action\": \"INITIATE\",\n    \"documents\": null,\n    \"proposedTaps\": \"10\",\n    \"proposedPipeSize\": 10,\n    \"processInstance\": {\n    \t\"action\":\"INITIATE\"\n    }\n  }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8090/ws-services/wc/_create",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8090",
+					"path": [
+						"ws-services",
+						"wc",
+						"_create"
+					],
+					"query": [
+						{
+							"key": "connectionNumber",
+							"value": "Con_1002",
+							"disabled": true
+						},
+						{
+							"key": "status",
+							"value": "Active",
+							"disabled": true
+						},
+						{
+							"key": "ids",
+							"value": null,
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "water_migration",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": " {\n     \"RequestInfo\": {\n\t\t\"apiId\": \"Rainmaker\",\n\t\t\"ver\": \".01\",\n\t\t\"action\": \"_update\",\n\t\t\"did\": \"1\",\n\t\t\"key\": \"\",\n\t\t\"msgId\": \"20170310130900|en_IN\",\n\t\t\"requesterId\": \"\",\n\t\t\"authToken\": \"4a5fe562-c60c-4dfe-8978-b812cb1d1d9a\",\n\t\t \"userInfo\":{\n\t\t    \"uuid\":\"18437375-73a8-4fb7-81b1-c9d5e3d10ff7\",\n            \"tenantId\":\"pb.amritsar\",\n            \"userName\":\"EMP-WS-MIGRATOR\",\n            \"password\":\"eGov@123\"\n\t\t}\n\t    }\n }\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8280/migrate/water/connection?tenantId=amritsar",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8280",
+					"path": [
+						"migrate",
+						"water",
+						"connection"
+					],
+					"query": [
+						{
+							"key": "tenantId",
+							"value": "amritsar"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
