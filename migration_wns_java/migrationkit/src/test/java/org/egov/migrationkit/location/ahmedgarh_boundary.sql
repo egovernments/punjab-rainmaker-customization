@@ -34,7 +34,7 @@ insert into tmp_boundary (digitname,digitcode) values (	'Tempo Adda to B.R. Amad
 insert into tmp_boundary (digitname,digitcode) values (	'Bank road left side. Block 7 - B7 - A1',	'Ahd_34'	);
 insert into tmp_boundary (digitname,digitcode) values (	'Mahavir road left side Jeet Boot house upto 30 foot deeply. Block 7 - B7 - A1',	'Ahd_35'	);
 insert into tmp_boundary (digitname,digitcode) values (	'Kunan lal hospital road upto limit, Green Avenue Block 7 - B7 - A1',	'Ahd_36'	);
-insert into tmp_boundary (digitname,digitcode) values (	'Area dr. Kundan Lal hospital, Lakashmi Narayan mandir \'s streets. Block 7 - B7 - A1',	'Ahd_37'	);
+insert into tmp_boundary (digitname,digitcode) values (	'Area dr. Kundan Lal hospital, Lakashmi Narayan mandir ''s streets. Block 7 - B7 - A1',	'Ahd_37'	);
 insert into tmp_boundary (digitname,digitcode) values (	'T.W. No 2 de opposite Area, Mahavir road back side Area. Block 7 - B7 - A1',	'Ahd_38'	);
 insert into tmp_boundary (digitname,digitcode) values (	'Hind hospital, Ram sharnam Ashram to right side yash painter Area Block 8 - B8 - A1',	'Ahd_39'	);
 insert into tmp_boundary (digitname,digitcode) values (	'Model town, Right side gainy upto gandhi school Area, Datta Ram schools streets. Block 8 - B8 - A1',	'Ahd_40'	);

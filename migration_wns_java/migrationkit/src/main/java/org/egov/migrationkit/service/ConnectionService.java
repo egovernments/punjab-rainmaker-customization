@@ -515,7 +515,7 @@ public class ConnectionService {
 				} catch (RestClientException e) {
 					log.error(e.getMessage(), e);
 					recordService.recordError("sewerage", tenantId,
-							"Error in creating water connection record :" + e.getMessage(), swConnection.getId());
+							"Error in creating sewerage connection record :" + e.getMessage(), swConnection.getId());
 					continue;
 				}
 
