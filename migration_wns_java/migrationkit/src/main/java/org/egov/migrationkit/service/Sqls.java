@@ -12,6 +12,7 @@ public class Sqls {
 			"  'proposedPipeSize'	, (select sizeininch from egwtr_pipesize psize where conndetails.pipesize=psize.id)		, "+
 			"  'proposedTaps'	, conndetails.nooftaps	,	 "+
 			"  'cityname',	 (SELECT CASE WHEN name like '%UAT%' THEN (SELECT split_part(name	,'-',	1) from eg_city) ELSE (select name from eg_city) END from eg_city), "+
+		    "   'cityCode', (select code from eg_city),\n"+
 			"  'zone',	 zone.name		, "+
 			"  'connectionNo'	, conn.consumercode		, "+
 			"  'id'	, conndetails.id	, "+
@@ -89,8 +90,9 @@ public class Sqls {
 			+ " usage.id=conndetails.usagetype and block.id=conn.block and locality.id=conn.locality and zone.id=conn.zone and"
 			+ " conndetails.propertytype=proptype.id and conndetails.category=wtrctgy.id and ownerinfo.connection=conn.id "
 			+ " and usr.id=ownerinfo.owner and address.id=conn.address and status.id=conndetails.statusid   "
+			+" :locCondition "
 			+ " and conndetails.id not in (select erpid::bigint from egwtr_migration where status in "
-			+ "('initiated','Saved','Demand_Created','Incompatible' ) )  "
+			+ "('initiated','Saved','Demand_Created' ) )  "
 			+ " order by conndetails.id  ; ";   
 	
 	
@@ -173,6 +175,7 @@ public class Sqls {
 	public static final String sewerageQuery="select json_build_object("
 			+ "'cityname', (SELECT CASE WHEN name like '%UAT%' THEN (SELECT split_part(name,'-',1) from eg_city) ELSE (select name from eg_city) END from eg_city),\n"
 			+ "'zone', zone.name,\n"
+			+ "'cityCode', (select code from eg_city),\n"
 			+ "'connectionNo', conn.shsc_number,\n"
 			+ "'id', conndetails.id,\n"
 			+ "'applicantname', usr.name,\n"
@@ -236,11 +239,11 @@ public class Sqls {
 			+ "usage.id=conndetails.usagetype and block.id=conn.block and\n"
 			+ "locality.id=conn.locality and zone.id=conn.zone and\n"
 			+ " ownerinfo.connection=conn.id and usr.id=ownerinfo.owner and\n"
-	
 			+ "  address.id=conn.address and status.id=appdetails.status  "
-		  +   " and conn.shsc_number is not null "
+		    +   " and conn.shsc_number is not null "
+			+" :locCondition "
 			+ " and conndetails.id not in (select erpid::bigint from egswtax_migration where status"
-			+ " in ('initiated','Saved','Demand_Created','Incompatible' ) ) order by conndetails.id limit 1 ;";
+			+ " in ('initiated','Saved','Demand_Created','Incompatible' ) ) order by conndetails.id  limit 500 ;";
 	
 	
 	
@@ -346,7 +349,10 @@ public class Sqls {
 //	+ "\n"
 //	+ "where id=:id;"; 
 	
-	
+	public static final String WATERDOCUMENTSQL="select app.connectiondetailsid,dname.documentname,f.filestoreid,f.filename,f.contenttype "+
+	                       " from egwtr_application_documents app, egwtr_documents d,eg_filestoremap f ,egwtr_document_names dname "+
+	                       " where f.id=d.filestoreid  and d.applicationdocumentsid=app.id and app.documentnamesid=dname.id "
+	                       + " and app.connectiondetailsid=:connNo 	and documentname!='DemandBill' order by app.connectiondetailsid ";
 	
 	
 	

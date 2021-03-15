@@ -21,6 +21,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class Document {
   @JsonProperty("id")
   private String id = null;
+  
+  @JsonProperty("documentCode")
+  private String documentCode = null;
 
   @JsonProperty("documentType")
   private String documentType = null;
@@ -166,5 +169,13 @@ public class Document {
     }
     return o.toString().replace("\n", "\n    ");
   }
+
+public String getDocumentCode() {
+	return documentCode;
+}
+
+public void setDocumentCode(String documentCode) {
+	this.documentCode = documentCode;
+}
 
 }

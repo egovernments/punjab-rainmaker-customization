@@ -1,5 +1,7 @@
 package org.egov.migrationkit.service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,8 +10,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import io.swagger.client.model.CollectionPayment;
-import io.swagger.client.model.WaterConnection;
+import io.swagger.client.model.LocalDocument;
 import io.swagger.client.model.SewerageConnection;
+import io.swagger.client.model.WaterConnection;
 @Transactional
 @Service
 public class RecordService {
@@ -187,6 +190,8 @@ public class RecordService {
 	//jdbcTemplate.execute("drop table if exists egwtr_migration" + tenantId);
 	jdbcTemplate.execute(Sqls.waterRecord_table);
 	jdbcTemplate.execute(Sqls.PROCESSINSERTTABLE);
+	
+	jdbcTemplate.execute("create sequence seq_mobilenumber");
 	}
 	
 	
@@ -244,6 +249,25 @@ public class RecordService {
 			tableName="egswtax_migration";
 		jdbcTemplate.execute("update "+tenantId+"."+tableName+" set mob='" + mob + "' where erpid='"+id+"'"); 
 		
+	}
+	@Transactional
+	public Long nextSequence() {
+	Long no=jdbcTemplate.queryForObject("Select nextval('seq_mobilenumber') ",Long.class );
+		return no;
+	}
+	public List<LocalDocument> getFiles(String connId, String module) {
+		List<LocalDocument> documents=new ArrayList<>();
+		if(module.equalsIgnoreCase("water"))
+		{
+			String sql=Sqls.WATERDOCUMENTSQL;
+			sql=sql.replaceAll(":connId",connId );
+			
+			documents = jdbcTemplate.queryForList(sql, LocalDocument.class);
+			 
+			
+		}
+		return documents; 
+	 
 	} 
 
 }
