@@ -4757,7 +4757,7 @@ ReportDefinitions:
     source: pt
     wrapper: true
     isMandatory: false
-    searchClause: AND tenantid = $ulb
+    searchClause: AND pt.tenantid = $ulb
   query: |
    --S.no    Service Name	ULB    Property Tax Unique ID    Date Of Transcation    Receipt Number	Existing Property ID    Type Of Property	Mobile Number   	Address
     with eg_pt_unit_v2_ot as (
@@ -4769,7 +4769,17 @@ ReportDefinitions:
       from eg_pt_unit as pu
       where  pu.tenantid = $ulb
       group by propertyid
-      )
+      ),
+    prop2019 as
+        (
+        select 
+           oldpropertyid as oldpropertyid,
+           pt.propertyid as propertyid
+        from eg_pt_property pt
+        inner join eg_pt_assessment as assessment on assessment.propertyid=pt.propertyid and assessment.assessmentyear='2019-20' and assessment.tenantid=$ulb
+        where pt.tenantid=$ulb
+        group by pt.propertyid,oldpropertyid
+        )
     select
       --distinct on (payd.receiptnumber)
       --initcap(split_part(payd.tenantid, '.', 2)) as "ulb",
@@ -4797,6 +4807,7 @@ ReportDefinitions:
     --and bill.consumercode not in (select consumercode from egcl_bill where tenantid=$ulb and businessservice='PT' and id in (select billid from egcl_billdetial where tenantid=$ulb and concat(to_char((To_timestamp(fromperiod/1000) at time Zone 'Asia/Kolkata'),'YYYY'),'-',to_char((To_timestamp(toperiod/1000) at time Zone 'Asia/Kolkata'),'YY')) ='2020-21'))
     and pt.status!='INACTIVE'
     and pt.propertyid not in (select consumercode from egcl_bill where tenantid=$ulb and businessservice='PT' and id in (select billid from egcl_billdetial where tenantid=$ulb and concat(to_char((To_timestamp(fromperiod/1000) at time Zone 'Asia/Kolkata'),'YYYY'),'-',to_char((To_timestamp(toperiod/1000) at time Zone 'Asia/Kolkata'),'YY')) ='2020-21'))
+    and pt.propertyid not in (select propertyid from prop2019 where oldpropertyid in (select concat('RID',previous_returnid) from ikon_2020_21_non_migrated_records where tenantid=$ulb))
   groupby: group by pt.propertyid
         
 - reportName: ZoneFYReport_V2
