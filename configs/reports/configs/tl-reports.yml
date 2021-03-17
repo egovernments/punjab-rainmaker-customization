@@ -2698,12 +2698,14 @@ ReportDefinitions:
       string_agg(DISTINCT t.applicationnumber,',')as applicationnumber,
       string_agg(DISTINCT t.tradeName,',') as tradename,
       string_agg(DISTINCT financialyear,',') as financialyear,
+      t.applicationdate,
       string_agg(DISTINCT(case when oldlicensenumber is null then 'New' else 'Renewal' end),',') AS licensetype,
       string_agg(distinct licensenumber,',') as licensenumber,
       split_part(string_agg(u.name,','),',',1) as name, -- string_agg(name,',') as name,
       string_agg(distinct paydetail.amountpaid::varchar,',') as totalamount,
       string_agg(distinct t.status,',') as status,
-      split_part(string_agg(distinct us.name,','),',',1) as assignee
+      split_part(string_agg(distinct us.name,','),',',1) as assignee,
+      CURRENT_DATE- to_timestamp(cast(t.applicationdate/1000 as bigint))::date as days
     FROM eg_tl_tradelicense t INNER JOIN eg_tl_tradelicensedetail td ON td.tradelicenseid = t.id 
     INNER JOIN eg_tl_owner O ON O.tradelicensedetailid = td.id
     INNER JOIN eg_user u ON u.uuid = O.id 
@@ -2715,6 +2717,6 @@ ReportDefinitions:
     INNER JOIN eg_user us ON us.uuid = W.assignee 
     WHERE t.status NOT IN ('APPROVED','CANCELLED','REJECTED','PENDINGPAYMENT','INITIATED') 
     and t.tenantid=$tenantid
-  groupby: GROUP BY O.tradelicensedetailid
+  groupby: GROUP BY O.tradelicensedetailid,applicationdate
   orderby: ORDER BY applicationnumber DESC    
     
