@@ -42,7 +42,7 @@ public class MigrationController {
 
 	@PostMapping("/water/connection")
 	@ResponseStatus(HttpStatus.CREATED)
-	public ResponseEntity migrateWater(@RequestParam String tenantId,@RequestParam String boundaryList,
+	public ResponseEntity migrateWater(@RequestParam String tenantId,
 			@RequestBody RequestInfoWrapper waterMigrateRequest,BindingResult result) {
 
 		try {
@@ -51,7 +51,7 @@ public class MigrationController {
 			String accessToken = userService.getAccessToken(userInfo.getUserName(), userInfo.getPassword(), userInfo.getTenantId());
 			if (accessToken != null) {
 				waterMigrateRequest.getRequestInfo().setAuthToken(accessToken);
-				service.migrateWtrConnection(tenantId,boundaryList, waterMigrateRequest.getRequestInfo());
+				service.migrateWtrConnection(tenantId, waterMigrateRequest.getRequestInfo());
 
 			} else {
 				return new ResponseEntity(HttpStatus.UNAUTHORIZED);
@@ -106,7 +106,7 @@ public class MigrationController {
 	
 	@PostMapping("/sewerage/connection")
 	@ResponseStatus(HttpStatus.CREATED)
-	public ResponseEntity sewerageConnection(@RequestParam String tenantId,@RequestParam String boundaryList,
+	public ResponseEntity sewerageConnection(@RequestParam String tenantId,//@RequestParam String boundaryList,
 			@RequestBody RequestInfoWrapper sewerageConnectionRequest,BindingResult result) {
 
 		try {
@@ -115,7 +115,7 @@ public class MigrationController {
 			String accessToken = userService.getAccessToken(userInfo.getUserName(), userInfo.getPassword(), userInfo.getTenantId());
 			if (accessToken != null) {
 				sewerageConnectionRequest.getRequestInfo().setAuthToken(accessToken);
-				service.createSewerageConnection(tenantId,boundaryList, sewerageConnectionRequest.getRequestInfo());
+				service.createSewerageConnection(tenantId, sewerageConnectionRequest.getRequestInfo());
 
 			} else {
 				return new ResponseEntity(HttpStatus.UNAUTHORIZED);

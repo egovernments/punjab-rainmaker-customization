@@ -68,7 +68,7 @@ public class ConnectionService {
 	@Value("${egov.services.sewerage.url}")
 	private String sewerageUrl = null;
 
-	public void migrateWtrConnection(String tenantId,String boundaryList, RequestInfo requestInfo) {
+	public void migrateWtrConnection(String tenantId, RequestInfo requestInfo) {
 
 		recordService.initiate(tenantId);
 		Map data = null;
@@ -86,17 +86,17 @@ public class ConnectionService {
 
 		String searchPath = jdbcTemplate.queryForObject("show search_path", String.class);
 		log.info(searchPath);
-		String qry=	Sqls.waterQueryFormatted;
-		if(boundaryList.length()>0)
-		{
 		
-		qry=qry.replace(":locCondition","and locality in ("+boundaryList+") " );
-		}else
-		{
-		 
-		qry=qry.replace(":locCondition","  " );
-			
-		}
+		  String qry= Sqls.waterQueryFormatted; 
+		  /* * if(boundaryList.length()>0) {
+		 * 
+		 * qry=qry.replace(":locCondition","and locality in ("+boundaryList+") " );
+		 * }else {
+		 * 
+		 * qry=qry.replace(":locCondition","  " );
+		 * 
+		 * }
+		 */
 
 		List<String> queryForList = jdbcTemplate.queryForList(qry, String.class);
 
@@ -105,6 +105,11 @@ public class ConnectionService {
 			try {
 				data = objectMapper.readValue(json, Map.class);
 				connection = objectMapper.readValue(json, WaterConnection.class);
+				if(connection.getConnectionType().trim().equalsIgnoreCase("Non-Metered")) {
+					connection.setConnectionType("Non Metered");
+				}else {
+					connection.setConnectionType("Metered");
+				}
 				String connectionNo = connection.getConnectionNo() != null ? connection.getConnectionNo()
 						: (String) data.get("applicationnumber");
 				connection.setConnectionNo(connectionNo);
@@ -133,8 +138,11 @@ public class ConnectionService {
 
 				if (connection.getMobilenumber() == null || connection.getMobilenumber().isEmpty()) {
 					recordService.recordError("water", tenantId, "Mobile Number is null ", connection.getId());
-					Long mobileNumber=getMobileNumber(cityCode,locCode);
-					recordService.setMob ("water", tenantId,mobileNumber , connection.getId());
+					/*
+					 * System is allowing only 6-9 series.So as of now added 9999999999
+					 */
+					Long mobileNumber=getMobileNumber(cityCode,locCode,tenantId);
+					recordService.setMob ("water", tenantId,mobileNumber, connection.getId());
 					connection.setMobilenumber(String.valueOf(mobileNumber));
 					//recordService.setStatus("water", tenantId, "Incompatible", connection.getId());
 					//continue;
@@ -201,7 +209,7 @@ public class ConnectionService {
 				addtionals.put("propertyId", (String) data.get("propertyId"));
 				addtionals.put("locality", localityCode);
 				addtionals.put("billingType", (String) data.get("billingType"));
-				addtionals.put("billingAmount", (String) data.get("billingAmount"));
+				addtionals.put("billingAmount", String.valueOf("billingAmount"));
 				addtionals.put("estimationLetterDate", (String) data.get("estimationLetterDate"));
 				addtionals.put("connectionCategory", (String) data.get("connectionCategory"));
 				addtionals.put("meterId", (String) data.get("meterId"));
@@ -305,9 +313,10 @@ public class ConnectionService {
 		log.info("Migration completed for " + tenantId);
 	}
 
-	private Long getMobileNumber(String cityCode, String locCode) {
+	private Long getMobileNumber(String cityCode, String locCode,String tenantId) {
 		String loc=  locCode.replaceAll("\\D+","");
-		String mobileNumber=String.format("4%4s%5s",cityCode,recordService.nextSequence() );
+		String mobileNumber=String.format("4%4s%5s",cityCode,recordService.nextSequence(tenantId) );
+		mobileNumber=mobileNumber.replaceAll(" ", "0");
 		return Long.valueOf(mobileNumber);
 		
 		
@@ -361,7 +370,7 @@ public class ConnectionService {
 
 	}
 
-	public void createSewerageConnection(String tenantId,String boundaryList, RequestInfo requestInfo) {
+	public void createSewerageConnection(String tenantId, RequestInfo requestInfo) {
 
 		recordService.initiateSewrage(tenantId);
 		SewerageConnection swConnection = null;
@@ -370,22 +379,23 @@ public class ConnectionService {
 		Locality locality = null;
 		String locCode = null;
 		String localityCode = null;
+		String cityCode=null;
 		
 
 		String searchPath = jdbcTemplate.queryForObject("show search_path", String.class);
 		log.info(searchPath);
 
 		String qry=	Sqls.sewerageQuery;
-		if(boundaryList.length()>0)
-		{
-		
-		qry=qry.replace(":locCondition","and locality in ("+boundaryList+") " );
-		}else
-		{
+		/*
+		 * if(boundaryList.length()>0) {
+		 * 
+		 * qry=qry.replace(":locCondition","and locality in ("+boundaryList+") " );
+		 * }else {
+		 * 
+		 * qry=qry.replace(":locCondition","  " );
 		 
-		qry=qry.replace(":locCondition","  " );
 			
-		}
+		}*/
 		List<String> queryForList = jdbcTemplate.queryForList(qry, String.class);
 
 		for (String json : queryForList) {
@@ -409,12 +419,14 @@ public class ConnectionService {
 				// swConnection.getConnectionType());
 				// log.debug("Connection id :" + swConnection.getId());
 				recordService.recordSewerageMigration(swConnection, tenantId);
-
+				locCode = (String) data.get("locality");
+				cityCode = (String) data.get("cityCode");
 				if (swConnection.getMobilenumber() == null || swConnection.getMobilenumber().isEmpty()) {
 					recordService.recordError("sewerage", tenantId, "Mobile Number is null ", swConnection.getId());
-					recordService.setMob ("sewerage", tenantId, mob, swConnection.getId());
-					mob = mob + 1;
-					recordService.setStatus("sewerage", tenantId, "Incompatible", swConnection.getId());
+					Long mobileNumber=getMobileNumber(cityCode,locCode,tenantId);
+					recordService.setMob ("sewerage", tenantId, mobileNumber, swConnection.getId());
+					swConnection.setMobilenumber(String.valueOf(mobileNumber));
+					
 					//continue;
 				}
 

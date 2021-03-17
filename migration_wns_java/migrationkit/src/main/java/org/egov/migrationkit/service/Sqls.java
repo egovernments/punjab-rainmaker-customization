@@ -90,10 +90,9 @@ public class Sqls {
 			+ " usage.id=conndetails.usagetype and block.id=conn.block and locality.id=conn.locality and zone.id=conn.zone and"
 			+ " conndetails.propertytype=proptype.id and conndetails.category=wtrctgy.id and ownerinfo.connection=conn.id "
 			+ " and usr.id=ownerinfo.owner and address.id=conn.address and status.id=conndetails.statusid   "
-			+" :locCondition "
 			+ " and conndetails.id not in (select erpid::bigint from egwtr_migration where status in "
-			+ "('initiated','Saved','Demand_Created' ) )  "
-			+ " order by conndetails.id  ; ";   
+			+ "('Saved','Demand_Created' ) )  "
+			+ " order by conndetails.id limit 1000 ; ";   
 	
 	
 	//public static final String ledgerId= "Select ledgerid as ledgerId from  egwtr_stg_connection;";
@@ -108,7 +107,7 @@ public class Sqls {
 	//public static final String averageMake= "Select averagemeterreading as averageMake from egwtr_connectiondetails;";
 	
 	public static final String waterRecord_table="create table if not exists egwtr_migration "
-			+ " ( erpid varchar(64),erpconn varchar(64) ,digitconn varchar(64) ,erppt varchar(64),digitpt varchar(64),status varchar(64),tenantId varchar(64),additiondetails varchar(1000),errorMessage varchar(4000) );"
+			+ " ( erpid varchar(64),erpconn varchar(64) ,digitconn varchar(64) ,erppt varchar(64),digitpt varchar(64),status varchar(64),tenantId varchar(64),additiondetails varchar(1000),errorMessage varchar(4000), mob varchar(11) );"
 			+ "";
 	
 	public static final String waterRecord_insert="insert into :schema.egwtr_migration "
@@ -241,9 +240,9 @@ public class Sqls {
 			+ " ownerinfo.connection=conn.id and usr.id=ownerinfo.owner and\n"
 			+ "  address.id=conn.address and status.id=appdetails.status  "
 		    +   " and conn.shsc_number is not null "
-			+" :locCondition "
+			//+" :locCondition "
 			+ " and conndetails.id not in (select erpid::bigint from egswtax_migration where status"
-			+ " in ('initiated','Saved','Demand_Created','Incompatible' ) ) order by conndetails.id  limit 500 ;";
+			+ " in ('Saved','Demand_Created' ) ) order by conndetails.id limit 1000;";
 	
 	
 	

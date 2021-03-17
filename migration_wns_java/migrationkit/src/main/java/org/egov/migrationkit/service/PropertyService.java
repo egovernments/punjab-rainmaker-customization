@@ -62,7 +62,7 @@ public class PropertyService {
 		Property property = null;
 		try {
 			property = searchPtRecord(wcr, data, tenantId);
-
+          
 			if (property == null) {
 				//log.debug("Propery not found creating new property");
 				property = createProperty(wcr, data, tenantId);
@@ -92,7 +92,7 @@ public class PropertyService {
 		return property;
 	}
 
-	private Property createProperty(WaterConnectionRequest wcr, Map data, String tenantId) {
+	private Property createProperty(WaterConnectionRequest wcr, Map data, String tenantId) throws InterruptedException {
 		String uuid = null;
 		PropertyRequest prequest = new PropertyRequest();
 		prequest.setRequestInfo(wcr.getRequestInfo());
@@ -145,7 +145,7 @@ public class PropertyService {
 
 		// log.info(res.getProperties().get(0).getSource() +"   "+res.getProperties().get(0).getAcknowldgementNumber());
 		//return res.getProperties().get(0);
-
+          Thread.sleep(2000);
 		Property property2 = res.getProperties().get(0);
 		property2.setSource(Source.WATER_CHARGES);
 		ProcessInstance workflow = new ProcessInstance();
@@ -236,7 +236,7 @@ public class PropertyService {
 
 		String propertySeachURL = ptseachurl + "?tenantId=" + conn.getRequestInfo().getUserInfo().getTenantId()
 				+ "&mobileNumber=" + conn.getWaterConnection().getMobilenumber()
-				+ "&applicantName=" + conn.getWaterConnection().getApplicantname();
+				+ "&name=" + conn.getWaterConnection().getApplicantname();
 
 		PropertySearchResponse response = restTemplate.postForObject(host + "/" + propertySeachURL, pr,
 				PropertySearchResponse.class);

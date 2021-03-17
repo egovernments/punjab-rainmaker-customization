@@ -191,7 +191,7 @@ public class RecordService {
 	jdbcTemplate.execute(Sqls.waterRecord_table);
 	jdbcTemplate.execute(Sqls.PROCESSINSERTTABLE);
 	
-	jdbcTemplate.execute("create sequence seq_mobilenumber");
+	jdbcTemplate.execute("create sequence if not exists seq_mobilenumber");
 	}
 	
 	
@@ -253,7 +253,8 @@ public class RecordService {
 		
 	}
 	@Transactional
-	public Long nextSequence() {
+	public Long nextSequence(String tenantId) {
+		jdbcTemplate.execute("set search_path to " + tenantId);
 	Long no=jdbcTemplate.queryForObject("Select nextval('seq_mobilenumber') ",Long.class );
 		return no;
 	}
