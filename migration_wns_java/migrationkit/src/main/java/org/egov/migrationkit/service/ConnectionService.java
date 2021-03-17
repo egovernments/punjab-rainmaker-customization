@@ -64,6 +64,8 @@ public class ConnectionService {
 
 	@Autowired
 	private DemandService demandService;
+	@Autowired
+	private	FileUploadService fileUploadService;
 
 	@Value("${egov.services.sewerage.url}")
 	private String sewerageUrl = null;
@@ -87,7 +89,7 @@ public class ConnectionService {
 		String searchPath = jdbcTemplate.queryForObject("show search_path", String.class);
 		log.info(searchPath);
 		String qry=	Sqls.waterQueryFormatted;
-		if(boundaryList.length()>0)
+		if(boundaryList!=null && boundaryList.length()>0)
 		{
 		
 		qry=qry.replace(":locCondition","and locality in ("+boundaryList+") " );
@@ -132,12 +134,13 @@ public class ConnectionService {
 				recordService.recordWaterMigration(connection, tenantId);
 
 				if (connection.getMobilenumber() == null || connection.getMobilenumber().isEmpty()) {
-					recordService.recordError("water", tenantId, "Mobile Number is null ", connection.getId());
+				//	continue;
+					connection.setMobilenumber("994534481");
+					/*recordService.recordError("water", tenantId, "Mobile Number is null ", connection.getId());
 					Long mobileNumber=getMobileNumber(cityCode,locCode);
 					recordService.setMob ("water", tenantId,mobileNumber , connection.getId());
-					connection.setMobilenumber(String.valueOf(mobileNumber));
-					//recordService.setStatus("water", tenantId, "Incompatible", connection.getId());
-					//continue;
+					connection.setMobilenumber(String.valueOf(mobileNumber));*/
+					 
 				}
 
 				String addressQuery = Sqls.address;
@@ -160,6 +163,7 @@ public class ConnectionService {
 				locality.setCode(localityCode);
 				address.setLocality(locality);
 				connection.setApplicantAddress(address);
+				connection.setDocuments(getDocuments(connection.getId(),"water",cityCode));
 
 				Property property = propertyService.findProperty(waterRequest, data, tenantId);
 				if (property == null) {
@@ -194,7 +198,7 @@ public class ConnectionService {
 				workflow.setModuleName("ws-services");
 				connection.setProcessInstance(workflow);
 
-				//connection.setDocuments(getDocuments(waterRequest, data));
+				
 				StringBuilder additionalDetail = new StringBuilder();
 				Map<Object, Object> addtionals = new HashMap<Object, Object>();
 				
@@ -308,18 +312,22 @@ public class ConnectionService {
 	private Long getMobileNumber(String cityCode, String locCode) {
 		String loc=  locCode.replaceAll("\\D+","");
 		String mobileNumber=String.format("4%4s%5s",cityCode,recordService.nextSequence() );
+		mobileNumber=mobileNumber.replaceAll(" ", "0");
 		return Long.valueOf(mobileNumber);
 		
 		
 	}   
 
-	private List<Document> getDocuments(WaterConnectionRequest waterRequest, Map data) {
+	private List<Document> getDocuments(String connNo, String module,String cityCode) {
+	
+		
+//		fileUploadService.uploadImages(connNo, module, cityCode);
 		List<Document> documents = new ArrayList<>();
 		Document doc = new Document();
 		//doc.setDocumentCode("OWNER.IDENTITYPROOF.AADHAAR");
 		//doc.setFileName("0a5b93d4-9eaa-4605-aaf1-970026ec3606.png");
 		//doc.setFileUrl("");
-		doc.setFileStore("34dc69f0-c5f2-483e-a0ac-e3555dffd5b1");
+		doc.setFileStore("0a5b93d4-9eaa-4605-aaf1-970026ec3606");
 		doc.setDocumentType("OWNER.IDENTITYPROOF.AADHAAR");
 		documents.add(doc);
 		return documents;
@@ -376,7 +384,8 @@ public class ConnectionService {
 		log.info(searchPath);
 
 		String qry=	Sqls.sewerageQuery;
-		if(boundaryList.length()>0)
+		
+		if(boundaryList!=null && boundaryList.length()>0)
 		{
 		
 		qry=qry.replace(":locCondition","and locality in ("+boundaryList+") " );
@@ -496,8 +505,10 @@ public class ConnectionService {
 							"Property not found or cannot be created  for the record  ", swConnection.getId());
 					continue;
 				}
+				
+				String	cityCode = (String) data.get("cityCode");
 				swConnection.setPropertyId(property.getId());
-				swConnection.setDocuments(getDocuments(null, data));
+				swConnection.setDocuments(getDocuments(swConnection.getId(), "sewerage",cityCode));
 
 				swConnection.setTenantId(requestInfo.getUserInfo().getTenantId());
 				ProcessInstance workflow = new ProcessInstance();

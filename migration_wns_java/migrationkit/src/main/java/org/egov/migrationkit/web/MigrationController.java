@@ -42,7 +42,7 @@ public class MigrationController {
 
 	@PostMapping("/water/connection")
 	@ResponseStatus(HttpStatus.CREATED)
-	public ResponseEntity migrateWater(@RequestParam String tenantId,@RequestParam String boundaryList,
+	public ResponseEntity migrateWater(@RequestParam String tenantId,@RequestParam(required=false)String boundaryList,
 			@RequestBody RequestInfoWrapper waterMigrateRequest,BindingResult result) {
 
 		try {
@@ -106,7 +106,7 @@ public class MigrationController {
 	
 	@PostMapping("/sewerage/connection")
 	@ResponseStatus(HttpStatus.CREATED)
-	public ResponseEntity sewerageConnection(@RequestParam String tenantId,@RequestParam String boundaryList,
+	public ResponseEntity sewerageConnection(@RequestParam String tenantId,@RequestParam(required=false) String boundaryList,
 			@RequestBody RequestInfoWrapper sewerageConnectionRequest,BindingResult result) {
 
 		try {

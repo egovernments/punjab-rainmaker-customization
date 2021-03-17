@@ -191,7 +191,7 @@ public class RecordService {
 	jdbcTemplate.execute(Sqls.waterRecord_table);
 	jdbcTemplate.execute(Sqls.PROCESSINSERTTABLE);
 	
-	jdbcTemplate.execute("create sequence seq_mobilenumber");
+//	jdbcTemplate.execute("create sequence seq_mobilenumber");
 	}
 	
 	
@@ -262,7 +262,7 @@ public class RecordService {
 		if(module.equalsIgnoreCase("water"))
 		{
 			String sql=Sqls.WATERDOCUMENTSQL;
-			sql=sql.replaceAll(":connId",connId );
+			sql=sql.replaceAll(":connNo",connId );
 			
 			documents = jdbcTemplate.queryForList(sql, LocalDocument.class);
 			 
