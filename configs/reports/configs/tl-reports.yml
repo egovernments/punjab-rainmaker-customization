@@ -2680,6 +2680,11 @@ ReportDefinitions:
     type: string
     source: tl
     total: false
+  - name: days
+    label: report.tl.days
+    type: string
+    source: tl
+    total: false
   searchParams:
   - name: fromDate
     label: reports.tl.fromDate
