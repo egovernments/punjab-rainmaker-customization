@@ -190,7 +190,7 @@ public class CollectionService {
 							CollectionPaymentResponse paymentResponse = objectMapper.convertValue(response.get(), CollectionPaymentResponse.class);
 							if(!CollectionUtils.isEmpty(paymentResponse.getPayments())) {
 								log.info("Collection migration done for consumer code: "+ payment.getConsumerCode());
-								recordService.updateSwgCollMigration(payment);
+								recordService.updateSwgCollMigration(payment,tenantId);
 							}
 								else {
 								log.error("Failed to register this payment at collection-service for consumer code: "+ payment.getConsumerCode());	

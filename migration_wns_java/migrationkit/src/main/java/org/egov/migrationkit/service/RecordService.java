@@ -169,10 +169,11 @@ public class RecordService {
 	}
 	
 	@Transactional
-	public void updateSwgCollMigration(CollectionPayment conn)
+	public void updateSwgCollMigration(CollectionPayment conn,String tenantId)
 	{
 		
 	String qry=	Sqls.SEWERAGE_COLLECTION_UPDATE;
+	qry=qry.replace(":schema", tenantId);
 	qry=qry.replace(":erpconn", "'"+conn.getConsumerCode()+"'");
 	qry=qry.replace(":status", "'Saved'");
 	qry=qry.replace(":tenantId", "'"+conn.getTenantId()+"'");
