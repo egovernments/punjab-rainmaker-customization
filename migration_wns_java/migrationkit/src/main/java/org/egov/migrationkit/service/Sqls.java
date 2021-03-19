@@ -146,30 +146,10 @@ public class Sqls {
 			+ " INNER JOIN egwtr_connectiondetails conndetails ON wtrcon.id=conndetails.connection INNER JOIN eg_user owner "
 			+ " ON owner.id=connowner.owner"
 			+ " and conndetails.id in (select erpid::bigint from egwtr_migration where status in ('Demand_Created') )"
-			+ " and wtrcon.consumercode not in (select erpconn from egwtr_cl_migration )"
+			+ " and wtrcon.consumercode not in (select erpconn from egwtr_cl_migration where status not in ('Saved') )"
 			+ " GROUP BY it.type,ih.transactionnumber, ih.transactiondate, ch.payeename, owner.mobilenumber, "
-			+ " owner.name, ch.consumercode, owner.emailid, owner.id,ch.totalamount, ih.instrumentdate, ih.instrumentNumber,status.code"
-			+ " UNION ALL select json_build_object( 'paymentMode','cash', 'paymentStatus', 'New', 'businessService', 'WS.ONE_TIME_FEE', "
-			+ " 'transactionNumber',ih.transactionnumber, 'transactionDate', (select extract(epoch from ih.transactiondate) * 1000), 'paidBy',"
-			+ "  ch.payeename, 'mobileNumber', owner.mobilenumber, 'payerName', owner.name, 'consumerCode', CASE WHEN wtrcon.consumercode is not"
-			+ " null THEN wtrcon.consumercode ELSE conndetails.applicationnumber END, 'payerEmail', owner.emailid, 'payerId', owner.id, "
-			+ " 'totalAmountPaid', ch.totalamount, 'totalDue', ch.totalamount, 'instrumentDate', (select extract(epoch from ih.instrumentdate) "
-			+ " * 1000) , 'instrumentNumber', ih.instrumentNumber, 'instrumentStatus', status.code, 'paymentDetails',"
-			+ " (json_agg(json_build_object('totalDue', ch.totalamount, 'totalAmountPaid' , ch.totalamount, 'businessService',"
-			+ " 'WS.ONE_TIME_FEE')ORDER BY ch.id ) ) ) as payments_info from egcl_collectionheader ch INNER JOIN egcl_servicedetails "
-			+ " billingservice ON ch.servicedetails=billingservice.id and billingservice.code !='STAX' INNER JOIN egcl_collectioninstrument ci"
-			+ " ON ch.id=ci.collectionheader INNER JOIN egf_instrumentheader ih ON ci.instrumentheader=ih.id INNER JOIN egf_instrumenttype it "
-			+ " ON ih.instrumenttype=it.id INNER JOIN egw_status status ON ch.status=status.id and ch.status in (select id from egw_status where"
-			+ " moduletype='ReceiptHeader' and code not in ('PENDING','FAILED')) INNER JOIN egwtr_connectiondetails conndetails"
-			+ " ON ch.consumercode=conndetails.applicationnumber INNER JOIN egwtr_connection wtrcon ON wtrcon.id=conndetails.connection "
-			+ " INNER JOIN egwtr_connection_owner_info connowner ON wtrcon.id=connowner.connection INNER JOIN eg_user owner ON "
-			+ " owner.id=connowner.owner "
-			+ " and conndetails.id in (select erpid::bigint from egswtax_migration where status in ('Demand_Created') )"
-			+ " and wtrcon.consumercode not in (select erpconn from egwtr_cl_migration )"
-			+ " GROUP BY it.type,ih.transactionnumber, ih.transactiondate, ch.payeename, owner.mobilenumber, "
-			+ " owner.name, ch.consumercode, owner.emailid, owner.id,ch.totalamount, ih.instrumentdate, ih.instrumentNumber,status.code,"
-			+ " conndetails.applicationnumber, wtrcon.consumercode ;";
-	
+			+ " owner.name, ch.consumercode, owner.emailid, owner.id,ch.totalamount, ih.instrumentdate, ih.instrumentNumber,status.code";
+				
 	
 	public static final String sewerageQuery="select json_build_object("
 			+ "'cityname', (SELECT CASE WHEN name like '%UAT%' THEN (SELECT split_part(name,'-',1) from eg_city) ELSE (select name from eg_city) END from eg_city),\n"
