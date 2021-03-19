@@ -146,7 +146,7 @@ public class Sqls {
 			+ " INNER JOIN egwtr_connectiondetails conndetails ON wtrcon.id=conndetails.connection INNER JOIN eg_user owner "
 			+ " ON owner.id=connowner.owner"
 			+ " and conndetails.id in (select erpid::bigint from egwtr_migration where status in ('Demand_Created') )"
-			+ " and wtrcon.consumercode not in (select erpconn from egwtr_cl_migration where status not in ('Saved') )"
+			+ " and wtrcon.consumercode not in (select erpconn from egwtr_cl_migration where status  in ('Saved') )"
 			+ " GROUP BY it.type,ih.transactionnumber, ih.transactiondate, ch.payeename, owner.mobilenumber, "
 			+ " owner.name, ch.consumercode, owner.emailid, owner.id,ch.totalamount, ih.instrumentdate, ih.instrumentNumber,status.code";
 				

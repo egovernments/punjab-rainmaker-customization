@@ -18,6 +18,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.client.model.BillResponseV2;
 import io.swagger.client.model.BillV2;
 import io.swagger.client.model.CollectionPayment;
+import io.swagger.client.model.CollectionPaymentDetail;
 import io.swagger.client.model.CollectionPaymentRequest;
 import io.swagger.client.model.CollectionPaymentResponse;
 import io.swagger.client.model.RequestInfo;
@@ -50,6 +51,8 @@ public class CollectionService {
 
 
 	public void migrateWtrCollection(String tenantId, RequestInfo requestInfo) {
+		
+		long startTime=System.currentTimeMillis();
 
 		//jdbcTemplate.execute("set search_path to " + tenantId);
 		recordService.initiateCollection(tenantId);
@@ -57,7 +60,7 @@ public class CollectionService {
 		jdbcTemplate.execute(Sqls.WATER_COLLECTION_TABLE);
 
 		String digitTenantId = requestInfo.getUserInfo().getTenantId();
-
+         log.info("query is"+Sqls.WATER_COLLECTION_QUERY );
 		List<String> queryForList = jdbcTemplate.queryForList(Sqls.WATER_COLLECTION_QUERY, String.class);
 
 		for (String json : queryForList) {
@@ -79,6 +82,9 @@ public class CollectionService {
 					recordService.recordError("Wtrcollection",digitTenantId, "Error while fetching bill:"+ exception.getMessage(), payment.getId());
 				}
 				if(bills != null && !bills.isEmpty() && !payment.getPaymentDetails().isEmpty()) {
+					List<CollectionPaymentDetail> detailList=new ArrayList<CollectionPaymentDetail>();
+					detailList.add(payment.getPaymentDetails().get(0));
+					payment.setPaymentDetails(detailList);
 					payment.getPaymentDetails().get(0).setBillId(bills.get(0).getId());
 					CollectionPaymentRequest paymentRequest = CollectionPaymentRequest.builder()
 							.requestInfo(requestInfo).payment(payment).build();
@@ -118,6 +124,8 @@ public class CollectionService {
 
 		}
 		log.info("Collection Migration is completed for "+tenantId);
+		long endtime=System.currentTimeMillis();
+		log.info("time taken for processing collection records in ms: "+ (endtime-startTime));
 	}
 
 	public List<BillV2> fetchBill(RequestInfo requestInfo, String tenantId, String businessService, String consumerCode) {
