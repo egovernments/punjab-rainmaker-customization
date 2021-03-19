@@ -94,8 +94,10 @@ public class CollectionService {
 					if(response.isPresent()) {
 						try {
 							CollectionPaymentResponse paymentResponse = objectMapper.convertValue(response.get(), CollectionPaymentResponse.class);
-							if(!CollectionUtils.isEmpty(paymentResponse.getPayments()))
+							if(!CollectionUtils.isEmpty(paymentResponse.getPayments())) {
 								log.info("Collection migration done for consumer code: "+ payment.getConsumerCode());
+								recordService.updateWtrCollMigration(payment,tenantId);
+							}
 							else {
 								log.error("Failed to register this payment at collection-service for consumer code: "+ payment.getConsumerCode());	
 								recordService.recordError("Wtrcollection",digitTenantId, "Failed to register this payment at collection-service for consumer code: "+ payment.getConsumerCode(), payment.getId());
@@ -111,7 +113,7 @@ public class CollectionService {
 						recordService.recordError("Wtrcollection",digitTenantId, "Failed to register this payment at collection-service", payment.getId());
 					}
 
-					recordService.updateWtrCollMigration(payment,tenantId);
+					
 					log.debug("waterResponse" + response); 
 				}
 
@@ -174,6 +176,9 @@ public class CollectionService {
 					recordService.recordError("Swcollection",digitTenantId, "Error while fetching bill:"+ exception.getMessage(), payment.getId());
 				}
 				if(bills != null && !bills.isEmpty() && !payment.getPaymentDetails().isEmpty()) {
+					List<CollectionPaymentDetail> detailList=new ArrayList<CollectionPaymentDetail>();
+					detailList.add(payment.getPaymentDetails().get(0));
+					payment.setPaymentDetails(detailList);
 					payment.getPaymentDetails().get(0).setBillId(bills.get(0).getId());
 					CollectionPaymentRequest paymentRequest = CollectionPaymentRequest.builder()
 							.requestInfo(requestInfo).payment(payment).build();
@@ -183,9 +188,11 @@ public class CollectionService {
 					if(response.isPresent()) {
 						try {
 							CollectionPaymentResponse paymentResponse = objectMapper.convertValue(response.get(), CollectionPaymentResponse.class);
-							if(!CollectionUtils.isEmpty(paymentResponse.getPayments()))
+							if(!CollectionUtils.isEmpty(paymentResponse.getPayments())) {
 								log.info("Collection migration done for consumer code: "+ payment.getConsumerCode());
-							else {
+								recordService.updateSwgCollMigration(payment);
+							}
+								else {
 								log.error("Failed to register this payment at collection-service for consumer code: "+ payment.getConsumerCode());	
 							recordService.recordError("Swcollection",digitTenantId, "Failed to register this payment at collection-service for consumer code: "+ payment.getConsumerCode(), payment.getId());
 							}
@@ -200,7 +207,7 @@ public class CollectionService {
 						recordService.recordError("Swcollection",digitTenantId, "Failed to register this payment at collection-service", payment.getId());
 					}
 
-					recordService.updateSwgCollMigration(payment);
+					
 					log.debug("sewerageResponse" + response); 
 				}
 

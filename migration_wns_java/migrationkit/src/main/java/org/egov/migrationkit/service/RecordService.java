@@ -123,7 +123,7 @@ public class RecordService {
 	String qry=	Sqls.WATER_COLLECTION_INSERT;
 	qry=qry.replace(":schema", tenantId);
 	
-	qry=qry.replace(":erpid", "'"+conn.getId()+"'");
+	qry=qry.replace(":erpid", "'"+conn.getPaymentDetails().get(0).getReceiptNumber()+"'");
 	qry=qry.replace(":erpconn", "'"+conn.getConsumerCode()+"'");
 	qry=qry.replace(":erppt", "'"+conn.getBusinessService()+"'");
 	qry=qry.replace(":status", "'initiated'");
@@ -141,7 +141,7 @@ public class RecordService {
 		
 	String qry=	Sqls.SEWERAGE_COLLECTION_INSERT;
 	qry=qry.replace(":schema", tenantId);
-	qry=qry.replace(":erpid", "'"+conn.getId()+"'");
+	qry=qry.replace(":erpid", "'"+conn.getPaymentDetails().get(0).getReceiptNumber()+"'");
 	qry=qry.replace(":erpconn", "'"+conn.getConsumerCode()+"'");
 	qry=qry.replace(":erppt", "'"+conn.getBusinessService()+"'");
 	qry=qry.replace(":status", "'initiated'");
