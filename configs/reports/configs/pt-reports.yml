@@ -4834,7 +4834,7 @@ ReportDefinitions:
     source: pt
     wrapper: true
     isMandatory: false
-    searchClause: AND pt.tenantid = $ulb
+    searchClause: AND 1=1
   query: |
    --S.no    Service Name	ULB    Property Tax Unique ID    Date Of Transcation    Receipt Number	Existing Property ID    Type Of Property	Mobile Number   	Address
     select mobilenumber as mobileno,name as ownername from eg_user 
