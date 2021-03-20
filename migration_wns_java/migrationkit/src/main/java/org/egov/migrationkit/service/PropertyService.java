@@ -62,9 +62,9 @@ public class PropertyService {
 		Property property = null;
 		try {
 			property = searchPtRecord(wcr, data, tenantId);
-          
+
 			if (property == null) {
-				//log.debug("Propery not found creating new property");
+				// log.debug("Propery not found creating new property");
 				property = createProperty(wcr, data, tenantId);
 
 			}
@@ -81,7 +81,7 @@ public class PropertyService {
 		try {
 			property = searchswPtRecord(swg, json, tenantId);
 			if (property == null) {
-			//	log.debug("Propery not found creating new property");
+				// log.debug("Propery not found creating new property");
 				property = createSProperty(swg, json, tenantId);
 			}
 		} catch (Exception e) {
@@ -93,7 +93,6 @@ public class PropertyService {
 	}
 
 	private Property createProperty(WaterConnectionRequest wcr, Map data, String tenantId) throws InterruptedException {
-		String uuid = null;
 		PropertyRequest prequest = new PropertyRequest();
 		prequest.setRequestInfo(wcr.getRequestInfo());
 		Property property = new Property();
@@ -103,7 +102,10 @@ public class PropertyService {
 		property.setAddress(conn.getApplicantAddress());
 		property.setChannel(Channel.SYSTEM);
 		property.setSource(Source.WATER_CHARGES);
-		property.setLandArea(BigDecimal.valueOf(50));
+		if (conn.getPlotSize() != null)
+			property.setLandArea(BigDecimal.valueOf(conn.getPlotSize()));
+		else
+			property.setLandArea(BigDecimal.valueOf(125));
 		property.setNoOfFloors(Long.valueOf(1));
 		property.setOldPropertyId(conn.getPropertyId());
 		property.setOwners(null);
@@ -121,9 +123,9 @@ public class PropertyService {
 		owner.setMobileNumber(conn.getMobilenumber());
 		owner.setFatherOrHusbandName(conn.getGuardianname());
 		owner.setOwnerType("NONE");
-		
+
 		property.creationReason(CreationReason.CREATE);
-		//log.info("conn.getPropertyType() :" + conn.getPropertyType());
+		// log.info("conn.getPropertyType() :" + conn.getPropertyType());
 		if (conn.getPropertyType() != null) {
 			property.setUsageCategory(conn.getPropertyType().toUpperCase().replace(" ", ""));
 		} else {
@@ -136,16 +138,16 @@ public class PropertyService {
 
 		property.setTenantId(conn.getTenantId());
 		prequest.setProperty(property);
-		 
 
 		// String response2= restTemplate.postForObject(host + "/" +
 		// ptcreatehurl, prequest, String.class);
 
 		PropertyResponse res = restTemplate.postForObject(host + "/" + ptcreatehurl, prequest, PropertyResponse.class);
 
-		// log.info(res.getProperties().get(0).getSource() +"   "+res.getProperties().get(0).getAcknowldgementNumber());
-		//return res.getProperties().get(0);
-          Thread.sleep(2000);
+		// log.info(res.getProperties().get(0).getSource() +"
+		// "+res.getProperties().get(0).getAcknowldgementNumber());
+		// return res.getProperties().get(0);
+		Thread.sleep(2000);
 		Property property2 = res.getProperties().get(0);
 		property2.setSource(Source.WATER_CHARGES);
 		ProcessInstance workflow = new ProcessInstance();
@@ -157,9 +159,10 @@ public class PropertyService {
 		property2.setWorkflow(workflow);
 		prequest.setProperty(property2);
 		PropertyResponse res2 = restTemplate.postForObject(host + "/" + ptupdatehurl, prequest, PropertyResponse.class);
-		log.info("newly created pt"+res2.getProperties().get(0).getPropertyId() +" id    "+res2.getProperties().get(0).getStatus());
+		log.info("newly created pt" + res2.getProperties().get(0).getPropertyId() + " id    "
+				+ res2.getProperties().get(0).getStatus());
 		return res2.getProperties().get(0);
- 
+
 	}
 
 	private Property createSProperty(SewerageConnectionRequest swg, String json, String tenantId) {
@@ -221,7 +224,7 @@ public class PropertyService {
 		} catch (RestClientException e) {
 			recordService.recordError("sewerage", tenantId, e.getMessage(), conn.getId());
 		}
-		
+
 		return null;
 
 	}
@@ -235,8 +238,8 @@ public class PropertyService {
 		// conn.getWaterConnection().getMobilenumber() : "9876543210";
 
 		String propertySeachURL = ptseachurl + "?tenantId=" + conn.getRequestInfo().getUserInfo().getTenantId()
-				+ "&mobileNumber=" + conn.getWaterConnection().getMobilenumber()
-				+ "&name=" + conn.getWaterConnection().getApplicantname();
+				+ "&mobileNumber=" + conn.getWaterConnection().getMobilenumber() + "&name="
+				+ conn.getWaterConnection().getApplicantname();
 
 		PropertySearchResponse response = restTemplate.postForObject(host + "/" + propertySeachURL, pr,
 				PropertySearchResponse.class);
@@ -245,14 +248,17 @@ public class PropertyService {
 
 		// && property.getStatus().equals(Status.ACTIVE) not used
 		if (response != null && response.getProperties() != null && response.getProperties().size() >= 1) {
-			//log.debug("found properties" + response.getProperties().size());
+			// log.debug("found properties" + response.getProperties().size());
 			for (Property property : response.getProperties()) {
-			/*	log.debug("status" + property.getPropertyId() + "---" + property.getStatus() + " Usage :"
-						+ property.getUsageCategory());
-*/
+				/*
+				 * log.debug("status" + property.getPropertyId() + "---" +
+				 * property.getStatus() + " Usage :" +
+				 * property.getUsageCategory());
+				 */
 				for (OwnerInfo owner : property.getOwners()) {
-					//log.debug("owner.getName() : " + owner.getName());
-					//log.debug("owner.getFatherOrHusbandName() : " + owner.getFatherOrHusbandName());
+					// log.debug("owner.getName() : " + owner.getName());
+					// log.debug("owner.getFatherOrHusbandName() : " +
+					// owner.getFatherOrHusbandName());
 
 					if (owner.getName().equalsIgnoreCase(conn.getWaterConnection().getApplicantname()) && owner
 							.getFatherOrHusbandName().equalsIgnoreCase(conn.getWaterConnection().getGuardianname())
@@ -261,16 +267,19 @@ public class PropertyService {
 
 						recordService.recordError("water", tenantId, "Found Property in digit :" + property.getId(),
 								conn.getWaterConnection().getId());
-					//	log.info("no  property found in digit system for mobilenumber--"
-						//		+ conn.getWaterConnection().getMobilenumber());
+						// log.info("no property found in digit system for
+						// mobilenumber--"
+						// + conn.getWaterConnection().getMobilenumber());
 						return property;
 					}
 
 				}
 			}
 		} else {
-			/*log.info("no  property found in digit system for mobilenumber--"
-					+ conn.getWaterConnection().getMobilenumber());*/
+			/*
+			 * log.info("no  property found in digit system for mobilenumber--"
+			 * + conn.getWaterConnection().getMobilenumber());
+			 */
 		}
 
 		return null;
@@ -283,8 +292,8 @@ public class PropertyService {
 		pr.setRequestInfo(conn.getRequestInfo());
 
 		String ptseachurlStr = ptseachurl + "?tenantId=" + conn.getRequestInfo().getUserInfo().getTenantId()
-				+ "&mobileNumber=" + conn.getSewerageConnection().getMobilenumber()
-				+ "&applicantName=" + conn.getSewerageConnection().getApplicantname();
+				+ "&mobileNumber=" + conn.getSewerageConnection().getMobilenumber() + "&applicantName="
+				+ conn.getSewerageConnection().getApplicantname();
 
 		PropertySearchResponse response = restTemplate.postForObject(host + "/" + ptseachurlStr, pr,
 				PropertySearchResponse.class);
@@ -292,13 +301,14 @@ public class PropertyService {
 		// String response = restTemplate.postForObject(host + "/" + ptseachurl,
 		// pr, String.class);
 
-	//	System.out.println("response" + response);
+		// System.out.println("response" + response);
 
 		// if property found compare with owner name,father name etc.
 		if (response != null && response.getProperties() != null && response.getProperties().size() >= 1) {
-		//	log.info("found properties" + response.getProperties().size());
+			// log.info("found properties" + response.getProperties().size());
 			for (Property property : response.getProperties()) {
-			//	log.info("status" + property.getPropertyId() + "---" + property.getStatus());
+				// log.info("status" + property.getPropertyId() + "---" +
+				// property.getStatus());
 				for (OwnerInfo owner : property.getOwners()) {
 					if (owner.getName().equalsIgnoreCase(conn.getSewerageConnection().getApplicantname()) && owner
 							.getFatherOrHusbandName().equalsIgnoreCase(conn.getSewerageConnection().getGuardianname())
@@ -314,8 +324,10 @@ public class PropertyService {
 				}
 			}
 		} else {
-		/*	log.info("no  property found in digit system for mobilenumber--"
-					+ conn.getSewerageConnection().getMobilenumber());*/
+			/*
+			 * log.info("no  property found in digit system for mobilenumber--"
+			 * + conn.getSewerageConnection().getMobilenumber());
+			 */
 		}
 
 		return null;
