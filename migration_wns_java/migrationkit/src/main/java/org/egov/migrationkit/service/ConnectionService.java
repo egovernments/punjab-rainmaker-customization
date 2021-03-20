@@ -68,7 +68,8 @@ public class ConnectionService {
 	private String sewerageUrl = null;
 
 	public void migrateWtrConnection(String tenantId, RequestInfo requestInfo) {
-
+		long startTime = System.currentTimeMillis();
+		
 		recordService.initiate(tenantId);
 		Map data = null;
 		WaterConnection connection = null;
@@ -310,7 +311,10 @@ public class ConnectionService {
 			}
 
 		}
-		log.info("Migration completed for " + tenantId);
+		long duration = System.currentTimeMillis()-startTime;
+		
+		log.info("Water Migration completed for " + tenantId + " took " + duration + " milliseconds to run");
+		
 	}
 
 	private Long getMobileNumber(String cityCode, String locCode, String tenantId) {
@@ -370,6 +374,7 @@ public class ConnectionService {
 	}
 
 	public void createSewerageConnection(String tenantId, RequestInfo requestInfo) {
+		long startTime = System.currentTimeMillis();
 
 		recordService.initiateSewrage(tenantId);
 		SewerageConnection swConnection = null;
@@ -586,7 +591,10 @@ public class ConnectionService {
 			}
 
 		}
-		log.info("Sewarage Connection completed for " + tenantId);
+		long duration = System.currentTimeMillis()-startTime;
+		
+		log.info("Sewerage Migration completed for " + tenantId + " took " + duration + " milliseconds to run");
+		
 
 	}
 
