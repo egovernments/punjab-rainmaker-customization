@@ -203,6 +203,7 @@ public class RecordService {
 	//jdbcTemplate.execute("drop table if exists egwtr_migration" + tenantId);
 	jdbcTemplate.execute(Sqls.SEWERAGE_CONNECTION_TABLE);
 	jdbcTemplate.execute(Sqls.PROCESSINSERTTABLE);
+	jdbcTemplate.execute("create sequence if not exists seq_mobilenumber");
 	}
 
 	
