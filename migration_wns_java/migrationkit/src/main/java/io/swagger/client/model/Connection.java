@@ -23,6 +23,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
+
 /**
  * This is lightweight property object that can be used as reference by
  * definitions needing property linking. Actual Property Object extends this to
@@ -48,7 +49,7 @@ public class Connection {
 
 	@JsonProperty("applicationStatus")
 	private String applicationStatus = null;
-	
+
 	@JsonProperty("oldApplication")
 	private Boolean oldApplication = false;
 
@@ -80,7 +81,6 @@ public class Connection {
 	@JsonProperty("mobilenumber")
 	private String mobilenumber = null;
 
-	
 	@JsonProperty("oldConnectionNo")
 	private String oldConnectionNo = null;
 
@@ -110,14 +110,12 @@ public class Connection {
 
 	@JsonProperty("auditDetails")
 	private AuditDetails auditDetails = null;
-	
+
 	@JsonProperty("applicantname")
 	private String applicantname = null;
-	
+
 	@JsonProperty("guardianname")
 	private String guardianname = null;
-	
-
 
 	/**
 	 * Unique Identifier of the connection for internal reference.
@@ -290,7 +288,6 @@ public class Connection {
 		return this;
 	}
 
-	 
 	/**
 	 * Get connectionExecutionDate
 	 * 
@@ -372,7 +369,7 @@ public class Connection {
 	public void setAuditDetails(AuditDetails auditDetails) {
 		this.auditDetails = auditDetails;
 	}
-	
+
 	public String getMobilenumber() {
 		return mobilenumber;
 	}
@@ -380,7 +377,6 @@ public class Connection {
 	public void setMobilenumber(String mobilenumber) {
 		this.mobilenumber = mobilenumber;
 	}
-
 
 	@Override
 	public boolean equals(java.lang.Object o) {
@@ -458,12 +454,12 @@ public class Connection {
 	}
 
 	public void setApplicantname(String applicantname) {
-		this.applicantname = applicantname; 
+		this.applicantname = applicantname;
 	}
 
 	public String getGuardianname() {
 		return guardianname;
-	} 
+	}
 
 	public void setGuardianname(String guardianname) {
 		this.guardianname = guardianname;

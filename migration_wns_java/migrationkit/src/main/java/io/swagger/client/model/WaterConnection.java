@@ -23,6 +23,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
+
 /**
  * WaterConnection
  */
@@ -32,271 +33,278 @@ import lombok.experimental.SuperBuilder;
 @Setter
 @SuperBuilder
 public class WaterConnection extends Connection {
-  @JsonProperty("rainWaterHarvesting")
-  private Boolean rainWaterHarvesting = null;
+	@JsonProperty("rainWaterHarvesting")
+	private Boolean rainWaterHarvesting = null;
 
-  @JsonProperty("waterSource")
-  private String waterSource = null;
+	@JsonProperty("waterSource")
+	private String waterSource = null;
 
-  @JsonProperty("meterId")
-  private String meterId = null;
+	@JsonProperty("meterId")
+	private String meterId = null;
 
-  @JsonProperty("meterInstallationDate")
-  private Long meterInstallationDate = null;
+	@JsonProperty("meterInstallationDate")
+	private Long meterInstallationDate = null;
 
-  @JsonProperty("proposedPipeSize")
-  private Double proposedPipeSize = null;
+	@JsonProperty("proposedPipeSize")
+	private Double proposedPipeSize = null;
 
-  @JsonProperty("actualPipeSize")
-  private Double pipeSize = null;
+	@JsonProperty("actualPipeSize")
+	private Double pipeSize = null;
 
-  @JsonProperty("proposedTaps")
-  private Double proposedTaps = null;
+	@JsonProperty("proposedTaps")
+	private Double proposedTaps = null;
 
-  @JsonProperty("noOfTaps")
-  private Double noOfTaps = null;
-  @JsonProperty("applicantaddress")
-  private Address applicantAddress=null;
-  
-  @JsonProperty("propertyType")
-  private String propertyType=null;
-  
-  @JsonProperty("applicationType")
+	@JsonProperty("noOfTaps")
+	private Double noOfTaps = null;
+	@JsonProperty("applicantaddress")
+	private Address applicantAddress = null;
+
+	@JsonProperty("propertyType")
+	private String propertyType = null;
+
+	@JsonProperty("applicationType")
 	private String applicationType = null;
-  
- @JsonProperty("processInstance")
-  private ProcessInstance processInstance = null;
- 
-  public ProcessInstance getProcessInstance() {
-	return processInstance;
-}
+	
+	@JsonProperty("plotSize")
+	private Integer plotSize = null;
 
-public void setProcessInstance(ProcessInstance processInstance) {
-	this.processInstance = processInstance;
-}
+	@JsonProperty("processInstance")
+	private ProcessInstance processInstance = null;
 
-public Boolean getRainWaterHarvesting() {
-	return rainWaterHarvesting;
-}
+	public ProcessInstance getProcessInstance() {
+		return processInstance;
+	}
 
-@JsonProperty("documents")
-  private List<Document> documents = null;
+	public void setProcessInstance(ProcessInstance processInstance) {
+		this.processInstance = processInstance;
+	}
 
-  public WaterConnection rainWaterHarvesting(Boolean rainWaterHarvesting) {
-    this.rainWaterHarvesting = rainWaterHarvesting;
-    return this;
-  }
+	public Boolean getRainWaterHarvesting() {
+		return rainWaterHarvesting;
+	}
 
-   /**
-   * Get rainWaterHarvesting
-   * @return rainWaterHarvesting
-  **/
-  public Boolean isRainWaterHarvesting() {
-    return rainWaterHarvesting;
-  }
+	@JsonProperty("documents")
+	private List<Document> documents = null;
 
-  public void setRainWaterHarvesting(Boolean rainWaterHarvesting) {
-    this.rainWaterHarvesting = rainWaterHarvesting;
-  }
+	public WaterConnection rainWaterHarvesting(Boolean rainWaterHarvesting) {
+		this.rainWaterHarvesting = rainWaterHarvesting;
+		return this;
+	}
 
-  public WaterConnection waterSource(String waterSource) {
-    this.waterSource = waterSource;
-    return this;
-  }
+	/**
+	 * Get rainWaterHarvesting
+	 * 
+	 * @return rainWaterHarvesting
+	 **/
+	public Boolean isRainWaterHarvesting() {
+		return rainWaterHarvesting;
+	}
 
-   /**
-   * It is a namespaced master data, defined in MDMS
-   * @return waterSource
-  **/
-  public String getWaterSource() {
-    return waterSource;
-  }
+	public void setRainWaterHarvesting(Boolean rainWaterHarvesting) {
+		this.rainWaterHarvesting = rainWaterHarvesting;
+	}
 
-  public void setWaterSource(String waterSource) {
-    this.waterSource = waterSource;
-  }
+	public WaterConnection waterSource(String waterSource) {
+		this.waterSource = waterSource;
+		return this;
+	}
 
-  public WaterConnection meterId(String meterId) {
-    this.meterId = meterId;
-    return this;
-  }
+	/**
+	 * It is a namespaced master data, defined in MDMS
+	 * 
+	 * @return waterSource
+	 **/
+	public String getWaterSource() {
+		return waterSource;
+	}
 
-   /**
-   * Unique id of the meter.
-   * @return meterId
-  **/
-  public String getMeterId() {
-    return meterId;
-  }
+	public void setWaterSource(String waterSource) {
+		this.waterSource = waterSource;
+	}
 
-  public void setMeterId(String meterId) {
-    this.meterId = meterId;
-  }
+	public WaterConnection meterId(String meterId) {
+		this.meterId = meterId;
+		return this;
+	}
 
-  public WaterConnection meterInstallationDate(Long meterInstallationDate) {
-    this.meterInstallationDate = meterInstallationDate;
-    return this;
-  }
+	/**
+	 * Unique id of the meter.
+	 * 
+	 * @return meterId
+	 **/
+	public String getMeterId() {
+		return meterId;
+	}
 
-   /**
-   * The date of meter installation date.
-   * @return meterInstallationDate
-  **/
-  public Long getMeterInstallationDate() {
-    return meterInstallationDate;
-  }
+	public void setMeterId(String meterId) {
+		this.meterId = meterId;
+	}
 
-  public void setMeterInstallationDate(Long meterInstallationDate) {
-    this.meterInstallationDate = meterInstallationDate;
-  }
+	public WaterConnection meterInstallationDate(Long meterInstallationDate) {
+		this.meterInstallationDate = meterInstallationDate;
+		return this;
+	}
 
-  public WaterConnection proposedPipeSize(Double proposedPipeSize) {
-    this.proposedPipeSize = proposedPipeSize;
-    return this;
-  }
+	/**
+	 * The date of meter installation date.
+	 * 
+	 * @return meterInstallationDate
+	 **/
+	public Long getMeterInstallationDate() {
+		return meterInstallationDate;
+	}
 
-   /**
-   * proposed size of the pipe which will be use to provide the connection.
-   * @return proposedPipeSize
-  **/
-  public Double getProposedPipeSize() {
-    return proposedPipeSize;
-  }
+	public void setMeterInstallationDate(Long meterInstallationDate) {
+		this.meterInstallationDate = meterInstallationDate;
+	}
 
-  public void setProposedPipeSize(Double proposedPipeSize) {
-    this.proposedPipeSize = proposedPipeSize;
-  }
+	public WaterConnection proposedPipeSize(Double proposedPipeSize) {
+		this.proposedPipeSize = proposedPipeSize;
+		return this;
+	}
 
-  
-   /**
-   * Actual pipe size which used in the water connection.
-   * @return actualPipeSize
-  **/
-  
+	/**
+	 * proposed size of the pipe which will be use to provide the connection.
+	 * 
+	 * @return proposedPipeSize
+	 **/
+	public Double getProposedPipeSize() {
+		return proposedPipeSize;
+	}
 
-  public WaterConnection proposedTaps(Double proposedTaps) {
-    this.proposedTaps = proposedTaps;
-    return this;
-  }
+	public void setProposedPipeSize(Double proposedPipeSize) {
+		this.proposedPipeSize = proposedPipeSize;
+	}
 
-   /**
-   * proposed number of the taps.
-   * @return proposedTaps
-  **/
-  public Double getProposedTaps() {
-    return proposedTaps;
-  }
+	/**
+	 * Actual pipe size which used in the water connection.
+	 * 
+	 * @return actualPipeSize
+	 **/
 
-  public void setProposedTaps(Double proposedTaps) {
-    this.proposedTaps = proposedTaps;
-  }
+	public WaterConnection proposedTaps(Double proposedTaps) {
+		this.proposedTaps = proposedTaps;
+		return this;
+	}
 
-  
-   /**
-   * Actual number of the taps
-   * @return actualTaps
-  **/
-  
-  @Override
-public WaterConnection documents(List<Document> documents) {
-    this.documents = documents;
-    return this;
-  }
+	/**
+	 * proposed number of the taps.
+	 * 
+	 * @return proposedTaps
+	 **/
+	public Double getProposedTaps() {
+		return proposedTaps;
+	}
 
-  @Override
-public WaterConnection addDocumentsItem(Document documentsItem) {
-    if (this.documents == null) {
-      this.documents = new ArrayList<Document>();
-    }
-    this.documents.add(documentsItem);
-    return this;
-  }
+	public void setProposedTaps(Double proposedTaps) {
+		this.proposedTaps = proposedTaps;
+	}
 
-   /**
-   * The documents attached by owner for exemption.
-   * @return documents
-  **/
-  @Override
-public List<Document> getDocuments() {
-    return documents;
-  }
+	/**
+	 * Actual number of the taps
+	 * 
+	 * @return actualTaps
+	 **/
 
-  @Override
-public void setDocuments(List<Document> documents) {
-    this.documents = documents;
-  }
+	@Override
+	public WaterConnection documents(List<Document> documents) {
+		this.documents = documents;
+		return this;
+	}
 
+	@Override
+	public WaterConnection addDocumentsItem(Document documentsItem) {
+		if (this.documents == null) {
+			this.documents = new ArrayList<Document>();
+		}
+		this.documents.add(documentsItem);
+		return this;
+	}
 
-  @Override
-  public boolean equals(java.lang.Object o) {
-    if (this == o) {
-      return true;
-    }
-    if (o == null || getClass() != o.getClass()) {
-      return false;
-    }
-    WaterConnection waterConnection = (WaterConnection) o;
-    return Objects.equals(this.rainWaterHarvesting, waterConnection.rainWaterHarvesting) &&
-        Objects.equals(this.waterSource, waterConnection.waterSource) &&
-        Objects.equals(this.meterId, waterConnection.meterId) &&
-        Objects.equals(this.meterInstallationDate, waterConnection.meterInstallationDate) &&
-        Objects.equals(this.proposedPipeSize, waterConnection.proposedPipeSize) &&
-        Objects.equals(this.pipeSize, waterConnection.pipeSize) &&
-        Objects.equals(this.proposedTaps, waterConnection.proposedTaps) &&
-        Objects.equals(this.noOfTaps, waterConnection.noOfTaps) &&
-        Objects.equals(this.documents, waterConnection.documents) &&
-        super.equals(o);
-  }
+	/**
+	 * The documents attached by owner for exemption.
+	 * 
+	 * @return documents
+	 **/
+	@Override
+	public List<Document> getDocuments() {
+		return documents;
+	}
 
-  @Override
-  public int hashCode() {
-    return Objects.hash(rainWaterHarvesting, waterSource, meterId, meterInstallationDate, proposedPipeSize, pipeSize, proposedTaps, noOfTaps, documents, super.hashCode());
-  }
+	@Override
+	public void setDocuments(List<Document> documents) {
+		this.documents = documents;
+	}
 
+	@Override
+	public boolean equals(java.lang.Object o) {
+		if (this == o) {
+			return true;
+		}
+		if (o == null || getClass() != o.getClass()) {
+			return false;
+		}
+		WaterConnection waterConnection = (WaterConnection) o;
+		return Objects.equals(this.rainWaterHarvesting, waterConnection.rainWaterHarvesting)
+				&& Objects.equals(this.waterSource, waterConnection.waterSource)
+				&& Objects.equals(this.meterId, waterConnection.meterId)
+				&& Objects.equals(this.meterInstallationDate, waterConnection.meterInstallationDate)
+				&& Objects.equals(this.proposedPipeSize, waterConnection.proposedPipeSize)
+				&& Objects.equals(this.pipeSize, waterConnection.pipeSize)
+				&& Objects.equals(this.proposedTaps, waterConnection.proposedTaps)
+				&& Objects.equals(this.noOfTaps, waterConnection.noOfTaps)
+				&& Objects.equals(this.documents, waterConnection.documents) && super.equals(o);
+	}
 
-  @Override
-  public String toString() {
-    StringBuilder sb = new StringBuilder();
-    sb.append("class WaterConnection {\n");
-    sb.append("    ").append(toIndentedString(super.toString())).append("\n");
-    sb.append("    rainWaterHarvesting: ").append(toIndentedString(rainWaterHarvesting)).append("\n");
-    sb.append("    waterSource: ").append(toIndentedString(waterSource)).append("\n");
-    sb.append("    meterId: ").append(toIndentedString(meterId)).append("\n");
-    sb.append("    meterInstallationDate: ").append(toIndentedString(meterInstallationDate)).append("\n");
-    sb.append("    proposedPipeSize: ").append(toIndentedString(proposedPipeSize)).append("\n");
-    sb.append("    actualPipeSize: ").append(toIndentedString(pipeSize)).append("\n");
-    sb.append("    proposedTaps: ").append(toIndentedString(proposedTaps)).append("\n");
-    sb.append("    actualTaps: ").append(toIndentedString(noOfTaps)).append("\n");
-    sb.append("    documents: ").append(toIndentedString(documents)).append("\n");
-    sb.append("}");
-    return sb.toString();
-  }
+	@Override
+	public int hashCode() {
+		return Objects.hash(rainWaterHarvesting, waterSource, meterId, meterInstallationDate, proposedPipeSize,
+				pipeSize, proposedTaps, noOfTaps, documents, super.hashCode());
+	}
 
-  /**
-   * Convert the given object to string with each line indented by 4 spaces
-   * (except the first line).
-   */
-  private String toIndentedString(java.lang.Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
-  }
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("class WaterConnection {\n");
+		sb.append("    ").append(toIndentedString(super.toString())).append("\n");
+		sb.append("    rainWaterHarvesting: ").append(toIndentedString(rainWaterHarvesting)).append("\n");
+		sb.append("    waterSource: ").append(toIndentedString(waterSource)).append("\n");
+		sb.append("    meterId: ").append(toIndentedString(meterId)).append("\n");
+		sb.append("    meterInstallationDate: ").append(toIndentedString(meterInstallationDate)).append("\n");
+		sb.append("    proposedPipeSize: ").append(toIndentedString(proposedPipeSize)).append("\n");
+		sb.append("    actualPipeSize: ").append(toIndentedString(pipeSize)).append("\n");
+		sb.append("    proposedTaps: ").append(toIndentedString(proposedTaps)).append("\n");
+		sb.append("    actualTaps: ").append(toIndentedString(noOfTaps)).append("\n");
+		sb.append("    documents: ").append(toIndentedString(documents)).append("\n");
+		sb.append("}");
+		return sb.toString();
+	}
 
-public Address getApplicantAddress() {
-	return applicantAddress;
-}
+	/**
+	 * Convert the given object to string with each line indented by 4 spaces
+	 * (except the first line).
+	 */
+	private String toIndentedString(java.lang.Object o) {
+		if (o == null) {
+			return "null";
+		}
+		return o.toString().replace("\n", "\n    ");
+	}
 
-public void setApplicantAddress(Address applicantAddress) {
-	this.applicantAddress = applicantAddress;
-}
+	public Address getApplicantAddress() {
+		return applicantAddress;
+	}
 
-public String getPropertyType() {
-	return propertyType;
-}
+	public void setApplicantAddress(Address applicantAddress) {
+		this.applicantAddress = applicantAddress;
+	}
 
-public void setPropertyType(String propertyType) {
-	this.propertyType = propertyType;
-}
+	public String getPropertyType() {
+		return propertyType;
+	}
+
+	public void setPropertyType(String propertyType) {
+		this.propertyType = propertyType;
+	}
 
 }

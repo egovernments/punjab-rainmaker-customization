@@ -12,7 +12,6 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
@@ -75,23 +74,22 @@ public class ConnectionService {
 		WaterConnection connection = null;
 		List<Map> roadCategoryList = null;
 		Integer area = null;
-		Long mob = 4000000000L;
 		Double areaDouble = null;
 		Address address = null;
 		Locality locality = null;
 		String locCode = null;
 		String localityCode = null;
-		String cityCode=null;
-	
+		String cityCode = null;
 
 		String searchPath = jdbcTemplate.queryForObject("show search_path", String.class);
 		log.info(searchPath);
-		
-		  String qry= Sqls.waterQueryFormatted; 
-		  /* * if(boundaryList.length()>0) {
+
+		String qry = Sqls.waterQueryFormatted;
+		/*
+		 * * if(boundaryList.length()>0) {
 		 * 
-		 * qry=qry.replace(":locCondition","and locality in ("+boundaryList+") " );
-		 * }else {
+		 * qry=qry.replace(":locCondition","and locality in ("+boundaryList+") "
+		 * ); }else {
 		 * 
 		 * qry=qry.replace(":locCondition","  " );
 		 * 
@@ -100,20 +98,21 @@ public class ConnectionService {
 
 		List<String> queryForList = jdbcTemplate.queryForList(qry, String.class);
 
-		for (String json : queryForList) {
+		for (String resultJson : queryForList) {
 
 			try {
-				data = objectMapper.readValue(json, Map.class);
-				connection = objectMapper.readValue(json, WaterConnection.class);
-				if(connection.getConnectionType().trim().equalsIgnoreCase("Non-Metered")) {
+				data = objectMapper.readValue(resultJson, Map.class);
+				connection = objectMapper.readValue(resultJson, WaterConnection.class);
+				if (connection.getConnectionType().trim().equalsIgnoreCase("Non-Metered")) {
 					connection.setConnectionType("Non Metered");
-				}else {
+				} else {
 					connection.setConnectionType("Metered");
 				}
 				String connectionNo = connection.getConnectionNo() != null ? connection.getConnectionNo()
 						: (String) data.get("applicationnumber");
 				connection.setConnectionNo(connectionNo);
 				connection.setTenantId(requestInfo.getUserInfo().getTenantId());
+				connection.setProposedPipeSize(connection.getPipeSize());
 				log.info("\n\n initiating migration for  " + connection.getMobilenumber());
 				// log.debug("mobile number : " + connection.getMobilenumber());
 				//// log.debug("getApplicantname ; " +
@@ -139,13 +138,15 @@ public class ConnectionService {
 				if (connection.getMobilenumber() == null || connection.getMobilenumber().isEmpty()) {
 					recordService.recordError("water", tenantId, "Mobile Number is null ", connection.getId());
 					/*
-					 * System is allowing only 6-9 series.So as of now added 9999999999
+					 * System is allowing only 6-9 series.So as of now added
+					 * 9999999999
 					 */
-					Long mobileNumber=getMobileNumber(cityCode,locCode,tenantId);
-					recordService.setMob ("water", tenantId,mobileNumber, connection.getId());
+					Long mobileNumber = getMobileNumber(cityCode, locCode, tenantId);
+					recordService.setMob("water", tenantId, mobileNumber, connection.getId());
 					connection.setMobilenumber(String.valueOf(mobileNumber));
-					//recordService.setStatus("water", tenantId, "Incompatible", connection.getId());
-					//continue;
+					// recordService.setStatus("water", tenantId,
+					// "Incompatible", connection.getId());
+					// continue;
 				}
 
 				String addressQuery = Sqls.address;
@@ -202,10 +203,9 @@ public class ConnectionService {
 				workflow.setModuleName("ws-services");
 				connection.setProcessInstance(workflow);
 
-				//connection.setDocuments(getDocuments(waterRequest, data));
-				StringBuilder additionalDetail = new StringBuilder();
+				// connection.setDocuments(getDocuments(waterRequest, data));
 				Map<Object, Object> addtionals = new HashMap<Object, Object>();
-				
+
 				addtionals.put("propertyId", (String) data.get("propertyId"));
 				addtionals.put("locality", localityCode);
 				addtionals.put("billingType", (String) data.get("billingType"));
@@ -214,7 +214,7 @@ public class ConnectionService {
 				addtionals.put("connectionCategory", (String) data.get("connectionCategory"));
 				addtionals.put("meterId", (String) data.get("meterId"));
 				addtionals.put("ledgerId", (String) data.get("ledgerId"));
-				//addtionals.put("pipeSize", (Double) data.get("pipeSize"));
+				// addtionals.put("pipeSize", (Double) data.get("pipeSize"));
 				addtionals.put("estimationFileStoreId", (String) data.get("estimationFileStoreId"));
 				addtionals.put("meterMake", (String) data.get("meterMake"));
 
@@ -313,21 +313,20 @@ public class ConnectionService {
 		log.info("Migration completed for " + tenantId);
 	}
 
-	private Long getMobileNumber(String cityCode, String locCode,String tenantId) {
-		String loc=  locCode.replaceAll("\\D+","");
-		String mobileNumber=String.format("4%4s%5s",cityCode,recordService.nextSequence(tenantId) );
-		mobileNumber=mobileNumber.replaceAll(" ", "0");
+	private Long getMobileNumber(String cityCode, String locCode, String tenantId) {
+		String loc = locCode.replaceAll("\\D+", "");
+		String mobileNumber = String.format("4%4s%5s", cityCode, recordService.nextSequence(tenantId));
+		mobileNumber = mobileNumber.replaceAll(" ", "0");
 		return Long.valueOf(mobileNumber);
-		
-		
-	}   
+
+	}
 
 	private List<Document> getDocuments(WaterConnectionRequest waterRequest, Map data) {
 		List<Document> documents = new ArrayList<>();
 		Document doc = new Document();
-		//doc.setDocumentCode("OWNER.IDENTITYPROOF.AADHAAR");
-		//doc.setFileName("0a5b93d4-9eaa-4605-aaf1-970026ec3606.png");
-		//doc.setFileUrl("");
+		// doc.setDocumentCode("OWNER.IDENTITYPROOF.AADHAAR");
+		// doc.setFileName("0a5b93d4-9eaa-4605-aaf1-970026ec3606.png");
+		// doc.setFileUrl("");
 		doc.setFileStore("34dc69f0-c5f2-483e-a0ac-e3555dffd5b1");
 		doc.setDocumentType("OWNER.IDENTITYPROOF.AADHAAR");
 		documents.add(doc);
@@ -358,7 +357,7 @@ public class ConnectionService {
 			// digitcode = "ALOC1"; //for Amritsar
 			// digitcode = "SUN158"; //for Sunam
 			// digitcode = "NSR_112"; //for Nawashahr
-			 digitcode="LC-137"; // for Fazilka
+			digitcode = "LC-137"; // for Fazilka
 			// digitcode="MH38"; //for mohali
 
 		}
@@ -379,23 +378,23 @@ public class ConnectionService {
 		Locality locality = null;
 		String locCode = null;
 		String localityCode = null;
-		String cityCode=null;
-		
+		String cityCode = null;
 
 		String searchPath = jdbcTemplate.queryForObject("show search_path", String.class);
 		log.info(searchPath);
 
-		String qry=	Sqls.sewerageQuery;
+		String qry = Sqls.sewerageQuery;
 		/*
 		 * if(boundaryList.length()>0) {
 		 * 
-		 * qry=qry.replace(":locCondition","and locality in ("+boundaryList+") " );
-		 * }else {
+		 * qry=qry.replace(":locCondition","and locality in ("+boundaryList+") "
+		 * ); }else {
 		 * 
 		 * qry=qry.replace(":locCondition","  " );
-		 
-			
-		}*/
+		 * 
+		 * 
+		 * }
+		 */
 		List<String> queryForList = jdbcTemplate.queryForList(qry, String.class);
 
 		for (String json : queryForList) {
@@ -423,11 +422,11 @@ public class ConnectionService {
 				cityCode = (String) data.get("cityCode");
 				if (swConnection.getMobilenumber() == null || swConnection.getMobilenumber().isEmpty()) {
 					recordService.recordError("sewerage", tenantId, "Mobile Number is null ", swConnection.getId());
-					Long mobileNumber=getMobileNumber(cityCode,locCode,tenantId);
-					recordService.setMob ("sewerage", tenantId, mobileNumber, swConnection.getId());
+					Long mobileNumber = getMobileNumber(cityCode, locCode, tenantId);
+					recordService.setMob("sewerage", tenantId, mobileNumber, swConnection.getId());
 					swConnection.setMobilenumber(String.valueOf(mobileNumber));
-					
-					//continue;
+
+					// continue;
 				}
 
 				String addressQuery = Sqls.address;
@@ -457,12 +456,12 @@ public class ConnectionService {
 
 				StringBuilder additionalDetail = new StringBuilder();
 				Map addtionals = new HashMap<String, String>();
- 
+
 				addtionals.put("propertyId", (String) data.get("propertyId"));
- 
+
 				addtionals.put("locality", localityCode);
 				addtionals.put("billingType", (String) data.get("billingType"));
-			//	addtionals.put("billingAmount", data.get("billingAmount"));
+				// addtionals.put("billingAmount", data.get("billingAmount"));
 				addtionals.put("estimationLetterDate", (String) data.get("estimationLetterDate"));
 				// addtionals.put("connectionCategory",(String)
 				// data.get("connectionCategory"));
