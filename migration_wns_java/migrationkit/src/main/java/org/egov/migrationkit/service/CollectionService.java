@@ -71,6 +71,7 @@ public class CollectionService {
 				log.info("initiating  for"+payment.getConsumerCode());
 				payment.setTenantId(digitTenantId);
 				payment.getPaymentDetails().get(0).setTenantId(digitTenantId);
+				payment.getPaymentDetails().get(0).setTotalDue(payment.getTotalDue());
 				recordService.recordWtrCollMigration(payment,tenantId);
 				List<BillV2> bills = null;
 				try {
@@ -96,7 +97,7 @@ public class CollectionService {
 							CollectionPaymentResponse paymentResponse = objectMapper.convertValue(response.get(), CollectionPaymentResponse.class);
 							if(!CollectionUtils.isEmpty(paymentResponse.getPayments())) {
 								log.info("Collection migration done for consumer code: "+ payment.getConsumerCode());
-								recordService.updateWtrCollMigration(payment,tenantId);
+								recordService.updateWtrCollMigration(payment,tenantId,paymentResponse.getPayments().get(0).getPaymentDetails().get(0).getReceiptNumber());
 							}
 							else {
 								log.error("Failed to register this payment at collection-service for consumer code: "+ payment.getConsumerCode());	
@@ -165,6 +166,7 @@ public class CollectionService {
 				CollectionPayment payment = objectMapper.readValue(json, CollectionPayment.class);
 				payment.setTenantId(digitTenantId);
 				payment.getPaymentDetails().get(0).setTenantId(digitTenantId);
+				payment.getPaymentDetails().get(0).setTotalDue(payment.getTotalDue());
 				recordService.recordSwgCollMigration(payment,tenantId);
 				List<BillV2> bills = null;
 				try {
@@ -190,7 +192,7 @@ public class CollectionService {
 							CollectionPaymentResponse paymentResponse = objectMapper.convertValue(response.get(), CollectionPaymentResponse.class);
 							if(!CollectionUtils.isEmpty(paymentResponse.getPayments())) {
 								log.info("Collection migration done for consumer code: "+ payment.getConsumerCode());
-								recordService.updateSwgCollMigration(payment,tenantId);
+								recordService.updateSwgCollMigration(payment,tenantId,paymentResponse.getPayments().get(0).getPaymentDetails().get(0).getReceiptNumber());
 							}
 								else {
 								log.error("Failed to register this payment at collection-service for consumer code: "+ payment.getConsumerCode());	

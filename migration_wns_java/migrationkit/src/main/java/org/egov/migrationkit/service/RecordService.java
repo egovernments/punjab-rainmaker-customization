@@ -123,12 +123,12 @@ public class RecordService {
 	String qry=	Sqls.WATER_COLLECTION_INSERT;
 	qry=qry.replace(":schema", tenantId);
 	
-	qry=qry.replace(":erpid", "'"+conn.getPaymentDetails().get(0).getReceiptNumber()+"'");
+	qry=qry.replace(":erpreceiptnumber", "'"+conn.getPaymentDetails().get(0).getReceiptNumber()+"'");
 	qry=qry.replace(":erpconn", "'"+conn.getConsumerCode()+"'");
 	qry=qry.replace(":erppt", "'"+conn.getBusinessService()+"'");
 	qry=qry.replace(":status", "'initiated'");
 	qry=qry.replace(":tenantId", "'"+conn.getTenantId()+"'");
-	qry=qry.replace(":digitconn", "'null'");
+	qry=qry.replace(":digitreceiptnumber", "'null'");
 	qry=qry.replace(":digitpt", "'null'");
 	qry=qry.replace(":addtionaldetails", "'null'");
 	jdbcTemplate.execute(qry); 
@@ -141,19 +141,19 @@ public class RecordService {
 		
 	String qry=	Sqls.SEWERAGE_COLLECTION_INSERT;
 	qry=qry.replace(":schema", tenantId);
-	qry=qry.replace(":erpid", "'"+conn.getPaymentDetails().get(0).getReceiptNumber()+"'");
+	qry=qry.replace(":erpreceiptnumber", "'"+conn.getPaymentDetails().get(0).getReceiptNumber()+"'");
 	qry=qry.replace(":erpconn", "'"+conn.getConsumerCode()+"'");
 	qry=qry.replace(":erppt", "'"+conn.getBusinessService()+"'");
 	qry=qry.replace(":status", "'initiated'");
 	qry=qry.replace(":tenantId", "'"+conn.getTenantId()+"'");
-	qry=qry.replace(":digitconn", "'null'");
+	qry=qry.replace(":digitreceiptnumber", "'null'");
 	qry=qry.replace(":digitpt", "'null'");
 	qry=qry.replace(":addtionaldetails", "'null'");
 	jdbcTemplate.execute(qry); 
 		
 	}
 	@Transactional
-	public void updateWtrCollMigration(CollectionPayment conn,String tenantId)
+	public void updateWtrCollMigration(CollectionPayment conn,String tenantId,String receiptNumber)
 	{
 		
 	String qry=	Sqls.WATER_COLLECTION_UPDATE;
@@ -162,14 +162,14 @@ public class RecordService {
 	qry=qry.replace(":erpconn", "'"+conn.getConsumerCode()+"'");
 	qry=qry.replace(":status", "'Saved'");
 	qry=qry.replace(":tenantId", "'"+conn.getTenantId()+"'");
-	qry=qry.replace(":digitconn", conn.getConsumerCode()==null?"'null'":conn.getConsumerCode());
+	qry=qry.replace(":digitreceiptnumber", receiptNumber);
 	qry=qry.replace(":digitpt","'"+conn.getBusinessService()+"'");
 	jdbcTemplate.execute(qry);
 		
 	}
 	
 	@Transactional
-	public void updateSwgCollMigration(CollectionPayment conn,String tenantId)
+	public void updateSwgCollMigration(CollectionPayment conn,String tenantId,String receiptNumber)
 	{
 		
 	String qry=	Sqls.SEWERAGE_COLLECTION_UPDATE;
@@ -177,7 +177,7 @@ public class RecordService {
 	qry=qry.replace(":erpconn", "'"+conn.getConsumerCode()+"'");
 	qry=qry.replace(":status", "'Saved'");
 	qry=qry.replace(":tenantId", "'"+conn.getTenantId()+"'");
-	qry=qry.replace(":digitconn", conn.getConsumerCode()==null?"'null'":conn.getConsumerCode());
+	qry=qry.replace(":digitreceiptnumber", receiptNumber);
 	qry=qry.replace(":digitpt","'"+conn.getBusinessService()+"'");
 	jdbcTemplate.execute(qry);
 		
