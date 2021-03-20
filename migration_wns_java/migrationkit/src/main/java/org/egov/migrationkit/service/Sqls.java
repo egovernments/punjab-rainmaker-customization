@@ -92,19 +92,8 @@ public class Sqls {
 			+ " and usr.id=ownerinfo.owner and address.id=conn.address and status.id=conndetails.statusid   "
 			+ " and conndetails.id not in (select erpid::bigint from egwtr_migration where status in "
 			+ "('Saved','Demand_Created' ) )  "
-			+ " order by conndetails.id limit 1000 ; ";   
+			+ " order by conndetails.id; ";   
 	
-	
-	//public static final String ledgerId= "Select ledgerid as ledgerId from  egwtr_stg_connection;";
-	//public static final String meterMake= "Select metermake as meterMake from egwtr_meter_details;";
-	//public static final String initialMeterReading= "Select initialmeterreading as initialMeterReading from egwtr_meter_details;";
-	//public static final String othersFee= "Select otherfee as othersFee from egwtr_connection_conversion_type;";
-	//public static final String connectionCategory= "Select connectiontype as connectionCategory from egwtr_connectiondetails;";
-	//public static final String billingType= "Select billingtype as billingType from egwtr_connectiondetails;";
-	//public static final String billingAmount= "Select billamount as billingAmount from egwtr_connectiondetails;";
-	//public static final String estimationLetterDate= "Select estimationnoticedate as estimationLetterDate from egwtr_connectiondetails;";
-	//public static final String estimationFileStoreId= "Select estimationnoticefilestoreid as estimationFileStoreId   from egwtr_connectiondetails;";
-	//public static final String averageMake= "Select averagemeterreading as averageMake from egwtr_connectiondetails;";
 	
 	public static final String waterRecord_table="create table if not exists egwtr_migration "
 			+ " ( erpid varchar(64),erpconn varchar(64) ,digitconn varchar(64) ,erppt varchar(64),digitpt varchar(64),status varchar(64),tenantId varchar(64),additiondetails varchar(1000),errorMessage varchar(4000), mob varchar(11) );"
@@ -222,7 +211,7 @@ public class Sqls {
 		    +   " and conn.shsc_number is not null "
 			//+" :locCondition "
 			+ " and conndetails.id not in (select erpid::bigint from egswtax_migration where status"
-			+ " in ('Saved','Demand_Created' ) ) order by conndetails.id limit 1000;";
+			+ " in ('Saved','Demand_Created' ) ) order by conndetails.id;";
 	
 	
 	
