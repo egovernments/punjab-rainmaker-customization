@@ -79,7 +79,7 @@ public class CollectionService {
 				} catch (Exception exception) {
 					log.error("Exception occurred while fetching the bills with business service:"
 							+ payment.getBusinessService() + " and consumer code: " + payment.getConsumerCode());
-					recordService.recordError("Wtrcollection", digitTenantId,
+					recordService.recordError("Wtrcollection", tenantId,
 							"Error while fetching bill:" + exception.getMessage(), payment.getId());
 				}
 				if (bills != null && !bills.isEmpty() && !payment.getPaymentDetails().isEmpty()) {
@@ -184,7 +184,7 @@ public class CollectionService {
 				} catch (Exception exception) {
 					log.error("Exception occurred while fetching the bills with business service:"
 							+ payment.getBusinessService() + " and consumer code: " + payment.getConsumerCode());
-					recordService.recordError("Swcollection", digitTenantId,
+					recordService.recordError("Swcollection", tenantId,
 							"Error while fetching bill:" + exception.getMessage(), payment.getId());
 				}
 				if (bills != null && !bills.isEmpty() && !payment.getPaymentDetails().isEmpty()) {
