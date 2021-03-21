@@ -159,7 +159,7 @@ public class RecordService {
 		qry = qry.replace(":erpconn", "'" + conn.getConsumerCode() + "'");
 		qry = qry.replace(":status", "'Saved'");
 		qry = qry.replace(":tenantId", "'" + conn.getTenantId() + "'");
-		qry = qry.replace(":digitreceiptnumber", receiptNumber);
+		qry = qry.replace(":digitreceiptnumber", "'" + receiptNumber + "'");
 		qry = qry.replace(":digitpt", "'" + conn.getBusinessService() + "'");
 		jdbcTemplate.execute(qry);
 
@@ -173,7 +173,7 @@ public class RecordService {
 		qry = qry.replace(":erpconn", "'" + conn.getConsumerCode() + "'");
 		qry = qry.replace(":status", "'Saved'");
 		qry = qry.replace(":tenantId", "'" + conn.getTenantId() + "'");
-		qry = qry.replace(":digitreceiptnumber", receiptNumber);
+		qry = qry.replace(":digitreceiptnumber", "'" + receiptNumber + "'" );
 		qry = qry.replace(":digitpt", "'" + conn.getBusinessService() + "'");
 		jdbcTemplate.execute(qry);
 

@@ -104,7 +104,7 @@ public class CollectionService {
 							} else {
 								log.error("Failed to register this payment at collection-service for consumer code: "
 										+ payment.getConsumerCode());
-								recordService.recordError("Wtrcollection", digitTenantId,
+								recordService.recordError("Wtrcollection", tenantId,
 										"Failed to register this payment at collection-service for consumer code: "
 												+ payment.getConsumerCode(),
 										payment.getId());
@@ -112,13 +112,13 @@ public class CollectionService {
 						} catch (Exception e) {
 							log.error("Failed to register this payment for consumer code: " + payment.getConsumerCode(),
 									e);
-							recordService.recordError("Wtrcollection", digitTenantId, e.getMessage(), payment.getId());
+							recordService.recordError("Wtrcollection", tenantId, e.getMessage(), payment.getId());
 
 						}
 
 					} else {
 						log.error("Failed to register this payment at collection-service");
-						recordService.recordError("Wtrcollection", digitTenantId,
+						recordService.recordError("Wtrcollection", tenantId,
 								"Failed to register this payment at collection-service", payment.getId());
 					}
 
@@ -209,7 +209,7 @@ public class CollectionService {
 							} else {
 								log.error("Failed to register this payment at collection-service for consumer code: "
 										+ payment.getConsumerCode());
-								recordService.recordError("Swcollection", digitTenantId,
+								recordService.recordError("Swcollection", tenantId,
 										"Failed to register this payment at collection-service for consumer code: "
 												+ payment.getConsumerCode(),
 										payment.getId());
@@ -217,13 +217,13 @@ public class CollectionService {
 						} catch (Exception e) {
 							log.error("Failed to register this payment for consumer code: " + payment.getConsumerCode(),
 									e);
-							recordService.recordError("Swcollection", digitTenantId, e.getMessage(), payment.getId());
+							recordService.recordError("Swcollection", tenantId, e.getMessage(), payment.getId());
 
 						}
 
 					} else {
 						log.error("Failed to register this payment at collection-service");
-						recordService.recordError("Swcollection", digitTenantId,
+						recordService.recordError("Swcollection", tenantId,
 								"Failed to register this payment at collection-service", payment.getId());
 					}
 
