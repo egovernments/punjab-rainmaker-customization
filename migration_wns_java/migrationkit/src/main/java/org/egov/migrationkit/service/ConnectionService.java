@@ -85,7 +85,7 @@ public class ConnectionService {
 		String searchPath = jdbcTemplate.queryForObject("show search_path", String.class);
 		log.info(searchPath);
 
-		String qry = Sqls.waterQueryFormatted;
+		String qry = Sqls.WATER_CONNECTION_QUERY;
 		/*
 		 * * if(boundaryList.length()>0) {
 		 * 
@@ -150,7 +150,7 @@ public class ConnectionService {
 					// continue;
 				}
 
-				String addressQuery = Sqls.address;
+				String addressQuery = Sqls.GET_ADDRESS;
 				addressQuery = addressQuery.replace(":schema_tenantId", tenantId);
 				Integer id = (Integer) data.get("applicantaddress.id");
 				addressQuery = addressQuery.replace(":id", id.toString());
@@ -313,7 +313,7 @@ public class ConnectionService {
 		}
 		long duration = System.currentTimeMillis()-startTime;
 		
-		log.info("Water Migration completed for " + tenantId + " took " + duration + " milliseconds to run");
+		log.info("Water Migration completed for " + tenantId + " took " + duration/1000 + " Secs to run");
 		
 	}
 
@@ -388,7 +388,7 @@ public class ConnectionService {
 		String searchPath = jdbcTemplate.queryForObject("show search_path", String.class);
 		log.info(searchPath);
 
-		String qry = Sqls.sewerageQuery;
+		String qry = Sqls.SEWERAGE_CONNECTION_QUERY;
 		/*
 		 * if(boundaryList.length()>0) {
 		 * 
@@ -434,7 +434,7 @@ public class ConnectionService {
 					// continue;
 				}
 
-				String addressQuery = Sqls.address;
+				String addressQuery = Sqls.GET_ADDRESS;
 
 				Integer id = (Integer) data.get("applicantaddress.id");
 
@@ -593,7 +593,7 @@ public class ConnectionService {
 		}
 		long duration = System.currentTimeMillis()-startTime;
 		
-		log.info("Sewerage Migration completed for " + tenantId + " took " + duration + " milliseconds to run");
+		log.info("Sewerage Migration completed for " + tenantId + " took " + duration/1000 + " Secs to run");
 		
 
 	}
