@@ -157,7 +157,7 @@ public class Sqls {
 			+ " in ('Saved','Demand_Created' ) ) order by conndetails.id;";
 
 	public static final String SEWERAGE_MIGRATION_TABLE = "create table  if not exists  egswtax_migration "
-			+ " ( erpid varchar(64),erpconn varchar(64) ,digitconn varchar(64) ,erppt varchar(64),digitpt varchar(64),status varchar(64),tenantId varchar(64),additiondetails varchar(1000),errorMessage varchar(4000)  );"
+			+ " ( erpid varchar(64),erpconn varchar(64), mob varchar(64),digitconn varchar(64) ,erppt varchar(64),digitpt varchar(64),status varchar(64),tenantId varchar(64),additiondetails varchar(1000),errorMessage varchar(4000)  );"
 			+ "";
 
 	public static final String SEWERAGE_MIGRATION_INSERT = "insert into  :schema_tenantId.egswtax_migration  "
