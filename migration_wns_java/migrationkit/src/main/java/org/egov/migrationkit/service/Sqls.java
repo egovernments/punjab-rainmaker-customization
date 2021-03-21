@@ -80,7 +80,7 @@ public class Sqls {
 
 	public static final String WATER_COLLECTION_MIGRATION_TABLE = "create table  if not exists  egwtr_cl_migration(erpreceiptnumber varchar(64),erpconn varchar(64) ,digitreceiptnumber varchar(64) ,erppt varchar(64),digitpt varchar(64),status varchar(64),tenantId varchar(64),additiondetails varchar(1000),errorMessage varchar(4000) );";
 
-	public static final String WATER_COLLECTION_MIGRATION_INSERT = "insert into  :schema.egwtr_cl_migration(erpreceiptnumber ,erpconn  ,digitreceiptnumber ,erppt ,digitpt ,status ,tenantId ,additiondetails ) values (:erpid,:erpconn,:digitreceiptnumber,:erppt,:digitpt,:status"
+	public static final String WATER_COLLECTION_MIGRATION_INSERT = "insert into  :schema.egwtr_cl_migration(erpreceiptnumber ,erpconn  ,digitreceiptnumber ,erppt ,digitpt ,status ,tenantId ,additiondetails ) values (:erpreceiptnumber,:erpconn,:digitreceiptnumber,:erppt,:digitpt,:status"
 			+ ", :tenantId,:addtionaldetails)";
 
 	public static final String WATER_COLLECTION_MIGRATION_UPDATE = "update  :schema.egwtr_cl_migration"
@@ -92,7 +92,7 @@ public class Sqls {
 			+ " 'payerName', owner.name, 'consumerCode', ch.consumercode, 'payerEmail', owner.emailid, 'payerId', owner.id, "
 			+ " 'totalAmountPaid', ch.totalamount, 'totalDue', ch.totalamount, 'instrumentDate',"
 			+ " (select extract(epoch from ih.instrumentdate) * 1000) , 'instrumentNumber', ih.instrumentNumber, 'instrumentStatus',"
-			+ " status.code, 'paymentDetails', (json_agg(json_build_object('receiptNumber,ch.receiptnumber,'totalDue', ch.totalamount, 'totalAmountPaid' , ch.totalamount,"
+			+ " status.code, 'paymentDetails', (json_agg(json_build_object('receiptNumber',ch.receiptnumber,'totalDue', ch.totalamount, 'totalAmountPaid' , ch.totalamount,"
 			+ " 'businessService', 'WS')ORDER BY ch.id ) ) ) as payments_info from egcl_collectionheader ch INNER JOIN egcl_servicedetails"
 			+ " billingservice ON ch.servicedetails=billingservice.id and billingservice.code !='STAX' INNER JOIN egcl_collectioninstrument "
 			+ " ci ON ch.id=ci.collectionheader INNER JOIN egf_instrumentheader ih ON ci.instrumentheader=ih.id INNER JOIN egf_instrumenttype "
