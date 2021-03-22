@@ -14,7 +14,9 @@ public class Sqls {
 			+ "   'cityCode', (select code from eg_city),\n" + "  'oldConnectionNo'	, conn.oldconsumernumber		, "
 			+ "  'connectionNo'	, conn.consumercode		, " + "  'id'	, conndetails.id	, "
 			+ "  'applicantname'	, usr.name		, "
+			+ "'gender', ( SELECT CASE WHEN usr.gender = 0 THEN 'FEMALE' WHEN usr.gender = 1 THEN 'MALE' ELSE 'OTHERS' END ,\n"
 			+ "  'connectionStatus',	 conndetails.connectionstatus	,	 "
+			+ "  'securityFee',	 conndetails.securitydeposit	,	 "
 			+ "  'createddate',	 to_char(conn.createddate::timestamp without time zone	, 'YYYY-MM-DD')	, "
 			+ "  'propertyType'	, proptype.name		, " + "  'guardianname',	 usr.guardian	,	 "
 			+ "  'channel'	, CASE WHEN conndetails.source is not null THEN conndetails.source ELSE 'COUNTER' END	,	 "
@@ -61,7 +63,7 @@ public class Sqls {
 			+ "  egw_status status where conn.id=conndetails.connection and apptype.id=conndetails.applicationtype and"
 			+ " usage.id=conndetails.usagetype and locality.id=conn.locality and"
 			+ " conndetails.propertytype=proptype.id and conndetails.category=wtrctgy.id and ownerinfo.connection=conn.id "
-			+ " and usr.id=ownerinfo.owner and address.id=conn.address and status.id=conndetails.statusid   "
+			+ " and usr.id=ownerinfo.owner and address.id=conn.address and status.id=conndetails.statusid  :locCondition "
 			+ " and conndetails.id not in (select erpid::bigint from egwtr_migration where status in "
 			+ "('Saved','Demand_Created' ) )  " + " order by conndetails.id; ";
 
@@ -110,11 +112,14 @@ public class Sqls {
 			+ "'cityname', (SELECT CASE WHEN name like '%UAT%' THEN (SELECT split_part(name,'-',1) from eg_city) ELSE (select name from eg_city) END from eg_city),\n"
 			+ "'zone', zone.name,\n" + "'cityCode', (select code from eg_city),\n"
 			+ "'connectionNo', conn.shsc_number,\n" + "'id', conndetails.id,\n" + "'applicantname', usr.name,\n"
+			+ "'gender', ( SELECT CASE WHEN usr.gender = 0 THEN 'FEMALE' WHEN usr.gender = 1 THEN 'MALE' ELSE 'OTHERS' END,\n"
 			+ "'connectionstatus', conn.status,\n"
 			+ "'createddate', to_timestamp(to_char(conn.createddate::timestamp without time zone, 'YYYY-MM-DD'),'YYYY-MM-DDTHH24:MI:SSZ'),\n"
 			+ "'servicetype', 'Sewerage Charges',\n"
 			+ "'autoverifieddate', (select lastmodifieddate from eg_wf_state_history statehist where statehist.state_id=appdetails.state_id and lastmodifiedby IN (select id from eg_user where username='system') LIMIT 1),\n"
 			+ "'guardianname', usr.guardian,\n"
+			+ "'plotsize', conndetails.plotsize,\n"
+			+ "  'securityFee',	 conndetails.securitydeposit	,	 "
 			+ "'channel', CASE WHEN appdetails.source is not null THEN appdetails.source ELSE 'COUNTER' END,\n"
 			+ "'applicationtype', apptype.name,\n" + "'billingType',	 conndetails.billingtype	,\n"
 			+ "'locality', locality.code,\n" + "'billingAmount',	 conndetails.billamount ,\n"
@@ -152,7 +157,7 @@ public class Sqls {
 			+ "locality.id=conn.locality and zone.id=conn.zone and\n"
 			+ " ownerinfo.connection=conn.id and usr.id=ownerinfo.owner and\n"
 			+ "  address.id=conn.address and status.id=appdetails.status  " + " and conn.shsc_number is not null "
-			// +" :locCondition "
+			+" :locCondition "
 			+ " and conndetails.id not in (select erpid::bigint from egswtax_migration where status"
 			+ " in ('Saved','Demand_Created' ) ) order by conndetails.id;";
 

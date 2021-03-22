@@ -15,8 +15,10 @@ import org.springframework.web.client.RestTemplate;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.swagger.client.model.User;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
+@Slf4j
 public class UserService {
 	
 	@Autowired
@@ -40,7 +42,7 @@ public class UserService {
 
 		if (tokenObject.containsKey("access_token")) {
 			access_token = (String) tokenObject.get("access_token");
-			System.out.println("Access token: " + access_token);
+			log.info("Access token: {}",  access_token);
 		}
 
 		return access_token;
@@ -48,7 +50,7 @@ public class UserService {
 	}
 	
     public Object getAccess(String userName, String password, String tenantId) {
-       System.out.println("Fetch access token for register with login flow");
+    	log.info("Fetch access token for register with login flow");
         try {
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
@@ -66,7 +68,7 @@ public class UserService {
             return restTemplate.postForEntity(userHost + userTokenEndpoint, request, Map.class).getBody();
 
         } catch (Exception e) {
-            System.out.println("Error occurred while logging-in via register flow" + e);
+        	log.error("Error occurred while logging-in via register flow" + e);
             throw e;
         }
     }

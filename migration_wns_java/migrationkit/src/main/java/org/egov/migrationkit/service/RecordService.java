@@ -17,6 +17,7 @@ import io.swagger.client.model.WaterConnection;
 @Transactional
 @Service
 public class RecordService {
+	
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
 

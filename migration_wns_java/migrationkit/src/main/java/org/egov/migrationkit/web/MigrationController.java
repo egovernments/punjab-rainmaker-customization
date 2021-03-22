@@ -1,5 +1,7 @@
 package org.egov.migrationkit.web;
 
+import java.util.List;
+
 import org.egov.migrationkit.service.CollectionService;
 import org.egov.migrationkit.service.ConnectionService;
 import org.egov.migrationkit.service.UserService;
@@ -41,7 +43,7 @@ public class MigrationController {
 	@PostMapping("/water/connection")
 	@ResponseStatus(HttpStatus.CREATED)
 	public ResponseEntity migrateWater(@RequestParam String tenantId,
-			@RequestBody RequestInfoWrapper waterMigrateRequest, BindingResult result) {
+			@RequestBody RequestInfoWrapper waterMigrateRequest, @RequestParam(required = false) List<String> boundaryList, BindingResult result) {
 
 		try {
 
@@ -50,7 +52,7 @@ public class MigrationController {
 					userInfo.getTenantId());
 			if (accessToken != null) {
 				waterMigrateRequest.getRequestInfo().setAuthToken(accessToken);
-				service.migrateWtrConnection(tenantId, waterMigrateRequest.getRequestInfo());
+				service.migrateWtrConnection(tenantId, waterMigrateRequest.getRequestInfo(), boundaryList);
 
 			} else {
 				return new ResponseEntity(HttpStatus.UNAUTHORIZED);
@@ -104,10 +106,8 @@ public class MigrationController {
 
 	@PostMapping("/sewerage/connection")
 	@ResponseStatus(HttpStatus.CREATED)
-	public ResponseEntity sewerageConnection(@RequestParam String tenantId, // @RequestParam
-																			// String
-																			// boundaryList,
-			@RequestBody RequestInfoWrapper sewerageConnectionRequest, BindingResult result) {
+	public ResponseEntity sewerageConnection(@RequestParam String tenantId, @RequestParam(required = false) List<String> boundaryList,
+			@RequestBody RequestInfoWrapper sewerageConnectionRequest,BindingResult result) {
 
 		try {
 
@@ -116,7 +116,7 @@ public class MigrationController {
 					userInfo.getTenantId());
 			if (accessToken != null) {
 				sewerageConnectionRequest.getRequestInfo().setAuthToken(accessToken);
-				service.createSewerageConnection(tenantId, sewerageConnectionRequest.getRequestInfo());
+				service.createSewerageConnection(tenantId, sewerageConnectionRequest.getRequestInfo(), boundaryList);
 
 			} else {
 				return new ResponseEntity(HttpStatus.UNAUTHORIZED);

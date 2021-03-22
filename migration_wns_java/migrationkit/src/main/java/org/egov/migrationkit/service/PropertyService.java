@@ -76,7 +76,7 @@ public class PropertyService {
 		return property;
 	}
 
-	public Property findProperty(SewerageConnectionRequest swg, String json, String tenantId) {
+	public Property findProperty(SewerageConnectionRequest swg, Map json, String tenantId) {
 		Property property = null;
 		try {
 			property = searchswPtRecord(swg, json, tenantId);
@@ -123,6 +123,7 @@ public class PropertyService {
 		owner.setMobileNumber(conn.getMobilenumber());
 		owner.setFatherOrHusbandName(conn.getGuardianname());
 		owner.setOwnerType("NONE");
+		owner.setGender((String)data.get("gender"));
 
 		property.creationReason(CreationReason.CREATE);
 		// log.info("conn.getPropertyType() :" + conn.getPropertyType());
@@ -165,7 +166,7 @@ public class PropertyService {
 
 	}
 
-	private Property createSProperty(SewerageConnectionRequest swg, String json, String tenantId) {
+	private Property createSProperty(SewerageConnectionRequest swg, Map json, String tenantId) {
 		String uuid = null;
 		PropertyRequest prequest = new PropertyRequest();
 		prequest.setRequestInfo(swg.getRequestInfo());
@@ -176,7 +177,12 @@ public class PropertyService {
 		property.setAddress(conn.getApplicantAddress());
 		property.setChannel(Channel.SYSTEM);
 		// property.setInstitution(null);
-		property.setLandArea(BigDecimal.valueOf(50));
+//		property.setLandArea(BigDecimal.valueOf(50));
+		long plotsize = (long)json.getOrDefault("plotsize", 125);
+		if (plotsize>0)
+			property.setLandArea(BigDecimal.valueOf(plotsize));
+		else
+			property.setLandArea(BigDecimal.valueOf(125));
 		property.setNoOfFloors(Long.valueOf(1));
 		property.setOldPropertyId(conn.getPropertyId());
 		property.setOwners(null);
@@ -199,6 +205,7 @@ public class PropertyService {
 		owner.setOwnerType("NONE");
 		property.creationReason(CreationReason.CREATE);
 		property.setUsageCategory("RESIDENTIAL");
+		owner.setGender((String)json.get("gender"));
 
 		List<OwnerInfo> owners = new ArrayList<>();
 		owners.add(owner);
@@ -286,7 +293,7 @@ public class PropertyService {
 
 	}
 
-	private Property searchswPtRecord(SewerageConnectionRequest conn, String json, String tenantId) {
+	private Property searchswPtRecord(SewerageConnectionRequest conn, Map json, String tenantId) {
 
 		PropertyRequest pr = new PropertyRequest();
 		pr.setRequestInfo(conn.getRequestInfo());

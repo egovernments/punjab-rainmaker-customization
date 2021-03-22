@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
+import org.apache.commons.codec.binary.StringUtils;
 import org.egov.migrationkit.constants.WSConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -67,7 +69,7 @@ public class ConnectionService {
 	@Value("${egov.services.sewerage.url}")
 	private String sewerageUrl = null;
 
-	public void migrateWtrConnection(String tenantId, RequestInfo requestInfo) {
+	public void migrateWtrConnection(String tenantId, RequestInfo requestInfo, List<String> boundaryList) {
 		long startTime = System.currentTimeMillis();
 		
 		recordService.initiate(tenantId);
@@ -86,18 +88,17 @@ public class ConnectionService {
 		log.info(searchPath);
 
 		String qry = Sqls.WATER_CONNECTION_QUERY;
-		/*
-		 * * if(boundaryList.length()>0) {
-		 * 
-		 * qry=qry.replace(":locCondition","and locality in ("+boundaryList+") "
-		 * ); }else {
-		 * 
-		 * qry=qry.replace(":locCondition","  " );
-		 * 
-		 * }
-		 */
+		
+		if (boundaryList != null && !boundaryList.isEmpty())
+			qry=qry.replace(":locCondition"," and locality.code in ("+String.join(",", boundaryList
+					.stream()
+		            .map(boundary -> ("'" + boundary + "'"))
+		            .collect(Collectors.toList()))+") " );
+		else
+			qry=qry.replace(":locCondition", " " );
 
 		List<String> queryForList = jdbcTemplate.queryForList(qry, String.class);
+		
 
 		for (String resultJson : queryForList) {
 
@@ -169,6 +170,7 @@ public class ConnectionService {
 
 				locality.setCode(localityCode);
 				address.setLocality(locality);
+				address.setCity((String)data.get("cityname"));
 				connection.setApplicantAddress(address);
 
 				Property property = propertyService.findProperty(waterRequest, data, tenantId);
@@ -215,9 +217,10 @@ public class ConnectionService {
 				addtionals.put("connectionCategory", (String) data.get("connectionCategory"));
 				addtionals.put("meterId", (String) data.get("meterId"));
 				addtionals.put("ledgerId", (String) data.get("ledgerId"));
-				// addtionals.put("pipeSize", (Double) data.get("pipeSize"));
+				addtionals.put("pipeSize", (Double) data.getOrDefault("pipeSize", 1));
 				addtionals.put("estimationFileStoreId", (String) data.get("estimationFileStoreId"));
 				addtionals.put("meterMake", (String) data.get("meterMake"));
+				addtionals.put("securityFee", data.get("securityFee"));
 
 				if (data.get("averageMeterReading") != null) {
 					try {
@@ -247,7 +250,7 @@ public class ConnectionService {
 				connection.setAdditionalDetails(addtionals);
 
 				connection.setOldApplication(true);
-				connection.setOldConnectionNo(connectionNo);
+//				connection.setOldConnectionNo(connectionNo);
 
 				String response = null;
 				try {
@@ -373,7 +376,7 @@ public class ConnectionService {
 
 	}
 
-	public void createSewerageConnection(String tenantId, RequestInfo requestInfo) {
+	public void createSewerageConnection(String tenantId, RequestInfo requestInfo, List<String> boundaryList) {
 		long startTime = System.currentTimeMillis();
 
 		recordService.initiateSewrage(tenantId);
@@ -389,17 +392,15 @@ public class ConnectionService {
 		log.info(searchPath);
 
 		String qry = Sqls.SEWERAGE_CONNECTION_QUERY;
-		/*
-		 * if(boundaryList.length()>0) {
-		 * 
-		 * qry=qry.replace(":locCondition","and locality in ("+boundaryList+") "
-		 * ); }else {
-		 * 
-		 * qry=qry.replace(":locCondition","  " );
-		 * 
-		 * 
-		 * }
-		 */
+		
+		if (boundaryList != null && !boundaryList.isEmpty())
+			qry=qry.replace(":locCondition"," and locality.code in ("+String.join(",", boundaryList
+					.stream()
+		            .map(boundary -> ("'" + boundary + "'"))
+		            .collect(Collectors.toList()))+") " );
+		else
+			qry=qry.replace(":locCondition", " " );
+		 
 		List<String> queryForList = jdbcTemplate.queryForList(qry, String.class);
 
 		for (String json : queryForList) {
@@ -456,6 +457,7 @@ public class ConnectionService {
 
 				locality.setCode(localityCode);
 				address.setLocality(locality);
+				address.setCity((String)data.get("cityname"));
 				swConnection.setApplicantAddress(address);
 				SewerageConnectionRequest sewerageRequest = new SewerageConnectionRequest();
 
@@ -474,6 +476,7 @@ public class ConnectionService {
 				addtionals.put("ledgerId", (String) data.get("ledgerId"));
 				// addtionals.put("pipeSize",(Double) data.get("pipeSize"));
 				addtionals.put("estimationFileStoreId", (String) data.get("estimationFileStoreId"));
+				addtionals.put("securityFee", data.get("securityFee"));
 				// addtionals.put("meterMake",(String) data.get("meterMake"));
 
 				if (data.get("averageMeterReading") != null) {
@@ -505,7 +508,7 @@ public class ConnectionService {
 
 				sewerageRequest.setSewerageConnection(swConnection);
 				sewerageRequest.setRequestInfo(requestInfo);
-				Property property = propertyService.findProperty(sewerageRequest, json, tenantId);
+				Property property = propertyService.findProperty(sewerageRequest, data, tenantId);
 
 				if (property == null) {
 					recordService.recordError("sewerage", tenantId,
@@ -580,10 +583,10 @@ public class ConnectionService {
 
 				}
 
-			} catch (JsonMappingException e) {
-				log.error(e.getMessage());
-			} catch (JsonProcessingException e) {
-				log.error(e.getMessage());
+//			} catch (JsonMappingException e) {
+//				log.error(e.getMessage());
+//			} catch (JsonProcessingException e) {
+//				log.error(e.getMessage());
 			} catch (Exception e) {
 				log.error(e.getMessage(), e);
 				recordService.recordError("sewerage", tenantId, e.getMessage(), swConnection.getId());
