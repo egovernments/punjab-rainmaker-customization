@@ -48,7 +48,7 @@ public class WaterConnection extends Connection {
 	@JsonProperty("proposedPipeSize")
 	private Double proposedPipeSize = null;
 
-	@JsonProperty("actualPipeSize")
+	@JsonProperty("pipeSize")
 	private Double pipeSize = null;
 
 	@JsonProperty("proposedTaps")
