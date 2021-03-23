@@ -2282,6 +2282,16 @@ ReportDefinitions:
     type: string
     source: tl
     total: true
+  - name: zone
+    label: report.tl.zone
+    type: string
+    source: tl
+    total: false
+  - name: ward_block
+    label: report.tl.locality
+    type: string
+    source: tl
+    total: false
   - name: locality
     label: report.tl.locality
     type: string
@@ -2315,6 +2325,8 @@ ReportDefinitions:
       SELECT 
         tl.applicationnumber as applicationnumber,
         locality_tlb.locality as locality,
+        eg_bndry_mohalla.blockcode as ward_block,
+        eg_bndry_mohalla.zonecode as zone,
         propertyid,
         financialyear,
         (case when oldlicensenumber is null then 'New' else 'Renewal' end) AS licensetype,
@@ -2342,6 +2354,7 @@ ReportDefinitions:
       LEFT OUTER JOIN egcl_bill bill ON bill.consumercode = tl.applicationnumber 
       LEFT OUTER JOIN egcl_paymentdetail as paydetail on paydetail.billid=bill.id
       INNER JOIN eg_tl_address ON eg_tl_address.tradelicensedetailid = tld.id
+      INNER JOIN eg_bndry_mohalla ON eg_bndry_mohalla.localitycode= eg_tl_address.locality
       LEFT OUTER JOIN 
       (
         SELECT tradelicensedetailid,array_to_string(array_agg(message.message),',') AS acc FROM eg_tl_accessory
