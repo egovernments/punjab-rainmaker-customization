@@ -239,4 +239,13 @@ public class Sqls {
 			+ " where f.id=d.filestoreid  and d.applicationdocumentsid=app.id and app.documentnamesid=dname.id "
 			+ " and app.connectiondetailsid=:connNo 	and documentname!='DemandBill' order by app.connectiondetailsid ";
 
+	public static final String ALLWATERDOCUMENTSSQL = "select app.connectiondetailsid,dname.documentname,f.filestoreid,f.filename,f.contenttype,conn.consumercode "
+			+ " from egwtr_connection conn,egwtr_connectiondetails conndt,egwtr_application_documents app, egwtr_documents d,eg_filestoremap f ,egwtr_document_names dname "
+			+ " where f.id=d.filestoreid  and d.applicationdocumentsid=app.id and app.documentnamesid=dname.id "
+			+ " and app.connectiondetailsid=conn.id and conndt.connection=conn.id and documentname!='DemandBill' order by app.connectiondetailsid";
+
+	public static final String WATER_DOCUMENTS_TABLE = "create table  if not exists  egwtr_document_migration(erpconn varchar(64) ,digitconn varchar(64) ,erpfilestore varchar(64),digitfilestore varchar(64),status varchar(64),tenantId varchar(64),additiondetails varchar(1000),errorMessage varchar(4000) )";
+
+	public static final String WATER_DOCUMENT_MIGRATION_INSERT = "Insert into egwtr_document_migration(erpconn, digitconn, erpfilestore ,digitfilestore ,status ,tenantId ,additiondetails ,errorMessage ) values(:erpconn,:digitconn,:erpfilestore,:digitfilestore,:status,:tenantId,:additiondetails,:errorMessage)";
+
 }

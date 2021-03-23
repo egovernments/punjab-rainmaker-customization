@@ -7,6 +7,8 @@ public class LocalDocument {
 	String filestoreid;
 	String filename;
 	String contenttype;
+	String connectionNo;
+
 	public String getConnectiondetailsid() {
 		return connectiondetailsid;
 	}
@@ -37,5 +39,12 @@ public class LocalDocument {
 	public void setContenttype(String contenttype) {
 		this.contenttype = contenttype;
 	}
+	
+	public String getConnectionNo() {
+		return connectionNo;
+	}
 
+	public void setConnectionNo(String connectionNo) {
+		this.connectionNo = connectionNo;
+	}
 }

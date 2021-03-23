@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.egov.migrationkit.service.CollectionService;
 import org.egov.migrationkit.service.ConnectionService;
+import org.egov.migrationkit.service.DocumentService;
 import org.egov.migrationkit.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -39,6 +40,9 @@ public class MigrationController {
 
 	@Autowired
 	private CollectionService collectionService;
+	
+	@Autowired
+	private DocumentService documentService;
 
 	@PostMapping("/water/connection")
 	@ResponseStatus(HttpStatus.CREATED)
@@ -103,7 +107,32 @@ public class MigrationController {
 		}
 		return new ResponseEntity(HttpStatus.CREATED);
 	}
+	
+	@PostMapping("/water/connection/documents")
+	@ResponseStatus(HttpStatus.CREATED)
+	public ResponseEntity<String> migrateDocuments(@RequestParam String tenantId,
+			@RequestBody RequestInfoWrapper waterMigrateRequest, BindingResult result) {
 
+		try {
+
+			UserInfo userInfo = waterMigrateRequest.getRequestInfo().getUserInfo();
+			String accessToken = userService.getAccessToken(userInfo.getUserName(), userInfo.getPassword(),
+					userInfo.getTenantId());
+			if (accessToken != null) {
+				waterMigrateRequest.getRequestInfo().setAuthToken(accessToken);
+				documentService.migrateWtrDocuments(tenantId, waterMigrateRequest.getRequestInfo());
+
+			} else {
+				return new ResponseEntity(HttpStatus.BAD_REQUEST);
+			}
+
+		} catch (Exception e) {
+
+			e.printStackTrace();
+			throw new RuntimeException("Failed to migrate files.");
+		}
+		return new ResponseEntity("Documents migrated for the city " + tenantId, HttpStatus.CREATED);
+	}
 	@PostMapping("/sewerage/connection")
 	@ResponseStatus(HttpStatus.CREATED)
 	public ResponseEntity sewerageConnection(@RequestParam String tenantId, @RequestParam(required = false) List<String> boundaryList,

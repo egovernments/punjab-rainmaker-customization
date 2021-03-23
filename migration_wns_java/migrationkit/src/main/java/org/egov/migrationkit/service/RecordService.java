@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import org.egov.migrationkit.rowmapper.LocalDocumentRowmapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,6 +22,9 @@ public class RecordService {
 	
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
+	
+	@Value("${egov.services.water.document.limit}")
+	private long fileLimit = 0l;
 
 	@Transactional
 	public void recordWaterMigration(WaterConnection conn, String tenantId) {
@@ -274,5 +279,39 @@ public class RecordService {
 		return documents;
 
 	}
+	
+	public List<LocalDocument> getAllFilesByTenantId(String tenantId) {
+		List<LocalDocument> documents = new ArrayList<>();
+		jdbcTemplate.execute("set search_path to " + tenantId);
+		jdbcTemplate.execute(Sqls.WATER_DOCUMENTS_TABLE);
+		String sql = Sqls.ALLWATERDOCUMENTSSQL;
+		if (fileLimit > 0)
+			sql = sql + " limit " + fileLimit;
+			
+		documents = jdbcTemplate.query(sql, new LocalDocumentRowmapper());
+		return documents;
+	}
+	public String getCityCodeByName(final String city) {
+		return jdbcTemplate.queryForObject("select code from eg_city where lower(name)='" + city + "'", String.class);
+	}
+
+	public void saveMigratedFilestoreDetails(String oldFileStore, String newFileStore, String connectionNo,
+			boolean success, String error, String tenantId) {
+
+		String qry = Sqls.WATER_DOCUMENT_MIGRATION_INSERT;
+
+		qry = qry.replace(":erpconn", "'" + connectionNo + "'");
+		qry = qry.replace(":digitconn", "'" + connectionNo + "'");
+		qry = qry.replace(":tenantId", "'" + tenantId + "'");
+		qry = qry.replace(":erpfilestore", "'" + oldFileStore + "'");
+		qry = qry.replace(":digitfilestore", "'" + newFileStore + "'");
+		qry = qry.replace(":status", success ? "'SUCCESS'" : "'FAILED'");
+		qry = qry.replace(":additiondetails", success ? "'Saved'" : "'Failed'");
+		qry = qry.replace(":errorMessage", success ? "'null'" : "'" + error + "'");
+
+		jdbcTemplate.execute(qry);
+
+	}
+
 
 }
