@@ -27,7 +27,17 @@ public class RecordService {
 	private long fileLimit = 0l;
 
 	@Transactional
-	public void recordWaterMigration(WaterConnection conn, String tenantId) {
+	public boolean recordWaterMigration(WaterConnection conn, String tenantId) {
+		String checkQuery = Sqls.WATER_MIGRATION_SELECT;
+		checkQuery = checkQuery.replace(":schema", tenantId);
+		checkQuery = checkQuery.replace(":status", "'Saved'");
+		checkQuery = checkQuery.replace(":erpconn", "'" + conn.getConnectionNo() + "'");
+		checkQuery = checkQuery.replace(":erpid", "'" + conn.getId() + "'");
+
+		int size = jdbcTemplate.queryForObject(checkQuery, Integer.class);
+
+		if(size >= 1)
+			return Boolean.TRUE;
 
 		String qry = Sqls.WATER_MIGRATION_INSERT;
 		qry = qry.replace(":schema", tenantId);
@@ -40,6 +50,8 @@ public class RecordService {
 		qry = qry.replace(":digitpt", "'null'");
 		qry = qry.replace(":addtionaldetails", "'null'");
 		jdbcTemplate.execute(qry);
+		
+		return Boolean.FALSE;
 
 	}
 
@@ -105,7 +117,18 @@ public class RecordService {
 	}
 
 	@Transactional
-	public void recordSewerageMigration(SewerageConnection conn, String tenantId) {
+	public boolean recordSewerageMigration(SewerageConnection conn, String tenantId) {
+		
+		String checkQuery = Sqls.SEWERAGE_MIGRATION_SELECT;
+		checkQuery = checkQuery.replace(":schema_tenantId", tenantId);
+		checkQuery = checkQuery.replace(":status", "'Saved'");
+		checkQuery = checkQuery.replace(":erpconn", "'" + conn.getConnectionNo() + "'");
+		checkQuery = checkQuery.replace(":erpid", "'" + conn.getId() + "'");
+
+		int size = jdbcTemplate.queryForObject(checkQuery, Integer.class);
+
+		if(size >= 1)
+			return Boolean.TRUE;
 
 		String qry = Sqls.SEWERAGE_MIGRATION_INSERT;
 		qry = qry.replace(":schema_tenantId", tenantId);
@@ -118,11 +141,22 @@ public class RecordService {
 		qry = qry.replace(":digitpt", "'null'");
 		qry = qry.replace(":addtionaldetails", "'null'");
 		jdbcTemplate.execute(qry);
+		
+		return Boolean.FALSE;
 
 	}
 
 	@Transactional
-	public void recordWtrCollMigration(CollectionPayment conn, String tenantId) {
+	public boolean recordWtrCollMigration(CollectionPayment conn, String tenantId) {
+		String checkQuery = Sqls.WATER_COLLECTION_MIGRATION_SELECT;
+		checkQuery = checkQuery.replace(":erpconn", "'" + conn.getConsumerCode() + "'");
+		checkQuery = checkQuery.replace(":schema", tenantId);
+		checkQuery = checkQuery.replace(":erpreceiptnumber", "'" + conn.getPaymentDetails().get(0).getReceiptNumber() + "'");
+		checkQuery = checkQuery.replace(":status", "'Saved'");
+		int size = jdbcTemplate.queryForObject(checkQuery, Integer.class);
+
+		if(size >= 1)
+			return Boolean.TRUE;
 
 		String qry = Sqls.WATER_COLLECTION_MIGRATION_INSERT;
 		qry = qry.replace(":schema", tenantId);
@@ -136,11 +170,23 @@ public class RecordService {
 		qry = qry.replace(":digitpt", "'null'");
 		qry = qry.replace(":addtionaldetails", "'null'");
 		jdbcTemplate.execute(qry);
+		
+		return Boolean.FALSE;
 
 	}
 
 	@Transactional
-	public void recordSwgCollMigration(CollectionPayment conn, String tenantId) {
+	public boolean recordSwgCollMigration(CollectionPayment conn, String tenantId) {
+		String checkQuery = Sqls.SEWERAGE_COLLECTION_MIGRATION_SELECT;
+		checkQuery = checkQuery.replace(":erpconn", "'" + conn.getConsumerCode() + "'");
+		checkQuery = checkQuery.replace(":schema", tenantId);
+		checkQuery = checkQuery.replace(":erpreceiptnumber", "'" + conn.getPaymentDetails().get(0).getReceiptNumber() + "'");
+		checkQuery = checkQuery.replace(":status", "'Saved'");
+		int size = jdbcTemplate.queryForObject(checkQuery, Integer.class);
+
+		if(size >= 1)
+			return Boolean.TRUE;
+
 
 		String qry = Sqls.SEWERAGE_COLLECTION_MIGRATION_INSERT;
 		qry = qry.replace(":schema", tenantId);
@@ -153,6 +199,8 @@ public class RecordService {
 		qry = qry.replace(":digitpt", "'null'");
 		qry = qry.replace(":addtionaldetails", "'null'");
 		jdbcTemplate.execute(qry);
+		
+		return Boolean.FALSE;
 
 	}
 

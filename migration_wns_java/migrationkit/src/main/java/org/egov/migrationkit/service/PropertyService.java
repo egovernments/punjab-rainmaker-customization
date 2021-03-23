@@ -82,12 +82,11 @@ public class PropertyService {
 			property = searchswPtRecord(swg, json, tenantId);
 			if (property == null) {
 				// log.debug("Propery not found creating new property");
-				property = createSProperty(swg, json, tenantId);
+				property = createSWProperty(swg, json, tenantId);
 			}
 		} catch (Exception e) {
-			log.error("error while finding or creating property {}", e.getMessage());
 			e.printStackTrace();
-			recordService.recordError("sewerage", tenantId, e.getMessage(), swg.getSewerageConnection().getId());
+			recordService.recordError("sewerage", tenantId, e.toString(), swg.getSewerageConnection().getId());
 		}
 
 		return property;
@@ -167,8 +166,8 @@ public class PropertyService {
 
 	}
 
-	private Property createSProperty(SewerageConnectionRequest swg, Map json, String tenantId) {
-		String uuid = null;
+	private Property createSWProperty(SewerageConnectionRequest swg, Map json, String tenantId) {
+//		String uuid = null;
 		PropertyRequest prequest = new PropertyRequest();
 		prequest.setRequestInfo(swg.getRequestInfo());
 		Property property = new Property();

@@ -74,6 +74,8 @@ public class Sqls {
 	public static final String WATER_MIGRATION_INSERT = "insert into :schema.egwtr_migration "
 			+ "(erpid ,erpconn  ,digitconn  ,erppt ,digitpt ,status ,tenantId ,additiondetails ) values (:erpid,:erpconn,:digitconn,:erppt,:digitpt,:status"
 			+ ", :tenantId,:addtionaldetails);";
+	
+	public static final String WATER_MIGRATION_SELECT = "SELECT count(*) :schema.egwtr_migration  where erpconn=:erpconn and erpid=:erpid and status=:status ";
 
 	public static final String WATER_MIGRATION_UPDATE = "update  :schema.egwtr_migration  "
 			+ "set digitconn=:digitconn , digitpt=:digitpt,status=:status where erpid=:erpid ";
@@ -84,6 +86,8 @@ public class Sqls {
 
 	public static final String WATER_COLLECTION_MIGRATION_INSERT = "insert into  :schema.egwtr_cl_migration(erpreceiptnumber ,erpconn  ,digitreceiptnumber ,erppt ,digitpt ,status ,tenantId ,additiondetails ) values (:erpreceiptnumber,:erpconn,:digitreceiptnumber,:erppt,:digitpt,:status"
 			+ ", :tenantId,:addtionaldetails)";
+	
+	public static final String WATER_COLLECTION_MIGRATION_SELECT = "select count(*) from :schema.egwtr_cl_migration where erpreceiptnumber=:erpreceiptnumber and erpconn=:erpconn and status=:status";
 
 	public static final String WATER_COLLECTION_MIGRATION_UPDATE = "update  :schema.egwtr_cl_migration"
 			+ " set digitreceiptnumber=:digitreceiptnumber , digitpt=:digitpt,status=:status where erpconn=:erpconn and tenantId=:tenantId";
@@ -168,6 +172,9 @@ public class Sqls {
 	public static final String SEWERAGE_MIGRATION_INSERT = "insert into  :schema_tenantId.egswtax_migration  "
 			+ "(erpid ,erpconn  ,digitconn  ,erppt ,digitpt ,status ,tenantId ,additiondetails ) values (:erpid,:erpconn,:digitconn,:erppt,:digitpt,:status"
 			+ ", :tenantId,:addtionaldetails);";
+	
+	public static final String SEWERAGE_MIGRATION_SELECT = "SELECT count(*) :schema_tenantId.egswtax_migration  where erpconn=:erpconn and erpid=:erpid and status=:status ";
+
 
 	public static final String SEWERAGE_MIGRATION_UPDATE = "update  :schema_tenantId.egswtax_migration  "
 			+ "set digitconn=:digitconn , digitpt=:digitpt,status=:status where erpid=:erpid ";
@@ -222,6 +229,9 @@ public class Sqls {
 	public static final String SEWERAGE_COLLECTION_MIGRATION_INSERT = "insert into  :schema.egswtax_cl_migration  "
 			+ "(erpreceiptnumber ,erpconn  ,digitreceiptnumber  ,erppt ,digitpt ,status ,tenantId ,additiondetails ) values (:erpreceiptnumber,:erpconn,:digitreceiptnumber,:erppt,:digitpt,:status"
 			+ ", :tenantId,:addtionaldetails);";
+	
+	public static final String SEWERAGE_COLLECTION_MIGRATION_SELECT = "select count(*) from :schema.egswtax_cl_migration where erpreceiptnumber=:erpreceiptnumber and erpconn=:erpconn and status=:status";
+
 
 	public static final String SEWERAGE_COLLECTION_UPDATE = "update  :schema.egswtax_cl_migration  "
 			+ "set digitreceiptnumber=:digitreceiptnumber , digitpt=:digitpt,status=:status where erpconn=:erpconn and tenantId=:tenantId";

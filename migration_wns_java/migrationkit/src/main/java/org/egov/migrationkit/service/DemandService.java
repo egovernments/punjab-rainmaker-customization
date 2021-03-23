@@ -141,36 +141,36 @@ public class DemandService {
      * @param demands The demands to be created
      * @return The list of demand created
      */
-    public Boolean saveDemand(RequestInfo requestInfo, List<Demand> demands,String erpId,String tenantId,String service){
-    	try{
-    
-    	
-    	 
-    	String url = billingServiceHost + demandCreateEndPoint+requestInfo.getUserInfo().getTenantId();
-        DemandRequest request = new DemandRequest(requestInfo,demands);
-        DemandResponse response = restTemplate.postForObject(url , request, DemandResponse.class);
-        
-        	//log.info("Demand Create Request: " + request + "Demand Create Respone: " + response);
-        }
-        catch(Exception e){
-         
-        	recordService.recordError(service,tenantId, e.getMessage(), erpId);
-            log.error("Error while Saving demands" + e.getMessage());
-            for(Demand demand:demands )
-            {
-            	log.info(demand.getConsumerCode() +""+demand.getBusinessService());
-            	for(DemandDetail dd:demand.getDemandDetails())
-            	{
-            		log.info(dd.getTaxHeadMasterCode());
-            		log.info("from date: "+dd.getFromDate());
-            		log.info("to date: "+dd.getToDate());
-            		
-            	}
-            }
-            return Boolean.FALSE;
-        }
-		return Boolean.TRUE;  
-    }
+	public Boolean saveDemand(RequestInfo requestInfo, List<Demand> demands,String erpId,String tenantId,String service){
+		boolean isDemandCreated = Boolean.TRUE;
+
+		try{
+
+			String url = billingServiceHost + demandCreateEndPoint+requestInfo.getUserInfo().getTenantId();
+			DemandRequest request = new DemandRequest(requestInfo,demands);
+			DemandResponse response = restTemplate.postForObject(url , request, DemandResponse.class);
+
+			//log.info("Demand Create Request: " + request + "Demand Create Respone: " + response);
+		}
+		catch(Exception e){
+			isDemandCreated=Boolean.FALSE;
+
+			recordService.recordError(service,tenantId, e.toString(), erpId);
+			log.error("Error while Saving demands" + e.toString());
+			for(Demand demand:demands )
+			{
+				log.info(demand.getConsumerCode() +""+demand.getBusinessService());
+				for(DemandDetail dd:demand.getDemandDetails())
+				{
+					log.info(dd.getTaxHeadMasterCode());
+					log.info("from date: "+dd.getFromDate());
+					log.info("to date: "+dd.getToDate());
+
+				}
+			}
+		}
+		return isDemandCreated;  
+	}
     
     public Boolean fetchBill(List<Demand> demands, RequestInfo requestInfo) {
 		for (Demand demand : demands) {

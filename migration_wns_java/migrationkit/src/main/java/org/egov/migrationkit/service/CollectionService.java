@@ -57,7 +57,7 @@ public class CollectionService {
 		jdbcTemplate.execute(Sqls.WATER_COLLECTION_MIGRATION_TABLE);
 
 		String digitTenantId = requestInfo.getUserInfo().getTenantId();
-		log.info("query is" + Sqls.WATER_COLLECTION_QUERY);
+		log.info("Water collectin query is: " + Sqls.WATER_COLLECTION_QUERY);
 		List<String> queryForList = jdbcTemplate.queryForList(Sqls.WATER_COLLECTION_QUERY, String.class);
 
 		for (String json : queryForList) {
@@ -65,11 +65,14 @@ public class CollectionService {
 			try {
 
 				CollectionPayment payment = objectMapper.readValue(json, CollectionPayment.class);
-				log.info("initiating  for" + payment.getConsumerCode());
+				log.info("Initiating  for" + payment.getConsumerCode());
 				payment.setTenantId(digitTenantId);
 				payment.getPaymentDetails().get(0).setTenantId(digitTenantId);
 				payment.getPaymentDetails().get(0).setTotalDue(payment.getTotalDue());
-				recordService.recordWtrCollMigration(payment, tenantId);
+				boolean isPaymentMigrated = recordService.recordWtrCollMigration(payment, tenantId);
+				if(isPaymentMigrated) 
+					continue;
+					
 				List<BillV2> bills = null;
 				try {
 
@@ -181,7 +184,11 @@ public class CollectionService {
 				payment.setTenantId(digitTenantId);
 				payment.getPaymentDetails().get(0).setTenantId(digitTenantId);
 				payment.getPaymentDetails().get(0).setTotalDue(payment.getTotalDue());
-				recordService.recordSwgCollMigration(payment, tenantId);
+				boolean isPaymentMigrated = recordService.recordSwgCollMigration(payment, tenantId);
+				
+				if(isPaymentMigrated)
+					continue;
+				
 				List<BillV2> bills = null;
 				try {
 
@@ -192,7 +199,7 @@ public class CollectionService {
 					log.error("Exception occurred while fetching the bills with business service:"
 							+ payment.getBusinessService() + " and consumer code: " + payment.getConsumerCode());
 					recordService.recordError("Swcollection", tenantId,
-							"Error while fetching bill:" + exception.getMessage(), payment.getId());
+							"Error while fetching bill:" + exception.toString(), payment.getId());
 				}
 				if (bills != null && !bills.isEmpty() && !payment.getPaymentDetails().isEmpty()) {
 					List<CollectionPaymentDetail> detailList = new ArrayList<CollectionPaymentDetail>();
