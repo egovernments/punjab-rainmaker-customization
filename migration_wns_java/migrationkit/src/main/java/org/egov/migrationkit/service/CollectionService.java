@@ -74,7 +74,7 @@ public class CollectionService {
 				try {
 
 					bills = fetchBill(requestInfo, digitTenantId, payment.getBusinessService(),
-							payment.getConsumerCode());
+							payment.getConsumerCode(),payment.getPaymentDetails().get(0).getReceiptNumber());
 
 				} catch (Exception exception) {
 					log.error("Exception occurred while fetching the bills with business service:"
@@ -137,7 +137,7 @@ public class CollectionService {
 	}
 
 	public List<BillV2> fetchBill(RequestInfo requestInfo, String tenantId, String businessService,
-			String consumerCode) {
+			String consumerCode, String erpReceiptNumber) {
 		List<BillV2> bills = new ArrayList<>();
 		try {
 
@@ -151,6 +151,13 @@ public class CollectionService {
 			return waterResponse.getBill();
 
 		} catch (Exception ex) {
+			String module=null;
+			if(businessService.equalsIgnoreCase("WS")) {
+				module="Wtrcollection";
+			}else {
+				module="Swcollection";
+			}
+			recordService.recordError(module, tenantId, ex.getMessage(), erpReceiptNumber);
 			log.error("Fetch Bill Error", ex);
 		}
 		return bills;
@@ -179,7 +186,7 @@ public class CollectionService {
 				try {
 
 					bills = fetchBill(requestInfo, digitTenantId, payment.getBusinessService(),
-							payment.getConsumerCode());
+							payment.getConsumerCode(),payment.getPaymentDetails().get(0).getReceiptNumber());
 
 				} catch (Exception exception) {
 					log.error("Exception occurred while fetching the bills with business service:"

@@ -225,9 +225,17 @@ public class RecordService {
 		String cleanedMessage = "";
 		if (message != null)
 			cleanedMessage = message.replace("'", "");
+		
+		if(module.equalsIgnoreCase("Wtrcollection") || module.equalsIgnoreCase("Swcollection")) {
+			jdbcTemplate.execute("update " + tenantId + "." + tableName + " set errorMessage='" + cleanedMessage
+					+ "' where erpreceiptnumber='" + id + "'");
+		}
 
+		else {
 		jdbcTemplate.execute("update " + tenantId + "." + tableName + " set errorMessage='" + cleanedMessage
 				+ "' where erpid='" + id + "'");
+		
+		}
 
 	}
 
