@@ -329,6 +329,7 @@ ReportDefinitions:
     total: true
   - name: consumercode
     label: reports.ws.consumercode
+    type: string
     source: ws
     total: false
   - name: paymentstatus
@@ -396,6 +397,7 @@ ReportDefinitions:
     total: true
   - name: consumercode
     label: reports.ws.consumercode
+    type: string
     source: ws
     total: false
   - name: paymentstatus
