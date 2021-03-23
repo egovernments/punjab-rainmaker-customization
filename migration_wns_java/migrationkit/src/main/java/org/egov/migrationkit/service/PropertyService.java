@@ -85,7 +85,8 @@ public class PropertyService {
 				property = createSProperty(swg, json, tenantId);
 			}
 		} catch (Exception e) {
-			log.error("error while finding or creating property", e.getMessage());
+			log.error("error while finding or creating property {}", e.getMessage());
+			e.printStackTrace();
 			recordService.recordError("sewerage", tenantId, e.getMessage(), swg.getSewerageConnection().getId());
 		}
 
@@ -178,7 +179,7 @@ public class PropertyService {
 		property.setChannel(Channel.SYSTEM);
 		// property.setInstitution(null);
 //		property.setLandArea(BigDecimal.valueOf(50));
-		long plotsize = (long)json.getOrDefault("plotsize", 125);
+		long plotsize = Long.valueOf((Integer)json.getOrDefault("plotsize", 125));
 		if (plotsize>0)
 			property.setLandArea(BigDecimal.valueOf(plotsize));
 		else

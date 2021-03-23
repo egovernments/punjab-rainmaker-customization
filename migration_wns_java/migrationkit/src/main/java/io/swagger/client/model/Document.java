@@ -34,15 +34,24 @@ public class Document {
   @JsonProperty("documentUid")
   private String documentUid = null;
 
+  @JsonProperty("connectionNo")
+  private String connectionNo = null;
+  
   @JsonProperty("additionalDetails")
   private Object additionalDetails = null;
 
-  public Document id(String id) {
+  @JsonProperty("tenantId")
+  private String tenantId = null;
+  
+
+
+public Document id(String id) {
     this.id = id;
     return this;
   }
 
-   /**
+
+/**
    * system id of the Document.
    * @return id
   **/
@@ -176,6 +185,23 @@ public String getDocumentCode() {
 
 public void setDocumentCode(String documentCode) {
 	this.documentCode = documentCode;
+}
+
+
+public String getConnectionNo() {
+	return connectionNo;
+}
+
+public void setConnectionNo(String connectionNo) {
+	this.connectionNo = connectionNo;
+}
+
+public String getTenantId() {
+	return tenantId;
+}
+
+public void setTenantId(String tenantId) {
+	this.tenantId = tenantId;
 }
 
 }
