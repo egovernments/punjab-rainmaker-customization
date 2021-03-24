@@ -129,7 +129,7 @@ public class MigrationController {
 		} catch (Exception e) {
 
 			e.printStackTrace();
-			throw new RuntimeException("Failed to migrate files.");
+			return new ResponseEntity("Documents migration failed for the city " + tenantId, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		return new ResponseEntity("Documents migrated for the city " + tenantId, HttpStatus.CREATED);
 	}
