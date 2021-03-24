@@ -44,18 +44,17 @@ public class DocumentService {
 					city);
 			uploadedDocuments.addAll(documents);
 		}
-		storeFileStoreIds(uploadedDocuments, requestInfo);
+		storeFileStoreIds(uploadedDocuments,city, requestInfo);
 
 	}
 
-	private void storeFileStoreIds(List<DocumentDetails> uploadedDocuments, RequestInfo requestInfo) {
-
+	private void storeFileStoreIds(List<DocumentDetails> uploadedDocuments, String city, RequestInfo requestInfo) {
+		String tenantId = "pb." + city;
 		uploadedDocuments.forEach(doc -> doc.setUserUid(requestInfo.getUserInfo().getUuid()));
 		DocumentRequest documentReq = DocumentRequest.builder().requestInfo(requestInfo).documents(uploadedDocuments)
 				.build();
 		ResponseEntity<String> result = restTemplate.postForEntity(
-				"http://localhost:8090/ws-services/wc/documents/_create?tenantId=pb.fazilka", documentReq,
-				String.class);
+				host + "/ws-services/wc/documents/_create?tenantId=" + tenantId, documentReq, String.class);
 		log.info("result:" + result.toString());
 	}
 

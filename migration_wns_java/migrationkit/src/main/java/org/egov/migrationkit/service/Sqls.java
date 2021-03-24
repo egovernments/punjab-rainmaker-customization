@@ -252,7 +252,7 @@ public class Sqls {
 	public static final String ALLWATERDOCUMENTSSQL = "select app.connectiondetailsid,dname.documentname,f.filestoreid,f.filename,f.contenttype,conn.consumercode "
 			+ " from egwtr_connection conn,egwtr_connectiondetails conndt,egwtr_application_documents app, egwtr_documents d,eg_filestoremap f ,egwtr_document_names dname "
 			+ " where f.id=d.filestoreid  and d.applicationdocumentsid=app.id and app.documentnamesid=dname.id "
-			+ " and app.connectiondetailsid=conn.id and conndt.connection=conn.id and documentname!='DemandBill' order by app.connectiondetailsid";
+			+ " and app.connectiondetailsid=conn.id and conndt.connection=conn.id and documentname!='DemandBill' and f.filestoreid not in(select erpfilestore from egwtr_document_migration mdoc where mdoc.status='SUCCESS') order by app.connectiondetailsid";
 
 	public static final String WATER_DOCUMENTS_TABLE = "create table  if not exists  egwtr_document_migration(erpconn varchar(64) ,digitconn varchar(64) ,erpfilestore varchar(64),digitfilestore varchar(64),status varchar(64),tenantId varchar(64),additiondetails varchar(1000),errorMessage varchar(4000) )";
 
