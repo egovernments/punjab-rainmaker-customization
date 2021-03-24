@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 import io.swagger.client.model.LocalDocument;
 
 @Component
-public class LocalDocumentRowmapper implements ResultSetExtractor<List<LocalDocument>> {
+public class WSDocumentRowmapper implements ResultSetExtractor<List<LocalDocument>> {
 
 	@Override
 	public List<LocalDocument> extractData(ResultSet rs) throws SQLException, DataAccessException {

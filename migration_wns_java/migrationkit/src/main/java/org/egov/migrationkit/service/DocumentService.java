@@ -38,36 +38,37 @@ public class DocumentService {
 
 	public void migrateWtrDocuments(String city, RequestInfo requestInfo) {
 		List<DocumentDetails> uploadedDocuments = new ArrayList<>();
-		List<LocalDocument> allDocs = recordService.getAllFilesByTenantId(city,MODULE_NAME_WATER);
+		List<LocalDocument> allDocs = recordService.getAllWSFilesByTenantId(city);
 		String cityCode = recordService.getCityCodeByName(city);
 		for (LocalDocument document : allDocs) {
 			List<DocumentDetails> documents = fileUploadService.uploadImages(document, MODULE_NAME_WATER, cityCode,
 					city);
 			uploadedDocuments.addAll(documents);
 		}
-		storeFileStoreIds(uploadedDocuments,city, requestInfo);
+		String wsUrl = host + "/ws-services/wc/documents/_create?tenantId=pb." + city;
+		storeFileStoreIds(uploadedDocuments,wsUrl, requestInfo);
 
 	}
 
 	public void migrateSWDocuments(String city, RequestInfo requestInfo) {
 		List<DocumentDetails> uploadedDocuments = new ArrayList<>();
-		List<LocalDocument> allDocs = recordService.getAllFilesByTenantId(city, "sewerage");
+		List<LocalDocument> allDocs = recordService.getAllSWFilesByTenantId(city);
 		String cityCode = recordService.getCityCodeByName(city);
 		for (LocalDocument document : allDocs) {
-			List<DocumentDetails> documents = fileUploadService.uploadImages(document, MODULE_NAME_WATER, cityCode,
+			List<DocumentDetails> documents = fileUploadService.uploadImages(document,"sewerage", cityCode,
 					city);
 			uploadedDocuments.addAll(documents);
 		}
-		storeFileStoreIds(uploadedDocuments, city, requestInfo);
+		String swUrl = host + "/sw-services/swc/documents/_create?tenantId=pb." + city;
+		storeFileStoreIds(uploadedDocuments, swUrl, requestInfo);
 
 	}
-	private void storeFileStoreIds(List<DocumentDetails> uploadedDocuments, String city, RequestInfo requestInfo) {
-		String tenantId = "pb." + city;
+
+	private void storeFileStoreIds(List<DocumentDetails> uploadedDocuments, String url, RequestInfo requestInfo) {
 		uploadedDocuments.forEach(doc -> doc.setUserUid(requestInfo.getUserInfo().getUuid()));
 		DocumentRequest documentReq = DocumentRequest.builder().requestInfo(requestInfo).documents(uploadedDocuments)
 				.build();
-		ResponseEntity<String> result = restTemplate.postForEntity(
-				host + "/ws-services/wc/documents/_create?tenantId=" + tenantId, documentReq, String.class);
+		ResponseEntity<String> result = restTemplate.postForEntity(url, documentReq, String.class);
 		log.info("result:" + result.toString());
 	}
 

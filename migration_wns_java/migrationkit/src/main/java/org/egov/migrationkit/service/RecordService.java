@@ -4,7 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import org.egov.migrationkit.rowmapper.LocalDocumentRowmapper;
+import org.egov.migrationkit.rowmapper.SWDocumentRowmapper;
+import org.egov.migrationkit.rowmapper.WSDocumentRowmapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -340,23 +341,31 @@ public class RecordService {
 
 	}
 	
-	public List<LocalDocument> getAllFilesByTenantId(String tenantId,String module) {
+	public List<LocalDocument> getAllWSFilesByTenantId(String tenantId) {
 		List<LocalDocument> documents = new ArrayList<>();
 		jdbcTemplate.execute("set search_path to " + tenantId);
 		String query = null;
-		if (MODULE_NAME_WATER.equalsIgnoreCase(module)) {
-			jdbcTemplate.execute(Sqls.WATER_DOCUMENTS_TABLE);
-			query = Sqls.ALLWATERDOCUMENTSSQL;
-		}
+		jdbcTemplate.execute(Sqls.WATER_DOCUMENTS_TABLE);
+		query = Sqls.ALL_WATER_DOCUMENTS_QUERY;
 
-		else if (MODULE_NAME_SEWERAGE.equalsIgnoreCase(module)) {
-			jdbcTemplate.execute(Sqls.SEWERAGE_DOCUMENTS_TABLE);
-			query = Sqls.ALLSEWERAGEDOCUMENTSSQL;
-		}
 		if (fileLimit > 0)
 			query = query + " limit " + fileLimit;
-			
-		documents = jdbcTemplate.query(query, new LocalDocumentRowmapper());
+
+		documents = jdbcTemplate.query(query, new WSDocumentRowmapper());
+		return documents;
+	}
+	
+	public List<LocalDocument> getAllSWFilesByTenantId(String tenantId) {
+		List<LocalDocument> documents = new ArrayList<>();
+		jdbcTemplate.execute("set search_path to " + tenantId);
+		String query = null;
+		jdbcTemplate.execute(Sqls.SEWERAGE_DOCUMENTS_TABLE);
+		query = Sqls.ALL_SEWERAGE_DOCUMENTS_QUERY;
+
+		if (fileLimit > 0)
+			query = query + " limit " + fileLimit;
+
+		documents = jdbcTemplate.query(query, new SWDocumentRowmapper());
 		return documents;
 	}
 	public String getCityCodeByName(final String city) {
