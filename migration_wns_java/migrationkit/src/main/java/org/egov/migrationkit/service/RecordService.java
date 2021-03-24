@@ -20,6 +20,10 @@ import io.swagger.client.model.WaterConnection;
 @Service
 public class RecordService {
 	
+	private static final String MODULE_NAME_WATER = "water";
+	
+	private static final String MODULE_NAME_SEWERAGE = "sewerage";
+	
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
 	
@@ -336,15 +340,23 @@ public class RecordService {
 
 	}
 	
-	public List<LocalDocument> getAllFilesByTenantId(String tenantId) {
+	public List<LocalDocument> getAllFilesByTenantId(String tenantId,String module) {
 		List<LocalDocument> documents = new ArrayList<>();
 		jdbcTemplate.execute("set search_path to " + tenantId);
-		jdbcTemplate.execute(Sqls.WATER_DOCUMENTS_TABLE);
-		String sql = Sqls.ALLWATERDOCUMENTSSQL;
+		String query = null;
+		if (MODULE_NAME_WATER.equalsIgnoreCase(module)) {
+			jdbcTemplate.execute(Sqls.WATER_DOCUMENTS_TABLE);
+			query = Sqls.ALLWATERDOCUMENTSSQL;
+		}
+
+		else if (MODULE_NAME_SEWERAGE.equalsIgnoreCase(module)) {
+			jdbcTemplate.execute(Sqls.SEWERAGE_DOCUMENTS_TABLE);
+			query = Sqls.ALLSEWERAGEDOCUMENTSSQL;
+		}
 		if (fileLimit > 0)
-			sql = sql + " limit " + fileLimit;
+			query = query + " limit " + fileLimit;
 			
-		documents = jdbcTemplate.query(sql, new LocalDocumentRowmapper());
+		documents = jdbcTemplate.query(query, new LocalDocumentRowmapper());
 		return documents;
 	}
 	public String getCityCodeByName(final String city) {

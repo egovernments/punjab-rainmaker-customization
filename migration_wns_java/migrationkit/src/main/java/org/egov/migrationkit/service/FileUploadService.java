@@ -71,7 +71,7 @@ public class FileUploadService {
 		    if(module.equalsIgnoreCase("water"))
 		    	moduleName="WTMS";
 		    else
-		    	moduleName="WCMS";
+		    	moduleName="STMS";
 		    	
 			String uri = nfsLocation + "/" + cityCode + "/" + moduleName + "/" + document.getFilestoreid();
 			// MultipartFile multipartFile = new MockMultipartFile(fileStoreId,

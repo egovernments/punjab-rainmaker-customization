@@ -110,7 +110,7 @@ public class MigrationController {
 	
 	@PostMapping("/water/connection/documents")
 	@ResponseStatus(HttpStatus.CREATED)
-	public ResponseEntity<String> migrateDocuments(@RequestParam String tenantId,
+	public ResponseEntity<String> migrateWSDocuments(@RequestParam String tenantId,
 			@RequestBody RequestInfoWrapper waterMigrateRequest, BindingResult result) {
 
 		try {
@@ -182,5 +182,29 @@ public class MigrationController {
 		}
 		return new ResponseEntity(HttpStatus.CREATED);
 	}
+	@PostMapping("/sewerage/connection/documents")
+	@ResponseStatus(HttpStatus.CREATED)
+	public ResponseEntity<String> migrateSWDocuments(@RequestParam String tenantId,
+			@RequestBody RequestInfoWrapper waterMigrateRequest, BindingResult result) {
 
+		try {
+
+			UserInfo userInfo = waterMigrateRequest.getRequestInfo().getUserInfo();
+			String accessToken = userService.getAccessToken(userInfo.getUserName(), userInfo.getPassword(),
+					userInfo.getTenantId());
+			if (accessToken != null) {
+				waterMigrateRequest.getRequestInfo().setAuthToken(accessToken);
+				documentService.migrateSWDocuments(tenantId, waterMigrateRequest.getRequestInfo());
+
+			} else {
+				return new ResponseEntity(HttpStatus.BAD_REQUEST);
+			}
+
+		} catch (Exception e) {
+
+			e.printStackTrace();
+			throw new RuntimeException("Failed to migrate files.");
+		}
+		return new ResponseEntity("Documents migrated for the city " + tenantId, HttpStatus.CREATED);
+	}
 }

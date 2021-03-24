@@ -258,4 +258,11 @@ public class Sqls {
 
 	public static final String WATER_DOCUMENT_MIGRATION_INSERT = "Insert into egwtr_document_migration(erpconn, digitconn, erpfilestore ,digitfilestore ,status ,tenantId ,additiondetails ,errorMessage ) values(:erpconn,:digitconn,:erpfilestore,:digitfilestore,:status,:tenantId,:additiondetails,:errorMessage)";
 
+	public static final String SEWERAGE_DOCUMENTS_TABLE = "create table  if not exists  egswtax_document_migration(erpconn varchar(64) ,digitconn varchar(64) ,erpfilestore varchar(64),digitfilestore varchar(64),status varchar(64),tenantId varchar(64),additiondetails varchar(1000),errorMessage varchar(4000) )";
+
+	public static final String SEWERAGE_DOCUMENT_MIGRATION_INSERT = "Insert into egswtax_document_migration(erpconn, digitconn, erpfilestore ,digitfilestore ,status ,tenantId ,additiondetails ,errorMessage ) values(:erpconn,:digitconn,:erpfilestore,:digitfilestore,:status,:tenantId,:additiondetails,:errorMessage)";
+
+	public static final String ALLSEWERAGEDOCUMENTSSQL = "select app.applicationdetails,dname.description,f.filestoreid,f.filename,f.contenttype,conn.shsc_number from egswtax_connection conn,egswtax_applicationdetails appdt, egswtax_applicationdetails_documents app,	egswtax_documents d, eg_filestoremap f,	egswtax_document_type_master dname"
+			+ " where f.id=d.filestoreid and d.applicationdetaildocument=	app.id and app.documenttypemaster=dname.id and app.applicationdetails=appdt.id and appdt.connection=	conn.id and dname.description!='DemandBill'	and f.filestoreid not in(select erpfilestore from egswtax_document_migration mdoc where mdoc.status='SUCCESS') order by app.applicationdetails";
+
 }
