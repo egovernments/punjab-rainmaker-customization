@@ -75,7 +75,7 @@ public class Sqls {
 			+ "(erpid ,erpconn  ,digitconn  ,erppt ,digitpt ,status ,tenantId ,additiondetails ) values (:erpid,:erpconn,:digitconn,:erppt,:digitpt,:status"
 			+ ", :tenantId,:addtionaldetails);";
 	
-	public static final String WATER_MIGRATION_SELECT = "SELECT count(*) :schema.egwtr_migration  where erpconn=:erpconn and erpid=:erpid and status=:status ";
+	public static final String WATER_MIGRATION_SELECT = "SELECT count(*) FROM :schema.egwtr_migration  where erpconn=:erpconn and erpid=:erpid and status=:status ";
 
 	public static final String WATER_MIGRATION_UPDATE = "update  :schema.egwtr_migration  "
 			+ "set digitconn=:digitconn , digitpt=:digitpt,status=:status where erpid=:erpid ";
@@ -175,7 +175,7 @@ public class Sqls {
 			+ "(erpid ,erpconn  ,digitconn  ,erppt ,digitpt ,status ,tenantId ,additiondetails ) values (:erpid,:erpconn,:digitconn,:erppt,:digitpt,:status"
 			+ ", :tenantId,:addtionaldetails);";
 	
-	public static final String SEWERAGE_MIGRATION_SELECT = "SELECT count(*) :schema_tenantId.egswtax_migration  where erpconn=:erpconn and erpid=:erpid and status=:status ";
+	public static final String SEWERAGE_MIGRATION_SELECT = "SELECT count(*) FROM :schema_tenantId.egswtax_migration  where erpconn=:erpconn and erpid=:erpid and status=:status ";
 
 
 	public static final String SEWERAGE_MIGRATION_UPDATE = "update  :schema_tenantId.egswtax_migration  "
