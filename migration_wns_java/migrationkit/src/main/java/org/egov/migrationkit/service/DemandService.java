@@ -60,7 +60,7 @@ public class DemandService {
 			DemandDetail dd = DemandDetail.builder()
 					.taxAmount(BigDecimal.valueOf((Integer)dcbData.get("amount")))
 					.taxHeadMasterCode(taxHeadMaster)
-					.collectionAmount(BigDecimal.ZERO)
+					.collectionAmount(BigDecimal.valueOf((Integer)dcbData.get("collected_amount")))
 					.amountPaid(BigDecimal.valueOf((Integer)dcbData.get("collected_amount")))
 					.fromDate(WSConstants.TIME_PERIOD_MAP.get((String)dcbData.get("from_date")))
 					.toDate(WSConstants.TIME_PERIOD_MAP.get((String)dcbData.get("to_date")))

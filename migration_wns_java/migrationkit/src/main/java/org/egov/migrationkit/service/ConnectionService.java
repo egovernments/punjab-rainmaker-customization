@@ -139,7 +139,7 @@ public class ConnectionService {
 					continue;
 
 				if (connection.getMobilenumber() == null || connection.getMobilenumber().isEmpty()) {
-					recordService.recordError("water", tenantId, "Mobile Number is null ", connection.getId());
+//					recordService.recordError("water", tenantId, "Mobile Number is null ", connection.getId());
 					/*
 					 * System is allowing only 6-9 series.So as of now added
 					 * 9999999999
@@ -419,7 +419,7 @@ public class ConnectionService {
 				locCode = (String) data.get("locality");
 				cityCode = (String) data.get("cityCode");
 				if (swConnection.getMobilenumber() == null || swConnection.getMobilenumber().isEmpty()) {
-					recordService.recordError("sewerage", tenantId, "Mobile Number is null ", swConnection.getId());
+//					recordService.recordError("sewerage", tenantId, "Mobile Number is null ", swConnection.getId());
 					Long mobileNumber = getMobileNumber(cityCode, locCode, tenantId);
 					recordService.setMob("sewerage", tenantId, mobileNumber, swConnection.getId());
 					swConnection.setMobilenumber(String.valueOf(mobileNumber));
@@ -494,8 +494,9 @@ public class ConnectionService {
 						addtionals.put("initialMeterReading", initialMeterReading);
 
 					}
-				} else
+				} else {
 					addtionals.put("initialMeterReading", 0);
+				}
 
 				swConnection.setAdditionalDetails(addtionals);
 

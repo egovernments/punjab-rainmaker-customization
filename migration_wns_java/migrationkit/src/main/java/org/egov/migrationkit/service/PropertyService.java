@@ -178,11 +178,17 @@ public class PropertyService {
 		property.setChannel(Channel.SYSTEM);
 		// property.setInstitution(null);
 //		property.setLandArea(BigDecimal.valueOf(50));
-		long plotsize = Long.valueOf((Integer)json.getOrDefault("plotsize", 125));
-		if (plotsize>0)
-			property.setLandArea(BigDecimal.valueOf(plotsize));
-		else
-			property.setLandArea(BigDecimal.valueOf(125));
+		Object landAreaObj = json.getOrDefault("plotsize", 0);
+		if(landAreaObj instanceof Integer) {
+			property.setLandArea(BigDecimal.valueOf(Long.valueOf((Integer)landAreaObj)));
+			
+		}else if(landAreaObj instanceof Long ){
+			property.setLandArea(BigDecimal.valueOf((Long)landAreaObj));
+			
+		} else {
+			property.setLandArea(BigDecimal.valueOf(0));
+			
+		}
 		property.setNoOfFloors(Long.valueOf(1));
 		property.setOldPropertyId(conn.getPropertyId());
 		property.setOwners(null);
@@ -272,8 +278,8 @@ public class PropertyService {
 
 					) {
 
-						recordService.recordError("water", tenantId, "Found Property in digit :" + property.getId(),
-								conn.getWaterConnection().getId());
+//						recordService.recordError("water", tenantId, "Found Property in digit :" + property.getId(),
+//								conn.getWaterConnection().getId());
 						// log.info("no property found in digit system for
 						// mobilenumber--"
 						// + conn.getWaterConnection().getMobilenumber());
@@ -322,8 +328,8 @@ public class PropertyService {
 
 					) {
 
-						recordService.recordError("sewerage", tenantId, "Found Property in digit :" + property.getId(),
-								conn.getSewerageConnection().getId());
+//						recordService.recordError("sewerage", tenantId, "Found Property in digit :" + property.getId(),
+//								conn.getSewerageConnection().getId());
 						return property;
 
 					}
