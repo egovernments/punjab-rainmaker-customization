@@ -115,10 +115,10 @@ public class CollectionPayment {
     private String consumerCode;
     
     @JsonProperty("periodFrom")
-	private Long periodFrom;
+	private String periodFrom;
 	
     @JsonProperty("periodTo")
-	private Long periodTo;
+	private String periodTo;
 
     public CollectionPayment addpaymentDetailsItem(CollectionPaymentDetail paymentDetail) {
         if (this.paymentDetails == null) {

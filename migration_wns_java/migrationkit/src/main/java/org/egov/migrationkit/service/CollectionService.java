@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.egov.migrationkit.constants.WSConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -76,10 +77,12 @@ public class CollectionService {
 					
 				List<BillV2> bills = null;
 				try {
+					Long fromDate = WSConstants.TIME_PERIOD_MAP.get(payment.getPeriodFrom());
+				    Long toDate = WSConstants.TIME_PERIOD_MAP.get(payment.getPeriodFrom());
 
 					bills = fetchBill(requestInfo, digitTenantId, payment.getBusinessService(),
 							payment.getConsumerCode(),payment.getPaymentDetails().get(0).getReceiptNumber(),
-							payment.getPeriodFrom(), payment.getPeriodTo());
+							fromDate, toDate);
 
 				} catch (Exception exception) {
 					log.error("Exception occurred while fetching the bills with business service:"
@@ -197,9 +200,12 @@ public class CollectionService {
 				List<BillV2> bills = null;
 				try {
 
+					Long fromDate = WSConstants.TIME_PERIOD_MAP.get(payment.getPeriodFrom());
+				    Long toDate = WSConstants.TIME_PERIOD_MAP.get(payment.getPeriodFrom());
+
 					bills = fetchBill(requestInfo, digitTenantId, payment.getBusinessService(),
 							payment.getConsumerCode(),payment.getPaymentDetails().get(0).getReceiptNumber(),
-							payment.getPeriodFrom(), payment.getPeriodTo());
+							fromDate, toDate);
 
 				} catch (Exception exception) {
 					log.error("Exception occurred while fetching the bills with business service:"
