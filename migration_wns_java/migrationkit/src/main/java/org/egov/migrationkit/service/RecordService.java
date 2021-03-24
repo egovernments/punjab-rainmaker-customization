@@ -372,21 +372,24 @@ public class RecordService {
 		return jdbcTemplate.queryForObject("select code from eg_city where lower(name)='" + city + "'", String.class);
 	}
 
-	public void saveMigratedFilestoreDetails(String oldFileStore, String newFileStore, String connectionNo,
-			boolean success, String error, String tenantId) {
+	public void saveMigratedFilestoreDetails(String module, String oldFileStore, String newFileStore,
+			String connectionNo, boolean success, String error, String tenantId) {
+		String query = null;
+		if (MODULE_NAME_WATER.equalsIgnoreCase(module))
+			query = Sqls.WATER_DOCUMENT_MIGRATION_INSERT;
+		else
+			query = Sqls.SEWERAGE_DOCUMENT_MIGRATION_INSERT;
 
-		String qry = Sqls.WATER_DOCUMENT_MIGRATION_INSERT;
+		query = query.replace(":erpconn", "'" + connectionNo + "'");
+		query = query.replace(":digitconn", "'" + connectionNo + "'");
+		query = query.replace(":tenantId", "'" + tenantId + "'");
+		query = query.replace(":erpfilestore", "'" + oldFileStore + "'");
+		query = query.replace(":digitfilestore", "'" + newFileStore + "'");
+		query = query.replace(":status", success ? "'SUCCESS'" : "'FAILED'");
+		query = query.replace(":additiondetails", success ? "'Saved'" : "'Failed'");
+		query = query.replace(":errorMessage", success ? "'null'" : "'" + error + "'");
 
-		qry = qry.replace(":erpconn", "'" + connectionNo + "'");
-		qry = qry.replace(":digitconn", "'" + connectionNo + "'");
-		qry = qry.replace(":tenantId", "'" + tenantId + "'");
-		qry = qry.replace(":erpfilestore", "'" + oldFileStore + "'");
-		qry = qry.replace(":digitfilestore", "'" + newFileStore + "'");
-		qry = qry.replace(":status", success ? "'SUCCESS'" : "'FAILED'");
-		qry = qry.replace(":additiondetails", success ? "'Saved'" : "'Failed'");
-		qry = qry.replace(":errorMessage", success ? "'null'" : "'" + error + "'");
-
-		jdbcTemplate.execute(qry);
+		jdbcTemplate.execute(query);
 
 	}
 

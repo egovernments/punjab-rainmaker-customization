@@ -107,11 +107,11 @@ public class FileUploadService {
 			doc.setTenantId(tenantId);
 			docs.add(doc);
 
-			recordService.saveMigratedFilestoreDetails(document.getFilestoreid(), newFileStore,
+			recordService.saveMigratedFilestoreDetails(module,document.getFilestoreid(), newFileStore,
 					document.getConnectionNo(), true, null, tenantId);
 		} catch (RestClientException e) {
 			e.printStackTrace();
-			recordService.saveMigratedFilestoreDetails(document.getFilestoreid(), null, document.getConnectionNo(),
+			recordService.saveMigratedFilestoreDetails(module,document.getFilestoreid(), null, document.getConnectionNo(),
 					false, e.getMessage(), tenantId);
 			throw new RuntimeException("Failed to migrate files.");
 
