@@ -172,25 +172,25 @@ public class DemandService {
 		return isDemandCreated;  
 	}
     
-    public Boolean fetchBill(List<Demand> demands, RequestInfo requestInfo) {
-		for (Demand demand : demands) {
-			try {
-
-				String url = commonService.getFetchBillURL(demand.getTenantId(), demand.getConsumerCode()
-						, demand.getBusinessService()).toString();
-				RequestInfoWrapper request = RequestInfoWrapper.builder().requestInfo(requestInfo).build();
-				
-				Object result = restTemplate.postForObject(url , request, String.class);
-				//log.info("Bill Request URL: " + url + "Bill RequestInfo: " + request + "Bill Response: " + result);
-				
-			} catch (Exception ex) {
-				
-				log.error("Fetch Bill Error", ex);
-				return Boolean.FALSE;
-			}
-		}
-		return Boolean.TRUE;
-	}
+//    public Boolean fetchBill(List<Demand> demands, RequestInfo requestInfo) {
+//		for (Demand demand : demands) {
+//			try {
+//
+//				String url = commonService.getFetchBillURL(demand.getTenantId(), demand.getConsumerCode()
+//						, demand.getBusinessService()).toString();
+//				RequestInfoWrapper request = RequestInfoWrapper.builder().requestInfo(requestInfo).build();
+//				
+//				Object result = restTemplate.postForObject(url , request, String.class);
+//				//log.info("Bill Request URL: " + url + "Bill RequestInfo: " + request + "Bill Response: " + result);
+//				
+//			} catch (Exception ex) {
+//				
+//				log.error("Fetch Bill Error", ex);
+//				return Boolean.FALSE;
+//			}
+//		}
+//		return Boolean.TRUE;
+//	}
     
 public List<Demand> prepareSwDemandRequest(Map data, String businessService, String consumerCode, String tenantId, OwnerInfo owner) {
 		

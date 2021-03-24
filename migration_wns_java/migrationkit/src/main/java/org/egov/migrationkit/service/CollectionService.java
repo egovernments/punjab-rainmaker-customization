@@ -78,7 +78,8 @@ public class CollectionService {
 				try {
 
 					bills = fetchBill(requestInfo, digitTenantId, payment.getBusinessService(),
-							payment.getConsumerCode(),payment.getPaymentDetails().get(0).getReceiptNumber());
+							payment.getConsumerCode(),payment.getPaymentDetails().get(0).getReceiptNumber(),
+							payment.getPeriodFrom(), payment.getPeriodTo());
 
 				} catch (Exception exception) {
 					log.error("Exception occurred while fetching the bills with business service:"
@@ -144,11 +145,11 @@ public class CollectionService {
 	}
 
 	public List<BillV2> fetchBill(RequestInfo requestInfo, String tenantId, String businessService,
-			String consumerCode, String erpReceiptNumber) {
+			String consumerCode, String erpReceiptNumber, Long periodFrom, Long periodTo) {
 		List<BillV2> bills = new ArrayList<>();
 		try {
 
-			String url = commonService.getFetchBillURL(tenantId, consumerCode, businessService).toString();
+			String url = commonService.getFetchBillURL(tenantId, consumerCode, businessService, periodFrom, periodTo).toString();
 			RequestInfoWrapper request = RequestInfoWrapper.builder().requestInfo(requestInfo).build();
 
 			String response = restTemplate.postForObject(url, request, String.class);
@@ -197,7 +198,8 @@ public class CollectionService {
 				try {
 
 					bills = fetchBill(requestInfo, digitTenantId, payment.getBusinessService(),
-							payment.getConsumerCode(),payment.getPaymentDetails().get(0).getReceiptNumber());
+							payment.getConsumerCode(),payment.getPaymentDetails().get(0).getReceiptNumber(),
+							payment.getPeriodFrom(), payment.getPeriodTo());
 
 				} catch (Exception exception) {
 					log.error("Exception occurred while fetching the bills with business service:"

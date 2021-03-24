@@ -37,7 +37,11 @@ public class WSConstants {
 	
 	public static final HashMap<String, String> DOCTYPEMAP = new HashMap<>();
 
+    public static final String PERIOD_FROM="periodFrom";
 
+    public static final String PERIOD_TO="periodFrom";
+
+	
     static {
     	
         DIGIT_ROAD_CATEGORIES.put("Premix Carpet", "PREMIXCARPET");

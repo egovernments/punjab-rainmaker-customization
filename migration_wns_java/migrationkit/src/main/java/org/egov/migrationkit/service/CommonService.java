@@ -21,7 +21,7 @@ public class CommonService {
 	 *            Consumer Code
 	 * @return uri of fetch bill
 	 */
-	public StringBuilder getFetchBillURL(String tenantId, String consumerCode, String businessService) {
+	public StringBuilder getFetchBillURL(String tenantId, String consumerCode, String businessService, Long periodFrom, Long periodTo) {
 
 		return new StringBuilder().append(billingServiceHost)
 				.append(fetchBillEndPoint).append(WSConstants.URL_PARAMS_SEPARATER)
@@ -29,6 +29,12 @@ public class CommonService {
 				.append(WSConstants.SEPARATER).append(WSConstants.CONSUMER_CODE_SEARCH_FIELD_NAME)
 				.append(consumerCode).append(WSConstants.SEPARATER)
 				.append(WSConstants.BUSINESSSERVICE_FIELD_FOR_SEARCH_URL)
-				.append(businessService);
+				.append(businessService)
+				.append(WSConstants.SEPARATER)
+				.append(WSConstants.PERIOD_FROM)
+				.append(periodFrom)
+				.append(WSConstants.SEPARATER)
+				.append(WSConstants.PERIOD_TO)
+				.append(periodTo);
 	}
 }
