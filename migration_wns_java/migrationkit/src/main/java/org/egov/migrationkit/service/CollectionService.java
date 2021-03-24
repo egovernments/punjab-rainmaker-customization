@@ -51,6 +51,7 @@ public class CollectionService {
 	public void migrateWtrCollection(String tenantId, RequestInfo requestInfo) {
 
 		long startTime = System.currentTimeMillis();
+		CollectionPayment payment = null ;
 
 		recordService.initiateCollection(tenantId);
 
@@ -64,7 +65,7 @@ public class CollectionService {
 
 			try {
 
-				CollectionPayment payment = objectMapper.readValue(json, CollectionPayment.class);
+				 payment = objectMapper.readValue(json, CollectionPayment.class);
 				log.info("Initiating  for" + payment.getConsumerCode());
 				payment.setTenantId(digitTenantId);
 				payment.getPaymentDetails().get(0).setTenantId(digitTenantId);
@@ -83,7 +84,7 @@ public class CollectionService {
 					log.error("Exception occurred while fetching the bills with business service:"
 							+ payment.getBusinessService() + " and consumer code: " + payment.getConsumerCode());
 					recordService.recordError("Wtrcollection", tenantId,
-							"Error while fetching bill:" + exception.getMessage(), payment.getId());
+							"Error while fetching bill:" + exception.getMessage(), payment.getPaymentDetails().get(0).getReceiptNumber());
 				}
 				if (bills != null && !bills.isEmpty() && !payment.getPaymentDetails().isEmpty()) {
 					List<CollectionPaymentDetail> detailList = new ArrayList<CollectionPaymentDetail>();
@@ -115,14 +116,14 @@ public class CollectionService {
 						} catch (Exception e) {
 							log.error("Failed to register this payment for consumer code: " + payment.getConsumerCode(),
 									e);
-							recordService.recordError("Wtrcollection", tenantId, e.getMessage(), payment.getId());
+							recordService.recordError("Wtrcollection", tenantId, e.getMessage(), payment.getPaymentDetails().get(0).getReceiptNumber());
 
 						}
 
 					} else {
 						log.error("Failed to register this payment at collection-service");
 						recordService.recordError("Wtrcollection", tenantId,
-								"Failed to register this payment at collection-service", payment.getId());
+								"Failed to register this payment at collection-service", payment.getPaymentDetails().get(0).getReceiptNumber());
 					}
 
 					log.debug("waterResponse" + response);
@@ -130,6 +131,9 @@ public class CollectionService {
 
 			} catch (Exception e) {
 				log.error(e.getMessage());
+				recordService.recordError("Wtrcollection", tenantId,
+						"Failed to register this payment at collection-service", payment.getPaymentDetails().get(0).getReceiptNumber());
+		
 
 			}
 
