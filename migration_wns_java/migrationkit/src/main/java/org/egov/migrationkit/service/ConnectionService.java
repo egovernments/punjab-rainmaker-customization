@@ -17,8 +17,6 @@ import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.swagger.client.model.Address;
@@ -70,7 +68,7 @@ public class ConnectionService {
 
 	public void migrateWtrConnection(String tenantId, RequestInfo requestInfo, List<String> boundaryList) {
 		long startTime = System.currentTimeMillis();
-		
+
 		recordService.initiate(tenantId);
 		Map data = null;
 		WaterConnection connection = null;
@@ -82,25 +80,28 @@ public class ConnectionService {
 		String locCode = null;
 		String localityCode = null;
 		String cityCode = null;
+		long connStartTime = 0l;
+		long connectionDuration = 0l;
+		long connectionCount=0l;
 
 		String searchPath = jdbcTemplate.queryForObject("show search_path", String.class);
 		log.info(searchPath);
 
 		String qry = Sqls.WATER_CONNECTION_QUERY;
-		
+
 		if (boundaryList != null && !boundaryList.isEmpty())
-			qry=qry.replace(":locCondition"," and locality.code in ("+String.join(",", boundaryList
-					.stream()
-		            .map(boundary -> ("'" + boundary + "'"))
-		            .collect(Collectors.toList()))+") " );
+			qry = qry.replace(":locCondition",
+					" and locality.code in (" + String.join(",",
+							boundaryList.stream().map(boundary -> ("'" + boundary + "'")).collect(Collectors.toList()))
+							+ ") ");
 		else
-			qry=qry.replace(":locCondition", " " );
+			qry = qry.replace(":locCondition", " ");
 
 		List<String> queryForList = jdbcTemplate.queryForList(qry, String.class);
-		
 
 		for (String resultJson : queryForList) {
-
+			connStartTime = System.currentTimeMillis();
+			connectionCount++;
 			try {
 				data = objectMapper.readValue(resultJson, Map.class);
 				connection = objectMapper.readValue(resultJson, WaterConnection.class);
@@ -135,11 +136,12 @@ public class ConnectionService {
 				cityCode = (String) data.get("cityCode");
 
 				boolean isMigrated = recordService.recordWaterMigration(connection, tenantId);
-				if(isMigrated)
+				if (isMigrated)
 					continue;
 
 				if (connection.getMobilenumber() == null || connection.getMobilenumber().isEmpty()) {
-//					recordService.recordError("water", tenantId, "Mobile Number is null ", connection.getId());
+					// recordService.recordError("water", tenantId, "Mobile
+					// Number is null ", connection.getId());
 					/*
 					 * System is allowing only 6-9 series.So as of now added
 					 * 9999999999
@@ -171,7 +173,7 @@ public class ConnectionService {
 
 				locality.setCode(localityCode);
 				address.setLocality(locality);
-				address.setCity((String)data.get("cityname"));
+				address.setCity((String) data.get("cityname"));
 				connection.setApplicantAddress(address);
 
 				Property property = propertyService.findProperty(waterRequest, data, tenantId);
@@ -252,7 +254,7 @@ public class ConnectionService {
 				connection.setAdditionalDetails(addtionals);
 
 				connection.setOldApplication(true);
-//				connection.setOldConnectionNo(connectionNo);
+				// connection.setOldConnectionNo(connectionNo);
 
 				String response = null;
 				try {
@@ -284,16 +286,21 @@ public class ConnectionService {
 							property.getOwners().get(0));
 					if (!demandRequestList.isEmpty()) {
 
-						Boolean isDemandCreated = demandService.saveDemand(requestInfo, demandRequestList, connection.getId(), tenantId, "water");
+						Boolean isDemandCreated = demandService.saveDemand(requestInfo, demandRequestList,
+								connection.getId(), tenantId, "water");
 						if (isDemandCreated) {
 							recordService.setStatus("water", tenantId, "Demand_Created", connection.getId());
-//							Boolean isBillCreated = demandService.fetchBill(demandRequestList, requestInfo);
-//							log.info("Bill created" + isBillCreated + " isDemandCreated" + isDemandCreated);
+							// Boolean isBillCreated =
+							// demandService.fetchBill(demandRequestList,
+							// requestInfo);
+							// log.info("Bill created" + isBillCreated + "
+							// isDemandCreated" + isDemandCreated);
 
 						}
 
-						// log.debug("waterResponse" + waterResponse);
-						log.info("completed for " + connection.getMobilenumber());
+						connectionDuration = System.currentTimeMillis() - connStartTime;
+						log.info("Migration completed for connection no : " + connection.getConnectionNo() + "in "
+								+ connectionDuration / 1000 + "Secs");
 
 					}
 				}
@@ -303,10 +310,10 @@ public class ConnectionService {
 			}
 
 		}
-		long duration = System.currentTimeMillis()-startTime;
-		
-		log.info("Water Migration completed for " + tenantId + " took " + duration/1000 + " Secs to run");
-		
+		long duration = System.currentTimeMillis() - startTime;
+
+		log.info("Water Migration completed for " + connectionCount + " connections in "+tenantId+ " in " + duration / 1000 + " Secs");
+
 	}
 
 	private Long getMobileNumber(String cityCode, String locCode, String tenantId) {
@@ -370,30 +377,33 @@ public class ConnectionService {
 
 		recordService.initiateSewrage(tenantId);
 		SewerageConnection swConnection = null;
-		Long mob = 3000000000L;
 		Address address = null;
 		Locality locality = null;
 		String locCode = null;
 		String localityCode = null;
 		String cityCode = null;
+		long connStartTime = 0l;
+		long connectionDuration = 0l;
+		long connectionCount=0l;
 
 		String searchPath = jdbcTemplate.queryForObject("show search_path", String.class);
 		log.info(searchPath);
 
 		String qry = Sqls.SEWERAGE_CONNECTION_QUERY;
-		
+
 		if (boundaryList != null && !boundaryList.isEmpty())
-			qry=qry.replace(":locCondition"," and locality.code in ("+String.join(",", boundaryList
-					.stream()
-		            .map(boundary -> ("'" + boundary + "'"))
-		            .collect(Collectors.toList()))+") " );
+			qry = qry.replace(":locCondition",
+					" and locality.code in (" + String.join(",",
+							boundaryList.stream().map(boundary -> ("'" + boundary + "'")).collect(Collectors.toList()))
+							+ ") ");
 		else
-			qry=qry.replace(":locCondition", " " );
-		 
+			qry = qry.replace(":locCondition", " ");
+
 		List<String> queryForList = jdbcTemplate.queryForList(qry, String.class);
 
 		for (String json : queryForList) {
-
+			connectionCount++;
+			connStartTime = System.currentTimeMillis();
 			try {
 
 				Map data = objectMapper.readValue(json, Map.class);
@@ -413,13 +423,14 @@ public class ConnectionService {
 				// swConnection.getConnectionType());
 				// log.debug("Connection id :" + swConnection.getId());
 				boolean isMigrated = recordService.recordSewerageMigration(swConnection, tenantId);
-				if(isMigrated)
+				if (isMigrated)
 					continue;
-				
+
 				locCode = (String) data.get("locality");
 				cityCode = (String) data.get("cityCode");
 				if (swConnection.getMobilenumber() == null || swConnection.getMobilenumber().isEmpty()) {
-//					recordService.recordError("sewerage", tenantId, "Mobile Number is null ", swConnection.getId());
+					// recordService.recordError("sewerage", tenantId, "Mobile
+					// Number is null ", swConnection.getId());
 					Long mobileNumber = getMobileNumber(cityCode, locCode, tenantId);
 					recordService.setMob("sewerage", tenantId, mobileNumber, swConnection.getId());
 					swConnection.setMobilenumber(String.valueOf(mobileNumber));
@@ -449,7 +460,7 @@ public class ConnectionService {
 
 				locality.setCode(localityCode);
 				address.setLocality(locality);
-				address.setCity((String)data.get("cityname"));
+				address.setCity((String) data.get("cityname"));
 				swConnection.setApplicantAddress(address);
 				SewerageConnectionRequest sewerageRequest = new SewerageConnectionRequest();
 
@@ -566,12 +577,16 @@ public class ConnectionService {
 						Boolean isDemandCreated = demandService.saveDemand(requestInfo, demandRequestList,
 								swConnection.getId(), tenantId, "sewerage");
 						if (isDemandCreated) {
-//							Boolean isBillCreated = demandService.fetchBill(demandRequestList, requestInfo);
+							// Boolean isBillCreated =
+							// demandService.fetchBill(demandRequestList,
+							// requestInfo);
 							recordService.setStatus("sewerage", tenantId, "Demand_Created", swConnection.getId());
-//
+							//
 						}
 
-						log.info("sewerageResponse" + sewerageResponse);
+						connectionDuration = System.currentTimeMillis() - connStartTime;
+						log.info("Migration completed for connection no : " + swConnection.getConnectionNo() + "in "
+								+ connectionDuration / 1000 + "Secs");
 
 					}
 
@@ -583,10 +598,8 @@ public class ConnectionService {
 			}
 
 		}
-		long duration = System.currentTimeMillis()-startTime;
-		
-		log.info("Sewerage Migration completed for " + tenantId + " took " + duration/1000 + " Secs to run");
-		
+		long duration = System.currentTimeMillis() - startTime;
+		log.info("Sewerage Migration completed for " + connectionCount + " connections in "+tenantId+ " in " + duration / 1000 + " Secs");
 
 	}
 
