@@ -482,8 +482,8 @@ ReportDefinitions:
     where bill.businessservice like 'SW%'
   orderby: ORDER BY payment.transactiondate DESC
   
-- reportName: Receipt Collections
-  summary: ReceiptCollections
+- reportName: ReceiptCollections
+  summary: Receipt Collections
   version: 1.0.0
   moduleName: rainmaker-ws
   additionalConfig:
@@ -593,7 +593,6 @@ ReportDefinitions:
     type: string
     source: ws
     total: false
-  - name: paymentmode
   query: |
     -- Use CTE to force query plan, compute & use CTE later
     select consumercode,receiptnumber,receiptdate,amountpaid from egcl_paymentdetail pd
