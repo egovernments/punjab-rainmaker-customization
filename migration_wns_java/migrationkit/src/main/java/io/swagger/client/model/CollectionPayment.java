@@ -23,7 +23,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @EqualsAndHashCode
 public class CollectionPayment {
-
+	
     @Size(max=64)
     @JsonProperty("id")
     private String id;

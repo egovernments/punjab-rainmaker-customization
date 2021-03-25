@@ -1,7 +1,9 @@
 package org.egov.migrationkit.service;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import org.egov.migrationkit.constants.WSConstants;
@@ -15,6 +17,7 @@ import org.springframework.web.client.RestTemplate;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import io.swagger.client.model.BillDetailV2;
 import io.swagger.client.model.BillResponseV2;
 import io.swagger.client.model.BillV2;
 import io.swagger.client.model.CollectionPayment;
@@ -49,6 +52,9 @@ public class CollectionService {
 	@Autowired
 	private CommonService commonService;
 
+	@Autowired
+	private DemandService demandService;
+
 	public void migrateWtrCollection(String tenantId, RequestInfo requestInfo) {
 
 		long startTime = System.currentTimeMillis();
@@ -66,7 +72,7 @@ public class CollectionService {
 
 			try {
 
-				 payment = objectMapper.readValue(json, CollectionPayment.class);
+				payment = objectMapper.readValue(json, CollectionPayment.class);
 				log.info("Initiating  for" + payment.getConsumerCode());
 				payment.setTenantId(digitTenantId);
 				payment.getPaymentDetails().get(0).setTenantId(digitTenantId);
@@ -74,15 +80,25 @@ public class CollectionService {
 				boolean isPaymentMigrated = recordService.recordWtrCollMigration(payment, tenantId);
 				if(isPaymentMigrated) 
 					continue;
-					
-				List<BillV2> bills = null;
+
+				List<BillV2> bills =null;
+
 				try {
-					Long fromDate = WSConstants.TIME_PERIOD_MAP.get(payment.getPeriodFrom());
-				    Long toDate = WSConstants.TIME_PERIOD_MAP.get(payment.getPeriodFrom());
+					List<BillDetailV2> billDetails = payment.getPaymentDetails().get(0).getBill().getBillDetails();
+
+					Long minFromPeriod = billDetails
+							.stream()
+							.min(Comparator.comparing(BillDetailV2::getFromPeriod))
+							.orElseThrow(NoSuchElementException::new).getFromPeriod();
+
+					Long maxToPeriod = billDetails
+							.stream()
+							.max(Comparator.comparing(BillDetailV2::getToPeriod))
+							.orElseThrow(NoSuchElementException::new).getToPeriod();
 
 					bills = fetchBill(requestInfo, digitTenantId, payment.getBusinessService(),
 							payment.getConsumerCode(),payment.getPaymentDetails().get(0).getReceiptNumber(),
-							fromDate, toDate);
+							minFromPeriod, maxToPeriod);
 
 				} catch (Exception exception) {
 					log.error("Exception occurred while fetching the bills with business service:"
@@ -105,7 +121,7 @@ public class CollectionService {
 						try {
 							CollectionPaymentResponse paymentResponse = objectMapper.convertValue(response.get(),
 									CollectionPaymentResponse.class);
-							if (!CollectionUtils.isEmpty(paymentResponse.getPayments())) {
+							if (paymentResponse != null  && !CollectionUtils.isEmpty(paymentResponse.getPayments())) {
 								log.info("Collection migration done for consumer code: " + payment.getConsumerCode());
 								recordService.updateWtrCollMigration(payment, tenantId, paymentResponse.getPayments()
 										.get(0).getPaymentDetails().get(0).getReceiptNumber());
@@ -115,7 +131,7 @@ public class CollectionService {
 								recordService.recordError("Wtrcollection", tenantId,
 										"Failed to register this payment at collection-service for consumer code: "
 												+ payment.getConsumerCode(),
-										payment.getId());
+												payment.getId());
 							}
 						} catch (Exception e) {
 							log.error("Failed to register this payment for consumer code: " + payment.getConsumerCode(),
@@ -137,22 +153,23 @@ public class CollectionService {
 				log.error(e.getMessage());
 				recordService.recordError("Wtrcollection", tenantId,
 						"Failed to register this payment at collection-service", payment.getPaymentDetails().get(0).getReceiptNumber());
-		
+
 
 			}
 
 		}
 		long duration = System.currentTimeMillis()-startTime;
-		
+
 		log.info("Water Collection Migration completed for " + tenantId + " took " + duration/1000 + " Secs to run");
 	}
 
-	public List<BillV2> fetchBill(RequestInfo requestInfo, String tenantId, String businessService,
-			String consumerCode, String erpReceiptNumber, Long periodFrom, Long periodTo) {
+	public List<BillV2> fetchBill(RequestInfo requestInfo, String tenantId, String businessService, String consumerCode,
+			String erpReceiptNumber, Long periodFrom, Long periodTo) {
 		List<BillV2> bills = new ArrayList<>();
 		try {
 
-			String url = commonService.getFetchBillURL(tenantId, consumerCode, businessService, periodFrom, periodTo).toString();
+			String url = commonService.getFetchBillURL(tenantId, consumerCode, businessService, periodFrom, periodTo)
+					.toString();
 			RequestInfoWrapper request = RequestInfoWrapper.builder().requestInfo(requestInfo).build();
 
 			String response = restTemplate.postForObject(url, request, String.class);
@@ -162,11 +179,11 @@ public class CollectionService {
 			return waterResponse.getBill();
 
 		} catch (Exception ex) {
-			String module=null;
-			if(businessService.equalsIgnoreCase("WS")) {
-				module="Wtrcollection";
-			}else {
-				module="Swcollection";
+			String module = null;
+			if (businessService.equalsIgnoreCase("WS")) {
+				module = "Wtrcollection";
+			} else {
+				module = "Swcollection";
 			}
 			recordService.recordError(module, tenantId, ex.getMessage(), erpReceiptNumber);
 			log.error("Fetch Bill Error", ex);
@@ -193,19 +210,19 @@ public class CollectionService {
 				payment.getPaymentDetails().get(0).setTenantId(digitTenantId);
 				payment.getPaymentDetails().get(0).setTotalDue(payment.getTotalDue());
 				boolean isPaymentMigrated = recordService.recordSwgCollMigration(payment, tenantId);
-				
-				if(isPaymentMigrated)
+
+				if (isPaymentMigrated)
 					continue;
-				
+
 				List<BillV2> bills = null;
 				try {
 
 					Long fromDate = WSConstants.TIME_PERIOD_MAP.get(payment.getPeriodFrom());
-				    Long toDate = WSConstants.TIME_PERIOD_MAP.get(payment.getPeriodFrom());
+					Long toDate = WSConstants.TIME_PERIOD_MAP.get(payment.getPeriodFrom());
 
 					bills = fetchBill(requestInfo, digitTenantId, payment.getBusinessService(),
-							payment.getConsumerCode(),payment.getPaymentDetails().get(0).getReceiptNumber(),
-							fromDate, toDate);
+							payment.getConsumerCode(), payment.getPaymentDetails().get(0).getReceiptNumber(), fromDate,
+							toDate);
 
 				} catch (Exception exception) {
 					log.error("Exception occurred while fetching the bills with business service:"
@@ -261,9 +278,10 @@ public class CollectionService {
 			}
 
 		}
-		long duration = System.currentTimeMillis()-startTime;
-		
-		log.info("Sewerage Collection Migration completed for " + tenantId + " took " + duration/1000 + " Secs to run");
+		long duration = System.currentTimeMillis() - startTime;
+
+		log.info("Sewerage Collection Migration completed for " + tenantId + " took " + duration / 1000
+				+ " Secs to run");
 	}
 
 }

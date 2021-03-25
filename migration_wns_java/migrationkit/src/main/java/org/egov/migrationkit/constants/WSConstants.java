@@ -36,12 +36,14 @@ public class WSConstants {
 	public static final HashMap<String, String> TAX_HEAD_MAP = new HashMap<>();
 	
 	public static final HashMap<String, String> DOCTYPEMAP = new HashMap<>();
-
-    public static final String PERIOD_FROM="periodFrom";
-
-    public static final String PERIOD_TO="periodFrom";
-
 	
+    public static final String EG_BS_BILL_NO_DEMANDS_FOUND_KEY = "EG_BS_BILL_NO_DEMANDS_FOUND";
+    public static final String EG_BS_BILL_NO_DEMANDS_FOUND_MSG = "No Demands Found for the given bill generate criteria";
+    
+    public static final String PERIOD_FROM_FIELD_NAME = "periodFrom=";
+	
+    public static final String PERIOD_TO_FIELD_NAME = "periodTo=";
+
     static {
     	
         DIGIT_ROAD_CATEGORIES.put("Premix Carpet", "PREMIXCARPET");

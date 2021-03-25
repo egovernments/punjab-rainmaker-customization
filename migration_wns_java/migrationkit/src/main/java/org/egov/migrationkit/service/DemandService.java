@@ -16,6 +16,7 @@ import org.springframework.web.client.RestTemplate;
 
 import io.swagger.client.model.Demand;
 import io.swagger.client.model.Demand.StatusEnum;
+import io.swagger.client.model.DemandCriteria;
 import io.swagger.client.model.DemandDetail;
 import io.swagger.client.model.DemandRequest;
 import io.swagger.client.model.DemandResponse;
@@ -192,7 +193,7 @@ public class DemandService {
 //		return Boolean.TRUE;
 //	}
     
-public List<Demand> prepareSwDemandRequest(Map data, String businessService, String consumerCode, String tenantId, OwnerInfo owner) {
+    public List<Demand> prepareSwDemandRequest(Map data, String businessService, String consumerCode, String tenantId, OwnerInfo owner) {
 		
 	Map<Integer, List<DemandDetail>> instaWiseDemandMap = new HashMap<>();
 	List<Map> dcbDataList = (List) data.get("dcb") != null ? (List) data.get("dcb") : new ArrayList<Map>();
@@ -283,6 +284,23 @@ public List<Demand> prepareSwDemandRequest(Map data, String businessService, Str
 		});
 
 	return demands;
+		
+	}
+
+	public List<Demand> getDemands(DemandCriteria demandCriteria, RequestInfo requestInfo) {
+		DemandResponse result = new DemandResponse();
+		try {
+
+			String url = commonService.getDemandSearchURL(demandCriteria).toString();
+			RequestInfoWrapper request = RequestInfoWrapper.builder().requestInfo(requestInfo).build();
+			
+			result = restTemplate.postForObject(url , request, DemandResponse.class);
+			log.info("Demand Request URL: " + url + "Demand RequestInfo: " + request + "Bill Response: " + result);
+			
+		} catch (Exception ex) {			
+			log.error("Search Demand failure for consumercode: {} ", ex);
+		}
+		return result.getDemands();
 		
 	}
     
