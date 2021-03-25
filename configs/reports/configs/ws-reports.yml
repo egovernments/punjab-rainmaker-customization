@@ -603,7 +603,7 @@ ReportDefinitions:
   orderby: ORDER BY pd.receiptdate DESC
   
 - reportName: CollectionsSummaryHeadwiseReport
-  summary: collections Summary Headwise Report
+  summary: Collections Summary Headwise Report
   version: 1.0.0
   moduleName: rainmaker-ws
   additionalConfig:
