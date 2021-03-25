@@ -480,7 +480,255 @@ ReportDefinitions:
     inner join egcl_bill as bill on bill.id=pd.billid
     INNER join egcl_payment as payment on payment.id=pd.paymentid
     where bill.businessservice like 'SW%'
-  orderby: ORDER BY payment.transactiondate DESC  
+  orderby: ORDER BY payment.transactiondate DESC
+  
+- reportName: Receipt Collections
+  summary: ReceiptCollections
+  version: 1.0.0
+  moduleName: rainmaker-ws
+  additionalConfig:
+    print:
+      pdfPageSize: "A1"
+  sourceColumns:
+  - name: receiptnumber
+    label: reports.ws.receiptnumber
+    type: string
+    source: ws
+    total: false
+  - name: receiptdate
+    label: reports.ws.receiptdate
+    type: string
+    source: ws
+    total: false
+  - name: businessservice
+    label: reports.ws.businessservice
+    type: string
+    source: ws
+    total: false
+  - name: amountpaid
+    label: reports.ws.amountpaid
+    type: string
+    source: ws
+    total: true
+  - name: consumercode
+    label: reports.ws.consumercode
+    type: string
+    source: ws
+    total: false
+  - name: paymentmode
+    label: reports.ws.paymentmode
+    type: string
+    source: ws
+    total: false
+  - name: billnumber
+    label: reports.ws.billnumber
+    type: string
+    source: ws
+    total: false
+  - name: paidby
+    label: reports.ws.paidby
+    type: string
+    source: ws
+    total: false
+  query: |
+    -- Use CTE to force query plan, compute & use CTE later
+    select consumercode,receiptnumber,receiptdate,amountpaid,paymentmode,pd.businessservice,bill.billnumber,payment.paidby
+    from egcl_paymentdetail pd
+    inner join egcl_bill as bill on bill.id=pd.billid
+    inner join egcl_payment as payment on payment.id=pd.paymentid and payment.paymentstatus!='CANCELLED'
+    where pd.businessservice like 'WS%' or pd.businessservice like 'SW%' and pd.tenantid=$tenantid
+  orderby: ORDER BY pd.receiptdate DESC
+  
+- reportName: JE_PendencyReport
+  summary: JE_Pendency Report
+  version: 1.0.0
+  moduleName: rainmaker-ws
+  additionalConfig:
+    print:
+      pdfPageSize: "A1"
+  sourceColumns:
+  - name: name
+    label: reports.ws.name
+    type: string
+    source: ws
+    total: false
+  - name: count
+    label: reports.ws.count
+    type: string
+    source: ws
+    total: true
+  query: |
+    -- Use CTE to force query plan, compute & use CTE later
+    select usr.name,count(*) 
+    from eg_ws_connection con
+    inner join eg_user as usr on usr.uuid=con.createdby and usr.type='EMPLOYEE'
+    where applicationstatus not in ('INITIATED') and con.tenantid=$tenantid
+  group by: GROUP BY con.createdby,usr.name
+  
+- reportName: CashCollectionReport
+  summary: Cash Collection Report
+  version: 1.0.0
+  moduleName: rainmaker-ws
+  additionalConfig:
+    print:
+      pdfPageSize: "A1"
+  sourceColumns:
+  - name: receiptnumber
+    label: reports.ws.receiptnumber
+    type: string
+    source: ws
+    total: false
+  - name: receiptdate
+    label: reports.ws.receiptdate
+    type: string
+    source: ws
+    total: false
+  - name: amountpaid
+    label: reports.ws.amountpaid
+    type: string
+    source: ws
+    total: true
+  - name: consumercode
+    label: reports.ws.consumercode
+    type: string
+    source: ws
+    total: false
+  - name: paymentmode
+  query: |
+    -- Use CTE to force query plan, compute & use CTE later
+    select consumercode,receiptnumber,receiptdate,amountpaid from egcl_paymentdetail pd
+    inner join egcl_bill as bill on bill.id=pd.billid
+    inner join egcl_payment as payment on payment.id=pd.paymentid and payment.paymentmode='CASH' and payment.paymentstatus!='CANCELLED'
+    where pd.businessservice like 'WS%'
+  orderby: ORDER BY pd.receiptdate DESC
+  
+- reportName: CollectionsSummaryHeadwiseReport
+  summary: Collections Summary Headwise Report
+  version: 1.0.0
+  moduleName: rainmaker-ws
+  additionalConfig:
+    print:
+      pdfPageSize: "A1"
+  sourceColumns:
+  - name: taxheadcode
+    label: reports.ws.taxheadcode
+    type: string
+    source: ws
+    total: false
+  - name: totalamountpaid
+    label: reports.ws.totalamountpaid
+    type: string
+    source: ws
+    total: true
+  - name: totalassessments
+    label: reports.ws.totalassessments
+    type: string
+    source: ws
+    total: true
+  - name: totalonline
+    label: reports.ws.totalonline
+    type: string
+    source: ws
+    total: true
+  - name: countonline
+    label: reports.ws.countonline
+    type: string
+    source: ws
+    total: true
+  - name: totalcash
+    label: reports.ws.totalcash
+    type: string
+    source: ws
+    total: true
+  - name: countcash
+    label: reports.ws.countcash
+    type: string
+    source: ws
+    total: true
+  - name: totalcheque
+    label: reports.ws.totalcheque
+    type: string
+    source: ws
+    total: true
+  - name: totaldd
+    label: reports.ws.totaldd
+    type: string
+    source: ws
+    total: true
+  - name: countdd
+    label: reports.ws.countdd
+    type: string
+    source: ws
+    total: true
+  - name: totalcard
+    label: reports.ws.totalcard
+    type: string
+    source: ws
+    total: true
+  - name: countcard
+    label: reports.ws.countcard
+    type: string
+    source: ws
+    total: true
+  - name: totalrtgs
+    label: reports.ws.totalrtgs
+    type: string
+    source: ws
+    total: true
+  - name: totalneft
+    label: reports.ws.totalneft
+    type: string
+    source: ws
+    total: true
+  - name: countneft
+    label: reports.ws.countneft
+    type: string
+    source: ws
+    total: true
+  - name: totalPO
+    label: reports.ws.totalPO
+    type: string
+    source: ws
+    total: true
+  - name: countPO
+    label: reports.ws.countPO
+    type: string
+    source: ws
+    total: true
+  - name: countoffline
+    label: reports.ws.countoffline
+    type: string
+    source: ws
+    total: true
+  query: |
+    -- Use CTE to force query plan, compute & use CTE later
+    SELECT 
+        taxheadcode,		
+        sum(payment.totalamountpaid) as totalamountpaid,
+        count(payment.totalamountpaid) as totalassessments,
+        sum(case when payment.paymentmode='ONLINE' then payment.totalamountpaid else 0 end) as "totalonline",
+        sum(case when payment.paymentmode='ONLINE' then 1 else 0 end) as "countonline",
+        sum(case when payment.paymentmode='CASH' then payment.totalamountpaid else 0 end) as totalcash,
+        sum(case when payment.paymentmode='CASH' then 1 else 0 end) as countcash,
+        sum(case when payment.paymentmode='CHEQUE' then payment.totalamountpaid else 0 end) as totalcheque,
+        sum(case when payment.paymentmode='CHEQUE' then 1 else 0 end) as countcheque,
+        sum(case when payment.paymentmode='DD' then payment.totalamountpaid else 0 end) as totalDD,
+        sum(case when payment.paymentmode='DD' then 1 else 0 end) as countDD,
+        sum(case when payment.paymentmode='CARD' then payment.totalamountpaid else 0 end) as totalcard, 
+        sum(case when payment.paymentmode='CARD' then 1 else 0 end) as countcard, 
+        sum(case when payment.paymentmode='OFFLINE_RTGS' then payment.totalamountpaid else 0 end) as totalRTGS,
+        sum(case when payment.paymentmode='OFFLINE_RTGS' then 1 else 0 end) as countRTGS,
+        sum(case when payment.paymentmode='OFFLINE_NEFT' then payment.totalamountpaid else 0 end) as totalNEFT,
+        sum(case when payment.paymentmode='OFFLINE_NEFT' then 1 else 0 end) as countNEFT,
+        sum(case when payment.paymentmode='POTAL_ORDER' then payment.totalamountpaid else 0 end) as "totalPO",
+        sum(case when payment.paymentmode='POTAL_ORDER' then 1 else 0 end) as "countPO",
+        sum(case when payment.paymentmode!='ONLINE' then 1 else 0 end) as "countoffline"
+        FROM egcl_paymentdetail pd
+        INNER join egcl_payment as payment on pd.paymentid=payment.id
+        INNER JOIN egcl_billdetial as bd on pd.billid = bd.billid
+        INNER JOIN egcl_billaccountdetail as bad on bad.billdetailid = bd.id
+        where  payment.paymentstatus != 'CANCELLED' and pd.businessservice like 'WS%' and payment.tenantid='pb.amritsar'  
+  groupby: GROUP BY taxheadcode
   
   
   
