@@ -58,6 +58,8 @@ public class FileUploadService {
 		documentMap.put("Plumber Report/Drawing", "PLUMBER_REPORT_DRAWING");
 		documentMap.put("Property Tax Receipt", "PROPERTY_TAX_RECIEPT");
 		documentMap.put("Electricity Bill", "ELECTRICITY_BILL");
+		documentMap.put("Property Tax Paid Receipt","PROPERTY_TAX_RECIEPT");
+        documentMap.put("Aadhar Card or Voter Id card or DL", "OWNER.IDENTITYPROOF.AADHAAR");
 
 	}
 	
