@@ -254,7 +254,7 @@ public class Sqls {
 	public static final String ALL_WATER_DOCUMENTS_QUERY = "select app.connectiondetailsid,dname.documentname,f.filestoreid,f.filename,f.contenttype,conn.consumercode "
 			+ " from egwtr_connection conn,egwtr_connectiondetails conndt,egwtr_application_documents app, egwtr_documents d,eg_filestoremap f ,egwtr_document_names dname "
 			+ " where f.id=d.filestoreid  and d.applicationdocumentsid=app.id and app.documentnamesid=dname.id "
-			+ " and app.connectiondetailsid=conn.id and conndt.connection=conn.id and documentname!='DemandBill' and f.filestoreid not in(select erpfilestore from egwtr_document_migration mdoc where mdoc.status='SUCCESS') order by app.connectiondetailsid";
+			+ " and app.connectiondetailsid=conn.id and conndt.connection=conn.id and conndt.connectionstatus='ACTIVE' and documentname!='DemandBill' and f.filestoreid not in(select erpfilestore from egwtr_document_migration mdoc where mdoc.status='SUCCESS') order by app.connectiondetailsid";
 
 	public static final String WATER_DOCUMENTS_TABLE = "create table  if not exists  egwtr_document_migration(erpconn varchar(64) ,digitconn varchar(64) ,erpfilestore varchar(64),digitfilestore varchar(64),status varchar(64),tenantId varchar(64),additiondetails varchar(1000),errorMessage varchar(4000) )";
 
@@ -265,6 +265,14 @@ public class Sqls {
 	public static final String SEWERAGE_DOCUMENT_MIGRATION_INSERT = "Insert into egswtax_document_migration(erpconn, digitconn, erpfilestore ,digitfilestore ,status ,tenantId ,additiondetails ,errorMessage ) values(:erpconn,:digitconn,:erpfilestore,:digitfilestore,:status,:tenantId,:additiondetails,:errorMessage)";
 
 	public static final String ALL_SEWERAGE_DOCUMENTS_QUERY = "select app.applicationdetails,dname.description,f.filestoreid,f.filename,f.contenttype,conn.shsc_number from egswtax_connection conn,egswtax_applicationdetails appdt, egswtax_applicationdetails_documents app,	egswtax_documents d, eg_filestoremap f,	egswtax_document_type_master dname"
-			+ " where f.id=d.filestoreid and d.applicationdetaildocument=	app.id and app.documenttypemaster=dname.id and app.applicationdetails=appdt.id and appdt.connection=	conn.id and dname.description!='DemandBill'	and f.filestoreid not in(select erpfilestore from egswtax_document_migration mdoc where mdoc.status='SUCCESS') order by app.applicationdetails";
+			+ " where f.id=d.filestoreid and d.applicationdetaildocument=	app.id and app.documenttypemaster=dname.id and app.applicationdetails=appdt.id and appdt.connection=conn.id and conn.status='ACTIVE' and dname.description!='DemandBill'	and f.filestoreid not in(select erpfilestore from egswtax_document_migration mdoc where mdoc.status='SUCCESS') order by app.applicationdetails";
+
+	public static final String WS_DOC_MIGRATION_STATUS_QUERY = " select count(*) from egwtr_document_migration where erpconn=:erpconn and erpfilestore=:erpfilestore ";
+
+	public static final String WS_DOC_MIGRATION_STATUS_UPDATE_QUERY = " update egwtr_document_migration set status=:status,digitfilestore=:digitfilestore,additiondetails=:additiondetails ,errorMessage=:errorMessage where erpconn=:erpconn and erpfilestore=:erpfilestore ";
+	
+	public static final String SW_DOC_MIGRATION_STATUS_QUERY = " select count(*) from egswtax_document_migration where erpconn=:erpconn and erpfilestore=:erpfilestore ";
+
+	public static final String SW_DOC_MIGRATION_STATUS_UPDATE_QUERY = "update egswtax_document_migration set status=:status,digitfilestore=:digitfilestore,additiondetails=:additiondetails ,errorMessage:=errorMessage where erpconn=:erpconn and erpfilestore=:erpfilestore  ";
 
 }

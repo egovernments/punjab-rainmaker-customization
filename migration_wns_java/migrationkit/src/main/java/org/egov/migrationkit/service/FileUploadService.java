@@ -113,7 +113,6 @@ public class FileUploadService {
 			e.printStackTrace();
 			recordService.saveMigratedFilestoreDetails(module,document.getFilestoreid(), null, document.getConnectionNo(),
 					false, e.getMessage(), tenantId);
-			throw new RuntimeException("Failed to migrate files.");
 
 		}
 		return docs;

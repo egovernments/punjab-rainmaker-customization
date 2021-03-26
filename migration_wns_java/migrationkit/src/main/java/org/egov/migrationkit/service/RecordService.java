@@ -372,26 +372,47 @@ public class RecordService {
 		return jdbcTemplate.queryForObject("select code from eg_city where lower(name)='" + city + "'", String.class);
 	}
 
-	public void saveMigratedFilestoreDetails(String module, String oldFileStore, String newFileStore,
+	public void saveMigratedFilestoreDetails(String module, String erpFileStore, String digitFileStore,
 			String connectionNo, boolean success, String error, String tenantId) {
-		String query = null;
-		if (MODULE_NAME_WATER.equalsIgnoreCase(module))
-			query = Sqls.WATER_DOCUMENT_MIGRATION_INSERT;
-		else
-			query = Sqls.SEWERAGE_DOCUMENT_MIGRATION_INSERT;
+		String selectQuery = null;
+		String updateQuery = null;
+		if (MODULE_NAME_WATER.equalsIgnoreCase(module)) {
+			selectQuery = Sqls.WS_DOC_MIGRATION_STATUS_QUERY;
+			updateQuery = Sqls.WS_DOC_MIGRATION_STATUS_UPDATE_QUERY;
+		} else {
+			selectQuery = Sqls.SW_DOC_MIGRATION_STATUS_QUERY;
+			updateQuery = Sqls.SW_DOC_MIGRATION_STATUS_UPDATE_QUERY;
+		}
+		selectQuery = selectQuery.replace(":erpconn", "'" + connectionNo + "'");
+		selectQuery = selectQuery.replace(":erpfilestore", "'" + erpFileStore + "'");
+		int size = jdbcTemplate.queryForObject(selectQuery, Integer.class);
 
-		query = query.replace(":erpconn", "'" + connectionNo + "'");
-		query = query.replace(":digitconn", "'" + connectionNo + "'");
-		query = query.replace(":tenantId", "'" + tenantId + "'");
-		query = query.replace(":erpfilestore", "'" + oldFileStore + "'");
-		query = query.replace(":digitfilestore", "'" + newFileStore + "'");
-		query = query.replace(":status", success ? "'SUCCESS'" : "'FAILED'");
-		query = query.replace(":additiondetails", success ? "'Saved'" : "'Failed'");
-		query = query.replace(":errorMessage", success ? "'null'" : "'" + error + "'");
+		if (size >= 1) {
+			updateQuery = updateQuery.replace(":erpconn", "'" + connectionNo + "'");
+			updateQuery = updateQuery.replace(":erpfilestore", "'" + erpFileStore + "'");
+			updateQuery = updateQuery.replace(":digitfilestore", "'" + connectionNo + "'");
+			updateQuery = updateQuery.replace(":status", success ? "'SUCCESS'" : "'FAILED'");
+			updateQuery = updateQuery.replace(":additiondetails", success ? "'Saved'" : "'Failed'");
+			updateQuery = updateQuery.replace(":errorMessage", success ? "'null'" : "'" + error + "'");
+			jdbcTemplate.execute(updateQuery);
+		} else {
+			String query = null;
+			if (MODULE_NAME_WATER.equalsIgnoreCase(module))
+				query = Sqls.WATER_DOCUMENT_MIGRATION_INSERT;
+			else
+				query = Sqls.SEWERAGE_DOCUMENT_MIGRATION_INSERT;
 
-		jdbcTemplate.execute(query);
+			query = query.replace(":erpconn", "'" + connectionNo + "'");
+			query = query.replace(":digitconn", "'" + connectionNo + "'");
+			query = query.replace(":tenantId", "'" + tenantId + "'");
+			query = query.replace(":erpfilestore", "'" + erpFileStore + "'");
+			query = query.replace(":digitfilestore", "'" + digitFileStore + "'");
+			query = query.replace(":status", success ? "'SUCCESS'" : "'FAILED'");
+			query = query.replace(":additiondetails", success ? "'Saved'" : "'Failed'");
+			query = query.replace(":errorMessage", success ? "'null'" : "'" + error + "'");
 
+			jdbcTemplate.execute(query);
+		}
 	}
-
 
 }
