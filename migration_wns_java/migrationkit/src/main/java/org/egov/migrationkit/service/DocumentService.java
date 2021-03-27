@@ -46,6 +46,7 @@ public class DocumentService {
 			uploadedDocuments.addAll(documents);
 		}
 		String wsUrl = host + "/ws-services/wc/documents/_create?tenantId=pb." + city;
+		if(!uploadedDocuments.isEmpty())
 		storeFileStoreIds(uploadedDocuments,wsUrl, requestInfo);
 
 	}
@@ -60,6 +61,7 @@ public class DocumentService {
 			uploadedDocuments.addAll(documents);
 		}
 		String swUrl = host + "/sw-services/swc/documents/_create?tenantId=pb." + city;
+		if(!uploadedDocuments.isEmpty())
 		storeFileStoreIds(uploadedDocuments, swUrl, requestInfo);
 
 	}

@@ -123,6 +123,8 @@ public class MigrationController {
 			if (accessToken != null) {
 				waterMigrateRequest.getRequestInfo().setAuthToken(accessToken);
 				documentService.migrateWtrDocuments(tenantId, waterMigrateRequest.getRequestInfo());
+				
+				return new ResponseEntity("Documents migrated for the city " + tenantId, HttpStatus.CREATED);
 
 			} else {
 				return new ResponseEntity(HttpStatus.BAD_REQUEST);
@@ -133,7 +135,6 @@ public class MigrationController {
 			e.printStackTrace();
 			return new ResponseEntity("Documents migration failed for the city " + tenantId, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		return new ResponseEntity("Documents migrated for the city " + tenantId, HttpStatus.CREATED);
 	}
 	@PostMapping("/sewerage/connection")
 	@ResponseStatus(HttpStatus.CREATED)
@@ -197,6 +198,7 @@ public class MigrationController {
 			if (accessToken != null) {
 				waterMigrateRequest.getRequestInfo().setAuthToken(accessToken);
 				documentService.migrateSWDocuments(tenantId, waterMigrateRequest.getRequestInfo());
+				return new ResponseEntity("Documents migrated for the city " + tenantId, HttpStatus.CREATED);
 
 			} else {
 				return new ResponseEntity(HttpStatus.BAD_REQUEST);
@@ -205,8 +207,7 @@ public class MigrationController {
 		} catch (Exception e) {
 
 			e.printStackTrace();
-			throw new RuntimeException("Failed to migrate files.");
+			return new ResponseEntity("Documents migration failed for the city " + tenantId, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		return new ResponseEntity("Documents migrated for the city " + tenantId, HttpStatus.CREATED);
 	}
 }
