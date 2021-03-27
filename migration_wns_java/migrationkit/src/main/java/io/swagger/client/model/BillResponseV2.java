@@ -24,6 +24,6 @@ public class BillResponseV2 {
 	private ResponseInfoV2 resposneInfo = null;
 
 	@JsonProperty("Bill")
-	private List<BillV2> bill = new ArrayList<>();
+	private List<Bill> bill = new ArrayList<>();
 
 }

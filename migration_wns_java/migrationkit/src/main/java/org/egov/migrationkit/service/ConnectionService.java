@@ -96,6 +96,8 @@ public class ConnectionService {
 							+ ") ");
 		else
 			qry = qry.replace(":locCondition", " ");
+		
+		log.info(qry);
 
 		List<String> queryForList = jdbcTemplate.queryForList(qry, String.class);
 
@@ -413,7 +415,7 @@ public class ConnectionService {
 				String connectionNo = swConnection.getConnectionNo() != null ? swConnection.getConnectionNo()
 						: (String) data.get("applicationnumber");
 				swConnection.setConnectionNo(connectionNo);
-				log.info("initiating for mobile number : " + swConnection.getMobilenumber());
+				log.info("Migrating for consumer number : " + swConnection.getConnectionNo());
 				// log.debug("getApplicantname ; " +
 				// swConnection.getApplicantname());
 				// log.debug("connectionNo; " + swConnection.getConnectionNo());

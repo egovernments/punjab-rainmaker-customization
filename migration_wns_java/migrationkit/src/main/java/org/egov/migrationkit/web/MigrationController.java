@@ -91,6 +91,8 @@ public class MigrationController {
 		try {
 
 			UserInfo userInfo = waterMigrateRequest.getRequestInfo().getUserInfo();
+//			userInfo.setId(12l);
+//			userInfo.setType("EMPLOYEE");
 			String accessToken = userService.getAccessToken(userInfo.getUserName(), userInfo.getPassword(),
 					userInfo.getTenantId());
 			if (accessToken != null) {

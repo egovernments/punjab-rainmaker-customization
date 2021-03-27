@@ -60,7 +60,7 @@ public class CollectionPaymentDetail {
     private String billId;
 
     @JsonProperty("bill")
-    private BillV2 bill;
+    private Bill bill;
 
     @JsonProperty("additionalDetails")
     private JsonNode additionalDetails;

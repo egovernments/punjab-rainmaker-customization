@@ -165,7 +165,6 @@ public class RecordService {
 
 		String qry = Sqls.WATER_COLLECTION_MIGRATION_INSERT;
 		qry = qry.replace(":schema", tenantId);
-
 		qry = qry.replace(":erpreceiptnumber", "'" + conn.getPaymentDetails().get(0).getReceiptNumber() + "'");
 		qry = qry.replace(":erpconn", "'" + conn.getConsumerCode() + "'");
 		qry = qry.replace(":erppt", "'" + conn.getBusinessService() + "'");
@@ -192,7 +191,6 @@ public class RecordService {
 		if(size >= 1)
 			return Boolean.TRUE;
 
-
 		String qry = Sqls.SEWERAGE_COLLECTION_MIGRATION_INSERT;
 		qry = qry.replace(":schema", tenantId);
 		qry = qry.replace(":erpreceiptnumber", "'" + conn.getPaymentDetails().get(0).getReceiptNumber() + "'");
@@ -215,6 +213,7 @@ public class RecordService {
 		String qry = Sqls.WATER_COLLECTION_MIGRATION_UPDATE;
 
 		qry = qry.replace(":schema", tenantId);
+		qry = qry.replace(":erpreceiptnumber", "'" + conn.getPaymentDetails().get(0).getReceiptNumber() + "'");
 		qry = qry.replace(":erpconn", "'" + conn.getConsumerCode() + "'");
 		qry = qry.replace(":status", "'Saved'");
 		qry = qry.replace(":tenantId", "'" + conn.getTenantId() + "'");
@@ -229,6 +228,7 @@ public class RecordService {
 
 		String qry = Sqls.SEWERAGE_COLLECTION_UPDATE;
 		qry = qry.replace(":schema", tenantId);
+		qry = qry.replace(":erpreceiptnumber", "'" + conn.getPaymentDetails().get(0).getReceiptNumber() + "'");
 		qry = qry.replace(":erpconn", "'" + conn.getConsumerCode() + "'");
 		qry = qry.replace(":status", "'Saved'");
 		qry = qry.replace(":tenantId", "'" + conn.getTenantId() + "'");

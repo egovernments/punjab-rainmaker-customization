@@ -33,6 +33,9 @@ public class BillDetailV2 {
 
 	@JsonProperty("billId")
 	private String billId;
+	
+	@JsonProperty("amountPaid")
+	private BigDecimal amountPaid;
 
 	@JsonProperty("expiryDate")
 	private Long expiryDate;
