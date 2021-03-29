@@ -343,7 +343,7 @@ public class RecordService {
 	
 	public List<LocalDocument> getAllWSFilesByTenantId(String tenantId) {
 		List<LocalDocument> documents = new ArrayList<>();
-		jdbcTemplate.execute("set search_path to " + tenantId);
+		jdbcTemplate.execute("set search_path to " + tenantId+"_prod");
 		String query = null;
 		jdbcTemplate.execute(Sqls.WATER_DOCUMENTS_TABLE);
 		query = Sqls.ALL_WATER_DOCUMENTS_QUERY;
@@ -357,7 +357,7 @@ public class RecordService {
 	
 	public List<LocalDocument> getAllSWFilesByTenantId(String tenantId) {
 		List<LocalDocument> documents = new ArrayList<>();
-		jdbcTemplate.execute("set search_path to " + tenantId);
+		jdbcTemplate.execute("set search_path to " + tenantId+"_prod");
 		String query = null;
 		jdbcTemplate.execute(Sqls.SEWERAGE_DOCUMENTS_TABLE);
 		query = Sqls.ALL_SEWERAGE_DOCUMENTS_QUERY;
