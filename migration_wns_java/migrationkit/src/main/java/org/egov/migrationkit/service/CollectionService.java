@@ -107,7 +107,7 @@ public class CollectionService {
 							.max(Comparator.comparing(BillDetail::getToPeriod))
 							.orElseThrow(NoSuchElementException::new).getToPeriod();
 
-					bills = fetchBill(requestInfo, digitTenantId, payment.getBusinessService(),
+					bills = fetchBill(tenantId, requestInfo, digitTenantId, payment.getBusinessService(),
 							payment.getConsumerCode(),payment.getPaymentDetails().get(0).getReceiptNumber(),
 							minFromPeriod, maxToPeriod);
 
@@ -186,7 +186,7 @@ public class CollectionService {
 		
 	}
 
-	public List<Bill> fetchBill(RequestInfo requestInfo, String tenantId, String businessService, String consumerCode,
+	public List<Bill> fetchBill(String erpTenantId, RequestInfo requestInfo, String tenantId, String businessService, String consumerCode,
 			String erpReceiptNumber, Long periodFrom, Long periodTo) {
 		List<Bill> bills = new ArrayList<>();
 		try {
@@ -209,7 +209,7 @@ public class CollectionService {
 			} else {
 				module = "Swcollection";
 			}
-			recordService.recordError(module, tenantId, ex.getMessage(), erpReceiptNumber);
+			recordService.recordError(module, erpTenantId, ex.getMessage(), erpReceiptNumber);
 			log.error("Fetch Bill Error", ex);
 		}
 		return bills;
@@ -268,7 +268,7 @@ public class CollectionService {
 							.max(Comparator.comparing(BillDetail::getToPeriod))
 							.orElseThrow(NoSuchElementException::new).getToPeriod();
 
-					bills = fetchBill(requestInfo, digitTenantId, payment.getBusinessService(),
+					bills = fetchBill(tenantId, requestInfo, digitTenantId, payment.getBusinessService(),
 							payment.getConsumerCode(),payment.getPaymentDetails().get(0).getReceiptNumber(),
 							minFromPeriod, maxToPeriod);
 
