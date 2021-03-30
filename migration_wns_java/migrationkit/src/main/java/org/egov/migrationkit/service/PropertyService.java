@@ -126,6 +126,7 @@ public class PropertyService {
 		owner.setFatherOrHusbandName(conn.getGuardianname());
 		owner.setOwnerType("NONE");
 		owner.setGender((String)data.get("gender"));
+		owner.setEmailId((String)data.getOrDefault("emailId", null));
 
 		property.creationReason(CreationReason.CREATE);
 		// log.info("conn.getPropertyType() :" + conn.getPropertyType());
@@ -219,6 +220,8 @@ public class PropertyService {
 		property.creationReason(CreationReason.CREATE);
 		property.setUsageCategory("RESIDENTIAL");
 		owner.setGender((String)json.get("gender"));
+		owner.setEmailId((String)json.getOrDefault("emailId", null));
+
 
 		List<OwnerInfo> owners = new ArrayList<>();
 		owners.add(owner);
