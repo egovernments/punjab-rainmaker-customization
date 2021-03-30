@@ -233,11 +233,6 @@ ReportDefinitions:
     type: string
     source: ws
     total: false
-  - name: userid
-    label: reports.ws.userid
-    type: string
-    source: ws
-    total: false
   - name: connectionholdertype
     label: reports.ws.connectionholdertype
     type: string
@@ -253,7 +248,7 @@ ReportDefinitions:
     type: string
     source: ws
     total: false
-  - name: ownername
+  - name: name
     label: reports.ws.ownername
     type: string
     source: ws
@@ -283,14 +278,13 @@ ReportDefinitions:
         where tenantid=$tenantid
         group by propertyid
     )
-        select connectionno, pt.landarea as plotsize,oldconnectionno,applicationno,pt.propertyid,ch.userid,ch.connectionholdertype,wsconnection.applicationstatus,users.name as connectionHolder,userowner.name as ownername,concat(address,' ',localityname) as address
+        select connectionno, pt.landarea as plotsize,oldconnectionno,applicationno,pt.propertyid,ch.connectionholdertype,wsconnection.applicationstatus,users.name as connectionHolder,userowner.name as name,concat(address,' ',localityname) as address
         from eg_ws_connection wsconnection
        inner join eg_pt_property as pt on pt.id=wsconnection.property_id
        left outer join eg_ws_connectionholder as ch on ch.connectionid=wsconnection.id
        left outer join eg_user as users on ch.userid=users.uuid
        inner join ptowner on  ptowner.propertyid=pt.id
        left outer join eg_user as userowner on ptowner.owneruserid=userowner.uuid
-
        inner join ptaddress on ptaddress.propertyid=pt.id
        INNER JOIN eg_bndry_mohalla on eg_bndry_mohalla.localitycode=ptaddress.locality
       
