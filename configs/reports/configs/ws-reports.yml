@@ -558,7 +558,7 @@ ReportDefinitions:
     from eg_ws_connection con
     inner join eg_user as usr on usr.uuid=con.createdby and usr.type='EMPLOYEE'
     where applicationstatus not in ('INITIATED') and con.tenantid=$tenantid
-  group by: GROUP BY con.createdby,usr.name
+  groupby: GROUP BY con.createdby,usr.name
   
 - reportName: CashCollectionReport
   summary: Cash Collection Report
