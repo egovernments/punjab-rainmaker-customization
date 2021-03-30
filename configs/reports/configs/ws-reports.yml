@@ -253,18 +253,13 @@ ReportDefinitions:
     type: string
     source: ws
     total: false
-  - name: ownerid
-    label: reports.ws.ownerid
-    type: string
-    source: ws
-    total: false
   - name: ownername
     label: reports.ws.ownername
     type: string
     source: ws
     total: false
-  - name: contact
-    label: reports.ws.contact
+  - name: address
+    label: reports.ws.address
     type: string
     source: ws
     total: false
@@ -288,7 +283,7 @@ ReportDefinitions:
         where tenantid=$tenantid
         group by propertyid
     )
-        select connectionno, pt.landarea as plotsize,oldconnectionno,applicationno,pt.propertyid,ch.userid,ch.connectionholdertype,wsconnection.applicationstatus,users.name as connectionHolder,ptowner.owneruserid as ownerid,userowner.name as ownername,concat(address,' ',localityname)
+        select connectionno, pt.landarea as plotsize,oldconnectionno,applicationno,pt.propertyid,ch.userid,ch.connectionholdertype,wsconnection.applicationstatus,users.name as connectionHolder,userowner.name as ownername,concat(address,' ',localityname) as address
         from eg_ws_connection wsconnection
        inner join eg_pt_property as pt on pt.id=wsconnection.property_id
        left outer join eg_ws_connectionholder as ch on ch.connectionid=wsconnection.id
@@ -354,7 +349,7 @@ ReportDefinitions:
     total: false
   query: |
     -- Use CTE to force query plan, compute & use CTE later
-    select receiptnumber,receiptdate,pd.businessservice,pd.amountpaid,consumercode,paymentstatus,paymentmode,usr.name,usr.mobilenumber
+    select receiptnumber,receiptdate,pd.businessservice,pd.amountpaid,consumercode,paymentstatus,paymentmode,usr.name as name,usr.mobilenumber as mobilenumber
     from egcl_paymentdetail pd
     inner join egcl_bill as bill on bill.id=pd.billid
     INNER join egcl_payment as payment on payment.id=pd.paymentid
