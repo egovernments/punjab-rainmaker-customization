@@ -22,6 +22,8 @@ import io.swagger.client.model.Property;
 import io.swagger.client.model.PropertyRequest;
 import io.swagger.client.model.PropertyResponse;
 import io.swagger.client.model.PropertySearchResponse;
+import io.swagger.client.model.RequestInfo;
+import io.swagger.client.model.RequestInfoWrapper;
 import io.swagger.client.model.SewerageConnection;
 import io.swagger.client.model.SewerageConnectionRequest;
 import io.swagger.client.model.Source;
@@ -150,6 +152,10 @@ public class PropertyService {
 		// return res.getProperties().get(0);
 		Thread.sleep(2000);
 		Property property2 = res.getProperties().get(0);
+		
+		property2 =  searchPropertyAfterCreate(conn.getTenantId(), property2.getPropertyId(), wcr.getRequestInfo(), property2);
+		
+		
 		property2.setSource(Source.WATER_CHARGES);
 		ProcessInstance workflow = new ProcessInstance();
 		workflow.setBusinessService("PT.CREATEWITHWNS");
@@ -166,7 +172,8 @@ public class PropertyService {
 
 	}
 
-	private Property createSWProperty(SewerageConnectionRequest swg, Map json, String tenantId) {
+	private Property createSWProperty(SewerageConnectionRequest swg, Map json, String tenantId) throws InterruptedException {
+
 //		String uuid = null;
 		PropertyRequest prequest = new PropertyRequest();
 		prequest.setRequestInfo(swg.getRequestInfo());
@@ -200,7 +207,7 @@ public class PropertyService {
 		property.setSource(Source.WATER_CHARGES);
 
 		property.setTotalConstructedArea(BigDecimal.valueOf(190));
-		property.setStatus(Status.ACTIVE);
+//		property.setStatus(Status.ACTIVE);
 		List<Unit> units = new ArrayList<>();
 		// units.add(new Unit());
 		property.setUnits(units);
@@ -223,6 +230,11 @@ public class PropertyService {
 		try {
 			res = restTemplate.postForObject(host + "/" + ptcreatehurl, prequest, PropertyResponse.class);
 			Property property2 = res.getProperties().get(0);
+			
+			Thread.sleep(2000);
+			
+			property2 =  searchPropertyAfterCreate(conn.getTenantId(), property2.getPropertyId(), swg.getRequestInfo(), property2);
+			
 			ProcessInstance workflow = new ProcessInstance();
 			workflow.setBusinessService("PT.CREATEWITHWNS");
 			workflow.setAction("SUBMIT");
@@ -347,4 +359,16 @@ public class PropertyService {
 
 	}
 
+
+    private Property searchPropertyAfterCreate(String tenantId, String propertyId, RequestInfo requestInfo, Property property2) {
+    	RequestInfoWrapper wrapper = RequestInfoWrapper.builder().requestInfo(requestInfo).build();
+    	
+    	System.out.println("hello");
+		PropertyResponse res = restTemplate.postForObject(host + "/" + ptseachurl + "?tenantId="+tenantId+"&propertyIds=" + propertyId , wrapper, PropertyResponse.class);
+		if(!res.getProperties().isEmpty() && res.getProperties().size()==1) {
+			return res.getProperties().get(0);
+		}
+		return property2;
+    	
+    }
 }

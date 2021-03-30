@@ -15,9 +15,16 @@ package io.swagger.client.model;
 import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 /**
  * Representation of a address. Indiavidual APIs may choose to extend from this using allOf if more details needed to be added in their case.
  */
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Address {
   
 @JsonProperty("tenantId")
@@ -289,10 +296,10 @@ public class Address {
     this.buildingName = buildingName;
   }
 
-  public Address street(String street) {
-    this.street = street;
-    return this;
-  }
+//  public Address street(String street) {
+//    this.street = street;
+//    return this;
+//  }
 
    /**
    * Street Name
