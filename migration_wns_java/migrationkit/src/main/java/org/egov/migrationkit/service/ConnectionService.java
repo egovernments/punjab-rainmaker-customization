@@ -526,12 +526,26 @@ public class ConnectionService {
 				swConnection.setDocuments(getDocuments(null, data));
 
 				swConnection.setTenantId(requestInfo.getUserInfo().getTenantId());
+				
+				swConnection.setStatus(StatusEnum.Active);
+
+				swConnection.setApplicationStatus("CONNECTION_ACTIVATED");
+
+				swConnection.setApplicationType("NEW_SEWERAGE_CONNECTION");
+
 				ProcessInstance workflow = new ProcessInstance();
 				workflow.setBusinessService("NewSW1");
-				workflow.setAction("SUBMIT");
+				workflow.setAction("ACTIVATE_CONNECTION");
 				workflow.setTenantId(swConnection.getTenantId());
 				workflow.setModuleName("sw-services");
 				swConnection.setProcessInstance(workflow);
+				
+//				ProcessInstance workflow = new ProcessInstance();
+//				workflow.setBusinessService("NewSW1");
+//				workflow.setAction("SUBMIT");
+//				workflow.setTenantId(swConnection.getTenantId());
+//				workflow.setModuleName("sw-services");
+//				swConnection.setProcessInstance(workflow);
 
 				String response = null;
 				try {

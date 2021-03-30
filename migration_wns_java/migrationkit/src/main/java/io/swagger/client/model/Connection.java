@@ -116,6 +116,9 @@ public class Connection {
 
 	@JsonProperty("guardianname")
 	private String guardianname = null;
+	
+	@JsonProperty("applicationType")
+	private String applicationType = null;
 
 	/**
 	 * Unique Identifier of the connection for internal reference.
