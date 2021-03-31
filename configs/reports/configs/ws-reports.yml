@@ -361,6 +361,14 @@ ReportDefinitions:
     type: string
     source: ws
     total: false
+  searchParams:
+  - name: connectionType
+    label: connectionType
+    type: singlevaluelist
+    pattern: 'list://WS%:Water,SW%:Sewerage'
+    source: pt
+    isMandatory: true
+    searchClause: AND pd.businessservice like $connectionType
   query: |
     -- Use CTE to force query plan, compute & use CTE later
     select receiptnumber,receiptdate,pd.businessservice,pd.amountpaid,consumercode,paymentstatus,paymentmode,usr.name as name,usr.mobilenumber as mobilenumber
@@ -368,7 +376,7 @@ ReportDefinitions:
     inner join egcl_bill as bill on bill.id=pd.billid
     INNER join egcl_payment as payment on payment.id=pd.paymentid
     inner join eg_user as usr on usr.id=payment.createdby::integer
-    where bill.businessservice like 'SW%'
+    where 1=1
   orderby: ORDER BY pd.receiptdate DESC
 
 - reportName: FieldCollectionSearchReceiptWS
@@ -429,6 +437,14 @@ ReportDefinitions:
     type: string
     source: ws
     total: false
+  searchParams:
+  - name: connectionType
+    label: connectionType
+    type: singlevaluelist
+    pattern: 'list://WS%:Water,SW%:Sewerage'
+    source: pt
+    isMandatory: true
+    searchClause: AND bill.businessservice like $connectionType
   query: |
     -- Use CTE to force query plan, compute & use CTE later
     select receiptnumber,manualreceiptnumber,receiptdate,pd.businessservice as businessservice, billnumber , billdescription, consumercode , pd.amountpaid as amountpaid,paymentmode, paymentstatus
@@ -436,7 +452,7 @@ ReportDefinitions:
     inner join egcl_bill as bill on bill.id=pd.billid
     inner join egcl_billdetial as billd on billd.billid=pd.billid
     INNER join egcl_payment as payment on payment.id=pd.paymentid
-    where bill.businessservice like 'SW%'
+    where 1=1
   orderby: ORDER BY pd.receiptdate DESC
   
 - reportName: SearchOnlineReceiptsWS
@@ -482,13 +498,21 @@ ReportDefinitions:
     type: string
     source: ws
     total: false
+  searchParams:
+  - name: connectionType
+    label: connectionType
+    type: singlevaluelist
+    pattern: 'list://WS%:Water,SW%:Sewerage'
+    source: pt
+    isMandatory: true
+    searchClause: AND bill.businessservice like $connectionType
   query: |
     -- Use CTE to force query plan, compute & use CTE later
     select billnumber,pd.amountpaid,pd.businessservice ,paymentstatus , payment.transactionnumber ,payment.transactiondate,paymentmode
     from egcl_paymentdetail pd
     inner join egcl_bill as bill on bill.id=pd.billid
     INNER join egcl_payment as payment on payment.id=pd.paymentid
-    where bill.businessservice like 'SW%'
+    where 1=1
   orderby: ORDER BY payment.transactiondate DESC
   
 - reportName: ReceiptCollections
@@ -539,13 +563,21 @@ ReportDefinitions:
     type: string
     source: ws
     total: false
+  searchParams:
+  - name: connectionType
+    label: connectionType
+    type: singlevaluelist
+    pattern: 'list://WS%:Water,SW%:Sewerage'
+    source: pt
+    isMandatory: true
+    searchClause: AND pd.businessservice like $connectionType
   query: |
     -- Use CTE to force query plan, compute & use CTE later
     select consumercode,receiptnumber,receiptdate,amountpaid,paymentmode,pd.businessservice,bill.billnumber,payment.paidby
     from egcl_paymentdetail pd
     inner join egcl_bill as bill on bill.id=pd.billid
     inner join egcl_payment as payment on payment.id=pd.paymentid and payment.paymentstatus!='CANCELLED'
-    where pd.businessservice like 'WS%' or pd.businessservice like 'SW%' and pd.tenantid=$tenantid
+    where  pd.tenantid=$tenantid
   orderby: ORDER BY pd.receiptdate DESC
   
 - reportName: JE_PendencyReport
@@ -602,12 +634,20 @@ ReportDefinitions:
     type: string
     source: ws
     total: false
+  searchParams:
+  - name: connectionType
+    label: connectionType
+    type: singlevaluelist
+    pattern: 'list://WS%:Water,SW%:Sewerage'
+    source: pt
+    isMandatory: true
+    searchClause: AND pd.businessservice like $connectionType
   query: |
     -- Use CTE to force query plan, compute & use CTE later
     select consumercode,receiptnumber,receiptdate,amountpaid from egcl_paymentdetail pd
     inner join egcl_bill as bill on bill.id=pd.billid
     inner join egcl_payment as payment on payment.id=pd.paymentid and payment.paymentmode='CASH' and payment.paymentstatus!='CANCELLED'
-    where pd.businessservice like 'WS%'
+    where 1=1
   orderby: ORDER BY pd.receiptdate DESC
   
 - reportName: CollectionsSummaryHeadwiseReport
@@ -708,6 +748,14 @@ ReportDefinitions:
     type: string
     source: ws
     total: true
+  searchParams:
+  - name: connectionType
+    label: connectionType
+    type: singlevaluelist
+    pattern: 'list://WS%:Water,SW%:Sewerage'
+    source: pt
+    isMandatory: true
+    searchClause: AND pd.businessservice like $connectionType
   query: |
     -- Use CTE to force query plan, compute & use CTE later
     SELECT 
@@ -735,7 +783,7 @@ ReportDefinitions:
         INNER join egcl_payment as payment on pd.paymentid=payment.id
         INNER JOIN egcl_billdetial as bd on pd.billid = bd.billid
         INNER JOIN egcl_billaccountdetail as bad on bad.billdetailid = bd.id
-        where  payment.paymentstatus != 'CANCELLED' and pd.businessservice like 'WS%' and payment.tenantid='pb.amritsar'  
+        where  payment.paymentstatus != 'CANCELLED' and payment.tenantid=$tenantid
   groupby: GROUP BY taxheadcode
   
   
