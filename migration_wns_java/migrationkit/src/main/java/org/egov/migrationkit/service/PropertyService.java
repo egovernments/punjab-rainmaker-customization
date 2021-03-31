@@ -22,6 +22,7 @@ import io.swagger.client.model.Property;
 import io.swagger.client.model.PropertyRequest;
 import io.swagger.client.model.PropertyResponse;
 import io.swagger.client.model.PropertySearchResponse;
+import io.swagger.client.model.Relationship;
 import io.swagger.client.model.RequestInfo;
 import io.swagger.client.model.RequestInfoWrapper;
 import io.swagger.client.model.SewerageConnection;
@@ -127,6 +128,7 @@ public class PropertyService {
 		owner.setOwnerType("NONE");
 		owner.setGender((String)data.get("gender"));
 		owner.setEmailId((String)data.getOrDefault("emailId", null));
+		owner.setRelationship(Relationship.valueOf((String)data.getOrDefault("guardianrelation", "OTHER")));
 
 		property.creationReason(CreationReason.CREATE);
 		// log.info("conn.getPropertyType() :" + conn.getPropertyType());
@@ -221,6 +223,7 @@ public class PropertyService {
 		property.setUsageCategory("RESIDENTIAL");
 		owner.setGender((String)json.get("gender"));
 		owner.setEmailId((String)json.getOrDefault("emailId", null));
+		owner.setRelationship(Relationship.valueOf((String)json.getOrDefault("guardianrelation", "OTHER")));
 
 
 		List<OwnerInfo> owners = new ArrayList<>();
