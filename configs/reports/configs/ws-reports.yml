@@ -161,6 +161,13 @@ ReportDefinitions:
     source: pt
     isMandatory: true
     searchClause: AND pd.receiptdate <= $toDate
+  - name: connectionType
+    label: connectionType
+    type: singlevaluelist
+    pattern: 'list://Water:WS%,Sewerage:SW%'
+    source: pt
+    isMandatory: false
+    searchClause: AND pd.businessservice like $paymentMode
   query: |
     -- Use CTE to force query plan, compute & use CTE later
     WITH receipt_breakup AS 
@@ -185,7 +192,7 @@ ReportDefinitions:
         INNER JOIN egcl_billdetial as bd on bd.id = bad.billdetailid
         INNER JOIN egcl_paymentdetail as pd on pd.billid = bd.billid
         INNER JOIN egcl_payment as payment on pd.paymentid=payment.id
-        WHERE payment.tenantid = $tenantid and payment.paymentstatus != 'CANCELLED' and  pd.businessservice like 'SW%'
+        WHERE payment.tenantid = $tenantid and payment.paymentstatus != 'CANCELLED' 
         group by pdid
     )
     SELECT
