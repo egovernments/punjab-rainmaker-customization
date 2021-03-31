@@ -4837,13 +4837,12 @@ ReportDefinitions:
     searchClause: AND 1=1
   query: |
    --S.no    Service Name	ULB    Property Tax Unique ID    Date Of Transcation    Receipt Number	Existing Property ID    Type Of Property	Mobile Number   	Address
-    select mobilenumber as mobileno,name as ownername from eg_user 
+    select mobilenumber,name from eg_user 
     where uuid in (select userid from eg_pt_owner where propertyid in
-    (select id from eg_pt_property where status='ACTIVE' and tenantid=$ulb and propertyid in 
-             (select consumercode from egcl_bill where id in 
-                   (select billid from egcl_billdetial where fromperiod='1554076800000' and toperiod='1585699199000' and tenantid=$ulb) 
-                   and id not in (select billid from egcl_billdetial where fromperiod='1585699200000' and toperiod='1617235199000' and tenantid=$ulb) 
-                   )))
+    (select id from eg_pt_property where status='ACTIVE' and tenantid=$ulb 
+    and propertyid in (select consumercode from egcl_bill where id in (select billid from egcl_billdetial where fromperiod=1554076800000 and toperiod=1585699199000 and tenantid=$ulb and amountpaid>100000) and businessservice='PT')
+    and propertyid not in (select consumercode from egcl_bill where id in (select billid from egcl_billdetial where fromperiod=1585699200000 and toperiod=1617215399000 and tenantid=$ulb ) and businessservice='PT')
+    ))
         
 - reportName: ZoneFYReport_V2
   summary: Zone FY Collection
