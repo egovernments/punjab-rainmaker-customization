@@ -343,7 +343,8 @@ public class RecordService {
 	
 	public List<LocalDocument> getAllWSFilesByTenantId(String tenantId) {
 		List<LocalDocument> documents = new ArrayList<>();
-		jdbcTemplate.execute("set search_path to " + tenantId+"_prod");
+		jdbcTemplate.execute("set search_path to " + tenantId+"");
+	
 		String query = null;
 		jdbcTemplate.execute(Sqls.WATER_DOCUMENTS_TABLE);
 		query = Sqls.ALL_WATER_DOCUMENTS_QUERY;
@@ -357,7 +358,7 @@ public class RecordService {
 	
 	public List<LocalDocument> getAllSWFilesByTenantId(String tenantId) {
 		List<LocalDocument> documents = new ArrayList<>();
-		jdbcTemplate.execute("set search_path to " + tenantId+"_prod");
+		jdbcTemplate.execute("set search_path to " + tenantId+"");
 		String query = null;
 		jdbcTemplate.execute(Sqls.SEWERAGE_DOCUMENTS_TABLE);
 		query = Sqls.ALL_SEWERAGE_DOCUMENTS_QUERY;
@@ -368,8 +369,9 @@ public class RecordService {
 		documents = jdbcTemplate.query(query, new SWDocumentRowmapper());
 		return documents;
 	}
-	public String getCityCodeByName(final String city) {
-		return jdbcTemplate.queryForObject("select code from eg_city where lower(name)='" + city + "'", String.class);
+	public String getCityCodeByName(final String erpTenant) {
+		jdbcTemplate.execute("set search_path to " + erpTenant+"");
+		return jdbcTemplate.queryForObject("select code from eg_city limit 1 ", String.class);
 	}
 
 	public void saveMigratedFilestoreDetails(String module, String erpFileStore, String digitFileStore,

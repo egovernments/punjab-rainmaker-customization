@@ -12,6 +12,7 @@ import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.swagger.client.model.Channel;
@@ -148,31 +149,40 @@ public class PropertyService {
 		// String response2= restTemplate.postForObject(host + "/" +
 		// ptcreatehurl, prequest, String.class);
 
-		PropertyResponse res = restTemplate.postForObject(host + "/" + ptcreatehurl, prequest, PropertyResponse.class);
+		try {
+			PropertyResponse res = restTemplate.postForObject(host + "/" + ptcreatehurl, prequest, PropertyResponse.class);
 
-		// log.info(res.getProperties().get(0).getSource() +"
-		// "+res.getProperties().get(0).getAcknowldgementNumber());
-		// return res.getProperties().get(0);
-		Thread.sleep(2000);
-		Property property2 = res.getProperties().get(0);
-		
-		property2 =  searchPropertyAfterCreate(conn.getTenantId(), property2.getPropertyId(), wcr.getRequestInfo(), property2);
-		
-		
-		property2.setSource(Source.WATER_CHARGES);
-		ProcessInstance workflow = new ProcessInstance();
-		workflow.setBusinessService("PT.CREATEWITHWNS");
-		workflow.setAction("SUBMIT");
-		workflow.setTenantId(conn.getTenantId());
-		workflow.setModuleName("PT");
-		workflow.setBusinessId(property2.getPropertyId());
-		property2.setWorkflow(workflow);
-		prequest.setProperty(property2);
-		PropertyResponse res2 = restTemplate.postForObject(host + "/" + ptupdatehurl, prequest, PropertyResponse.class);
-		log.info("newly created pt" + res2.getProperties().get(0).getPropertyId() + " id    "
-				+ res2.getProperties().get(0).getStatus());
-		return res2.getProperties().get(0);
-
+ 
+			// log.info(res.getProperties().get(0).getSource() +"
+			// "+res.getProperties().get(0).getAcknowldgementNumber());
+			// return res.getProperties().get(0);
+			Thread.sleep(2000);
+			Property property2 = res.getProperties().get(0);
+			property2.setSource(Source.WATER_CHARGES);
+			ProcessInstance workflow = new ProcessInstance();
+			workflow.setBusinessService("PT.CREATEWITHWNS");
+			workflow.setAction("SUBMIT");
+			workflow.setTenantId(conn.getTenantId());
+			workflow.setModuleName("PT");
+			workflow.setBusinessId(property2.getPropertyId());
+			property2.setWorkflow(workflow);
+			prequest.setProperty(property2);
+			PropertyResponse res2 = restTemplate.postForObject(host + "/" + ptupdatehurl, prequest, PropertyResponse.class);
+			log.info("newly created pt" + res2.getProperties().get(0).getPropertyId() + " id    "
+					+ res2.getProperties().get(0).getStatus());
+			return res2.getProperties().get(0);
+		} catch (RestClientException e) {
+			recordService.recordError("water", tenantId, e.getMessage(), conn.getId());
+			try {
+				String ptrequest=objectMapper.writeValueAsString(prequest);
+				log.error("failed request " +ptrequest);
+			} catch (JsonProcessingException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		}
+		return null;
+ 
 	}
 
 	private Property createSWProperty(SewerageConnectionRequest swg, Map json, String tenantId) throws InterruptedException {
@@ -254,6 +264,13 @@ public class PropertyService {
 			return res2.getProperties().get(0);
 		} catch (RestClientException e) {
 			recordService.recordError("sewerage", tenantId, e.getMessage(), conn.getId());
+			try {
+				String ptrequest=objectMapper.writeValueAsString(prequest);
+				log.error("failed request " +ptrequest);
+			} catch (JsonProcessingException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 		}
 
 		return null;
@@ -323,7 +340,7 @@ public class PropertyService {
 		pr.setRequestInfo(conn.getRequestInfo());
 
 		String ptseachurlStr = ptseachurl + "?tenantId=" + conn.getRequestInfo().getUserInfo().getTenantId()
-				+ "&mobileNumber=" + conn.getSewerageConnection().getMobilenumber() + "&applicantName="
+				+ "&mobileNumber=" + conn.getSewerageConnection().getMobilenumber() + "&name="
 				+ conn.getSewerageConnection().getApplicantname();
 
 		PropertySearchResponse response = restTemplate.postForObject(host + "/" + ptseachurlStr, pr,

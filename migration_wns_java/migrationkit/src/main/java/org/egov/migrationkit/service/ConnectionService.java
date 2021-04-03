@@ -411,6 +411,7 @@ public class ConnectionService {
 				Map data = objectMapper.readValue(json, Map.class);
 				swConnection = objectMapper.readValue(json, SewerageConnection.class);
 				swConnection.setTenantId(requestInfo.getUserInfo().getTenantId());
+				swConnection.setConnectionType("Non Metered");
 
 				String connectionNo = swConnection.getConnectionNo() != null ? swConnection.getConnectionNo()
 						: (String) data.get("applicationnumber");

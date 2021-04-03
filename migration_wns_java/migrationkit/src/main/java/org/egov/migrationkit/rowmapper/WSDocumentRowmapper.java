@@ -10,7 +10,8 @@ import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.stereotype.Component;
 
 import io.swagger.client.model.LocalDocument;
-
+import lombok.extern.slf4j.Slf4j;
+@Slf4j
 @Component
 public class WSDocumentRowmapper implements ResultSetExtractor<List<LocalDocument>> {
 
@@ -29,6 +30,8 @@ public class WSDocumentRowmapper implements ResultSetExtractor<List<LocalDocumen
 			documentList.add(document);
 		}
 
+		 
+		log.info("from row mapper got records"+documentList.size());
 		return documentList;
 	}
 }

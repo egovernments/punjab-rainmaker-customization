@@ -36,16 +36,22 @@ public class DocumentService {
 	@Autowired
 	private FileUploadService fileUploadService;
 
-	public void migrateWtrDocuments(String city, RequestInfo requestInfo) {
+	public void migrateWtrDocuments(String erpTenant, RequestInfo requestInfo) {
+		log.info("Beginging document migration");
 		List<DocumentDetails> uploadedDocuments = new ArrayList<>();
-		List<LocalDocument> allDocs = recordService.getAllWSFilesByTenantId(city);
-		String cityCode = recordService.getCityCodeByName(city);
+		List<LocalDocument> allDocs = recordService.getAllWSFilesByTenantId(erpTenant);
+		if(allDocs!=null && !allDocs.isEmpty() )
+			log.info("got "+allDocs.size());
+		else
+		   log.info("Documents not found");
+		String cityCode = recordService.getCityCodeByName(erpTenant);
 		for (LocalDocument document : allDocs) {
 			List<DocumentDetails> documents = fileUploadService.uploadImages(document, MODULE_NAME_WATER, cityCode,
-					city);
+					erpTenant,requestInfo.getUserInfo().getTenantId());
 			uploadedDocuments.addAll(documents);
 		}
-		String wsUrl = host + "/ws-services/wc/documents/_create?tenantId=pb." + city;
+		String digitTenant=requestInfo.getUserInfo().getTenantId();
+		String wsUrl = host + "/ws-services/wc/documents/_create?tenantId="+digitTenant;
 		if(!uploadedDocuments.isEmpty())
 		storeFileStoreIds(uploadedDocuments,wsUrl, requestInfo);
 
@@ -57,7 +63,7 @@ public class DocumentService {
 		String cityCode = recordService.getCityCodeByName(city);
 		for (LocalDocument document : allDocs) {
 			List<DocumentDetails> documents = fileUploadService.uploadImages(document,"sewerage", cityCode,
-					city);
+					city,requestInfo.getUserInfo().getTenantId());
 			uploadedDocuments.addAll(documents);
 		}
 		String swUrl = host + "/sw-services/swc/documents/_create?tenantId=pb." + city;
