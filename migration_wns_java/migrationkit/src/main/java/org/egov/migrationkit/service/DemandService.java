@@ -58,7 +58,20 @@ public class DemandService {
 		for (Map dcbData : dcbDataList) {
 			
 			String taxHeadMaster = WSConstants.TAX_HEAD_MAP.get((String)dcbData.get("demand_reason"));
-			DemandDetail dd = DemandDetail.builder()
+			DemandDetail dd = null;
+			if(taxHeadMaster.matches("(.*)ADVANCE(.*)")) {
+				dd = DemandDetail.builder()
+					.taxAmount(BigDecimal.valueOf((Integer)dcbData.get("collected_amount")).negate())
+					.taxHeadMasterCode(taxHeadMaster)
+					.collectionAmount(BigDecimal.ZERO)
+					.amountPaid(BigDecimal.valueOf((Integer)dcbData.get("collected_amount")))
+					.fromDate(WSConstants.TIME_PERIOD_MAP.get((String)dcbData.get("from_date")))
+					.toDate(WSConstants.TIME_PERIOD_MAP.get((String)dcbData.get("to_date")))
+					.tenantId(tenantId)
+					.build();
+				
+			} else { 
+				dd = DemandDetail.builder()
 					.taxAmount(BigDecimal.valueOf((Integer)dcbData.get("amount")))
 					.taxHeadMasterCode(taxHeadMaster)
 					.collectionAmount(BigDecimal.valueOf((Integer)dcbData.get("collected_amount")))
@@ -67,6 +80,7 @@ public class DemandService {
 					.toDate(WSConstants.TIME_PERIOD_MAP.get((String)dcbData.get("to_date")))
 					.tenantId(tenantId)
 					.build();
+			}
 		
 			
 /*			log.info("from db :"+(String)dcbData.get("demand_reason") +"   @taxHeadMaster " +taxHeadMaster);
