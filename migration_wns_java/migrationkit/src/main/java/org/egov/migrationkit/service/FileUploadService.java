@@ -12,7 +12,6 @@ import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -63,9 +62,10 @@ public class FileUploadService {
 
 	}
 	
-	public List<DocumentDetails> uploadImages(LocalDocument document,String module,String cityCode,String city)  {
+	public List<DocumentDetails> uploadImages(LocalDocument document,String module,String cityCode,String city,String digitTenant)  {
+	log.info("Starting upload........");
 		List<DocumentDetails> docs=new ArrayList<>();
-		final String tenantId="pb."+city;
+		final String tenantId=digitTenant;
 		try {
 			HttpHeaders headers = new HttpHeaders();
 		    //String fileStoreId="0a5b93d4-9eaa-4605-aaf1-970026ec3606";
@@ -84,25 +84,26 @@ public class FileUploadService {
 			String newPath = nfsLocation+"/"+cityCode+"/"+moduleName+"/" + newName;
             file.renameTo(new File(newPath));
 			
-            log.info(String.format("Uploaded file   %s   with size  %s " ,file.getName() , file.length()));
+            log.info(String.format("to be uploaded file   %s   with size  %s " ,file.getName() , file.length()));
 			
 			headers.setContentType(MediaType.MULTIPART_FORM_DATA);
 			headers.set("boundary", "----WebKitFormBoundaryEcfz5dm0NVcJ1Jrx34");
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			map.add("file", new FileSystemResource(newPath));
-			map.add("tenantId", tenantId);  
-			map.add("module", moduleName);
+			map.add("tenantId", "pb");  
+			map.add("module", "undefined");
 			HttpEntity<MultiValueMap<String, Object>> request = new HttpEntity<MultiValueMap<String, Object>>(map,
 					headers);
 			
 			String url = host+"/filestore/v1/files";
-			   ResponseEntity<StorageResponse> result  = restTemplate.postForEntity(url, request, StorageResponse.class);  
+			StorageResponse result  = restTemplate.postForObject(url, request, StorageResponse.class);  
+			// String result  = restTemplate.postForObject(url, request, String.class);   
 			log.info(result.toString());
 
-			log.info("FilestoreID: " + result.getBody().getFiles().get(0).getFileStoreId());
-			String newFileStore = result.getBody().getFiles().get(0).getFileStoreId();
+		    log.info("FilestoreID: " + result.getFiles().get(0).getFileStoreId());
+			String newFileStore = result.getFiles().get(0).getFileStoreId();
 			DocumentDetails doc = new DocumentDetails();
-			doc.setFileStoreId(result.getBody().getFiles().get(0).getFileStoreId());
+			doc.setFileStoreId(result.getFiles().get(0).getFileStoreId());
 			doc.setConnectionNo(document.getConnectionNo());
 			doc.setDocumentType(documentMap.get(document.getDocumentname()) == null ? document.getDocumentname()
 					: documentMap.get(document.getDocumentname()));
@@ -111,10 +112,11 @@ public class FileUploadService {
 
 			recordService.saveMigratedFilestoreDetails(module,document.getFilestoreid(), newFileStore,
 					document.getConnectionNo(), true, null, tenantId);
+			log.info("completed migration for "+document.getConnectionNo());	
 		} catch (RestClientException e) {
 			e.printStackTrace();
-			recordService.saveMigratedFilestoreDetails(module,document.getFilestoreid(), null, document.getConnectionNo(),
-					false, e.getMessage(), tenantId);
+		/*	recordService.saveMigratedFilestoreDetails(module,document.getFilestoreid(), null, document.getConnectionNo(),
+					false, e.getMessage(), tenantId);*/
 
 		}
 		return docs;

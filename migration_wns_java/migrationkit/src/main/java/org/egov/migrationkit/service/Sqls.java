@@ -80,7 +80,7 @@ public class Sqls {
 	public static final String WATER_MIGRATION_UPDATE = "update  :schema.egwtr_migration  "
 			+ "set digitconn=:digitconn , digitpt=:digitpt,status=:status where erpid=:erpid ";
 
-	public static final String GET_ADDRESS = "select id,housenobldgapt as plotno,landmark,citytownvillage as city,district,arealocalitysector as street,state,country,pincode, buildingName,streetroadline as region from :schema_tenantId.eg_address where id=:id ;";
+	public static final String GET_ADDRESS = "select id,housenobldgapt as plotno,landmark,citytownvillage as city,district,arealocalitysector as region,state,country,pincode, buildingName,streetroadline as street from :schema_tenantId.eg_address where id=:id ;";
 
 	public static final String WATER_COLLECTION_MIGRATION_TABLE = "create table  if not exists  egwtr_cl_migration(erpreceiptnumber varchar(64),erpconn varchar(64) ,digitreceiptnumber varchar(64) ,erppt varchar(64),digitpt varchar(64),status varchar(64),tenantId varchar(64),additiondetails varchar(1000),errorMessage varchar(4000) );";
 
@@ -118,7 +118,7 @@ public class Sqls {
 			+ "'cityname', (SELECT CASE WHEN name like '%UAT%' THEN (SELECT split_part(name,'-',1) from eg_city) ELSE (select name from eg_city) END from eg_city),\n"
 			+ "'zone', zone.name,\n" + "'cityCode', (select code from eg_city),\n"
 			+ "'connectionNo', conn.shsc_number,\n" + "'id', conndetails.id,\n" + "'applicantname', usr.name,\n"
-			+ " 'emailId',	 usr.emailid, 'gender', ( SELECT CASE WHEN usr.gender = 0 THEN 'FEMALE' WHEN usr.gender = 1 THEN 'MALE' ELSE 'OTHERS' END ),\n"
+			+ "'gender', ( SELECT CASE WHEN usr.gender = 0 THEN 'FEMALE' WHEN usr.gender = 1 THEN 'MALE' ELSE 'OTHERS' END ),\n"
 			+ "'connectionstatus', conn.status,\n"
 			+ "'createddate', to_timestamp(to_char(conn.createddate::timestamp without time zone, 'YYYY-MM-DD'),'YYYY-MM-DDTHH24:MI:SSZ'),\n"
 			+ "'servicetype', 'Sewerage Charges',\n"
