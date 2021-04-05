@@ -2320,7 +2320,7 @@ ReportDefinitions:
     type: boundarylist
     source: tl
     isMandatory: false
-    searchClause: AND localitycode IN ($localityArray)
+    searchClause: AND eg_tl_address.locality IN ($localityArray)
   query: |
       SELECT 
         tl.applicationnumber as applicationnumber,
