@@ -15,112 +15,102 @@ package io.swagger.client.model;
 import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 /**
  * Info of the API being called
  */
+
+@Data
 public class ApiInfo {
-  @JsonProperty("id")
-  private String id = null;
+	@JsonProperty("id")
+	private String id = null;
 
-  @JsonProperty("version")
-  private String version = null;
+	@JsonProperty("version")
+	private String version = null;
 
-  @JsonProperty("path")
-  private String path = null;
+	@JsonProperty("path")
+	private String path = null;
 
-  public ApiInfo id(String id) {
-    this.id = id;
-    return this;
-  }
+	public ApiInfo id(String id) {
+		this.id = id;
+		return this;
+	}
 
-   /**
-   * The id of the API being called
-   * @return id
-  **/
-  public String getId() {
-    return id;
-  }
+	public ApiInfo version(String version) {
+		this.version = version;
+		return this;
+	}
 
-  public void setId(String id) {
-    this.id = id;
-  }
+	public ApiInfo path(String path) {
+		this.path = path;
+		return this;
+	}
 
-  public ApiInfo version(String version) {
-    this.version = version;
-    return this;
-  }
+	/*
+	
+	 *//**
+		 * The id of the API being called
+		 * 
+		 * @return id
+		 **/
+	/*
+	 * public String getId() { return id; }
+	 * 
+	 * public void setId(String id) { this.id = id; }
+	 * 
+	 * 
+	 * 
+	 * 
+	 *//**
+		 * The version of the API
+		 * 
+		 * @return version
+		 **/
+	/*
+	 * public String getVersion() { return version; }
+	 * 
+	 * public void setVersion(String version) { this.version = version; }
+	 * 
+	 *//**
+		 * The URI of the API
+		 * 
+		 * @return path
+		 **//*
+			 * public String getPath() { return path; }
+			 * 
+			 * public void setPath(String path) { this.path = path; }
+			 * 
+			 * 
+			 * @Override public boolean equals(java.lang.Object o) { if (this == o) { return
+			 * true; } if (o == null || getClass() != o.getClass()) { return false; }
+			 * ApiInfo apiInfo = (ApiInfo) o; return Objects.equals(this.id, apiInfo.id) &&
+			 * Objects.equals(this.version, apiInfo.version) && Objects.equals(this.path,
+			 * apiInfo.path); }
+			 * 
+			 * @Override public int hashCode() { return Objects.hash(id, version, path); }
+			 * 
+			 * 
+			 * @Override public String toString() { StringBuilder sb = new StringBuilder();
+			 * sb.append("class ApiInfo {\n");
+			 * 
+			 * sb.append("    id: ").append(toIndentedString(id)).append("\n");
+			 * sb.append("    version: ").append(toIndentedString(version)).append("\n");
+			 * sb.append("    path: ").append(toIndentedString(path)).append("\n");
+			 * sb.append("}"); return sb.toString(); }
+			 */
 
-   /**
-   * The version of the API
-   * @return version
-  **/
-  public String getVersion() {
-    return version;
-  }
-
-  public void setVersion(String version) {
-    this.version = version;
-  }
-
-  public ApiInfo path(String path) {
-    this.path = path;
-    return this;
-  }
-
-   /**
-   * The URI of the API
-   * @return path
-  **/
-  public String getPath() {
-    return path;
-  }
-
-  public void setPath(String path) {
-    this.path = path;
-  }
-
-
-  @Override
-  public boolean equals(java.lang.Object o) {
-    if (this == o) {
-      return true;
-    }
-    if (o == null || getClass() != o.getClass()) {
-      return false;
-    }
-    ApiInfo apiInfo = (ApiInfo) o;
-    return Objects.equals(this.id, apiInfo.id) &&
-        Objects.equals(this.version, apiInfo.version) &&
-        Objects.equals(this.path, apiInfo.path);
-  }
-
-  @Override
-  public int hashCode() {
-    return Objects.hash(id, version, path);
-  }
-
-
-  @Override
-  public String toString() {
-    StringBuilder sb = new StringBuilder();
-    sb.append("class ApiInfo {\n");
-    
-    sb.append("    id: ").append(toIndentedString(id)).append("\n");
-    sb.append("    version: ").append(toIndentedString(version)).append("\n");
-    sb.append("    path: ").append(toIndentedString(path)).append("\n");
-    sb.append("}");
-    return sb.toString();
-  }
-
-  /**
-   * Convert the given object to string with each line indented by 4 spaces
-   * (except the first line).
-   */
-  private String toIndentedString(java.lang.Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
-  }
+	/**
+	 * Convert the given object to string with each line indented by 4 spaces
+	 * (except the first line).
+	 */
+	private String toIndentedString(java.lang.Object o) {
+		if (o == null) {
+			return "null";
+		}
+		return o.toString().replace("\n", "\n    ");
+	}
 
 }

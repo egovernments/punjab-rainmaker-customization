@@ -26,6 +26,12 @@ public class WSConstants {
     
     public static final String SEWERAGE_BUSINESS_SERVICE="SW";
     
+    public static final String CONNECTION_ACTIVATED="CA";
+    
+    public static final String NEW_WATER_CONNECTION= "NWC";
+    
+    public static final String NEW_SEWERAGE_CONNECTION="NSC";
+    
     public static final List<String> ONE_TIME_TAX_HEAD_MASTERS = Collections.unmodifiableList(
     		Arrays.asList("WS_OTHER_FEE", "WS_ROAD_CUTTING_CHARGE", "WS_FORM_FEE", "WS_SECURITY_DEPOSIT"));
     

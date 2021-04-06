@@ -184,25 +184,51 @@ public class ConnectionService {
 				}
 				connection.setPropertyId(property.getId());
 				roadCategoryList = (List<Map>) data.get("road_category");
+				/*
+				 * if (roadCategoryList != null) { String roadCategory = (String)
+				 * roadCategoryList.get(0).get("road_name");
+				 * connection.setRoadType(WSConstants.DIGIT_ROAD_CATEGORIES.get(roadCategory));
+				 * try { area = (Integer) roadCategoryList.get(0).get("road_area");
+				 * 
+				 * connection.setRoadCuttingArea(Double.valueOf(area)); } catch (Exception e) {
+				 * areaDouble = (Double) roadCategoryList.get(0).get("road_area");
+				 * connection.setRoadCuttingArea(areaDouble); }
+				 * 
+				 * }
+				 */
+				
 				if (roadCategoryList != null) {
 					String roadCategory = (String) roadCategoryList.get(0).get("road_name");
 					connection.setRoadType(WSConstants.DIGIT_ROAD_CATEGORIES.get(roadCategory));
-					try {
+					
+					Object areaObject= roadCategoryList.get(0).get("road_area");
+					
+					if(areaObject instanceof Integer) {
 						area = (Integer) roadCategoryList.get(0).get("road_area");
 
 						connection.setRoadCuttingArea(Double.valueOf(area));
-					} catch (Exception e) {
+					} else if (areaObject instanceof Double) {
+						
+					
 						areaDouble = (Double) roadCategoryList.get(0).get("road_area");
 						connection.setRoadCuttingArea(areaDouble);
+					}else {
+						areaDouble = 0d;
 					}
 
 				}
-
+				
+				
 				connection.setStatus(StatusEnum.Active);
 
-				connection.setApplicationStatus("CONNECTION_ACTIVATED");
+				//connection.setApplicationStatus("CONNECTION_ACTIVATED");
+				
+				connection.setApplicationStatus(WSConstants.CONNECTION_ACTIVATED);
 
-				connection.setApplicationType("NEW_WATER_CONNECTION");
+
+				//connection.setApplicationType("NEW_WATER_CONNECTION");
+				
+				connection.setApplicationType(WSConstants.NEW_WATER_CONNECTION);
 
 				ProcessInstance workflow = new ProcessInstance();
 				workflow.setBusinessService("NewWS1");
@@ -240,6 +266,7 @@ public class ConnectionService {
 					}
 				} else
 					addtionals.put("averageMeterReading", 0);
+				
 				if (data.get("initialMeterReading") != null) {
 					try {
 						Integer initialMeterReading = (Integer) data.get("initialMeterReading");
@@ -411,7 +438,6 @@ public class ConnectionService {
 				Map data = objectMapper.readValue(json, Map.class);
 				swConnection = objectMapper.readValue(json, SewerageConnection.class);
 				swConnection.setTenantId(requestInfo.getUserInfo().getTenantId());
-				swConnection.setConnectionType("Non Metered");
 
 				String connectionNo = swConnection.getConnectionNo() != null ? swConnection.getConnectionNo()
 						: (String) data.get("applicationnumber");
@@ -530,9 +556,9 @@ public class ConnectionService {
 				
 				swConnection.setStatus(StatusEnum.Active);
 
-				swConnection.setApplicationStatus("CONNECTION_ACTIVATED");
+				swConnection.setApplicationStatus(WSConstants.CONNECTION_ACTIVATED);
 
-				swConnection.setApplicationType("NEW_SEWERAGE_CONNECTION");
+				swConnection.setApplicationType(WSConstants.NEW_SEWERAGE_CONNECTION);
 
 				ProcessInstance workflow = new ProcessInstance();
 				workflow.setBusinessService("NewSW1");
