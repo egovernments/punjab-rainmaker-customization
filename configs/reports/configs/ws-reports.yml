@@ -789,4 +789,53 @@ ReportDefinitions:
   groupby: GROUP BY taxheadcode
   
   
-  
+- reportName: ArrearReport
+  summary: Arrear Report
+  version: 1.0.0
+  moduleName: rainmaker-ws
+  additionalConfig:
+    print:
+      pdfPageSize: "A1"
+  sourceColumns:
+  - name: consumercode
+    label: reports.ws.consumercode
+    type: string
+    source: ws
+    total: false
+  - name: totalamount
+    label: reports.ws.totalamount
+    type: string
+    source: ws
+    total: true
+  - name: amountpaid
+    label: reports.ws.amountpaid
+    type: string
+    source: ws
+    total: true
+  - name: dueamount
+    label: reports.ws.dueamount
+    type: string
+    source: ws
+    total: true
+  searchParams:
+  - name: connectionType
+    label: connectionType
+    type: singlevaluelist
+    pattern: 'list://WS%:Water,SW%:Sewerage'
+    source: pt
+    isMandatory: true
+    searchClause: AND businessservice like $connectionType
+  query: |
+    -- Use CTE to force query plan, compute & use CTE later
+    with demands as
+    (
+      select demandid,sum(taxamount) as amount,sum(collectionamount) as collection,sum(taxamount-collectionamount) as arrear 
+      from egbs_demanddetail_v1 where tenantid=$tenantid
+      group by demandid
+      having sum(taxamount-collectionamount)>0
+    )
+    select consumercode,sum(amount) as totalamount,sum(collection) as amountpaid,sum(arrear) as dueamount 
+    from egbs_demand_v1 d 
+    inner join demands on demands.demandid=d.id  and status='ACTIVE'
+    where tenantid=$tenantid
+  groupby: group by consumercode
