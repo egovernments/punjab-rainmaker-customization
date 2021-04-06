@@ -35,27 +35,29 @@ public class RecordService {
 	public boolean recordWaterMigration(WaterConnection conn, String tenantId) {
 		String checkQuery = Sqls.WATER_MIGRATION_SELECT;
 		checkQuery = checkQuery.replace(":schema", tenantId);
-		checkQuery = checkQuery.replace(":status", "'Saved'");
+//		checkQuery = checkQuery.replace(":status", "'Saved'");
 		checkQuery = checkQuery.replace(":erpconn", "'" + conn.getConnectionNo() + "'");
 		checkQuery = checkQuery.replace(":erpid", "'" + conn.getId() + "'");
 
-		int size = jdbcTemplate.queryForObject(checkQuery, Integer.class);
-
-		if(size >= 1)
-			return Boolean.TRUE;
-
-		String qry = Sqls.WATER_MIGRATION_INSERT;
-		qry = qry.replace(":schema", tenantId);
-		qry = qry.replace(":erpid", "'" + conn.getId() + "'");
-		qry = qry.replace(":erpconn", "'" + conn.getConnectionNo() + "'");
-		qry = qry.replace(":erppt", "'" + conn.getPropertyId() + "'");
-		qry = qry.replace(":status", "'initiated'");
-		qry = qry.replace(":tenantId", "'" + conn.getTenantId() + "'");
-		qry = qry.replace(":digitconn", "'null'");
-		qry = qry.replace(":digitpt", "'null'");
-		qry = qry.replace(":addtionaldetails", "'null'");
-		jdbcTemplate.execute(qry);
-		
+		String status = jdbcTemplate.queryForObject(checkQuery, String.class);
+		if(status != null && status.equalsIgnoreCase("Saved")) {
+			return  Boolean.TRUE;
+			
+		} else if (status == null) {
+			String qry = Sqls.WATER_MIGRATION_INSERT;
+			qry = qry.replace(":schema", tenantId);
+			qry = qry.replace(":erpid", "'" + conn.getId() + "'");
+			qry = qry.replace(":erpconn", "'" + conn.getConnectionNo() + "'");
+			qry = qry.replace(":erppt", "'" + conn.getPropertyId() + "'");
+			qry = qry.replace(":status", "'initiated'");
+			qry = qry.replace(":tenantId", "'" + conn.getTenantId() + "'");
+			qry = qry.replace(":digitconn", "'null'");
+			qry = qry.replace(":digitpt", "'null'");
+			qry = qry.replace(":addtionaldetails", "'null'");
+			jdbcTemplate.execute(qry);
+			return Boolean.FALSE;
+			
+		}		
 		return Boolean.FALSE;
 
 	}
@@ -126,26 +128,28 @@ public class RecordService {
 		
 		String checkQuery = Sqls.SEWERAGE_MIGRATION_SELECT;
 		checkQuery = checkQuery.replace(":schema_tenantId", tenantId);
-		checkQuery = checkQuery.replace(":status", "'Saved'");
+//		checkQuery = checkQuery.replace(":status", "'Saved'");
 		checkQuery = checkQuery.replace(":erpconn", "'" + conn.getConnectionNo() + "'");
 		checkQuery = checkQuery.replace(":erpid", "'" + conn.getId() + "'");
 
-		int size = jdbcTemplate.queryForObject(checkQuery, Integer.class);
+		String status = jdbcTemplate.queryForObject(checkQuery, String.class);
 
-		if(size >= 1)
-			return Boolean.TRUE;
+		if(status != null && status.equalsIgnoreCase("Saved")) {
+			return  Boolean.TRUE;
+		} else if (status == null) {
 
-		String qry = Sqls.SEWERAGE_MIGRATION_INSERT;
-		qry = qry.replace(":schema_tenantId", tenantId);
-		qry = qry.replace(":erpid", "'" + conn.getId() + "'");
-		qry = qry.replace(":erpconn", "'" + conn.getConnectionNo() + "'");
-		qry = qry.replace(":erppt", "'" + conn.getPropertyId() + "'");
-		qry = qry.replace(":status", "'initiated'");
-		qry = qry.replace(":tenantId", "'" + conn.getTenantId() + "'");
-		qry = qry.replace(":digitconn", "'null'");
-		qry = qry.replace(":digitpt", "'null'");
-		qry = qry.replace(":addtionaldetails", "'null'");
-		jdbcTemplate.execute(qry);
+			String qry = Sqls.SEWERAGE_MIGRATION_INSERT;
+			qry = qry.replace(":schema_tenantId", tenantId);
+			qry = qry.replace(":erpid", "'" + conn.getId() + "'");
+			qry = qry.replace(":erpconn", "'" + conn.getConnectionNo() + "'");
+			qry = qry.replace(":erppt", "'" + conn.getPropertyId() + "'");
+			qry = qry.replace(":status", "'initiated'");
+			qry = qry.replace(":tenantId", "'" + conn.getTenantId() + "'");
+			qry = qry.replace(":digitconn", "'null'");
+			qry = qry.replace(":digitpt", "'null'");
+			qry = qry.replace(":addtionaldetails", "'null'");
+			jdbcTemplate.execute(qry);
+		}
 		
 		return Boolean.FALSE;
 

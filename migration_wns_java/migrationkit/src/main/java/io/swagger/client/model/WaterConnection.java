@@ -19,10 +19,10 @@ import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.experimental.SuperBuilder;
 
 /**
  * WaterConnection
@@ -31,7 +31,7 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @AllArgsConstructor
 @Setter
-@SuperBuilder
+@Builder
 public class WaterConnection extends Connection {
 	@JsonProperty("rainWaterHarvesting")
 	private Boolean rainWaterHarvesting = null;

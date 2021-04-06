@@ -19,21 +19,20 @@ import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.experimental.SuperBuilder;
 
 /**
  * This is lightweight property object that can be used as reference by
  * definitions needing property linking. Actual Property Object extends this to
  * include more elaborate attributes of the property.
  */
-@Getter
 @NoArgsConstructor
 @AllArgsConstructor
+@Getter
 @Setter
-@SuperBuilder
 public class Connection {
 	@JsonProperty("id")
 	private String id = null;
@@ -90,11 +89,8 @@ public class Connection {
 	@JsonProperty("plumberInfo")
 	private List<PlumberInfo> plumberInfo = null;
 
-	@JsonProperty("roadType")
-	private String roadType = null;
-
-	@JsonProperty("roadCuttingArea")
-	private Double roadCuttingArea = null;
+	@JsonProperty("roadCuttingInfo")	
+	private List<RoadCuttingInfo> roadCuttingInfo = null;
 
 	@JsonProperty("connectionExecutionDate")
 	private Long connectionExecutionDate = null;
@@ -266,31 +262,6 @@ public class Connection {
 		this.plumberInfo = plumberInfo;
 	}
 
-	public Connection roadType(String roadType) {
-		this.roadType = roadType;
-		return this;
-	}
-
-	/**
-	 * It is a master data, defined in MDMS. If road cutting is required to
-	 * established the connection then we need to capture the details of road
-	 * type.
-	 * 
-	 * @return roadType
-	 **/
-	public String getRoadType() {
-		return roadType;
-	}
-
-	public void setRoadType(String roadType) {
-		this.roadType = roadType;
-	}
-
-	public Connection roadCuttingArea(Double roadCuttingArea) {
-		this.roadCuttingArea = roadCuttingArea;
-		return this;
-	}
-
 	/**
 	 * Get connectionExecutionDate
 	 * 
@@ -399,8 +370,6 @@ public class Connection {
 				&& Objects.equals(this.oldConnectionNo, connection.oldConnectionNo)
 				&& Objects.equals(this.documents, connection.documents)
 				&& Objects.equals(this.plumberInfo, connection.plumberInfo)
-				&& Objects.equals(this.roadType, connection.roadType)
-				&& Objects.equals(this.roadCuttingArea, connection.roadCuttingArea)
 				&& Objects.equals(this.connectionExecutionDate, connection.connectionExecutionDate)
 				&& Objects.equals(this.connectionCategory, connection.connectionCategory)
 				&& Objects.equals(this.connectionType, connection.connectionType)
@@ -411,7 +380,7 @@ public class Connection {
 	@Override
 	public int hashCode() {
 		return Objects.hash(id, tenantId, propertyId, applicationNo, applicationStatus, status, connectionNo,
-				oldConnectionNo, documents, plumberInfo, roadType, roadCuttingArea, connectionExecutionDate,
+				oldConnectionNo, documents, plumberInfo, connectionExecutionDate,
 				connectionCategory, connectionType, additionalDetails, auditDetails);
 	}
 
@@ -430,8 +399,6 @@ public class Connection {
 		sb.append("    oldConnectionNo: ").append(toIndentedString(oldConnectionNo)).append("\n");
 		sb.append("    documents: ").append(toIndentedString(documents)).append("\n");
 		sb.append("    plumberInfo: ").append(toIndentedString(plumberInfo)).append("\n");
-		sb.append("    roadType: ").append(toIndentedString(roadType)).append("\n");
-		sb.append("    roadCuttingArea: ").append(toIndentedString(roadCuttingArea)).append("\n");
 		sb.append("    connectionExecutionDate: ").append(toIndentedString(connectionExecutionDate)).append("\n");
 		sb.append("    connectionCategory: ").append(toIndentedString(connectionCategory)).append("\n");
 		sb.append("    connectionType: ").append(toIndentedString(connectionType)).append("\n");

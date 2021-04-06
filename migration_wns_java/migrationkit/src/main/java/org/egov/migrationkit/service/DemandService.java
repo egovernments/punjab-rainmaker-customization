@@ -57,7 +57,7 @@ public class DemandService {
 //		dcbDataList
 		for (Map dcbData : dcbDataList) {
 			
-			String taxHeadMaster = WSConstants.TAX_HEAD_MAP.get((String)dcbData.get("demand_reason"));
+			String taxHeadMaster = WSConstants.WS_TAX_HEAD_MAP.get((String)dcbData.getOrDefault("demand_reason", "WS_OTHER_FEE"));
 			DemandDetail dd = null;
 			if(taxHeadMaster.matches("(.*)ADVANCE(.*)")) {
 				dd = DemandDetail.builder()
@@ -172,40 +172,9 @@ public class DemandService {
 
 			recordService.recordError(service,tenantId, e.toString(), erpId);
 			log.error("Error while Saving demands" + e.toString());
-			for(Demand demand:demands )
-			{
-				log.info(demand.getConsumerCode() +""+demand.getBusinessService());
-				for(DemandDetail dd:demand.getDemandDetails())
-				{
-					log.info(dd.getTaxHeadMasterCode());
-					log.info("from date: "+dd.getFromDate());
-					log.info("to date: "+dd.getToDate());
-
-				}
-			}
 		}
 		return isDemandCreated;  
 	}
-    
-//    public Boolean fetchBill(List<Demand> demands, RequestInfo requestInfo) {
-//		for (Demand demand : demands) {
-//			try {
-//
-//				String url = commonService.getFetchBillURL(demand.getTenantId(), demand.getConsumerCode()
-//						, demand.getBusinessService()).toString();
-//				RequestInfoWrapper request = RequestInfoWrapper.builder().requestInfo(requestInfo).build();
-//				
-//				Object result = restTemplate.postForObject(url , request, String.class);
-//				//log.info("Bill Request URL: " + url + "Bill RequestInfo: " + request + "Bill Response: " + result);
-//				
-//			} catch (Exception ex) {
-//				
-//				log.error("Fetch Bill Error", ex);
-//				return Boolean.FALSE;
-//			}
-//		}
-//		return Boolean.TRUE;
-//	}
     
     public List<Demand> prepareSwDemandRequest(Map data, String businessService, String consumerCode, String tenantId, OwnerInfo owner) {
 		
@@ -215,41 +184,52 @@ public class DemandService {
 	
 //	dcbDataList
 	for (Map dcbData : dcbDataList) {
-		String taxHeadMaster="";
-		String taxhead= 		(String)dcbData.get("demand_reason");
-		if(taxhead.contains("PENALTY"))
-			taxHeadMaster="SW_TIME_PENALTY";
-			else
-		 taxHeadMaster = WSConstants.TAX_HEAD_MAP.get(taxhead);
-		DemandDetail dd = DemandDetail.builder()
-				.taxAmount(BigDecimal.valueOf((Integer)dcbData.get("amount")))
-				.taxHeadMasterCode(taxHeadMaster)
-				.collectionAmount(BigDecimal.ZERO)
-				.amountPaid(BigDecimal.valueOf((Integer)dcbData.get("collected_amount")))
-			.fromDate(WSConstants.TIME_PERIOD_MAP.get((String)dcbData.get("from_date")))
-			.toDate(WSConstants.TIME_PERIOD_MAP.get((String)dcbData.get("to_date")))
-//			.fromDate(1554076800000l)
-//			.toDate(1617175799000l)
-				.tenantId(tenantId)  
-				.build();
-	
-	//	log.info("from db :"+(String)dcbData.get("demand_reason") +"  @taxHeadMaster " +taxHeadMaster );
-	//	log.info("from_date" +(String)dcbData.get("from_date") + "  and epoc" +WSConstants.TIME_PERIOD_MAP.get((String)dcbData.get("from_date")));
-	//	log.info("to_date" +(String)dcbData.get("to_date") + "  and epoc" +WSConstants.TIME_PERIOD_MAP.get((String)dcbData.get("to_date")));
+		String taxhead = (String)dcbData.get("demand_reason");
+		String taxHeadMaster = WSConstants.SW_TAX_HEAD_MAP.getOrDefault(taxhead,"SW_OTHER_FEE");
+		DemandDetail dd = null;
+		if(taxHeadMaster.matches("(.*)ADVANCE(.*)")) {
+			dd = DemandDetail.builder()
+					.taxAmount(BigDecimal.valueOf((Integer)dcbData.get("collected_amount")).negate())
+					.taxHeadMasterCode(taxHeadMaster)
+					.collectionAmount(BigDecimal.ZERO)
+					.amountPaid(BigDecimal.valueOf((Integer)dcbData.get("collected_amount")))
+					.fromDate(WSConstants.TIME_PERIOD_MAP.get((String)dcbData.get("from_date")))
+					.toDate(WSConstants.TIME_PERIOD_MAP.get((String)dcbData.get("to_date")))
+					//					.fromDate(1554076800000l)
+					//					.toDate(1617175799000l)
+					.tenantId(tenantId)  
+					.build();
+		}else {
+			dd = DemandDetail.builder()
+					.taxAmount(BigDecimal.valueOf((Integer)dcbData.get("amount")))
+					.taxHeadMasterCode(taxHeadMaster)
+					.collectionAmount(BigDecimal.ZERO)
+					.amountPaid(BigDecimal.valueOf((Integer)dcbData.get("collected_amount")))
+					.fromDate(WSConstants.TIME_PERIOD_MAP.get((String)dcbData.get("from_date")))
+					.toDate(WSConstants.TIME_PERIOD_MAP.get((String)dcbData.get("to_date")))
+					//					.fromDate(1554076800000l)
+					//					.toDate(1617175799000l)
+					.tenantId(tenantId)  
+					.build();
+		}
 
-		
+		//	log.info("from db :"+(String)dcbData.get("demand_reason") +"  @taxHeadMaster " +taxHeadMaster );
+		//	log.info("from_date" +(String)dcbData.get("from_date") + "  and epoc" +WSConstants.TIME_PERIOD_MAP.get((String)dcbData.get("from_date")));
+		//	log.info("to_date" +(String)dcbData.get("to_date") + "  and epoc" +WSConstants.TIME_PERIOD_MAP.get((String)dcbData.get("to_date")));
+
+
 		Integer installmentId = (Integer)dcbData.get("insta_id");
 		if(instaWiseDemandMap.containsKey(installmentId)) {
-			
-				instaWiseDemandMap.get(installmentId).add(dd);
+
+			instaWiseDemandMap.get(installmentId).add(dd);
 
 		} else {
 			List<DemandDetail> ddList = new ArrayList<>();
-			
+
 			ddList.add(dd);
 			instaWiseDemandMap.put(installmentId, ddList);
 		}
-			
+
 	}
 	instaWiseDemandMap.forEach((insta_id, ddList) -> {
 		BigDecimal totalAmountPaid = BigDecimal.ZERO;

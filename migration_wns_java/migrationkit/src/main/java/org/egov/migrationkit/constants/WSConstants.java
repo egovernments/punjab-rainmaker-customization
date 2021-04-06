@@ -20,6 +20,12 @@ public class WSConstants {
 	
 	public static final String BUSINESSSERVICE_FIELD_FOR_SEARCH_URL = "businessService=";
 	
+	public static final String SEARCHTYPE_URL = "searchType=CONNECTION";
+	
+	public static final String CONNECTION_NUMBER_URL = "connectionNumber=";
+	
+	public static final String UUIDS_URL = "uuids=";
+
 	public static final String WATER_TAX_SERVICE_CODE = "WS";
 	
     public static final String WATER_BUSINESS_SERVICE="WS";
@@ -33,7 +39,9 @@ public class WSConstants {
 	
 	public static final HashMap<String, String> DIGIT_ROAD_CATEGORIES = new HashMap<>();
 	public static final HashMap<String, Long> TIME_PERIOD_MAP = new HashMap<>();
-	public static final HashMap<String, String> TAX_HEAD_MAP = new HashMap<>();
+	public static final HashMap<String, String> WS_TAX_HEAD_MAP = new HashMap<>();
+	public static final HashMap<String, String> SW_TAX_HEAD_MAP = new HashMap<>();
+
 	
 	public static final HashMap<String, String> DOCTYPEMAP = new HashMap<>();
 	
@@ -55,33 +63,33 @@ public class WSConstants {
         DIGIT_ROAD_CATEGORIES.put("Under Scheme", "UNDERSCHEME");
         DIGIT_ROAD_CATEGORIES.put("Open Pipe", "OPENPIPE");
         
-        TAX_HEAD_MAP.put("METERCHARGES", "WS_METER_TESTING_FEE");
-        TAX_HEAD_MAP.put("PENALTY", "WS_TIME_PENALTY");
-        TAX_HEAD_MAP.put("BREAKDOWN_PENALTY", "WS_TIME_PENALTY");
-        TAX_HEAD_MAP.put("INTEREST", "WS_TIME_INTEREST");
-        TAX_HEAD_MAP.put("WTAXCHARGES", "WS_CHARGE");
-        TAX_HEAD_MAP.put("METERRENT", "WS_OTHER_FEE");
-        TAX_HEAD_MAP.put("WTADJUSTMENT", "WS_OTHER_FEE");
-        TAX_HEAD_MAP.put("DOORTODOORCOLLECTIONCHARGES", "WS_OTHER_FEE");
-        TAX_HEAD_MAP.put("TITLETRANSFERFEE", "WS_OTHER_FEE");
-        TAX_HEAD_MAP.put("ADDITIONALFEEFORTITLETRANSFER", "WS_OTHER_FEE");
-        TAX_HEAD_MAP.put("WTAXSUPERVISION", "WS_OTHER_FEE");
-        TAX_HEAD_MAP.put("WTADVANCE", "WS_ADVANCE_CARRYFORWARD");
-        TAX_HEAD_MAP.put("WTAXSECURITY", "WS_SECURITY_DEPOSIT");
-        TAX_HEAD_MAP.put("WTAXOTHERS", "WS_OTHER_FEE");
-        TAX_HEAD_MAP.put("WTAXROADCUTTING", "WS_ROAD_CUTTING_CHARGE");
-        TAX_HEAD_MAP.put("WTAXAPPLICATION", "WS_FORM_FEE");
-        TAX_HEAD_MAP.put("CONNECTIONTYPECONVERSIONFEE", "WS_OTHER_FEE");
+        WS_TAX_HEAD_MAP.put("METERCHARGES", "WS_METER_TESTING_FEE");
+        WS_TAX_HEAD_MAP.put("PENALTY", "WS_TIME_PENALTY");
+        WS_TAX_HEAD_MAP.put("BREAKDOWN_PENALTY", "WS_TIME_PENALTY");
+        WS_TAX_HEAD_MAP.put("INTEREST", "WS_TIME_INTEREST");
+        WS_TAX_HEAD_MAP.put("WTAXCHARGES", "WS_CHARGE");
+        WS_TAX_HEAD_MAP.put("METERRENT", "WS_OTHER_FEE");
+        WS_TAX_HEAD_MAP.put("WTADJUSTMENT", "WS_OTHER_FEE");
+        WS_TAX_HEAD_MAP.put("DOORTODOORCOLLECTIONCHARGES", "WS_OTHER_FEE");
+        WS_TAX_HEAD_MAP.put("TITLETRANSFERFEE", "WS_OTHER_FEE");
+        WS_TAX_HEAD_MAP.put("ADDITIONALFEEFORTITLETRANSFER", "WS_OTHER_FEE");
+        WS_TAX_HEAD_MAP.put("WTAXSUPERVISION", "WS_OTHER_FEE");
+        WS_TAX_HEAD_MAP.put("WTADVANCE", "WS_ADVANCE_CARRYFORWARD");
+        WS_TAX_HEAD_MAP.put("WTAXSECURITY", "WS_SECURITY_DEPOSIT");
+        WS_TAX_HEAD_MAP.put("WTAXOTHERS", "WS_OTHER_FEE");
+        WS_TAX_HEAD_MAP.put("WTAXROADCUTTING", "WS_ROAD_CUTTING_CHARGE");
+        WS_TAX_HEAD_MAP.put("WTAXAPPLICATION", "WS_FORM_FEE");
+        WS_TAX_HEAD_MAP.put("CONNECTIONTYPECONVERSIONFEE", "WS_OTHER_FEE");
         
-        TAX_HEAD_MAP.put("SEWERAGEADVANCE","SW_ADVANCE_CARRYFORWARD");
-        TAX_HEAD_MAP.put("STAXSECURITY","SW_SECURITY_DEPOSIT");
-        TAX_HEAD_MAP.put("STAXOTHERS","SW_OTHER_FEE");
-        TAX_HEAD_MAP.put("STAXROADCUTTING","SW_ROAD_CUTTING_CHARGE");
-        TAX_HEAD_MAP.put("STAXAPPLICATION","SW_OTHER_FEE");
-        TAX_HEAD_MAP.put("STAXSUPERVISION","SW_OTHER_FEE");
-        TAX_HEAD_MAP.put("SEWERAGETAX","SW_CHARGE");
-        TAX_HEAD_MAP.put("SWTAXADJUSTMENT","SW_OTHER_FEE");
-
+        SW_TAX_HEAD_MAP.put("SEWERAGEADVANCE","SW_ADVANCE_CARRYFORWARD");
+        SW_TAX_HEAD_MAP.put("STAXSECURITY","SW_SECURITY_DEPOSIT");
+        SW_TAX_HEAD_MAP.put("STAXOTHERS","SW_OTHER_FEE");
+        SW_TAX_HEAD_MAP.put("STAXROADCUTTING","SW_ROAD_CUTTING_CHARGE");
+        SW_TAX_HEAD_MAP.put("STAXAPPLICATION","SW_OTHER_FEE");
+        SW_TAX_HEAD_MAP.put("STAXSUPERVISION","SW_OTHER_FEE");
+        SW_TAX_HEAD_MAP.put("SEWERAGETAX","SW_CHARGE");
+        SW_TAX_HEAD_MAP.put("SWTAXADJUSTMENT","SW_OTHER_FEE");
+        SW_TAX_HEAD_MAP.put("PENALTY","SW_TIME_PENALTY");
         
         //2022-23 
 //        TIME_PERIOD_MAP.put("2022-03-31", 1648751399000l);     

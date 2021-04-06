@@ -24,9 +24,11 @@ import io.swagger.client.model.Connection.StatusEnum;
 import io.swagger.client.model.Demand;
 import io.swagger.client.model.Document;
 import io.swagger.client.model.Locality;
+import io.swagger.client.model.OwnerInfo;
 import io.swagger.client.model.ProcessInstance;
 import io.swagger.client.model.Property;
 import io.swagger.client.model.RequestInfo;
+import io.swagger.client.model.RoadCuttingInfo;
 import io.swagger.client.model.SewerageConnection;
 import io.swagger.client.model.SewerageConnectionRequest;
 import io.swagger.client.model.SewerageConnectionResponse;
@@ -62,6 +64,9 @@ public class ConnectionService {
 
 	@Autowired
 	private DemandService demandService;
+	
+	@Autowired
+	private CommonService commonService;
 
 	@Value("${egov.services.sewerage.url}")
 	private String sewerageUrl = null;
@@ -74,7 +79,7 @@ public class ConnectionService {
 		WaterConnection connection = null;
 		List<Map> roadCategoryList = null;
 		Integer area = null;
-		Double areaDouble = null;
+		Float areaDouble = null;
 		Address address = null;
 		Locality locality = null;
 		String locCode = null;
@@ -137,9 +142,25 @@ public class ConnectionService {
 				locCode = (String) data.get("locality");
 				cityCode = (String) data.get("cityCode");
 
-				boolean isMigrated = recordService.recordWaterMigration(connection, tenantId);
-				if (isMigrated)
+				boolean isConnectionMigrated = recordService.recordWaterMigration(connection, tenantId);
+				if (isConnectionMigrated) {
+					try {
+						OwnerInfo ownerInfo = commonService.searchConnection(requestInfo, connectionNo, tenantId, "water");
+						if( ownerInfo != null) {
+							createWaterDemand(data, connection.getId(), connectionNo, requestInfo, ownerInfo);
+							connectionDuration = System.currentTimeMillis() - connStartTime;
+							log.info("Migration completed for connection no : " + connection.getConnectionNo() + "in "
+									+ connectionDuration / 1000 + "Secs");
+						} else {
+							recordService.recordError("water", tenantId, "Connection or Property not found to generate the demand" ,
+									connection.getId());
+						}
+					}catch (Exception e) {
+						recordService.recordError("water", tenantId, "Exception occured while generating the demand"+e.toString() ,
+								connection.getId());
+					}
 					continue;
+				}
 
 				if (connection.getMobilenumber() == null || connection.getMobilenumber().isEmpty()) {
 					// recordService.recordError("water", tenantId, "Mobile
@@ -184,19 +205,31 @@ public class ConnectionService {
 				}
 				connection.setPropertyId(property.getId());
 				roadCategoryList = (List<Map>) data.get("road_category");
-				if (roadCategoryList != null) {
+				List<RoadCuttingInfo> cuttingInfoList = new ArrayList<>();
+				RoadCuttingInfo cuttingInfo = null;
+				if (roadCategoryList != null && !roadCategoryList.isEmpty()) {
+					cuttingInfo = new RoadCuttingInfo();
+					
 					String roadCategory = (String) roadCategoryList.get(0).get("road_name");
-					connection.setRoadType(WSConstants.DIGIT_ROAD_CATEGORIES.get(roadCategory));
+					cuttingInfo.setRoadType(WSConstants.DIGIT_ROAD_CATEGORIES.get(roadCategory));
 					try {
-						area = (Integer) roadCategoryList.get(0).get("road_area");
-
-						connection.setRoadCuttingArea(Double.valueOf(area));
+						Object areaObj = roadCategoryList.get(0).get("road_area");
+						if(areaObj instanceof Integer)
+							cuttingInfo.setRoadCuttingArea(Float.valueOf((Integer)areaObj));
+						else if(areaObj instanceof Double)
+							cuttingInfo.setRoadCuttingArea(((Double)areaObj).floatValue());
+						else if(areaObj instanceof Float)
+							cuttingInfo.setRoadCuttingArea(((Float)areaObj));
+						else
+							cuttingInfo.setRoadCuttingArea(0f);
+							
 					} catch (Exception e) {
-						areaDouble = (Double) roadCategoryList.get(0).get("road_area");
-						connection.setRoadCuttingArea(areaDouble);
+						cuttingInfo.setRoadCuttingArea(0f);
 					}
+					cuttingInfoList.add(cuttingInfo);
 
 				}
+				connection.setRoadCuttingInfo(cuttingInfoList);
 
 				connection.setStatus(StatusEnum.Active);
 
@@ -255,7 +288,7 @@ public class ConnectionService {
 
 				connection.setAdditionalDetails(addtionals);
 
-				connection.setOldApplication(true);
+				connection.setOldApplication(false);
 				// connection.setOldConnectionNo(connectionNo);
 
 				String response = null;
@@ -282,29 +315,32 @@ public class ConnectionService {
 							requestInfo.getUserInfo().getUuid());
 					String consumerCode = wtrConnResp.getConnectionNo() != null ? wtrConnResp.getConnectionNo()
 							: wtrConnResp.getApplicationNo();
-
-					List<Demand> demandRequestList = demandService.prepareDemandRequest(data,
-							WSConstants.WATER_BUSINESS_SERVICE, consumerCode, requestInfo.getUserInfo().getTenantId(),
-							property.getOwners().get(0));
-					if (!demandRequestList.isEmpty()) {
-
-						Boolean isDemandCreated = demandService.saveDemand(requestInfo, demandRequestList,
-								connection.getId(), tenantId, "water");
-						if (isDemandCreated) {
-							recordService.setStatus("water", tenantId, "Demand_Created", connection.getId());
-							// Boolean isBillCreated =
-							// demandService.fetchBill(demandRequestList,
-							// requestInfo);
-							// log.info("Bill created" + isBillCreated + "
-							// isDemandCreated" + isDemandCreated);
-
-						}
+					
+					//Creating demand for water connection
+					createWaterDemand(data, connection.getId(), consumerCode, requestInfo, property.getOwners().get(0));
+					
+					
+//					List<Demand> demandRequestList = demandService.prepareDemandRequest(data,
+//							WSConstants.WATER_BUSINESS_SERVICE, consumerCode, requestInfo.getUserInfo().getTenantId(),
+//							property.getOwners().get(0));
+//					if (!demandRequestList.isEmpty()) {
+//
+//						Boolean isDemandCreated = demandService.saveDemand(requestInfo, demandRequestList,
+//								connection.getId(), tenantId, "water");
+//						if (isDemandCreated) {
+//							// Boolean isBillCreated =
+//							// demandService.fetchBill(demandRequestList,
+//							// requestInfo);
+//							// log.info("Bill created" + isBillCreated + "
+//							// isDemandCreated" + isDemandCreated);
+//
+//						}
 
 						connectionDuration = System.currentTimeMillis() - connStartTime;
 						log.info("Migration completed for connection no : " + connection.getConnectionNo() + "in "
 								+ connectionDuration / 1000 + "Secs");
 
-					}
+//					}
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -316,6 +352,22 @@ public class ConnectionService {
 
 		log.info("Water Migration completed for " + connectionCount + " connections in "+tenantId+ " in " + duration / 1000 + " Secs");
 
+	}
+	
+	private void createWaterDemand(Map data,String connectionId, String consumerCode, RequestInfo requestInfo, OwnerInfo ownerInfo ) {
+		List<Demand> demandRequestList = demandService.prepareDemandRequest(data,
+				WSConstants.WATER_BUSINESS_SERVICE, consumerCode, requestInfo.getUserInfo().getTenantId(),
+				ownerInfo);
+		if (!demandRequestList.isEmpty()) {
+
+			Boolean isDemandCreated = demandService.saveDemand(requestInfo, demandRequestList,
+					connectionId, requestInfo.getUserInfo().getTenantId(), "water");
+			if (isDemandCreated) {
+				recordService.setStatus("water", requestInfo.getUserInfo().getTenantId(), "Demand_Created", connectionId);
+
+			}
+		}
+		
 	}
 
 	private Long getMobileNumber(String cityCode, String locCode, String tenantId) {
@@ -387,6 +439,7 @@ public class ConnectionService {
 		long connStartTime = 0l;
 		long connectionDuration = 0l;
 		long connectionCount=0l;
+		List<Map> roadCategoryList = null;
 
 		String searchPath = jdbcTemplate.queryForObject("show search_path", String.class);
 		log.info(searchPath);
@@ -425,9 +478,29 @@ public class ConnectionService {
 				// log.debug("Connection Type :" +
 				// swConnection.getConnectionType());
 				// log.debug("Connection id :" + swConnection.getId());
+				SewerageConnectionRequest sewerageRequest = new SewerageConnectionRequest();
+				sewerageRequest.setSewerageConnection(swConnection);
+				sewerageRequest.setRequestInfo(requestInfo);
+				
 				boolean isMigrated = recordService.recordSewerageMigration(swConnection, tenantId);
-				if (isMigrated)
+				if (isMigrated) {
+					try {
+					OwnerInfo ownerInfo = commonService.searchConnection(requestInfo, connectionNo, tenantId, "sewerage");
+					if( ownerInfo != null) {
+					createSewerageDemand(data, swConnection.getId(), connectionNo, requestInfo, ownerInfo);
+					connectionDuration = System.currentTimeMillis() - connStartTime;
+					log.info("Migration completed for connection no : " + swConnection.getConnectionNo() + "in "
+							+ connectionDuration / 1000 + "Secs");
+					}else {
+						recordService.recordError("sewerage", tenantId, "Connection or Property not found to generate the demand" + locCode,
+								swConnection.getId());
+					}
+					}catch (Exception e) {
+						recordService.recordError("sewerage", tenantId, "Exception occured while generating the demand"+e.toString() ,
+								swConnection.getId());
+					}
 					continue;
+				}
 
 				locCode = (String) data.get("locality");
 				cityCode = (String) data.get("cityCode");
@@ -465,7 +538,6 @@ public class ConnectionService {
 				address.setLocality(locality);
 				address.setCity((String) data.get("cityname"));
 				swConnection.setApplicantAddress(address);
-				SewerageConnectionRequest sewerageRequest = new SewerageConnectionRequest();
 
 				StringBuilder additionalDetail = new StringBuilder();
 				Map addtionals = new HashMap<String, String>();
@@ -524,6 +596,32 @@ public class ConnectionService {
 					continue;
 				}
 				swConnection.setPropertyId(property.getId());
+				roadCategoryList = (List<Map>) data.get("road_category");
+				List<RoadCuttingInfo> cuttingInfoList = new ArrayList<>();
+				RoadCuttingInfo cuttingInfo = null;
+				if (roadCategoryList != null && !roadCategoryList.isEmpty()) {
+					cuttingInfo = new RoadCuttingInfo();
+					
+					String roadCategory = (String) roadCategoryList.get(0).get("road_name");
+					cuttingInfo.setRoadType(WSConstants.DIGIT_ROAD_CATEGORIES.get(roadCategory));
+					try {
+						Object areaObj = roadCategoryList.get(0).get("road_area");
+						if(areaObj instanceof Integer)
+							cuttingInfo.setRoadCuttingArea(Float.valueOf((Integer)areaObj));
+						else if(areaObj instanceof Double)
+							cuttingInfo.setRoadCuttingArea(((Double)areaObj).floatValue());
+						else if(areaObj instanceof Float)
+							cuttingInfo.setRoadCuttingArea(((Float)areaObj));
+						else
+							cuttingInfo.setRoadCuttingArea(0f);
+							
+					} catch (Exception e) {
+						cuttingInfo.setRoadCuttingArea(0f);
+					}
+					cuttingInfoList.add(cuttingInfo);
+
+				}
+				swConnection.setRoadCuttingInfo(cuttingInfoList);
 				swConnection.setDocuments(getDocuments(null, data));
 
 				swConnection.setTenantId(requestInfo.getUserInfo().getTenantId());
@@ -582,30 +680,33 @@ public class ConnectionService {
 
 					String consumerCode = srgConnResp.getConnectionNo() != null ? srgConnResp.getConnectionNo()
 							: srgConnResp.getApplicationNo();
+					
+					createSewerageDemand(data, swConnection.getId(), connectionNo, requestInfo, property.getOwners().get(0));
 
-					List<Demand> demandRequestList = demandService.prepareSwDemandRequest(data,
-							WSConstants.SEWERAGE_BUSINESS_SERVICE, consumerCode,
-							requestInfo.getUserInfo().getTenantId(), property.getOwners().get(0));
-
-					// log.info("Demand Request=" + demandRequestList.size());
-
-					if (!demandRequestList.isEmpty()) {
-
-						Boolean isDemandCreated = demandService.saveDemand(requestInfo, demandRequestList,
-								swConnection.getId(), tenantId, "sewerage");
-						if (isDemandCreated) {
-							// Boolean isBillCreated =
-							// demandService.fetchBill(demandRequestList,
-							// requestInfo);
-							recordService.setStatus("sewerage", tenantId, "Demand_Created", swConnection.getId());
-							//
-						}
+//
+//					List<Demand> demandRequestList = demandService.prepareSwDemandRequest(data,
+//							WSConstants.SEWERAGE_BUSINESS_SERVICE, consumerCode,
+//							requestInfo.getUserInfo().getTenantId(), property.getOwners().get(0));
+//
+//					// log.info("Demand Request=" + demandRequestList.size());
+//
+//					if (!demandRequestList.isEmpty()) {
+//
+//						Boolean isDemandCreated = demandService.saveDemand(requestInfo, demandRequestList,
+//								swConnection.getId(), tenantId, "sewerage");
+//						if (isDemandCreated) {
+//							// Boolean isBillCreated =
+//							// demandService.fetchBill(demandRequestList,
+//							// requestInfo);
+//							recordService.setStatus("sewerage", tenantId, "Demand_Created", swConnection.getId());
+//							//
+//						}
 
 						connectionDuration = System.currentTimeMillis() - connStartTime;
 						log.info("Migration completed for connection no : " + swConnection.getConnectionNo() + "in "
 								+ connectionDuration / 1000 + "Secs");
 
-					}
+//					}
 
 				}
 			} catch (Exception e) {
@@ -619,5 +720,24 @@ public class ConnectionService {
 		log.info("Sewerage Migration completed for " + connectionCount + " connections in "+tenantId+ " in " + duration / 1000 + " Secs");
 
 	}
+	
+	private void createSewerageDemand(Map data,String connectionId, String consumerCode, RequestInfo requestInfo, OwnerInfo ownerInfo ) {
+		List<Demand> demandRequestList = demandService.prepareSwDemandRequest(data,
+				WSConstants.SEWERAGE_BUSINESS_SERVICE, consumerCode,
+				requestInfo.getUserInfo().getTenantId(), ownerInfo);
+
+		if (!demandRequestList.isEmpty()) {
+
+			Boolean isDemandCreated = demandService.saveDemand(requestInfo, demandRequestList,
+					connectionId, requestInfo.getUserInfo().getTenantId(), "sewerage");
+			if (isDemandCreated) {
+				recordService.setStatus("sewerage", requestInfo.getUserInfo().getTenantId(), "Demand_Created", connectionId);
+			}
+
+
+		}
+
+	}
+
 
 }

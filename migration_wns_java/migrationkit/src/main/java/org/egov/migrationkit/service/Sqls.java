@@ -64,8 +64,8 @@ public class Sqls {
 			+ " usage.id=conndetails.usagetype and locality.id=conn.locality and"
 			+ " conndetails.propertytype=proptype.id and conndetails.category=wtrctgy.id and ownerinfo.connection=conn.id "
 			+ " and usr.id=ownerinfo.owner and address.id=conn.address and status.id=conndetails.statusid  :locCondition "
-			+ " and conndetails.id not in (select erpid::bigint from egwtr_migration where status in "
-			+ "('Saved','Demand_Created' ) )  " + " order by conndetails.id; ";
+			+ " and conndetails.connectionstatus='ACTIVE' and conndetails.id not in (select erpid::bigint from egwtr_migration where status in "
+			+ "('Demand_Created' ) )  " + " order by conndetails.id; ";
 
 	public static final String WATER_MIGRATION_TABLE = "create table if not exists egwtr_migration "
 			+ " ( erpid varchar(64),erpconn varchar(64) ,digitconn varchar(64) ,erppt varchar(64),digitpt varchar(64),status varchar(64),tenantId varchar(64),additiondetails varchar(1000),errorMessage varchar(4000), mob varchar(11) );"
@@ -75,7 +75,7 @@ public class Sqls {
 			+ "(erpid ,erpconn  ,digitconn  ,erppt ,digitpt ,status ,tenantId ,additiondetails ) values (:erpid,:erpconn,:digitconn,:erppt,:digitpt,:status"
 			+ ", :tenantId,:addtionaldetails);";
 	
-	public static final String WATER_MIGRATION_SELECT = "SELECT count(*) FROM :schema.egwtr_migration  where erpconn=:erpconn and erpid=:erpid and status=:status ";
+	public static final String WATER_MIGRATION_SELECT = "SELECT status FROM :schema.egwtr_migration  where erpconn=:erpconn and erpid=:erpid ";
 
 	public static final String WATER_MIGRATION_UPDATE = "update  :schema.egwtr_migration  "
 			+ "set digitconn=:digitconn , digitpt=:digitpt,status=:status where erpid=:erpid ";
@@ -121,7 +121,7 @@ public class Sqls {
 			+ "'gender', ( SELECT CASE WHEN usr.gender = 0 THEN 'FEMALE' WHEN usr.gender = 1 THEN 'MALE' ELSE 'OTHERS' END ),\n"
 			+ "'connectionstatus', conn.status,\n"
 			+ "'createddate', to_timestamp(to_char(conn.createddate::timestamp without time zone, 'YYYY-MM-DD'),'YYYY-MM-DDTHH24:MI:SSZ'),\n"
-			+ "'servicetype', 'Sewerage Charges',\n"
+			+ "'oldConnectionNo' , conn.oldconsumernumber ,'servicetype', 'Sewerage Charges',\n"
 			+ "'autoverifieddate', (select lastmodifieddate from eg_wf_state_history statehist where statehist.state_id=appdetails.state_id and lastmodifiedby IN (select id from eg_user where username='system') LIMIT 1),\n"
 			+ "'guardianrelation', ( CASE WHEN usr.guardianrelation ='Mother' THEN 'MOTHER' WHEN usr.guardianrelation ='Father' THEN 'FATHER' WHEN usr.guardianrelation='Husband' THEN 'HUSBAND' WHEN usr.guardianrelation ='Others' THEN 'OTHER' WHEN usr.guardianrelation ='Other' THEN 'OTHER' ELSE 'OTHER' END ), 'guardianname', usr.guardian,\n"
 			+ "'plotsize', conndetails.plotsize,\n"
@@ -152,7 +152,7 @@ public class Sqls {
 			+ "  eg_installment_master inst	,		 " + "  eg_demand_reason_master drm		,	 "
 			+ "  eg_demand_reason dr where appdetails.id=cdemand.applicationdetail and appdetails.connectiondetail=conndetails.id and cdemand.demand=d.id and d.id=dd.id_demand "
 			+ " and dr.id_installment=inst.id and dd.id_demand_reason=dr.id and dr.id_demand_reason_master=drm.id and inst.id=dr.id_installment "
-			+ " and d.is_history='N' order by inst.start_date ) dcb )	)	 "
+			+ " and d.is_history='N' order by inst.start_date ) dcb ),'road_category' , (SELECT json_agg(road_category) FROM ( SELECT road_category.name \"road_name\" , estimatedetails.area \"road_area\" , estimatedetails.unitrate \"unitrate\" , estimatedetails.amount \"amount\" from egswtax_estimation_details estimatedetails , egswtax_road_category road_category WHERE appdetails.id=estimatedetails.applicationdetails and estimatedetails.roadcategory=road_category.id ) road_category )	)	 "
 			+ "from egswtax_connection conn, egswtax_connectiondetail conndetails,\n"
 			+ "egswtax_applicationdetails appdetails,\n" + "egswtax_application_type apptype,\n"
 			+ "egswtax_usage_type usage,\n" + "eg_boundary locality, eg_boundary zone,\n"
@@ -162,10 +162,10 @@ public class Sqls {
 			+ "usage.id=conndetails.usagetype and block.id=conn.block and\n"
 			+ "locality.id=conn.locality and zone.id=conn.zone and\n"
 			+ " ownerinfo.connection=conn.id and usr.id=ownerinfo.owner and\n"
-			+ "  address.id=conn.address and status.id=appdetails.status  " + " and conn.shsc_number is not null "
+			+ "  address.id=conn.address and status.id=appdetails.status and conn.status='ACTIVE' and conn.shsc_number is not null "
 			+" :locCondition "
 			+ " and conndetails.id not in (select erpid::bigint from egswtax_migration where status"
-			+ " in ('Saved','Demand_Created' ) ) order by conndetails.id;";
+			+ " in ('Demand_Created' ) ) order by conndetails.id;";
 
 	public static final String SEWERAGE_MIGRATION_TABLE = "create table  if not exists  egswtax_migration "
 			+ " ( erpid varchar(64),erpconn varchar(64), mob varchar(64),digitconn varchar(64) ,erppt varchar(64),digitpt varchar(64),status varchar(64),tenantId varchar(64),additiondetails varchar(1000),errorMessage varchar(4000)  );"
@@ -175,7 +175,7 @@ public class Sqls {
 			+ "(erpid ,erpconn  ,digitconn  ,erppt ,digitpt ,status ,tenantId ,additiondetails ) values (:erpid,:erpconn,:digitconn,:erppt,:digitpt,:status"
 			+ ", :tenantId,:addtionaldetails);";
 	
-	public static final String SEWERAGE_MIGRATION_SELECT = "SELECT count(*) FROM :schema_tenantId.egswtax_migration  where erpconn=:erpconn and erpid=:erpid and status=:status ";
+	public static final String SEWERAGE_MIGRATION_SELECT = "SELECT status FROM :schema_tenantId.egswtax_migration  where erpconn=:erpconn and erpid=:erpid ";
 
 
 	public static final String SEWERAGE_MIGRATION_UPDATE = "update  :schema_tenantId.egswtax_migration  "
