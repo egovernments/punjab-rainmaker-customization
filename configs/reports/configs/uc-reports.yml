@@ -1736,7 +1736,8 @@ ReportDefinitions:
         wrapper: true
         isMandatory: false
         searchClause: AND eg_user.id = $collectorname::INTEGER
-    query: SELECT
+    query: |
+      SELECT
         eg_user.name as collectorname,
         paymentmode as paymentmode,
         count(paydetail.receiptnumber) as Countofreceipts,
@@ -1745,4 +1746,4 @@ ReportDefinitions:
         JOIN egcl_paymentdetail as paydetail on paydetail.paymentid=payment.id
         JOIN eg_user ON payment.createdby::INTEGER=eg_user.id
         WHERE payment.tenantid='pb.ropar' AND businessservice not in ('PT','TL','FIRENOC') and payment.paymentstatus != 'CANCELLED'
-    GROPUP BY: group by collectorname , paymentmode
+    groupby: group by collectorname , paymentmode
