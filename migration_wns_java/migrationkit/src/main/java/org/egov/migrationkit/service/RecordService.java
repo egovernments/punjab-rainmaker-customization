@@ -39,11 +39,11 @@ public class RecordService {
 		checkQuery = checkQuery.replace(":erpconn", "'" + conn.getConnectionNo() + "'");
 		checkQuery = checkQuery.replace(":erpid", "'" + conn.getId() + "'");
 
-		String status = jdbcTemplate.queryForObject(checkQuery, String.class);
-		if(status != null && status.equalsIgnoreCase("Saved")) {
+		List<String> status = jdbcTemplate.queryForList(checkQuery, String.class);
+		if(status != null && !status.isEmpty() && status.get(0).equalsIgnoreCase("Saved")) {
 			return  Boolean.TRUE;
 			
-		} else if (status == null) {
+		} else if (status == null || status.isEmpty()) {
 			String qry = Sqls.WATER_MIGRATION_INSERT;
 			qry = qry.replace(":schema", tenantId);
 			qry = qry.replace(":erpid", "'" + conn.getId() + "'");
@@ -132,11 +132,11 @@ public class RecordService {
 		checkQuery = checkQuery.replace(":erpconn", "'" + conn.getConnectionNo() + "'");
 		checkQuery = checkQuery.replace(":erpid", "'" + conn.getId() + "'");
 
-		String status = jdbcTemplate.queryForObject(checkQuery, String.class);
-
-		if(status != null && status.equalsIgnoreCase("Saved")) {
+		List<String> status = jdbcTemplate.queryForList(checkQuery, String.class);
+		if(status != null && !status.isEmpty() && status.get(0).equalsIgnoreCase("Saved")) {
 			return  Boolean.TRUE;
-		} else if (status == null) {
+			
+		} else if (status == null || status.isEmpty()) {
 
 			String qry = Sqls.SEWERAGE_MIGRATION_INSERT;
 			qry = qry.replace(":schema_tenantId", tenantId);
