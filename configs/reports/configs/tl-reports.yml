@@ -2736,5 +2736,68 @@ ReportDefinitions:
     WHERE t.status NOT IN ('APPROVED','CANCELLED','REJECTED','PENDINGPAYMENT','INITIATED') 
     and t.tenantid=$tenantid
   groupby: GROUP BY O.tradelicensedetailid,applicationdate
-  orderby: ORDER BY applicationnumber DESC    
+  orderby: ORDER BY applicationnumber DESC
+  
+- reportName: EmployeeWiseCollectionTL_v2
+    decryptionPathId: MiscReceiptULB_v2
+    summary: Employee Wise Collection TL
+    version: 1.0.0
+    moduleName: rainmaker-tl
+    additionalConfig:
+      print:
+        pdfPageSize: "A3"
+    sourceColumns:
+      - name: collectorname
+        label: reports.tl.collectorname
+        type: string
+        source: tl
+        total: false
+      - name: paymentmode
+        label: reports.tl.paymentmode
+        type: string
+        source: tl
+        total: false
+      - name: countofreceipts
+        label: reports.tl.countofreceipts
+        type: string
+        source: tl
+        total: true
+      - name: totalamount
+        label: reports.tl.totalamount
+        type: string
+        source: tl
+        total: true
+    searchParams:
+     - name: fromDate
+       label: reports.tl.fromDate
+       type: epoch
+       source: tl
+       isMandatory: false
+       searchClause: AND receipt.createddate >= $fromDate
+     - name: toDate
+       label: reports.tl.toDate
+       type: epoch
+       source: tl
+       isMandatory: false
+       searchClause: AND receipt.createddate  <= $toDate 
+     - name: collectorname
+       label: reports.tl.collectorname
+       type: singlevaluelist
+       pattern: http://egov-hrms:8080/egov-hrms/employees/_search?tenantId=$tenantid&roles=TL_CEMP|$.Employees[*].user.id|$.Employees[*].user.name
+       source: pt
+       wrapper: true
+       isMandatory: false
+       searchClause: AND eg_user.id = $collectorname::INTEGER
+       query: |
+         SELECT
+            eg_user.name as collectorname,
+            paymentmode as paymentmode,
+            count(paydetail.receiptnumber) as Countofreceipts,
+            Sum(payment.totalamountpaid) as totalamount
+            FROM egcl_payment AS payment
+            JOIN egcl_paymentdetail as paydetail on paydetail.paymentid=payment.id
+            JOIN eg_user ON payment.createdby::INTEGER=eg_user.id
+            WHERE payment.tenantid='pb.ropar' AND businessservice not in ('TL') and payment.paymentstatus != 'CANCELLED'
+       groupby: GROUP BY collectorname , paymentmode
+        
     
