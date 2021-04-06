@@ -2788,15 +2788,16 @@ ReportDefinitions:
        wrapper: true
        isMandatory: false
        searchClause: AND eg_user.id = $collectorname::INTEGER
-       query: SELECT
-        eg_user.name as collectorname,
-        paymentmode as paymentmode,
-        count(paydetail.receiptnumber) as Countofreceipts,
-        Sum(payment.totalamountpaid) as totalamount
-        FROM egcl_payment AS payment
-        JOIN egcl_paymentdetail as paydetail on paydetail.paymentid=payment.id
-        JOIN eg_user ON payment.createdby::INTEGER=eg_user.id
-        WHERE payment.tenantid='pb.ropar' AND businessservice not in ('TL') and payment.paymentstatus != 'CANCELLED'
-       group by: GROUP BY collectorname , paymentmode
+       query: |
+         SELECT
+            eg_user.name as collectorname,
+            paymentmode as paymentmode,
+            count(paydetail.receiptnumber) as Countofreceipts,
+            Sum(payment.totalamountpaid) as totalamount
+            FROM egcl_payment AS payment
+            JOIN egcl_paymentdetail as paydetail on paydetail.paymentid=payment.id
+            JOIN eg_user ON payment.createdby::INTEGER=eg_user.id
+            WHERE payment.tenantid='pb.ropar' AND businessservice not in ('TL') and payment.paymentstatus != 'CANCELLED'
+       groupby: GROUP BY collectorname , paymentmode
         
     
