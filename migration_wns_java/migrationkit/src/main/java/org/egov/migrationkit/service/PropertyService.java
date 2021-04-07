@@ -106,10 +106,10 @@ public class PropertyService {
 		property.setAddress(conn.getApplicantAddress());
 		property.setChannel(Channel.SYSTEM);
 		property.setSource(Source.WATER_CHARGES);
-		if (conn.getPlotSize() != null)
+		if (conn.getPlotSize() != null && conn.getPlotSize() < 2)
 			property.setLandArea(BigDecimal.valueOf(conn.getPlotSize()));
 		else
-			property.setLandArea(BigDecimal.valueOf(125));
+			property.setLandArea(BigDecimal.valueOf(2));
 		property.setNoOfFloors(Long.valueOf(1));
 		property.setOldPropertyId(conn.getPropertyId());
 		property.setOwners(null);
@@ -198,15 +198,15 @@ public class PropertyService {
 		property.setChannel(Channel.SYSTEM);
 		// property.setInstitution(null);
 //		property.setLandArea(BigDecimal.valueOf(50));
-		Object landAreaObj = json.getOrDefault("plotsize", 0);
-		if(landAreaObj instanceof Integer) {
+		Object landAreaObj = json.getOrDefault("plotsize", 2);
+		if(landAreaObj instanceof Integer && (Integer)landAreaObj > 2) {
 			property.setLandArea(BigDecimal.valueOf(Long.valueOf((Integer)landAreaObj)));
 			
-		}else if(landAreaObj instanceof Long ){
+		}else if(landAreaObj instanceof Long && (Long)landAreaObj > 2){
 			property.setLandArea(BigDecimal.valueOf((Long)landAreaObj));
 			
 		} else {
-			property.setLandArea(BigDecimal.valueOf(0));
+			property.setLandArea(BigDecimal.valueOf(2));
 			
 		}
 		property.setNoOfFloors(Long.valueOf(1));
@@ -386,7 +386,6 @@ public class PropertyService {
     private Property searchPropertyAfterCreate(String tenantId, String propertyId, RequestInfo requestInfo, Property property2) {
     	RequestInfoWrapper wrapper = RequestInfoWrapper.builder().requestInfo(requestInfo).build();
     	
-    	System.out.println("hello");
 		PropertyResponse res = restTemplate.postForObject(host + "/" + ptseachurl + "?tenantId="+tenantId+"&propertyIds=" + propertyId , wrapper, PropertyResponse.class);
 		if(!res.getProperties().isEmpty() && res.getProperties().size()==1) {
 			return res.getProperties().get(0);
