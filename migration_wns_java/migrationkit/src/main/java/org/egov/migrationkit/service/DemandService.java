@@ -93,7 +93,7 @@ public class DemandService {
 
 				instaWiseDemandMap.get(installmentId+"ONE_TIME_FEE").add(dd);
 				
-			} else if( instaWiseDemandMap.containsKey(installmentId+"WS")){
+			} else if( instaWiseDemandMap.containsKey(installmentId+"WS") && !WSConstants.ONE_TIME_TAX_HEAD_MASTERS.contains(dd.getTaxHeadMasterCode())){
 				
 				instaWiseDemandMap.get(installmentId+"WS").add(dd);
 			}else {
@@ -232,7 +232,7 @@ public class DemandService {
 
 			instaWiseDemandMap.get(installmentId+"ONE_TIME_FEE").add(dd);
 			
-		} else if( instaWiseDemandMap.containsKey(installmentId+"SW")){
+		} else if( instaWiseDemandMap.containsKey(installmentId+"SW") && !WSConstants.ONE_TIME_TAX_HEAD_MASTERS.contains(dd.getTaxHeadMasterCode())){
 			
 			instaWiseDemandMap.get(installmentId+"SW").add(dd);
 		}else {
