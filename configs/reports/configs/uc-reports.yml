@@ -1745,5 +1745,5 @@ ReportDefinitions:
         FROM egcl_payment AS payment
         JOIN egcl_paymentdetail as paydetail on paydetail.paymentid=payment.id
         JOIN eg_user ON payment.createdby::INTEGER=eg_user.id
-        WHERE payment.tenantid='pb.ropar' AND businessservice not in ('PT','TL','FIRENOC') and payment.paymentstatus != 'CANCELLED'
+        WHERE payment.tenantid=$tenantid AND businessservice not in ('PT','TL','FIRENOC') and payment.paymentstatus != 'CANCELLED'
     groupby: group by collectorname , paymentmode
