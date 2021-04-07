@@ -40,7 +40,7 @@ public class RecordService {
 		checkQuery = checkQuery.replace(":erpid", "'" + conn.getId() + "'");
 
 		List<String> status = jdbcTemplate.queryForList(checkQuery, String.class);
-		if(status != null && !status.isEmpty() && status.get(0).equalsIgnoreCase("Saved")) {
+		if(status != null && !status.isEmpty() && status.contains("Saved")) {
 			return  Boolean.TRUE;
 			
 		} else if (status == null || status.isEmpty()) {
@@ -133,7 +133,7 @@ public class RecordService {
 		checkQuery = checkQuery.replace(":erpid", "'" + conn.getId() + "'");
 
 		List<String> status = jdbcTemplate.queryForList(checkQuery, String.class);
-		if(status != null && !status.isEmpty() && status.get(0).equalsIgnoreCase("Saved")) {
+		if(status != null && !status.isEmpty() && status.contains("Saved")) {
 			return  Boolean.TRUE;
 			
 		} else if (status == null || status.isEmpty()) {
