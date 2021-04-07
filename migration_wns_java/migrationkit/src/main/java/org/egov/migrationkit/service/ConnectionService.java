@@ -364,7 +364,7 @@ public class ConnectionService {
 			Boolean isDemandCreated = demandService.saveDemand(requestInfo, demandRequestList,
 					connectionId, tenantId, "water");
 			if (isDemandCreated) {
-				recordService.setStatus("water", requestInfo.getUserInfo().getTenantId(), "Demand_Created", connectionId);
+				recordService.setStatus("water", tenantId, "Demand_Created", connectionId);
 
 			}
 		}
@@ -732,7 +732,7 @@ public class ConnectionService {
 			Boolean isDemandCreated = demandService.saveDemand(requestInfo, demandRequestList,
 					connectionId, tenantId, "sewerage");
 			if (isDemandCreated) {
-				recordService.setStatus("sewerage", requestInfo.getUserInfo().getTenantId(), "Demand_Created", connectionId);
+				recordService.setStatus("sewerage", tenantId, "Demand_Created", connectionId);
 			}
 
 
