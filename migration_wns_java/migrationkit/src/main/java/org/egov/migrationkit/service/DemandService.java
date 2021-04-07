@@ -50,7 +50,7 @@ public class DemandService {
 	public List<Demand> prepareDemandRequest(Map data, String businessService, String consumerCode, String tenantId, OwnerInfo owner) {
 		
 		
-		Map<Integer, List<DemandDetail>> instaWiseDemandMap = new HashMap<>();
+		Map<String, List<DemandDetail>> instaWiseDemandMap = new HashMap<>();
 		List<Map> dcbDataList = (List) data.get("dcb") != null ? (List) data.get("dcb") : new ArrayList<Map>();
 		List<Demand> demands = new LinkedList<>();
 		
@@ -87,16 +87,25 @@ public class DemandService {
 			log.info("from_date" +(String)dcbData.get("from_date") + "  and epoc" +WSConstants.TIME_PERIOD_MAP.get((String)dcbData.get("from_date")));
 			log.info("to_date" +(String)dcbData.get("to_date") + "  and epoc" +WSConstants.TIME_PERIOD_MAP.get((String)dcbData.get("to_date")));
 			
-		*/	Integer installmentId = (Integer)dcbData.get("insta_id");
-			if(instaWiseDemandMap.containsKey(installmentId)) {
-				
-					instaWiseDemandMap.get(installmentId).add(dd);
+		*/	
+			Integer installmentId = (Integer)dcbData.get("insta_id");
+			if(instaWiseDemandMap.containsKey(installmentId+"ONE_TIME_FEE")  && WSConstants.ONE_TIME_TAX_HEAD_MASTERS.contains(dd.getTaxHeadMasterCode()) ) {
 
-			} else {
-				List<DemandDetail> ddList = new ArrayList<>();
+				instaWiseDemandMap.get(installmentId+"ONE_TIME_FEE").add(dd);
 				
+			} else if( instaWiseDemandMap.containsKey(installmentId+"WS")){
+				
+				instaWiseDemandMap.get(installmentId+"WS").add(dd);
+			}else {
+				
+				List<DemandDetail> ddList = new ArrayList<>();
 				ddList.add(dd);
-				instaWiseDemandMap.put(installmentId, ddList);
+				
+				if(WSConstants.ONE_TIME_TAX_HEAD_MASTERS.contains(dd.getTaxHeadMasterCode()))
+					instaWiseDemandMap.put(installmentId+"ONE_TIME_FEE", ddList);
+				else
+					instaWiseDemandMap.put(installmentId+"WS", ddList);
+				
 			}
 				
 		}
@@ -178,7 +187,7 @@ public class DemandService {
     
     public List<Demand> prepareSwDemandRequest(Map data, String businessService, String consumerCode, String tenantId, OwnerInfo owner) {
 		
-	Map<Integer, List<DemandDetail>> instaWiseDemandMap = new HashMap<>();
+	Map<String, List<DemandDetail>> instaWiseDemandMap = new HashMap<>();
 	List<Map> dcbDataList = (List) data.get("dcb") != null ? (List) data.get("dcb") : new ArrayList<Map>();
 	List<Demand> demands = new LinkedList<>();
 	
@@ -219,15 +228,23 @@ public class DemandService {
 
 
 		Integer installmentId = (Integer)dcbData.get("insta_id");
-		if(instaWiseDemandMap.containsKey(installmentId)) {
+		if(instaWiseDemandMap.containsKey(installmentId+"ONE_TIME_FEE")  && WSConstants.ONE_TIME_TAX_HEAD_MASTERS.contains(dd.getTaxHeadMasterCode()) ) {
 
-			instaWiseDemandMap.get(installmentId).add(dd);
-
-		} else {
+			instaWiseDemandMap.get(installmentId+"ONE_TIME_FEE").add(dd);
+			
+		} else if( instaWiseDemandMap.containsKey(installmentId+"SW")){
+			
+			instaWiseDemandMap.get(installmentId+"SW").add(dd);
+		}else {
+			
 			List<DemandDetail> ddList = new ArrayList<>();
-
 			ddList.add(dd);
-			instaWiseDemandMap.put(installmentId, ddList);
+			
+			if(WSConstants.ONE_TIME_TAX_HEAD_MASTERS.contains(dd.getTaxHeadMasterCode()))
+				instaWiseDemandMap.put(installmentId+"ONE_TIME_FEE", ddList);
+			else
+				instaWiseDemandMap.put(installmentId+"SW", ddList);
+			
 		}
 
 	}
