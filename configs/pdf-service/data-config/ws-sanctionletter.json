@@ -272,9 +272,7 @@
               },
               {
                 "variable": "sla",
-                "value": {
-                  "path": "$.sla"
-                }
+                "value": "10"
               },
               {
                 "variable": "slaDate",

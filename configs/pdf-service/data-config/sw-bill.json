@@ -1,5 +1,5 @@
 {
-  "key": "ws-bill",
+  "key": "sw-bill",
   "DataConfigs": {
     "serviceName": "rainmaker-common",
     "version": "1.0.0",
@@ -774,17 +774,17 @@
                 ]
               },
               {
-                "path": "http://ws-services:8080/ws-services/wc/_search",
+                "path": "http://sw-services:8080/sw-services/swc/_search",
                 "queryParam": "tenantId=$.tenantId,connectionNumber=$.consumerCode",
                 "apiRequest": null,
                 "responseMapping": [
                   {
                     "variable": "oldConnectionNo",
-                    "value": "$.WaterConection[0].additionalDetails.oldConnectionNo"
+                    "value": "$.SewerageConnection[0].additionalDetails.oldConnectionNo"
                   },
                   {
                     "variable": "ledgerId",
-                    "value": "$.WaterConection[0].additionalDetails.ledgerId"
+                    "value": "$.SewerageConnection[0].additionalDetails.ledgerId"
                   }
                 ]
               },
