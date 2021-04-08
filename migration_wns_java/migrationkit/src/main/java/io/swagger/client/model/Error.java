@@ -17,9 +17,15 @@ import java.util.List;
 import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 /**
  * Error object will be returned as a part of reponse body in conjunction with ResponseHeader as part of ErrorResponse whenever the request processing status in the ResponseHeader is FAILED. HTTP return in this scenario will usually be HTTP 400.
  */
+
+@ToString
+@EqualsAndHashCode
 public class Error {
   @JsonProperty("code")
   private String code = null;
@@ -109,41 +115,30 @@ public class Error {
     this.params = params;
   }
 
-
-  @Override
-  public boolean equals(java.lang.Object o) {
-    if (this == o) {
-      return true;
-    }
-    if (o == null || getClass() != o.getClass()) {
-      return false;
-    }
-    Error error = (Error) o;
-    return Objects.equals(this.code, error.code) &&
-        Objects.equals(this.message, error.message) &&
-        Objects.equals(this.description, error.description) &&
-        Objects.equals(this.params, error.params);
-  }
-
-  @Override
-  public int hashCode() {
-    return Objects.hash(code, message, description, params);
-  }
-
-
-  @Override
-  public String toString() {
-    StringBuilder sb = new StringBuilder();
-    sb.append("class Error {\n");
-    
-    sb.append("    code: ").append(toIndentedString(code)).append("\n");
-    sb.append("    message: ").append(toIndentedString(message)).append("\n");
-    sb.append("    description: ").append(toIndentedString(description)).append("\n");
-    sb.append("    params: ").append(toIndentedString(params)).append("\n");
-    sb.append("}");
-    return sb.toString();
-  }
-
+	/*
+	 * @Override public boolean equals(java.lang.Object o) { if (this == o) { return
+	 * true; } if (o == null || getClass() != o.getClass()) { return false; } Error
+	 * error = (Error) o; return Objects.equals(this.code, error.code) &&
+	 * Objects.equals(this.message, error.message) &&
+	 * Objects.equals(this.description, error.description) &&
+	 * Objects.equals(this.params, error.params); }
+	 * 
+	 * @Override public int hashCode() { return Objects.hash(code, message,
+	 * description, params); }
+	 * 
+	 * 
+	 * @Override public String toString() { StringBuilder sb = new StringBuilder();
+	 * sb.append("class Error {\n");
+	 * 
+	 * sb.append("    code: ").append(toIndentedString(code)).append("\n");
+	 * sb.append("    message: ").append(toIndentedString(message)).append("\n");
+	 * sb.append("    description: ").append(toIndentedString(description)).append(
+	 * "\n");
+	 * sb.append("    params: ").append(toIndentedString(params)).append("\n");
+	 * sb.append("}"); return sb.toString(); }
+	 * 
+	 */  
+  
   /**
    * Convert the given object to string with each line indented by 4 spaces
    * (except the first line).

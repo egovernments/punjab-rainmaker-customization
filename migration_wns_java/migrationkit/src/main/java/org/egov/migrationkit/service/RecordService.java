@@ -1,5 +1,6 @@
 package org.egov.migrationkit.service;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -240,8 +241,9 @@ public class RecordService {
 
 	@Transactional
 	public void initiate(String tenantId) {
-
+		
 		jdbcTemplate.execute("set search_path to " + tenantId);
+		
 
 		// jdbcTemplate.execute("drop table if exists egwtr_migration" +
 		// tenantId);

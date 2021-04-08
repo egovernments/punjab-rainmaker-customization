@@ -12,13 +12,19 @@
 
 package io.swagger.client.model;
 
+
 import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 /**
  * ConnectionCategory
  */
 
+@ToString
+@EqualsAndHashCode
 public class ConnectionCategory {
   @JsonProperty("code")
   private String code = null;
@@ -60,37 +66,23 @@ public class ConnectionCategory {
     this.active = active;
   }
 
-
-  @Override
-  public boolean equals(java.lang.Object o) {
-    if (this == o) {
-      return true;
-    }
-    if (o == null || getClass() != o.getClass()) {
-      return false;
-    }
-    ConnectionCategory connectionCategory = (ConnectionCategory) o;
-    return Objects.equals(this.code, connectionCategory.code) &&
-        Objects.equals(this.active, connectionCategory.active);
-  }
-
-  @Override
-  public int hashCode() {
-    return Objects.hash(code, active);
-  }
-
-
-  @Override
-  public String toString() {
-    StringBuilder sb = new StringBuilder();
-    sb.append("class ConnectionCategory {\n");
-    
-    sb.append("    code: ").append(toIndentedString(code)).append("\n");
-    sb.append("    active: ").append(toIndentedString(active)).append("\n");
-    sb.append("}");
-    return sb.toString();
-  }
-
+	/*
+	 * @Override public boolean equals(java.lang.Object o) { if (this == o) { return
+	 * true; } if (o == null || getClass() != o.getClass()) { return false; }
+	 * ConnectionCategory connectionCategory = (ConnectionCategory) o; return
+	 * Objects.equals(this.code, connectionCategory.code) &&
+	 * Objects.equals(this.active, connectionCategory.active); }
+	 * 
+	 * @Override public int hashCode() { return Objects.hash(code, active); }
+	 * 
+	 * 
+	 * @Override public String toString() { StringBuilder sb = new StringBuilder();
+	 * sb.append("class ConnectionCategory {\n");
+	 * 
+	 * sb.append("    code: ").append(toIndentedString(code)).append("\n");
+	 * sb.append("    active: ").append(toIndentedString(active)).append("\n");
+	 * sb.append("}"); return sb.toString(); }
+	 */
   /**
    * Convert the given object to string with each line indented by 4 spaces
    * (except the first line).

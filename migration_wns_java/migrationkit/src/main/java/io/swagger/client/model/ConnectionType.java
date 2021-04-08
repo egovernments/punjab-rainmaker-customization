@@ -15,10 +15,15 @@ package io.swagger.client.model;
 import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 /**
  * ConnectionType
  */
 
+@ToString
+@EqualsAndHashCode
 public class ConnectionType {
   @JsonProperty("code")
   private String code = null;
@@ -60,38 +65,24 @@ public class ConnectionType {
     this.active = active;
   }
 
-
-  @Override
-  public boolean equals(java.lang.Object o) {
-    if (this == o) {
-      return true;
-    }
-    if (o == null || getClass() != o.getClass()) {
-      return false;
-    }
-    ConnectionType connectionType = (ConnectionType) o;
-    return Objects.equals(this.code, connectionType.code) &&
-        Objects.equals(this.active, connectionType.active);
-  }
-
-  @Override
-  public int hashCode() {
-    return Objects.hash(code, active);
-  }
-
-
-  @Override
-  public String toString() {
-    StringBuilder sb = new StringBuilder();
-    sb.append("class ConnectionType {\n");
-    
-    sb.append("    code: ").append(toIndentedString(code)).append("\n");
-    sb.append("    active: ").append(toIndentedString(active)).append("\n");
-    sb.append("}");
-    return sb.toString();
-  }
-
-  /**
+	/*
+	 * @Override public boolean equals(java.lang.Object o) { if (this == o) { return
+	 * true; } if (o == null || getClass() != o.getClass()) { return false; }
+	 * ConnectionType connectionType = (ConnectionType) o; return
+	 * Objects.equals(this.code, connectionType.code) && Objects.equals(this.active,
+	 * connectionType.active); }
+	 * 
+	 * @Override public int hashCode() { return Objects.hash(code, active); }
+	 * 
+	 * 
+	 * @Override public String toString() { StringBuilder sb = new StringBuilder();
+	 * sb.append("class ConnectionType {\n");
+	 * 
+	 * sb.append("    code: ").append(toIndentedString(code)).append("\n");
+	 * sb.append("    active: ").append(toIndentedString(active)).append("\n");
+	 * sb.append("}"); return sb.toString(); }
+	 * 
+	 */  /**
    * Convert the given object to string with each line indented by 4 spaces
    * (except the first line).
    */

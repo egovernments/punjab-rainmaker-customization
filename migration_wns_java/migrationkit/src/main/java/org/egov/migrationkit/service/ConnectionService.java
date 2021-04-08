@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
 import org.egov.migrationkit.constants.WSConstants;
@@ -30,9 +33,7 @@ import io.swagger.client.model.RequestInfo;
 import io.swagger.client.model.SewerageConnection;
 import io.swagger.client.model.SewerageConnectionRequest;
 import io.swagger.client.model.SewerageConnectionResponse;
-import io.swagger.client.model.WaterConnection;
 import io.swagger.client.model.WaterConnectionRequest;
-import io.swagger.client.model.WaterConnectionResponse;
 import lombok.extern.slf4j.Slf4j;
 
 @Service
@@ -70,19 +71,8 @@ public class ConnectionService {
 		long startTime = System.currentTimeMillis();
 
 		recordService.initiate(tenantId);
-		Map data = null;
-		WaterConnection connection = null;
-		List<Map> roadCategoryList = null;
-		Integer area = null;
-		Double areaDouble = null;
-		Address address = null;
-		Locality locality = null;
-		String locCode = null;
-		String localityCode = null;
-		String cityCode = null;
-		long connStartTime = 0l;
-		long connectionDuration = 0l;
-		long connectionCount=0l;
+
+		long connectionCount = 0l;
 
 		String searchPath = jdbcTemplate.queryForObject("show search_path", String.class);
 		log.info(searchPath);
@@ -96,252 +86,29 @@ public class ConnectionService {
 							+ ") ");
 		else
 			qry = qry.replace(":locCondition", " ");
-		
+
 		log.info(qry);
 
 		List<String> queryForList = jdbcTemplate.queryForList(qry, String.class);
-
+		ExecutorService executor = Executors.newFixedThreadPool(10);
+		List<Callable<String>> listOfTasks = new ArrayList<Callable<String>>();
 		for (String resultJson : queryForList) {
-			connStartTime = System.currentTimeMillis();
 			connectionCount++;
-			try {
-				data = objectMapper.readValue(resultJson, Map.class);
-				connection = objectMapper.readValue(resultJson, WaterConnection.class);
-				if (connection.getConnectionType().trim().equalsIgnoreCase("Non-Metered")) {
-					connection.setConnectionType("Non Metered");
-				} else {
-					connection.setConnectionType("Metered");
-				}
-				String connectionNo = connection.getConnectionNo() != null ? connection.getConnectionNo()
-						: (String) data.get("applicationnumber");
-				connection.setConnectionNo(connectionNo);
-				connection.setTenantId(requestInfo.getUserInfo().getTenantId());
-				connection.setProposedPipeSize(connection.getPipeSize());
-				log.info("\n\n initiating migration for  " + connection.getMobilenumber());
-				// log.debug("mobile number : " + connection.getMobilenumber());
-				//// log.debug("getApplicantname ; " +
-				// connection.getApplicantname());
-				// log.debug("Guardian name :" + connection.getGuardianname());
-				// log.debug("connectionNo; " + connection.getConnectionNo());
-				// log.debug("Connection Category : " +
-				// connection.getConnectionCategory());
-				// log.debug("Connection Type :" +
-				// connection.getConnectionType());
-				// log.debug("ConnectionDetail id :" + connection.getId());
-
-				// ToDo: populate connectionHolders
-				WaterConnectionRequest waterRequest = new WaterConnectionRequest();
-
-				waterRequest.setWaterConnection(connection);
-				waterRequest.setRequestInfo(requestInfo);
-				locCode = (String) data.get("locality");
-				cityCode = (String) data.get("cityCode");
-
-				boolean isMigrated = recordService.recordWaterMigration(connection, tenantId);
-				if (isMigrated)
-					continue;
-
-				if (connection.getMobilenumber() == null || connection.getMobilenumber().isEmpty()) {
-					// recordService.recordError("water", tenantId, "Mobile
-					// Number is null ", connection.getId());
-					/*
-					 * System is allowing only 6-9 series.So as of now added
-					 * 9999999999
-					 */
-					Long mobileNumber = getMobileNumber(cityCode, locCode, tenantId);
-					recordService.setMob("water", tenantId, mobileNumber, connection.getId());
-					connection.setMobilenumber(String.valueOf(mobileNumber));
-					// recordService.setStatus("water", tenantId,
-					// "Incompatible", connection.getId());
-					// continue;
-				}
-
-				String addressQuery = Sqls.GET_ADDRESS;
-				addressQuery = addressQuery.replace(":schema_tenantId", tenantId);
-				Integer id = (Integer) data.get("applicantaddress.id");
-				addressQuery = addressQuery.replace(":id", id.toString());
-
-				address = (Address) jdbcTemplate.queryForObject(addressQuery, new BeanPropertyRowMapper(Address.class));
-				locality = new Locality();
-				// locality.setCode((String)data.get("locality"));
-				// use the map here
-				locCode = (String) data.get("locality");
-				localityCode = findLocality(locCode, tenantId);
-				if (localityCode == null) {
-					recordService.recordError("water", tenantId, "No Mapping for Locality: " + locCode,
-							connection.getId());
-					continue;
-				}
-
-				locality.setCode(localityCode);
-				address.setLocality(locality);
-				address.setCity((String) data.get("cityname"));
-				connection.setApplicantAddress(address);
-
-				Property property = propertyService.findProperty(waterRequest, data, tenantId);
-				if (property == null) {
-					continue;
-				}
-				connection.setPropertyId(property.getId());
-				roadCategoryList = (List<Map>) data.get("road_category");
-				/*
-				 * if (roadCategoryList != null) { String roadCategory = (String)
-				 * roadCategoryList.get(0).get("road_name");
-				 * connection.setRoadType(WSConstants.DIGIT_ROAD_CATEGORIES.get(roadCategory));
-				 * try { area = (Integer) roadCategoryList.get(0).get("road_area");
-				 * 
-				 * connection.setRoadCuttingArea(Double.valueOf(area)); } catch (Exception e) {
-				 * areaDouble = (Double) roadCategoryList.get(0).get("road_area");
-				 * connection.setRoadCuttingArea(areaDouble); }
-				 * 
-				 * }
-				 */
-				
-				if (roadCategoryList != null) {
-					String roadCategory = (String) roadCategoryList.get(0).get("road_name");
-					connection.setRoadType(WSConstants.DIGIT_ROAD_CATEGORIES.get(roadCategory));
-					
-					Object areaObject= roadCategoryList.get(0).get("road_area");
-					
-					if(areaObject instanceof Integer) {
-						area = (Integer) roadCategoryList.get(0).get("road_area");
-
-						connection.setRoadCuttingArea(Double.valueOf(area));
-					} else if (areaObject instanceof Double) {
-						
-					
-						areaDouble = (Double) roadCategoryList.get(0).get("road_area");
-						connection.setRoadCuttingArea(areaDouble);
-					}else {
-						areaDouble = 0d;
-					}
-
-				}
-				
-				
-				connection.setStatus(StatusEnum.Active);
-
-				//connection.setApplicationStatus("CONNECTION_ACTIVATED");
-				
-				connection.setApplicationStatus(WSConstants.CONNECTION_ACTIVATED);
-
-
-				//connection.setApplicationType("NEW_WATER_CONNECTION");
-				
-				connection.setApplicationType(WSConstants.NEW_WATER_CONNECTION);
-
-				ProcessInstance workflow = new ProcessInstance();
-				workflow.setBusinessService("NewWS1");
-				workflow.setAction("ACTIVATE_CONNECTION");
-				workflow.setTenantId(connection.getTenantId());
-				workflow.setModuleName("ws-services");
-				connection.setProcessInstance(workflow);
-
-				// connection.setDocuments(getDocuments(waterRequest, data));
-				Map<Object, Object> addtionals = new HashMap<Object, Object>();
-
-				addtionals.put("propertyId", (String) data.get("propertyId"));
-				addtionals.put("locality", localityCode);
-				addtionals.put("billingType", (String) data.get("billingType"));
-				addtionals.put("billingAmount", String.valueOf("billingAmount"));
-				addtionals.put("estimationLetterDate", (String) data.get("estimationLetterDate"));
-				addtionals.put("connectionCategory", (String) data.get("connectionCategory"));
-				addtionals.put("meterId", (String) data.get("meterId"));
-				addtionals.put("ledgerId", (String) data.get("ledgerId"));
-				addtionals.put("pipeSize", (Double) data.getOrDefault("pipeSize", 1));
-				addtionals.put("estimationFileStoreId", (String) data.get("estimationFileStoreId"));
-				addtionals.put("meterMake", (String) data.get("meterMake"));
-				addtionals.put("securityFee", data.get("securityFee"));
-				addtionals.put("isMigrated", Boolean.TRUE);
-
-				if (data.get("averageMeterReading") != null) {
-					try {
-						Integer averageMeterReading = (Integer) data.get("averageMeterReading");
-
-						addtionals.put("averageMeterReading", Double.valueOf(averageMeterReading));
-					} catch (Exception e) {
-						Double averageMeterReading = (Double) data.get("averageMeterReading");
-						addtionals.put("averageMeterReading", averageMeterReading);
-
-					}
-				} else
-					addtionals.put("averageMeterReading", 0);
-				
-				if (data.get("initialMeterReading") != null) {
-					try {
-						Integer initialMeterReading = (Integer) data.get("initialMeterReading");
-
-						addtionals.put("initialMeterReading", Double.valueOf(initialMeterReading));
-					} catch (Exception e) {
-						Double initialMeterReading = (Double) data.get("initialMeterReading");
-						addtionals.put("initialMeterReading", initialMeterReading);
-
-					}
-				} else
-					addtionals.put("initialMeterReading", 0);
-
-				connection.setAdditionalDetails(addtionals);
-
-				connection.setOldApplication(true);
-				// connection.setOldConnectionNo(connectionNo);
-
-				String response = null;
-				try {
-					response = restTemplate.postForObject(host + "/" + waterUrl, waterRequest, String.class);
-				} catch (Exception e) {
-					e.printStackTrace();
-					recordService.recordError("water", tenantId, e.toString(), connection.getId());
-					continue;
-				}
-
-				// log.debug("Response=" + response);
-
-				WaterConnectionResponse waterResponse = objectMapper.readValue(response, WaterConnectionResponse.class);
-
-				WaterConnection wtrConnResp = null;
-				if (waterResponse != null && waterResponse.getWaterConnection() != null
-						&& !waterResponse.getWaterConnection().isEmpty()) {
-
-					wtrConnResp = waterResponse.getWaterConnection().get(0);
-					log.info("status" + wtrConnResp.getStatus() + " application status"
-							+ wtrConnResp.getApplicationStatus());
-					recordService.updateWaterMigration(wtrConnResp, connection.getId(), tenantId,
-							requestInfo.getUserInfo().getUuid());
-					String consumerCode = wtrConnResp.getConnectionNo() != null ? wtrConnResp.getConnectionNo()
-							: wtrConnResp.getApplicationNo();
-
-					List<Demand> demandRequestList = demandService.prepareDemandRequest(data,
-							WSConstants.WATER_BUSINESS_SERVICE, consumerCode, requestInfo.getUserInfo().getTenantId(),
-							property.getOwners().get(0));
-					if (!demandRequestList.isEmpty()) {
-
-						Boolean isDemandCreated = demandService.saveDemand(requestInfo, demandRequestList,
-								connection.getId(), tenantId, "water");
-						if (isDemandCreated) {
-							recordService.setStatus("water", tenantId, "Demand_Created", connection.getId());
-							// Boolean isBillCreated =
-							// demandService.fetchBill(demandRequestList,
-							// requestInfo);
-							// log.info("Bill created" + isBillCreated + "
-							// isDemandCreated" + isDemandCreated);
-
-						}
-
-						connectionDuration = System.currentTimeMillis() - connStartTime;
-						log.info("Migration completed for connection no : " + connection.getConnectionNo() + "in "
-								+ connectionDuration / 1000 + "Secs");
-
-					}
-				}
-			} catch (Exception e) {
-				e.printStackTrace();
-				recordService.recordError("water", tenantId, e.toString(), connection.getId());
-			}
+			listOfTasks.add(new ConnectionServiceParallelizable(recordService, objectMapper, propertyService,
+					restTemplate, jdbcTemplate, demandService, requestInfo, resultJson, tenantId, waterUrl, host));
 
 		}
+		try {
+			executor.invokeAll(listOfTasks);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		long duration = System.currentTimeMillis() - startTime;
 
-		log.info("Water Migration completed for " + connectionCount + " connections in "+tenantId+ " in " + duration / 1000 + " Secs");
+		log.info("Water Migration completed for " + connectionCount + " connections in " + tenantId + " in "
+				+ duration / 1000 + " Secs");
 
 	}
 
@@ -413,7 +180,7 @@ public class ConnectionService {
 		String cityCode = null;
 		long connStartTime = 0l;
 		long connectionDuration = 0l;
-		long connectionCount=0l;
+		long connectionCount = 0l;
 
 		String searchPath = jdbcTemplate.queryForObject("show search_path", String.class);
 		log.info(searchPath);
@@ -553,7 +320,7 @@ public class ConnectionService {
 				swConnection.setDocuments(getDocuments(null, data));
 
 				swConnection.setTenantId(requestInfo.getUserInfo().getTenantId());
-				
+
 				swConnection.setStatus(StatusEnum.Active);
 
 				swConnection.setApplicationStatus(WSConstants.CONNECTION_ACTIVATED);
@@ -566,7 +333,7 @@ public class ConnectionService {
 				workflow.setTenantId(swConnection.getTenantId());
 				workflow.setModuleName("sw-services");
 				swConnection.setProcessInstance(workflow);
-				
+
 //				ProcessInstance workflow = new ProcessInstance();
 //				workflow.setBusinessService("NewSW1");
 //				workflow.setAction("SUBMIT");
@@ -642,7 +409,8 @@ public class ConnectionService {
 
 		}
 		long duration = System.currentTimeMillis() - startTime;
-		log.info("Sewerage Migration completed for " + connectionCount + " connections in "+tenantId+ " in " + duration / 1000 + " Secs");
+		log.info("Sewerage Migration completed for " + connectionCount + " connections in " + tenantId + " in "
+				+ duration / 1000 + " Secs");
 
 	}
 

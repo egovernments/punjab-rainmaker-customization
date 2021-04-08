@@ -13,6 +13,7 @@ import org.apache.http.conn.ssl.TrustStrategy;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -27,7 +28,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 
 
 @SpringBootApplication
-public class MigrationkitApplication {
+public class MigrationkitApplication implements CommandLineRunner {
 
 	
 	@Value("${app.timezone}")
@@ -79,6 +80,12 @@ public class MigrationkitApplication {
 		mapper.enable(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT);
 		converter.setObjectMapper(mapper);
 		return converter;
+	}
+
+	@Override
+	public void run(String... args) throws Exception {
+		// TODO Auto-generated method stub
+		
 	}
 
 	 
