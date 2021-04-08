@@ -80,7 +80,7 @@ public class Sqls {
 	public static final String WATER_MIGRATION_UPDATE = "update  :schema.egwtr_migration  "
 			+ "set digitconn=:digitconn , digitpt=:digitpt,status=:status where erpid=:erpid ";
 
-	public static final String GET_ADDRESS = "select id,housenobldgapt as plotno,landmark,citytownvillage as city,district,arealocalitysector as region,state,country,pincode, buildingName,streetroadline as street from :schema_tenantId.eg_address where id=:id ;";
+	public static final String GET_ADDRESS = "select id,housenobldgapt as doorNo,housenobldgapt as plotno,landmark,citytownvillage as city,district,arealocalitysector as region,state,country,pincode, buildingName,streetroadline as street from :schema_tenantId.eg_address where id=:id ;";
 
 	public static final String WATER_COLLECTION_MIGRATION_TABLE = "create table  if not exists  egwtr_cl_migration(erpreceiptnumber varchar(64),erpconn varchar(64) ,digitreceiptnumber varchar(64) ,erppt varchar(64),digitpt varchar(64),status varchar(64),tenantId varchar(64),additiondetails varchar(1000),errorMessage varchar(4000) );";
 

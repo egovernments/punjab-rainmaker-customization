@@ -106,7 +106,7 @@ public class PropertyService {
 		property.setAddress(conn.getApplicantAddress());
 		property.setChannel(Channel.SYSTEM);
 		property.setSource(Source.WATER_CHARGES);
-		if (conn.getPlotSize() != null && conn.getPlotSize() < 2)
+		if (conn.getPlotSize() != null && conn.getPlotSize() > 2)
 			property.setLandArea(BigDecimal.valueOf(conn.getPlotSize()));
 		else
 			property.setLandArea(BigDecimal.valueOf(2));
