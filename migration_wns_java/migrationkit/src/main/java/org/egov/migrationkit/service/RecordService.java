@@ -32,7 +32,7 @@ public class RecordService {
 	private long fileLimit = 0l;
 
 	@Transactional
-	public boolean recordWaterMigration(WaterConnection conn, String tenantId) {
+	public List<String> recordWaterMigration(WaterConnection conn, String tenantId) {
 		String checkQuery = Sqls.WATER_MIGRATION_SELECT;
 		checkQuery = checkQuery.replace(":schema", tenantId);
 //		checkQuery = checkQuery.replace(":status", "'Saved'");
@@ -41,7 +41,7 @@ public class RecordService {
 
 		List<String> status = jdbcTemplate.queryForList(checkQuery, String.class);
 		if(status != null && !status.isEmpty() && status.contains("Saved")) {
-			return  Boolean.TRUE;
+			return  status;
 			
 		} else if (status == null || status.isEmpty()) {
 			String qry = Sqls.WATER_MIGRATION_INSERT;
@@ -55,10 +55,10 @@ public class RecordService {
 			qry = qry.replace(":digitpt", "'null'");
 			qry = qry.replace(":addtionaldetails", "'null'");
 			jdbcTemplate.execute(qry);
-			return Boolean.FALSE;
+			return status;
 			
 		}		
-		return Boolean.FALSE;
+		return status;
 
 	}
 
