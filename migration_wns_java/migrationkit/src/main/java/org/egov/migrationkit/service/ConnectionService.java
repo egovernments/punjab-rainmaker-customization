@@ -143,8 +143,8 @@ public class ConnectionService {
 				locCode = (String) data.get("locality");
 				cityCode = (String) data.get("cityCode");
 
-				boolean isConnectionMigrated = recordService.recordWaterMigration(connection, tenantId);
-				if (isConnectionMigrated) {
+				List<String> isConnectionMigrated = recordService.recordWaterMigration(connection, tenantId);
+				if (isConnectionMigrated != null && !isConnectionMigrated.isEmpty() && isConnectionMigrated.contains("Saved")) {
 					try {
 						OwnerInfo ownerInfo = commonService.searchConnection(requestInfo, connectionNo, connection.getTenantId(), "water");
 						if( ownerInfo != null) {
@@ -161,6 +161,8 @@ public class ConnectionService {
 								connection.getId());
 					}
 					continue;
+				}else if(isConnectionMigrated != null && !isConnectionMigrated.isEmpty() && isConnectionMigrated.contains("Demand_Created")) {
+					continue;					
 				}
 
 				if (connection.getMobilenumber() == null || connection.getMobilenumber().isEmpty() || connection.getMobilenumber().length()<10 ) {
@@ -483,8 +485,8 @@ public class ConnectionService {
 				sewerageRequest.setSewerageConnection(swConnection);
 				sewerageRequest.setRequestInfo(requestInfo);
 				
-				boolean isMigrated = recordService.recordSewerageMigration(swConnection, tenantId);
-				if (isMigrated) {
+				List<String> listStatuses = recordService.recordSewerageMigration(swConnection, tenantId);
+				if (listStatuses != null && !listStatuses.isEmpty() && listStatuses.contains("Saved")) {
 					try {
 					OwnerInfo ownerInfo = commonService.searchConnection(requestInfo, connectionNo,  swConnection.getTenantId(), "sewerage");
 					if( ownerInfo != null) {
@@ -502,6 +504,11 @@ public class ConnectionService {
 					}
 					continue;
 				}
+				else if(listStatuses != null && !listStatuses.isEmpty() && listStatuses.contains("Demand_Created")) {
+					continue;					
+				}
+				
+				
 
 				locCode = (String) data.get("locality");
 				cityCode = (String) data.get("cityCode");
