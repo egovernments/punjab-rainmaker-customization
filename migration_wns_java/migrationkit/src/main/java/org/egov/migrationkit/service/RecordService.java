@@ -133,7 +133,7 @@ public class RecordService {
 		checkQuery = checkQuery.replace(":erpid", "'" + conn.getId() + "'");
 
 		List<String> status = jdbcTemplate.queryForList(checkQuery, String.class);
-		if(status != null && !status.isEmpty() && status.contains("Saved")) {
+		if(status != null && !status.isEmpty()) {
 			return  status;
 			
 		} else if (status == null || status.isEmpty()) {
