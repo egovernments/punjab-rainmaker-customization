@@ -124,7 +124,7 @@ public class RecordService {
 	}
 
 	@Transactional
-	public boolean recordSewerageMigration(SewerageConnection conn, String tenantId) {
+	public List<String> recordSewerageMigration(SewerageConnection conn, String tenantId) {
 		
 		String checkQuery = Sqls.SEWERAGE_MIGRATION_SELECT;
 		checkQuery = checkQuery.replace(":schema_tenantId", tenantId);
@@ -134,7 +134,7 @@ public class RecordService {
 
 		List<String> status = jdbcTemplate.queryForList(checkQuery, String.class);
 		if(status != null && !status.isEmpty() && status.contains("Saved")) {
-			return  Boolean.TRUE;
+			return  status;
 			
 		} else if (status == null || status.isEmpty()) {
 
@@ -149,9 +149,11 @@ public class RecordService {
 			qry = qry.replace(":digitpt", "'null'");
 			qry = qry.replace(":addtionaldetails", "'null'");
 			jdbcTemplate.execute(qry);
+			
+			return status;
 		}
 		
-		return Boolean.FALSE;
+		return status;
 
 	}
 

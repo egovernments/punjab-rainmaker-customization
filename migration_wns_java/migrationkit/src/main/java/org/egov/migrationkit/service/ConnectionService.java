@@ -483,8 +483,8 @@ public class ConnectionService {
 				sewerageRequest.setSewerageConnection(swConnection);
 				sewerageRequest.setRequestInfo(requestInfo);
 				
-				boolean isMigrated = recordService.recordSewerageMigration(swConnection, tenantId);
-				if (isMigrated) {
+				List<String> isMigrated = recordService.recordSewerageMigration(swConnection, tenantId);
+				if (isMigrated != null) {
 					try {
 					OwnerInfo ownerInfo = commonService.searchConnection(requestInfo, connectionNo,  swConnection.getTenantId(), "sewerage");
 					if( ownerInfo != null) {
