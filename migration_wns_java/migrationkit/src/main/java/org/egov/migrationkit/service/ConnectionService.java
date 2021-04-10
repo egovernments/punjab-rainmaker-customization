@@ -123,7 +123,7 @@ public class ConnectionService {
 				connection.setConnectionNo(connectionNo);
 				connection.setTenantId(requestInfo.getUserInfo().getTenantId());
 				connection.setProposedPipeSize(connection.getPipeSize());
-				log.info("\n\n initiating migration for  " + connection.getMobilenumber());
+				log.info(" Water connection migrating for " + connectionNo);
 				// log.debug("mobile number : " + connection.getMobilenumber());
 				//// log.debug("getApplicantname ; " +
 				// connection.getApplicantname());
@@ -175,9 +175,6 @@ public class ConnectionService {
 					Long mobileNumber = getMobileNumber(cityCode, locCode, tenantId);
 					recordService.setMob("water", tenantId, mobileNumber, connection.getId());
 					connection.setMobilenumber(String.valueOf(mobileNumber));
-					// recordService.setStatus("water", tenantId,
-					// "Incompatible", connection.getId());
-					// continue;
 				}
 
 				String addressQuery = Sqls.GET_ADDRESS;
@@ -322,25 +319,8 @@ public class ConnectionService {
 					//Creating demand for water connection
 					createWaterDemand(data, connection.getId(), consumerCode, requestInfo, property.getOwners().get(0), tenantId);
 					
-					
-//					List<Demand> demandRequestList = demandService.prepareDemandRequest(data,
-//							WSConstants.WATER_BUSINESS_SERVICE, consumerCode, requestInfo.getUserInfo().getTenantId(),
-//							property.getOwners().get(0));
-//					if (!demandRequestList.isEmpty()) {
-//
-//						Boolean isDemandCreated = demandService.saveDemand(requestInfo, demandRequestList,
-//								connection.getId(), tenantId, "water");
-//						if (isDemandCreated) {
-//							// Boolean isBillCreated =
-//							// demandService.fetchBill(demandRequestList,
-//							// requestInfo);
-//							// log.info("Bill created" + isBillCreated + "
-//							// isDemandCreated" + isDemandCreated);
-//
-//						}
-
 						connectionDuration = System.currentTimeMillis() - connStartTime;
-						log.info("Migration completed for connection no : " + connection.getConnectionNo() + "in "
+						log.info("Water Migration completed for connection no : " + connection.getConnectionNo() + "in "
 								+ connectionDuration / 1000 + "Secs");
 
 //					}
@@ -472,7 +452,7 @@ public class ConnectionService {
 				String connectionNo = swConnection.getConnectionNo() != null ? swConnection.getConnectionNo()
 						: (String) data.get("applicationnumber");
 				swConnection.setConnectionNo(connectionNo);
-				log.info("Migrating for consumer number : " + swConnection.getConnectionNo());
+				log.info("Sewerage connection Migrating for consumer number : " + swConnection.getConnectionNo());
 				// log.debug("getApplicantname ; " +
 				// swConnection.getApplicantname());
 				// log.debug("connectionNo; " + swConnection.getConnectionNo());
@@ -508,8 +488,6 @@ public class ConnectionService {
 					continue;					
 				}
 				
-				
-
 				locCode = (String) data.get("locality");
 				cityCode = (String) data.get("cityCode");
 				if (swConnection.getMobilenumber() == null || swConnection.getMobilenumber().isEmpty()) {
@@ -647,13 +625,6 @@ public class ConnectionService {
 				workflow.setModuleName("sw-services");
 				swConnection.setProcessInstance(workflow);
 				
-//				ProcessInstance workflow = new ProcessInstance();
-//				workflow.setBusinessService("NewSW1");
-//				workflow.setAction("SUBMIT");
-//				workflow.setTenantId(swConnection.getTenantId());
-//				workflow.setModuleName("sw-services");
-//				swConnection.setProcessInstance(workflow);
-
 				String response = null;
 				try {
 					response = restTemplate.postForObject(host + "/" + sewerageUrl, sewerageRequest, String.class);
@@ -666,12 +637,8 @@ public class ConnectionService {
 					continue;
 				}
 
-				// log.debug("Response=" + response);
-
 				SewerageConnectionResponse sewerageResponse = objectMapper.readValue(response,
 						SewerageConnectionResponse.class);
-
-				//// log.debug("Sewerage Response=" + sewerageResponse);
 
 				SewerageConnection srgConnResp = null;
 
@@ -691,27 +658,8 @@ public class ConnectionService {
 					
 					createSewerageDemand(data, swConnection.getId(), connectionNo, requestInfo, property.getOwners().get(0), tenantId);
 
-//
-//					List<Demand> demandRequestList = demandService.prepareSwDemandRequest(data,
-//							WSConstants.SEWERAGE_BUSINESS_SERVICE, consumerCode,
-//							requestInfo.getUserInfo().getTenantId(), property.getOwners().get(0));
-//
-//					// log.info("Demand Request=" + demandRequestList.size());
-//
-//					if (!demandRequestList.isEmpty()) {
-//
-//						Boolean isDemandCreated = demandService.saveDemand(requestInfo, demandRequestList,
-//								swConnection.getId(), tenantId, "sewerage");
-//						if (isDemandCreated) {
-//							// Boolean isBillCreated =
-//							// demandService.fetchBill(demandRequestList,
-//							// requestInfo);
-//							recordService.setStatus("sewerage", tenantId, "Demand_Created", swConnection.getId());
-//							//
-//						}
-
 						connectionDuration = System.currentTimeMillis() - connStartTime;
-						log.info("Migration completed for connection no : " + swConnection.getConnectionNo() + "in "
+						log.info("Sewerage Migration completed for connection no : " + swConnection.getConnectionNo() + "in "
 								+ connectionDuration / 1000 + "Secs");
 
 //					}
