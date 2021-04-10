@@ -94,6 +94,12 @@
                 }
               },
               {
+                "variable": "renewalPenalty", 
+                "value": {
+                  "path": "$.paymentDetails[0].bill.billDetails[0].billAccountDetails[?(@.taxHeadCode == 'TL_RENEWAL_PENALTY')].amount"
+                }
+              },
+              {
                 "variable": "adhocRebate", 
                 "value": {
                   "path": "$.paymentDetails[0].bill.billDetails[0].billAccountDetails[?(@.taxHeadCode == 'TL_ADHOC_REBATE')].amount"
