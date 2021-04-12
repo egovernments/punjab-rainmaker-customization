@@ -9,16 +9,16 @@ SearchDefinitions:
     baseQuery: |
       select array_to_json(array_agg(row_to_json(data))) from (
         select
-          pt.propertyid as propertyid,
-          pt.oldpropertyid as oldpropertyid,
-          pt.surveyid as surveyid,
-          pd.receiptnumber as receiptnumber,
-          pt.tenantid as tenantid,
-          pd.receiptdate as receiptdate,
-          pd.receiptnumber as receiptnumber,
-          pd.amountpaid as amount,
-          getfinancialyear(pd.billid) as financialyear,
-          bn.blockname
+           concat(pt.propertyid , '/' , pt.surveyid) as primarykey,
+           pt.oldpropertyid as oldpropertyid,
+           pt.surveyid as surveyid,
+           pd.amountpaid as amount,
+           getfinancialyearforgis(pd.billid) as financialyear,
+           bn.blockname,
+           pt.tenantid as tenantid,
+           pd.receiptnumber as receiptnumber,
+           to_char(to_timestamp(cast(pd.receiptdate/1000 as bigint))::date , 'dd/mm/yyyy') as receiptdate,
+           pt.landarea as plotarea
         from egcl_paymentdetail AS pd
         INNER JOIN egcl_bill on pd.billid=egcl_bill.id
         INNER JOIN eg_pt_property AS pt ON pt.propertyid = egcl_bill.consumercode AND  ((pt.oldpropertyid IS NOT NULL
