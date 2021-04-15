@@ -167,7 +167,7 @@ public class Sqls {
 			+ "  address.id=conn.address and status.id=appdetails.status and conn.shsc_number is not null "
 			+" :locCondition "
 			+ " and conndetails.id not in (select erpid::bigint from egswtax_migration where status"
-			+ " in ('Demand_Created' ) ) and and (conn.status='ACTIVE' or (conn.status='INACTIVE' and appdetails.closeconnectionreason is not null)) order by conndetails.id;";
+			+ " in ('Demand_Created' ) ) and (conn.status='ACTIVE' or (conn.status='INACTIVE' and appdetails.closeconnectionreason is not null)) order by conndetails.id;";
 
 	public static final String SEWERAGE_MIGRATION_TABLE = "create table  if not exists  egswtax_migration "
 			+ " ( erpid varchar(64),erpconn varchar(64), mob varchar(64),digitconn varchar(64) ,erppt varchar(64),digitpt varchar(64),status varchar(64),tenantId varchar(64),additiondetails varchar(1000),errorMessage varchar(4000)  );"
