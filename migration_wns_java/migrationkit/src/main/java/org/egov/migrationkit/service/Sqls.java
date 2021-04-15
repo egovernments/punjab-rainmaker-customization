@@ -15,7 +15,7 @@ public class Sqls {
 			+ "  'connectionNo'	, conn.consumercode		, " + "  'id'	, conndetails.id	, "
 			+ "  'guardianrelation', ( CASE WHEN usr.guardianrelation ='Mother' THEN 'MOTHER' WHEN usr.guardianrelation ='Father' THEN 'FATHER' WHEN usr.guardianrelation='Husband' THEN 'HUSBAND' WHEN usr.guardianrelation ='Others' THEN 'OTHER' WHEN usr.guardianrelation ='Other' THEN 'OTHER' ELSE 'OTHER' END ), 'emailId',	 usr.emailid, 'applicantname'	, usr.name		, "
 			+ "'gender', ( SELECT CASE WHEN usr.gender = 0 THEN 'FEMALE' WHEN usr.gender = 1 THEN 'MALE' ELSE 'OTHERS' END ),\n"
-			+ "  'connectionStatus',	 conndetails.connectionstatus	,	 "
+			+ "  'status',( SELECT CASE WHEN conndetails.connectionstatus ='ACTIVE' THEN 'Active' ELSE 'Inactive' END)	,	 "
 			+ "  'securityFee',	 conndetails.securitydeposit	,	 "
 			+ "  'createddate',	 to_char(conn.createddate::timestamp without time zone	, 'YYYY-MM-DD')	, "
 			+ "  'propertyType'	, proptype.name		, " + "  'guardianname',	 usr.guardian	,	 "
@@ -64,8 +64,8 @@ public class Sqls {
 			+ " usage.id=conndetails.usagetype and locality.id=conn.locality and"
 			+ " conndetails.propertytype=proptype.id and conndetails.category=wtrctgy.id and ownerinfo.connection=conn.id "
 			+ " and usr.id=ownerinfo.owner and address.id=conn.address and status.id=conndetails.statusid  :locCondition "
-			+ " and conndetails.connectionstatus='ACTIVE' and conndetails.id not in (select erpid::bigint from egwtr_migration where status in "
-			+ "('Demand_Created' ) )  " + " order by conndetails.id; ";
+			+ " and conndetails.id not in (select erpid::bigint from egwtr_migration where status in "
+			+ "('Demand_Created' ) )  and (conndetails.connectionstatus='ACTIVE' or (conndetails.connectionstatus='INACTIVE' and conn.parentconnection is null)) " + " order by conndetails.id; ";
 
 	public static final String WATER_MIGRATION_TABLE = "create table if not exists egwtr_migration "
 			+ " ( erpid varchar(64),erpconn varchar(64) ,digitconn varchar(64) ,erppt varchar(64),digitpt varchar(64),status varchar(64),tenantId varchar(64),additiondetails varchar(1000),errorMessage varchar(4000), mob varchar(11) );"
@@ -121,7 +121,7 @@ public class Sqls {
 			+ "'zone', zone.name,\n" + "'cityCode', (select code from eg_city),\n"
 			+ "'connectionNo', conn.shsc_number,\n" + "'id', conndetails.id,\n" + "'applicantname', usr.name,\n"
 			+ "'gender', ( SELECT CASE WHEN usr.gender = 0 THEN 'FEMALE' WHEN usr.gender = 1 THEN 'MALE' ELSE 'OTHERS' END ),\n"
-			+ "'connectionstatus', conn.status,\n"
+			+ "'status', ( SELECT CASE WHEN conn.status='ACTIVE' THEN 'Active' ELSE 'Inactive' END) ,\n"
 			+ "'createddate', to_timestamp(to_char(conn.createddate::timestamp without time zone, 'YYYY-MM-DD'),'YYYY-MM-DDTHH24:MI:SSZ'),\n"
 			+ "'oldConnectionNo' , conn.oldconsumernumber ,'servicetype', 'Sewerage Charges',\n"
 			+ "'autoverifieddate', (select lastmodifieddate from eg_wf_state_history statehist where statehist.state_id=appdetails.state_id and lastmodifiedby IN (select id from eg_user where username='system') LIMIT 1),\n"
