@@ -76,7 +76,7 @@ public class CollectionService {
 				collectionCount++;
 
 				payment = objectMapper.readValue(json, CollectionPayment.class);
-				log.info("Initiating  for " + payment.getConsumerCode());
+				log.info("Water collection migrating  for " + payment.getConsumerCode());
 				payment.setTenantId(digitTenantId);
 				payment.getPaymentDetails().get(0).setTenantId(digitTenantId);
 				payment.getPaymentDetails().get(0).setTotalDue(payment.getTotalDue());
@@ -246,6 +246,8 @@ public class CollectionService {
 				payment.setTenantId(digitTenantId);
 				payment.getPaymentDetails().get(0).setTenantId(digitTenantId);
 				payment.getPaymentDetails().get(0).setTotalDue(payment.getTotalDue());
+				log.info("Sewerage collection migrating  for " + payment.getConsumerCode());
+
 				if (payment.getPaymentMode().equals(CollectionPaymentModeEnum.ONLINE) 
 						|| payment.getPaymentMode().equals(CollectionPaymentModeEnum.CARD)) {
 					payment.setInstrumentNumber(payment.getTransactionNumber());

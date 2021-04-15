@@ -662,7 +662,6 @@ public class ConnectionService {
 						log.info("Sewerage Migration completed for connection no : " + swConnection.getConnectionNo() + "in "
 								+ connectionDuration / 1000 + "Secs");
 
-//					}
 
 				}
 			} catch (Exception e) {
