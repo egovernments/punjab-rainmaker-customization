@@ -232,7 +232,7 @@ public class ConnectionService {
 				}
 				connection.setRoadCuttingInfo(cuttingInfoList);
 
-				connection.setStatus(StatusEnum.Active);
+//				connection.setStatus(StatusEnum.Active);
 
 				connection.setApplicationStatus("CONNECTION_ACTIVATED");
 
@@ -612,7 +612,7 @@ public class ConnectionService {
 
 				swConnection.setTenantId(requestInfo.getUserInfo().getTenantId());
 				
-				swConnection.setStatus(StatusEnum.Active);
+//				swConnection.setStatus(StatusEnum.Active);
 
 				swConnection.setApplicationStatus("CONNECTION_ACTIVATED");
 
