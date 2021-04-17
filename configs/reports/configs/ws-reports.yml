@@ -57,7 +57,7 @@ ReportDefinitions:
     label: reports.ws.ownername
     type: string
     source: ws
-    total: true
+    total: false
   searchParams:
   - name: fromDate
     label: reports.pt.fromDate
@@ -115,7 +115,6 @@ ReportDefinitions:
     inner join egcl_bill as bill on bill.id=pd.billid 
     inner join egcl_payment as payment on payment.id=pd.paymentid and payment.paymentstatus!='CANCELLED'
     where payment.tenantid=$tenantid
-    and bill.businessservice like 'WS%'
   orderby: order by pd.receiptdate desc
 
 
