@@ -588,7 +588,7 @@ ReportDefinitions:
     type: string
     source: ws
     total: false
-  - name: transactiondate
+  - name: transactiondate1
     label: reports.ws.transactiondate
     type: string
     source: ws
@@ -626,13 +626,32 @@ ReportDefinitions:
     source: pt
     isMandatory: true
     searchClause: AND bill.businessservice like $connectionType
+  - name: fromDate
+    label: reports.pt.fromDate
+    type: epoch
+    source: pt
+    isMandatory: true
+    searchClause: AND pd.receiptdate >= $fromDate
+  - name: toDate
+    label: reports.pt.toDate
+    type: epoch
+    source: pt
+    isMandatory: true
+    searchClause: AND pd.receiptdate <= $toDate
   query: |
     -- Use CTE to force query plan, compute & use CTE later
-    select billnumber,pd.amountpaid,pd.businessservice ,paymentstatus , payment.transactionnumber ,payment.transactiondate,paymentmode
+    select 
+      billnumber,
+      pd.amountpaid,
+      pd.businessservice ,
+      paymentstatus , 
+      payment.transactionnumber ,
+      to_char((To_timestamp(payment.transactiondate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY') as transactiondate1,
+      paymentmode
     from egcl_paymentdetail pd
     inner join egcl_bill as bill on bill.id=pd.billid
     INNER join egcl_payment as payment on payment.id=pd.paymentid
-    where 1=1
+    where paymentmode='ONLINE'
   orderby: ORDER BY payment.transactiondate DESC
   
 - reportName: ReceiptCollections
