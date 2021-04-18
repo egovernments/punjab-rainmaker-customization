@@ -451,7 +451,7 @@ ReportDefinitions:
     type: string
     source: ws
     total: false
-  - name: receiptdate
+  - name: receiptdate1
     label: reports.ws.receiptdate
     type: string
     source: ws
@@ -499,14 +499,35 @@ ReportDefinitions:
     source: pt
     isMandatory: true
     searchClause: AND pd.businessservice like $connectionType
+  - name: fromDate
+    label: reports.pt.fromDate
+    type: epoch
+    source: pt
+    isMandatory: false
+    searchClause: AND pd.receiptdate >= $fromDate
+  - name: toDate
+    label: reports.pt.toDate
+    type: epoch
+    source: pt
+    isMandatory: false
+    searchClause: AND pd.receiptdate <= $toDate
   query: |
     -- Use CTE to force query plan, compute & use CTE later
-    select receiptnumber,receiptdate,pd.businessservice,pd.amountpaid,consumercode,paymentstatus,paymentmode,usr.name as name,usr.mobilenumber as mobilenumber
+    select 
+      receiptnumber,
+      to_char((To_timestamp(pd.receiptdate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY') AS  receiptdate1,
+      pd.businessservice,
+      pd.amountpaid,
+      consumercode,
+      paymentstatus,
+      paymentmode,
+      usr.name as name,
+      usr.mobilenumber as mobilenumber
     from egcl_paymentdetail pd
     inner join egcl_bill as bill on bill.id=pd.billid
     INNER join egcl_payment as payment on payment.id=pd.paymentid
     inner join eg_user as usr on usr.id=payment.createdby::integer
-    where 1=1
+    where pd.tenantid=$tenantid
   orderby: ORDER BY pd.receiptdate DESC
 
 - reportName: FieldCollectionSearchReceiptWS
@@ -522,7 +543,7 @@ ReportDefinitions:
     type: string
     source: ws
     total: false
-  - name: receiptdate
+  - name: receiptdate1
     label: reports.ws.receiptdate
     type: string
     source: ws
@@ -575,9 +596,31 @@ ReportDefinitions:
     source: pt
     isMandatory: true
     searchClause: AND bill.businessservice like $connectionType
+  - name: fromDate
+    label: reports.pt.fromDate
+    type: epoch
+    source: pt
+    isMandatory: false
+    searchClause: AND pd.receiptdate >= $fromDate
+  - name: toDate
+    label: reports.pt.toDate
+    type: epoch
+    source: pt
+    isMandatory: false
+    searchClause: AND pd.receiptdate <= $toDate
   query: |
     -- Use CTE to force query plan, compute & use CTE later
-    select receiptnumber,manualreceiptnumber,receiptdate,pd.businessservice as businessservice, billnumber , billdescription, consumercode , pd.amountpaid as amountpaid,paymentmode, paymentstatus
+    select 
+      receiptnumber,
+      manualreceiptnumber,
+      to_char((To_timestamp(pd.receiptdate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY') AS  receiptdate1,,
+      pd.businessservice as businessservice,
+      billnumber, 
+      billdescription, 
+      consumercode, 
+      pd.amountpaid as amountpaid,
+      paymentmode, 
+      paymentstatus
     from egcl_paymentdetail pd
     inner join egcl_bill as bill on bill.id=pd.billid
     inner join egcl_billdetial as billd on billd.billid=pd.billid
@@ -677,7 +720,7 @@ ReportDefinitions:
     type: string
     source: ws
     total: false
-  - name: receiptdate
+  - name: receiptdate1
     label: reports.ws.receiptdate
     type: string
     source: ws
@@ -722,7 +765,15 @@ ReportDefinitions:
     searchClause: AND pd.businessservice like $connectionType
   query: |
     -- Use CTE to force query plan, compute & use CTE later
-    select consumercode,receiptnumber,receiptdate,amountpaid,paymentmode,pd.businessservice,bill.billnumber,payment.paidby
+    select 
+      consumercode,
+      receiptnumber,
+      to_char((To_timestamp(pd.receiptdate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY') as receiptdate1,
+      amountpaid,
+      paymentmode,
+      pd.businessservice,
+      bill.billnumber,
+      payment.paidby
     from egcl_paymentdetail pd
     inner join egcl_bill as bill on bill.id=pd.billid
     inner join egcl_payment as payment on payment.id=pd.paymentid and payment.paymentstatus!='CANCELLED'
@@ -769,7 +820,7 @@ ReportDefinitions:
     type: string
     source: ws
     total: false
-  - name: receiptdate
+  - name: receiptdate1
     label: reports.ws.receiptdate
     type: string
     source: ws
@@ -792,9 +843,26 @@ ReportDefinitions:
     source: pt
     isMandatory: true
     searchClause: AND pd.businessservice like $connectionType
+  - name: fromDate
+    label: reports.pt.fromDate
+    type: epoch
+    source: pt
+    isMandatory: false
+    searchClause: AND pd.receiptdate >= $fromDate
+  - name: toDate
+    label: reports.pt.toDate
+    type: epoch
+    source: pt
+    isMandatory: false
+    searchClause: AND pd.receiptdate <= $toDate
   query: |
     -- Use CTE to force query plan, compute & use CTE later
-    select consumercode,receiptnumber,receiptdate,amountpaid from egcl_paymentdetail pd
+    select 
+      consumercode,
+      receiptnumber,
+      to_char((To_timestamp(pd.receiptdate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY') as receiptdate1,
+      amountpaid 
+    from egcl_paymentdetail pd
     inner join egcl_bill as bill on bill.id=pd.billid
     inner join egcl_payment as payment on payment.id=pd.paymentid and payment.paymentmode='CASH' and payment.paymentstatus!='CANCELLED'
     where payment.tenantid=$tenantid
