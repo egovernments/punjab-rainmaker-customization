@@ -763,6 +763,18 @@ ReportDefinitions:
     source: pt
     isMandatory: true
     searchClause: AND pd.businessservice like $connectionType
+  - name: fromDate
+    label: reports.pt.fromDate
+    type: epoch
+    source: pt
+    isMandatory: false
+    searchClause: AND payment.transactiondate >= $fromDate
+  - name: toDate
+    label: reports.pt.toDate
+    type: epoch
+    source: pt
+    isMandatory: false
+    searchClause: AND payment.transactiondate <= $toDate
   query: |
     -- Use CTE to force query plan, compute & use CTE later
     select 
@@ -974,6 +986,18 @@ ReportDefinitions:
     source: pt
     isMandatory: true
     searchClause: AND pd.businessservice like $connectionType
+  - name: fromDate
+    label: reports.pt.fromDate
+    type: epoch
+    source: pt
+    isMandatory: false
+    searchClause: AND pd.receiptdate >= $fromDate
+  - name: toDate
+    label: reports.pt.toDate
+    type: epoch
+    source: pt
+    isMandatory: false
+    searchClause: AND pd.receiptdate <= $toDate
   query: |
     -- Use CTE to force query plan, compute & use CTE later
     SELECT 
@@ -997,11 +1021,11 @@ ReportDefinitions:
         sum(case when payment.paymentmode='POTAL_ORDER' then payment.totalamountpaid else 0 end) as "totalPO",
         sum(case when payment.paymentmode='POTAL_ORDER' then 1 else 0 end) as "countPO",
         sum(case when payment.paymentmode!='ONLINE' then 1 else 0 end) as "countoffline"
-        FROM egcl_paymentdetail pd
-        INNER join egcl_payment as payment on pd.paymentid=payment.id
-        INNER JOIN egcl_billdetial as bd on pd.billid = bd.billid
-        INNER JOIN egcl_billaccountdetail as bad on bad.billdetailid = bd.id
-        where  payment.paymentstatus != 'CANCELLED' and payment.tenantid=$tenantid
+      FROM egcl_paymentdetail pd
+      INNER join egcl_payment as payment on pd.paymentid=payment.id
+      INNER JOIN egcl_billdetial as bd on pd.billid = bd.billid
+      INNER JOIN egcl_billaccountdetail as bad on bad.billdetailid = bd.id
+      where  payment.paymentstatus != 'CANCELLED' and payment.tenantid=$tenantid
   groupby: GROUP BY taxheadcode
   
   
