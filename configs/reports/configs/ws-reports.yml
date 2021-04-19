@@ -815,6 +815,11 @@ ReportDefinitions:
     type: string
     source: ws
     total: false
+  - name: collectorname
+    label: reports.ws.collectorname
+    type: string
+    source: ws
+    total: false
   searchParams:
   - name: connectionType
     label: connectionType
