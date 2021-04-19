@@ -820,6 +820,7 @@ ReportDefinitions:
   groupby: GROUP BY con.createdby,usr.name
   
 - reportName: CashCollectionReport
+  decryptionPathId: ReceiptRegisterShort_V2
   summary: Cash Collection Report
   version: 1.0.0
   moduleName: rainmaker-ws
@@ -844,6 +845,11 @@ ReportDefinitions:
     total: true
   - name: consumercode
     label: reports.ws.consumercode
+    type: string
+    source: ws
+    total: false
+  - name: collectorname
+    label: reports.ws.collectorname
     type: string
     source: ws
     total: false
