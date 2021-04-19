@@ -867,14 +867,23 @@ ReportDefinitions:
     source: pt
     isMandatory: false
     searchClause: AND pd.receiptdate <= $toDate
+  - name: collectorname
+    label: reports.pt.collectorname
+    type: singlevaluelist
+    pattern: http://egov-hrms:8080/egov-hrms/employees/_search?tenantId=$tenantid&roles=WS_CEMP,WS_DOC_VERIFIER,WS_FIELD_INSPECTOR,WS_APPROVER,WS_CLERK,SW_CEMP,SW_DOC_VERIFIER,SW_FIELD_INSPECTOR,SW_APPROVER,SW_CLERK|$.Employees[*].user.id|$.Employees[*].user.name
+    source: ws
+    wrapper: true
+    isMandatory: false
+    searchClause: AND eg_user.id = $collectorname::INTEGER
   query: |
     -- Use CTE to force query plan, compute & use CTE later
     select 
       consumercode,
       receiptnumber,
       to_char((To_timestamp(pd.receiptdate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY') as receiptdate1,
-      amountpaid 
-    from egcl_paymentdetail pd
+      amountpaid,
+      (case when eg_user.name is null then '30048|23/xn3x2FAxn8vYAN0IdplsOxaE=' else eg_user.name end)  as collectorname
+    from egcl_paymentdetail pd Left outer join eg_user on eg_user.id = pd.createdby::INTEGER
     inner join egcl_bill as bill on bill.id=pd.billid
     inner join egcl_payment as payment on payment.id=pd.paymentid and payment.paymentmode='CASH' and payment.paymentstatus!='CANCELLED'
     where payment.tenantid=$tenantid
