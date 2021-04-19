@@ -876,7 +876,7 @@ ReportDefinitions:
   - name: collectorname
     label: reports.pt.collectorname
     type: singlevaluelist
-    pattern: http://egov-hrms:8080/egov-hrms/employees/_search?tenantId=$tenantid&roles=WS_CEMP,WS_DOC_VERIFIER,WS_FIELD_INSPECTOR,WS_APPROVER,WS_CLERK,SW_CEMP,SW_DOC_VERIFIER,SW_FIELD_INSPECTOR,SW_APPROVER,SW_CLERK|$.Employees[*].user.id|$.Employees[*].user.name
+    pattern: http://egov-hrms:8080/egov-hrms/employees/_search?tenantId=$tenantid&roles=WS_CEMP,SW_CEMP|$.Employees[*].user.id|$.Employees[*].user.name
     source: ws
     wrapper: true
     isMandatory: false
