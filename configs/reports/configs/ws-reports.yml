@@ -741,7 +741,7 @@ ReportDefinitions:
     select 
       receiptnumber,
       manualreceiptnumber,
-      to_char((To_timestamp(pd.receiptdate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY') AS  receiptdate1,,
+      to_char((To_timestamp(pd.receiptdate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY') AS  receiptdate1,
       pd.businessservice as businessservice,
       billnumber, 
       billdescription, 
