@@ -40,6 +40,11 @@ public class DemandService {
 	@Value("${egov.demand.create.url}")
 	private String demandCreateEndPoint;
 	
+	@Value("${egov.bill.expiry.days.in.milliseconds}")
+	private Long billExpiryDaysInMilliseconds;
+	
+	
+	
 	@Autowired
 	private RestTemplate restTemplate;
 	
@@ -122,6 +127,7 @@ public class DemandService {
 						.demandDetails(ddList)
 						.payer(User.builder().uuid(owner.getUuid()).name(owner.getName()).build())
 						.tenantId(tenantId)
+						.billExpiryTime(billExpiryDaysInMilliseconds)
 //						There is no tax periods configured for all the previous year in PB QA environments as of now giving dummy configured tax period. 
 //						.taxPeriodFrom(ddList.get(0).getFromDate())
 //						.taxPeriodTo(ddList.get(0).getToDate())
@@ -150,6 +156,7 @@ public class DemandService {
 						.status(StatusEnum.valueOf("ACTIVE"))
 						.totalAmountPaid(totalAmountPaid)
 						.isPaymentCompleted(false)
+						.billExpiryTime(billExpiryDaysInMilliseconds)
 						.build());	
 			}
 				
@@ -271,6 +278,7 @@ public class DemandService {
 					.status(StatusEnum.valueOf("ACTIVE"))
 					.totalAmountPaid(totalAmountPaid)
 					.isPaymentCompleted(false)
+					.billExpiryTime(billExpiryDaysInMilliseconds)
 					.build());	
 		}else {
 			demands.add(Demand.builder()
@@ -289,6 +297,7 @@ public class DemandService {
 					.status(StatusEnum.valueOf("ACTIVE"))
 					.totalAmountPaid(totalAmountPaid)
 					.isPaymentCompleted(false)
+					.billExpiryTime(billExpiryDaysInMilliseconds)
 					.build());	
 		}
 			
