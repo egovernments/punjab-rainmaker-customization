@@ -883,7 +883,7 @@ ReportDefinitions:
     left outer join bank_branches on bank_branches.ifsc=payment.ifsccode
     inner join egcl_bill bill on bill.id=pd.billid
     inner join eg_ws_connection wsconnection on wsconnection.connectionno=bill.consumercode
-    where payment.paymentmode='CHEQUE' and tenantid=$tenantid and payment.paymentstatus!='CANCELLED'
+    where payment.paymentmode='CHEQUE' and pd.tenantid=$tenantid and payment.paymentstatus!='CANCELLED'
   orderby: ORDER BY pd.receiptdate DESC
   
 - reportName: SearchOnlineReceiptsWS
