@@ -132,6 +132,7 @@ public class Sqls {
 			+ " 'estimationLetterDate', appdetails.estimationdate,\n"
 			+ " 'estimationFileStoreId',appdetails.filestoreid, \n" + "'othersFee','null', \n"
 			+ "'ledgerId',conndetails.ledgernumber,\n" + "'block', block.name,\n"
+			+ "  'connectionExecutionDate'	, (select extract(epoch from conndetails.executiondate) * 1000),\n "
 			+ "'citycode', (select code from eg_city),\n" + "'emailid', usr.emailid,\n"
 			+ "'applicatioNumber', appdetails.applicationnumber,\n" + "'disposaldate', appdetails.disposalDate,\n"
 			+ "'usage', usage.name,\n" + "'applicationdate', appdetails.applicationdate,\n"
