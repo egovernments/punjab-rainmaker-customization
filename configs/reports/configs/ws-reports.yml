@@ -756,6 +756,136 @@ ReportDefinitions:
     where 1=1
   orderby: ORDER BY pd.receiptdate DESC
   
+  
+- reportName: ChequeCollectionReportWS
+  summary: Cheque Collection Report WS
+  version: 1.0.0
+  moduleName: rainmaker-ws
+  additionalConfig:
+    print:
+      pdfPageSize: "A1"
+  sourceColumns:
+  - name: consumercode
+    label: reports.ws.consumercode
+    type: string
+    source: ws
+    total: false
+  - name: connectionno
+    label: reports.ws.connectionno
+    type: string
+    source: ws
+    total: false
+  - name: oldconnectionno
+    label: reports.ws.oldconnectionno
+    type: string
+    source: ws
+    total: false
+  - name: receiptnumber
+    label: reports.ws.receiptnumber
+    type: string
+    source: ws
+    total: false
+  - name: receiptdate1
+    label: reports.ws.receiptdate
+    type: string
+    source: ws
+    total: false
+  - name: manualreceiptnumber
+    label: reports.ws.manualreceiptnumber
+    type: string
+    source: ws
+    total: false
+  - name: manualreceiptdate
+    label: reports.ws.manualreceiptdate
+    type: string
+    source: ws
+    total: false
+  - name: cheque_dd_no
+    label: reports.ws.cheque_dd_no
+    type: string
+    source: ws
+    total: false
+  - name: cheque_dd_date
+    label: reports.ws.cheque_dd_date
+    type: string
+    source: ws
+    total: false
+  - name: paymentmode
+    label: reports.ws.paymentmode
+    type: string
+    source: ws
+    total: false
+  - name: paymentstatus
+    label: reports.ws.paymentstatus
+    type: string
+    source: ws
+    total: false
+  - name: bank_name
+    label: reports.ws.bank_name
+    type: string
+    source: ws
+    total: false
+  - name: branch
+    label: reports.ws.branch
+    type: string
+    source: ws
+    total: false
+  - name: amountpaid
+    label: reports.ws.amountpaid
+    type: string
+    source: ws
+    total: true
+  - name: businessservice
+    label: reports.ws.businessservice
+    type: string
+    source: ws
+    total: false
+  searchParams:
+  - name: connectionType
+    label: connectionType
+    type: singlevaluelist
+    pattern: 'list://WS%:Water,SW%:Sewerage'
+    source: pt
+    isMandatory: true
+    searchClause: AND bill.businessservice like $connectionType
+  - name: fromDate
+    label: reports.pt.fromDate
+    type: epoch
+    source: pt
+    isMandatory: false
+    searchClause: AND pd.receiptdate >= $fromDate
+  - name: toDate
+    label: reports.pt.toDate
+    type: epoch
+    source: pt
+    isMandatory: false
+    searchClause: AND pd.receiptdate <= $toDate
+  query: |
+    -- Use CTE to force query plan, compute & use CTE later
+    select
+      consumercode,
+      wsconnection.connectionno,
+      wsconnection.oldconnectionno,
+      receiptnumber,
+      to_char((To_timestamp(pd.receiptdate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY') as receiptdate1,
+      manualreceiptnumber,
+      to_char((To_timestamp(pd.manualreceiptdate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY') as manualreceiptdate,
+      transactionnumber as cheque_dd_no,
+      to_char((To_timestamp(transactiondate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY') as cheque_dd_date,
+      paymentmode,
+      paymentstatus,
+      bank_name,
+      branch,
+      pd.amountpaid,
+      pd.businessservice
+    from egcl_paymentdetail pd
+    inner join egcl_payment payment on payment.id=pd.paymentid
+    left outer join bank_branches on bank_branches.ifsc=payment.ifsccode
+    inner join egcl_bill bill on bill.id=pd.billid
+    inner join eg_ws_connection wsconnection on wsconnection.connectionno=bill.consumercode
+    where payment.paymentmode='CHEQUE' and tenantid=$tenantid and payment.paymentstatus!='CANCELLED'
+  orderby: ORDER BY pd.receiptdate DESC
+  
 - reportName: SearchOnlineReceiptsWS
   decryptionPathId: ReceiptRegisterShort_V2
   summary: Search Online Receipts WS
