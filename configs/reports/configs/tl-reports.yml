@@ -1372,7 +1372,7 @@ ReportDefinitions:
       SELECT tradelicensedetailid,array_to_string(array_agg(message.message),',') AS acc FROM eg_tl_accessory
       LEFT OUTER JOIN message ON code=CONCAT('TRADELICENSE_ACCESSORIESCATEGORY_', REGEXP_REPLACE(accessorycategory, '[^A-Za-z0-9]','_', 'g')) AND message.locale = 'en_IN' GROUP BY 1 ) tlacc ON tlacc.tradelicensedetailid = tld.id
     Join eg_user ON eg_user.id = egcl_paymentdetail.createdby::INTEGER
-    WHERE  tl.tenantId = $tenantid 
+    WHERE  tl.tenantId = $tenantid and payment.paymentstatus!='CANCELLED'
 
 
 - reportName: StateTradeLicenseCancelledRegistryReport_v2
