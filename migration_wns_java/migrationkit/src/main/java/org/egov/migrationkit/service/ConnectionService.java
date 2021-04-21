@@ -283,7 +283,7 @@ public class ConnectionService {
 				// connection.setOldConnectionNo(connectionNo);
 				
 				Property approvedProperty = propertyService.updateProperty(property, tenantId, requestInfo);
-				connection.setPropertyId(approvedProperty.getId());
+				//connection.setPropertyId(approvedProperty.getId());
 
 				String response = null;
 				try {
@@ -610,7 +610,7 @@ public class ConnectionService {
 
 				swConnection.setApplicationType("NEW_SEWERAGE_CONNECTION");
 				Property approvedProperty = propertyService.updateProperty(property, tenantId, requestInfo);
-				swConnection.setPropertyId(approvedProperty.getId());
+			//	swConnection.setPropertyId(approvedProperty.getId());
 				
 				ProcessInstance workflow = new ProcessInstance();
 				workflow.setBusinessService("NewSW1");
