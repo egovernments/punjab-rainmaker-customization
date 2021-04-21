@@ -510,7 +510,13 @@ public class ConnectionService {
 				address.setLocality(locality);
 				address.setCity((String) data.get("cityname"));
 				swConnection.setApplicantAddress(address);
-
+				Property property = propertyService.findProperty(sewerageRequest, data, tenantId);
+				if (property == null) {
+					recordService.recordError("sewerage", tenantId,
+							"Property not found or cannot be created  for the record  ", swConnection.getId());
+					continue;
+				}
+				swConnection.setPropertyId(property.getId());
 				StringBuilder additionalDetail = new StringBuilder();
 				Map addtionals = new HashMap<String, String>();
 
@@ -564,14 +570,9 @@ public class ConnectionService {
 
 				sewerageRequest.setSewerageConnection(swConnection);
 				sewerageRequest.setRequestInfo(requestInfo);
-				Property property = propertyService.findProperty(sewerageRequest, data, tenantId);
+			
 
-				if (property == null) {
-					recordService.recordError("sewerage", tenantId,
-							"Property not found or cannot be created  for the record  ", swConnection.getId());
-					continue;
-				}
-				swConnection.setPropertyId(property.getId());
+				
 			
 				
 				roadCategoryList = (List<Map>) data.get("road_category");

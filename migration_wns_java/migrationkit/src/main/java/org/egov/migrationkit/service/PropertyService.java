@@ -175,6 +175,7 @@ public class PropertyService {
 			throws InterruptedException {
 		
 		try {
+			Thread.sleep(2000);
 			PropertyRequest prequest = new PropertyRequest();
 			prequest.setRequestInfo(requestInfo);
 			 
