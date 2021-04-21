@@ -184,10 +184,14 @@ public class DemandService {
 			//log.info("Demand Create Request: " + request + "Demand Create Respone: " + response);
 		}
 		catch(Exception e){
-			isDemandCreated=Boolean.FALSE;
+			if(e.toString().equalsIgnoreCase("Demand already exists in the same period")) {
+				isDemandCreated=Boolean.TRUE;
+			}else {
+				isDemandCreated=Boolean.FALSE;
 
-			recordService.recordError(service,tenantId, e.toString(), erpId);
-			log.error("Error while Saving demands" + e.toString());
+				recordService.recordError(service,tenantId, e.toString(), erpId);
+				log.error("Error while Saving demands" + e.toString());
+			}
 		}
 		return isDemandCreated;  
 	}

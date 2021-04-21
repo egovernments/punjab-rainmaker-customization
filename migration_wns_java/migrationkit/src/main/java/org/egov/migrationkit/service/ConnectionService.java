@@ -260,7 +260,11 @@ public class ConnectionService {
 				addtionals.put("estimationFileStoreId", (String) data.get("estimationFileStoreId"));
 				addtionals.put("meterMake", (String) data.get("meterMake"));
 				addtionals.put("securityFee", data.get("securityFee"));
-				addtionals.put("isMigrated", Boolean.TRUE);
+				if(data.get("connectionreason") == null ) {
+					addtionals.put("isMigrated", Boolean.FALSE);
+				}else {
+					addtionals.put("isMigrated", Boolean.TRUE);
+				}
 
 				if (data.get("averageMeterReading") != null) {
 					try {
@@ -541,7 +545,11 @@ public class ConnectionService {
 				// addtionals.put("pipeSize",(Double) data.get("pipeSize"));
 				addtionals.put("estimationFileStoreId", (String) data.get("estimationFileStoreId"));
 				addtionals.put("securityFee", data.get("securityFee"));
-				addtionals.put("isMigrated", Boolean.TRUE);
+				if(data.get("connectionreason") == null ) {
+					addtionals.put("isMigrated", Boolean.FALSE);
+				}else {
+					addtionals.put("isMigrated", Boolean.TRUE);
+				}
 				// addtionals.put("meterMake",(String) data.get("meterMake"));
 
 				if (data.get("averageMeterReading") != null) {
