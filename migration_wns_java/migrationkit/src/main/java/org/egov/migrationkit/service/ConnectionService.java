@@ -129,7 +129,7 @@ public class ConnectionService {
 				waterRequest.setWaterConnection(connection);
 				waterRequest.setRequestInfo(requestInfo);
 				locCode = (String) data.get("locality");
-				cityCode = (String) data.get("cityCode");
+				cityCode = (String) data.get("citycode");
 
 				List<String> isConnectionMigrated = recordService.recordWaterMigration(connection, tenantId);
 				if (isConnectionMigrated != null && !isConnectionMigrated.isEmpty() && isConnectionMigrated.contains("Saved")) {
@@ -190,6 +190,7 @@ public class ConnectionService {
 					continue;
 				}
 				connection.setPropertyId(property.getId());
+			
 				roadCategoryList = (List<Map>) data.get("road_category");
 				List<RoadCuttingInfo> cuttingInfoList = new ArrayList<>();
 				RoadCuttingInfo cuttingInfo = null;
@@ -217,8 +218,12 @@ public class ConnectionService {
 
 				}
 				connection.setRoadCuttingInfo(cuttingInfoList);
-
-//				connection.setStatus(StatusEnum.Active);
+				
+				if(Status.ACTIVE.compareTo(property.getStatus())!=0 )
+				{ 	
+					Property approvedProperty = propertyService.updateProperty(property, tenantId, requestInfo);
+	 
+				}
 
 				connection.setApplicationStatus("CONNECTION_ACTIVATED");
 
@@ -282,7 +287,7 @@ public class ConnectionService {
 				connection.setOldApplication(false);
 				// connection.setOldConnectionNo(connectionNo);
 				
-				Property approvedProperty = propertyService.updateProperty(property, tenantId, requestInfo);
+			
 				//connection.setPropertyId(approvedProperty.getId());
 
 				String response = null;
@@ -475,15 +480,13 @@ public class ConnectionService {
 				}
 				
 				locCode = (String) data.get("locality");
-				cityCode = (String) data.get("cityCode");
+				cityCode = (String) data.get("citycode");
 				if (swConnection.getMobilenumber() == null || swConnection.getMobilenumber().isEmpty()) {
-					// recordService.recordError("sewerage", tenantId, "Mobile
-					// Number is null ", swConnection.getId());
 					Long mobileNumber = getMobileNumber(cityCode, locCode, tenantId);
 					recordService.setMob("sewerage", tenantId, mobileNumber, swConnection.getId());
 					swConnection.setMobilenumber(String.valueOf(mobileNumber));
 
-					// continue;
+					 
 				}
 
 				String addressQuery = Sqls.GET_ADDRESS;
@@ -571,7 +574,12 @@ public class ConnectionService {
 				sewerageRequest.setSewerageConnection(swConnection);
 				sewerageRequest.setRequestInfo(requestInfo);
 			
-
+				if(Status.ACTIVE.compareTo(property.getStatus())!=0 )
+				{ 
+					Thread.sleep(1000);
+					Property approvedProperty = propertyService.updateProperty(property, tenantId, requestInfo);
+					Thread.sleep(1000);
+				}
 				
 			
 				
@@ -610,9 +618,6 @@ public class ConnectionService {
 				swConnection.setApplicationStatus("CONNECTION_ACTIVATED");
 
 				swConnection.setApplicationType("NEW_SEWERAGE_CONNECTION");
-				Property approvedProperty = propertyService.updateProperty(property, tenantId, requestInfo);
-			//	swConnection.setPropertyId(approvedProperty.getId());
-				
 				ProcessInstance workflow = new ProcessInstance();
 				workflow.setBusinessService("NewSW1");
 				workflow.setAction("ACTIVATE_CONNECTION");

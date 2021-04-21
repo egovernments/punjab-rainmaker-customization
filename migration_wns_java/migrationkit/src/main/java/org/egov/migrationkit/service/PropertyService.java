@@ -151,13 +151,11 @@ public class PropertyService {
 
 		try {
 			PropertyResponse res = restTemplate.postForObject(host + "/" + ptcreatehurl, prequest, PropertyResponse.class);
-
- 
-			// log.info(res.getProperties().get(0).getSource() +"
-			// "+res.getProperties().get(0).getAcknowldgementNumber());
-			 return res.getProperties().get(0);
+			Property	property2=	res.getProperties().get(0);
+			log.info("create pt ws in workflow state "+property2.getPropertyId() +"  status"+property2.getStatus() );
+			 return property2;
 			
-		} catch (RestClientException e) {
+		} catch (Exception e) {
 			recordService.recordError("water", tenantId, e.getMessage(), conn.getId());
 			try {
 				String ptrequest=objectMapper.writeValueAsString(prequest);
@@ -173,13 +171,13 @@ public class PropertyService {
 
 	public Property updateProperty(Property property2, String tenantId , RequestInfo requestInfo)
 			throws InterruptedException {
-		
+		log.info("updatig property after 1 sec");	
 		try {
-			Thread.sleep(2000);
+		
 			PropertyRequest prequest = new PropertyRequest();
 			prequest.setRequestInfo(requestInfo);
 			 
-			//Property property2 = res.getProperties().get(0);
+			
 			property2.setSource(Source.WATER_CHARGES);
 			ProcessInstance workflow = new ProcessInstance();
 			workflow.setBusinessService("PT.CREATEWITHWNS");
@@ -190,10 +188,12 @@ public class PropertyService {
 			property2.setWorkflow(workflow);
 			prequest.setProperty(property2);
 			PropertyResponse res2 = restTemplate.postForObject(host + "/" + ptupdatehurl, prequest, PropertyResponse.class);
-			log.debug("newly created pt" + res2.getProperties().get(0).getPropertyId() + " id    "
+			log.info("newly created pt" + res2.getProperties().get(0).getPropertyId() + " id    "
 					+ res2.getProperties().get(0).getStatus());
+		 
 			return res2.getProperties().get(0);
-		} catch (RestClientException e) {
+			
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -234,6 +234,7 @@ public class PropertyService {
 		property.setSource(Source.WATER_CHARGES);
 
 		property.setTotalConstructedArea(BigDecimal.valueOf(190));
+		property.setStatus(Status.ACTIVE);
  
 		List<Unit> units = new ArrayList<>();
 		property.setUnits(units);
@@ -259,8 +260,9 @@ public class PropertyService {
 		try {
 			res = restTemplate.postForObject(host + "/" + ptcreatehurl, prequest, PropertyResponse.class);
 			Property property2 = res.getProperties().get(0);
+			log.info("create pt sw in workflow state "+property2.getPropertyId() +"  status"+property2.getStatus() );
 			return property2;
-		} catch (RestClientException e) {
+		} catch (Exception e) {
 			recordService.recordError("sewerage", tenantId, e.getMessage(), conn.getId());
 			try {
 				String ptrequest=objectMapper.writeValueAsString(prequest);
@@ -317,7 +319,7 @@ public class PropertyService {
 				}
 			}
 		} else {
-			log.debug("Property not  found");
+			log.info("Property not  found");
 
 			 
 		}
@@ -360,7 +362,7 @@ public class PropertyService {
 				}
 			}
 		} else {
-			log.debug("Property not  found"); 
+			log.info("Property not  found"); 
 		}
 
 		return null;
