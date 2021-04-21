@@ -123,19 +123,7 @@ public class ConnectionService {
 				connection.setConnectionNo(connectionNo);
 				connection.setTenantId(requestInfo.getUserInfo().getTenantId());
 				connection.setProposedPipeSize(connection.getPipeSize());
-				log.info(" Water connection migrating for " + connectionNo);
-				// log.debug("mobile number : " + connection.getMobilenumber());
-				//// log.debug("getApplicantname ; " +
-				// connection.getApplicantname());
-				// log.debug("Guardian name :" + connection.getGuardianname());
-				// log.debug("connectionNo; " + connection.getConnectionNo());
-				// log.debug("Connection Category : " +
-				// connection.getConnectionCategory());
-				// log.debug("Connection Type :" +
-				// connection.getConnectionType());
-				// log.debug("ConnectionDetail id :" + connection.getId());
-
-				// ToDo: populate connectionHolders
+				log.info(" Water connection migrating for " + connectionNo +" MobileNumber "+connection.getMobilenumber() +""+connection.getId());
 				WaterConnectionRequest waterRequest = new WaterConnectionRequest();
 
 				waterRequest.setWaterConnection(connection);
@@ -166,8 +154,7 @@ public class ConnectionService {
 				}
 
 				if (connection.getMobilenumber() == null || connection.getMobilenumber().isEmpty() || connection.getMobilenumber().length()<10 ) {
-					// recordService.recordError("water", tenantId, "Mobile
-					// Number is null ", connection.getId());
+				 
 					/*
 					 * System is allowing only 6-9 series.So as of now added
 					 * 9999999999
@@ -184,8 +171,7 @@ public class ConnectionService {
 
 				address = (Address) jdbcTemplate.queryForObject(addressQuery, new BeanPropertyRowMapper(Address.class));
 				locality = new Locality();
-				// locality.setCode((String)data.get("locality"));
-				// use the map here
+			 
 				locCode = (String) data.get("locality");
 				localityCode = findLocality(locCode, tenantId);
 				if (localityCode == null) {
@@ -291,6 +277,9 @@ public class ConnectionService {
 
 				connection.setOldApplication(false);
 				// connection.setOldConnectionNo(connectionNo);
+				
+				Property approvedProperty = propertyService.updateProperty(property, tenantId, requestInfo);
+				connection.setPropertyId(approvedProperty.getId());
 
 				String response = null;
 				try {
@@ -301,7 +290,7 @@ public class ConnectionService {
 					continue;
 				}
 
-				// log.debug("Response=" + response);
+				 log.info("Connection Migrated "+connection.getConnectionNo());
 
 				WaterConnectionResponse waterResponse = objectMapper.readValue(response, WaterConnectionResponse.class);
 
@@ -310,7 +299,7 @@ public class ConnectionService {
 						&& !waterResponse.getWaterConnection().isEmpty()) {
 
 					wtrConnResp = waterResponse.getWaterConnection().get(0);
-					log.info("status" + wtrConnResp.getStatus() + " application status"
+					log.debug("status" + wtrConnResp.getStatus() + " application status"
 							+ wtrConnResp.getApplicationStatus());
 					recordService.updateWaterMigration(wtrConnResp, connection.getId(), tenantId,"uuid");
 					String consumerCode = wtrConnResp.getConnectionNo() != null ? wtrConnResp.getConnectionNo()
@@ -320,7 +309,7 @@ public class ConnectionService {
 					createWaterDemand(data, connection.getId(), consumerCode, requestInfo, property.getOwners().get(0), tenantId);
 					
 						connectionDuration = System.currentTimeMillis() - connStartTime;
-						log.info("Water Migration completed for connection no : " + connection.getConnectionNo() + "in "
+						log.debug("Water Migration completed for connection no : " + connection.getConnectionNo() + "in "
 								+ connectionDuration / 1000 + "Secs");
 
 //					}
@@ -453,14 +442,7 @@ public class ConnectionService {
 						: (String) data.get("applicationnumber");
 				swConnection.setConnectionNo(connectionNo);
 				log.info("Sewerage connection Migrating for consumer number : " + swConnection.getConnectionNo());
-				// log.debug("getApplicantname ; " +
-				// swConnection.getApplicantname());
-				// log.debug("connectionNo; " + swConnection.getConnectionNo());
-				// log.debug("Connection Category : " +
-				// swConnection.getConnectionCategory());
-				// log.debug("Connection Type :" +
-				// swConnection.getConnectionType());
-				// log.debug("Connection id :" + swConnection.getId());
+				 
 				SewerageConnectionRequest sewerageRequest = new SewerageConnectionRequest();
 				sewerageRequest.setSewerageConnection(swConnection);
 				sewerageRequest.setRequestInfo(requestInfo);
@@ -472,7 +454,7 @@ public class ConnectionService {
 					if( ownerInfo != null) {
 					createSewerageDemand(data, swConnection.getId(), connectionNo, requestInfo, ownerInfo, tenantId);
 					connectionDuration = System.currentTimeMillis() - connStartTime;
-					log.info("Migration completed for connection no : " + swConnection.getConnectionNo() + "in "
+					log.debug("Migration completed for connection no : " + swConnection.getConnectionNo() + "in "
 							+ connectionDuration / 1000 + "Secs");
 					}else {
 						recordService.recordError("sewerage", tenantId, "Connection or Property not found to generate the demand" + locCode,
@@ -582,6 +564,8 @@ public class ConnectionService {
 					continue;
 				}
 				swConnection.setPropertyId(property.getId());
+			
+				
 				roadCategoryList = (List<Map>) data.get("road_category");
 				List<RoadCuttingInfo> cuttingInfoList = new ArrayList<>();
 				RoadCuttingInfo cuttingInfo = null;
@@ -612,12 +596,14 @@ public class ConnectionService {
 
 				swConnection.setTenantId(requestInfo.getUserInfo().getTenantId());
 				
-//				swConnection.setStatus(StatusEnum.Active);
+ 	 
 
 				swConnection.setApplicationStatus("CONNECTION_ACTIVATED");
 
 				swConnection.setApplicationType("NEW_SEWERAGE_CONNECTION");
-
+				Property approvedProperty = propertyService.updateProperty(property, tenantId, requestInfo);
+				swConnection.setPropertyId(approvedProperty.getId());
+				
 				ProcessInstance workflow = new ProcessInstance();
 				workflow.setBusinessService("NewSW1");
 				workflow.setAction("ACTIVATE_CONNECTION");
@@ -639,11 +625,12 @@ public class ConnectionService {
 
 				SewerageConnectionResponse sewerageResponse = objectMapper.readValue(response,
 						SewerageConnectionResponse.class);
+				
+				
 
 				SewerageConnection srgConnResp = null;
 
-				// this will be uncomented after the searage request is
-				// completed
+				 log.info("Connection Migrated "+swConnection.getConnectionNo()); 
 
 				if (sewerageResponse != null && sewerageResponse.getSewerageConnections() != null
 						&& !sewerageResponse.getSewerageConnections().isEmpty()) {
@@ -659,7 +646,7 @@ public class ConnectionService {
 					createSewerageDemand(data, swConnection.getId(), connectionNo, requestInfo, property.getOwners().get(0), tenantId);
 
 						connectionDuration = System.currentTimeMillis() - connStartTime;
-						log.info("Sewerage Migration completed for connection no : " + swConnection.getConnectionNo() + "in "
+						log.debug("Sewerage Migration completed for connection no : " + swConnection.getConnectionNo() + "in "
 								+ connectionDuration / 1000 + "Secs");
 
 
@@ -681,6 +668,7 @@ public class ConnectionService {
 				WSConstants.SEWERAGE_BUSINESS_SERVICE, consumerCode,
 				requestInfo.getUserInfo().getTenantId(), ownerInfo);
 
+		log.info("Migrating demand");
 		if (!demandRequestList.isEmpty()) {
 
 			Boolean isDemandCreated = demandService.saveDemand(requestInfo, demandRequestList,

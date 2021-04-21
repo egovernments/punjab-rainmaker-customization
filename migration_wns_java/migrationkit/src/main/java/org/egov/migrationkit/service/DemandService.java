@@ -128,7 +128,6 @@ public class DemandService {
 						.payer(User.builder().uuid(owner.getUuid()).name(owner.getName()).build())
 						.tenantId(tenantId)
 						.billExpiryTime(billExpiryDaysInMilliseconds)
-//						There is no tax periods configured for all the previous year in PB QA environments as of now giving dummy configured tax period. 
 //						.taxPeriodFrom(ddList.get(0).getFromDate())
 //						.taxPeriodTo(ddList.get(0).getToDate())
 						.taxPeriodFrom(1554057000000l)
@@ -146,7 +145,7 @@ public class DemandService {
 						.demandDetails(ddList)
 						.payer(User.builder().uuid(owner.getUuid()).name(owner.getName()).build())
 						.tenantId(tenantId)
-//						There is no tax periods configured for all the previous year in PB QA environments as of now giving dummy configured tax period. 
+//					 
 						.taxPeriodFrom(ddList.get(0).getFromDate())
 						.taxPeriodTo(ddList.get(0).getToDate())
 					//	.taxPeriodFrom(1554076800000l)
