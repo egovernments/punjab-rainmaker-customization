@@ -1377,3 +1377,96 @@ ReportDefinitions:
     inner join demands on demands.demandid=d.id  and status='ACTIVE'
     where tenantid=$tenantid
   groupby: group by consumercode
+
+
+- reportName: SearchWaterChargeReport
+  summary: Search Water Charge Notice Report
+  version: 1.0.0
+  moduleName: rainmaker-ws
+  additionalConfig:
+    print:
+      pdfPageSize: "A1"
+  sourceColumns:
+  - name: connectionno
+    label: reports.ws.connectionno
+    type: string
+    source: ws
+    total: false
+  - name: oldconnectionno
+    label: reports.ws.connectionno
+    type: string
+    source: ws
+    total: false  
+  - name: ownername
+    label: reports.ws.connectionno
+    type: string
+    source: ws
+    total: false
+  - name: propertyid
+    label: reports.ws.propertyid
+    type: string
+    source: ws
+    total: false
+  - name: connectiontype
+    label: reports.ws.propertyid
+    type: string
+    source: ws
+    total: false
+  - name: billnumber
+    label: reports.ws.billno
+    type: string
+    source: ws
+    total: false
+  - name: fromdate
+    label: reports.ws.fromdate
+    type: string
+    source: ws
+    total: false
+  - name: todate
+    label: reports.ws.todate
+    type: string
+    source: ws
+    total: false
+  searchParams:
+  - name: connectionType
+    label: connectionType
+    type: singlevaluelist
+    pattern: 'list://WS%:Water,SW%:Sewerage'
+    source: pt
+    isMandatory: true
+    searchClause: AND bill.businessservice like $connectionType
+  query: |
+    -- Use CTE to force query plan, compute & use CTE later
+    with owners as
+      (
+        select 
+          split_part(string_agg(name,','),',',1) as ownername,
+          pt.propertyid as propertyid
+        from eg_user usr
+        inner join eg_pt_owner on eg_pt_owner.userid=usr.uuid
+        inner join eg_pt_property pt on eg_pt_owner.propertyid=pt.id and pt.status='ACTIVE'
+        where pt.tenantid=$tenantid
+        group by pt.propertyid
+      )
+    select 
+      connectionno,
+      oldconnectionno,
+      pt.propertyid,
+      ownername,
+      connectiontype,
+      bill.billnumber,
+      to_char((To_timestamp(bill.billdate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY') as billdate,
+      to_char((To_timestamp(bd.fromperiod/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY') fromperiod,
+      to_char((To_timestamp(bd.toperiod/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY') toperiod,
+      bill.totalamount,
+      bill.businessservice
+    from eg_ws_connection wsconnection
+    inner join eg_pt_property pt on pt.id=wsconnection.property_id and pt.status='ACTIVE'
+    inner join eg_ws_service on eg_ws_service.connection_id=wsconnection.id
+    inner join egcl_bill bill on bill.consumercode=wsconnection.connectionno 
+    inner join egcl_billdetial bd on bill.id=bd.billid
+    inner join owners on owners.propertyid=pt.propertyid
+    where wsconnection.tenantid=$tenantid and wsconnection.status='Active' and bill.businessservice like 'WS%'
+orderby: order by bill.billdate desc
+
+  
