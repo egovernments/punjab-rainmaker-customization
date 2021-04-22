@@ -106,7 +106,7 @@ public class ConnectionService {
 		else
 			qry = qry.replace(":locCondition", " ");
 		
-			qry = qry.replace(":staus",status);
+			qry = qry.replace(":status",status);
 					 
 		 
 		
@@ -228,9 +228,9 @@ public class ConnectionService {
 				
 				if(Status.ACTIVE.compareTo(property.getStatus())!=0 )
 				{ 	
-					 
+					Thread.sleep(2000); 
 					Property approvedProperty = propertyService.updateProperty(property, tenantId, requestInfo);
-	 
+					Thread.sleep(1000); 
 				}
 
 				connection.setApplicationStatus("CONNECTION_ACTIVATED");
@@ -443,7 +443,7 @@ public class ConnectionService {
 		else
 			qry = qry.replace(":locCondition", " ");
 		
-		qry = qry.replace(":staus",status);
+		qry = qry.replace(":status",status);
 
 		List<String> queryForList = jdbcTemplate.queryForList(qry, String.class);
 
@@ -586,8 +586,9 @@ public class ConnectionService {
 			
 				if(Status.ACTIVE.compareTo(property.getStatus())!=0 )
 				{ 
-					 
+					Thread.sleep(2000);  
 					Property approvedProperty = propertyService.updateProperty(property, tenantId, requestInfo);
+					Thread.sleep(1000); 
 				}
 				
 			
