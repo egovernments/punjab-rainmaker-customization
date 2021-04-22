@@ -65,7 +65,7 @@ public class Sqls {
 			+ " conndetails.propertytype=proptype.id and conndetails.category=wtrctgy.id and ownerinfo.connection=conn.id "
 			+ " and usr.id=ownerinfo.owner and address.id=conn.address and status.id=conndetails.statusid  :locCondition "
 			+ " and conndetails.id not in (select erpid::bigint from egwtr_migration where status in "
-			+ "('Demand_Created' ) )  and (conndetails.connectionstatus='ACTIVE' or (conndetails.connectionstatus='INACTIVE' and conn.parentconnection is null)) " + " order by conndetails.id; ";
+			+ "(:status ) )  and (conndetails.connectionstatus='ACTIVE' or (conndetails.connectionstatus='INACTIVE' and conn.parentconnection is null)) " + " order by conndetails.id; ";
 
 	public static final String WATER_MIGRATION_TABLE = "create table if not exists egwtr_migration "
 			+ " ( erpid varchar(64),erpconn varchar(64) ,digitconn varchar(64) ,erppt varchar(64),digitpt varchar(64),status varchar(64),tenantId varchar(64),additiondetails varchar(1000),errorMessage varchar(4000), mob varchar(11) );"
@@ -167,7 +167,7 @@ public class Sqls {
 			+ "  address.id=conn.address and status.id=appdetails.status and conn.shsc_number is not null "
 			+" :locCondition "
 			+ " and conndetails.id not in (select erpid::bigint from egswtax_migration where status"
-			+ " in ('Demand_Created' ) ) and (conn.status='ACTIVE' or (conn.status='INACTIVE' and appdetails.closeconnectionreason is not null)) order by conndetails.id;";
+			+ " in ( :status ) ) and (conn.status='ACTIVE' or (conn.status='INACTIVE' and appdetails.closeconnectionreason is not null)) order by conndetails.id;";
 
 	public static final String SEWERAGE_MIGRATION_TABLE = "create table  if not exists  egswtax_migration "
 			+ " ( erpid varchar(64),erpconn varchar(64), mob varchar(64),digitconn varchar(64) ,erppt varchar(64),digitpt varchar(64),status varchar(64),tenantId varchar(64),additiondetails varchar(1000),errorMessage varchar(4000)  );"

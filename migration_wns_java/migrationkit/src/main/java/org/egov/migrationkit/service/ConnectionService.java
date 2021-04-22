@@ -51,6 +51,9 @@ public class ConnectionService {
 
 	@Value("${egov.services.water.url}")
 	private String waterUrl = null;
+	
+	@Value("${egov.services.status.to.ignore}")
+	private String status="Demand_Created";
 
 	@Autowired
 	private RestTemplate restTemplate;
@@ -102,6 +105,10 @@ public class ConnectionService {
 							+ ") ");
 		else
 			qry = qry.replace(":locCondition", " ");
+		
+			qry = qry.replace(":staus",status);
+					 
+		 
 		
 		log.info(qry);
 
@@ -221,7 +228,7 @@ public class ConnectionService {
 				
 				if(Status.ACTIVE.compareTo(property.getStatus())!=0 )
 				{ 	
-					Thread.sleep(2000);
+					 
 					Property approvedProperty = propertyService.updateProperty(property, tenantId, requestInfo);
 	 
 				}
@@ -435,6 +442,8 @@ public class ConnectionService {
 							+ ") ");
 		else
 			qry = qry.replace(":locCondition", " ");
+		
+		qry = qry.replace(":staus",status);
 
 		List<String> queryForList = jdbcTemplate.queryForList(qry, String.class);
 
@@ -577,7 +586,7 @@ public class ConnectionService {
 			
 				if(Status.ACTIVE.compareTo(property.getStatus())!=0 )
 				{ 
-					Thread.sleep(2000);
+					 
 					Property approvedProperty = propertyService.updateProperty(property, tenantId, requestInfo);
 				}
 				
