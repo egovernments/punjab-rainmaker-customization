@@ -1494,7 +1494,7 @@ ReportDefinitions:
   orderby: order by bill.billdate desc
 
 
-- reportName: SearchSewrageChargeReport
+- reportName: SearchSewerageChargeReport
   summary: Search Sewerage Charge Notice Report
   version: 1.0.0
   moduleName: rainmaker-ws
