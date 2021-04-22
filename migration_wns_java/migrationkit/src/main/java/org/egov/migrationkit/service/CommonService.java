@@ -85,7 +85,7 @@ public class CommonService {
 				.append(WSConstants.TENANT_ID_FIELD_FOR_SEARCH_URL).append(tenantId)
 				.append(WSConstants.SEPARATER).append(WSConstants.CONSUMER_CODE_SEARCH_FIELD_NAME)
 				.append(consumerCode).append(WSConstants.SEPARATER)
-				.append(WSConstants.BUSINESSSERVICE_FIELD_FOR_SEARCH_URL)
+				.append(WSConstants.SERVICE_FIELD_FOR_SEARCH_URL)
 				.append(businessService)
 				.append(WSConstants.SEPARATER)
 				.append(WSConstants.BILL_NUMBER_FIELD_NAME)
