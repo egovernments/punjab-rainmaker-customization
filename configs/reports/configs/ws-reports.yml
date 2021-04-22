@@ -1429,23 +1429,42 @@ ReportDefinitions:
     total: false
   searchParams:
   - name: fromDate
-    label: reports.pt.fromDate
+    label: reports.ws.fromBillDate
     type: epoch
-    source: pt
+    source: ws
     isMandatory: false
     searchClause: AND bill.billdate >= $fromDate
   - name: toDate
-    label: reports.pt.toDate
+    label: reports.ws.toBillDate
     type: epoch
-    source: pt
+    source: ws
     isMandatory: false
     searchClause: AND bill.billdate <= $toDate
+  - name: mobilenumber
+    label: reports.ws.mobilenumber
+    type: String
+    source: ws
+    isMandatory: false
+    searchClause: AND owners.mobilenumber=$mobilenumber
+  - name: connectionNumber
+    label: reports.ws.connectionNumber
+    type: String
+    source: ws
+    isMandatory: false
+    searchClause: AND connectionno=$connectionNumber
+  - name: oldConnectionNumber
+    label: reports.ws.oldConnectionNumber
+    type: String
+    source: ws
+    isMandatory: false
+    searchClause: AND oldconnectionno=$oldConnectionNumber
   query: |
     -- Use CTE to force query plan, compute & use CTE later
     with owners as
       (
         select 
           split_part(string_agg(name,','),',',1) as ownername,
+          split_part(string_agg(mobilenumber,','),',',1) as mobilenumber,
           pt.propertyid as propertyid
         from eg_user usr
         inner join eg_pt_owner on eg_pt_owner.userid=usr.uuid
@@ -1520,17 +1539,35 @@ ReportDefinitions:
     total: false
   searchParams:
   - name: fromDate
-    label: reports.pt.fromDate
+    label: reports.ws.fromBillDate
     type: epoch
-    source: pt
+    source: ws
     isMandatory: false
     searchClause: AND bill.billdate >= $fromDate
   - name: toDate
-    label: reports.pt.toDate
+    label: reports.ws.toBillDate
     type: epoch
-    source: pt
+    source: ws
     isMandatory: false
     searchClause: AND bill.billdate <= $toDate
+  - name: mobilenumber
+    label: reports.ws.mobilenumber
+    type: String
+    source: ws
+    isMandatory: false
+    searchClause: AND owners.mobilenumber=$mobilenumber
+  - name: connectionNumber
+    label: reports.ws.connectionNumber
+    type: String
+    source: ws
+    isMandatory: false
+    searchClause: AND connectionno=$connectionNumber
+  - name: oldConnectionNumber
+    label: reports.ws.oldConnectionNumber
+    type: String
+    source: ws
+    isMandatory: false
+    searchClause: AND oldconnectionno=$oldConnectionNumber
   query: |
     -- Use CTE to force query plan, compute & use CTE later
     with owners as
