@@ -52,12 +52,15 @@ public class DemandService {
 	private RecordService recordService;
  
 
-	public List<Demand> prepareDemandRequest(Map data, String businessService, String consumerCode, String tenantId, OwnerInfo owner) {
+	public List<Demand> prepareDemandRequest(Map data, String businessService, String consumerCode, String tenantId, OwnerInfo owner, String connectionId) {
 		
 		
 		Map<String, List<DemandDetail>> instaWiseDemandMap = new HashMap<>();
 		List<Map> dcbDataList = (List) data.get("dcb") != null ? (List) data.get("dcb") : new ArrayList<Map>();
 		List<Demand> demands = new LinkedList<>();
+		if(dcbDataList.isEmpty()) {
+			recordService.setStatus("water", tenantId, "Demand_Created", connectionId);
+		}
 		
 //		dcbDataList
 		for (Map dcbData : dcbDataList) {
@@ -195,12 +198,14 @@ public class DemandService {
 		return isDemandCreated;  
 	}
     
-    public List<Demand> prepareSwDemandRequest(Map data, String businessService, String consumerCode, String tenantId, OwnerInfo owner) {
+    public List<Demand> prepareSwDemandRequest(Map data, String businessService, String consumerCode, String tenantId, OwnerInfo owner, String connectionId) {
 		
 	Map<String, List<DemandDetail>> instaWiseDemandMap = new HashMap<>();
 	List<Map> dcbDataList = (List) data.get("dcb") != null ? (List) data.get("dcb") : new ArrayList<Map>();
 	List<Demand> demands = new LinkedList<>();
-	
+	if(dcbDataList.isEmpty()) {
+		recordService.setStatus("water", tenantId, "Demand_Created", connectionId);
+	}
 //	dcbDataList
 	for (Map dcbData : dcbDataList) {
 		String taxhead = (String)dcbData.get("demand_reason");
