@@ -50,8 +50,10 @@ public class WSConstants {
     public static final String EG_BS_BILL_NO_DEMANDS_FOUND_MSG = "No Demands Found for the given bill generate criteria";
     
     public static final String PERIOD_FROM_FIELD_NAME = "periodFrom=";
-	
+    
     public static final String PERIOD_TO_FIELD_NAME = "periodTo=";
+    
+    public static final String BILL_NUMBER_FIELD_NAME = "billNumber=";
 
     static {
     	

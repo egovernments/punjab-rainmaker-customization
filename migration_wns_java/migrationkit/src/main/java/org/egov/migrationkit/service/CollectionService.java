@@ -96,27 +96,27 @@ public class CollectionService {
 				List<Bill> bills =null;
 
 				try {
-					List<BillDetail> billDetails = payment.getPaymentDetails().get(0).getBill().getBillDetails();
+//					List<BillDetail> billDetails = payment.getPaymentDetails().get(0).getBill().getBillDetails();
 
-					Long minFromPeriod = billDetails
-							.stream()
-							.min(Comparator.comparing(BillDetail::getFromPeriod))
-							.orElseThrow(NoSuchElementException::new).getFromPeriod();
-					LocalDate utcDate = Instant.ofEpochMilli(minFromPeriod).atZone(ZoneId.of("UTC")).toLocalDate();
+//					Long minFromPeriod = billDetails
+//							.stream()
+//							.min(Comparator.comparing(BillDetail::getFromPeriod))
+//							.orElseThrow(NoSuchElementException::new).getFromPeriod();
+//					LocalDate utcDate = Instant.ofEpochMilli(minFromPeriod).atZone(ZoneId.of("UTC")).toLocalDate();
+//
+//					minFromPeriod = WSConstants.TIME_PERIOD_MAP.get(utcDate.toString());
+//
+//					Long maxToPeriod = billDetails
+//							.stream()
+//							.max(Comparator.comparing(BillDetail::getToPeriod))
+//							.orElseThrow(NoSuchElementException::new).getToPeriod();
+//					LocalDate utcDatemaxToPeriod = Instant.ofEpochMilli(maxToPeriod).atZone(ZoneId.of("UTC")).toLocalDate();
+//
+//					maxToPeriod = WSConstants.TIME_PERIOD_MAP.get(utcDatemaxToPeriod.toString());
 
-					minFromPeriod = WSConstants.TIME_PERIOD_MAP.get(utcDate.toString());
-
-					Long maxToPeriod = billDetails
-							.stream()
-							.max(Comparator.comparing(BillDetail::getToPeriod))
-							.orElseThrow(NoSuchElementException::new).getToPeriod();
-					LocalDate utcDatemaxToPeriod = Instant.ofEpochMilli(maxToPeriod).atZone(ZoneId.of("UTC")).toLocalDate();
-
-					maxToPeriod = WSConstants.TIME_PERIOD_MAP.get(utcDatemaxToPeriod.toString());
-
-					bills = fetchBill(tenantId, requestInfo, digitTenantId, payment.getBusinessService(),
+					bills = searchBill(tenantId, requestInfo, digitTenantId, payment.getBusinessService(),
 							payment.getConsumerCode(),payment.getPaymentDetails().get(0).getReceiptNumber(),
-							minFromPeriod, maxToPeriod);
+							payment.getPaymentDetails().get(0).getBill().getBillNumber());
 
 				} catch (Exception exception) {
 					log.error("Exception occurred while fetching the bills with business service:"
@@ -200,7 +200,34 @@ public class CollectionService {
 
 			String url = commonService.getFetchBillURL(tenantId, consumerCode, businessService, periodFrom, periodTo)
 					.toString();
-//			System.out.println("ha");
+			RequestInfoWrapper request = RequestInfoWrapper.builder().requestInfo(requestInfo).build();
+
+			String response = restTemplate.postForObject(url, request, String.class);
+			log.debug("Bill Request URL: " + url + "Bill RequestInfo: " + request + "Bill Response: " + response);
+			BillResponseV2 waterResponse = objectMapper.readValue(response, BillResponseV2.class);
+
+			return waterResponse.getBill();
+
+		} catch (Exception ex) {
+			String module = null;
+			if (businessService.equalsIgnoreCase("WS")) {
+				module = "Wtrcollection";
+			} else {
+				module = "Swcollection";
+			}
+			recordService.recordError(module, erpTenantId, ex.getMessage(), erpReceiptNumber);
+			log.error("Fetch Bill Error", ex);
+		}
+		return bills;
+	}
+	
+	public List<Bill> searchBill(String erpTenantId, RequestInfo requestInfo, String tenantId, String businessService, String consumerCode,
+			String erpReceiptNumber, String billNumber) {
+		List<Bill> bills = new ArrayList<>();
+		try {
+
+			String url = commonService.getSearchBillURL(tenantId, consumerCode, businessService, billNumber)
+					.toString();
 			RequestInfoWrapper request = RequestInfoWrapper.builder().requestInfo(requestInfo).build();
 
 			String response = restTemplate.postForObject(url, request, String.class);
@@ -265,27 +292,27 @@ public class CollectionService {
 				List<Bill> bills =null;
 
 				try {
-					List<BillDetail> billDetails = payment.getPaymentDetails().get(0).getBill().getBillDetails();
+//					List<BillDetail> billDetails = payment.getPaymentDetails().get(0).getBill().getBillDetails();
+//
+//					Long minFromPeriod = billDetails
+//							.stream()
+//							.min(Comparator.comparing(BillDetail::getFromPeriod))
+//							.orElseThrow(NoSuchElementException::new).getFromPeriod();
+//					LocalDate utcDate = Instant.ofEpochMilli(minFromPeriod).atZone(ZoneId.of("UTC")).toLocalDate();
+//
+//					minFromPeriod = WSConstants.TIME_PERIOD_MAP.get(utcDate.toString());
+//
+//					Long maxToPeriod = billDetails
+//							.stream()
+//							.max(Comparator.comparing(BillDetail::getToPeriod))
+//							.orElseThrow(NoSuchElementException::new).getToPeriod();
+//					LocalDate utcDatemaxToPeriod = Instant.ofEpochMilli(maxToPeriod).atZone(ZoneId.of("UTC")).toLocalDate();
+//
+//					maxToPeriod = WSConstants.TIME_PERIOD_MAP.get(utcDatemaxToPeriod.toString());
 
-					Long minFromPeriod = billDetails
-							.stream()
-							.min(Comparator.comparing(BillDetail::getFromPeriod))
-							.orElseThrow(NoSuchElementException::new).getFromPeriod();
-					LocalDate utcDate = Instant.ofEpochMilli(minFromPeriod).atZone(ZoneId.of("UTC")).toLocalDate();
-
-					minFromPeriod = WSConstants.TIME_PERIOD_MAP.get(utcDate.toString());
-
-					Long maxToPeriod = billDetails
-							.stream()
-							.max(Comparator.comparing(BillDetail::getToPeriod))
-							.orElseThrow(NoSuchElementException::new).getToPeriod();
-					LocalDate utcDatemaxToPeriod = Instant.ofEpochMilli(maxToPeriod).atZone(ZoneId.of("UTC")).toLocalDate();
-
-					maxToPeriod = WSConstants.TIME_PERIOD_MAP.get(utcDatemaxToPeriod.toString());
-
-					bills = fetchBill(tenantId, requestInfo, digitTenantId, payment.getBusinessService(),
+					bills = searchBill(tenantId, requestInfo, digitTenantId, payment.getBusinessService(),
 							payment.getConsumerCode(),payment.getPaymentDetails().get(0).getReceiptNumber(),
-							minFromPeriod, maxToPeriod);
+							payment.getPaymentDetails().get(0).getBill().getBillNumber());
 
 				} catch (Exception exception) {
 					log.error("Exception occurred while fetching the bills with business service:"

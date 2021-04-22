@@ -16,6 +16,9 @@ import io.swagger.client.model.WaterConnectionResponse;
 
 @Component
 public class CommonService {
+	
+	@Value("${egov.bill.search.endpoint}")
+	private String searchBillEndPoint;
 
 	@Value("${egov.bill.fetch.endpoint}")
 	private String fetchBillEndPoint;
@@ -65,6 +68,28 @@ public class CommonService {
 				.append(WSConstants.SEPARATER)
 				.append(WSConstants.PERIOD_TO_FIELD_NAME)
 				.append(periodTo);
+	}
+	
+	/**
+	 * 
+	 * @param tenantId
+	 *            Tenant Id
+	 * @param consumerCode
+	 *            Consumer Code
+	 * @return uri of fetch bill
+	 */
+	public StringBuilder getSearchBillURL(String tenantId, String consumerCode, String businessService, String billNumber) {
+
+		return new StringBuilder().append(billingServiceHost)
+				.append(searchBillEndPoint).append(WSConstants.URL_PARAMS_SEPARATER)
+				.append(WSConstants.TENANT_ID_FIELD_FOR_SEARCH_URL).append(tenantId)
+				.append(WSConstants.SEPARATER).append(WSConstants.CONSUMER_CODE_SEARCH_FIELD_NAME)
+				.append(consumerCode).append(WSConstants.SEPARATER)
+				.append(WSConstants.BUSINESSSERVICE_FIELD_FOR_SEARCH_URL)
+				.append(businessService)
+				.append(WSConstants.SEPARATER)
+				.append(WSConstants.BILL_NUMBER_FIELD_NAME)
+				.append(billNumber);
 	}
 	
 	/**

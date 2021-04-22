@@ -178,9 +178,10 @@ public class DemandService {
 
 			String url = billingServiceHost + demandCreateEndPoint+requestInfo.getUserInfo().getTenantId();
 			DemandRequest request = new DemandRequest(requestInfo,demands);
+			log.info("Demand Create Request: " + request);
 			DemandResponse response = restTemplate.postForObject(url , request, DemandResponse.class);
 
-			//log.info("Demand Create Request: " + request + "Demand Create Respone: " + response);
+			log.info("Demand Create Respone: " + response);
 		}
 		catch(Exception e){
 			if(e.toString().equalsIgnoreCase("Demand already exists in the same period")) {
