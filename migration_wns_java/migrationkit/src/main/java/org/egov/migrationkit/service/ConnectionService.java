@@ -106,7 +106,7 @@ public class ConnectionService {
 		else
 			qry = qry.replace(":locCondition", " ");
 		
-			qry = qry.replace(":staus",status);
+			qry = qry.replace(":status",status);
 					 
 		 
 		
@@ -443,7 +443,7 @@ public class ConnectionService {
 		else
 			qry = qry.replace(":locCondition", " ");
 		
-		qry = qry.replace(":staus",status);
+		qry = qry.replace(":status",status);
 
 		List<String> queryForList = jdbcTemplate.queryForList(qry, String.class);
 
