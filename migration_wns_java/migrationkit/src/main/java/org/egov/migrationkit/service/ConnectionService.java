@@ -346,7 +346,7 @@ public class ConnectionService {
 	private void createWaterDemand(Map data,String connectionId, String consumerCode, RequestInfo requestInfo, OwnerInfo ownerInfo, String tenantId ) {
 		List<Demand> demandRequestList = demandService.prepareDemandRequest(data,
 				WSConstants.WATER_BUSINESS_SERVICE, consumerCode, requestInfo.getUserInfo().getTenantId(),
-				ownerInfo, connectionId);
+				ownerInfo);
 		if (!demandRequestList.isEmpty()) {
 
 			Boolean isDemandCreated = demandService.saveDemand(requestInfo, demandRequestList,
@@ -355,6 +355,8 @@ public class ConnectionService {
 				recordService.setStatus("water", tenantId, "Demand_Created", connectionId);
 
 			}
+		}else {
+			recordService.setStatus("water", tenantId, "Demand_Created", connectionId);
 		}
 		
 	}
@@ -690,7 +692,7 @@ public class ConnectionService {
 	private void createSewerageDemand(Map data,String connectionId, String consumerCode, RequestInfo requestInfo, OwnerInfo ownerInfo, String tenantId ) {
 		List<Demand> demandRequestList = demandService.prepareSwDemandRequest(data,
 				WSConstants.SEWERAGE_BUSINESS_SERVICE, consumerCode,
-				requestInfo.getUserInfo().getTenantId(), ownerInfo, connectionId);
+				requestInfo.getUserInfo().getTenantId(), ownerInfo);
 
 		log.info("Migrating demand");
 		if (!demandRequestList.isEmpty()) {
@@ -702,6 +704,8 @@ public class ConnectionService {
 			}
 
 
+		}else {
+			recordService.setStatus("sewerage", tenantId, "Demand_Created", connectionId);
 		}
 
 	}
