@@ -12,7 +12,9 @@ declare
 	 props record;
 	 bill_detail   record;
 	 cur_bills cursor for
-		   select * from eg_bill bill, egcl_collectionheader ch where ch.referencenumber=bill.id and bill.service_code in ('WT','STAX')  order by ch.receiptdate  ;
+	 		 select * from eg_bill where id_bill_type=1 and service_code in ('WT','STAX') 
+	 		 union
+		   select bill.* from eg_bill bill, egcl_collectionheader ch where ch.referencenumber::bigint=bill.id and bill.service_code in ('WT','STAX')  ;
    
 
 begin
