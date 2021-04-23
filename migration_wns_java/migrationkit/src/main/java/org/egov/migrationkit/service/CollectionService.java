@@ -96,27 +96,31 @@ public class CollectionService {
 				List<Bill> bills =null;
 
 				try {
-//					List<BillDetail> billDetails = payment.getPaymentDetails().get(0).getBill().getBillDetails();
+					List<BillDetail> billDetails = payment.getPaymentDetails().get(0).getBill().getBillDetails();
 
-//					Long minFromPeriod = billDetails
-//							.stream()
-//							.min(Comparator.comparing(BillDetail::getFromPeriod))
-//							.orElseThrow(NoSuchElementException::new).getFromPeriod();
-//					LocalDate utcDate = Instant.ofEpochMilli(minFromPeriod).atZone(ZoneId.of("UTC")).toLocalDate();
-//
-//					minFromPeriod = WSConstants.TIME_PERIOD_MAP.get(utcDate.toString());
-//
-//					Long maxToPeriod = billDetails
-//							.stream()
-//							.max(Comparator.comparing(BillDetail::getToPeriod))
-//							.orElseThrow(NoSuchElementException::new).getToPeriod();
-//					LocalDate utcDatemaxToPeriod = Instant.ofEpochMilli(maxToPeriod).atZone(ZoneId.of("UTC")).toLocalDate();
-//
-//					maxToPeriod = WSConstants.TIME_PERIOD_MAP.get(utcDatemaxToPeriod.toString());
+					Long minFromPeriod = billDetails
+							.stream()
+							.min(Comparator.comparing(BillDetail::getFromPeriod))
+							.orElseThrow(NoSuchElementException::new).getFromPeriod();
+					LocalDate utcDate = Instant.ofEpochMilli(minFromPeriod).atZone(ZoneId.of("UTC")).toLocalDate();
 
-					bills = searchBill(tenantId, requestInfo, digitTenantId, payment.getBusinessService(),
+					minFromPeriod = WSConstants.TIME_PERIOD_MAP.get(utcDate.toString());
+
+					Long maxToPeriod = billDetails
+							.stream()
+							.max(Comparator.comparing(BillDetail::getToPeriod))
+							.orElseThrow(NoSuchElementException::new).getToPeriod();
+					LocalDate utcDatemaxToPeriod = Instant.ofEpochMilli(maxToPeriod).atZone(ZoneId.of("UTC")).toLocalDate();
+
+					maxToPeriod = WSConstants.TIME_PERIOD_MAP.get(utcDatemaxToPeriod.toString());
+
+					bills = fetchBill(tenantId, requestInfo, digitTenantId, payment.getBusinessService(),
 							payment.getConsumerCode(),payment.getPaymentDetails().get(0).getReceiptNumber(),
-							payment.getPaymentDetails().get(0).getBill().getBillNumber());
+							minFromPeriod, maxToPeriod);
+					
+//					bills = searchBill(tenantId, requestInfo, digitTenantId, payment.getBusinessService(),
+//							payment.getConsumerCode(),payment.getPaymentDetails().get(0).getReceiptNumber(),
+//							payment.getPaymentDetails().get(0).getBill().getBillNumber());
 
 				} catch (Exception exception) {
 					log.error("Exception occurred while fetching the bills with business service:"
@@ -292,27 +296,31 @@ public class CollectionService {
 				List<Bill> bills =null;
 
 				try {
-//					List<BillDetail> billDetails = payment.getPaymentDetails().get(0).getBill().getBillDetails();
-//
-//					Long minFromPeriod = billDetails
-//							.stream()
-//							.min(Comparator.comparing(BillDetail::getFromPeriod))
-//							.orElseThrow(NoSuchElementException::new).getFromPeriod();
-//					LocalDate utcDate = Instant.ofEpochMilli(minFromPeriod).atZone(ZoneId.of("UTC")).toLocalDate();
-//
-//					minFromPeriod = WSConstants.TIME_PERIOD_MAP.get(utcDate.toString());
-//
-//					Long maxToPeriod = billDetails
-//							.stream()
-//							.max(Comparator.comparing(BillDetail::getToPeriod))
-//							.orElseThrow(NoSuchElementException::new).getToPeriod();
-//					LocalDate utcDatemaxToPeriod = Instant.ofEpochMilli(maxToPeriod).atZone(ZoneId.of("UTC")).toLocalDate();
-//
-//					maxToPeriod = WSConstants.TIME_PERIOD_MAP.get(utcDatemaxToPeriod.toString());
+					List<BillDetail> billDetails = payment.getPaymentDetails().get(0).getBill().getBillDetails();
 
-					bills = searchBill(tenantId, requestInfo, digitTenantId, payment.getBusinessService(),
+					Long minFromPeriod = billDetails
+							.stream()
+							.min(Comparator.comparing(BillDetail::getFromPeriod))
+							.orElseThrow(NoSuchElementException::new).getFromPeriod();
+					LocalDate utcDate = Instant.ofEpochMilli(minFromPeriod).atZone(ZoneId.of("UTC")).toLocalDate();
+
+					minFromPeriod = WSConstants.TIME_PERIOD_MAP.get(utcDate.toString());
+
+					Long maxToPeriod = billDetails
+							.stream()
+							.max(Comparator.comparing(BillDetail::getToPeriod))
+							.orElseThrow(NoSuchElementException::new).getToPeriod();
+					LocalDate utcDatemaxToPeriod = Instant.ofEpochMilli(maxToPeriod).atZone(ZoneId.of("UTC")).toLocalDate();
+
+					maxToPeriod = WSConstants.TIME_PERIOD_MAP.get(utcDatemaxToPeriod.toString());
+
+					bills = fetchBill(tenantId, requestInfo, digitTenantId, payment.getBusinessService(),
 							payment.getConsumerCode(),payment.getPaymentDetails().get(0).getReceiptNumber(),
-							payment.getPaymentDetails().get(0).getBill().getBillNumber());
+							minFromPeriod, maxToPeriod);
+
+//					bills = searchBill(tenantId, requestInfo, digitTenantId, payment.getBusinessService(),
+//							payment.getConsumerCode(),payment.getPaymentDetails().get(0).getReceiptNumber(),
+//							payment.getPaymentDetails().get(0).getBill().getBillNumber());
 
 				} catch (Exception exception) {
 					log.error("Exception occurred while fetching the bills with business service:"
