@@ -126,7 +126,7 @@ public class ConnectionService {
 					connection.setConnectionType("Metered");
 				}
 				String connectionNo = connection.getConnectionNo() != null ? connection.getConnectionNo()
-						: (String) data.get("applicationnumber");
+						: (String) data.get("applicationNo");
 				connection.setConnectionNo(connectionNo);
 				connection.setTenantId(requestInfo.getUserInfo().getTenantId());
 				connection.setProposedPipeSize(connection.getPipeSize());
@@ -259,6 +259,8 @@ public class ConnectionService {
 				addtionals.put("estimationFileStoreId", (String) data.get("estimationFileStoreId"));
 				addtionals.put("meterMake", (String) data.get("meterMake"));
 				addtionals.put("securityFee", data.get("securityFee"));
+				addtionals.put("applicationNo", data.get("applicationNo"));
+				
 				if(data.get("connectionreason") == null ) {
 					addtionals.put("isMigrated", Boolean.FALSE);
 				}else {
@@ -460,7 +462,7 @@ public class ConnectionService {
 				swConnection.setConnectionType("Non Metered");
 
 				String connectionNo = swConnection.getConnectionNo() != null ? swConnection.getConnectionNo()
-						: (String) data.get("applicationnumber");
+						: (String) data.get("applicationNo");
 				swConnection.setConnectionNo(connectionNo);
 				log.info("Sewerage connection Migrating for consumer number : " + swConnection.getConnectionNo());
 				 
@@ -548,6 +550,8 @@ public class ConnectionService {
 				// addtionals.put("pipeSize",(Double) data.get("pipeSize"));
 				addtionals.put("estimationFileStoreId", (String) data.get("estimationFileStoreId"));
 				addtionals.put("securityFee", data.get("securityFee"));
+				addtionals.put("applicationNo", data.get("applicationNo"));
+				
 				if(data.get("connectionreason") == null ) {
 					addtionals.put("isMigrated", Boolean.FALSE);
 				}else {

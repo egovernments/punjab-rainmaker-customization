@@ -115,11 +115,21 @@ public class DemandService {
 				
 		}
 		instaWiseDemandMap.forEach((insta_id, ddList) -> {
-			BigDecimal totalAmountPaid = BigDecimal.ZERO;
-			for (DemandDetail demandDetail : ddList) {
-				totalAmountPaid = totalAmountPaid.add(demandDetail.getAmountPaid());	
-			}
+			Boolean isPaymentCompleted = false;
+			BigDecimal totoalTax = ddList.stream().map(DemandDetail::getTaxAmount)
+					.reduce(BigDecimal.ZERO, BigDecimal::add);
+			
+			BigDecimal totalCollection = ddList.stream().map(DemandDetail::getCollectionAmount)
+					.reduce(BigDecimal.ZERO, BigDecimal::add);
 
+			if (totoalTax.compareTo(totalCollection) == 0)
+				isPaymentCompleted = true;
+			else if (totoalTax.compareTo(totalCollection) != 0)
+				isPaymentCompleted= false;
+			
+			BigDecimal totalAmountPaid = ddList.stream().map(DemandDetail::getAmountPaid)
+					.reduce(BigDecimal.ZERO, BigDecimal::add);
+			
 			if(!ddList.isEmpty() && WSConstants.ONE_TIME_TAX_HEAD_MASTERS.contains(ddList.get(0).getTaxHeadMasterCode())) {
 				demands.add(Demand.builder()
 						.businessService(businessService + WSConstants.ONE_TIME_FEE_CONST)
@@ -136,7 +146,7 @@ public class DemandService {
 						.consumerType("waterConnection")
 						.status(StatusEnum.valueOf("ACTIVE"))
 						.totalAmountPaid(totalAmountPaid)
-						.isPaymentCompleted(false)
+						.isPaymentCompleted(isPaymentCompleted)
 						.build());	
 			}else {
 				demands.add(Demand.builder()
@@ -154,7 +164,7 @@ public class DemandService {
 						.consumerType("waterConnection")
 						.status(StatusEnum.valueOf("ACTIVE"))
 						.totalAmountPaid(totalAmountPaid)
-						.isPaymentCompleted(false)
+						.isPaymentCompleted(isPaymentCompleted)
 						.billExpiryTime(billExpiryDaysInMilliseconds)
 						.build());	
 			}
@@ -260,11 +270,21 @@ public class DemandService {
 
 	}
 	instaWiseDemandMap.forEach((insta_id, ddList) -> {
-		BigDecimal totalAmountPaid = BigDecimal.ZERO;
-		for (DemandDetail demandDetail : ddList) {
-			totalAmountPaid = totalAmountPaid.add(demandDetail.getAmountPaid());	
-		}
+		Boolean isPaymentCompleted = false;
+		BigDecimal totoalTax = ddList.stream().map(DemandDetail::getTaxAmount)
+				.reduce(BigDecimal.ZERO, BigDecimal::add);
+		
+		BigDecimal totalCollection = ddList.stream().map(DemandDetail::getCollectionAmount)
+				.reduce(BigDecimal.ZERO, BigDecimal::add);
 
+		if (totoalTax.compareTo(totalCollection) == 0)
+			isPaymentCompleted = true;
+		else if (totoalTax.compareTo(totalCollection) != 0)
+			isPaymentCompleted= false;
+		
+		BigDecimal totalAmountPaid = ddList.stream().map(DemandDetail::getAmountPaid)
+				.reduce(BigDecimal.ZERO, BigDecimal::add);
+		
 		if(!ddList.isEmpty() && WSConstants.ONE_TIME_TAX_HEAD_MASTERS.contains(ddList.get(0).getTaxHeadMasterCode())) {
 			demands.add(Demand.builder()
 					.businessService(businessService + WSConstants.ONE_TIME_FEE_CONST)
@@ -281,7 +301,7 @@ public class DemandService {
 					.consumerType("sewerageConnection")
 					.status(StatusEnum.valueOf("ACTIVE"))
 					.totalAmountPaid(totalAmountPaid)
-					.isPaymentCompleted(false)
+					.isPaymentCompleted(isPaymentCompleted)
 					.billExpiryTime(billExpiryDaysInMilliseconds)
 					.build());	
 		}else {
@@ -300,7 +320,7 @@ public class DemandService {
 					.consumerType("sewerageConnection")
 					.status(StatusEnum.valueOf("ACTIVE"))
 					.totalAmountPaid(totalAmountPaid)
-					.isPaymentCompleted(false)
+					.isPaymentCompleted(isPaymentCompleted)
 					.billExpiryTime(billExpiryDaysInMilliseconds)
 					.build());	
 		}
