@@ -76,33 +76,39 @@ Loop
 
  if( props.code = 'METERCHARGES') then head:= 'WS_METER_TESTING_FEE' ; end if;
 if( props.code = 'PENALTY') then head:= 'WS_TIME_PENALTY' ; end if;
-if( props.code = 'BREAKDOWN_PENALTY') then head:= 'WS_TIME_PENALTY' ; end if;
+if( props.code = 'BREAKDOWN_PENALTY') then head:= 'WS_BREAKDOWN_PENALTY' ; end if;
 if( props.code = 'INTEREST') then head:= 'WS_TIME_INTEREST' ; end if;
 if( props.code = 'WTAXCHARGES') then head:= 'WS_CHARGE' ; end if;
-if( props.code = 'METERRENT') then head:= 'WS_OTHER_FEE' ; end if;
-if( props.code = 'WTADJUSTMENT') then head:= 'WS_OTHER_FEE' ; end if;
-if( props.code = 'DOORTODOORCOLLECTIONCHARGES') then head:= 'WS_OTHER_FEE' ; end if;
-if( props.code = 'TITLETRANSFERFEE') then head:= 'WS_OTHER_FEE' ; end if;
-if( props.code = 'ADDITIONALFEEFORTITLETRANSFER') then head:= 'WS_OTHER_FEE' ; end if;
-if( props.code = 'WTAXSUPERVISION') then head:= 'WS_OTHER_FEE' ; end if;
+if( props.code = 'METERRENT') then head:= 'WS_METER_RENT' ; end if;
+if( props.code = 'WTADJUSTMENT') then head:= 'WS_TAX_ADJUSTMENT' ; end if;
+if( props.code = 'DOORTODOORCOLLECTIONCHARGES') then head:= 'WS_DOOR_TO_DOOR_COLLECTION_CHARGES' ; end if;
+if( props.code = 'TITLETRANSFERFEE') then head:= 'WS_TITLE_TRANSFER_FEE' ; end if;
+if( props.code = 'ADDITIONALFEEFORTITLETRANSFER') then head:= 'WS_ADDITIONAL_TITLE_TRANSFER_FEE' ; end if;
+if( props.code = 'WTAXSUPERVISION') then head:= 'WS_SUPERVISION_CHARGE' ; end if;
 if( props.code = 'WTADVANCE') then head:= 'WS_ADVANCE_CARRYFORWARD' ; end if;
 if( props.code = 'WTAXSECURITY') then head:= 'WS_SECURITY_DEPOSIT' ; end if;
 if( props.code = 'WTAXOTHERS') then head:= 'WS_OTHER_FEE' ; end if;
 if( props.code = 'WTAXROADCUTTING') then head:= 'WS_ROAD_CUTTING_CHARGE' ; end if;
 if( props.code = 'WTAXAPPLICATION') then head:= 'WS_FORM_FEE' ; end if;
-if( props.code = 'CONNECTIONTYPECONVERSIONFEE') then head:= 'WS_OTHER_FEE' ; end if;
+if( props.code = 'CONNECTIONTYPECONVERSIONFEE') then head:= 'WS_CONNECTION_TYPE_CONVERSION_FEE' ; end if;
      
 if( props.code = 'SEWERAGEADVANCE') then head:='SW_ADVANCE_CARRYFORWARD' ; end if;
 if( props.code = 'STAXSECURITY') then head:='SW_SECURITY_DEPOSIT' ; end if;
 if( props.code = 'STAXOTHERS') then head:='SW_OTHER_FEE' ; end if;
 if( props.code = 'STAXROADCUTTING') then head:='SW_ROAD_CUTTING_CHARGE' ; end if;
-if( props.code = 'STAXAPPLICATION') then head:='SW_OTHER_FEE' ; end if;
-if( props.code = 'STAXSUPERVISION') then head:='SW_OTHER_FEE' ; end if;
+if( props.code = 'STAXAPPLICATION') then head:='SW_FORM_FEE' ; end if;
+if( props.code = 'STAXSUPERVISION') then head:='SW_SUPERVISION_CHARGE' ; end if;
 if( props.code = 'SEWERAGETAX') then head:='SW_CHARGE' ; end if;
-if( props.code = 'SWTAXADJUSTMENT') then head:='SW_OTHER_FEE' ; end if;
-if( props.code = 'PENALTY' and  service = 'SW' ) then head:='SW_TIME_PENALTY' ; end if;
- 
-   
+if( props.code = 'SWTAXADJUSTMENT') then head:='SW_TAX_ADJUSTMENT' ; end if;
+if( props.code = 'PENALTY' and  service = 'SW') then head:='SW_TIME_PENALTY' ; end if;
+if( props.code = 'TITLETRANSFERFEE') then head:='SW_TITLE_TRANSFER_FEE' ; end if;
+if( props.code = 'INTEREST') then head:='SW_TIME_INTEREST' ; end if;
+if( props.code = 'ADDITIONALFEEFORTITLETRANSFER') then head:='SW_ADDITIONAL_TITLE_TRANSFER_FEE' ; end if;
+if( props.code = 'DOORTODOORCOLLECTIONCHARGES') then head:='SW_DOOR_TO_DOOR_COLLECTION_CHARGES' ; end if;
+if( props.code = 'DONATIONCHARGE') then head:='SW_DONATION_CHARGE' ; end if;
+if( props.code = 'INSPECTIONCHARGE') then head:='SW_INSPECTION_CHARGE' ; end if;
+if( props.code = 'ESTIMATIONCHARGE') then head:='SW_ESTIMATION_CHARGE' ; end if;
+	     
          INSERT INTO public.egbs_billaccountdetail_v1(
             id, tenantid, billdetail, glcode, orderno, accountdescription, 
             creditamount, debitamount, isactualdemand, purpose, createdby, 
