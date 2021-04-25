@@ -358,7 +358,7 @@ public class ConnectionService {
 
 			}
 		}else {
-			recordService.setStatus("water", tenantId, "Demand_Created", connectionId);
+			recordService.setStatus("water", tenantId, "NO_DEMANDS", connectionId);
 		}
 		
 	}
@@ -709,7 +709,7 @@ public class ConnectionService {
 
 
 		}else {
-			recordService.setStatus("sewerage", tenantId, "Demand_Created", connectionId);
+			recordService.setStatus("sewerage", tenantId, "NO_DEMANDS", connectionId);
 		}
 
 	}

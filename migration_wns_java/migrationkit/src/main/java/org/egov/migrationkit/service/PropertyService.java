@@ -123,9 +123,9 @@ public class PropertyService {
 	 
 		property.setUnits(units);
 		OwnerInfo owner = new OwnerInfo();
-		owner.setName(conn.getApplicantname().replace('?', ' '));
+		owner.setName(conn.getApplicantname().replace('?', ' ').replace('`', ' '));
 		owner.setMobileNumber(conn.getMobilenumber());
-		owner.setFatherOrHusbandName(conn.getGuardianname().replace('?', ' '));
+		owner.setFatherOrHusbandName(conn.getGuardianname().replace('?', ' ').replace('`', ' '));
 		owner.setOwnerType("NONE");
 		owner.setGender((String)data.get("gender"));
 		owner.setEmailId((String)data.getOrDefault("emailId", null));
@@ -238,9 +238,9 @@ public class PropertyService {
 		List<Unit> units = new ArrayList<>();
 		property.setUnits(units);
 		OwnerInfo owner = new OwnerInfo();
-		owner.setName(conn.getApplicantname().replace('?', ' '));
+		owner.setName(conn.getApplicantname().replace('?', ' ').replace('`', ' '));
 		owner.setMobileNumber(conn.getMobilenumber());
-		owner.setFatherOrHusbandName(conn.getGuardianname().replace('?', ' '));
+		owner.setFatherOrHusbandName(conn.getGuardianname().replace('?', ' ').replace('`', ' '));
 		owner.setOwnerType("NONE");
 		property.creationReason(CreationReason.CREATE);
 		property.setUsageCategory("RESIDENTIAL");
