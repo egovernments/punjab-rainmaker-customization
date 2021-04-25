@@ -123,9 +123,9 @@ public class PropertyService {
 	 
 		property.setUnits(units);
 		OwnerInfo owner = new OwnerInfo();
-		owner.setName(conn.getApplicantname());
+		owner.setName(conn.getApplicantname().replace('?', ' '));
 		owner.setMobileNumber(conn.getMobilenumber());
-		owner.setFatherOrHusbandName(conn.getGuardianname());
+		owner.setFatherOrHusbandName(conn.getGuardianname().replace('?', ' '));
 		owner.setOwnerType("NONE");
 		owner.setGender((String)data.get("gender"));
 		owner.setEmailId((String)data.getOrDefault("emailId", null));
@@ -230,7 +230,6 @@ public class PropertyService {
 		property.setOwnershipCategory("INDIVIDUAL.SINGLEOWNER");
 		property.setPropertyType("BUILTUP.INDEPENDENTPROPERTY");
 
-		// may have to change to seweragecharges
 		property.setSource(Source.WATER_CHARGES);
 
 		property.setTotalConstructedArea(BigDecimal.valueOf(190));
@@ -239,9 +238,9 @@ public class PropertyService {
 		List<Unit> units = new ArrayList<>();
 		property.setUnits(units);
 		OwnerInfo owner = new OwnerInfo();
-		owner.setName(conn.getApplicantname());
+		owner.setName(conn.getApplicantname().replace('?', ' '));
 		owner.setMobileNumber(conn.getMobilenumber());
-		owner.setFatherOrHusbandName(conn.getGuardianname());
+		owner.setFatherOrHusbandName(conn.getGuardianname().replace('?', ' '));
 		owner.setOwnerType("NONE");
 		property.creationReason(CreationReason.CREATE);
 		property.setUsageCategory("RESIDENTIAL");
