@@ -156,7 +156,7 @@ public class ConnectionService {
 								connection.getId());
 					}
 					continue;
-				}else if(isConnectionMigrated != null && !isConnectionMigrated.isEmpty() && isConnectionMigrated.contains("Demand_Created")) {
+				}else if(isConnectionMigrated != null && !isConnectionMigrated.isEmpty() && isConnectionMigrated.contains("Demand_Created") && isConnectionMigrated.contains("NO_DEMANDS")) {
 					continue;					
 				}
 
@@ -489,7 +489,7 @@ public class ConnectionService {
 					}
 					continue;
 				}
-				else if(listStatuses != null && !listStatuses.isEmpty() && listStatuses.contains("Demand_Created")) {
+				else if(listStatuses != null && !listStatuses.isEmpty() && listStatuses.contains("Demand_Created")  && listStatuses.contains("NO_DEMANDS")) {
 					continue;					
 				}
 				
