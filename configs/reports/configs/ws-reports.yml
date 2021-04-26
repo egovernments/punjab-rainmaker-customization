@@ -1,0 +1,1601 @@
+---
+ReportDefinitions:
+- reportName: ReceiptRegisterSW
+  summary: Receipt Register
+  version: 1.0.0
+  moduleName: rainmaker-ws
+  additionalConfig:
+    print:
+      pdfPageSize: "A1"
+  sourceColumns:
+  - name: receiptno
+    label: reports.ws.receiptno
+    type: string
+    source: ws
+    total: false
+  - name: receiptdate1
+    label: reports.ws.receiptdate
+    type: string
+    source: ws
+    total: false
+  - name: service
+    label: reports.ws.serive
+    type: string
+    source: ws
+    total: false
+  - name: billnumber
+    label: reports.ws.billnumber
+    type: string
+    source: ws
+    total: false
+  - name: billdate1
+    label: reports.ws.billdate
+    type: string
+    source: ws
+    total: false
+  - name: paidby
+    label: reports.ws.paidby
+    type: string
+    source: ws
+    total: false
+  - name: amountpaid
+    label: reports.ws.amountpaid
+    type: string
+    source: ws
+    total: true
+  - name: paymentmode
+    label: reports.ws.paymentmode
+    type: string
+    source: ws
+    total: false
+  - name: paymentstatus
+    label: reports.ws.paymentstatus
+    type: string
+    source: ws
+    total: false
+  - name: ownername
+    label: reports.ws.ownername
+    type: string
+    source: ws
+    total: false
+  searchParams:
+  - name: fromDate
+    label: reports.pt.fromDate
+    type: epoch
+    source: pt
+    isMandatory: true
+    searchClause: AND pd.receiptdate >= $fromDate
+  - name: toDate
+    label: reports.pt.toDate
+    type: epoch
+    source: pt
+    isMandatory: true
+    searchClause: AND pd.receiptdate <= $toDate
+  - name: serviceType
+    label: serviceType
+    type: singlevaluelist
+    pattern: 'list://WS%:Water,SW%:Sewerage'
+    source: pt
+    isMandatory: true
+    searchClause: AND pd.businessservice like $serviceType
+  - name: receiptNumber
+    label: receiptNumber
+    type: string
+    source: pt
+    isMandatory: false
+    searchClause: AND pd.receiptnumber like $receiptNumber
+  - name: paymentStatus
+    label: paymentStatus
+    type: singlevaluelist
+    pattern: 'list://NEW:NEW,DEPOSITED:DEPOSITED'
+    source: pt
+    isMandatory: false
+    searchClause: AND payment.paymentstatus like $paymentStatus
+  - name: paymentMode
+    label: paymentMode
+    type: singlevaluelist
+    pattern: 'list://CASH:CASH,CHEQUE:CHEQUE,DD:DD,ONLINE:ONLINE,CARD:CARD,OFFLINE_NEFT:OFFLINE NEFT'
+    source: pt
+    isMandatory: false
+    searchClause: AND payment.paymentmode like $paymentMode
+  query: |
+    -- Use CTE to force query plan, compute & use CTE later
+    select
+      receiptnumber as receiptno,
+      to_char((To_timestamp(pd.receiptdate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY') as receiptdate1,
+      bill.businessservice as service,
+      billnumber,
+      to_char((To_timestamp(bill.billdate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY') as billdate1,
+      paidby,
+      amountpaid,
+      paymentmode,
+      paymentstatus,
+      payername as ownername
+    from egcl_paymentdetail pd
+    inner join egcl_bill as bill on bill.id=pd.billid 
+    inner join egcl_payment as payment on payment.id=pd.paymentid and payment.paymentstatus!='CANCELLED'
+    where payment.tenantid=$tenantid
+  orderby: order by pd.receiptdate desc
+
+
+- reportName: ReceiptRegisterSW_OLD
+  summary: Receipt Register
+  version: 1.0.0
+  moduleName: rainmaker-ws
+  additionalConfig:
+    print:
+      pdfPageSize: "A1"
+  sourceColumns:
+  - name: connectionno
+    label: reports.ws.connectionno
+    type: string
+    source: ws
+    total: false
+  - name: consumercode
+    label: reports.ws.consumercode
+    type: string
+    source: ws
+    total: false
+  - name: receiptdate
+    label: reports.ws.receiptdate
+    type: string
+    source: ws
+    total: false
+  - name: receiptnumber
+    label: reports.ws.receiptnumber
+    type: string
+    source: ws
+    total: false
+  - name: instrumenttype
+    label: reports.ws.instrumenttype
+    type: string
+    source: ws
+    total: false
+  - name: bankname
+    label: reports.ws.bankname
+    type: string
+    source: ws
+    total: false
+  - name: transactionnumber
+    label: reports.ws.transactionnumber
+    type: string
+    source: ws
+    total: false
+  - name: transactiondate
+    label: reports.ws.transactiondate
+    type: string
+    source: ws
+    total: false
+  - name: billperiod
+    label: reports.ws.billperiod
+    type: string
+    source: ws
+    total: false
+  - name: amount
+    label: reports.ws.amount
+    type: string
+    source: ws
+    total: true
+  - name: pendingamount
+    label: reports.ws.pendingamount
+    type: string
+    source: ws
+    total: true
+  - name: usagetype
+    label: reports.ws.usagetype
+    type: string
+    source: ws
+    total: false
+  - name: adhocpenalty
+    label: reports.ws.adhocpenalty
+    type: string
+    source: ws
+    total: true
+  - name: adhocrebate
+    label: reports.ws.adhocrebate
+    type: string
+    source: ws
+    total: true
+  - name: compositionfee
+    label: reports.ws.compositionfee
+    type: string
+    source: ws
+    total: true
+  - name: connectionfee
+    label: reports.ws.connectionfee
+    type: string
+    source: ws
+    total: true
+  - name: roundoff
+    label: reports.ws.roundoff
+    type: string
+    source: ws
+    total: true
+  - name: formfee
+    label: reports.ws.formfee
+    type: string
+    source: ws
+    total: true
+  - name: onetimefee
+    label: reports.ws.onetimefee
+    type: string
+    source: ws
+    total: true
+  - name: othercharge
+    label: reports.ws.othercharge
+    type: string
+    source: ws
+    total: true
+  - name: otherfee
+    label: reports.ws.otherfee
+    type: string
+    source: ws
+    total: true
+  - name: roadcuttingcharge
+    label: reports.ws.roadcuttingcharge
+    type: string
+    source: ws
+    total: true
+  - name: securityfee
+    label: reports.ws.securityfee
+    type: string
+    source: ws
+    total: true
+  - name: securitycharge
+    label: reports.ws.securitycharge
+    type: string
+    source: ws
+    total: true
+  - name: taxandcess
+    label: reports.ws.interest
+    type: string
+    source: ws
+    total: true
+  - name: usercharge
+    label: reports.ws.usercharge
+    type: string
+    source: ws
+    total: true
+  - name: g8issuedate
+    label: reports.ws.g8issuedate
+    type: string
+    source: ws
+    total: false
+  - name: g8receiptno
+    label: reports.ws.g8receiptno
+    type: string
+    source: ws
+    total: false
+  searchParams:
+  - name: fromDate
+    label: reports.pt.fromDate
+    type: epoch
+    source: pt
+    isMandatory: true
+    searchClause: AND pd.receiptdate >= $fromDate
+  - name: toDate
+    label: reports.pt.toDate
+    type: epoch
+    source: pt
+    isMandatory: true
+    searchClause: AND pd.receiptdate <= $toDate
+  - name: connectionType
+    label: connectionType
+    type: singlevaluelist
+    pattern: 'list://WS%:Water,SW%:Sewerage'
+    source: pt
+    isMandatory: true
+    searchClause: AND pd.businessservice like $connectionType
+  query: |
+    -- Use CTE to force query plan, compute & use CTE later
+    WITH receipt_breakup AS 
+    (
+        SELECT
+            pd.id as pdid,
+            SUM(CASE WHEN taxheadcode LIKE 'SW_ADHOC_PENALTY' THEN adjustedamount ELSE 0 END) as adhocpenalty, 
+            SUM(CASE WHEN taxheadcode LIKE 'SW_ADHOC_REBATE' THEN adjustedamount ELSE 0 END) as adhocrebate, 
+            SUM(CASE WHEN taxheadcode LIKE 'SW_COMPOSITION_FEE' THEN adjustedamount ELSE 0 END) as compositionfee, 
+            SUM(CASE WHEN taxheadcode LIKE 'SW_CONNECTION_FEE' THEN adjustedamount ELSE 0 END) as connectionfee, 
+            SUM(CASE WHEN taxheadcode LIKE 'SW_FEE_ROUND_OFF' THEN adjustedamount ELSE 0 END) as roundoff, 
+            SUM(CASE WHEN taxheadcode LIKE 'SW_FORM_FEE' THEN adjustedamount ELSE 0 END) as formfee, 
+            SUM(CASE WHEN taxheadcode LIKE 'SW_ONE_TIME_FEE' THEN adjustedamount ELSE 0 END) as onetimefee,
+            SUM(CASE WHEN taxheadcode LIKE 'SW_OTHER_CHARGE' THEN bad.amount ELSE 0 END) as othercharge,
+            SUM(CASE WHEN taxheadcode LIKE 'SW_OTHER_FEE' THEN adjustedamount ELSE 0 END) as otherfee, 
+            SUM(CASE WHEN taxheadcode LIKE 'SW_ROAD_CUTTING_CHARGE' THEN bad.amount ELSE 0 END) as roadcuttingcharge,
+            SUM(CASE WHEN taxheadcode LIKE 'SW_SCRUTINY_FEE' THEN bad.amount ELSE 0 END)  as scrutinyfee,
+            SUM(CASE WHEN taxheadcode LIKE 'SW_SECURITY_CHARGE' THEN adjustedamount ELSE 0 END) as securitycharge,
+            SUM(CASE WHEN taxheadcode LIKE 'SW_TAX_AND_CESS' THEN adjustedamount ELSE 0 END) as taxandcess,
+            SUM(CASE WHEN taxheadcode LIKE 'SW_USER_CHARGE' THEN adjustedamount ELSE 0 END) as usercharge				 
+        FROM egcl_billaccountdetail as bad
+        INNER JOIN egcl_billdetial as bd on bd.id = bad.billdetailid
+        INNER JOIN egcl_paymentdetail as pd on pd.billid = bd.billid
+        INNER JOIN egcl_payment as payment on pd.paymentid=payment.id
+        WHERE payment.tenantid = $tenantid and payment.paymentstatus != 'CANCELLED' 
+        group by pdid
+    )
+    SELECT
+        --count(*)	
+        pd.tenantid AS tenantid,
+        pd.id,
+        pt.propertyid as consumercode,
+        to_char((To_timestamp(pd.receiptdate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY')  AS receiptdate,
+        payment.ifsccode AS bankname, 
+        receiptnumber,
+        payment.totalamountpaid as amount, 
+        payment.paymentmode as instrumenttype, 
+        payment.transactionnumber,
+        concat(to_char((To_timestamp(get_fromperiod(pd.billid)/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY'),'-', to_char((To_timestamp(get_toperiod(pd.billid)/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY')) as billperiod, 
+        to_char((To_timestamp(payment.transactiondate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY') AS transactiondate, 
+        payment.totaldue - payment.totalamountpaid AS pendingamount,
+        Initcap(case when pt.usagecategory like '%.%' then split_part(pt.usagecategory,'.',2) else pt.usagecategory end) as usagetype,
+        (case when eg_user.name is null then '30048|21Fj+c3k2ldB0X3AzIh7atXB' else eg_user.name end)  as collectorname,
+        receipt_breakup.*,
+        to_char((To_timestamp(pd.manualreceiptdate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY') AS g8issuedate, 
+        manualreceiptnumber as g8receiptno
+      FROM egcl_paymentdetail pd Left outer join eg_user on eg_user.id = pd.createdby::INTEGER, egcl_payment payment, eg_pt_property as pt, receipt_breakup, egcl_bill bill, eg_sw_connection
+      --(select string_agg(distinct propertyid,',') as propertyid, string_agg(distinct locality,',') as locality from eg_pt_address where tenantid=$tenantid group by propertyid ) pt_addr
+      where pd.paymentid=payment.id and bill.id=pd.billid and payment.paymentstatus != 'CANCELLED' and pd.businessservice like $connectionType and payment.tenantid=$tenantid 
+      and pt.id = eg_sw_connection.property_id 
+      and receipt_breakup.pdid=pd.id  
+      and pt.status!='INACTIVE' 
+      --and pt_addr.propertyid=pt.id 
+      --and pt.propertyid='PT-1012-978737'
+      --and receiptnumber='PT/1012/2020-21/001021'
+  orderby: ORDER BY pd.receiptdate DESC
+  
+  
+- reportName: ReceiptRegisterReportSW
+  decryptionPathId: ReceiptRegisterShort_V2
+  summary: Receipt Register
+  version: 1.0.0
+  moduleName: rainmaker-ws
+  additionalConfig:
+    print:
+      pdfPageSize: "A1"
+  sourceColumns:
+  - name: receiptnumber
+    label: reports.ws.receiptnumber
+    type: string
+    source: ws
+    total: false
+  - name: receiptdate
+    label: reports.ws.receiptdate
+    type: string
+    source: ws
+    total: false
+  - name: service
+    label: reports.ws.service
+    type: string
+    source: ws
+    total: false
+  - name: collectorname
+    label: reports.ws.collectorname
+    type: string
+    source: ws
+    total: false
+  - name: online
+    label: reports.ws.online
+    type: string
+    source: ws
+    total: true
+  - name: cash
+    label: reports.ws.cash
+    type: string
+    source: ws
+    total: true
+  - name: cheque
+    label: reports.ws.cheque
+    type: string
+    source: ws
+    total: true
+  - name: dd
+    label: reports.ws.dd
+    type: string
+    source: ws
+    total: true
+  - name: cheque_dd_date
+    label: reports.ws.cheque_dd_date
+    type: string
+    source: ws
+    total: false
+  - name: cheque_dd_transaction_number
+    label: reports.ws.cheque_dd_transaction_number
+    type: string
+    source: ws
+    total: false
+  - name: card
+    label: reports.ws.card
+    type: string
+    source: ws
+    total: true
+  - name: rtgs
+    label: reports.ws.rtgs
+    type: string
+    source: ws
+    total: true
+  - name: neft
+    label: reports.ws.neft
+    type: string
+    source: ws
+    total: true
+  - name: po
+    label: reports.ws.po
+    type: string
+    source: ws
+    total: true
+  - name: paymentstatus
+    label: reports.ws.paymentstatus
+    type: string
+    source: ws
+    total: false
+  searchParams:
+  - name: fromDate
+    label: reports.pt.fromDate
+    type: epoch
+    source: pt
+    isMandatory: true
+    searchClause: AND pd.receiptdate >= $fromDate
+  - name: toDate
+    label: reports.pt.toDate
+    type: epoch
+    source: pt
+    isMandatory: true
+    searchClause: AND pd.receiptdate <= $toDate
+  - name: connectionType
+    label: connectionType
+    type: singlevaluelist
+    pattern: 'list://WS%:Water,SW%:Sewerage'
+    source: pt
+    isMandatory: true
+    searchClause: AND pd.businessservice like $connectionType
+  query: |
+    -- Use CTE to force query plan, compute & use CTE later
+    select
+      receiptnumber,
+      to_char((To_timestamp(pd.receiptdate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY') as receiptdate1,
+      businessservice as service,
+      (case when eg_user.name is null then '30048|21Fj+c3k2ldB0X3AzIh7atXB' else eg_user.name end)  as collectorname,
+      case when payment.paymentmode='ONLINE' then payment.totalamountpaid else 0 end as "online",
+      case when payment.paymentmode='CASH' then payment.totalamountpaid else 0 end as cash,
+      case when payment.paymentmode='CHEQUE' then payment.totalamountpaid else 0 end as cheque,
+      case when payment.paymentmode='DD' then payment.totalamountpaid else 0 end as dd,
+      to_char((To_timestamp(instrumentdate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY') as cheque_dd_date,
+      instrumentnumber as cheque_dd_transaction_number,
+      case when payment.paymentmode='CARD' then payment.totalamountpaid else 0 end as card, 
+      case when payment.paymentmode='OFFLINE_RTGS' then payment.totalamountpaid else 0 end as rtgs,
+      case when payment.paymentmode='OFFLINE_NEFT' then payment.totalamountpaid else 0 end as neft,
+      case when payment.paymentmode='POTAL_ORDER' then payment.totalamountpaid else 0 end as po
+    from egcl_paymentdetail pd  Left outer join eg_user on eg_user.id = pd.createdby::INTEGER
+    inner join egcl_payment payment on payment.id=pd.paymentid 
+    where pd.tenantid=$tenantid
+  orderby: order by pd.receiptdate
+  
+  
+- reportName: BaseRegisterReportWS
+  summary: Base Register Report WS
+  version: 1.0.0
+  moduleName: rainmaker-ws
+  additionalConfig:
+    print:
+      pdfPageSize: "A1"
+  sourceColumns:
+  - name: connectionno
+    label: reports.ws.connectionno
+    type: string
+    source: ws
+    total: false
+  - name: plotsize
+    label: reports.ws.plotsize
+    type: string
+    source: ws
+    total: false
+  - name: applicationno
+    label: reports.ws.applicationno
+    type: string
+    source: ws
+    total: false
+  - name: propertyid
+    label: reports.ws.propertyid
+    type: string
+    source: ws
+    total: false
+  - name: connectionholdertype
+    label: reports.ws.connectionholdertype
+    type: string
+    source: ws
+    total: false
+  - name: applicationstatus
+    label: reports.ws.applicationstatus
+    type: string
+    source: ws
+    total: false
+  - name: connectionholder
+    label: reports.ws.connectionholder
+    type: string
+    source: ws
+    total: false
+  - name: name
+    label: reports.ws.ownername
+    type: string
+    source: ws
+    total: false
+  - name: address
+    label: reports.ws.address
+    type: string
+    source: ws
+    total: false
+  query: |
+    -- Use CTE to force query plan, compute & use CTE later
+    with ptowner as
+    (
+        select split_part(string_agg(userid,','),',',1) as owneruserid,
+        propertyid 
+        from eg_pt_owner
+        where tenantid=$tenantid and status='ACTIVE'
+        group by propertyid
+    )
+    --,
+    --    ptaddress as
+    --(
+    --    select 
+    --    split_part(string_agg(locality,','),',',1) as locality,
+    --    split_part(string_agg(concat(doorno,' ',plotno,' ',buildingname,' ',street,' ',city),'|'),'|',1) as address,
+    --    propertyid 
+    --    from eg_pt_address
+    --    where tenantid=$tenantid
+    --    group by propertyid
+    --)
+       select 
+         connectionno, 
+         pt.landarea as plotsize,
+         oldconnectionno,
+         applicationno,
+         pt.propertyid,
+         ch.connectionholdertype,
+         wsconnection.applicationstatus,
+         users.name as connectionHolder,
+         userowner.name as name
+         --concat(address,' ',localityname) as address
+       from eg_ws_connection wsconnection
+       inner join eg_pt_property as pt on pt.id=wsconnection.property_id
+       left outer join eg_ws_connectionholder as ch on ch.connectionid=wsconnection.id
+       left outer join eg_user as users on ch.userid=users.uuid
+       inner join ptowner on  ptowner.propertyid=pt.id
+       left outer join eg_user as userowner on ptowner.owneruserid=userowner.uuid
+       --inner join ptaddress on ptaddress.propertyid=pt.id
+       --INNER JOIN eg_bndry_mohalla on eg_bndry_mohalla.localitycode=ptaddress.locality
+      
+- reportName: FieldCollectionSearchReportWS
+  decryptionPathId: FieldCollectionSearchReportWS
+  summary: Field Collection Search Report WS
+  version: 1.0.0
+  moduleName: rainmaker-ws
+  additionalConfig:
+    print:
+      pdfPageSize: "A1"
+  sourceColumns:
+  - name: receiptnumber
+    label: reports.ws.receiptnumber
+    type: string
+    source: ws
+    total: false
+  - name: receiptdate1
+    label: reports.ws.receiptdate
+    type: string
+    source: ws
+    total: false
+  - name: businessservice
+    label: reports.ws.businessservice
+    type: string
+    source: ws
+    total: false
+  - name: amountpaid
+    label: reports.ws.amountpaid
+    type: string
+    source: ws
+    total: true
+  - name: consumercode
+    label: reports.ws.consumercode
+    type: string
+    source: ws
+    total: false
+  - name: paymentstatus
+    label: reports.ws.paymentstatus
+    type: string
+    source: ws
+    total: false
+  - name: paymentmode
+    label: reports.ws.paymentmode
+    type: string
+    source: ws
+    total: false
+  - name: name
+    label: reports.ws.name
+    type: string
+    source: ws
+    total: false
+  - name: mobilenumber
+    label: reports.ws.mobilenumber
+    type: string
+    source: ws
+    total: false
+  searchParams:
+  - name: connectionType
+    label: connectionType
+    type: singlevaluelist
+    pattern: 'list://WS%:Water,SW%:Sewerage'
+    source: pt
+    isMandatory: true
+    searchClause: AND pd.businessservice like $connectionType
+  - name: fromDate
+    label: reports.pt.fromDate
+    type: epoch
+    source: pt
+    isMandatory: false
+    searchClause: AND pd.receiptdate >= $fromDate
+  - name: toDate
+    label: reports.pt.toDate
+    type: epoch
+    source: pt
+    isMandatory: false
+    searchClause: AND pd.receiptdate <= $toDate
+  query: |
+    -- Use CTE to force query plan, compute & use CTE later
+    select 
+      receiptnumber,
+      to_char((To_timestamp(pd.receiptdate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY') AS  receiptdate1,
+      pd.businessservice,
+      pd.amountpaid,
+      consumercode,
+      paymentstatus,
+      paymentmode,
+      usr.name as name,
+      usr.mobilenumber as mobilenumber
+    from egcl_paymentdetail pd
+    inner join egcl_bill as bill on bill.id=pd.billid
+    INNER join egcl_payment as payment on payment.id=pd.paymentid
+    inner join eg_user as usr on usr.id=payment.createdby::integer
+    where pd.tenantid=$tenantid
+  orderby: ORDER BY pd.receiptdate DESC
+
+- reportName: FieldCollectionSearchReceiptWS
+  summary: Field Collection Search Receipt WS
+  version: 1.0.0
+  moduleName: rainmaker-ws
+  additionalConfig:
+    print:
+      pdfPageSize: "A1"
+  sourceColumns:
+  - name: receiptnumber
+    label: reports.ws.receiptnumber
+    type: string
+    source: ws
+    total: false
+  - name: receiptdate1
+    label: reports.ws.receiptdate
+    type: string
+    source: ws
+    total: false
+  - name: manualreceiptnumber
+    label: reports.ws.manualreceiptnumber
+    type: string
+    source: ws
+    total: false
+  - name: businessservice
+    label: reports.ws.businessservice
+    type: string
+    source: ws
+    total: false
+  - name: amountpaid
+    label: reports.ws.amountpaid
+    type: string
+    source: ws
+    total: true
+  - name: consumercode
+    label: reports.ws.consumercode
+    type: string
+    source: ws
+    total: false
+  - name: paymentstatus
+    label: reports.ws.paymentstatus
+    type: string
+    source: ws
+    total: false
+  - name: paymentmode
+    label: reports.ws.paymentmode
+    type: string
+    source: ws
+    total: false
+  - name: billnumber
+    label: reports.ws.billnumber
+    type: string
+    source: ws
+    total: false
+  - name: billdescription
+    label: reports.ws.billdescription
+    type: string
+    source: ws
+    total: false
+  searchParams:
+  - name: connectionType
+    label: connectionType
+    type: singlevaluelist
+    pattern: 'list://WS%:Water,SW%:Sewerage'
+    source: pt
+    isMandatory: true
+    searchClause: AND bill.businessservice like $connectionType
+  - name: fromDate
+    label: reports.pt.fromDate
+    type: epoch
+    source: pt
+    isMandatory: false
+    searchClause: AND pd.receiptdate >= $fromDate
+  - name: toDate
+    label: reports.pt.toDate
+    type: epoch
+    source: pt
+    isMandatory: false
+    searchClause: AND pd.receiptdate <= $toDate
+  query: |
+    -- Use CTE to force query plan, compute & use CTE later
+    select 
+      receiptnumber,
+      manualreceiptnumber,
+      to_char((To_timestamp(pd.receiptdate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY') AS  receiptdate1,
+      pd.businessservice as businessservice,
+      billnumber, 
+      billdescription, 
+      consumercode, 
+      pd.amountpaid as amountpaid,
+      paymentmode, 
+      paymentstatus
+    from egcl_paymentdetail pd
+    inner join egcl_bill as bill on bill.id=pd.billid
+    inner join egcl_billdetial as billd on billd.billid=pd.billid
+    INNER join egcl_payment as payment on payment.id=pd.paymentid
+    where 1=1
+  orderby: ORDER BY pd.receiptdate DESC
+  
+  
+- reportName: ChequeCollectionReportWS
+  summary: Cheque Collection Report WS
+  version: 1.0.0
+  moduleName: rainmaker-ws
+  additionalConfig:
+    print:
+      pdfPageSize: "A1"
+  sourceColumns:
+  - name: consumercode
+    label: reports.ws.consumercode
+    type: string
+    source: ws
+    total: false
+  - name: connectionno
+    label: reports.ws.connectionno
+    type: string
+    source: ws
+    total: false
+  - name: oldconnectionno
+    label: reports.ws.oldconnectionno
+    type: string
+    source: ws
+    total: false
+  - name: receiptnumber
+    label: reports.ws.receiptnumber
+    type: string
+    source: ws
+    total: false
+  - name: receiptdate1
+    label: reports.ws.receiptdate
+    type: string
+    source: ws
+    total: false
+  - name: manualreceiptnumber
+    label: reports.ws.manualreceiptnumber
+    type: string
+    source: ws
+    total: false
+  - name: manualreceiptdate
+    label: reports.ws.manualreceiptdate
+    type: string
+    source: ws
+    total: false
+  - name: cheque_dd_no
+    label: reports.ws.cheque_dd_no
+    type: string
+    source: ws
+    total: false
+  - name: cheque_dd_date
+    label: reports.ws.cheque_dd_date
+    type: string
+    source: ws
+    total: false
+  - name: paymentmode
+    label: reports.ws.paymentmode
+    type: string
+    source: ws
+    total: false
+  - name: paymentstatus
+    label: reports.ws.paymentstatus
+    type: string
+    source: ws
+    total: false
+  - name: bank_name
+    label: reports.ws.bank_name
+    type: string
+    source: ws
+    total: false
+  - name: branch
+    label: reports.ws.branch
+    type: string
+    source: ws
+    total: false
+  - name: amountpaid
+    label: reports.ws.amountpaid
+    type: string
+    source: ws
+    total: true
+  - name: businessservice
+    label: reports.ws.businessservice
+    type: string
+    source: ws
+    total: false
+  searchParams:
+  - name: connectionType
+    label: connectionType
+    type: singlevaluelist
+    pattern: 'list://WS%:Water,SW%:Sewerage'
+    source: pt
+    isMandatory: true
+    searchClause: AND bill.businessservice like $connectionType
+  - name: fromDate
+    label: reports.pt.fromDate
+    type: epoch
+    source: pt
+    isMandatory: false
+    searchClause: AND pd.receiptdate >= $fromDate
+  - name: toDate
+    label: reports.pt.toDate
+    type: epoch
+    source: pt
+    isMandatory: false
+    searchClause: AND pd.receiptdate <= $toDate
+  query: |
+    -- Use CTE to force query plan, compute & use CTE later
+    select
+      consumercode,
+      wsconnection.connectionno,
+      wsconnection.oldconnectionno,
+      receiptnumber,
+      to_char((To_timestamp(pd.receiptdate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY') as receiptdate1,
+      manualreceiptnumber,
+      to_char((To_timestamp(pd.manualreceiptdate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY') as manualreceiptdate,
+      transactionnumber as cheque_dd_no,
+      to_char((To_timestamp(transactiondate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY') as cheque_dd_date,
+      paymentmode,
+      paymentstatus,
+      bank_name,
+      branch,
+      pd.amountpaid,
+      pd.businessservice
+    from egcl_paymentdetail pd
+    inner join egcl_payment payment on payment.id=pd.paymentid
+    left outer join bank_branches on bank_branches.ifsc=payment.ifsccode
+    inner join egcl_bill bill on bill.id=pd.billid
+    inner join eg_ws_connection wsconnection on wsconnection.connectionno=bill.consumercode
+    where payment.paymentmode='CHEQUE' and pd.tenantid=$tenantid and payment.paymentstatus!='CANCELLED'
+  orderby: ORDER BY pd.receiptdate DESC
+  
+- reportName: SearchOnlineReceiptsWS
+  decryptionPathId: ReceiptRegisterShort_V2
+  summary: Search Online Receipts WS
+  version: 1.0.0
+  moduleName: rainmaker-ws
+  additionalConfig:
+    print:
+      pdfPageSize: "A1"
+  sourceColumns:
+  - name: billnumber
+    label: reports.ws.billnumber
+    type: string
+    source: ws
+    total: false
+  - name: consumercode
+    label: reports.ws.consumercode
+    type: string
+    source: ws
+    total: false
+  - name: receiptnumber
+    label: reports.ws.receiptnumber
+    type: string
+    source: ws
+    total: false
+  - name: receiptdate1
+    label: reports.ws.receiptdate1
+    type: string
+    source: ws
+    total: false
+  - name: amountpaid
+    label: reports.ws.amountpaid
+    type: string
+    source: ws
+    total: true
+  - name: transactionnumber
+    label: reports.ws.transactionnumber
+    type: string
+    source: ws
+    total: false
+  - name: transactiondate1
+    label: reports.ws.transactiondate
+    type: string
+    source: ws
+    total: false
+  - name: businessservice
+    label: reports.ws.businessservice
+    type: string
+    source: ws
+    total: false
+  - name: paymentstatus
+    label: reports.ws.paymentstatus
+    type: string
+    source: ws
+    total: false
+  - name: paymentmode
+    label: reports.ws.paymentmode
+    type: string
+    source: ws
+    total: false
+  - name: collectorname
+    label: reports.ws.collectorname
+    type: string
+    source: ws
+    total: false
+  searchParams:
+  - name: connectionType
+    label: connectionType
+    type: singlevaluelist
+    pattern: 'list://WS%:Water,SW%:Sewerage'
+    source: pt
+    isMandatory: true
+    searchClause: AND bill.businessservice like $connectionType
+  - name: fromDate
+    label: reports.pt.fromDate
+    type: epoch
+    source: pt
+    isMandatory: false
+    searchClause: AND payment.transactiondate >= $fromDate
+  - name: toDate
+    label: reports.pt.toDate
+    type: epoch
+    source: pt
+    isMandatory: false
+    searchClause: AND payment.transactiondate <= $toDate
+  query: |
+    -- Use CTE to force query plan, compute & use CTE later
+    select 
+      billnumber,
+      bill.consumercode as consumercode,
+      pd.receiptnumber as receiptnumber,
+      to_char((To_timestamp(pd.receiptdate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY') as receiptate1,
+      pd.amountpaid,
+      pd.businessservice ,
+      paymentstatus , 
+      payment.transactionnumber ,
+      to_char((To_timestamp(payment.transactiondate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY') as transactiondate1,
+      paymentmode,
+      (case when eg_user.name is null then '30048|23/xn3x2FAxn8vYAN0IdplsOxaE=' else eg_user.name end)  as collectorname
+    from egcl_paymentdetail pd Left outer join eg_user on eg_user.id = pd.createdby::INTEGER
+    inner join egcl_bill as bill on bill.id=pd.billid
+    INNER join egcl_payment as payment on payment.id=pd.paymentid
+    where paymentmode='ONLINE' and payment.tenantid=$tenantid
+  orderby: ORDER BY payment.transactiondate DESC
+  
+- reportName: ReceiptCollections
+  summary: Receipt Collections
+  version: 1.0.0
+  moduleName: rainmaker-ws
+  additionalConfig:
+    print:
+      pdfPageSize: "A1"
+  sourceColumns:
+  - name: receiptnumber
+    label: reports.ws.receiptnumber
+    type: string
+    source: ws
+    total: false
+  - name: receiptdate1
+    label: reports.ws.receiptdate
+    type: string
+    source: ws
+    total: false
+  - name: businessservice
+    label: reports.ws.businessservice
+    type: string
+    source: ws
+    total: false
+  - name: amountpaid
+    label: reports.ws.amountpaid
+    type: string
+    source: ws
+    total: true
+  - name: consumercode
+    label: reports.ws.consumercode
+    type: string
+    source: ws
+    total: false
+  - name: paymentmode
+    label: reports.ws.paymentmode
+    type: string
+    source: ws
+    total: false
+  - name: billnumber
+    label: reports.ws.billnumber
+    type: string
+    source: ws
+    total: false
+  - name: paidby
+    label: reports.ws.paidby
+    type: string
+    source: ws
+    total: false
+  searchParams:
+  - name: connectionType
+    label: connectionType
+    type: singlevaluelist
+    pattern: 'list://WS%:Water,SW%:Sewerage'
+    source: pt
+    isMandatory: true
+    searchClause: AND pd.businessservice like $connectionType
+  - name: fromDate
+    label: reports.pt.fromDate
+    type: epoch
+    source: pt
+    isMandatory: false
+    searchClause: AND payment.transactiondate >= $fromDate
+  - name: toDate
+    label: reports.pt.toDate
+    type: epoch
+    source: pt
+    isMandatory: false
+    searchClause: AND payment.transactiondate <= $toDate
+  query: |
+    -- Use CTE to force query plan, compute & use CTE later
+    select 
+      consumercode,
+      receiptnumber,
+      to_char((To_timestamp(pd.receiptdate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY') as receiptdate1,
+      amountpaid,
+      paymentmode,
+      pd.businessservice,
+      bill.billnumber,
+      payment.paidby
+    from egcl_paymentdetail pd
+    inner join egcl_bill as bill on bill.id=pd.billid
+    inner join egcl_payment as payment on payment.id=pd.paymentid and payment.paymentstatus!='CANCELLED'
+    where  pd.tenantid=$tenantid
+  orderby: ORDER BY pd.receiptdate DESC
+  
+- reportName: JE_PendencyReport
+  decryptionPathId: JE_PendencyReport_WS
+  summary: JE_Pendency Report
+  version: 1.0.0
+  moduleName: rainmaker-ws
+  additionalConfig:
+    print:
+      pdfPageSize: "A1"
+  sourceColumns:
+  - name: name
+    label: reports.ws.name
+    type: string
+    source: ws
+    total: false
+  - name: count
+    label: reports.ws.count
+    type: string
+    source: ws
+    total: true
+  query: |
+    -- Use CTE to force query plan, compute & use CTE later
+    select usr.name,count(*) 
+    from eg_ws_connection con
+    inner join eg_user as usr on usr.uuid=con.createdby and usr.type='EMPLOYEE'
+    where applicationstatus not in ('INITIATED') and con.tenantid=$tenantid
+  groupby: GROUP BY con.createdby,usr.name
+  
+- reportName: CashCollectionReport
+  decryptionPathId: ReceiptRegisterShort_V2
+  summary: Cash Collection Report
+  version: 1.0.0
+  moduleName: rainmaker-ws
+  additionalConfig:
+    print:
+      pdfPageSize: "A1"
+  sourceColumns:
+  - name: receiptnumber
+    label: reports.ws.receiptnumber
+    type: string
+    source: ws
+    total: false
+  - name: receiptdate1
+    label: reports.ws.receiptdate
+    type: string
+    source: ws
+    total: false
+  - name: amountpaid
+    label: reports.ws.amountpaid
+    type: string
+    source: ws
+    total: true
+  - name: consumercode
+    label: reports.ws.consumercode
+    type: string
+    source: ws
+    total: false
+  - name: collectorname
+    label: reports.ws.collectorname
+    type: string
+    source: ws
+    total: false
+  searchParams:
+  - name: connectionType
+    label: connectionType
+    type: singlevaluelist
+    pattern: 'list://WS%:Water,SW%:Sewerage'
+    source: pt
+    isMandatory: true
+    searchClause: AND pd.businessservice like $connectionType
+  - name: fromDate
+    label: reports.pt.fromDate
+    type: epoch
+    source: pt
+    isMandatory: false
+    searchClause: AND pd.receiptdate >= $fromDate
+  - name: toDate
+    label: reports.pt.toDate
+    type: epoch
+    source: pt
+    isMandatory: false
+    searchClause: AND pd.receiptdate <= $toDate
+  - name: collectorname
+    label: reports.pt.collectorname
+    type: singlevaluelist
+    pattern: http://egov-hrms:8080/egov-hrms/employees/_search?tenantId=$tenantid&roles=WS_CEMP,WS_CLERK,SW_CEMP,SW_CLERK|$.Employees[*].user.id|$.Employees[*].user.name
+    source: ws
+    wrapper: true
+    isMandatory: false
+    searchClause: AND eg_user.id = $collectorname::INTEGER
+  query: |
+    -- Use CTE to force query plan, compute & use CTE later
+    select 
+      consumercode,
+      receiptnumber,
+      to_char((To_timestamp(pd.receiptdate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY') as receiptdate1,
+      amountpaid,
+      (case when eg_user.name is null then '30048|23/xn3x2FAxn8vYAN0IdplsOxaE=' else eg_user.name end)  as collectorname
+    from egcl_paymentdetail pd Left outer join eg_user on eg_user.id = pd.createdby::INTEGER
+    inner join egcl_bill as bill on bill.id=pd.billid
+    inner join egcl_payment as payment on payment.id=pd.paymentid and payment.paymentmode='CASH' and payment.paymentstatus!='CANCELLED'
+    where payment.tenantid=$tenantid
+  orderby: ORDER BY pd.receiptdate DESC
+  
+- reportName: CollectionsSummaryHeadwiseReport
+  summary: Collections Summary Headwise Report
+  version: 1.0.0
+  moduleName: rainmaker-ws
+  additionalConfig:
+    print:
+      pdfPageSize: "A1"
+  sourceColumns:
+  - name: taxheadcode
+    label: reports.ws.taxheadcode
+    type: string
+    source: ws
+    total: false
+  - name: totalamountpaid
+    label: reports.ws.totalamountpaid
+    type: string
+    source: ws
+    total: true
+  - name: totalassessments
+    label: reports.ws.totalassessments
+    type: string
+    source: ws
+    total: true
+  - name: totalonline
+    label: reports.ws.totalonline
+    type: string
+    source: ws
+    total: true
+  - name: countonline
+    label: reports.ws.countonline
+    type: string
+    source: ws
+    total: true
+  - name: totalcash
+    label: reports.ws.totalcash
+    type: string
+    source: ws
+    total: true
+  - name: countcash
+    label: reports.ws.countcash
+    type: string
+    source: ws
+    total: true
+  - name: totalcheque
+    label: reports.ws.totalcheque
+    type: string
+    source: ws
+    total: true
+  - name: totaldd
+    label: reports.ws.totaldd
+    type: string
+    source: ws
+    total: true
+  - name: countdd
+    label: reports.ws.countdd
+    type: string
+    source: ws
+    total: true
+  - name: totalcard
+    label: reports.ws.totalcard
+    type: string
+    source: ws
+    total: true
+  - name: countcard
+    label: reports.ws.countcard
+    type: string
+    source: ws
+    total: true
+  - name: totalrtgs
+    label: reports.ws.totalrtgs
+    type: string
+    source: ws
+    total: true
+  - name: totalneft
+    label: reports.ws.totalneft
+    type: string
+    source: ws
+    total: true
+  - name: countneft
+    label: reports.ws.countneft
+    type: string
+    source: ws
+    total: true
+  - name: totalPO
+    label: reports.ws.totalPO
+    type: string
+    source: ws
+    total: true
+  - name: countPO
+    label: reports.ws.countPO
+    type: string
+    source: ws
+    total: true
+  - name: countoffline
+    label: reports.ws.countoffline
+    type: string
+    source: ws
+    total: true
+  searchParams:
+  - name: connectionType
+    label: connectionType
+    type: singlevaluelist
+    pattern: 'list://WS%:Water,SW%:Sewerage'
+    source: pt
+    isMandatory: true
+    searchClause: AND pd.businessservice like $connectionType
+  - name: fromDate
+    label: reports.pt.fromDate
+    type: epoch
+    source: pt
+    isMandatory: false
+    searchClause: AND pd.receiptdate >= $fromDate
+  - name: toDate
+    label: reports.pt.toDate
+    type: epoch
+    source: pt
+    isMandatory: false
+    searchClause: AND pd.receiptdate <= $toDate
+  query: |
+    -- Use CTE to force query plan, compute & use CTE later
+    SELECT 
+        taxheadcode,		
+        sum(payment.totalamountpaid) as totalamountpaid,
+        count(payment.totalamountpaid) as totalassessments,
+        sum(case when payment.paymentmode='ONLINE' then payment.totalamountpaid else 0 end) as "totalonline",
+        sum(case when payment.paymentmode='ONLINE' then 1 else 0 end) as "countonline",
+        sum(case when payment.paymentmode='CASH' then payment.totalamountpaid else 0 end) as totalcash,
+        sum(case when payment.paymentmode='CASH' then 1 else 0 end) as countcash,
+        sum(case when payment.paymentmode='CHEQUE' then payment.totalamountpaid else 0 end) as totalcheque,
+        sum(case when payment.paymentmode='CHEQUE' then 1 else 0 end) as countcheque,
+        sum(case when payment.paymentmode='DD' then payment.totalamountpaid else 0 end) as totalDD,
+        sum(case when payment.paymentmode='DD' then 1 else 0 end) as countDD,
+        sum(case when payment.paymentmode='CARD' then payment.totalamountpaid else 0 end) as totalcard, 
+        sum(case when payment.paymentmode='CARD' then 1 else 0 end) as countcard, 
+        sum(case when payment.paymentmode='OFFLINE_RTGS' then payment.totalamountpaid else 0 end) as totalRTGS,
+        sum(case when payment.paymentmode='OFFLINE_RTGS' then 1 else 0 end) as countRTGS,
+        sum(case when payment.paymentmode='OFFLINE_NEFT' then payment.totalamountpaid else 0 end) as totalNEFT,
+        sum(case when payment.paymentmode='OFFLINE_NEFT' then 1 else 0 end) as countNEFT,
+        sum(case when payment.paymentmode='POTAL_ORDER' then payment.totalamountpaid else 0 end) as "totalPO",
+        sum(case when payment.paymentmode='POTAL_ORDER' then 1 else 0 end) as "countPO",
+        sum(case when payment.paymentmode!='ONLINE' then 1 else 0 end) as "countoffline"
+      FROM egcl_paymentdetail pd
+      INNER join egcl_payment as payment on pd.paymentid=payment.id
+      INNER JOIN egcl_billdetial as bd on pd.billid = bd.billid
+      INNER JOIN egcl_billaccountdetail as bad on bad.billdetailid = bd.id
+      where  payment.paymentstatus != 'CANCELLED' and payment.tenantid=$tenantid
+  groupby: GROUP BY taxheadcode
+  
+  
+- reportName: ArrearReport
+  summary: Arrear Report
+  version: 1.0.0
+  moduleName: rainmaker-ws
+  additionalConfig:
+    print:
+      pdfPageSize: "A1"
+  sourceColumns:
+  - name: consumercode
+    label: reports.ws.consumercode
+    type: string
+    source: ws
+    total: false
+  - name: totalamount
+    label: reports.ws.totalamount
+    type: string
+    source: ws
+    total: true
+  - name: amountpaid
+    label: reports.ws.amountpaid
+    type: string
+    source: ws
+    total: true
+  - name: dueamount
+    label: reports.ws.dueamount
+    type: string
+    source: ws
+    total: true
+  searchParams:
+  - name: connectionType
+    label: connectionType
+    type: singlevaluelist
+    pattern: 'list://WS%:Water,SW%:Sewerage'
+    source: pt
+    isMandatory: true
+    searchClause: AND businessservice like $connectionType
+  query: |
+    -- Use CTE to force query plan, compute & use CTE later
+    with demands as
+    (
+      select demandid,sum(taxamount) as amount,sum(collectionamount) as collection,sum(taxamount-collectionamount) as arrear 
+      from egbs_demanddetail_v1 where tenantid=$tenantid
+      group by demandid
+      having sum(taxamount-collectionamount)>0
+    )
+    select consumercode,sum(amount) as totalamount,sum(collection) as amountpaid,sum(arrear) as dueamount 
+    from egbs_demand_v1 d 
+    inner join demands on demands.demandid=d.id  and status='ACTIVE'
+    where tenantid=$tenantid
+  groupby: group by consumercode
+
+
+- reportName: SearchWaterChargeReport
+  summary: Search Water Charge Notice Report
+  version: 1.0.0
+  moduleName: rainmaker-ws
+  additionalConfig:
+    print:
+      pdfPageSize: "A1"
+  sourceColumns:
+  - name: connectionno
+    label: reports.ws.connectionno
+    type: string
+    source: ws
+    total: false
+  - name: oldconnectionno
+    label: reports.ws.connectionno
+    type: string
+    source: ws
+    total: false  
+  - name: ownername
+    label: reports.ws.connectionno
+    type: string
+    source: ws
+    total: false
+  - name: propertyid
+    label: reports.ws.propertyid
+    type: string
+    source: ws
+    total: false
+  - name: connectiontype
+    label: reports.ws.propertyid
+    type: string
+    source: ws
+    total: false
+  - name: billnumber
+    label: reports.ws.billno
+    type: string
+    source: ws
+    total: false
+  - name: fromdate
+    label: reports.ws.fromdate
+    type: string
+    source: ws
+    total: false
+  - name: todate
+    label: reports.ws.todate
+    type: string
+    source: ws
+    total: false
+  searchParams:
+  - name: fromDate
+    label: reports.ws.fromBillDate
+    type: epoch
+    source: ws
+    isMandatory: false
+    searchClause: AND bill.billdate >= $fromDate
+  - name: toDate
+    label: reports.ws.toBillDate
+    type: epoch
+    source: ws
+    isMandatory: false
+    searchClause: AND bill.billdate <= $toDate
+  - name: mobilenumber
+    label: reports.ws.mobilenumber
+    type: string
+    source: ws
+    isMandatory: false
+    searchClause: AND owners.mobilenumber=$mobilenumber
+  - name: connectionNumber
+    label: reports.ws.connectionNumber
+    type: string
+    source: ws
+    isMandatory: false
+    searchClause: AND connectionno=$connectionNumber
+  - name: oldConnectionNumber
+    label: reports.ws.oldConnectionNumber
+    type: string
+    source: ws
+    isMandatory: false
+    searchClause: AND oldconnectionno=$oldConnectionNumber
+  query: |
+    -- Use CTE to force query plan, compute & use CTE later
+    with owners as
+      (
+        select 
+          split_part(string_agg(name,','),',',1) as ownername,
+          split_part(string_agg(mobilenumber,','),',',1) as mobilenumber,
+          pt.propertyid as propertyid
+        from eg_user usr
+        inner join eg_pt_owner on eg_pt_owner.userid=usr.uuid
+        inner join eg_pt_property pt on eg_pt_owner.propertyid=pt.id and pt.status='ACTIVE'
+        where pt.tenantid=$tenantid
+        group by pt.propertyid
+      )
+    select 
+      connectionno,
+      oldconnectionno,
+      pt.propertyid,
+      ownername,
+      connectiontype,
+      bill.billnumber,
+      to_char((To_timestamp(bill.billdate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY') as billdate,
+      to_char((To_timestamp(bd.fromperiod/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY') fromperiod,
+      to_char((To_timestamp(bd.toperiod/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY') toperiod,
+      bill.totalamount,
+      bill.businessservice
+    from eg_ws_connection wsconnection
+    inner join eg_pt_property pt on pt.id=wsconnection.property_id and pt.status='ACTIVE'
+    inner join eg_ws_service on eg_ws_service.connection_id=wsconnection.id
+    inner join egcl_bill bill on bill.consumercode=wsconnection.connectionno 
+    inner join egcl_billdetial bd on bill.id=bd.billid
+    inner join owners on owners.propertyid=pt.propertyid
+    where wsconnection.tenantid=$tenantid and wsconnection.status='Active' and bill.businessservice like 'WS%'
+  orderby: order by bill.billdate desc
+
+
+- reportName: SearchSewerageChargeReport
+  summary: Search Sewerage Charge Notice Report
+  version: 1.0.0
+  moduleName: rainmaker-ws
+  additionalConfig:
+    print:
+      pdfPageSize: "A1"
+  sourceColumns:
+  - name: connectionno
+    label: reports.ws.connectionno
+    type: string
+    source: ws
+    total: false
+  - name: oldconnectionno
+    label: reports.ws.connectionno
+    type: string
+    source: ws
+    total: false  
+  - name: ownername
+    label: reports.ws.connectionno
+    type: string
+    source: ws
+    total: false
+  - name: propertyid
+    label: reports.ws.propertyid
+    type: string
+    source: ws
+    total: false
+  - name: billnumber
+    label: reports.ws.billno
+    type: string
+    source: ws
+    total: false
+  - name: fromdate
+    label: reports.ws.fromdate
+    type: string
+    source: ws
+    total: false
+  - name: todate
+    label: reports.ws.todate
+    type: string
+    source: ws
+    total: false
+  searchParams:
+  - name: fromDate
+    label: reports.ws.fromBillDate
+    type: epoch
+    source: ws
+    isMandatory: false
+    searchClause: AND bill.billdate >= $fromDate
+  - name: toDate
+    label: reports.ws.toBillDate
+    type: epoch
+    source: ws
+    isMandatory: false
+    searchClause: AND bill.billdate <= $toDate
+  - name: mobilenumber
+    label: reports.ws.mobilenumber
+    type: string
+    source: ws
+    isMandatory: false
+    searchClause: AND owners.mobilenumber=$mobilenumber
+  - name: connectionNumber
+    label: reports.ws.connectionNumber
+    type: string
+    source: ws
+    isMandatory: false
+    searchClause: AND connectionno=$connectionNumber
+  - name: oldConnectionNumber
+    label: reports.ws.oldConnectionNumber
+    type: string
+    source: ws
+    isMandatory: false
+    searchClause: AND oldconnectionno=$oldConnectionNumber
+  query: |
+    -- Use CTE to force query plan, compute & use CTE later
+    with owners as
+      (
+        select 
+          split_part(string_agg(name,','),',',1) as ownername,
+          pt.propertyid as propertyid
+        from eg_user usr
+        inner join eg_pt_owner on eg_pt_owner.userid=usr.uuid
+        inner join eg_pt_property pt on eg_pt_owner.propertyid=pt.id and pt.status='ACTIVE'
+        where pt.tenantid=$tenantid
+        group by pt.propertyid
+      )
+      select 
+        connectionno,
+        oldconnectionno,
+        pt.propertyid,
+        ownername,
+        bill.billnumber,
+        to_char((To_timestamp(bill.billdate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY') as billdate,
+        to_char((To_timestamp(bd.fromperiod/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY') fromperiod,
+        to_char((To_timestamp(bd.toperiod/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY') toperiod,
+        bill.totalamount,
+        bill.businessservice
+        from eg_sw_connection swconnection
+        inner join eg_pt_property pt on pt.id=swconnection.property_id and pt.status='ACTIVE'
+        inner join egcl_bill bill on bill.consumercode=swconnection.connectionno 
+        inner join egcl_billdetial bd on bill.id=bd.billid
+        inner join owners on owners.propertyid=pt.propertyid
+        where swconnection.tenantid=$tenantid and swconnection.status='Active' and bill.businessservice like 'SW%'
+  orderby: order by bill.billdate desc
