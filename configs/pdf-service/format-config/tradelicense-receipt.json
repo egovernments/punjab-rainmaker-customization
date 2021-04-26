@@ -457,7 +457,7 @@
                 "style": "receipt-table"
               },
               {
-                "text": "Trade License Fee",
+                "text": "Trade License Fee,Renewal Penalty",
                 "border": [
                   false,
                   false,
@@ -467,7 +467,7 @@
                 "style": "receipt-table-value"
               },
               {
-                "text": "₹ {{tradeFee}}",
+                "text": "₹ {{tradeFee}} , ₹ {{renewalPenalty}}",
                 "border": [
                   false,
                   false,
