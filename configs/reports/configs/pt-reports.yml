@@ -2470,6 +2470,7 @@ ReportDefinitions:
                   INNER JOIN egcl_paymentdetail as pd on pd.billid = bd.billid
                   INNER JOIN egcl_payment as payment on pd.paymentid=payment.id
                   WHERE payment.tenantid = $tenantid and payment.paymentstatus != 'CANCELLED' and  pd.businessservice='PT'
+                  AND pd.receiptdate >= $fromDate AND pd.receiptdate <= $toDate
                   GROUP BY pdid
       )
       SELECT 
