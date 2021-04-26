@@ -1442,19 +1442,19 @@ ReportDefinitions:
     searchClause: AND bill.billdate <= $toDate
   - name: mobilenumber
     label: reports.ws.mobilenumber
-    type: String
+    type: string
     source: ws
     isMandatory: false
     searchClause: AND owners.mobilenumber=$mobilenumber
   - name: connectionNumber
     label: reports.ws.connectionNumber
-    type: String
+    type: string
     source: ws
     isMandatory: false
     searchClause: AND connectionno=$connectionNumber
   - name: oldConnectionNumber
     label: reports.ws.oldConnectionNumber
-    type: String
+    type: string
     source: ws
     isMandatory: false
     searchClause: AND oldconnectionno=$oldConnectionNumber
@@ -1552,19 +1552,19 @@ ReportDefinitions:
     searchClause: AND bill.billdate <= $toDate
   - name: mobilenumber
     label: reports.ws.mobilenumber
-    type: String
+    type: string
     source: ws
     isMandatory: false
     searchClause: AND owners.mobilenumber=$mobilenumber
   - name: connectionNumber
     label: reports.ws.connectionNumber
-    type: String
+    type: string
     source: ws
     isMandatory: false
     searchClause: AND connectionno=$connectionNumber
   - name: oldConnectionNumber
     label: reports.ws.oldConnectionNumber
-    type: String
+    type: string
     source: ws
     isMandatory: false
     searchClause: AND oldconnectionno=$oldConnectionNumber
