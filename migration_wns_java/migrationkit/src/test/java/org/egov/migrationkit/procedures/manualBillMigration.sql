@@ -14,9 +14,10 @@ declare
 	 props record;
 	 bill_detail   record;
 	 cur_bills cursor for
-	 		 select * from eg_bill where id_bill_type=1 and service_code in ('WT','STAX') 
+	 		 select * from eg_bill where id_bill_type=1 and service_code in ('WT','STAX')  and is_cancelled='N' and is_history='N' 
 	 		 union
-		   select bill.* from eg_bill bill, egcl_collectionheader ch where ch.referencenumber::bigint=bill.id and bill.service_code in ('WT','STAX')  and id_bill_type!=1  ;
+		   select bill.* from eg_bill bill, egcl_collectionheader ch where ch.referencenumber::bigint=bill.id and bill.service_code in ('WT','STAX') 
+		       and id_bill_type!=1  and  is_cancelled='N' and is_history='N' ;
    
 
 begin
@@ -72,6 +73,11 @@ if( demandId_digit is null) then
 
 select demand.id   from public.egbs_demand_v1 demand where demand.consumercode=rec.consumer_id  
 and  Extract(epoch FROM rec.issue_date    ) * 1000 between demand.taxperiodfrom and demand.taxperiodto into demandId_digit;
+end if;
+
+if( demandId_digit is null) then 
+select demand.id   from public.egbs_demand_v1 demand where demand.consumercode=rec.consumer_id  
+order by demand.taxperiodfrom desc limit 1 ;
 end if;
 
 
