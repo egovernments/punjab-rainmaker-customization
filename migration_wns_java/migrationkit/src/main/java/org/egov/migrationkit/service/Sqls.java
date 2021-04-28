@@ -254,7 +254,8 @@ public class Sqls {
 	public static final String ProcessContent = "INSERT INTO eg_wf_processinstance_v2( id,tenantid,businessService,businessId,moduleName,"
 			+ "action,status,comment, assigner, stateSla,businessServiceSla, previousStatus, createdby, lastmodifiedby, createdtime, lastmodifiedtime)"
 			+ " values ('':id'','':tenantId'','':businessService'' ,'':businessId'','':moduleName'',''ACTIVATE_CONNECTION'',"
-			+ " ''d5e544f2-eac3-4dd6-b151-9045acad61c2'',null,'':userUUID'',null,0,null,'':userUUID'','':userUUID'',:epocnow,:epocnow);";
+			+ " (select uuid from eg_wf_state_v2 where state='CONNECTION_ACTIVATED' and businessserviceid="
+			+ " (select uuid from eg_wf_businessservice_v2 where businessservice=':businessService' )),null,'':userUUID'',null,0,null,'':userUUID'','':userUUID'',:epocnow,:epocnow);";
 
 	public static final String PROCESSINSERT = "Insert into :schema.processinsert (stmt) values('\":val\"');";
 	public static final String PROCESSINSERTTABLE = "create table if not exists processinsert (stmt varchar(1000) ); ";
