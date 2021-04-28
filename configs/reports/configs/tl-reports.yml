@@ -2590,19 +2590,13 @@ ReportDefinitions:
     type: epoch
     source: tl
     isMandatory: false
-    searchClause: AND applicationdate >= $fromDate
+    searchClause: AND tl.applicationdate >= $fromDate
   - name: toDate
     label: reports.tl.toDate
     type: epoch
     source: tl
     isMandatory: false
-    searchClause: AND applicationdate <= $toDate 
-  - name: localityArray
-    label: reports.tl.zoneList
-    type: boundarylist
-    source: tl
-    isMandatory: false
-    searchClause: AND localitycode IN ($localityArray)
+    searchClause: AND tl.applicationdate <= $toDate 
   query: |
       SELECT 
         tl.applicationnumber as applicationnumber,
