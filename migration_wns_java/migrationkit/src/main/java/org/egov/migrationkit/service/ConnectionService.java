@@ -698,7 +698,6 @@ public class ConnectionService {
 				WSConstants.SEWERAGE_BUSINESS_SERVICE, consumerCode,
 				requestInfo.getUserInfo().getTenantId(), ownerInfo);
 
-		log.info("Migrating demand");
 		if (!demandRequestList.isEmpty()) {
 
 			Boolean isDemandCreated = demandService.saveDemand(requestInfo, demandRequestList,
