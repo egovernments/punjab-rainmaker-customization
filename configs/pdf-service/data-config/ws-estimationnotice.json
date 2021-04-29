@@ -41,7 +41,12 @@
                                 "variable": "usageType",
                                 "value": {
                                     "path": "$.property.usageCategory"
-                                }
+                                },
+                                "localisation":{
+                                    "required":true,
+                                    "prefix": null,
+                                    "module": "rainmaker-common"
+                                 }
                             },
                             {
                                 "variable": "houseNo",
