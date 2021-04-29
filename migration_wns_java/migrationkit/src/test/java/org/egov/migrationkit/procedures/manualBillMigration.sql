@@ -16,11 +16,11 @@ declare
 	 bill_detail   record;
 	 cur_bills cursor for
 	 		 select * from eg_bill bill where bill.id_bill_type=1 and bill.service_code in ('WT','STAX')  
-	 		 and bill.is_cancelled='N' and bill.is_history='N'  and bill.consumer_id='0603000415' 
+	 		 and bill.is_cancelled='N' and bill.is_history='N'   
 	 		 union
 		   select bill.* from eg_bill bill, egcl_collectionheader ch where ch.referencenumber::bigint=bill.id and 
 		   bill.service_code in ('WT','STAX') 
-		       and id_bill_type!=1  and  is_cancelled='N' and is_history='N' and bill.consumer_id='0603000415'   ;
+		       and id_bill_type!=1  and  is_cancelled='N' and is_history='N'     ;
    
 
 begin
