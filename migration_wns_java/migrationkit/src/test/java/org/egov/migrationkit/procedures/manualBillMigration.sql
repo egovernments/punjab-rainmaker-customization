@@ -4,6 +4,7 @@ create or replace function migrate_manual_bills( tenantId varchar)
 declare 
          billId varchar(64);
 	 billdetailid  varchar(64);
+	  digitStatus  varchar(64);
    demandId_digit varchar(64);
    demand_detail_digit	varchar(64);
 	 mobilenumber varchar(10) default '9999119999';
@@ -45,7 +46,12 @@ begin
        
 
 SELECT uuid_in(md5(random()::text || clock_timestamp()::text)::cstring) into billId ;
-
+if(rec.id_bill_type = 2 )
+then
+digitStatus:='PAID';
+else 
+digitStatus='Expired';
+end if ;
 
          INSERT INTO public.egbs_bill_v1 (
             id, tenantid, payername, payeraddress, payeremail, isactive, 
@@ -53,7 +59,7 @@ SELECT uuid_in(md5(random()::text || clock_timestamp()::text)::cstring) into bil
             mobilenumber, status, additionaldetails)
     VALUES (
 billId, tenantId, rec.citizen_name, rec.citizen_address, rec.emailid, True, False,'6ccc8719-5b0a-4d24-924e-ec6d2a674b28',Extract(epoch FROM rec.create_date) * 1000,
-            '6ccc8719-5b0a-4d24-924e-ec6d2a674b28', Extract(epoch FROM rec.modified_date) * 1000, mobilenumber, 'ACTIVE', '{"manualmigratedbill":true}') ;
+            '6ccc8719-5b0a-4d24-924e-ec6d2a674b28', Extract(epoch FROM rec.modified_date) * 1000, mobilenumber, digitStatus, '{"manualmigratedbill":true}') ;
 
  --raise notice 'bill id is %s',rec.id ;
  
