@@ -320,7 +320,7 @@ public class ConnectionService {
 					wtrConnResp = waterResponse.getWaterConnection().get(0);
 					log.debug("status" + wtrConnResp.getStatus() + " application status"
 							+ wtrConnResp.getApplicationStatus());
-					recordService.updateWaterMigration(wtrConnResp, connection.getId(), tenantId,"uuid");
+					recordService.updateWaterMigration(wtrConnResp, connection.getId(), tenantId, requestInfo.getUserInfo().getUuid());
 					String consumerCode = wtrConnResp.getConnectionNo() != null ? wtrConnResp.getConnectionNo()
 							: wtrConnResp.getApplicationNo();
 					

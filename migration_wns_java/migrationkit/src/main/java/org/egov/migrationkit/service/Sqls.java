@@ -67,7 +67,7 @@ public class Sqls {
 			+ " and conndetails.ishistory = false and conndetails.id not in (select erpid::bigint from egwtr_migration where status in "
 			+ "(:status ) )  and conndetails.connectionstatus in ('ACTIVE', 'INACTIVE')" + " order by conndetails.id; ";
 	
-//	 and (conndetails.connectionstatus='ACTIVE' or (conndetails.connectionstatus='INACTIVE' and conn.parentconnection is null))
+//	 and conn.consumercode='0603002411' and (conndetails.connectionstatus='ACTIVE' or (conndetails.connectionstatus='INACTIVE' and conn.parentconnection is null))
 
 	public static final String WATER_MIGRATION_TABLE = "create table if not exists egwtr_migration "
 			+ " ( erpid varchar(64),erpconn varchar(64) ,digitconn varchar(64) ,erppt varchar(64),digitpt varchar(64),status varchar(64),tenantId varchar(64),additiondetails varchar(1000),errorMessage varchar(4000), mob varchar(11) );"
