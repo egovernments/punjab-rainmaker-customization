@@ -14,25 +14,26 @@ declare
 	 props record;
 	 bill_detail   record;
 	 cur_bills cursor for
-	 		 select * from eg_bill bill where bill.id_bill_type=1 and bill.service_code in ('WT','STAX')  and bill.is_cancelled='N' and bill.is_history='N'   
+	 		 select * from eg_bill bill where bill.id_bill_type=1 and bill.service_code in ('WT','STAX')  
+	 		 and bill.is_cancelled='N' and bill.is_history='N'  and bill.consumer_id='0603000415' 
 	 		 union
-		   select bill.* from eg_bill bill, egcl_collectionheader ch where ch.referencenumber::bigint=bill.id and bill.service_code in ('WT','STAX') 
-		       and id_bill_type!=1  and  is_cancelled='N' and is_history='N'    ;
+		   select bill.* from eg_bill bill, egcl_collectionheader ch where ch.referencenumber::bigint=bill.id and 
+		   bill.service_code in ('WT','STAX') 
+		       and id_bill_type!=1  and  is_cancelled='N' and is_history='N' and bill.consumer_id='0603000415'   ;
    
 
 begin
    -- open the cursor
    open cur_bills;
 	
-   loop
+   Loop
    
 
 
       fetch cur_bills into rec;
 
-
-    
       exit when not found;
+
       if(rec.service_code  = 'WT') then
           service:='WS';
 	select mobilenumber from egwtr_migration where erpid::bigint=rec.id  limit 1 into mobilenumber ;
@@ -54,7 +55,7 @@ SELECT uuid_in(md5(random()::text || clock_timestamp()::text)::cstring) into bil
 billId, tenantId, rec.citizen_name, rec.citizen_address, rec.emailid, True, False,'6ccc8719-5b0a-4d24-924e-ec6d2a674b28',Extract(epoch FROM rec.create_date) * 1000,
             '6ccc8719-5b0a-4d24-924e-ec6d2a674b28', Extract(epoch FROM rec.modified_date) * 1000, mobilenumber, 'ACTIVE', '{"manualmigratedbill":true}') ;
 
- raise notice 'bill id is %s',rec.id ;
+ --raise notice 'bill id is %s',rec.id ;
  
  select * from eg_bill bill,eg_demand demand ,eg_installment_master inst  
 where demand.id_installment=inst.id and bill.id_demand=demand.id and   bill.id=rec.id into bill_detail ;
@@ -85,6 +86,9 @@ and demand.businessservice =service
 order by demand.taxperiodfrom desc limit 1 into demandId_digit ;
 raise notice 'found from 3rd %s',demandId_digit;
 end if;
+
+if(demandId_digit is not null)
+then
 
 
 INSERT INTO public.egbs_billdetail_v1(
@@ -144,10 +148,12 @@ if( props.code = 'DONATIONCHARGE') then head:='SW_DONATION_CHARGE' ; end if;
 if( props.code = 'INSPECTIONCHARGE') then head:='SW_INSPECTION_CHARGE' ; end if;
 if( props.code = 'ESTIMATIONCHARGE') then head:='SW_ESTIMATION_CHARGE' ; end if;
 
-raise notice 'tax head code from erp bill%s',head ;
+--raise notice 'tax head code from erp bill%s',head ;
  
 select id from public.egbs_demanddetail_v1 where demandid = demandId_digit
 and taxheadcode=head into demand_detail_digit;
+if (demand_detail_digit is not null)
+then
 
 raise notice 'found detailid  %s',demand_detail_digit;
  
@@ -161,14 +167,16 @@ raise notice 'found detailid  %s',demand_detail_digit;
             props.cr_amount, props.dr_amount, False, props.purpose, '6ccc8719-5b0a-4d24-924e-ec6d2a674b28', 
              Extract(epoch FROM rec.create_date) * 1000, '6ccc8719-5b0a-4d24-924e-ec6d2a674b28', Extract(epoch FROM rec.create_date) * 1000, props.cr_amount, 
            head, props.cr_amount, 0, demand_detail_digit, '{"manualmigratedbill":true}');
-   end ;
+end if;
+end ;
    end Loop;
-           
+end if ;
+ 
 
 
 
    
- end loop;
+ end Loop;
    -- close the cursor
    close cur_bills;
 
