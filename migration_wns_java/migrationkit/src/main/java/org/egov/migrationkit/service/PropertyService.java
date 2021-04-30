@@ -73,7 +73,8 @@ public class PropertyService {
 
 			}
 		} catch (Exception e) {
-			log.error("error while finding or creating property", e.getMessage());
+			log.error("error while finding or creating property {}", e.getMessage());
+			e.printStackTrace();
 			recordService.recordError("water", tenantId, e.getMessage(), wcr.getWaterConnection().getId());
 		}
 
@@ -98,9 +99,11 @@ public class PropertyService {
 
 	private Property createProperty(WaterConnectionRequest wcr, Map data, String tenantId) throws InterruptedException {
 		PropertyRequest prequest = new PropertyRequest();
+		WaterConnection conn = wcr.getWaterConnection();
+		try {
 		prequest.setRequestInfo(wcr.getRequestInfo());
 		Property property = new Property();
-		WaterConnection conn = wcr.getWaterConnection();
+		
 		// set all property values
 
 		property.setAddress(conn.getApplicantAddress());
@@ -125,7 +128,7 @@ public class PropertyService {
 		OwnerInfo owner = new OwnerInfo();
 		owner.setName(conn.getApplicantname().replace('?', ' ').replace('`', ' '));
 		owner.setMobileNumber(conn.getMobilenumber());
-		owner.setFatherOrHusbandName(conn.getGuardianname().replace('?', ' ').replace('`', ' '));
+		owner.setFatherOrHusbandName(conn.getGuardianname() != null ? conn.getGuardianname().replace('?', ' ').replace('`', ' '): null);
 		owner.setOwnerType("NONE");
 		owner.setGender((String)data.get("gender"));
 		owner.setEmailId((String)data.getOrDefault("emailId", null));
@@ -149,7 +152,7 @@ public class PropertyService {
 		// String response2= restTemplate.postForObject(host + "/" +
 		// ptcreatehurl, prequest, String.class);
 
-		try {
+		
 			PropertyResponse res = restTemplate.postForObject(host + "/" + ptcreatehurl, prequest, PropertyResponse.class);
 			Property	property2=	res.getProperties().get(0);
 			log.info("create pt ws in workflow state "+property2.getPropertyId() +"  status"+property2.getStatus() );
@@ -157,6 +160,7 @@ public class PropertyService {
 			
 		} catch (Exception e) {
 			recordService.recordError("water", tenantId, e.getMessage(), conn.getId());
+			e.printStackTrace();
 			try {
 				String ptrequest=objectMapper.writeValueAsString(prequest);
 				log.error("failed request " +ptrequest);
@@ -204,10 +208,12 @@ public class PropertyService {
 
 //		String uuid = null;
 		PropertyRequest prequest = new PropertyRequest();
+		SewerageConnection conn = swg.getSewerageConnection();
+		try {
+		
+		// set all property values
 		prequest.setRequestInfo(swg.getRequestInfo());
 		Property property = new Property();
-		SewerageConnection conn = swg.getSewerageConnection();
-		// set all property values
 
 		property.setAddress(conn.getApplicantAddress());
 		property.setChannel(Channel.SYSTEM);
@@ -240,7 +246,7 @@ public class PropertyService {
 		OwnerInfo owner = new OwnerInfo();
 		owner.setName(conn.getApplicantname().replace('?', ' ').replace('`', ' '));
 		owner.setMobileNumber(conn.getMobilenumber());
-		owner.setFatherOrHusbandName(conn.getGuardianname().replace('?', ' ').replace('`', ' '));
+		owner.setFatherOrHusbandName(conn.getGuardianname() != null ? conn.getGuardianname().replace('?', ' ').replace('`', ' ') : null);
 		owner.setOwnerType("NONE");
 		property.creationReason(CreationReason.CREATE);
 		property.setUsageCategory("RESIDENTIAL");
@@ -256,13 +262,14 @@ public class PropertyService {
 		property.setTenantId(conn.getTenantId());
 		prequest.setProperty(property);
 		PropertyResponse res = null;
-		try {
+		
 			res = restTemplate.postForObject(host + "/" + ptcreatehurl, prequest, PropertyResponse.class);
 			Property property2 = res.getProperties().get(0);
 			log.info("create pt sw in workflow state "+property2.getPropertyId() +"  status"+property2.getStatus() );
 			return property2;
 		} catch (Exception e) {
 			recordService.recordError("sewerage", tenantId, e.getMessage(), conn.getId());
+			e.printStackTrace();
 			try {
 				String ptrequest=objectMapper.writeValueAsString(prequest);
 				log.error("failed request " +ptrequest);

@@ -156,7 +156,7 @@ public class ConnectionService {
 								connection.getId());
 					}
 					continue;
-				}else if(isConnectionMigrated != null && !isConnectionMigrated.isEmpty() && isConnectionMigrated.contains("Demand_Created") && isConnectionMigrated.contains("NO_DEMANDS")) {
+				}else if(isConnectionMigrated != null && !isConnectionMigrated.isEmpty() && (isConnectionMigrated.contains("Demand_Created") || isConnectionMigrated.contains("NO_DEMANDS"))) {
 					continue;					
 				}
 
@@ -320,7 +320,7 @@ public class ConnectionService {
 					wtrConnResp = waterResponse.getWaterConnection().get(0);
 					log.debug("status" + wtrConnResp.getStatus() + " application status"
 							+ wtrConnResp.getApplicationStatus());
-					recordService.updateWaterMigration(wtrConnResp, connection.getId(), tenantId,"uuid");
+					recordService.updateWaterMigration(wtrConnResp, connection.getId(), tenantId, requestInfo.getUserInfo().getUuid());
 					String consumerCode = wtrConnResp.getConnectionNo() != null ? wtrConnResp.getConnectionNo()
 							: wtrConnResp.getApplicationNo();
 					
@@ -489,7 +489,7 @@ public class ConnectionService {
 					}
 					continue;
 				}
-				else if(listStatuses != null && !listStatuses.isEmpty() && listStatuses.contains("Demand_Created")  && listStatuses.contains("NO_DEMANDS")) {
+				else if(listStatuses != null && !listStatuses.isEmpty() && (listStatuses.contains("Demand_Created")  || listStatuses.contains("NO_DEMANDS"))) {
 					continue;					
 				}
 				
@@ -698,7 +698,6 @@ public class ConnectionService {
 				WSConstants.SEWERAGE_BUSINESS_SERVICE, consumerCode,
 				requestInfo.getUserInfo().getTenantId(), ownerInfo);
 
-		log.info("Migrating demand");
 		if (!demandRequestList.isEmpty()) {
 
 			Boolean isDemandCreated = demandService.saveDemand(requestInfo, demandRequestList,

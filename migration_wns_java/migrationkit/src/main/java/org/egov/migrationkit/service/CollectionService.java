@@ -60,8 +60,8 @@ public class CollectionService {
 		long collectionCount=0l;
 
 		String digitTenantId = requestInfo.getUserInfo().getTenantId();
-		log.info("Water collectin query is: " + Sqls.WATER_COLLECTION_QUERY_CONN_BILLNo);
-		List<String> queryForList = jdbcTemplate.queryForList(Sqls.WATER_COLLECTION_QUERY_CONN_BILLNo, String.class);
+		log.info("Water collectin query is: " + Sqls.WATER_COLLECTION_QUERY);
+		List<String> queryForList = jdbcTemplate.queryForList(Sqls.WATER_COLLECTION_QUERY, String.class);
 
 		for (String json : queryForList) {
 
