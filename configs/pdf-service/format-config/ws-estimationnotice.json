@@ -448,6 +448,42 @@
                                                 "text": "{{rebateAmount}}",
                                                 "alignment": "right"
                                             }
+                                        ], [
+                                            {
+                                                "text": "10.",
+                                                "alignment": "center"
+                                            },
+                                            {
+                                                "text": "Connection Fee"
+                                            },
+                                            {
+                                                "text": "{{connectionFee}}",
+                                                "alignment": "right"
+                                            }
+                                        ],[
+                                            {
+                                                "text": "11.",
+                                                "alignment": "center"
+                                            },
+                                            {
+                                                "text": "Composition Fee"
+                                            },
+                                            {
+                                                "text": "{{compositionFee}}",
+                                                "alignment": "right"
+                                            }
+                                        ],[
+                                            {
+                                                "text": "12.",
+                                                "alignment": "center"
+                                            },
+                                            {
+                                                "text": "User Charges"
+                                            },
+                                            {
+                                                "text": "{{userCharges}}",
+                                                "alignment": "right"
+                                            }
                                         ],
                                         [
                                             {
