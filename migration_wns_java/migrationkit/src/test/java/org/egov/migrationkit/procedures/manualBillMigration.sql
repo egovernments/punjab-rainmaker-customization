@@ -1,4 +1,4 @@
---set search_path to fazilka ;
+set search_path to fazilka_prod ;
 create or replace function migrate_manual_bills( tenantId varchar)
    returns text as $$ 
 declare 
@@ -21,7 +21,9 @@ declare
 	 		 union
 		   select bill.* from eg_bill bill, egcl_collectionheader ch where ch.referencenumber::bigint=bill.id and 
 		   bill.service_code in ('WT','STAX') 
-		       and id_bill_type!=1  and  is_cancelled='N' and is_history='N'     ;
+		       and id_bill_type=(select id from eg_bill_type where code='AUTO')  and  is_cancelled='N' and is_history='N' 
+		       and ch.status = (select id from egw_status where moduletype='ReceiptHeader' and description='Approved')  ;
+		       
    
 
 begin
@@ -75,7 +77,7 @@ end if ;
     VALUES (
 	billId, tenantId, rec.citizen_name, rec.citizen_address, rec.emailid, True, False,'6ccc8719-5b0a-4d24-924e-ec6d2a674b28',
 	Extract(epoch FROM rec.create_date) * 1000, '6ccc8719-5b0a-4d24-924e-ec6d2a674b28', Extract(epoch FROM rec.modified_date) * 1000,
-	mobilenumber, digitStatus, '{"manualmigratedbill":true}') ;
+	mobilenumber, digitStatus, '{"migrated":true}') ;
 
  ----raise notice 'bill id is %s',rec.id ;
  
@@ -126,7 +128,7 @@ INSERT INTO public.egbs_billdetail_v1(
             null, null, null, '6ccc8719-5b0a-4d24-924e-ec6d2a674b28', 
             Extract(epoch FROM rec.create_date) * 1000,  '6ccc8719-5b0a-4d24-924e-ec6d2a674b28', Extract(epoch FROM rec.create_date) * 1000, 
            null, null, Extract(epoch FROM bill_detail.start_date) * 1000, Extract(epoch FROM bill_detail.end_date) * 1000, demandId_digit, null, 
-            Extract(epoch FROM rec.last_date) * 1000, '{"manualmigratedbill":true}');
+            Extract(epoch FROM rec.last_date) * 1000, '{"migrated":true}');
         
 for props in (select * from eg_bill_details detail ,eg_demand_reason reason,eg_installment_master inst ,eg_demand_reason_master master  
 where reason.id_installment=inst.id and detail.id_demand_reason=reason.id   and master.id=reason.id_demand_reason_master  and  detail.id_bill=rec.id   )
@@ -189,7 +191,7 @@ then
 	   props.description, 
             props.cr_amount, props.dr_amount, False, props.purpose, '6ccc8719-5b0a-4d24-924e-ec6d2a674b28', 
              Extract(epoch FROM rec.create_date) * 1000, '6ccc8719-5b0a-4d24-924e-ec6d2a674b28', Extract(epoch FROM rec.create_date) * 1000, props.cr_amount, 
-           head, props.cr_amount, 0, demand_detail_digit, '{"manualmigratedbill":true}');
+           head, props.cr_amount, 0, demand_detail_digit, '{"migrated":true}');
 end if;
 end ;
    end Loop;
@@ -209,10 +211,10 @@ language plpgsql;
 
 
 --select migrate_manual_bills('pb.fazilka');
---delete from public.egbs_billaccountdetail_v1 where additionaldetails ='{"manualmigratedbill":true}';
---delete from public.egbs_billdetail_v1 where additionaldetails ='{"manualmigratedbill":true}';
---delete from public.egbs_bill_v1 where additionaldetails ='{"manualmigratedbill":true}';
+--delete from public.egbs_billaccountdetail_v1 where additionaldetails ='{"migrated":true}';
+--delete from public.egbs_billdetail_v1 where additionaldetails ='{"migrated":true}';
+--delete from public.egbs_bill_v1 where additionaldetails ='{"migrated":true}';
 
-
+	
 
 
