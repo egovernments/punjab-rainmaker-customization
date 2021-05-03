@@ -196,7 +196,7 @@ public class ConnectionService {
 				if (property == null) {
 					continue;
 				}
-				connection.setPropertyId(property.getId());
+				connection.setPropertyId(property.getPropertyId());
 			
 				roadCategoryList = (List<Map>) data.get("road_category");
 				List<RoadCuttingInfo> cuttingInfoList = new ArrayList<>();
@@ -533,7 +533,7 @@ public class ConnectionService {
 							"Property not found or cannot be created  for the record  ", swConnection.getId());
 					continue;
 				}
-				swConnection.setPropertyId(property.getId());
+				swConnection.setPropertyId(property.getPropertyId());
 				StringBuilder additionalDetail = new StringBuilder();
 				Map addtionals = new HashMap<String, String>();
 
