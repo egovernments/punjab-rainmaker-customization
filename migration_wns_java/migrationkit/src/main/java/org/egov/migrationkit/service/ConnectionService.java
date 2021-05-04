@@ -250,7 +250,7 @@ public class ConnectionService {
 				addtionals.put("propertyId", (String) data.get("propertyId"));
 				addtionals.put("locality", localityCode);
 				addtionals.put("billingType", (String) data.get("billingType"));
-				addtionals.put("billingAmount", String.valueOf(data.get("billingAmount")));
+				addtionals.put("billingAmount", data.get("billingAmount") != null ? data.get("billingAmount") : 0);
 				addtionals.put("estimationLetterDate", (String) data.get("estimationLetterDate"));
 				addtionals.put("connectionCategory", (String) data.get("connectionCategory"));
 				addtionals.put("meterId", (String) data.get("meterId"));
@@ -541,7 +541,7 @@ public class ConnectionService {
 
 				addtionals.put("locality", localityCode);
 				addtionals.put("billingType", (String) data.get("billingType"));
-				// addtionals.put("billingAmount", data.get("billingAmount"));
+				 addtionals.put("billingAmount", data.get("billingAmount") != null ? data.get("billingAmount") : 0 );
 				addtionals.put("estimationLetterDate", (String) data.get("estimationLetterDate"));
 				// addtionals.put("connectionCategory",(String)
 				// data.get("connectionCategory"));
