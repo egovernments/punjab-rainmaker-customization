@@ -1040,7 +1040,7 @@ router.post('/protected/punjab-pt/pre-hook/pg-service/transaction/v1/_create', a
 
         request['Transaction']['callbackUrl'] = url.format(url_callback);
     }
-      else if (request['Transaction']['tenantId'] == 'pb.amritsar') {
+      else if (request['Transaction']['tenantId'] == 'pb.amritsar' || request['Transaction']['tenantId'] == 'pb.mohali') {
       let original_callback = request['Transaction']['callbackUrl'];
       request['Transaction']['gateway'] = 'RAZORPAY'
       url_callback = url.parse(original_callback)
