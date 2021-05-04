@@ -780,7 +780,7 @@
                 "responseMapping": [
                   {
                     "variable": "oldConnectionNo",
-                    "value": "$.WaterConection[0].additionalDetails.oldConnectionNo"
+                    "value": "$.WaterConection[0].oldConnectionNo"
                   },
                   {
                     "variable": "ledgerId",
@@ -795,7 +795,7 @@
                 "responseMapping": [
                   {
                     "variable": "oldConnectionNoSew",
-                    "value": "$.SewerageConnection[0].additionalDetails.oldConnectionNo"
+                    "value": "$.SewerageConnection[0].oldConnectionNo"
                   },
                   {
                     "variable": "ledgerIdSew",
