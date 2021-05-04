@@ -266,7 +266,7 @@
                         "style": "receipt-table2"
                       },
                       {
-                        "text": "{{oldConnectionNo}}{{oldConnectionNoSew}}",
+                        "text": "{{oldConnectionNo}}{{oldConnectionNoSew || ' '}}",
                         "border": [
                           false,
                           false,
@@ -286,7 +286,7 @@
                         "style": "receipt-table2"
                       },
                       {
-                        "text":"{{ledgerId}}{{ledgerIdSew}}",
+                        "text":"{{ledgerId}}{{ledgerIdSew || ' '}}",
                         "border": [
                           false,
                           false,

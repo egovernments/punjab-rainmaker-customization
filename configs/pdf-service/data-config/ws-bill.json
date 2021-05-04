@@ -795,11 +795,11 @@
                 "responseMapping": [
                   {
                     "variable": "oldConnectionNoSew",
-                    "value": "$.SewerageConnection[0].oldConnectionNo"
+                    "value": "$.SewerageConnections[0].oldConnectionNo"
                   },
                   {
                     "variable": "ledgerIdSew",
-                    "value": "$.SewerageConnection[0].additionalDetails.ledgerId"
+                    "value": "$.SewerageConnections[0].additionalDetails.ledgerId"
                   }
                 ]
               },
