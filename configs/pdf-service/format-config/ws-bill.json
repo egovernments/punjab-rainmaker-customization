@@ -206,10 +206,10 @@
               {
                 "table": {
                   "widths": [
-                    "17%",
-                    "43%",
-                    "15%",
-                    "25%"
+                    "23%",
+                    "25%",
+                    "23%",
+                    "*"
                   ],
                   "body": [
                     [
@@ -266,7 +266,7 @@
                         "style": "receipt-table2"
                       },
                       {
-                        "text": "{{oldConnectionNo}}{{oldConnectionNoSew || ' '}}",
+                        "text": "{{oldConnectionNo}}",
                         "border": [
                           false,
                           false,
@@ -286,7 +286,7 @@
                         "style": "receipt-table2"
                       },
                       {
-                        "text":"{{ledgerId}}{{ledgerIdSew || ' '}}",
+                        "text":"{{ledgerId}}",
                         "border": [
                           false,
                           false,

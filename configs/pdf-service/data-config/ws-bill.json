@@ -457,6 +457,18 @@
                 }
               },
               {
+                "variable": "oldConnectionNo",
+                "value": {
+                  "path": "$.additionalDetails.oldConnectionNo"
+                }
+              },
+              {
+                "variable": "ledgerId",
+                "value": {
+                  "path": "$.additionalDetails.ledgerId"
+                }
+              },
+              {
                 "variable": "payerAddress",
                 "value": {
                   "path": "$.payerAddress"
@@ -770,36 +782,6 @@
                   {
                     "variable": "ws_time_penalty",
                     "value": "$.Demands[(@.length-1)].demandDetails[?(@.taxHeadMasterCode == 'WS_TIME_PENALTY')].taxAmount"
-                  }
-                ]
-              },
-              {
-                "path": "http://ws-services:8080/ws-services/wc/_search",
-                "queryParam": "tenantId=$.tenantId,connectionNumber=$.consumerCode",
-                "apiRequest": null,
-                "responseMapping": [
-                  {
-                    "variable": "oldConnectionNo",
-                    "value": "$.WaterConection[0].oldConnectionNo"
-                  },
-                  {
-                    "variable": "ledgerId",
-                    "value": "$.WaterConection[0].additionalDetails.ledgerId"
-                  }
-                ]
-              },
-              {
-                "path": "http://sw-services:8080/sw-services/swc/_search",
-                "queryParam": "tenantId=$.tenantId,connectionNumber=$.consumerCode",
-                "apiRequest": null,
-                "responseMapping": [
-                  {
-                    "variable": "oldConnectionNoSew",
-                    "value": "$.SewerageConnections[0].oldConnectionNo"
-                  },
-                  {
-                    "variable": "ledgerIdSew",
-                    "value": "$.SewerageConnections[0].additionalDetails.ledgerId"
                   }
                 ]
               },
