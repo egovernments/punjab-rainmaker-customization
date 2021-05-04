@@ -789,6 +789,21 @@
                 ]
               },
               {
+                "path": "http://sw-services:8080/sw-services/swc/_search",
+                "queryParam": "tenantId=$.tenantId,connectionNumber=$.consumerCode",
+                "apiRequest": null,
+                "responseMapping": [
+                  {
+                    "variable": "oldConnectionNoSew",
+                    "value": "$.SewerageConnection[0].additionalDetails.oldConnectionNo"
+                  },
+                  {
+                    "variable": "ledgerIdSew",
+                    "value": "$.SewerageConnection[0].additionalDetails.ledgerId"
+                  }
+                ]
+              },
+              {
                 "path": "http://property-services.egov:8080/property-services/property/_search",
                 "queryParam": "tenantId=$.tenantId,propertyIds=$.additionalDetails.propertyId",
                 "apiRequest": null,
