@@ -41,7 +41,12 @@
                                 "variable": "usageType",
                                 "value": {
                                     "path": "$.property.usageCategory"
-                                }
+                                },
+                                "localisation":{
+                                    "required":true,
+                                    "prefix": null,
+                                    "module": "rainmaker-common"
+                                 }
                             },
                             {
                                 "variable": "houseNo",
@@ -82,7 +87,7 @@
                             {
                                 "variable": "otherCharge",
                                 "value": {
-                                    "path": "$.pdfTaxhead[?(@.taxHeadCode == 'OTHER_CHARGE')].estimateAmount"
+                                    "path": "$.pdfTaxhead[?(@.taxHeadCode == 'OTHER_FEE')].estimateAmount"
                                 }
                             },
                             {
@@ -107,6 +112,21 @@
                                 "variable": "oneTimeFee",
                                 "value": {
                                     "path": "$.pdfTaxhead[?(@.taxHeadCode == 'ONE_TIME_FEE')].estimateAmount"
+                                }
+                            },  {
+                                "variable": "connectionFee",
+                                "value": {
+                                    "path": "$.pdfTaxhead[?(@.taxHeadCode == 'CONNECTION_FEE')].estimateAmount"
+                                }
+                            }, {
+                                "variable": "compositionFee",
+                                "value": {
+                                    "path": "$.pdfTaxhead[?(@.taxHeadCode == 'COMPOSITION_FEE')].estimateAmount"
+                                }
+                            },{
+                                "variable": "userCharges",
+                                "value": {
+                                    "path": "$.pdfTaxhead[?(@.taxHeadCode == 'USER_CHARGE')].estimateAmount"
                                 }
                             },
                             {
