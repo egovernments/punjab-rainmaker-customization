@@ -67,7 +67,7 @@ if(rec.id_bill_type = 2 )
 then
 digitStatus:='PAID';
 else 
-digitStatus='Expired';
+digitStatus='EXPIRED';
 end if ;
 
          INSERT INTO public.egbs_bill_v1 (
