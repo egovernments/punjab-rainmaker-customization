@@ -105,7 +105,7 @@
         ],
         "margin": [
           -26,
-          10,
+          4,
           0,
           0
         ]
@@ -115,7 +115,7 @@
         "style": "header"
       },
       {
-        "style": "ws-table",
+        "style": "ws-table-property",
         "table": {
           "widths": [
             "103%"
@@ -689,7 +689,7 @@
         "style": "header"
       },
       {
-        "style": "ws-table",
+        "style": "ws-table-property",
         "table": {
           "widths": [
             "103%"
@@ -926,9 +926,9 @@
         "color": "#484848",
         "margin": [
           -25,
-          18,
+          8,
           -8,
-          110
+          2
         ]
       },
       "header": {
@@ -939,7 +939,7 @@
         "fontWeight": 500,
         "margin": [
           -25,
-          15,
+          5,
           0,
           -10
         ]
@@ -953,7 +953,7 @@
           3,
           0,
           0,
-          10
+          1
         ]
       },
       "ws-sub-table": {
@@ -963,7 +963,7 @@
         "fontWeight": 400,
         "margin": [
           3,
-          8,
+          1,
           0,
           0
         ]
