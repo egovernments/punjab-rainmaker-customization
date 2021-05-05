@@ -271,12 +271,6 @@
                 }
               },
               {
-                "variable": "sla",
-                "value": {
-                  "path": "$.sla"
-                }
-              },
-              {
                 "variable": "slaDate",
                 "value": {
                   "path": "$.slaDate"
