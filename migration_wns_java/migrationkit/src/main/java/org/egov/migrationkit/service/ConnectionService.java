@@ -192,7 +192,7 @@ public class ConnectionService {
 				address.setCity((String) data.get("cityname"));
 				connection.setApplicantAddress(address);
 
-				Property property = propertyService.findProperty(waterRequest, data, tenantId);
+				Property property = propertyService.findProperty(waterRequest, data, tenantId,localityCode);
 				if (property == null) {
 					continue;
 				}
@@ -527,7 +527,7 @@ public class ConnectionService {
 				address.setLocality(locality);
 				address.setCity((String) data.get("cityname"));
 				swConnection.setApplicantAddress(address);
-				Property property = propertyService.findProperty(sewerageRequest, data, tenantId);
+				Property property = propertyService.findProperty(sewerageRequest, data, tenantId, localityCode);
 				if (property == null) {
 					recordService.recordError("sewerage", tenantId,
 							"Property not found or cannot be created  for the record  ", swConnection.getId());

@@ -61,11 +61,11 @@ public class PropertyService {
 	@Autowired
 	private RecordService recordService;
 
-	public Property findProperty(WaterConnectionRequest wcr, Map data, String tenantId) {
+	public Property findProperty(WaterConnectionRequest wcr, Map data, String tenantId, String localityCode) {
 
 		Property property = null;
 		try {
-			property = searchPtRecord(wcr, data, tenantId);
+			property = searchPtRecord(wcr, data, tenantId, localityCode);
 
 			if (property == null) {
 				 log.debug("Propery not found creating new property");
@@ -81,10 +81,10 @@ public class PropertyService {
 		return property;
 	}
 
-	public Property findProperty(SewerageConnectionRequest swg, Map json, String tenantId) {
+	public Property findProperty(SewerageConnectionRequest swg, Map json, String tenantId, String localityCode) {
 		Property property = null;
 		try {
-			property = searchswPtRecord(swg, json, tenantId);
+			property = searchswPtRecord(swg, json, tenantId, localityCode);
 			if (property == null) {
 				// log.debug("Propery not found creating new property");
 				property = createSWProperty(swg, json, tenantId);
@@ -290,7 +290,7 @@ public class PropertyService {
 	 *  if property found compare with owner name,father name etc.
 	 */
 
-	private Property searchPtRecord(WaterConnectionRequest conn, Map data, String tenantId) {
+	private Property searchPtRecord(WaterConnectionRequest conn, Map data, String tenantId, String localityCode) {
 
 		PropertyRequest pr = new PropertyRequest();
 		pr.setRequestInfo(conn.getRequestInfo());
@@ -306,19 +306,20 @@ public class PropertyService {
 		if (response != null && response.getProperties() != null && response.getProperties().size() >= 1) {
 		 
 			for (Property property : response.getProperties()) {
-				 
+
 				for (OwnerInfo owner : property.getOwners()) {
-					 
 
-					if (owner.getName().equalsIgnoreCase(conn.getWaterConnection().getApplicantname()) && owner
-							.getFatherOrHusbandName().equalsIgnoreCase(conn.getWaterConnection().getGuardianname())
+					if (owner.getName().equalsIgnoreCase(conn.getWaterConnection().getApplicantname()) && 
+							owner.getFatherOrHusbandName().equalsIgnoreCase(conn.getWaterConnection().getGuardianname()) &&
+							property.getAddress().getLocality() != null &&
+							localityCode.equalsIgnoreCase(property.getAddress().getLocality().getCode())
 
-					) {
+							) {
 
 						recordService.recordError("water", tenantId, "Found Property in digit :" + property.getId(),
-							conn.getWaterConnection().getId());
-						 
-						 
+								conn.getWaterConnection().getId());
+
+
 						return property;
 					}
 
@@ -334,14 +335,15 @@ public class PropertyService {
 
 	}
 
-	private Property searchswPtRecord(SewerageConnectionRequest conn, Map json, String tenantId) {
+	private Property searchswPtRecord(SewerageConnectionRequest conn, Map json, String tenantId, String localityCode) {
 
 		PropertyRequest pr = new PropertyRequest();
 		pr.setRequestInfo(conn.getRequestInfo());
-		log.debug("Searching property");
+//		
 		String ptseachurlStr = ptseachurl + "?tenantId=" + conn.getRequestInfo().getUserInfo().getTenantId()
 				+ "&mobileNumber=" + conn.getSewerageConnection().getMobilenumber() + "&name="
 				+ conn.getSewerageConnection().getApplicantname();
+		log.debug("Searching property with url: " + ptseachurlStr);
 
 		PropertySearchResponse response = restTemplate.postForObject(host + "/" + ptseachurlStr, pr,
 				PropertySearchResponse.class);
@@ -354,8 +356,10 @@ public class PropertyService {
 			for (Property property : response.getProperties()) {
 				 
 				for (OwnerInfo owner : property.getOwners()) {
-					if (owner.getName().equalsIgnoreCase(conn.getSewerageConnection().getApplicantname()) && owner
-							.getFatherOrHusbandName().equalsIgnoreCase(conn.getSewerageConnection().getGuardianname())
+					if (owner.getName().equalsIgnoreCase(conn.getSewerageConnection().getApplicantname()) && 
+							owner.getFatherOrHusbandName().equalsIgnoreCase(conn.getSewerageConnection().getGuardianname()) &&
+							property.getAddress().getLocality() != null &&
+							localityCode.equalsIgnoreCase(property.getAddress().getLocality().getCode())
 
 					) {
 
