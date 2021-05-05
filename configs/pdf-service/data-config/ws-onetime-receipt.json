@@ -113,6 +113,53 @@
                 }
               },
               {
+                "variable": "chequeDD", 
+                "value": {
+                  "path": "$.instrumentNumber"
+                }
+              },
+              {
+                "variable": "chequeDDDate", 
+                "value": {
+                  "path": "$.instrumentDate"
+                },
+                "type":"date"
+              },
+              {
+                "variable": "bankName",
+                "value": {
+                  "path": "$.additionalDetails[0].bankName"
+                }
+              },  {
+                "variable": "branchName",
+                "value": {
+                  "path": "$.additionalDetails[0].branchName"
+                }
+              }, {
+                "variable": "ifsc",
+                "value": {
+                  "path": "$.ifscCode"
+                }
+              },
+              {
+                "variable": "var_paymentheads",                        
+                "value":{
+                  "path":"$.paymentDetails[0].additionalDetails.*"},
+                 "type":"array",
+                 "format":{                            
+                    "type":"string",
+                    "scema":[
+                       {
+                          "variable":"taxheaddd",
+                          "value": "taxhead"
+                       },
+                       {
+                          "variable":"amountt",
+                          "value": "amount"
+                       }]
+                } 
+             },
+              {
                 "variable": "dueAmount",
                 "value": {
                   "path": "$.paymentDetails[0].totalDue"
@@ -218,6 +265,30 @@
                 "variable": "paid_amount",
                 "value": {
                   "path": "PDF_STATIC_LABEL_CONSOLIDATED_RECEIPT_PAID_AMOUNT"
+                },
+                "type": "label",
+                "localisation": {
+                  "required": true,
+                  "prefix": null,
+                  "module": "rainmaker-common"
+                }
+              },
+              {
+                "variable": "bill_amount",
+                "value": {
+                  "path": "PDF_STATIC_LABEL_CONSOLIDATED_RECEIPT_BILL_AMOUNT"
+                },
+                "type": "label",
+                "localisation": {
+                  "required": true,
+                  "prefix": null,
+                  "module": "rainmaker-common"
+                }
+              },
+              {
+                "variable": "advance_amount",
+                "value": {
+                  "path": "PDF_STATIC_LABEL_CONSOLIDATED_RECEIPT_ADVANCE_AMOUNT"
                 },
                 "type": "label",
                 "localisation": {
@@ -424,7 +495,11 @@
             "derived": [
               {
                 "variable": "pendingAmount",
-                "formula": "{{dueAmount}}-{{paidAmount}}"
+                "formula": "{{paidAmount}}>{{dueAmount}}?0:{{dueAmount}}-{{paidAmount}}"
+              },
+              {
+                "variable": "advanceAmount",
+                "formula": "{{paidAmount}}>{{dueAmount}}?{{paidAmount}}-{{dueAmount}}:0"
               }
             ]
           },
