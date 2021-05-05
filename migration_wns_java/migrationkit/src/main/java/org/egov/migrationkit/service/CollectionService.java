@@ -73,6 +73,7 @@ public class CollectionService {
 				payment.setTenantId(digitTenantId);
 				payment.getPaymentDetails().get(0).setTenantId(digitTenantId);
 				payment.getPaymentDetails().get(0).setTotalDue(payment.getTotalDue());
+				payment.getPaymentDetails().get(0).setManualReceiptNumber(payment.getPaymentDetails().get(0).getReceiptNumber());
 				if (payment.getPaymentMode().equals(CollectionPaymentModeEnum.ONLINE) 
 						|| payment.getPaymentMode().equals(CollectionPaymentModeEnum.CARD)) {
 					payment.setInstrumentNumber(payment.getTransactionNumber());
@@ -270,6 +271,7 @@ public class CollectionService {
 				payment.setTenantId(digitTenantId);
 				payment.getPaymentDetails().get(0).setTenantId(digitTenantId);
 				payment.getPaymentDetails().get(0).setTotalDue(payment.getTotalDue());
+				payment.getPaymentDetails().get(0).setManualReceiptNumber(payment.getPaymentDetails().get(0).getReceiptNumber());
 				log.info("Sewerage collection migrating  for " + payment.getConsumerCode());
 
 				if (payment.getPaymentMode().equals(CollectionPaymentModeEnum.ONLINE) 
