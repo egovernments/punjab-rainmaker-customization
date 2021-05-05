@@ -81,9 +81,7 @@ public class ConnectionService {
 		recordService.initiate(tenantId);
 		Map data = null;
 		WaterConnection connection = null;
-		List<Map> roadCategoryList = null;
-		Integer area = null;
-		Float areaDouble = null;
+		List<Map<String, Object>> roadCategoryList = null;
 		Address address = null;
 		Locality locality = null;
 		String locCode = null;
@@ -198,30 +196,30 @@ public class ConnectionService {
 				}
 				connection.setPropertyId(property.getPropertyId());
 			
-				roadCategoryList = (List<Map>) data.get("road_category");
+				roadCategoryList = (List<Map<String, Object>>) data.get("road_category");
 				List<RoadCuttingInfo> cuttingInfoList = new ArrayList<>();
 				RoadCuttingInfo cuttingInfo = null;
 				if (roadCategoryList != null && !roadCategoryList.isEmpty()) {
-					cuttingInfo = new RoadCuttingInfo();
-					
-					String roadCategory = (String) roadCategoryList.get(0).get("road_name");
-					cuttingInfo.setRoadType(WSConstants.DIGIT_ROAD_CATEGORIES.get(roadCategory));
-					cuttingInfo.setStatus(Status.ACTIVE);
-					try {
-						Object areaObj = roadCategoryList.get(0).get("road_area");
-						if(areaObj instanceof Integer)
-							cuttingInfo.setRoadCuttingArea(Float.valueOf((Integer)areaObj));
-						else if(areaObj instanceof Double)
-							cuttingInfo.setRoadCuttingArea(((Double)areaObj).floatValue());
-						else if(areaObj instanceof Float)
-							cuttingInfo.setRoadCuttingArea(((Float)areaObj));
-						else
+					for (Map roadCategory : roadCategoryList) {
+						cuttingInfo = new RoadCuttingInfo();
+						String road_name = (String) roadCategory.get("road_name");
+						cuttingInfo.setRoadType(WSConstants.DIGIT_ROAD_CATEGORIES.get(road_name));
+						try {
+							Object areaObj = roadCategory.get("road_area");
+							if(areaObj instanceof Integer)
+								cuttingInfo.setRoadCuttingArea(Float.valueOf((Integer)areaObj));
+							else if(areaObj instanceof Double)
+								cuttingInfo.setRoadCuttingArea(((Double)areaObj).floatValue());
+							else if(areaObj instanceof Float)
+								cuttingInfo.setRoadCuttingArea(((Float)areaObj));
+							else
+								cuttingInfo.setRoadCuttingArea(0f);
+
+						} catch (Exception e) {
 							cuttingInfo.setRoadCuttingArea(0f);
-							
-					} catch (Exception e) {
-						cuttingInfo.setRoadCuttingArea(0f);
+						}
+						cuttingInfoList.add(cuttingInfo);
 					}
-					cuttingInfoList.add(cuttingInfo);
 
 				}
 				connection.setRoadCuttingInfo(cuttingInfoList);
@@ -432,7 +430,7 @@ public class ConnectionService {
 		long connStartTime = 0l;
 		long connectionDuration = 0l;
 		long connectionCount=0l;
-		List<Map> roadCategoryList = null;
+		List<Map<String, Object>> roadCategoryList = null;
 
 		String searchPath = jdbcTemplate.queryForObject("show search_path", String.class);
 		log.info(searchPath);
@@ -599,29 +597,30 @@ public class ConnectionService {
 				
 			
 				
-				roadCategoryList = (List<Map>) data.get("road_category");
+				roadCategoryList = (List<Map<String, Object>>) data.get("road_category");
 				List<RoadCuttingInfo> cuttingInfoList = new ArrayList<>();
 				RoadCuttingInfo cuttingInfo = null;
 				if (roadCategoryList != null && !roadCategoryList.isEmpty()) {
-					cuttingInfo = new RoadCuttingInfo();
-					
-					String roadCategory = (String) roadCategoryList.get(0).get("road_name");
-					cuttingInfo.setRoadType(WSConstants.DIGIT_ROAD_CATEGORIES.get(roadCategory));
-					try {
-						Object areaObj = roadCategoryList.get(0).get("road_area");
-						if(areaObj instanceof Integer)
-							cuttingInfo.setRoadCuttingArea(Float.valueOf((Integer)areaObj));
-						else if(areaObj instanceof Double)
-							cuttingInfo.setRoadCuttingArea(((Double)areaObj).floatValue());
-						else if(areaObj instanceof Float)
-							cuttingInfo.setRoadCuttingArea(((Float)areaObj));
-						else
+					for (Map roadCategory : roadCategoryList) {
+						cuttingInfo = new RoadCuttingInfo();
+						String road_name = (String) roadCategory.get("road_name");
+						cuttingInfo.setRoadType(WSConstants.DIGIT_ROAD_CATEGORIES.get(road_name));
+						try {
+							Object areaObj = roadCategory.get("road_area");
+							if(areaObj instanceof Integer)
+								cuttingInfo.setRoadCuttingArea(Float.valueOf((Integer)areaObj));
+							else if(areaObj instanceof Double)
+								cuttingInfo.setRoadCuttingArea(((Double)areaObj).floatValue());
+							else if(areaObj instanceof Float)
+								cuttingInfo.setRoadCuttingArea(((Float)areaObj));
+							else
+								cuttingInfo.setRoadCuttingArea(0f);
+
+						} catch (Exception e) {
 							cuttingInfo.setRoadCuttingArea(0f);
-							
-					} catch (Exception e) {
-						cuttingInfo.setRoadCuttingArea(0f);
+						}
+						cuttingInfoList.add(cuttingInfo);
 					}
-					cuttingInfoList.add(cuttingInfo);
 
 				}
 				swConnection.setRoadCuttingInfo(cuttingInfoList);
