@@ -126,8 +126,7 @@
                 "table": {
                   "widths": [
                     "25%",
-                    "25%",
-                    "25%",
+                    "50%",
                     "25%"
                   ],
                   "body": [
@@ -161,16 +160,6 @@
                           false
                         ],
                         "style": "ws-sub-table"
-                      },
-                      {
-                        "text": " ",
-                        "border": [
-                          false,
-                          false,
-                          false,
-                          false
-                        ],
-                        "style": "ws-sub-table"
                       }
                     ],
                     [
@@ -196,16 +185,6 @@
                       },
                       {
                         "text": "{{uom}}",
-                        "border": [
-                          false,
-                          false,
-                          false,
-                          false
-                        ],
-                        "style": "ws-sub-table-value"
-                      },
-                      {
-                        "text": " ",
                         "border": [
                           false,
                           false,
@@ -748,9 +727,9 @@
         "color": "#484848",
         "margin": [
           -25,
-          18,
+          8,
           -8,
-          10
+          4
         ]
       },
       "header": {
@@ -761,7 +740,7 @@
         "fontWeight": 500,
         "margin": [
           -25,
-          15,
+          12,
           0,
           -10
         ]
@@ -775,7 +754,7 @@
           3,
           0,
           0,
-          10
+          2
         ]
       },
       "ws-sub-table": {
@@ -785,7 +764,7 @@
         "fontWeight": 400,
         "margin": [
           3,
-          8,
+          2,
           0,
           0
         ]
