@@ -17,7 +17,7 @@
                         [
                             {
                                 "image": "{{logoImage}}",
-                                "width": 50,
+                                "width": 55,
                                 "height": 61.25,
                                 "margin": [
                                     12,
@@ -68,9 +68,9 @@
                                 "table": {
                                     "widths": [
                                         "16%",
-                                        "34%",
+                                        "44%",
                                         "18%",
-                                        "32%"
+                                        "22%"
                                     ],
                                     "body": [
                                         [
@@ -448,6 +448,42 @@
                                                 "text": "{{rebateAmount}}",
                                                 "alignment": "right"
                                             }
+                                        ], [
+                                            {
+                                                "text": "10.",
+                                                "alignment": "center"
+                                            },
+                                            {
+                                                "text": "Connection Fee"
+                                            },
+                                            {
+                                                "text": "{{connectionFee}}",
+                                                "alignment": "right"
+                                            }
+                                        ],[
+                                            {
+                                                "text": "11.",
+                                                "alignment": "center"
+                                            },
+                                            {
+                                                "text": "Composition Fee"
+                                            },
+                                            {
+                                                "text": "{{compositionFee}}",
+                                                "alignment": "right"
+                                            }
+                                        ],[
+                                            {
+                                                "text": "12.",
+                                                "alignment": "center"
+                                            },
+                                            {
+                                                "text": "User Charges"
+                                            },
+                                            {
+                                                "text": "{{userCharges}}",
+                                                "alignment": "right"
+                                            }
                                         ],
                                         [
                                             {
@@ -490,7 +526,7 @@
             },
             {
                 "text": "{{approved_by}}",
-                "alignment": "center"
+                "alignment": "right"
             }
         ],
         "styles": {
@@ -539,7 +575,7 @@
                 "color": "#000000",
                 "textTransform": "uppercase",
                 "bold": true,
-                "fontSize": 12,
+                "fontSize": 10,
                 "fontWeight": 500,
                 "margin": [
                     -25,
@@ -550,13 +586,13 @@
             },
             "ws-sub-table-value": {
                 "color": "#000000",
-                "fontSize": 12,
+                "fontSize": 10,
                 "fontWeight": 500
             },
             "ws-sub-table": {
                 "color": "#000000",
                 "bold": true,
-                "fontSize": 12,
+                "fontSize": 10,
                 "fontWeight": 400,
                 "margin": [
                     3,
@@ -579,7 +615,7 @@
             "receipt-table-value": {
                 "color": "#000000",
                 "bold": true,
-                "fontSize": 12,
+                "fontSize": 10,
                 "fontWeight": 500,
                 "margin": [
                     5,
@@ -591,7 +627,7 @@
             "receipt-table-value-total": {
                 "color": "#000000",
                 "bold": true,
-                "fontSize": 12,
+                "fontSize": 10,
                 "fontWeight": 500,
                 "alignment": "right",
                 "margin": [
@@ -604,7 +640,7 @@
             "receipt-table-value-down": {
                 "color": "#000000",
                 "bold": false,
-                "fontSize": 12,
+                "fontSize": 10,
                 "fontWeight": 400,
                 "alignment": "left",
                 "margin": [
@@ -617,7 +653,7 @@
             "receipt-table-value2": {
                 "color": "#000000",
                 "bold": false,
-                "fontSize": 12,
+                "fontSize": 10,
                 "fontWeight": 500,
                 "margin": [
                     3,
@@ -629,7 +665,7 @@
             "receipt-table-value-cont": {
                 "color": "#000000",
                 "bold": false,
-                "fontSize": 11,
+                "fontSize": 10,
                 "fontWeight": 400,
                 "margin": [
                     3,
@@ -641,7 +677,7 @@
             "receipt-table": {
                 "color": "#484848",
                 "bold": true,
-                "fontSize": 12,
+                "fontSize": 10,
                 "fontWeight": 400,
                 "margin": [
                     -30,
@@ -653,7 +689,7 @@
             "receipt-table2": {
                 "color": "#000000",
                 "bold": true,
-                "fontSize": 12,
+                "fontSize": 10,
                 "fontWeight": 500,
                 "margin": [
                     3,
