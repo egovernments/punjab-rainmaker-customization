@@ -23,7 +23,7 @@
               {
                 "stack": [
                   {
-                    "text": "{{logo_header}} {{Municipal_Corporation}}",
+                    "text": "{{logo_header}} {{ulbGrade}}",
                     "style": "receipt-logo-header"
                   },
                   {
@@ -717,7 +717,7 @@
             ],
             [
               {
-                "text": "1. Online payment can be done for {{serviceType}} charges payment.  http://bit.ly/{{Municipal_Corporation}}{{serviceType}}",
+                "text": "1. Online payment can be done for {{serviceType}} charges payment.  http://bit.ly/{{logo_header}}{{serviceType}}",
                 "border": [
                   true,
                   false,
