@@ -717,7 +717,7 @@
             ],
             [
               {
-                "text": "1. Online payment can be done for water charges payment.",
+                "text": "1. Online payment can be done for {{serviceType}} charges payment.  http://bit.ly/{{Municipal_Corporation}}{{serviceType}}",
                 "border": [
                   true,
                   false,
@@ -785,7 +785,7 @@
             ],
             [
               {
-                "text": "5. Late payment charges will be applied after due date",
+                "text": "5. {{rate}}% Late payment charges will be applied after due date",
                 "border": [
                   true,
                   false,

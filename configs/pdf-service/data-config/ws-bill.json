@@ -461,6 +461,11 @@
                 "value": {
                   "path": "$.additionalDetails.oldConnectionNo"
                 }
+              }, {
+                "variable": "rate",
+                "value": {
+                  "path": "$.additionalDetails.penaltyRate"
+                }
               },
               {
                 "variable": "ledgerId",
