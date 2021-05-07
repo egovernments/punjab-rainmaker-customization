@@ -1040,7 +1040,7 @@ router.post('/protected/punjab-pt/pre-hook/pg-service/transaction/v1/_create', a
 
         request['Transaction']['callbackUrl'] = url.format(url_callback);
     }
-      else if (request['Transaction']['tenantId'] == 'pb.amritsar' || request['Transaction']['tenantId'] == 'pb.mohali') {
+      else if (request['Transaction']['tenantId'] == 'pb.amritsar' || request['Transaction']['tenantId'] == 'pb.mohali' || request['Transaction']['tenantId'] == 'pb.hoshiarpur' || request['Transaction']['tenantId'] == 'pb.kapurthala' || request['Transaction']['tenantId'] == 'pb.khanna' || request['Transaction']['tenantId'] == 'pb.moga') {
       let original_callback = request['Transaction']['callbackUrl'];
       request['Transaction']['gateway'] = 'RAZORPAY'
       url_callback = url.parse(original_callback)
