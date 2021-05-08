@@ -173,7 +173,7 @@ public class Sqls {
 			+ "  address.id=conn.address and status.id=appdetails.status and conn.shsc_number is not null "
 			+" :locCondition "
 			+ " and isactive=true and conndetails.id not in (select erpid::bigint from egswtax_migration where status"
-			+ " in ( :status ) and conn.status in ('ACTIVE', 'INACTIVE')  )  order by conndetails.id;";
+			+ " in ( :status ) ) and conn.status in ('ACTIVE', 'INACTIVE')  order by conndetails.id;";
 	
 //	and (conn.status='ACTIVE' or (conn.status='INACTIVE' and appdetails.closeconnectionreason is not null))
 
