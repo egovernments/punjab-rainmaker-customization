@@ -418,10 +418,10 @@ public class ConnectionService {
 
 	}
 
-	public void createSewerageConnection(String tenantId, RequestInfo requestInfo, List<String> boundaryList) {
+	public void createSewerageConnection(String erpSchema, RequestInfo requestInfo, List<String> boundaryList) {
 		long startTime = System.currentTimeMillis();
 
-		recordService.initiateSewrage(tenantId);
+		recordService.initiateSewrage(erpSchema);
 		SewerageConnection swConnection = null;
 		Address address = null;
 		Locality locality = null;
@@ -469,21 +469,21 @@ public class ConnectionService {
 				sewerageRequest.setSewerageConnection(swConnection);
 				sewerageRequest.setRequestInfo(requestInfo);
 				
-				List<String> listStatuses = recordService.recordSewerageMigration(swConnection, tenantId);
+				List<String> listStatuses = recordService.recordSewerageMigration(swConnection, erpSchema);
 				if (listStatuses != null && !listStatuses.isEmpty() && listStatuses.contains("Saved")) {
 					try {
 					OwnerInfo ownerInfo = commonService.searchConnection(requestInfo, connectionNo,  swConnection.getTenantId(), "sewerage");
 					if( ownerInfo != null) {
-					createSewerageDemand(data, swConnection.getId(), connectionNo, requestInfo, ownerInfo, tenantId);
+					createSewerageDemand(data, swConnection.getId(), connectionNo, requestInfo, ownerInfo, erpSchema);
 					connectionDuration = System.currentTimeMillis() - connStartTime;
 					log.debug("Migration completed for connection no : " + swConnection.getConnectionNo() + "in "
 							+ connectionDuration / 1000 + "Secs");
 					}else {
-						recordService.recordError("sewerage", tenantId, "Connection or Property not found to generate the demand" + locCode,
+						recordService.recordError("sewerage", erpSchema, "Connection or Property not found to generate the demand" + locCode,
 								swConnection.getId());
 					}
 					}catch (Exception e) {
-						recordService.recordError("sewerage", tenantId, "Exception occured while generating the demand"+e.toString() ,
+						recordService.recordError("sewerage", erpSchema, "Exception occured while generating the demand"+e.toString() ,
 								swConnection.getId());
 					}
 					continue;
@@ -495,8 +495,8 @@ public class ConnectionService {
 				locCode = (String) data.get("locality");
 				cityCode = (String) data.get("citycode");
 				if (swConnection.getMobilenumber() == null || swConnection.getMobilenumber().isEmpty()) {
-					Long mobileNumber = getMobileNumber(cityCode, locCode, tenantId);
-					recordService.setMob("sewerage", tenantId, mobileNumber, swConnection.getId());
+					Long mobileNumber = getMobileNumber(cityCode, locCode, erpSchema);
+					recordService.setMob("sewerage", erpSchema, mobileNumber, swConnection.getId());
 					swConnection.setMobilenumber(String.valueOf(mobileNumber));
 
 					 
@@ -506,7 +506,7 @@ public class ConnectionService {
 
 				Integer id = (Integer) data.get("applicantaddress.id");
 
-				addressQuery = addressQuery.replace(":schema_tenantId", tenantId);
+				addressQuery = addressQuery.replace(":schema_tenantId", erpSchema);
 				addressQuery = addressQuery.replace(":id", id.toString());
 
 				address = (Address) jdbcTemplate.queryForObject(addressQuery, new BeanPropertyRowMapper(Address.class));
@@ -515,9 +515,9 @@ public class ConnectionService {
 				// locality.setCode((String)data.get("locality"));
 				// use the map here
 				locCode = (String) data.get("locality");
-				localityCode = findLocality(locCode, tenantId);
+				localityCode = findLocality(locCode, erpSchema);
 				if (localityCode == null) {
-					recordService.recordError("sewerage", tenantId, "No Mapping for Locality: " + locCode,
+					recordService.recordError("sewerage", erpSchema, "No Mapping for Locality: " + locCode,
 							swConnection.getId());
 					continue;
 				}
@@ -526,9 +526,9 @@ public class ConnectionService {
 				address.setLocality(locality);
 				address.setCity((String) data.get("cityname"));
 				swConnection.setApplicantAddress(address);
-				Property property = propertyService.findProperty(sewerageRequest, data, tenantId, localityCode);
+				Property property = propertyService.findProperty(sewerageRequest, data, erpSchema, localityCode);
 				if (property == null) {
-					recordService.recordError("sewerage", tenantId,
+					recordService.recordError("sewerage", erpSchema,
 							"Property not found or cannot be created  for the record  ", swConnection.getId());
 					continue;
 				}
@@ -645,11 +645,11 @@ public class ConnectionService {
 				String response = null;
 				try {
 					response = restTemplate.postForObject(host + "/" + sewerageUrl, sewerageRequest, String.class);
-					recordService.setStatus("sewerage", tenantId, "Saved", swConnection.getId());
+					recordService.setStatus("sewerage", erpSchema, "Saved", swConnection.getId());
 
 				} catch (RestClientException e) {
 					log.error(e.getMessage(), e);
-					recordService.recordError("sewerage", tenantId,
+					recordService.recordError("sewerage", erpSchema,
 							"Error in creating sewerage connection record :" + e.getMessage(), swConnection.getId());
 					continue;
 				}
@@ -668,13 +668,13 @@ public class ConnectionService {
 
 					srgConnResp = sewerageResponse.getSewerageConnections().get(0);
 
-					recordService.updateSewerageMigration(srgConnResp, swConnection.getId(), tenantId,
+					recordService.updateSewerageMigration(srgConnResp, swConnection.getId(), erpSchema,
 							requestInfo.getUserInfo().getUuid());
 
 					String consumerCode = srgConnResp.getConnectionNo() != null ? srgConnResp.getConnectionNo()
 							: srgConnResp.getApplicationNo();
 					
-					createSewerageDemand(data, swConnection.getId(), connectionNo, requestInfo, property.getOwners().get(0), tenantId);
+					createSewerageDemand(data, swConnection.getId(), connectionNo, requestInfo, property.getOwners().get(0), erpSchema);
 
 						connectionDuration = System.currentTimeMillis() - connStartTime;
 						log.debug("Sewerage Migration completed for connection no : " + swConnection.getConnectionNo() + "in "
@@ -684,13 +684,13 @@ public class ConnectionService {
 				}
 			} catch (Exception e) {
 				log.error(e.getMessage(), e);
-				recordService.recordError("sewerage", tenantId, e.getMessage(), swConnection.getId());
+				recordService.recordError("sewerage", erpSchema, e.getMessage(), swConnection.getId());
 				return;
 			}
 
 		}
 		long duration = System.currentTimeMillis() - startTime;
-		log.info("Sewerage Migration completed for " + connectionCount + " connections in "+tenantId+ " in " + duration / 1000 + " Secs");
+		log.info("Sewerage Migration completed for " + connectionCount + " connections in "+erpSchema+ " in " + duration / 1000 + " Secs");
 
 	}
 	

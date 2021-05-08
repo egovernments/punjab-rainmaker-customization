@@ -191,6 +191,7 @@ public class PropertyService {
 			workflow.setBusinessId(property2.getPropertyId());
 			property2.setWorkflow(workflow);
 			prequest.setProperty(property2);
+			log.info("PT Update API: "+ host + "/" + ptupdatehurl);
 			PropertyResponse res2 = restTemplate.postForObject(host + "/" + ptupdatehurl, prequest, PropertyResponse.class);
 			log.info("newly created pt" + res2.getProperties().get(0).getPropertyId() + " id    "
 					+ res2.getProperties().get(0).getStatus());
