@@ -227,7 +227,7 @@ public class ConnectionService {
 				if(Status.ACTIVE.compareTo(property.getStatus())!=0 )
 				{ 	
 					Thread.sleep(2000); 
-					Property approvedProperty = propertyService.updateProperty(property, tenantId, requestInfo);
+					Property approvedProperty = propertyService.updateProperty(property, connection.getTenantId(), requestInfo);
 					Thread.sleep(1000); 
 				}
 
@@ -593,7 +593,7 @@ public class ConnectionService {
 				if(Status.ACTIVE.compareTo(property.getStatus())!=0 )
 				{ 
 					Thread.sleep(2000);  
-					Property approvedProperty = propertyService.updateProperty(property, tenantId, requestInfo);
+					Property approvedProperty = propertyService.updateProperty(property, swConnection.getTenantId(), requestInfo);
 					Thread.sleep(1000); 
 				}
 				
