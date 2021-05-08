@@ -257,7 +257,8 @@ public class ConnectionService {
 				addtionals.put("estimationFileStoreId", (String) data.get("estimationFileStoreId"));
 				addtionals.put("meterMake", (String) data.get("meterMake"));
 				addtionals.put("securityFee", data.get("securityFee"));
-				addtionals.put("applicationNo", data.get("applicationNo"));
+				addtionals.put("applicationNo", data.getOrDefault("applicationNo", null));
+				addtionals.put("isexempted", data.getOrDefault("isexempted", false));
 				
 				if(data.get("connectionreason") == null ) {
 					addtionals.put("isMigrated", Boolean.FALSE);
@@ -548,7 +549,8 @@ public class ConnectionService {
 				// addtionals.put("pipeSize",(Double) data.get("pipeSize"));
 				addtionals.put("estimationFileStoreId", (String) data.get("estimationFileStoreId"));
 				addtionals.put("securityFee", data.get("securityFee"));
-				addtionals.put("applicationNo", data.get("applicationNo"));
+				addtionals.put("applicationNo", data.getOrDefault("applicationNo", null));
+				addtionals.put("isexempted", data.getOrDefault("isexempted", false));
 				
 				if(data.get("connectionreason") == null ) {
 					addtionals.put("isMigrated", Boolean.FALSE);
