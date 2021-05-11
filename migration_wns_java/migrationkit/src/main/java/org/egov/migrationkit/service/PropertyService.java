@@ -136,8 +136,18 @@ public class PropertyService {
 
 		property.creationReason(CreationReason.CREATE);
 		 
-		if (conn.getPropertyType() != null) {
-			property.setUsageCategory(conn.getPropertyType().toUpperCase().replace(" ", ""));
+		if (data.getOrDefault("usage", null) != null) {
+			String usageCategory = (String) data.get("usageType");
+			if (usageCategory == "DOMESTIC")
+				usageCategory="RESIDENTIAL";
+			else if (usageCategory == "COMMERCIAL")
+				usageCategory="NONRESIDENTIAL.COMMERCIAL";
+			else if (usageCategory == "INDUSTRIAL")
+				usageCategory="NONRESIDENTIAL.INDUSTRIAL";
+			else
+				usageCategory="NONRESIDENTIAL.OTHERS";
+
+			property.setUsageCategory(usageCategory);
 		} else {
 			property.setUsageCategory("RESIDENTIAL");
 		}
@@ -250,7 +260,23 @@ public class PropertyService {
 		owner.setFatherOrHusbandName(conn.getGuardianname() != null ? conn.getGuardianname().replace('?', ' ').replace('`', ' ') : null);
 		owner.setOwnerType("NONE");
 		property.creationReason(CreationReason.CREATE);
-		property.setUsageCategory("RESIDENTIAL");
+		
+		if (json.getOrDefault("usage", null) != null) {
+			String usageCategory = (String) json.get("usageType");
+			if (usageCategory == "DOMESTIC")
+				usageCategory="RESIDENTIAL";
+			else if (usageCategory == "COMMERCIAL")
+				usageCategory="NONRESIDENTIAL.COMMERCIAL";
+			else if (usageCategory == "INDUSTRIAL")
+				usageCategory="NONRESIDENTIAL.INDUSTRIAL";
+			else
+				usageCategory="NONRESIDENTIAL.OTHERS";
+
+			property.setUsageCategory(usageCategory);
+		} else {
+			property.setUsageCategory("RESIDENTIAL");
+		}
+		
 		owner.setGender((String)json.get("gender"));
 		owner.setEmailId((String)json.getOrDefault("emailId", null));
 		owner.setRelationship(Relationship.valueOf((String)json.getOrDefault("guardianrelation", "OTHER")));
