@@ -68,13 +68,13 @@ SearchDefinitions:
    searchParams:
     condition: AND
     params:
+    - name: tenantid
+      isMandatory: false
+      jsonPath: $.searchCriteria.tenantId
+      operator: LIKE
     - name: servicerequestid
       isMandatory: false
       jsonPath: $.searchCriteria.serviceRequestId
-    - name: servicerequestid
-      isMandatory: false
-      jsonPath: $.searchCriteria.complaintId
-      operator: LIKE
     - name: accountid
       isMandatory: true
       jsonPath: $.searchCriteria.accountId
