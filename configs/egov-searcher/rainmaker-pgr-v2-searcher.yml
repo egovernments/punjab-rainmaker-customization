@@ -78,6 +78,7 @@ SearchDefinitions:
     - name: accountid
       isMandatory: true
       jsonPath: $.searchCriteria.accountId
+      operator: =
     - name: status
       isMandatory: false
       jsonPath: $.searchCriteria.status
