@@ -68,6 +68,10 @@ SearchDefinitions:
    searchParams:
     condition: AND
     params:
+    - name: accountid
+      isMandatory: true
+      jsonPath: $.searchCriteria.accountId
+      operator: =
     - name: tenantid
       isMandatory: false
       jsonPath: $.searchCriteria.tenantId
@@ -75,10 +79,6 @@ SearchDefinitions:
     - name: servicerequestid
       isMandatory: false
       jsonPath: $.searchCriteria.serviceRequestId
-    - name: accountid
-      isMandatory: true
-      jsonPath: $.searchCriteria.accountId
-      operator: =
     - name: status
       isMandatory: false
       jsonPath: $.searchCriteria.status
