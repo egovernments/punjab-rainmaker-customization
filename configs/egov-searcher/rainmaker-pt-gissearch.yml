@@ -53,7 +53,7 @@ SearchDefinitions:
    query:
     baseQuery: |
       select array_to_json(array_agg(row_to_json(data))) from (
-        SELECT * FROM eg_firenoc_billingslab 
+        SELECT * FROM eg_firenoc_state_billingslab 
         $where) data
     groupBy:
     orderBy:
