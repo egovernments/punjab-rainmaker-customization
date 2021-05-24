@@ -48,3 +48,33 @@ SearchDefinitions:
     jsonFormat: {"ResponseInfo": {}}
     outJsonPath: $.data
     responseInfoPath: $.ResponseInfo
+    
+ - name: firenoc_billing_slab_search
+   query:
+    baseQuery: |
+      select array_to_json(array_agg(row_to_json(data))) from (
+        SELECT * FROM eg_firenoc_billingslab 
+        $where) data
+    groupBy:
+    orderBy:
+   searchParams:
+    condition: AND
+    params:
+    - name: heightfromuom
+      isMandatory: true
+      jsonPath: $.searchCriteria.height
+      operator: LE
+    - name: heighttouom
+      isMandatory: true
+      jsonPath: $.searchCriteria.height
+      operator: GE
+    - name: buildingusagetype
+      isMandatory: true
+      jsonPath: $.searchCriteria.usagetype
+      operator: =
+
+   output:
+    jsonFormat: {"ResponseInfo": {}}
+    outJsonPath: $.data
+    responseInfoPath: $.ResponseInfo
+
