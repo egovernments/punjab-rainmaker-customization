@@ -245,7 +245,7 @@ ServiceMaps:
     indexes:
       - name: water-services
         type: general
-        id: $.id,$.tenantId
+        id: $.id
         jsonPath: $.WaterConnection
         timeStampField: $.auditDetails.createdTime
         customJsonMapping:
