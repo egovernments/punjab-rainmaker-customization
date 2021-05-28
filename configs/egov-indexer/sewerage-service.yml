@@ -221,7 +221,7 @@ ServiceMaps:
     indexes:
       - name: sewerage-services
         type: general
-        id: $.id,$.tenantId
+        id: $.id
         timeStampField: $.auditDetails.lastModifiedTime
         jsonPath: $.SewerageConnection
         customJsonMapping:
