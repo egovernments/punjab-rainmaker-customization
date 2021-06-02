@@ -19,7 +19,8 @@ package io.swagger.client.model;
 public enum CreationReason {
   NEWPROPERTY("NEWPROPERTY"),
   SUBDIVISION("SUBDIVISION"),
-  CREATE("CREATE");
+  CREATE("CREATE"),
+  UPDATE("UPDATE");
 
   private String value;
 
