@@ -163,11 +163,13 @@ public class RecordService {
 		checkQuery = checkQuery.replace(":erpconn", "'" + conn.getConsumerCode() + "'");
 		checkQuery = checkQuery.replace(":schema", tenantId);
 		checkQuery = checkQuery.replace(":erpreceiptnumber", "'" + conn.getPaymentDetails().get(0).getReceiptNumber() + "'");
-		checkQuery = checkQuery.replace(":status", "'Saved'");
-		int size = jdbcTemplate.queryForObject(checkQuery, Integer.class);
+//		checkQuery = checkQuery.replace(":status", "'Saved'");
+		List<String> status = jdbcTemplate.queryForList(checkQuery, String.class);
 
-		if(size >= 1)
+		if(status != null && !status.isEmpty() && status.contains("Saved")) {
 			return Boolean.TRUE;
+			
+		} else {
 
 		String qry = Sqls.WATER_COLLECTION_MIGRATION_INSERT;
 		qry = qry.replace(":schema", tenantId);
@@ -191,11 +193,13 @@ public class RecordService {
 		checkQuery = checkQuery.replace(":erpconn", "'" + conn.getConsumerCode() + "'");
 		checkQuery = checkQuery.replace(":schema", tenantId);
 		checkQuery = checkQuery.replace(":erpreceiptnumber", "'" + conn.getPaymentDetails().get(0).getReceiptNumber() + "'");
-		checkQuery = checkQuery.replace(":status", "'Saved'");
-		int size = jdbcTemplate.queryForObject(checkQuery, Integer.class);
+//		checkQuery = checkQuery.replace(":status", "'Saved'");
+		List<String> status = jdbcTemplate.queryForList(checkQuery, String.class);
 
-		if(size >= 1)
+		if(status != null && !status.isEmpty() && status.contains("Saved")) {
 			return Boolean.TRUE;
+			
+		} else {
 
 		String qry = Sqls.SEWERAGE_COLLECTION_MIGRATION_INSERT;
 		qry = qry.replace(":schema", tenantId);
