@@ -532,6 +532,68 @@
                }
               },
               {
+                "variable": "var_bills",                        
+                "value":{
+                  "path":"$.paymentDetails[0].additionalDetails.arrearArray.*"
+                },
+                 "type":"array",
+                 "format":{                            
+                    "type":"string",
+                    "scema":[
+                       {
+                          "variable":"year",
+                          "value":  "year"
+                        
+                        },{
+                          "variable":"tax",
+                          "value":  "tax"
+                        
+                        },{
+                          "variable":"firecess",
+                          "value":  "firecess"
+                        
+                        },{
+                          "variable":"cancercess",
+                          "value":  "cancercess"
+                        
+                        },{
+                          "variable":"penalty",
+                          "value":  "penalty"
+                        
+                        },{
+                          "variable":"interest",
+                          "value":  "interest"
+                        
+                        },{
+                          "variable":"usage_exemption",
+                          "value":  "usage_exemption"
+                        
+                        },{
+                          "variable":"special_category_exemption",
+                          "value":  "special_category_exemption"
+                        
+                        },{
+                          "variable":"adhoc_penalty",
+                          "value":  "adhoc_penalty"
+                        
+                        },{
+                          "variable":"adhoc_rebate",
+                          "value":  "adhoc_rebate"
+                        
+                        },{
+                          "variable":"roundoff",
+                          "value":  "roundoff"
+                        
+                        },{
+                          "variable":"total",
+                          "value":  "total"
+                        
+                        }
+                       ]
+                } 
+             },
+
+              {
                 "variable": "Municipal_Corporation",
                 "value": {
                   "path": "PDF_STATIC_LABEL_MDMS_MUNICIPAL_CORPORATION"
