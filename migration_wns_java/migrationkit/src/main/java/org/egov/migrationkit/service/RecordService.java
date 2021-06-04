@@ -169,7 +169,7 @@ public class RecordService {
 		if(status != null && !status.isEmpty() && status.contains("Saved")) {
 			return Boolean.TRUE;
 			
-		} else {
+		} else if (status == null || status.isEmpty()) {
 
 		String qry = Sqls.WATER_COLLECTION_MIGRATION_INSERT;
 		qry = qry.replace(":schema", tenantId);
@@ -186,6 +186,7 @@ public class RecordService {
 		return Boolean.FALSE;
 		}
 
+		return Boolean.FALSE;
 	}
 
 	@Transactional
@@ -200,7 +201,7 @@ public class RecordService {
 		if(status != null && !status.isEmpty() && status.contains("Saved")) {
 			return Boolean.TRUE;
 			
-		} else {
+		} else if (status == null || status.isEmpty()) {
 
 		String qry = Sqls.SEWERAGE_COLLECTION_MIGRATION_INSERT;
 		qry = qry.replace(":schema", tenantId);
@@ -216,7 +217,7 @@ public class RecordService {
 		
 		return Boolean.FALSE;
 		}
-
+		return Boolean.FALSE;
 	}
 
 	@Transactional
