@@ -241,10 +241,11 @@ ServiceMaps:
               outJsonPath: $.Data.history
               
   - topic: ws-services-legacyindex
-    configKey: INDEX
+    configKey: LEGACYINDEX
     indexes:
       - name: water-services
         type: general
+        isBulk: true
         id: $.id,$.tenantId
         jsonPath: $.WaterConnection
         timeStampField: $.auditDetails.createdTime
