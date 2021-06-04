@@ -241,12 +241,13 @@ ServiceMaps:
               outJsonPath: $.Data.history
               
   - topic: ws-services-legacyindex
-    configKey: INDEX
+    configKey: LEGACYINDEX
     indexes:
       - name: water-services
         type: general
         id: $.id,$.tenantId
         jsonPath: $.WaterConnection
+        isBulk: true
         timeStampField: $.auditDetails.createdTime
         customJsonMapping:
           indexMapping: {"Data":{"workflow": {"state": {}, "action": "", "assignes": []},"applicationNo":"","applicationStatus":"","status":"","connectionNo":"","oldConnectionNo":"","plumberInfo":[],"roadCuttingInfo":[],"connectionHolders":[],"roadType":"","roadCuttingArea":"","connectionExecutionDate":"","connectionCategory":"","connectionType":"","additionalDetails":{},"id":"","propertyId":"","rainWaterHarvesting":"","waterSource":"","tenantId":"","meterId":"","meterInstallationDate":"","proposedPipeSize":"","proposedTaps":"","pipeSize":"","noOfTaps":"","applicationType":"","dateEffectiveFrom":"","history":{}}}
