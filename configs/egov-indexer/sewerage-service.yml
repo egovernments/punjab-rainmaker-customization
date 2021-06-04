@@ -217,13 +217,14 @@ ServiceMaps:
               outJsonPath: $.Data.history 
               
   - topic: sw-services-legacyindex
-    configKey: INDEX
+    configKey: LEGACYINDEX
     indexes:
       - name: sewerage-services
         type: general
-        id: $.id
+        id: $.id,$.tenantId
         timeStampField: $.auditDetails.lastModifiedTime
         jsonPath: $.SewerageConnection
+        isBulk: true
         customJsonMapping:
           indexMapping: {"Data":{"workflow": {"state": {}, "action": "", "assignes": []},"applicationNo":"","applicationStatus":"","status":"","connectionNo":"","oldConnectionNo":"","plumberInfo":[],"roadCuttingInfo":[],"connectionHolders":[],"roadType":"","roadCuttingArea":"","connectionExecutionDate":"","connectionCategory":"","connectionType":"","additionalDetails":{},"id":"","propertyId":"","tenantId":"","proposedWaterClosets":"","proposedToilets":"","noOfWaterClosets":"","noOfToilets":"","applicationType":"","dateEffectiveFrom":"","history":{}}}
           fieldMapping:
