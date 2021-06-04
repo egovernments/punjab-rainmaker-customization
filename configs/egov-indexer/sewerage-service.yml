@@ -223,7 +223,7 @@ ServiceMaps:
         type: general
         isBulk: true
         id: $.id,$.tenantId
-        timeStampField: $.auditDetails.lastModifiedTime
+        timeStampField: $.auditDetails.createdTime
         jsonPath: $.SewerageConnection
         customJsonMapping:
           indexMapping: {"Data":{"workflow": {"state": {}, "action": "", "assignes": []},"applicationNo":"","applicationStatus":"","status":"","connectionNo":"","oldConnectionNo":"","plumberInfo":[],"roadCuttingInfo":[],"connectionHolders":[],"roadType":"","roadCuttingArea":"","connectionExecutionDate":"","connectionCategory":"","connectionType":"","additionalDetails":{},"id":"","propertyId":"","tenantId":"","proposedWaterClosets":"","proposedToilets":"","noOfWaterClosets":"","noOfToilets":"","applicationType":"","dateEffectiveFrom":"","history":{}}}
