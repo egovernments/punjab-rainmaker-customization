@@ -217,10 +217,11 @@ ServiceMaps:
               outJsonPath: $.Data.history      
               
   - topic: sw-services-legacyindex
-    configKey: INDEX
+    configKey: LEGACYINDEX
     indexes:
       - name: sewerage-services
         type: general
+        isBulk: true
         id: $.id,$.tenantId
         timeStampField: $.auditDetails.lastModifiedTime
         jsonPath: $.SewerageConnection
