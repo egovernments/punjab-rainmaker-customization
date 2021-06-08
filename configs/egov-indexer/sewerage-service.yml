@@ -9,7 +9,7 @@ ServiceMaps:
         type: general
         id: $.id,$.tenantId
         timeStampField: $.auditDetails.createdTime
-        jsonPath: $.SewerageConnection
+        jsonPath: $.SewerageConnections
         customJsonMapping:
           indexMapping: {"Data":{"workflow": {"state": {}, "action": "", "assignes": []},"applicationNo":"","applicationStatus":"","status":"","connectionNo":"","oldConnectionNo":"","plumberInfo":[],"roadCuttingInfo":[],"connectionHolders":[],"roadType":"","roadCuttingArea":"","connectionExecutionDate":"","connectionCategory":"","connectionType":"","additionalDetails":{},"id":"","propertyId":"","tenantId":"","proposedWaterClosets":"","proposedToilets":"","noOfWaterClosets":"","noOfToilets":"","applicationType":"","dateEffectiveFrom":"","history":{}}}
           fieldMapping:
@@ -80,7 +80,7 @@ ServiceMaps:
         type: general
         id: $.id,$.tenantId
         timeStampField: $.auditDetails.lastModifiedTime
-        jsonPath: $.SewerageConnection
+        jsonPath: $.SewerageConnections
         customJsonMapping:
           indexMapping: {"Data":{"workflow": {"state": {}, "action": "", "assignes": []},"applicationNo":"","applicationStatus":"","status":"","connectionNo":"","oldConnectionNo":"","plumberInfo":[],"roadCuttingInfo":[],"connectionHolders":[],"roadType":"","roadCuttingArea":"","connectionExecutionDate":"","connectionCategory":"","connectionType":"","additionalDetails":{},"id":"","propertyId":"","tenantId":"","proposedWaterClosets":"","proposedToilets":"","noOfWaterClosets":"","noOfToilets":"","applicationType":"","dateEffectiveFrom":"","history":{}}}
           fieldMapping:
@@ -152,7 +152,7 @@ ServiceMaps:
         type: general
         id: $.id,$.tenantId
         timeStampField: $.auditDetails.lastModifiedTime
-        jsonPath: $.SewerageConnection
+        jsonPath: $.SewerageConnections
         customJsonMapping:
           indexMapping: {"Data":{"workflow": {"state": {}, "action": "", "assignes": []},"applicationNo":"","applicationStatus":"","status":"","connectionNo":"","oldConnectionNo":"","plumberInfo":[],"roadCuttingInfo":[],"connectionHolders":[],"roadType":"","roadCuttingArea":"","connectionExecutionDate":"","connectionCategory":"","connectionType":"","additionalDetails":{},"id":"","propertyId":"","tenantId":"","proposedWaterClosets":"","proposedToilets":"","noOfWaterClosets":"","noOfToilets":"","applicationType":"","dateEffectiveFrom":"","history":{}}}
           fieldMapping:
@@ -224,7 +224,7 @@ ServiceMaps:
         isBulk: true
         id: $.id,$.tenantId
         timeStampField: $.auditDetails.createdTime
-        jsonPath: $.SewerageConnection
+        jsonPath: $.SewerageConnections
         customJsonMapping:
           indexMapping: {"Data":{"workflow": {"state": {}, "action": "", "assignes": []},"applicationNo":"","applicationStatus":"","status":"","connectionNo":"","oldConnectionNo":"","plumberInfo":[],"roadCuttingInfo":[],"connectionHolders":[],"roadType":"","roadCuttingArea":"","connectionExecutionDate":"","connectionCategory":"","connectionType":"","additionalDetails":{},"id":"","propertyId":"","tenantId":"","proposedWaterClosets":"","proposedToilets":"","noOfWaterClosets":"","noOfToilets":"","applicationType":"","dateEffectiveFrom":"","history":{}}}
           fieldMapping:
