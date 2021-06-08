@@ -222,9 +222,9 @@ ServiceMaps:
       - name: sewerage-services
         type: general
         id: $.id,$.tenantId
-        timeStampField: $.auditDetails.lastModifiedTime
         jsonPath: $.SewerageConnection
         isBulk: true
+        timeStampField: $.auditDetails.createdTime       
         customJsonMapping:
           indexMapping: {"Data":{"workflow": {"state": {}, "action": "", "assignes": []},"applicationNo":"","applicationStatus":"","status":"","connectionNo":"","oldConnectionNo":"","plumberInfo":[],"roadCuttingInfo":[],"connectionHolders":[],"roadType":"","roadCuttingArea":"","connectionExecutionDate":"","connectionCategory":"","connectionType":"","additionalDetails":{},"id":"","propertyId":"","tenantId":"","proposedWaterClosets":"","proposedToilets":"","noOfWaterClosets":"","noOfToilets":"","applicationType":"","dateEffectiveFrom":"","history":{}}}
           fieldMapping:
