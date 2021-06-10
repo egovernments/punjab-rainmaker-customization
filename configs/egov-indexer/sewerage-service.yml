@@ -222,7 +222,7 @@ ServiceMaps:
       - name: sewerage-services
         type: general
         id: $.id,$.tenantId
-        jsonPath: $.SewerageConnection
+        jsonPath: $.SewerageConnections
         isBulk: true
         timeStampField: $.auditDetails.createdTime       
         customJsonMapping:
