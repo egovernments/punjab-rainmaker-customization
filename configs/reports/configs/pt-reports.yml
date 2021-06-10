@@ -5543,6 +5543,40 @@ ReportDefinitions:
     type: string
     source: pt
     total: false
+  searchParams:
+  - name: fromDate
+    label: reports.pt.fromDate
+    type: epoch
+    source: pt
+    isMandatory: true
+    searchClause: AND payd.receiptdate >= $fromDate
+  - name: toDate
+    label: reports.pt.toDate
+    type: epoch
+    source: pt
+    isMandatory: true
+    searchClause: AND payd.receiptdate <= $toDate
+  - name: financialyear
+    label: Financial Year
+    type: singlevaluelist
+    pattern: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?tenantId=$tenantid&moduleName=egf-master&masterName=FinancialYear|$.MdmsRes.egf-master.FinancialYear.[?(@.module=='PT')].code|$.MdmsRes.egf-master.FinancialYear.[?(@.module=='PT')].name
+    source: pt
+    wrapper: true
+    isMandatory: false
+    searchClause: AND concat(to_char((To_timestamp(billd.fromperiod/1000) at time Zone 'Asia/Kolkata'),'YYYY'),'-', to_char((To_timestamp(billd.toperiod/1000) at time Zone 'Asia/Kolkata'),'YY')) = $financialyear
+  - name: paymentMode
+    label: Payment Mode
+    type: singlevaluelist
+    pattern: 'list://CARD:Card,CASH:Cash,CHEQUE:Cheque,DD:DD,OFFLINE_NEFT:NEFT,OFFLINE_RTGS:RTGS,ONLINE:Online,POSTAL_ORDER:PostalOrder'
+    source: pt
+    isMandatory: false
+    searchClause: AND payment.paymentmode = $paymentMode
+  - name: localityArray
+    label: reports.pt.zoneList
+    type: boundarylist
+    source: pt
+    isMandatory: false
+    searchClause: AND pta.locality IN ($localityArray)
   query: |
     select pt.propertyid as propertyid, u.name as propertyowner, u.guardian as guardianname, u.mobilenumber as mobilenumber, u.uuid as useruuid from eg_pt_property pt, eg_pt_owner po, eg_user u where pt.id=po.propertyid and po.userid=u.uuid and pt.tenantid=$tenantid order by pt.propertyid
   orderby: ORDER BY totalamountpaid DESC NULLS LAST
