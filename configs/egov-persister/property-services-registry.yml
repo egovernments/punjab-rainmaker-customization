@@ -278,7 +278,7 @@ serviceMaps:
 
       - jsonPath: $.Property.units.*.active
       
-       - jsonPath: $.Property.units.*.additionalDetails
+      - jsonPath: $.Property.units.*.additionalDetails
         type: JSON
         dbType: JSONB
 
@@ -543,7 +543,7 @@ serviceMaps:
 
       - jsonPath: $.Property.units.*.active
       
-       - jsonPath: $.Property.units.*.additionalDetails
+      - jsonPath: $.Property.units.*.additionalDetails
         type: JSON
         dbType: JSONB
 
