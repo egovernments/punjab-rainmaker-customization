@@ -277,6 +277,10 @@ serviceMaps:
         dbType: JSONB
 
       - jsonPath: $.Property.units.*.active
+      
+       - jsonPath: $.Property.units.*.additionalDetails
+        type: JSON
+        dbType: JSONB
 
       - jsonPath: $.Property.auditDetails.createdBy
 
@@ -286,9 +290,7 @@ serviceMaps:
 
       - jsonPath: $.Property.auditDetails.lastModifiedTime
 
-      - jsonPath: $.Property.units.*.additionalDetails
-        type: JSON
-        dbType: JSONB
+     
 
   - version: 1.0
     description: Update property EG_PT_PROPERTY ltable
@@ -540,6 +542,10 @@ serviceMaps:
         dbType: JSONB
 
       - jsonPath: $.Property.units.*.active
+      
+       - jsonPath: $.Property.units.*.additionalDetails
+        type: JSON
+        dbType: JSONB
 
       - jsonPath: $.Property.auditDetails.createdBy
 
@@ -549,9 +555,7 @@ serviceMaps:
 
       - jsonPath: $.Property.auditDetails.lastModifiedTime
 
-      - jsonPath: $.Property.units.*.additionalDetails
-        type: JSON
-        dbType: JSONB
+     
 
   - version: 1.0
     description: Update documents in  EG_PT_PROPERTY ltable
