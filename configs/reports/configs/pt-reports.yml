@@ -5697,6 +5697,6 @@ ReportDefinitions:
   	  source: pt
    	  isMandatory: true
    	  searchClause: AND pt.createdtime <= $toDate 
- 	query: |
+    query: |
   	  select pt.propertyid as propertyid, u.name as ownername, u.guardian as guardianname, u.mobilenumber as mobileno, u.uuid as useruuid from eg_pt_property pt, eg_pt_owner po, eg_user u where pt.id=po.propertyid and po.userid=u.uuid and pt.tenantid=$tenantid
- 	orderby: ORDER BY pt.propertyid DESC NULLS LAST
+    orderby: ORDER BY pt.propertyid DESC NULLS LAST
