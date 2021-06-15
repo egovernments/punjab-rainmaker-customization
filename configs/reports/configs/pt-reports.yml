@@ -5653,50 +5653,50 @@ ReportDefinitions:
         WHERE propety.tenantid=$tenantid AND propety.acknowldgementnumber NOTNULL AND propety.status='ACTIVE'
   orderby: ORDER BY propety.createdtime DESC
   
-  - reportName: ULBPTData
-    decryptionPathId: ULBPTDataDumpReport_V2
-    summary: ULB-wise PT Data
-    version: 1.0.0
-    moduleName: rainmaker-pt
-    sourceColumns:
-  	- name: propertyid
-    	  label: reports.pt.propertyId
-   	  type: string
-   	  source: pt
-  	  total: false
-  	- name: ownername
-    	  label: reports.pt.ownername
-  	  type: string
-  	  source: pt
-  	  total: false
-  	- name: guardianname
-  	  label: reports.pt.guardianname
- 	  type: string
-    	  source: pt
-  	  total: false
-  	- name: mobileno
-    	  label: reports.pt.mobileno
-          type: string
-   	  source: pt
-    	  total: false  
- 	- name: useruuid
-  	  label: reports.pt.useruuid
-  	  type: string
-  	  source: pt
-  	  total: false
-    searchParams:
-  	- name: fromDate
-  	  label: reports.pt.fromDate
-  	  type: epoch
-   	  source: pt
-   	  isMandatory: true
-  	  searchClause: AND pt.createdtime >= $fromDate
-  	- name: toDate
-   	  label: reports.pt.toDate
-   	  type: epoch
-  	  source: pt
-   	  isMandatory: true
-   	  searchClause: AND pt.createdtime <= $toDate 
+- reportName: ULBPTData
+  decryptionPathId: ULBPTDataDumpReport_V2
+  summary: ULB-wise PT Data
+  version: 1.0.0
+  moduleName: rainmaker-pt
+  sourceColumns:
+  - name: propertyid
+    label: reports.pt.propertyId
+    type: string
+    source: pt
+    total: false
+  - name: ownername
+    label: reports.pt.ownername
+    type: string
+    source: pt
+    total: false
+  - name: guardianname
+    label: reports.pt.guardianname
+    type: string
+    source: pt
+    total: false
+  - name: mobileno
+    label: reports.pt.mobileno
+    type: string
+    source: pt
+    total: false  
+  - name: useruuid
+    label: reports.pt.useruuid
+    type: string
+    source: pt
+    total: false
+  searchParams:
+  - name: fromDate
+    label: reports.pt.fromDate
+    type: epoch
+    source: pt
+    isMandatory: true
+    searchClause: AND pt.createdtime >= $fromDate
+  - name: toDate
+    label: reports.pt.toDate
+    type: epoch
+    source: pt
+    isMandatory: true
+    searchClause: AND pt.createdtime <= $toDate 
     query: |
-    	  select pt.propertyid as propertyid, u.name as ownername, u.guardian as guardianname, u.mobilenumber as mobileno, u.uuid as useruuid from eg_pt_property pt, eg_pt_owner po, eg_user u where pt.id=po.propertyid and po.userid=u.uuid and pt.tenantid=$tenantid
+        select pt.propertyid as propertyid, u.name as ownername, u.guardian as guardianname, u.mobilenumber as mobileno, u.uuid as useruuid from eg_pt_property pt, eg_pt_owner po, eg_user u where pt.id=po.propertyid and po.userid=u.uuid and pt.tenantid=$tenantid
     orderby: ORDER BY pt.propertyid DESC NULLS LAST
