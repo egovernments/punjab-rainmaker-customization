@@ -4934,6 +4934,16 @@ ReportDefinitions:
     label: reports.pt.2020_21Collection
     type: string
     source: pt
+    total: true
+  - name: 2021_22PTR
+    label: reports.pt.2021_22_PTR
+    type: string
+    source: pt
+    total: true  
+  - name: 2021_22Collection
+    label: reports.pt.2021_22Collection
+    type: string
+    source: pt
     total: true  
   - name: totalptr
     label: reports.pt.totalptr
@@ -5089,6 +5099,22 @@ ReportDefinitions:
       and pd.receiptdate>=$fromDate and pd.receiptdate<=$toDate
       GROUP BY financialyear,zonecode
     ),
+    fy2021 as
+    (
+      SELECT 
+        zonecode,
+        sum(payment.totalamountpaid) as amount,
+        count(payment.totalamountpaid) as totalcount,
+        concat(to_char((To_timestamp(get_fromperiod(pd.billid)/1000) at time Zone 'Asia/Kolkata'),'YYYY'),'-', to_char((To_timestamp(get_toperiod(pd.billid)/1000) at time Zone 'Asia/Kolkata'),'YY')) as financialyear
+      FROM egcl_paymentdetail pd Left outer join eg_user on eg_user.id = pd.createdby::INTEGER, egcl_payment payment, eg_pt_property as pt, egcl_bill bill,
+      (select string_agg(distinct propertyid,',') as propertyid, string_agg(distinct locality,',') as locality from eg_pt_address where tenantid=$tenantid group by propertyid ) pt_addr
+      INNER JOIN eg_bndry_mohalla on eg_bndry_mohalla.localitycode= pt_addr.locality and eg_bndry_mohalla.tenantid=$tenantid
+      where pd.paymentid=payment.id and bill.id=pd.billid and payment.paymentstatus != 'CANCELLED' and pd.businessservice='PT' and payment.tenantid=$tenantid
+      and pt.propertyid = bill.consumercode and pt.status!='INACTIVE' and pt_addr.propertyid=pt.id
+      and concat(to_char((To_timestamp(get_fromperiod(pd.billid)/1000) at time Zone 'Asia/Kolkata'),'YYYY'),'-', to_char((To_timestamp(get_toperiod(pd.billid)/1000) at time Zone 'Asia/Kolkata'),'YY'))='2021-22'
+      and pd.receiptdate>=$fromDate and pd.receiptdate<=$toDate
+      GROUP BY financialyear,zonecode
+    ),
     zones as
     (
     select zonecode,string_agg(distinct zonename,',') as zname from eg_bndry_mohalla where tenantid=$tenantid group by zonecode
@@ -5112,8 +5138,10 @@ ReportDefinitions:
       coalesce(fy2019.amount,0) as "2019_20Collection",
       coalesce(fy2020.totalcount,0) as "2020_21PTR",
       coalesce(fy2020.amount,0) as "2020_21Collection",
-      coalesce(fy2013.totalcount,0)+coalesce(fy2014.totalcount,0)+coalesce(fy2015.totalcount,0)+coalesce(fy2016.totalcount,0)+coalesce(fy2017.totalcount,0)+coalesce(fy2018.totalcount,0)+coalesce(fy2019.totalcount,0)+coalesce(fy2020.totalcount,0) as "totalptr",
-      coalesce(fy2013.amount,0)+coalesce(fy2014.amount,0)+coalesce(fy2015.amount,0)+coalesce(fy2016.amount,0)+coalesce(fy2017.amount,0)+coalesce(fy2018.amount,0)+coalesce(fy2019.amount,0)+coalesce(fy2020.amount,0) as "totalcollection"
+      coalesce(fy2021.totalcount,0) as "2021_22PTR",
+      coalesce(fy2021.amount,0) as "2021_22Collection",
+      coalesce(fy2013.totalcount,0)+coalesce(fy2014.totalcount,0)+coalesce(fy2015.totalcount,0)+coalesce(fy2016.totalcount,0)+coalesce(fy2017.totalcount,0)+coalesce(fy2018.totalcount,0)+coalesce(fy2019.totalcount,0)+coalesce(fy2020.totalcount,0)+coalesce(fy2021.totalcount,0) as "totalptr",
+      coalesce(fy2013.amount,0)+coalesce(fy2014.amount,0)+coalesce(fy2015.amount,0)+coalesce(fy2016.amount,0)+coalesce(fy2017.amount,0)+coalesce(fy2018.amount,0)+coalesce(fy2019.amount,0)+coalesce(fy2020.amount,0)+coalesce(fy2021.amount,0) as "totalcollection"
     from  zones
     left outer join fy2013 on fy2013.zonecode=zones.zonecode
     left outer join fy2014 on fy2014.zonecode=zones.zonecode
@@ -5123,6 +5151,7 @@ ReportDefinitions:
     left outer join fy2018 on fy2018.zonecode=zones.zonecode
     left outer join fy2019 on fy2019.zonecode=zones.zonecode
     left outer join fy2020 on fy2020.zonecode=zones.zonecode
+    left outer join fy2021 on fy2021.zonecode=zones.zonecode
     where 1=1
   orderby: order by zonename
   
@@ -5217,6 +5246,16 @@ ReportDefinitions:
     type: string
     source: pt
     total: true  
+  - name: 2021_22PTR
+    label: reports.pt.2020_21_PTR
+    type: string
+    source: pt
+    total: true  
+  - name: 2021_22Collection
+    label: reports.pt.2020_21Collection
+    type: string
+    source: pt
+    total: true
   - name: totalptr
     label: reports.pt.totalptr
     type: string
@@ -5371,6 +5410,22 @@ ReportDefinitions:
       and pd.receiptdate>=$fromDate and pd.receiptdate<=$toDate
       GROUP BY financialyear,blockcode
     ),
+    fy2021 as
+    (
+    SELECT 
+        blockcode,
+        sum(payment.totalamountpaid) as amount,
+        count(payment.totalamountpaid) as totalcount,
+        concat(to_char((To_timestamp(get_fromperiod(pd.billid)/1000) at time zone 'Asia/Kolkata'),'YYYY'),'-', to_char((To_timestamp(get_toperiod(pd.billid)/1000) at time zone 'Asia/Kolkata'),'YY')) as financialyear
+      FROM egcl_paymentdetail pd Left outer join eg_user on eg_user.id = pd.createdby::INTEGER, egcl_payment payment, eg_pt_property as pt, egcl_bill bill,
+      (select string_agg(distinct propertyid,',') as propertyid, string_agg(distinct locality,',') as locality from eg_pt_address where tenantid=$tenantid group by propertyid ) pt_addr
+      INNER JOIN eg_bndry_mohalla on eg_bndry_mohalla.localitycode= pt_addr.locality and eg_bndry_mohalla.tenantid=$tenantid
+      where pd.paymentid=payment.id and bill.id=pd.billid and payment.paymentstatus != 'CANCELLED' and pd.businessservice='PT' and payment.tenantid=$tenantid
+      and pt.propertyid = bill.consumercode and pt.status!='INACTIVE' and pt_addr.propertyid=pt.id
+      and concat(to_char((To_timestamp(get_fromperiod(pd.billid)/1000) at time zone 'Asia/Kolkata'),'YYYY'),'-', to_char((To_timestamp(get_toperiod(pd.billid)/1000) at time zone 'Asia/Kolkata'),'YY'))='2021-22'
+      and pd.receiptdate>=$fromDate and pd.receiptdate<=$toDate
+      GROUP BY financialyear,blockcode
+    ),
     blocks as
     (
     select blockcode,string_agg(distinct blockname,',') as zname from eg_bndry_mohalla where tenantid=$tenantid group by blockcode
@@ -5393,9 +5448,11 @@ ReportDefinitions:
       coalesce(fy2019.totalcount,0) as "2019_20PTR",
       coalesce(fy2019.amount,0) as "2019_20Collection",
       coalesce(fy2020.totalcount,0) as "2020_21PTR",
+      coalesce(fy2021.amount,0) as "2021_22Collection",
+      coalesce(fy2021.totalcount,0) as "2021_22PTR",
       coalesce(fy2020.amount,0) as "2020_21Collection",
-      coalesce(fy2013.totalcount,0)+coalesce(fy2014.totalcount,0)+coalesce(fy2015.totalcount,0)+coalesce(fy2016.totalcount,0)+coalesce(fy2017.totalcount,0)+coalesce(fy2018.totalcount,0)+coalesce(fy2019.totalcount,0)+coalesce(fy2020.totalcount,0) as "totalptr",
-      coalesce(fy2013.amount,0)+coalesce(fy2014.amount,0)+coalesce(fy2015.amount,0)+coalesce(fy2016.amount,0)+coalesce(fy2017.amount,0)+coalesce(fy2018.amount,0)+coalesce(fy2019.amount,0)+coalesce(fy2020.amount,0) as "totalcollection"
+      coalesce(fy2013.totalcount,0)+coalesce(fy2014.totalcount,0)+coalesce(fy2015.totalcount,0)+coalesce(fy2016.totalcount,0)+coalesce(fy2017.totalcount,0)+coalesce(fy2018.totalcount,0)+coalesce(fy2019.totalcount,0)+coalesce(fy2020.totalcount,0)+coalesce(fy2021.totalcount,0) as "totalptr",
+      coalesce(fy2013.amount,0)+coalesce(fy2014.amount,0)+coalesce(fy2015.amount,0)+coalesce(fy2016.amount,0)+coalesce(fy2017.amount,0)+coalesce(fy2018.amount,0)+coalesce(fy2019.amount,0)+coalesce(fy2020.amount,0)+coalesce(fy2021.amount,0) as "totalcollection"
     from  blocks
     left outer join fy2013 on fy2013.blockcode=blocks.blockcode
     left outer join fy2014 on fy2014.blockcode=blocks.blockcode
@@ -5405,6 +5462,7 @@ ReportDefinitions:
     left outer join fy2018 on fy2018.blockcode=blocks.blockcode
     left outer join fy2019 on fy2019.blockcode=blocks.blockcode
     left outer join fy2020 on fy2020.blockcode=blocks.blockcode
+    left outer join fy2021 on fy2021.blockcode=blocks.blockcode
     where 1=1
   orderby: order by blockname
 
