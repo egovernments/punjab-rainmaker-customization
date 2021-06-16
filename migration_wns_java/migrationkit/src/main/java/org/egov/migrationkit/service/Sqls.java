@@ -134,7 +134,7 @@ public class Sqls {
 			+ "'guardianrelation', ( CASE WHEN usr.guardianrelation ='Mother' THEN 'MOTHER' WHEN usr.guardianrelation ='Father' THEN 'FATHER' WHEN usr.guardianrelation='Husband' THEN 'HUSBAND' WHEN usr.guardianrelation ='Others' THEN 'OTHER' WHEN usr.guardianrelation ='Other' THEN 'OTHER' ELSE 'OTHER' END ), 'guardianname', usr.guardian,\n"
 			+ "'plotsize', conndetails.plotsize, 'connectionExecutionDate'	, (select extract(epoch from conn.executiondate) * 1000), "
 			+ "  'securityFee',	 conndetails.securitydeposit,'connectionreason',  ( SELECT CASE WHEN conn.legacy=true THEN 'Migrated Connection' ELSE null END)  ,	 "
-			+ "  'isexempted', conn.isexempted, "
+			+ "  'isexempted', conndetails.isexempted, "
 			+ "'applicationtype', apptype.name,\n" + "'billingType',	 conndetails.billingtype	,\n"
 			+ "'locality', locality.code,\n" + "'billingAmount',	 conndetails.billamount ,\n"
 			+ " 'estimationLetterDate', appdetails.estimationdate,\n"
