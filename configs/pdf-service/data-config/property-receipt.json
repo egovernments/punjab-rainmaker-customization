@@ -751,10 +751,7 @@
                     "variable":"surveyId",
                     "value":"$.Properties[0].surveyId"
                   },
-                  {             
-                    "variable":"ownerMobileNumber",
-                    "value":"$.Properties[0].owners[0].mobileNumber"
-                  },                  
+                                   
                   {
                     "variable": "var_owners",                        
                     "value":"$.Properties[0].owners[?(@.active== true && @.status== 'ACTIVE')]",
@@ -769,7 +766,12 @@
                            {
                               "variable":"fatherOrHusbandName2",
                               "value":"fatherOrHusbandName"
-                           }]
+                           },
+                           {             
+                            "variable":"ownerMobileNumber",
+                            "value":"mobileNumber"
+                          }
+                          ]
                     } 
                  },
                  {
