@@ -2616,7 +2616,7 @@ ReportDefinitions:
          tradeTypeName,
          acc,
          name,
-         emailid,
+         (case when emailid is null then '30048|23/xn3x2FAxn8vYAN0IdplsOxaE=' else emailid end)  as emailid,
          string_agg(distinct REGEXP_REPLACE(REGEXP_REPLACE(CONCAT(tla.doorno, ',', tla.buildingname, ',',tla.street,',',tla.localityname,',', tla.pincode), ',+', ','), '^,|,$', ''),',') as "address",
          mobilenumber,
          paydetail.amountpaid as totalamount,
