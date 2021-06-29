@@ -93,7 +93,7 @@
                             {
                                 "variable": "securityCharge",
                                 "value": {
-                                    "path": "$.pdfTaxhead[?(@.taxHeadCode == 'SECURITY_CHARGE')].estimateAmount"
+                                    "path": "$.pdfTaxhead[?(@.taxHeadCode == 'SECURITY_DEPOSIT')].estimateAmount"
                                 }
                             },
                             {
