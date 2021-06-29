@@ -2574,8 +2574,13 @@ ReportDefinitions:
     type: string
     source: tl
     total: false
-  - name: locality
-    label: report.tl.locality
+  - name: address
+    label: report.tl.address
+    type: string
+    source: tl
+    total: false
+  - name: emailid
+    label: report.tl.emailid
     type: string
     source: tl
     total: false
@@ -2598,29 +2603,29 @@ ReportDefinitions:
     isMandatory: false
     searchClause: AND tl.applicationdate <= $toDate 
   query: |
-      SELECT 
-        tl.applicationnumber as applicationnumber,
-        locality_tlb.locality as locality,
-        propertyid,
-        financialyear,
+    SELECT
+      tl.applicationnumber as applicationnumber,
+       propertyid,
+       financialyear,
         (case when oldlicensenumber is null then 'New' else 'Renewal' end) AS licensetype,
         oldlicensenumber,
-        licensenumber,
-        to_char((To_timestamp(issueddate / 1000) at time Zone 'Asia/Kolkata'), 'DD/MM/YYYY') as formattedIssuedDate,
-        tl.tradeName,
-        tl.tenantid,
-        tradeTypeName,   
-        acc, 
-        name,
-        mobilenumber,
-        paydetail.amountpaid as totalamount,
-        tl.status as status
+        string_agg(tl.licensenumber, ', ') as "licensenumber",
+         to_char((To_timestamp(issueddate / 1000) at time Zone 'Asia/Kolkata'), 'DD/MM/YYYY') as formattedIssuedDate,
+         string_agg(tl.tradeName, ', ') as "tradeName",
+         string_agg(tl.tenantid, ', ') as "tenantid",
+         tradeTypeName,
+         acc,
+         name,
+         emailid,
+         string_agg(distinct REGEXP_REPLACE(REGEXP_REPLACE(CONCAT(tla.doorno, ',', tla.buildingname, ',',tla.street,',',tla.localityname,',', tla.pincode), ',+', ','), '^,|,$', ''),',') as "address",
+         mobilenumber,
+         paydetail.amountpaid as totalamount,
+         tl.status as status
       FROM eg_tl_tradelicense tl 
-      INNER JOIN eg_tl_tradelicensedetail tld ON tld.tradelicenseid = tl.id 
-      INNER JOIN (
-                select tradelicensedetailid, array_to_string(array_agg(message.message),', ') as locality,array_to_string(array_agg(locality),', ') as localitycode from eg_tl_address as tla
-                LEFT OUTER JOIN message on code=CONCAT(UPPER(REGEXP_REPLACE( '[^A-Za-z0-9]','_', 'g')),'_REVENUE_', REGEXP_REPLACE( locality , '[^A-Za-z0-9]','_', 'g')) 
-                AND message.locale = 'en_IN' group by 1) locality_tlb ON  locality_tlb.tradelicensedetailid = tld.id
+        INNER JOIN eg_tl_tradelicensedetail tld ON tld.tradelicenseid = tl.id 
+        inner join (SELECT tradelicensedetailid , locality,doorno,street,buildingname,pincode,localityname, max(createdtime) 
+                 from eg_tl_address inner join eg_bndry_mohalla on eg_bndry_mohalla.localitycode=eg_tl_address.locality where eg_tl_address.tenantid=$tenantid
+                 group by tradelicensedetailid, locality, doorno,street,buildingname,pincode,localityname) tla ON tld.id=tla.tradelicensedetailid
       INNER JOIN eg_tl_owner tlowner ON tlowner.tradelicensedetailid = tld.id 
       INNER JOIN (
         SELECT tradelicensedetailid, array_to_string(array_agg(message.message),', ') as tradeTypeName FROM eg_tl_tradeunit
@@ -2634,6 +2639,7 @@ ReportDefinitions:
         SELECT tradelicensedetailid,array_to_string(array_agg(message.message),',') AS acc FROM eg_tl_accessory
         LEFT OUTER JOIN message ON code=CONCAT('TRADELICENSE_ACCESSORIESCATEGORY_', REGEXP_REPLACE(accessorycategory, '[^A-Za-z0-9]','_', 'g')) AND message.locale = 'en_IN' GROUP BY 1 ) tlacc ON tlacc.tradelicensedetailid = tld.id
       WHERE tl.tenantid!='pb.testing'
+  groupby: group by tl.applicationnumber, tl.propertyid, tl.financialyear, tl.oldlicensenumber, tl.issueddate, tlunit.tradetypename, tlacc.acc,tluser.name,tluser.emailid, tluser.mobilenumber,paydetail.amountpaid, tl.status,tl.tenantid
   orderby: order by tl.tenantid     
    
 - reportName: TradeLicensePendencyReport_v2
