@@ -1,5 +1,5 @@
 {
-  "_comment": "Master dashboard which holds all the possible visualisation. Note new dashboards/visualisations can be added",
+  "_comment": "Master dashboard which holds all the possible visualisation. Note new dashboards/visualisations can be added ",
   "dashboards": [
     {
       "name": "DSS_OVERVIEW_DASHBOARD",
@@ -414,9 +414,15 @@
                   "headers": []
                 }
               ]
-            },
+            }
+          ]
+        },
+                {
+          "row": 3,
+          "name": "DSS_REVENUE",
+          "vizArray": [
             {
-              "id": 223,
+              "id": 231,
               "name": "DSS_PT_COLLECTION_BY_USAGE_TYPE",
               "dimensions": {
                 "height": 250,
@@ -437,7 +443,7 @@
               ]
             },
             {
-              "id": 224,
+              "id": 232,
               "name": "DSS_PT_COLLECTION_BY_PAYMENT_MODE",
               "dimensions": {
                 "height": 250,
@@ -460,11 +466,11 @@
           ]
         },
         {
-          "row": 3,
+          "row": 4,
           "name": "DSS_REVENUE",
           "vizArray": [
             {
-              "id": 231,
+              "id": 241,
               "name": "DSS_PT_KEY_FY_INDICATORS",
               "dimensions": {
                 "height": 350,
@@ -497,11 +503,11 @@
           ]
         },
         {
-          "row": 4,
+          "row": 5,
           "name": "DSS_REVENUE",
           "vizArray": [
             {
-              "id": 231,
+              "id": 251,
               "name": "DSS_PT_TAX_HEAD",
               "dimensions": {
                 "height": 350,
@@ -535,11 +541,11 @@
           ]
         },
         {
-          "row": 5,
+          "row": 6,
           "name": "DSS_SERVICE",
           "vizArray": [
             {
-              "id": 241,
+              "id": 261,
               "name": "DSS_OVERVIEW",
               "dimensions": {
                 "height": 350,
@@ -576,7 +582,7 @@
               ]
             },
             {
-              "id": 242,
+              "id": 262,
               "name": "DSS_PT_CUMULATIVE_PROPERTIES_ASSESSED",
               "dimensions": {
                 "height": 350,
@@ -598,11 +604,11 @@
           ]
         },
         {
-          "row": 6,
+          "row": 7,
           "name": "DSS_SERVICE",
           "vizArray": [
             {
-              "id": 251,
+              "id": 271,
               "name": "DSS_PT_TOP_3_PERFORMING_ULBS",
               "dimensions": {
                 "height": 250,
@@ -623,7 +629,7 @@
               ]
             },
             {
-              "id": 252,
+              "id": 272,
               "name": "DSS_PT_BOTTOM_3_PERFORMING_ULBS",
               "dimensions": {
                 "height": 250,
@@ -643,7 +649,7 @@
               ]
             },
             {
-              "id": 253,
+              "id": 273,
               "name": "DSS_PT_PROPERTIES_BY_USAGE_TYPE",
               "dimensions": {
                 "height": 250,
