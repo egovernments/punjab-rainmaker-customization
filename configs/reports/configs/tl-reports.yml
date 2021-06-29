@@ -2624,7 +2624,7 @@ ReportDefinitions:
       FROM eg_tl_tradelicense tl 
         INNER JOIN eg_tl_tradelicensedetail tld ON tld.tradelicenseid = tl.id 
         inner join (SELECT tradelicensedetailid , locality,doorno,street,buildingname,pincode,localityname, max(createdtime) 
-                 from eg_tl_address inner join eg_bndry_mohalla on eg_bndry_mohalla.localitycode=eg_tl_address.locality where eg_tl_address.tenantid=$tenantid
+                 from eg_tl_address inner join eg_bndry_mohalla on eg_bndry_mohalla.localitycode=eg_tl_address.locality where eg_tl_address.tenantid=eg_bndry_mohalla.tenantid
                  group by tradelicensedetailid, locality, doorno,street,buildingname,pincode,localityname) tla ON tld.id=tla.tradelicensedetailid
       INNER JOIN eg_tl_owner tlowner ON tlowner.tradelicensedetailid = tld.id 
       INNER JOIN (
