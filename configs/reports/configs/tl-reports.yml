@@ -2574,8 +2574,13 @@ ReportDefinitions:
     type: string
     source: tl
     total: false
-  - name: locality
-    label: report.tl.locality
+  - name: address
+    label: report.tl.address
+    type: string
+    source: tl
+    total: false
+  - name: emailid
+    label: report.tl.emailid
     type: string
     source: tl
     total: false
@@ -2606,7 +2611,6 @@ ReportDefinitions:
   query: |
       SELECT 
         tl.applicationnumber as applicationnumber,
-        locality_tlb.locality as locality,
         propertyid,
         financialyear,
         (case when oldlicensenumber is null then 'New' else 'Renewal' end) AS licensetype,
@@ -2619,14 +2623,15 @@ ReportDefinitions:
         acc, 
         name,
         mobilenumber,
+        emailid,
         paydetail.amountpaid as totalamount,
+        string_agg(distinct REGEXP_REPLACE(REGEXP_REPLACE(CONCAT(tla.doorno, ',', tla.buildingname, ',',tla.street,',',tla.localityname,',', tla.pincode), ',+', ','), '^,|,$', ''),',') as "address",
         tl.status as status
       FROM eg_tl_tradelicense tl 
       INNER JOIN eg_tl_tradelicensedetail tld ON tld.tradelicenseid = tl.id 
-      INNER JOIN (
-                select tradelicensedetailid, array_to_string(array_agg(message.message),', ') as locality,array_to_string(array_agg(locality),', ') as localitycode from eg_tl_address as tla
-                LEFT OUTER JOIN message on code=CONCAT(UPPER(REGEXP_REPLACE( '[^A-Za-z0-9]','_', 'g')),'_REVENUE_', REGEXP_REPLACE( locality , '[^A-Za-z0-9]','_', 'g')) 
-                AND message.locale = 'en_IN' group by 1) locality_tlb ON  locality_tlb.tradelicensedetailid = tld.id
+      inner join (SELECT tradelicensedetailid , locality,doorno,street,buildingname,pincode,localityname, max(createdtime) 
+                 from eg_tl_address inner join eg_bndry_mohalla on eg_bndry_mohalla.localitycode=locality where eg_tl_address.tenantid=$tenantid
+                 group by tradelicensedetailid, locality, doorno,street,buildingname,pincode,localityname) tla ON tld.id=tla.tradelicensedetailid
       INNER JOIN eg_tl_owner tlowner ON tlowner.tradelicensedetailid = tld.id 
       INNER JOIN (
         SELECT tradelicensedetailid, array_to_string(array_agg(message.message),', ') as tradeTypeName FROM eg_tl_tradeunit
