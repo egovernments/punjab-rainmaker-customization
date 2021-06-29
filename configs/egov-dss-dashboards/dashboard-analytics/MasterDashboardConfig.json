@@ -360,7 +360,7 @@
                   "id": "cumulativeCollection",
                   "name": "Monthly",
                   "code": "",
-                  "chartType": "bar",
+                  "chartType": "line",
                   "filter": "",
                   "headers": []
                 }
