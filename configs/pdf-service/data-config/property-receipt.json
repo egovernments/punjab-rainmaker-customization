@@ -565,6 +565,11 @@
                           "value":  "interest"
                         
                         },{
+                          "variable":"rebate",
+                          "value":  "rebate"
+                        
+                        },
+                        {
                           "variable":"usage_exemption",
                           "value":  "usage_exemption"
                         
