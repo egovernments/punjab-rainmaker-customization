@@ -128,7 +128,7 @@ loop
 if(demands.taxperiodfrom = Extract(epoch FROM bill_detail.start_date) * 1000 )
 then
  demandId_digit:=demands.id;
-else if(demands.taxperiodfrom = \Extract(epoch FROM bill_detail.start_date::timestamp - '3 month'::interval  ) * 1000 )
+else if(demands.taxperiodfrom = Extract(epoch FROM bill_detail.start_date::timestamp - '3 month'::interval  ) * 1000 )
 then
  demandId_digit:=demands.id;
 else if(demands.taxperiodfrom = Extract(epoch FROM bill_detail.start_date::timestamp - '6 month'::interval  ) * 1000 )
@@ -151,7 +151,7 @@ end if;
 if(demandId_digit is not null)
 then
  
-if ( rec.id_bill_type = 2 and ( rec.total_amount = 0 or rec.total_amount is null) ) then
+if ( rec.id_bill_type = 2 and ( rec.total_amount <= 0 or rec.total_amount is null) ) then
 total_amount=rec.total_collected_amount ;
 else
 total_amount=rec.total_amount;
