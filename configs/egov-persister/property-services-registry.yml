@@ -238,7 +238,7 @@ serviceMaps:
         dbType: JSONB
 
 
-    - query: INSERT INTO eg_pt_unit(id, tenantid, propertyid, floorno, unittype, usagecategory, occupancytype, occupancydate, carpetarea, builtuparea, plintharea, superbuiltuparea, arv, constructiontype, constructiondate, dimensions, active, createdby, createdtime, lastmodifiedby, lastmodifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+    - query: INSERT INTO eg_pt_unit(id, tenantid, propertyid, floorno, unittype, usagecategory, occupancytype, occupancydate, carpetarea, builtuparea, plintharea, superbuiltuparea, arv, constructiontype, constructiondate, dimensions, active, additionaldetails, createdby, createdtime, lastmodifiedby, lastmodifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
       basePath: Property.units.*
       jsonMaps:
 
@@ -277,6 +277,10 @@ serviceMaps:
         dbType: JSONB
 
       - jsonPath: $.Property.units.*.active
+      
+      - jsonPath: $.Property.units.*.additionalDetails
+        type: JSON
+        dbType: JSONB
 
       - jsonPath: $.Property.auditDetails.createdBy
 
@@ -497,7 +501,7 @@ serviceMaps:
       - jsonPath: $.Property.auditDetails.lastModifiedTime
 
 
-    - query: INSERT INTO eg_pt_unit(id, tenantid, propertyid, floorno, unittype, usagecategory, occupancytype, occupancydate, carpetarea, builtuparea, plintharea, superbuiltuparea, arv, constructiontype, constructiondate, dimensions, active, createdby, createdtime, lastmodifiedby, lastmodifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT (id) DO UPDATE SET floorno=EXCLUDED.floorno, unittype=EXCLUDED.unittype, usagecategory=EXCLUDED.usagecategory, occupancytype=EXCLUDED.occupancytype, occupancydate=EXCLUDED.occupancydate, carpetarea=EXCLUDED.carpetarea, builtuparea=EXCLUDED.builtuparea, plintharea=EXCLUDED.plintharea, superbuiltuparea=EXCLUDED.superbuiltuparea, arv=EXCLUDED.arv, constructiontype=EXCLUDED.constructiontype, constructiondate=EXCLUDED.constructiondate, dimensions=excluded.dimensions, active=EXCLUDED.active, lastmodifiedby=EXCLUDED.lastmodifiedby, lastmodifiedtime=EXCLUDED.lastmodifiedtime;
+    - query: INSERT INTO eg_pt_unit(id, tenantid, propertyid, floorno, unittype, usagecategory, occupancytype, occupancydate, carpetarea, builtuparea, plintharea, superbuiltuparea, arv, constructiontype, constructiondate, dimensions, active, additionaldetails, createdby, createdtime, lastmodifiedby, lastmodifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT (id) DO UPDATE SET floorno=EXCLUDED.floorno, unittype=EXCLUDED.unittype, usagecategory=EXCLUDED.usagecategory, occupancytype=EXCLUDED.occupancytype, occupancydate=EXCLUDED.occupancydate, carpetarea=EXCLUDED.carpetarea, builtuparea=EXCLUDED.builtuparea, plintharea=EXCLUDED.plintharea, superbuiltuparea=EXCLUDED.superbuiltuparea, arv=EXCLUDED.arv, constructiontype=EXCLUDED.constructiontype, constructiondate=EXCLUDED.constructiondate, dimensions=excluded.dimensions, active=EXCLUDED.active, lastmodifiedby=EXCLUDED.lastmodifiedby, lastmodifiedtime=EXCLUDED.lastmodifiedtime;
       basePath: Property.units.*
       jsonMaps:
 
@@ -536,6 +540,10 @@ serviceMaps:
         dbType: JSONB
 
       - jsonPath: $.Property.units.*.active
+      
+      - jsonPath: $.Property.units.*.additionalDetails
+        type: JSON
+        dbType: JSONB
 
       - jsonPath: $.Property.auditDetails.createdBy
 
