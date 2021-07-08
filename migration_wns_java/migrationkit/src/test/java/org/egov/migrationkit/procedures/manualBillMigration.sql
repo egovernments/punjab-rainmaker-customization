@@ -20,11 +20,11 @@ declare
      addetails jsonb;
 	demands record;
 	 cur_bills cursor for
-	 		 select * from eg_bill bill where bill.id_bill_type=1 and bill.service_code in ('WT','STAX')  
-	 		 and bill.is_cancelled='N' and bill.is_history='N'  and boundary_num='100'
+	 		 select * from eg_bill bill where bill.id_bill_type=(select id from eg_bill_type where code='MANUAL') and bill.service_code in ('WT','STAX')  
+	 		 and bill.is_cancelled='N' and bill.is_history='N'  and id not in (select erpbillid from ws_latest_bill_data)
         union
 		   select bill.* from eg_bill bill, egcl_collectionheader ch where ch.referencenumber::bigint=bill.id and 
-		   bill.service_code in ('WT','STAX') 
+		   bill.service_code in ('WT','STAX') and id not in (select erpbillid from ws_latest_bill_data)
 		       and id_bill_type=(select id from eg_bill_type where code='AUTO')  and  is_cancelled='N' and is_history='N' 
 		       and ch.status = (select id from egw_status where moduletype='ReceiptHeader' and description='Approved') 
 					  ;
@@ -73,7 +73,6 @@ else
 digitStatus='EXPIRED';
 addetails:='{"migrated":true,"bill_type":"manual"}';
 if(rec.last_date > now() ) then
-  digitStatus='ACTIVE';
 bill_type='Manual';
 end if ;
 end if ;
