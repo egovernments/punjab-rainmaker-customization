@@ -4659,8 +4659,9 @@ ReportDefinitions:
      (select 
        pt.propertyid as "propertytaxuniqueid",
        string_agg(collection.finyear, ', ') as "financailyear" ,
-       string_agg(collection.taxpaid::varchar, ', ') as "amountcollected" ,
-       string_agg(pt.oldpropertyid,',') as "existingpropertyid",
+       --string_agg(collection.taxpaid::varchar, ', ') as "amountcollected" ,
+       max(collection.taxpaid) as "amountcollected" ,
+       string_agg(distinct pt.oldpropertyid,',') as "existingpropertyid",
        split_part(string_agg(eu."name",','),',',1) as "ownername",
        string_agg(pot.propertytype,',') as "propertytype",
        split_part(string_agg(eu.mobilenumber,','),',',1) as "mobileno",
