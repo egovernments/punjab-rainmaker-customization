@@ -1,4 +1,3 @@
----
 ReportDefinitions:
 - reportName: HRMSEmployeewiseReport
   summary: HRMS Employeewise Report
@@ -56,27 +55,27 @@ ReportDefinitions:
     searchClause: AND tl.tenantId = $ulb
   query: |
     with userroles as
-   (
-   select user_id,string_agg(role_code,',') as role_codes
+    (
+    select user_id,string_agg(role_code,',') as role_codes
     from eg_userrole_v1
-   group by user_id
-   )
-   select   
-   u.name, 
-   u.mobilenumber,
-   u.tenantid, 
-   r.role_codes,
-   e.code, 
-   assign.department,
-   assign.designation, 
-   msg.message as departmentname,
-   msg1.message as designationname,
-   u.active
-   from eg_user u 
-   inner join userroles r on u.id=r.user_id inner join eg_hrms_employee e on u.id=e.id 
-   inner join eg_hrms_assignment assign on e.uuid=assign.employeeid and assign.iscurrentassignment='true'
-   inner join message as msg on msg.code=concat('COMMON_MASTERS_DEPARTMENT_',assign.department)
-   inner join message as msg1 on msg1.code=concat('COMMON_MASTERS_DESIGNATION_',assign.designation)
-   where u.type!='CITIZEN'
+    group by user_id
+    )
+    select   
+    u.name, 
+    u.mobilenumber,
+    u.tenantid, 
+    r.role_codes,
+    e.code, 
+    assign.department,
+    assign.designation, 
+    msg.message as departmentname,
+    msg1.message as designationname,
+    u.active
+    from eg_user u 
+    inner join userroles r on u.id=r.user_id inner join eg_hrms_employee e on u.id=e.id 
+    inner join eg_hrms_assignment assign on e.uuid=assign.employeeid and assign.iscurrentassignment='true'
+    inner join message as msg on msg.code=concat('COMMON_MASTERS_DEPARTMENT_',assign.department)
+    inner join message as msg1 on msg1.code=concat('COMMON_MASTERS_DESIGNATION_',assign.designation)
+    where u.type!='CITIZEN'
   groupby: GROUP BY rh.tenantId
   orderby: ORDER BY rh.tenantId asc
