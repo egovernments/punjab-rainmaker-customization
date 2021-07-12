@@ -2487,7 +2487,7 @@ ReportDefinitions:
         pd.tenantid AS tenantid,
         pd.id,
         pt.propertyid as consumercode,
-        pt.surveyid as surveyid
+        pt.surveyid as surveyid,
         to_char((To_timestamp(pd.receiptdate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY')  AS receiptdate,
         --payment.ifsccode AS bankname,
         concat(bank_branches.bank_name,' ',bank_branches.branch) as bankname, 
