@@ -3143,7 +3143,7 @@ ReportDefinitions:
     source: pt
     wrapper: true
     isMandatory: false
-    searchClause: AND pt.usagecategory = $usage
+    searchClause: AND upper(split_part(pt.usagecategory,'.',1)) = $usage
   query: |
     SELECT 
         --initcap(split_part(payment.tenantid, '.', 2)) as tenantid, 
