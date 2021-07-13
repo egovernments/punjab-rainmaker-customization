@@ -1,1 +1,81 @@
-
+ReportDefinitions:
+- reportName: HRMSEmployeewiseReport
+  summary: HRMS Employeewise Report
+  version: 1.0.0
+  moduleName: rainmaker-hrms
+  sourceColumns:
+  - name: name
+    label: report.hrms.name
+    type: string
+    source: hrms
+    total: false
+  - name: mobilenumber
+    label: report.hrms.mobilenumber
+    type: string
+    source: hrms
+    total: false
+  - name: tenantid
+    label: report.hrms.tenantid
+    type: string
+    source: hrms
+    total: false
+  - name: role_codes
+    label: report.hrms.role_codes
+    type: string
+    source: hrms
+    total: true
+  - name: code
+    label: report.hrms.code
+    type: string
+    source: hrms
+    total: false
+  - name: departmentname
+    label: report.hrms.departmentname
+    type: string
+    source: hrms
+    total: false
+  - name: designationname
+    label: report.hrms.designationname
+    type: string
+    source: hrms
+    total: true
+  - name: active
+    label: reports.hrms.active
+    type: string
+    source: hrms
+    total: false
+  searchParams:
+  - name: ulb
+    label: ULB
+    type: singlevaluelist
+    pattern: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?tenantId=$tenantid&moduleName=tenant&masterName=tenants|$.MdmsRes.tenant.tenants.*.code|$.MdmsRes.tenant.tenants.*.name
+    source: hrms
+    wrapper: true
+    isMandatory: false
+    searchClause: AND tl.tenantId = $ulb
+  query: |
+    with userroles as
+    (
+    select user_id,string_agg(role_code,',') as role_codes
+    from eg_userrole_v1
+    group by user_id
+    )
+    select   
+    u.name, 
+    u.mobilenumber,
+    u.tenantid, 
+    r.role_codes,
+    e.code, 
+    assign.department,
+    assign.designation, 
+    msg.message as departmentname,
+    msg1.message as designationname,
+    u.active
+    from eg_user u 
+    inner join userroles r on u.id=r.user_id inner join eg_hrms_employee e on u.id=e.id 
+    inner join eg_hrms_assignment assign on e.uuid=assign.employeeid and assign.iscurrentassignment='true'
+    inner join message as msg on msg.code=concat('COMMON_MASTERS_DEPARTMENT_',assign.department)
+    inner join message as msg1 on msg1.code=concat('COMMON_MASTERS_DESIGNATION_',assign.designation)
+    where u.type!='CITIZEN'
+  groupby: GROUP BY rh.tenantId
+  orderby: ORDER BY rh.tenantId asc
