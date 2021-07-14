@@ -5767,6 +5767,7 @@ ReportDefinitions:
   orderby: ORDER BY pt.propertyid DESC NULLS LAST
   
 - reportName: PTReportforGISMapping
+  decryptionPathId: ULBDEFAULTERPTREPORT_V2
   summary: PT Report for GIS Mapping
   version: 1.0.0
   moduleName: rainmaker-pt
@@ -5806,8 +5807,8 @@ ReportDefinitions:
     type: string
     source: pt
     total: false
-  - name: name
-    label: reports.pt.name
+  - name: ownername
+    label: reports.pt.ownername
     type: string
     source: pt
     total: false
@@ -5816,13 +5817,13 @@ ReportDefinitions:
     type: string
     source: pt
     total: false
-  - name: mobilenumber
-    label: reports.pt.mobilenumber
+  - name: mobileno
+    label: reports.pt.mobileno
     type: string
     source: pt
     total: false
   query: |
-    select p.propertyid,p.nooffloors,p.landarea,p.usagecategory,p.surveyid,p.oldpropertyid,u.name,u.guardian,u.mobilenumber from eg_pt_property p,eg_pt_owner o ,eg_user u where p.id=o.propertyid and 
+    select p.propertyid,p.nooffloors,p.landarea,p.usagecategory,p.surveyid,p.oldpropertyid,u.name as ownername,u.guardian,u.mobilenumber as mobileno from eg_pt_property p,eg_pt_owner o ,eg_user u where p.id=o.propertyid and 
     p.tenantid='pb.hoshiarpur' and p.status='ACTIVE' and o.userid=u.uuid and o.tenantid='pb.hoshiarpur' 
     and o.status='ACTIVE' and 
     o.propertyid in (select id  from eg_pt_property where tenantid='pb.hoshiarpur' and status='ACTIVE')
