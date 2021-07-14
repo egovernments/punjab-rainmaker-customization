@@ -166,12 +166,14 @@
                 "value": {
                   "path": "$.paymentDetails[0].bill.totalAmount"
                 }
-              }, {
+              },  
+              {
                 "variable": "approvedBy", 
                 "value": {
                   "path": "$.paymentDetails[0].bill.additionalDetails.lastModifier"
                 }
-              }, {
+              },
+              {
                 "variable": "penaltyReason", 
                 "value": {
                   "path": "$.paymentDetails[0].bill.additionalDetails.adhocPenaltyReason"
@@ -530,6 +532,73 @@
                }
               },
               {
+                "variable": "var_bills",                        
+                "value":{
+                  "path":"$.paymentDetails[0].additionalDetails.arrearArray.*"
+                },
+                 "type":"array",
+                 "format":{                            
+                    "type":"string",
+                    "scema":[
+                       {
+                          "variable":"year",
+                          "value":  "year"
+                        
+                        },{
+                          "variable":"tax",
+                          "value":  "tax"
+                        
+                        },{
+                          "variable":"firecess",
+                          "value":  "firecess"
+                        
+                        },{
+                          "variable":"cancercess",
+                          "value":  "cancercess"
+                        
+                        },{
+                          "variable":"penalty",
+                          "value":  "penalty"
+                        
+                        },{
+                          "variable":"interest",
+                          "value":  "interest"
+                        
+                        },{
+                          "variable":"rebate",
+                          "value":  "rebate"
+                        
+                        },
+                        {
+                          "variable":"usage_exemption",
+                          "value":  "usage_exemption"
+                        
+                        },{
+                          "variable":"special_category_exemption",
+                          "value":  "special_category_exemption"
+                        
+                        },{
+                          "variable":"adhoc_penalty",
+                          "value":  "adhoc_penalty"
+                        
+                        },{
+                          "variable":"adhoc_rebate",
+                          "value":  "adhoc_rebate"
+                        
+                        },{
+                          "variable":"roundoff",
+                          "value":  "roundoff"
+                        
+                        },{
+                          "variable":"total",
+                          "value":  "total"
+                        
+                        }
+                       ]
+                } 
+             },
+
+              {
                 "variable": "Municipal_Corporation",
                 "value": {
                   "path": "PDF_STATIC_LABEL_MDMS_MUNICIPAL_CORPORATION"
@@ -615,13 +684,13 @@
                 "queryParam": "propertyIds=$.paymentDetails[0].bill.consumerCode,tenantId=$.tenantId",
                 "apiRequest": null,
                 "responseMapping":[
-                  { "variable":"institutionName",
+                 { "variable":"institutionName",
                   "value":"$.Properties[0].institution.name"
                 },
                   {             
                     "variable":"vasikaNo",
                     "value":"$.Properties[0].additionalDetails.vasikaNo"
-                  },  {             
+                  },{             
                     "variable":"vasikaDate",
                     "value":"$.Properties[0].additionalDetails.vasikaDate",
                     "type":"date"
@@ -682,15 +751,12 @@
                   {             
                     "variable":"oldPropertyId",
                     "value":"$.Properties[0].oldPropertyId"
-                  }, 
+                  },
 		  {             
                     "variable":"surveyId",
                     "value":"$.Properties[0].surveyId"
                   },
-                  {             
-                    "variable":"ownerMobileNumber",
-                    "value":"$.Properties[0].owners[0].mobileNumber"
-                  },                  
+                                   
                   {
                     "variable": "var_owners",                        
                     "value":"$.Properties[0].owners[?(@.active== true && @.status== 'ACTIVE')]",
@@ -705,7 +771,12 @@
                            {
                               "variable":"fatherOrHusbandName2",
                               "value":"fatherOrHusbandName"
-                           }]
+                           },
+                           {             
+                            "variable":"ownerMobileNumber",
+                            "value":"mobileNumber"
+                          }
+                          ]
                     } 
                  },
                  {
