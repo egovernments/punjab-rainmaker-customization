@@ -5765,3 +5765,65 @@ ReportDefinitions:
   query: |
     select pt.propertyid as propertyid, u.name as ownername, u.guardian as guardianname, u.mobilenumber as mobileno, u.uuid as useruuid from eg_pt_property pt, eg_pt_owner po, eg_user u where pt.id=po.propertyid and po.userid=u.uuid and pt.status='ACTIVE' and po.status='ACTIVE' and pt.tenantid=$tenantid
   orderby: ORDER BY pt.propertyid DESC NULLS LAST
+  
+- reportName: PTReportforGISMapping
+  summary: PT Report for GIS Mapping
+  version: 1.0.0
+  moduleName: rainmaker-pt
+  sourceColumns:
+  - name: propertyid
+    label: reports.pt.propertyid
+    type: string
+    source: pt
+    total: false
+  - name: applicationnumber
+    label: reports.pt.applicationnumber
+    type: string
+    source: pt
+    total: false
+  - name: oldpropertyid
+    label: reports.pt.oldpropertyid
+    type: string
+    source: pt
+    total: false
+  - name: nooffloors
+    label: reports.pt.nooffloors
+    type: string
+    source: pt
+    total: false
+  - name: landarea
+    label: reports.pt.landarea
+    type: string
+    source: pt
+    total: false
+  - name: usagecategory
+    label: reports.pt.usagecategory
+    type: string
+    source: pt
+    total: false
+  - name: surveyid
+    label: reports.pt.surveyid
+    type: string
+    source: pt
+    total: false
+  - name: name
+    label: reports.pt.name
+    type: string
+    source: pt
+    total: false
+  - name: guardian
+    label: reports.pt.guardian
+    type: string
+    source: pt
+    total: false
+  - name: mobilenumber
+    label: reports.pt.mobilenumber
+    type: string
+    source: pt
+    total: false
+  query: |
+    select p.propertyid,p.nooffloors,p.landarea,p.usagecategory,p.surveyid,p.oldpropertyid,u.name,u.guardian,u.mobilenumber from eg_pt_property p,eg_pt_owner o ,eg_user u where p.id=o.propertyid and 
+    p.tenantid='pb.hoshiarpur' and p.status='ACTIVE' and o.userid=u.uuid and o.tenantid='pb.hoshiarpur' 
+    and o.status='ACTIVE' and 
+    o.propertyid in (select id  from eg_pt_property where tenantid='pb.hoshiarpur' and status='ACTIVE')
+  orderby: ORDER BY pt.propertyid
