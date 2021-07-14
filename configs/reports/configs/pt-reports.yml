@@ -5827,4 +5827,4 @@ ReportDefinitions:
     p.tenantid='pb.hoshiarpur' and p.status='ACTIVE' and o.userid=u.uuid and o.tenantid='pb.hoshiarpur' 
     and o.status='ACTIVE' and 
     o.propertyid in (select id  from eg_pt_property where tenantid='pb.hoshiarpur' and status='ACTIVE')
-  orderby: ORDER BY pt.propertyid
+  orderby: ORDER BY p.propertyid
