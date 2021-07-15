@@ -5832,6 +5832,19 @@ ReportDefinitions:
     type: string
     source: pt
     total: false
+  searchParams:
+  - name: fromDate
+    label: reports.pt.fromDate
+    type: epoch
+    source: pt
+    isMandatory: false
+    searchClause: AND p.createdtime >= $fromDate
+  - name: toDate
+    label: reports.pt.toDate
+    type: epoch
+    source: pt
+    isMandatory: false
+    searchClause: AND p.createdtime <= $toDate
   query: |
     select distinct p.propertyid,p.nooffloors,p.landarea,p.usagecategory,p.surveyid,p.oldpropertyid,u.name as ownername,
      u.guardian as guardianname,u.mobilenumber as mobileno, a.locality,localnames.localityname as localityname
