@@ -5,27 +5,27 @@ ReportDefinitions:
   moduleName: rainmaker-hrms
   sourceColumns:
   - name: name
-    label: report.hrms.name
+    label: reports.hrms.name
     type: string
     source: hrms
     total: false
   - name: mobilenumber
-    label: report.hrms.mobilenumber
+    label: reports.hrms.mobilenumber
     type: string
     source: hrms
     total: false
   - name: tenantid
-    label: report.hrms.tenantid
+    label: reports.hrms.tenantid
     type: string
     source: hrms
     total: false
   - name: role_codes
-    label: report.hrms.role_codes
+    label: reports.hrms.role_codes
     type: string
     source: hrms
     total: true
   - name: code
-    label: report.hrms.code
+    label: reports.hrms.code
     type: string
     source: hrms
     total: false
@@ -35,7 +35,7 @@ ReportDefinitions:
     source: hrms
     total: false
   - name: designationname
-    label: report.hrms.designationname
+    label: reports.hrms.designationname
     type: string
     source: hrms
     total: true
