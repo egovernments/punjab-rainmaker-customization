@@ -267,8 +267,8 @@ public class PropertyService {
 		String key;
         for (Entry<String, String> entry : PROP_USAGE_TYPE.entrySet()) {
         	key = entry.getKey();
-		if (data.getOrDefault("usage", null) != null) {
-			String usageCategory = (String) data.get("usageType");
+		if (json.getOrDefault("usage", null) != null) {
+			String usageCategory = (String) json.get("usageType");
 			
 			if (usageCategory.equalsIgnoreCase(key))
 				usageCategory=PROP_USAGE_TYPE.get(usageCategory);
