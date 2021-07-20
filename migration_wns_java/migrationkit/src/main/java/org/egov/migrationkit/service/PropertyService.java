@@ -4,7 +4,9 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
+import static org.egov.migrationkit.constants.WSConstants.PROP_USAGE_TYPE;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -135,22 +137,23 @@ public class PropertyService {
 		owner.setRelationship(Relationship.valueOf((String)data.getOrDefault("guardianrelation", "OTHER")));
 
 		property.creationReason(CreationReason.CREATE);
-		 
+		
+	    String key;
+        for (Entry<String, String> entry : PROP_USAGE_TYPE.entrySet()) {
+        	key = entry.getKey();
 		if (data.getOrDefault("usage", null) != null) {
 			String usageCategory = (String) data.get("usageType");
-			if (usageCategory == "DOMESTIC")
-				usageCategory="RESIDENTIAL";
-			else if (usageCategory == "COMMERCIAL")
-				usageCategory="NONRESIDENTIAL.COMMERCIAL";
-			else if (usageCategory == "INDUSTRIAL")
-				usageCategory="NONRESIDENTIAL.INDUSTRIAL";
+			
+			if (usageCategory.equalsIgnoreCase(key))
+				usageCategory=PROP_USAGE_TYPE.get(usageCategory);
 			else
-				usageCategory="NONRESIDENTIAL.OTHERS";
+				usageCategory=PROP_USAGE_TYPE.get("OTHERS");
 
 			property.setUsageCategory(usageCategory);
 		} else {
 			property.setUsageCategory("RESIDENTIAL");
 		}
+        }
 
 		List<OwnerInfo> owners = new ArrayList<>();
 		owners.add(owner);
@@ -261,22 +264,22 @@ public class PropertyService {
 		owner.setOwnerType("NONE");
 		property.creationReason(CreationReason.CREATE);
 		
-		if (json.getOrDefault("usage", null) != null) {
-			String usageCategory = (String) json.get("usageType");
-			if (usageCategory == "DOMESTIC")
-				usageCategory="RESIDENTIAL";
-			else if (usageCategory == "COMMERCIAL")
-				usageCategory="NONRESIDENTIAL.COMMERCIAL";
-			else if (usageCategory == "INDUSTRIAL")
-				usageCategory="NONRESIDENTIAL.INDUSTRIAL";
+		String key;
+        for (Entry<String, String> entry : PROP_USAGE_TYPE.entrySet()) {
+        	key = entry.getKey();
+		if (data.getOrDefault("usage", null) != null) {
+			String usageCategory = (String) data.get("usageType");
+			
+			if (usageCategory.equalsIgnoreCase(key))
+				usageCategory=PROP_USAGE_TYPE.get(usageCategory);
 			else
-				usageCategory="NONRESIDENTIAL.OTHERS";
+				usageCategory=PROP_USAGE_TYPE.get("OTHERS");
 
 			property.setUsageCategory(usageCategory);
 		} else {
 			property.setUsageCategory("RESIDENTIAL");
 		}
-		
+        }
 		owner.setGender((String)json.get("gender"));
 		owner.setEmailId((String)json.getOrDefault("emailId", null));
 		owner.setRelationship(Relationship.valueOf((String)json.getOrDefault("guardianrelation", "OTHER")));
