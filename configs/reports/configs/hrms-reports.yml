@@ -1,6 +1,7 @@
 ---
 ReportDefinitions:
 - reportName: HRMSEmployeewiseReport
+  decryptionPathId: TradeLicenseDetailsReport_v2
   summary: HRMS Employeewise Report
   version: 1.0.0
   moduleName: rainmaker-hrms
@@ -65,10 +66,10 @@ ReportDefinitions:
     u.name, 
     u.mobilenumber,
     u.tenantid, 
-    r.role_codes,
-    e.code, 
-    assign.department,
-    assign.designation, 
+    r.role_codes as role_assigned,
+    e.code as user_id, 
+    --assign.department,
+    --assign.designation, 
     msg.message as departmentname,
     msg1.message as designationname,
     u.active
@@ -78,5 +79,4 @@ ReportDefinitions:
     inner join message as msg on msg.code=concat('COMMON_MASTERS_DEPARTMENT_',assign.department)
     inner join message as msg1 on msg1.code=concat('COMMON_MASTERS_DESIGNATION_',assign.designation)
     where u.type!='CITIZEN'
-  groupby: GROUP BY rh.tenantId
-  orderby: ORDER BY rh.tenantId asc
+  orderby: ORDER BY u.tenantId asc
