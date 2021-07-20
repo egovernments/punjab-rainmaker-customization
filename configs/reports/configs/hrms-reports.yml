@@ -54,7 +54,7 @@ ReportDefinitions:
     source: pt
     wrapper: true
     isMandatory: false
-    searchClause: AND tl.tenantId = $ulb
+    searchClause: AND u.tenantId = $ulb
   query: |
     with userroles as
     (
