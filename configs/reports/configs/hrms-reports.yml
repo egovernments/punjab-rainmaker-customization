@@ -21,13 +21,13 @@ ReportDefinitions:
     type: string
     source: hrms
     total: false
-  - name: role_codes
-    label: reports.hrms.role_codes
+  - name: role_assigned
+    label: reports.hrms.role_assigned
     type: string
     source: hrms
     total: true
-  - name: code
-    label: reports.hrms.code
+  - name: user_id
+    label: reports.hrms.user_id
     type: string
     source: hrms
     total: false
