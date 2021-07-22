@@ -4829,7 +4829,7 @@ ReportDefinitions:
                             where tenantid=$tenantid and concat(to_char((To_timestamp(fromperiod/1000) at time Zone 'Asia/Kolkata'),'YYYY'),'-',to_char((To_timestamp(toperiod/1000) at time Zone 'Asia/Kolkata'),'YY')) =$finYear))
                             group by pt.propertyid
                             )
-        select * from props
+        select * from props where 1=1 
         --where propertytaxuniqueid not in (select propertyid from prop2019 where oldpropertyid in (select concat('RID',previous_returnid) from ikon_2020_21_non_migrated_records where tenantid=$tenantid))
 
 - reportName: ULBDEFAULTERPTREPORT_MINI_STATE_V2_OLD
