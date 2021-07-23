@@ -4664,7 +4664,7 @@ ReportDefinitions:
     with props as 
      (select 
        pt.propertyid as "propertytaxuniqueid",
-       string_agg(collection.finyear, ', ') as "financailyear" ,
+       string_agg(distinct collection.finyear, ', ') as "financailyear" ,
        --string_agg(collection.taxpaid::varchar, ', ') as "amountcollected" ,
        max(collection.taxpaid) as "amountcollected" ,
        string_agg(distinct pt.oldpropertyid,',') as "existingpropertyid",
@@ -4790,7 +4790,7 @@ ReportDefinitions:
     with props as 
      (select 
        pt.propertyid as "propertytaxuniqueid",
-       string_agg(collection.finyear, ', ') as "financailyear" ,
+       string_agg(distinct collection.finyear, ', ') as "financailyear" ,
        --string_agg(collection.taxpaid::varchar, ', ') as "amountcollected" ,
        max(collection.taxpaid) as "amountcollected" ,
        string_agg(distinct pt.oldpropertyid,',') as "existingpropertyid",
