@@ -31,7 +31,7 @@
 						"startDate":{
 						 	"type":"string"
 						 },
-						"endData":{
+						"endDate":{
 							"type":"string"
 						}
 					}
