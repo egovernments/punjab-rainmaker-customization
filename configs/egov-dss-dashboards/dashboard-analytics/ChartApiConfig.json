@@ -519,7 +519,7 @@
       {
         "module": "COMMON",
         "requestQueryMap": "{\"module\" : \"businessService.keyword\", \"tenantId\" : \"tenantIdForMunicipalCorporation.keyword\"}",
-        "dateRefField": "dataObject.dates.startDate",
+        "dateRefField": "@timestamp",
         "indexName": "dss-target_v1",
         "aggrQuery": "{\"aggs\":{\"Target Collection\":{\"sum\":{\"field\":\"budgetProposedForMunicipalCorporation\"}}}}"
       }
