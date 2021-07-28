@@ -25,7 +25,7 @@ ReportDefinitions:
     label: reports.hrms.role_assigned
     type: string
     source: hrms
-    total: true
+    total: false
   - name: user_id
     label: reports.hrms.user_id
     type: string
@@ -40,7 +40,7 @@ ReportDefinitions:
     label: reports.hrms.designationname
     type: string
     source: hrms
-    total: true
+    total: false
   - name: active
     label: reports.hrms.active
     type: string
