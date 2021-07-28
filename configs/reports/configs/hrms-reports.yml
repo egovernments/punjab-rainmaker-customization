@@ -41,8 +41,8 @@ ReportDefinitions:
     type: string
     source: hrms
     total: false
-  - name: active
-    label: reports.hrms.active
+  - name: status
+    label: reports.hrms.status
     type: string
     source: hrms
     total: false
@@ -72,7 +72,10 @@ ReportDefinitions:
     --assign.designation, 
     msg.message as departmentname,
     msg1.message as designationname,
-    u.active
+    case
+    when u.active='true' then 'Active'
+    when u.active='false' then 'Inactive'
+    as status
     from eg_user u 
     inner join userroles r on u.id=r.user_id inner join eg_hrms_employee e on u.id=e.id 
     inner join eg_hrms_assignment assign on e.uuid=assign.employeeid and assign.iscurrentassignment='true'
