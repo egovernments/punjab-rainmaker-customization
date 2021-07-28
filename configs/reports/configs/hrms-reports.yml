@@ -79,7 +79,7 @@ ReportDefinitions:
     from eg_user u 
     inner join userroles r on u.id=r.user_id inner join eg_hrms_employee e on u.id=e.id 
     inner join eg_hrms_assignment assign on e.uuid=assign.employeeid and assign.iscurrentassignment='true'
-    inner join message as msg on msg.code=concat('COMMON_MASTERS_DEPARTMENT_',assign.department) and msg.locale=en_IN
-    inner join message as msg1 on msg1.code=concat('COMMON_MASTERS_DESIGNATION_',assign.designation) and msg1.locale=en_IN
+    inner join message as msg on msg.code=concat('COMMON_MASTERS_DEPARTMENT_',assign.department) and msg.locale='en_IN'
+    inner join message as msg1 on msg1.code=concat('COMMON_MASTERS_DESIGNATION_',assign.designation) and msg1.locale='en_IN'
     where u.type!='CITIZEN'
   orderby: ORDER BY u.tenantId asc
