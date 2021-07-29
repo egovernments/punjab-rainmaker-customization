@@ -126,6 +126,7 @@ public class ConnectionService {
 				String connectionNo = connection.getConnectionNo() != null ? connection.getConnectionNo()
 						: (String) data.get("applicationNo");
 				connection.setConnectionNo(connectionNo);
+				//connection.setConnectionNo("2102000013");
 				connection.setTenantId(requestInfo.getUserInfo().getTenantId());
 				connection.setProposedPipeSize(connection.getPipeSize());
 				log.info(" Water connection migrating for " + connectionNo +" MobileNumber "+connection.getMobilenumber() +""+connection.getId());

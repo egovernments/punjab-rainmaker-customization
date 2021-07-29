@@ -1,4 +1,4 @@
-set search_path to dhilwan_prod ;
+set search_path to ghagga_prod ;
 
 CREATE TABLE ws_latest_bill_data (erpbillid bigint,consumercode character varying(256), billno character varying(256), businessservice character varying(256));
 
@@ -126,4 +126,4 @@ DECLARE
 END$$  language plpgsql;
 
 --TO start the latest bill migration
-select migrate_latest_manual_bills('pb.dhilwan');
+select migrate_latest_manual_bills('pb.ghagga');

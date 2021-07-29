@@ -1,4 +1,4 @@
-set search_path to dhilwan_prod ;
+set search_path to ghagga_prod ;
 create or replace function migrate_manual_bills( tenantId varchar)
    returns text as $$ 
 declare 
@@ -262,7 +262,7 @@ language plpgsql;
 
 
 
---select migrate_manual_bills('pb.dhilwan');
+--select migrate_manual_bills('pb.ghagga');
 --delete from public.egbs_billaccountdetail_v1 where additionaldetails ='{"migrated":true}';
 --delete from public.egbs_billdetail_v1 where additionaldetails ='{"migrated":true}';
 --delete from public.egbs_bill_v1 where additionaldetails ='{"migrated":true}';
