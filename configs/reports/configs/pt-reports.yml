@@ -5637,7 +5637,6 @@ ReportDefinitions:
     type: string
     source: pt
     total: false
-  searchParams:
   query: |
     with assessments as
     (
