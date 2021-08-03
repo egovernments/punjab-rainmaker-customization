@@ -6054,7 +6054,7 @@ ReportDefinitions:
     (
         select 
             propertyid,
-            string_agg(concat(assessmentyears,'(Rs.',totalamount,') '),',') as fy,
+            string_agg(concat(assessmentyears,' (Rs.',totalamount,')'),', ') as fy,
             max(assessmentyears) as latest_fy,
             max(totalamount) as maxtotal,
             max(propertytax) as max_pt_tax
