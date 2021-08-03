@@ -5648,7 +5648,7 @@ ReportDefinitions:
             max(propertytax) as max_pt_tax
         from report_assessments 
         where tenantid=$tenantid
-            and propertyid not in (select propertyid from report_assessments where tenantid='pb.hoshiarpur' and assessmentyears ='2020-21')
+            and propertyid not in (select propertyid from report_assessments where tenantid=$tenantid and assessmentyears ='2020-21')
             group by propertyid
     ),
     owners as 
