@@ -5564,3 +5564,116 @@ ReportDefinitions:
   query: |
     select pt.propertyid as propertyid, u.name as ownername, u.guardian as guardianname, u.mobilenumber as mobileno, u.uuid as useruuid from eg_pt_property pt, eg_pt_owner po, eg_user u where pt.id=po.propertyid and po.userid=u.uuid and pt.tenantid=$tenantid
   orderby: ORDER BY pt.propertyid DESC NULLS LAST
+
+
+- reportName: PT_DEFAULTER_REPORT_V2
+  decryptionPathId: ULBDEFAULTERPTREPORT_V2
+  summary: ULB_PT_DEFAULTER
+  version: 1.0.0
+  moduleName: rainmaker-pt
+  sourceColumns:
+  - name: propertyid
+    label: reports.pt.propertyId
+    type: string
+    source: pt
+    total: false
+  - name: oldpropertyid
+    label: reports.pt.oldpropertyId
+    type: string
+    source: pt
+    total: false
+  - name: businessname
+    label: reports.pt.busnessname
+    type: string
+    source: pt
+    total: false
+  - name: financialyear
+    label: reports.pt.financialyear
+    type: string
+    source: pt
+    total: false
+  - name: latestfy
+    label: reports.pt.latestfy
+    type: string
+    source: pt
+    total: false
+  - name: max_pt_tax
+    label: reports.pt.max_pt_tax
+    type: string
+    source: pt
+    total: true
+  - name: max_paid
+    label: reports.pt.max_paid
+    type: string
+    source: pt
+    total: true
+  - name: propertytype
+    label: reports.pt.propertytype
+    type: string
+    source: pt
+    total: false
+  - name: propertyusagetype
+    label: reports.pt.propertyusagetype
+    type: string
+    source: pt
+    total: false
+  - name: address
+    label: reports.pt.address
+    type: string
+    source: pt
+    total: false
+  - name: block
+    label: reports.pt.block
+    type: string
+    source: pt
+    total: false
+  - name: ownername
+    label: reports.pt.ownername
+    type: string
+    source: pt
+    total: false
+  - name: mobileno
+    label: reports.pt.mobileno
+    type: string
+    source: pt
+    total: false
+  query: |
+    with assessments as
+    (
+        select 
+            propertyid,
+            string_agg(concat(assessmentyears,'(Rs.',totalamount,')'),',') as fy,
+            max(assessmentyears) as latest_fy,
+            max(totalamount) as maxtotal,
+            max(propertytax) as max_pt_tax
+        from report_assessments 
+        where tenantid=$tenantid
+            and propertyid not in (select propertyid from report_assessments where tenantid='pb.hoshiarpur' and assessmentyears ='2020-21')
+            group by propertyid
+    ),
+    owners as 
+    (
+        select 
+        split_part(string_agg(ownername,','),',',1) as ownername,
+        split_part(string_agg(mobileNumber,','),',',1) as mobileNumber,
+        propertyid
+        from report_owners
+        group by propertyid
+    )
+    select 
+        assessments.propertyid as propertyid,
+        props.oldpropertyid as oldpropertyid,
+        props.firmbusinessname as businessname,
+        assessments.fy as financialyear,
+        assessments.latest_fy as latestfy,
+        assessments.max_pt_tax as max_pt_tax,
+        assessments.maxtotal as max_paid,
+        props.propertytype as propertytype,
+        propertyusagetype as propertyusagetype,
+        concat(address,' ',localityname) as address,
+        blockcode as block,
+        owners.ownername as ownername,
+        owners.mobileNumber as mobileno
+    from report_properties props
+    inner join assessments on assessments.propertyid=props.propertyid
+    inner join owners on owners.propertyid=props.propertyid 
