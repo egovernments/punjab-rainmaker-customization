@@ -459,7 +459,7 @@
               {
                 "variable": "oldConnectionNo",
                 "value": {
-                  "path": "$.oldpid"
+                  "path": "$.connection.oldConnectionNo"
                 }
               }, {
                 "variable": "rate",
@@ -470,7 +470,7 @@
               {
                 "variable": "ledgerId",
                 "value": {
-                  "path": "$.conn_add.ledgerId"
+                  "path": "$.connection.additionalDetails.ledgerId"
                 }
               },
               {
@@ -795,7 +795,7 @@
               },
               {
                 "path": "http://property-services.egov:8080/property-services/property/_search",
-                "queryParam": "tenantId=$.tenantId,propertyIds=$.pid",
+                "queryParam": "tenantId=$.tenantId,propertyIds=$.connection.propertyId",
                 "apiRequest": null,
                 "responseMapping": [
                   {
