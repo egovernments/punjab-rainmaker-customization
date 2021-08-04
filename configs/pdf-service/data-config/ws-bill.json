@@ -459,7 +459,7 @@
               {
                 "variable": "oldConnectionNo",
                 "value": {
-                  "path": "$.additionalDetails.oldConnectionNo"
+                  "path": "$.connection.oldConnectionNo"
                 }
               }, {
                 "variable": "rate",
@@ -470,7 +470,7 @@
               {
                 "variable": "ledgerId",
                 "value": {
-                  "path": "$.additionalDetails.ledgerId"
+                  "path": "$.connection.additionalDetails.ledgerId"
                 }
               },
               {
@@ -734,13 +734,13 @@
                   {
                     "variable": "phoneNumber",
                     "value": "$.MdmsRes.tenant.tenants[0].contactNumber"
+                  }, {
+                    "variable":"mcGrade",
+                    "value":"$.MdmsRes.tenant.tenants[0].city.ulbType"
                   },
                   {
                     "variable": "website",
                     "value": "$.MdmsRes.tenant.tenants[0].domainUrl"
-                  },{
-                    "variable":"mcGrade",
-                    "value":"$.MdmsRes.tenant.tenants[0].city.ulbType"
                   },
                   {
                     "variable": "email",
@@ -795,7 +795,7 @@
               },
               {
                 "path": "http://property-services.egov:8080/property-services/property/_search",
-                "queryParam": "tenantId=$.tenantId,propertyIds=$.additionalDetails.propertyId",
+                "queryParam": "tenantId=$.tenantId,propertyIds=$.connection.propertyId",
                 "apiRequest": null,
                 "responseMapping": [
                   {
