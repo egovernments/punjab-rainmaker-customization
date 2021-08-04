@@ -6049,6 +6049,20 @@ ReportDefinitions:
     type: string
     source: pt
     total: false
+  searchParams:  
+  - name: finYear
+    label: Financial Year
+    type: singlevaluelist
+    pattern: 'list://2015-16:2015-16,2016-17:2016-17,2017-18:2017-18,2017-18:2017-18,2018-19:2018-19,2019-20:2019-20,2020-21:2020-21,2021-22:2021-22'
+    source: pt
+    isMandatory: false
+    searchClause: AND 1=1
+  - name: localityArray
+    label: reports.pt.zoneList
+    type: boundarylist
+    source: pt
+    isMandatory: false
+    searchClause: AND props.localitycode IN ($localityArray)
   query: |
     with assessments as
     (
@@ -6060,7 +6074,7 @@ ReportDefinitions:
             max(propertytax) as max_pt_tax
         from report_assessments 
         where tenantid=$tenantid
-            and propertyid not in (select propertyid from report_assessments where tenantid=$tenantid and assessmentyears ='2020-21')
+            and propertyid not in (select propertyid from report_assessments where tenantid=$tenantid and assessmentyears =$finYear)
             group by propertyid
     ),
     owners as 
@@ -6089,3 +6103,4 @@ ReportDefinitions:
     from report_properties props
     inner join assessments on assessments.propertyid=props.propertyid
     inner join owners on owners.propertyid=props.propertyid 
+    where 1=1
