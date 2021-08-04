@@ -6057,6 +6057,13 @@ ReportDefinitions:
     source: pt
     isMandatory: false
     searchClause: AND 1=1
+  - name: usageType
+    label: Usage Type
+    type: singlevaluelist
+    pattern: 'list://RESIDENTIAL:Residential,NONRESIDENTIAL:NonResidential,MIXED:Mixed'
+    source: pt
+    isMandatory: false
+    searchClause: AND split_part(props.propertyusagetype,'.',1) = $usageType
   - name: localityArray
     label: reports.pt.zoneList
     type: boundarylist
