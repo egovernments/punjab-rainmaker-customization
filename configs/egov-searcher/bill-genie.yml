@@ -180,7 +180,7 @@ SearchDefinitions:
    rowMapperKey: billsearch
    query: 
     baseQuery:   with bill_data as ( 
-            SELECT b.id AS b_id, b.mobilenumber, 
+          SELECT conn.property_id as pid,conn.oldConnectionNo as oldpid,conn.additionaldetails as conn_add,b.id AS b_id, b.mobilenumber, 
             b.tenantid AS b_tenantid, b.payername AS b_payername, 
             b.payeraddress AS b_payeraddress, b.payeremail AS b_payeremail, 
             b.isactive AS b_isactive, b.iscancelled AS b_iscancelled, 
