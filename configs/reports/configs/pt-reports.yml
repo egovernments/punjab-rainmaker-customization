@@ -6111,3 +6111,173 @@ ReportDefinitions:
     inner join assessments on assessments.propertyid=props.propertyid
     inner join owners on owners.propertyid=props.propertyid 
     where 1=1
+
+- reportName: PT_RECEIPTREGISTER_REPORT_V2
+  decryptionPathId: ReceiptRegister_V2
+  summary: Receipt Register
+  version: 1.0.0
+  moduleName: rainmaker-pt
+  additionalConfig:
+    print:
+      pdfPageSize: "A1"
+  sourceColumns:
+  - name: receiptnumber
+    label: reports.pt.receiptNo
+    type: string
+    source: pt
+    total: false
+  - name: receiptdate
+    label: reports.pt.receiptDate
+    type: string
+    source: pt
+    total: false
+  - name: g8issuedate
+    label: reports.pt.g8issuedate
+    type: string
+    source: pt
+    total: false
+  - name: g8receiptno
+    label: reports.pt.g8receiptno
+    type: string
+    source: pt
+    total: false
+  - name: amount
+    label: reports.pt.amount
+    type: string
+    source: pt
+    total: true
+  - name: propertytax
+    label: reports.pt.propertyTax
+    type: string
+    source: pt
+    total: true
+  - name: paidpropertytax
+    label: reports.pt.paidpropertyTax
+    type: string
+    source: pt
+    total: true
+  - name: firecess
+    label: reports.pt.fireCess
+    type: string
+    source: pt
+    total: true
+  - name: cancercess
+    label: reports.pt.cancerCess
+    type: string
+    source: pt
+    total: true
+  - name: rebate
+    label: reports.pt.rebate
+    type: string
+    source: pt
+    total: true
+  - name: adhocrebate
+    label: reports.pt.adhocrebate
+    type: string
+    source: pt
+    total: true
+  - name: penalty
+    label: reports.pt.penalty
+    type: string
+    source: pt
+    total: true
+  - name: adhocpenalty
+    label: reports.pt.adhocpenalty
+    type: string
+    source: pt
+    total: true
+  - name: interest
+    label: reports.pt.interest
+    type: string
+    source: pt
+    total: true
+  - name: exemption
+    label: reports.pt.exemption
+    type: string
+    source: pt
+    total: true
+  - name: adjustment
+    label: reports.pt.roundoff
+    type: string
+    source: pt
+    total: true
+  - name: consumercode
+    label: reports.pt.propertyId
+    type: string
+    source: pt
+    total: false
+  - name: instrumenttype
+    label: reports.pt.paymentMode
+    type: string
+    source: pt
+    total: false
+  - name: collectorname
+    label: reports.pt.collectorname
+    type: string
+    source: pt
+    total: false
+  searchParams:
+  - name: fromDate
+    label: reports.pt.fromDate
+    type: epoch
+    source: pt
+    isMandatory: false
+    searchClause: AND rp.receiptdate >= $fromDate
+  - name: toDate
+    label: reports.pt.toDate
+    type: epoch
+    source: pt
+    isMandatory: false
+    searchClause: AND rp.receiptdate <= $toDate
+  - name: paymentMode
+    label: Payment Mode
+    type: singlevaluelist
+    pattern: 'list://CARD:Card,CASH:Cash,CHEQUE:Cheque,DD:DD,OFFLINE_NEFT:NEFT,OFFLINE_RTGS:RTGS,ONLINE:Online,POSTAL_ORDER:PostalOrder'
+    source: pt
+    isMandatory: false
+    searchClause: AND rp.paymentmode = $paymentMode
+  query: |
+      with assessments as
+      (
+        select
+          billid,
+          sum(ra.propertytax) as propertytax,
+          sum(ra.paidpropertytax) as paidpropertytax,
+          sum(ra.firecess) as firecess,
+          sum(ra.cancercess) as cancercess,
+          sum(ra.adhocrebate) as adhocrebate,
+          sum(ra.rebate) as rebate,
+          sum(ra.penalty) as penalty,
+          sum(ra.adhocpenalty) as adhocpenalty,
+          sum(ra.interest) as interest,
+          sum(ra.exemption) as exemption,
+          sum(ra.adjustment) as roundoff
+        from report_assessments ra
+        where tenantid=$tenantid
+        group by billid
+      )
+      select 
+        rp.receiptnumber,
+        rp.propertyid as consumercode,
+        rp.receiptdate,
+        rp.paymentmode,
+        rp.g8_issuedate as g8issuedate,
+        rp.g8_receiptnumber as g8receiptno,
+        rp.amoutpaid as amount,
+        rp.paymentmode as instrumenttype,
+        asmt.propertytax as propertytax,
+        asmt.paidpropertytax as paidpropertytax,
+        asmt.firecess as firecess,
+        asmt.cancercess as cancercess,
+        asmt.adhocrebate as adhocrebate,
+        asmt.rebate as rebate,
+        asmt.penalty as penalty,
+        asmt.adhocpenalty as adhocpenalty,
+        asmt.interest as interest,
+        asmt.exemption as exemption,
+        asmt.roundoff as adjustment,
+        (case when rp.collectedby is null then '30048|21Fj+c3k2ldB0X3AzIh7atXB' else rp.collectedby end) as collectorname
+      from report_payments as rp
+      inner join assessments as asmt on asmt.billid=rp.billid
+      where rp.paymentstatus!='CANCELLED' and rp.tenantid=$tenantid
+  orderby: order by receiptnumber
