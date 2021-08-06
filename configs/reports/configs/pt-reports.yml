@@ -6493,4 +6493,334 @@ ReportDefinitions:
       inner join report_assessments ra on split_part(ra.billid,',',1)=rp.billid and  ra.propertyid=rp.propertyid
       inner join owners on owners.propertyid=pt.propertyid
       where pt.tenantid=$tenantid
-   
+      
+      
+- reportName: PT_ZoneFYReport_V2
+  summary: Zone FY Collection
+  version: 1.0.0
+  moduleName: rainmaker-pt
+  sourceColumns:
+  - name: zonename
+    label: reports.pt.zonename
+    type: string
+    source: pt
+    total: false  
+  - name: 2013_14PTR
+    label: reports.pt.2013_14_PTR
+    type: string
+    source: pt
+    total: true  
+  - name: 2013_14Collection
+    label: reports.pt.2013_14Collection
+    type: string
+    source: pt
+    total: true
+  - name: 2014_15PTR
+    label: reports.pt.2014_15_PTR
+    type: string
+    source: pt
+    total: true  
+  - name: 2014_15Collection
+    label: reports.pt.2014_15Collection
+    type: string
+    source: pt
+    total: true
+  - name: 2015_16PTR
+    label: reports.pt.2015_16_PTR
+    type: string
+    source: pt
+    total: true  
+  - name: 2015_16Collection
+    label: reports.pt.2015_16Collection
+    type: string
+    source: pt
+    total: true
+  - name: 2016_17PTR
+    label: reports.pt.2016_17_PTR
+    type: string
+    source: pt
+    total: true  
+  - name: 2016_17Collection
+    label: reports.pt.2016_17Collection
+    type: string
+    source: pt
+    total: true
+  - name: 2017_18PTR
+    label: reports.pt.2017_18_PTR
+    type: string
+    source: pt
+    total: true  
+  - name: 2017_18Collection
+    label: reports.pt.2017_18Collection
+    type: string
+    source: pt
+    total: true
+  - name: 2018_19PTR
+    label: reports.pt.2018_19_PTR
+    type: string
+    source: pt
+    total: true  
+  - name: 2018_19Collection
+    label: reports.pt.2018_19Collection
+    type: string
+    source: pt
+    total: true
+  - name: 2019_20PTR
+    label: reports.pt.2019_20_PTR
+    type: string
+    source: pt
+    total: true  
+  - name: 2019_20Collection
+    label: reports.pt.2019_20Collection
+    type: string
+    source: pt
+    total: true
+  - name: 2020_21PTR
+    label: reports.pt.2020_21_PTR
+    type: string
+    source: pt
+    total: true  
+  - name: 2020_21Collection
+    label: reports.pt.2020_21Collection
+    type: string
+    source: pt
+    total: true
+  - name: 2021_22PTR
+    label: reports.pt.2021_22_PTR
+    type: string
+    source: pt
+    total: true  
+  - name: 2021_22Collection
+    label: reports.pt.2021_22Collection
+    type: string
+    source: pt
+    total: true  
+  - name: totalptr
+    label: reports.pt.totalptr
+    type: string
+    source: pt
+    total: true  
+  - name: totalcollection
+    label: reports.pt.totalcollection
+    type: string
+    source: pt
+    total: true
+  searchParams:
+  - name: fromDate
+    label: reports.pt.fromDate
+    type: epoch
+    source: pt
+    isMandatory: true
+    searchClause: AND 1=1
+  - name: toDate
+    label: reports.pt.toDate
+    type: epoch
+    source: pt
+    isMandatory: true
+    searchClause: AND 1=1
+  query: |
+   --S.no    Service Name ULB    Property Tax Unique ID    Date Of Transcation    Receipt Number Existing Property ID    Type Of Property Mobile Number    Address
+    with summary as
+    (
+        select 
+          assessmentyears,
+          zonename,
+          sum(totalamount) as amount,
+          count(*) as totalcount
+        from report_assessments as asmt
+        inner join report_properties as pt on pt.propertyid=asmt.propertyid
+        where pt.tenantid=$tenantid
+        and asmt.createdtime>=$fromDate
+        and asmt.createdtime<=$toDate
+        group by assessmentyears,zonename
+      )
+    select
+      zonename,
+      sum(case when assessmentyears='2013-14' then amount else 0 end) as FY2013_14Collection,
+      sum(case when assessmentyears='2013-14' then totalcount else 0 end) as FY2013_14PTR,
+      sum(case when assessmentyears='2014-15' then amount else 0 end) as FY2014_15Collection,
+      sum(case when assessmentyears='2014-15' then totalcount else 0 end) as FY2014_15PTR,
+      sum(case when assessmentyears='2015-16' then amount else 0 end) as FY2015_16Collection,
+      sum(case when assessmentyears='2015-16' then totalcount else 0 end) as FY2015_16PTR,
+      sum(case when assessmentyears='2016-17' then amount else 0 end) as FY2016_17Collection,
+      sum(case when assessmentyears='2016-17' then totalcount else 0 end) as FY2016_17PTR,
+      sum(case when assessmentyears='2017-18' then amount else 0 end) as FY2017_18Collection,
+      sum(case when assessmentyears='2017-18' then totalcount else 0 end) as FY2017_18PTR,
+      sum(case when assessmentyears='2018-19' then amount else 0 end) as FY2018_19Collection,
+      sum(case when assessmentyears='2018-19' then totalcount else 0 end) as FY2018_19PTR,
+      sum(case when assessmentyears='2019-20' then amount else 0 end) as FY2019_20Collection,
+      sum(case when assessmentyears='2019-20' then totalcount else 0 end) as FY2019_20PTR,
+      sum(case when assessmentyears='2020-21' then amount else 0 end) as FY2020_21Collection,
+      sum(case when assessmentyears='2020-21' then totalcount else 0 end) as FY2020_21PTR,
+      sum(case when assessmentyears='2021-22' then amount else 0 end) as FY2021_22Collection,
+      sum(case when assessmentyears='2021-22' then totalcount else 0 end) as FY2021_22PTR,
+      sum(amount) as totalcollection,
+      sum(totalcount) as totalptr
+    from summary
+    group by zonename
+    
+
+- reportName: PT_BlockFYReport_V2
+  summary: Block FY Collection
+  version: 1.0.0
+  moduleName: rainmaker-pt
+  sourceColumns:
+  - name: blockname
+    label: reports.pt.blockname
+    type: string
+    source: pt
+    total: false  
+  - name: 2013_14PTR
+    label: reports.pt.2013_14_PTR
+    type: string
+    source: pt
+    total: true  
+  - name: 2013_14Collection
+    label: reports.pt.2013_14Collection
+    type: string
+    source: pt
+    total: true
+  - name: 2014_15PTR
+    label: reports.pt.2014_15_PTR
+    type: string
+    source: pt
+    total: true  
+  - name: 2014_15Collection
+    label: reports.pt.2014_15Collection
+    type: string
+    source: pt
+    total: true
+  - name: 2015_16PTR
+    label: reports.pt.2015_16_PTR
+    type: string
+    source: pt
+    total: true  
+  - name: 2015_16Collection
+    label: reports.pt.2015_16Collection
+    type: string
+    source: pt
+    total: true
+  - name: 2016_17PTR
+    label: reports.pt.2016_17_PTR
+    type: string
+    source: pt
+    total: true  
+  - name: 2016_17Collection
+    label: reports.pt.2016_17Collection
+    type: string
+    source: pt
+    total: true
+  - name: 2017_18PTR
+    label: reports.pt.2017_18_PTR
+    type: string
+    source: pt
+    total: true  
+  - name: 2017_18Collection
+    label: reports.pt.2017_18Collection
+    type: string
+    source: pt
+    total: true
+  - name: 2018_19PTR
+    label: reports.pt.2018_19_PTR
+    type: string
+    source: pt
+    total: true  
+  - name: 2018_19Collection
+    label: reports.pt.2018_19Collection
+    type: string
+    source: pt
+    total: true
+  - name: 2019_20PTR
+    label: reports.pt.2019_20_PTR
+    type: string
+    source: pt
+    total: true  
+  - name: 2019_20Collection
+    label: reports.pt.2019_20Collection
+    type: string
+    source: pt
+    total: true
+  - name: 2020_21PTR
+    label: reports.pt.2020_21_PTR
+    type: string
+    source: pt
+    total: true  
+  - name: 2020_21Collection
+    label: reports.pt.2020_21Collection
+    type: string
+    source: pt
+    total: true  
+  - name: 2021_22PTR
+    label: reports.pt.2020_21_PTR
+    type: string
+    source: pt
+    total: true  
+  - name: 2021_22Collection
+    label: reports.pt.2020_21Collection
+    type: string
+    source: pt
+    total: true
+  - name: totalptr
+    label: reports.pt.totalptr
+    type: string
+    source: pt
+    total: true  
+  - name: totalcollection
+    label: reports.pt.totalcollection
+    type: string
+    source: pt
+    total: true
+  searchParams:
+  - name: fromDate
+    label: reports.pt.fromDate
+    type: epoch
+    source: pt
+    isMandatory: true
+    searchClause: AND 1=1
+  - name: toDate
+    label: reports.pt.toDate
+    type: epoch
+    source: pt
+    isMandatory: true
+    searchClause: AND 1=1
+  query: |
+   --S.no    Service Name ULB    Property Tax Unique ID    Date Of Transcation    Receipt Number Existing Property ID    Type Of Property Mobile Number    Address
+    with summary as
+    (
+        select 
+          assessmentyears,
+          blockname,
+          sum(totalamount) as amount,
+          count(*) as totalcount
+        from report_assessments as asmt
+        inner join report_properties as pt on pt.propertyid=asmt.propertyid
+        where pt.tenantid=$tenantid
+        and asmt.createdtime>=$fromDate
+        and asmt.createdtime<=$toDate
+        group by assessmentyears,blockname
+      )
+    select
+      blockname,
+      sum(case when assessmentyears='2013-14' then amount else 0 end) as FY2013_14Collection,
+      sum(case when assessmentyears='2013-14' then totalcount else 0 end) as FY2013_14PTR,
+      sum(case when assessmentyears='2014-15' then amount else 0 end) as FY2014_15Collection,
+      sum(case when assessmentyears='2014-15' then totalcount else 0 end) as FY2014_15PTR,
+      sum(case when assessmentyears='2015-16' then amount else 0 end) as FY2015_16Collection,
+      sum(case when assessmentyears='2015-16' then totalcount else 0 end) as FY2015_16PTR,
+      sum(case when assessmentyears='2016-17' then amount else 0 end) as FY2016_17Collection,
+      sum(case when assessmentyears='2016-17' then totalcount else 0 end) as FY2016_17PTR,
+      sum(case when assessmentyears='2017-18' then amount else 0 end) as FY2017_18Collection,
+      sum(case when assessmentyears='2017-18' then totalcount else 0 end) as FY2017_18PTR,
+      sum(case when assessmentyears='2018-19' then amount else 0 end) as FY2018_19Collection,
+      sum(case when assessmentyears='2018-19' then totalcount else 0 end) as FY2018_19PTR,
+      sum(case when assessmentyears='2019-20' then amount else 0 end) as FY2019_20Collection,
+      sum(case when assessmentyears='2019-20' then totalcount else 0 end) as FY2019_20PTR,
+      sum(case when assessmentyears='2020-21' then amount else 0 end) as FY2020_21Collection,
+      sum(case when assessmentyears='2020-21' then totalcount else 0 end) as FY2020_21PTR,
+      sum(case when assessmentyears='2021-22' then amount else 0 end) as FY2021_22Collection,
+      sum(case when assessmentyears='2021-22' then totalcount else 0 end) as FY2021_22PTR,
+      sum(amount) as totalcollection,
+      sum(totalcount) as totalptr
+    from summary
+    group by blockname
+    
