@@ -6657,7 +6657,7 @@ ReportDefinitions:
       sum(amount) as totalcollection,
       sum(totalcount) as totalptr
     from summary
-    group by zonename
+  groupby: group by zonename
     
 
 - reportName: PT_BlockFYReport_V2
@@ -6822,5 +6822,5 @@ ReportDefinitions:
       sum(amount) as totalcollection,
       sum(totalcount) as totalptr
     from summary
-    group by blockname
+  groupby: group by blockname
     
