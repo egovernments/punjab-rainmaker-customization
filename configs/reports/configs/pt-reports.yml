@@ -6657,6 +6657,7 @@ ReportDefinitions:
       sum(amount) as totalcollection,
       sum(totalcount) as totalptr
     from summary
+    where 1=1
   groupby: group by zonename
     
 
@@ -6821,6 +6822,7 @@ ReportDefinitions:
       sum(case when assessmentyears='2021-22' then totalcount else 0 end) as FY2021_22PTR,
       sum(amount) as totalcollection,
       sum(totalcount) as totalptr
-    from summary
+    from summary 
+    where 1=1
   groupby: group by blockname
     
