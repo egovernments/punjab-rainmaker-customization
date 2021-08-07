@@ -6415,7 +6415,7 @@ ReportDefinitions:
     type: epoch
     source: pt
     isMandatory: true
-    searchClause: AND and rp.receiptdate >= $fromDate
+    searchClause: AND rp.receiptdate >= $fromDate
   - name: toDate
     label: reports.pt.toDate
     type: epoch
