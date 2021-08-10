@@ -6278,7 +6278,7 @@ ReportDefinitions:
         asmt.roundoff as adjustment,
         (case when rp.collectedby is null then '30048|21Fj+c3k2ldB0X3AzIh7atXB' else rp.collectedby end) as collectorname
       from report_payments as rp
-      inner join assessments as asmt on asmt.billid=rp.billid
+      inner join assessments as asmt on asmt.billid like concat('%',rp.billid,'%')
       where rp.paymentstatus!='CANCELLED' and rp.tenantid=$tenantid
   orderby: order by receiptnumber
   
