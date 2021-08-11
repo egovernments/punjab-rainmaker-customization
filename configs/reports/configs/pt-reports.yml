@@ -6468,7 +6468,8 @@ ReportDefinitions:
         rp.receiptdate as paymentdate,
         rp.paymentmode as paymentmode,
         pt.oldpropertyid as existingpropertyid,
-        ra.assessmentyears as financialyear,
+        --ra.assessmentyears as financialyear,
+        getfinancialyear(rp.billid) as financialyear,
         owners.ownername as ownername,
         owners.guardianname as guardianname,
         owners.mobilenumber as mobileno,
@@ -6478,7 +6479,8 @@ ReportDefinitions:
         ru.occupancytype as occupancy,
         pt.propertytype as propertytype,
         rp.payermobilenumber as mobilenumber,
-        ra.totalamount as paymentamount,
+        --ra.totalamount as paymentamount,
+        rp.amoutpaid as paymentamount,
         --rp.transactiondate as transcationdate,
         owners.emailid as emailid,
         pt.address as address,
@@ -6490,7 +6492,7 @@ ReportDefinitions:
       from report_properties pt
       inner join units as ru on ru.propertyid=pt.propertyid 
       inner join report_payments as rp on  rp.propertyid=pt.propertyid
-      inner join report_assessments ra on split_part(ra.billid,',',1)=rp.billid and  ra.propertyid=rp.propertyid
+      --inner join report_assessments ra on split_part(ra.billid,',',1)=rp.billid and  ra.propertyid=rp.propertyid
       inner join owners on owners.propertyid=pt.propertyid
       where pt.tenantid=$tenantid
       
