@@ -6461,7 +6461,7 @@ ReportDefinitions:
       select
         rp.billid,
         --ra.billid,
-        pt.tenantid as ulbn,
+        pt.tenantid as ulb,
         pt.propertyid as propertytaxuniqueid,
         rp.transactiondate as dateoftransaction,
         rp.receiptnumber as receiptnumber,
