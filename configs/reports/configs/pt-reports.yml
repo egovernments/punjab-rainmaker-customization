@@ -6491,7 +6491,7 @@ ReportDefinitions:
         pt.localityname as localityname
       from report_properties pt
       inner join units as ru on ru.propertyid=pt.propertyid 
-      inner join report_payments as rp on  rp.propertyid=pt.propertyid
+      inner join report_payments as rp on  rp.propertyid=pt.propertyid and rp.paymentstatus!='CANCELLED'
       --inner join report_assessments ra on split_part(ra.billid,',',1)=rp.billid and  ra.propertyid=rp.propertyid
       inner join owners on owners.propertyid=pt.propertyid
       where pt.tenantid=$tenantid
@@ -6631,7 +6631,7 @@ ReportDefinitions:
           count(*) as totalcount
         from report_assessments as asmt
         inner join report_properties as pt on pt.propertyid=asmt.propertyid
-        where pt.tenantid=$tenantid
+        where paymentstatus!='CANCELLED' and pt.tenantid=$tenantid
         and asmt.createdtime>=$fromDate
         and asmt.createdtime<=$toDate
         group by assessmentyears,zonename
@@ -6797,7 +6797,7 @@ ReportDefinitions:
           count(*) as totalcount
         from report_assessments as asmt
         inner join report_properties as pt on pt.propertyid=asmt.propertyid
-        where pt.tenantid=$tenantid
+        where paymentstatus!='CANCELLED' and pt.tenantid=$tenantid
         and asmt.createdtime>=$fromDate
         and asmt.createdtime<=$toDate
         group by assessmentyears,blockname
