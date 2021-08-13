@@ -6110,7 +6110,7 @@ ReportDefinitions:
     from report_properties props
     inner join assessments on assessments.propertyid=props.propertyid
     inner join owners on owners.propertyid=props.propertyid 
-    where 1=1
+    where props.oldpropertyid not in (select concat('RID',previous_returnid) from ikon_2020_21_non_migrated_records where tenantid=$tenantid and replace(session,'-20','-')=$finYear)
 
 - reportName: PT_RECEIPTREGISTER_REPORT_V2
   decryptionPathId: ReceiptRegister_V2
