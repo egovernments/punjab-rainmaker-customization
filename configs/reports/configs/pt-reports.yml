@@ -158,7 +158,7 @@ ReportDefinitions:
     pattern: 'list://Cash:Cash,Online:Online,Card:Card,DD:DD,Cheque:Cheque'
     source: pt
     isMandatory: false
-    searchClause: AND instrumenttype = $paymentMode
+    searchClause: AND instrumenttype = $paymentMo
   - name: financialyear
     label: Financial Year
     type: singlevaluelist
@@ -2228,7 +2228,7 @@ ReportDefinitions:
     pattern: 'list://CARD:Card,CASH:Cash,CHEQUE:Cheque,DD:DD,OFFLINE_NEFT:NEFT,OFFLINE_RTGS:RTGS,ONLINE:Online,POSTAL_ORDER:PostalOrder'
     source: pt
     isMandatory: false
-    searchClause: AND payment.paymentmode = $paymentMode
+    searchClause: AND payment.paymentmode = replace($paymentMode,',','_')
   - name: localityArray
     label: reports.pt.zoneList
     type: boundarylist
@@ -2672,7 +2672,7 @@ ReportDefinitions:
     pattern: 'list://CARD:Card,CASH:Cash,CHEQUE:Cheque,DD:DD,OFFLINE_NEFT:NEFT,OFFLINE_RTGS:RTGS,ONLINE:Online,POSTAL_ORDER:PostalOrder'
     source: pt
     isMandatory: false
-    searchClause: AND payment.paymentmode = $paymentMode
+    searchClause: AND payment.paymentmode = replace($paymentMode,',','_')
   query: |
       -- Use CTE to force query plan, compute & use CTE later
       WITH receipt_breakup AS (
@@ -2939,7 +2939,7 @@ ReportDefinitions:
     pattern: 'list://CARD:Card,CASH:Cash,CHEQUE:Cheque,DD:DD,OFFLINE_NEFT:NEFT,OFFLINE_RTGS:RTGS,ONLINE:Online,POSTAL_ORDER:PostalOrder'
     source: pt
     isMandatory: false
-    searchClause: AND payment.paymentmode = $paymentMode
+    searchClause: AND payment.paymentmode = replace($paymentMode,',','_')
   query: |
       -- Use CTE to force query plan, compute & use CTE later
       WITH receipt_breakup AS (
@@ -3254,7 +3254,7 @@ ReportDefinitions:
     pattern: 'list://CARD:Card,CASH:Cash,CHEQUE:Cheque,DD:DD,OFFLINE_NEFT:NEFT,OFFLINE_RTGS:RTGS,ONLINE:Online,POSTAL_ORDER:PostalOrder'
     source: pt
     isMandatory: false
-    searchClause: AND payment.paymentmode = $paymentMode
+    searchClause: AND payment.paymentmode = replace($paymentMode,',','_')
   - name: financialyear
     label: Financial Year
     type: singlevaluelist
@@ -3393,7 +3393,7 @@ ReportDefinitions:
     pattern: 'list://CARD:Card,CASH:Cash,CHEQUE:Cheque,DD:DD,OFFLINE_NEFT:NEFT,OFFLINE_RTGS:RTGS,ONLINE:Online,POSTAL_ORDER:PostalOrder'
     source: pt
     isMandatory: false
-    searchClause: AND payment.paymentmode = $paymentMode
+    searchClause: AND payment.paymentmode = replace($paymentMode,',','_')
   - name: financialyear
     label: Financial Year
     type: singlevaluelist
@@ -3589,7 +3589,7 @@ ReportDefinitions:
     pattern: 'list://CARD:Card,CASH:Cash,CHEQUE:Cheque,DD:DD,OFFLINE_NEFT:NEFT,OFFLINE_RTGS:RTGS,ONLINE:Online,POSTAL_ORDER:PostalOrder'
     source: pt
     isMandatory: false
-    searchClause: AND payment.paymentmode = $paymentMode
+    searchClause: AND payment.paymentmode = replace($paymentMode,',','_')
   - name: localityArray
     label: reports.pt.zoneList
     type: boundarylist
@@ -3804,7 +3804,7 @@ ReportDefinitions:
     pattern: 'list://CARD:Card,CASH:Cash,CHEQUE:Cheque,DD:DD,OFFLINE_NEFT:NEFT,OFFLINE_RTGS:RTGS,ONLINE:Online,POSTAL_ORDER:PostalOrder'
     source: pt
     isMandatory: false
-    searchClause: AND instrumenttype = $paymentMode
+    searchClause: AND instrumenttype = replace($paymentMode,',','_')
   - name: financialyear
     label: Financial Year
     type: singlevaluelist
@@ -6235,7 +6235,7 @@ ReportDefinitions:
     pattern: 'list://CARD:Card,CASH:Cash,CHEQUE:Cheque,DD:DD,OFFLINE_NEFT:NEFT,OFFLINE_RTGS:RTGS,ONLINE:Online,POSTAL_ORDER:PostalOrder'
     source: pt
     isMandatory: false
-    searchClause: AND rp.paymentmode = $paymentMode
+    searchClause: AND rp.paymentmode = replace($paymentMode,',','_')
   query: |
       with assessments as
       (
@@ -6428,7 +6428,7 @@ ReportDefinitions:
     pattern: 'list://CARD:Card,CASH:Cash,CHEQUE:Cheque,DD:DD,OFFLINE_NEFT:NEFT,OFFLINE_RTGS:RTGS,ONLINE:Online,POSTAL_ORDER:PostalOrder'
     source: pt
     isMandatory: false
-    searchClause: AND rp.paymentmode = $paymentMode
+    searchClause: AND rp.paymentmode = replace($paymentMode,',','_')
   - name: localityArray
     label: reports.pt.zoneList
     type: boundarylist
