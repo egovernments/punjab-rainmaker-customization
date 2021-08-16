@@ -2455,7 +2455,7 @@ ReportDefinitions:
     pattern: 'list://CARD:Card,CASH:Cash,CHEQUE:Cheque,DD:DD,OFFLINE_NEFT:NEFT,OFFLINE_RTGS:RTGS,ONLINE:Online,POSTAL_ORDER:PostalOrder'
     source: pt
     isMandatory: false
-    searchClause: AND payment.paymentmode = $paymentMode
+    searchClause: AND payment.paymentmode = replace($paymentMode,',','_')
   query: |
       -- Use CTE to force query plan, compute & use CTE later
       WITH receipt_breakup AS (
