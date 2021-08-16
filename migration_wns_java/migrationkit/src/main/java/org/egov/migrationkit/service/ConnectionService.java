@@ -299,10 +299,11 @@ public class ConnectionService {
 				
 			
 				//connection.setPropertyId(approvedProperty.getId());
-
+				
+				Boolean isMigration=true;
 				String response = null;
 				try {
-					response = restTemplate.postForObject(host + "/" + waterUrl, waterRequest, String.class);
+					response = restTemplate.postForObject(host + "/" + waterUrl+"?isMigration="+isMigration, waterRequest, String.class);
 				} catch (Exception e) {
 					e.printStackTrace();
 					recordService.recordError("water", tenantId, e.toString(), connection.getId());
@@ -643,9 +644,10 @@ public class ConnectionService {
 				workflow.setModuleName("sw-services");
 				swConnection.setProcessInstance(workflow);
 				
+				Boolean isMigration=true;
 				String response = null;
 				try {
-					response = restTemplate.postForObject(host + "/" + sewerageUrl, sewerageRequest, String.class);
+					response = restTemplate.postForObject(host + "/" + sewerageUrl+"?isMigration=" + isMigration, sewerageRequest, String.class);
 					recordService.setStatus("sewerage", erpSchema, "Saved", swConnection.getId());
 
 				} catch (RestClientException e) {
