@@ -6827,4 +6827,109 @@ ReportDefinitions:
     from summary 
     where 1=1
   groupby: group by blockname
+  
+- reportName: PT_NO_PAYMENT_DEFAULTERS_REPORT
+  summary: PT NO PAYMENT DEFAULTERS_REPORT
+  version: 1.0.0
+  moduleName: rainmaker-pt
+  sourceColumns:
+  - name: tenantid
+    label: reports.pt.tenantid
+    type: string
+    source: pt
+    total: false
+  - name: propertyid
+    label: reports.pt.propertyid
+    type: string
+    source: pt
+    total: false  
+  - name: surveyid
+    label: reports.pt.surveyid
+    type: string
+    source: pt
+    total: false  
+  - name: oldpropertyid
+    label: reports.pt.oldpropertyid
+    type: string
+    source: pt
+    total: false  
+  - name: firmbusinessname
+    label: reports.pt.firmbusinessname
+    type: string
+    source: pt
+    total: false
+  - name: address
+    label: reports.pt.address
+    type: string
+    source: pt
+    total: false  
+  - name: blockname
+    label: reports.pt.blockname
+    type: string
+    source: pt
+    total: false
+  - name: zonename
+    label: reports.pt.zonename
+    type: string
+    source: pt
+    total: false  
+  - name: propertyusagetype
+    label: reports.pt.propertyusagetype
+    type: string
+    source: pt
+    total: false
+  - name: propertytype
+    label: reports.pt.propertytype
+    type: string
+    source: pt
+    total: false  
+  - name: superbuilduparea
+    label: reports.pt.superbuilduparea
+    type: string
+    source: pt
+    total: false
+  - name: nooffloors
+    label: reports.pt.nooffloors
+    type: string
+    source: pt
+    total: false  
+  - name: ownershipcategory
+    label: reports.pt.ownershipcategory
+    type: string
+    source: pt
+    total: false  
+  - name: source
+    label: reports.pt.source
+    type: string
+    source: pt
+    total: false 
+  - name: channel
+    label: reports.pt.channel
+    type: string
+    source: pt
+    total: false 
+  - name: propertystatus
+    label: reports.pt.propertystatus
+    type: string
+    source: pt
+    total: false 
+  query: |
+    select 
+    tenantid,
+    propertyid,
+    surveyid,
+    oldpropertyid,
+    firmbusinessname,
+    concat(address,' ',localityname) as address,
+    blockname,
+    zonename,
+    propertyusagetype,
+    propertytype,
+    superbuilduparea,
+    nooffloors,
+    ownershipcategory,
+    source,
+    channel,
+    propertystatus
+    from report_properties_withoutdemand where tenantid=$tenantid
     
