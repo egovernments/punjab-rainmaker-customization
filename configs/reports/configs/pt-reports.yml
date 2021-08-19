@@ -6908,11 +6908,42 @@ ReportDefinitions:
     type: string
     source: pt
     total: false 
+  - name: plotsize
+    label: reports.pt.plotsize
+    type: string
+    source: pt
+    total: false 
   - name: propertystatus
     label: reports.pt.propertystatus
     type: string
     source: pt
-    total: false 
+    total: false
+  searchParams:
+  - name: usageType
+    label: Usage Type
+    type: singlevaluelist
+    pattern: 'list://RESIDENTIAL:Residential,NONRESIDENTIAL:NonResidential,MIXED:Mixed,'
+    source: pt
+    isMandatory: false
+    searchClause: AND split_part(propertyusagetype,'.',1) = $usageType
+  - name: localityArray
+    label: reports.pt.zoneList
+    type: boundarylist
+    source: pt
+    isMandatory: false
+    searchClause: AND localitycode IN ($localityArray)
+  - name: fromPlotsize
+    label: reports.pt.fromPlotsize
+    type: string
+    source: pt
+    isMandatory: false
+    searchClause: AND plotsize >= ($fromPlotsize)::int
+  - name: toPlotsize
+    label: reports.pt.toPlotsize
+    type: string
+    source: pt
+    isMandatory: true
+    searchClause: AND plotsize <= ($toPlotsize)::int
   query: |
     select 
     tenantid,
@@ -6923,6 +6954,7 @@ ReportDefinitions:
     concat(address,' ',localityname) as address,
     blockname,
     zonename,
+    plotsize,
     propertyusagetype,
     propertytype,
     superbuilduparea,
@@ -6931,5 +6963,6 @@ ReportDefinitions:
     source,
     channel,
     propertystatus
-    from report_properties_withoutdemand where tenantid=$tenantid
+    from report_properties_withoutdemand 
+    where tenantid=$tenantid
     
