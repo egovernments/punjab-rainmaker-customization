@@ -6942,7 +6942,7 @@ ReportDefinitions:
     label: reports.pt.toPlotsize
     type: string
     source: pt
-    isMandatory: true
+    isMandatory: false
     searchClause: AND plotsize <= ($toPlotsize)::int
   query: |
     select 
