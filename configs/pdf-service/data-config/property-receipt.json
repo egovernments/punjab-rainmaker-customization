@@ -774,7 +774,11 @@
                            {
                               "variable":"fatherOrHusbandName2",
                               "value":"fatherOrHusbandName"
-                           }
+                           },
+                           {
+                            "variable":"ownerShipPercentage",
+                            "value":"ownerShipPercentage"
+                         }
                           ]
                     } 
                  },
