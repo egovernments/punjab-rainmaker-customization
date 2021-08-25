@@ -1,5 +1,5 @@
 {
-  "_comment": "Master dashboard which holds all the possible visualisation. Note new dashboards/visualisations can be added ",
+  "_comment": "Master dashboard which holds all the possible visualisation. Note new dashboards/visualisations can be added",
   "dashboards": [
     {
       "name": "DSS_OVERVIEW_DASHBOARD",
@@ -22,9 +22,7 @@
                   "name": "DSS_TOTAL_COLLECTION_TODAY",
                   "code": "",
                   "chartType": "",
-                  "filter": {
-                    "title": "TODAY"
-                  },
+                  "filter": {"title": "TODAY"},
                   "headers": []
                 },
                 {
@@ -283,10 +281,6 @@
                 }
               ]
             }
-              ]
-            }
-          ]
-        }
           ]
         }
       ]
@@ -313,14 +307,13 @@
               "isCollapsible": false,
               "label": "DSS_OVERVIEW",
               "charts": [
+
                 {
                   "id": "todaysCollection",
                   "name": "DSS_TOTAL_COLLECTION_TODAY",
                   "code": "",
                   "chartType": "metric",
-                  "filter": {
-                    "title": "TODAY"
-                  },
+                  "filter": {"title": "TODAY"},
                   "headers": []
                 },
                 {
@@ -364,7 +357,7 @@
                   "id": "cumulativeCollection",
                   "name": "Monthly",
                   "code": "",
-                  "chartType": "bar",
+                  "chartType": "line",
                   "filter": "",
                   "headers": []
                 }
@@ -381,7 +374,7 @@
               "name": "DSS_PT_TOP_3_PERFORMING_ULBS",
               "dimensions": {
                 "height": 250,
-                "width": 3
+                "width": 4
               },
               "vizType": "performing-metric",
               "noUnit": false,
@@ -403,7 +396,7 @@
               "name": "DSS_PT_BOTTOM_3_PERFORMING_ULBS",
               "dimensions": {
                 "height": 250,
-                "width": 3
+                "width": 4
               },
               "vizType": "performing-metric",
               "noUnit": false,
@@ -418,19 +411,13 @@
                   "headers": []
                 }
               ]
-            }
-          ]
-        },
-                {
-          "row": 3,
-          "name": "DSS_REVENUE",
-          "vizArray": [
+            },
             {
-              "id": 231,
+              "id": 223,
               "name": "DSS_PT_COLLECTION_BY_USAGE_TYPE",
               "dimensions": {
                 "height": 250,
-                "width": 3
+                "width": 4
               },
               "vizType": "chart",
               "noUnit": true,
@@ -445,36 +432,15 @@
                   "headers": []
                 }
               ]
-            },
-            {
-              "id": 232,
-              "name": "DSS_PT_COLLECTION_BY_PAYMENT_MODE",
-              "dimensions": {
-                "height": 250,
-                "width": 3
-              },
-              "vizType": "chart",
-              "noUnit": true,
-              "isCollapsible": false,
-              "charts": [
-                {
-                  "id": "collectionByPaymentMode",
-                  "name": "DSS_PT_COLLECTION_BY_PAYMENT_MODE",
-                  "code": "",
-                  "chartType": "donut",
-                  "filter": "",
-                  "headers": []
-                }
-              ]
             }
           ]
         },
         {
-          "row": 4,
+          "row": 3,
           "name": "DSS_REVENUE",
           "vizArray": [
             {
-              "id": 241,
+              "id": 231,
               "name": "DSS_PT_KEY_FY_INDICATORS",
               "dimensions": {
                 "height": 350,
@@ -507,11 +473,11 @@
           ]
         },
         {
-          "row": 5,
+          "row": 4,
           "name": "DSS_REVENUE",
           "vizArray": [
             {
-              "id": 251,
+              "id": 231,
               "name": "DSS_PT_TAX_HEAD",
               "dimensions": {
                 "height": 350,
@@ -545,11 +511,11 @@
           ]
         },
         {
-          "row": 6,
+          "row": 5,
           "name": "DSS_SERVICE",
           "vizArray": [
             {
-              "id": 261,
+              "id": 241,
               "name": "DSS_OVERVIEW",
               "dimensions": {
                 "height": 350,
@@ -586,7 +552,7 @@
               ]
             },
             {
-              "id": 262,
+              "id": 242,
               "name": "DSS_PT_CUMULATIVE_PROPERTIES_ASSESSED",
               "dimensions": {
                 "height": 350,
@@ -608,11 +574,11 @@
           ]
         },
         {
-          "row": 7,
+          "row": 6,
           "name": "DSS_SERVICE",
           "vizArray": [
             {
-              "id": 271,
+              "id": 251,
               "name": "DSS_PT_TOP_3_PERFORMING_ULBS",
               "dimensions": {
                 "height": 250,
@@ -633,7 +599,7 @@
               ]
             },
             {
-              "id": 272,
+              "id": 252,
               "name": "DSS_PT_BOTTOM_3_PERFORMING_ULBS",
               "dimensions": {
                 "height": 250,
@@ -653,7 +619,7 @@
               ]
             },
             {
-              "id": 273,
+              "id": 253,
               "name": "DSS_PT_PROPERTIES_BY_USAGE_TYPE",
               "dimensions": {
                 "height": 250,
@@ -732,9 +698,7 @@
                   "name": "DSS_TOTAL_COLLECTION_TODAY",
                   "code": "",
                   "chartType": "metric",
-                  "filter": {
-                    "title": "TODAY"
-                  },
+                  "filter": {"title": "TODAY"},
                   "headers": []
                 },
                 {
@@ -1073,6 +1037,7 @@
                   "filter": "",
                   "headers": [],
                   "tabName": "Boundary"
+
                 }
               ]
             }
@@ -1272,6 +1237,7 @@
                 }
               ]
             }
+
           ]
         },
         {
@@ -1551,6 +1517,7 @@
         }
       ]
     },
+
     {
       "name": "DSS_PGR_DASHBOARD",
       "id": "ulb-pgr",
@@ -1743,6 +1710,7 @@
                 }
               ]
             }
+
           ]
         },
         {
@@ -1859,9 +1827,7 @@
                   "name": "DSS_TOTAL_COLLECTION_TODAY",
                   "code": "",
                   "chartType": "metric",
-                  "filter": {
-                    "title": "TODAY"
-                  },
+                  "filter": {"title": "TODAY"},
                   "headers": []
                 },
                 {
@@ -1922,7 +1888,7 @@
               "name": "DSS_PT_TOP_3_PERFORMING_ULBS",
               "dimensions": {
                 "height": 250,
-                "width": 3
+                "width": 4
               },
               "vizType": "performing-metric",
               "noUnit": false,
@@ -1944,7 +1910,7 @@
               "name": "DSS_PT_BOTTOM_3_PERFORMING_ULBS",
               "dimensions": {
                 "height": 250,
-                "width": 3
+                "width": 4
               },
               "vizType": "performing-metric",
               "noUnit": false,
@@ -1965,7 +1931,7 @@
               "name": "DSS_PT_COLLECTION_BY_USAGE_TYPE",
               "dimensions": {
                 "height": 250,
-                "width": 3
+                "width": 4
               },
               "vizType": "chart",
               "noUnit": true,
@@ -1974,27 +1940,6 @@
                 {
                   "id": "collectionByUsageType",
                   "name": "DSS_PT_COLLECTION_BY_USAGE_TYPE",
-                  "code": "",
-                  "chartType": "donut",
-                  "filter": "",
-                  "headers": []
-                }
-              ]
-            },
-            {
-              "id": 224,
-              "name": "DSS_PT_COLLECTION_BY_PAYMENT_MODE",
-              "dimensions": {
-                "height": 250,
-                "width": 3
-              },
-              "vizType": "chart",
-              "noUnit": true,
-              "isCollapsible": false,
-              "charts": [
-                {
-                  "id": "collectionByPaymentMode",
-                  "name": "DSS_PT_COLLECTION_BY_PAYMENT_MODE",
                   "code": "",
                   "chartType": "donut",
                   "filter": "",
@@ -2267,9 +2212,7 @@
                   "name": "DSS_TOTAL_COLLECTION_TODAY",
                   "code": "",
                   "chartType": "metric",
-                  "filter": {
-                    "title": "TODAY"
-                  },
+                  "filter": {"title": "TODAY"},
                   "headers": []
                 },
                 {
@@ -2608,6 +2551,7 @@
                   "filter": "",
                   "headers": [],
                   "tabName": "Boundary"
+
                 }
               ]
             }
@@ -2636,9 +2580,7 @@
                   "name": "DSS_TOTAL_COLLECTION_TODAY",
                   "code": "",
                   "chartType": "",
-                  "filter": {
-                    "title": "TODAY"
-                  },
+                  "filter": {"title": "TODAY"},
                   "headers": []
                 },
                 {
@@ -3061,6 +3003,7 @@
         }
       ]
     },
+
     {
       "name": "DSS_W&S_DASHBOARD",
       "id": "ws",
@@ -3465,6 +3408,7 @@
                 }
               ]
             }
+
           ]
         }
       ]
@@ -3873,9 +3817,11 @@
                 }
               ]
             }
+
           ]
         }
       ]
     }
   ]
 }
+
