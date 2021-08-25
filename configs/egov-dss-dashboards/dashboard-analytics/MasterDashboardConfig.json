@@ -282,7 +282,45 @@
                   "headers": []
                 }
               ]
+            },
+          {
+              "row": 5,
+               "name": "DSS_REVENUE",
+               "vizArray": [
+                              {
+              "id": 151,
+              "name": "DSS_PT_TAX_HEAD",
+              "dimensions": {
+                "height": 350,
+                "width": 12
+              },
+              "vizType": "chart",
+              "label": "",
+              "noUnit": false,
+              "isCollapsible": true,
+              "charts": [
+                {
+                  "id": "taxHeadsBreakupDDRRevenue",
+                  "name": "DSS_PT_TAX_HEAD_BREAKUP_REVENUE",
+                  "code": "",
+                  "chartType": "table",
+                  "filter": "",
+                  "headers": [],
+                  "tabName": "Boundary"
+                },
+                {
+                  "id": "taxHeadsBreakupUsage",
+                  "name": "DSS_PT_TAX_HEAD_BREAKUP_USAGE",
+                  "code": "",
+                  "chartType": "table",
+                  "filter": "",
+                  "headers": [],
+                  "tabName": "Usage"
+                }
+              ]
             }
+          ]
+        }
           ]
         }
       ]
