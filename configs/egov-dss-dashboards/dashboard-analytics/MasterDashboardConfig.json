@@ -108,7 +108,7 @@
                 "height": 250,
                 "width": 4
               },
-              "vizType": "performing-metric",
+              "vizType": "chart",
               "noUnit": false,
               "isCollapsible": false,
               "charts": [
@@ -116,9 +116,10 @@
                   "id": "bottomPerformingUlbs",
                   "name": "DSS_BOTTOM_PERFORMING_ULBS",
                   "code": "",
-                  "chartType": "bar",
+                  "chartType": "table",
                   "filter": "",
-                  "headers": []
+                  "headers": [],
+                  "tabName":"Boundary"
                 }
               ]
             },
