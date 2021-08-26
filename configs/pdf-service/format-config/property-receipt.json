@@ -860,9 +860,11 @@
           "*",
           "*",
           "*",
+          "*",
+          "*",
           "*"
         ],
-        "body": ["{{#var_owners}}[{\"text\":\"Owner Name\",\"border\":[true,true,false,true],\"style\":\"receipt-table-key\"},{\"text\":\"{{name2}}\",\"border\":[false,true,true,true]},{\"text\":\"Father/Husband Name\",\"border\":[true,true,false,true],\"style\":\"receipt-table-key\"},{\"text\":\"{{fatherOrHusbandName2}}\",\"border\":[false,true,true,true]}]{{/var_owners}}"]
+        "body": ["{{#var_owners}}[{\"text\":\"Owner Name\",\"border\":[true,true,false,true],\"style\":\"receipt-table-key\"},{\"text\":\"{{name2}}\",\"border\":[false,true,true,true]},{\"text\":\"Father/Husband Name\",\"border\":[true,true,false,true],\"style\":\"receipt-table-key\"},{\"text\":\"{{fatherOrHusbandName2}}\",\"border\":[false,true,true,true]},{\"text\":\"Ownership %\",\"border\":[false,true,false,true],\"style\":\"receipt-table-key\"},{\"text\":\"{{ownerShipPercentage}}\",\"border\":[false,true,true,true]}]{{/var_owners}}"]
       },
       "layout": {}
     }, {
