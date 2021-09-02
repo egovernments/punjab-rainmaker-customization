@@ -151,24 +151,24 @@
           "vizArray": [	
             {	
               "id": 131,	
-              "name": "DSS_TOP_PERFORMING_ULBS",	
+              "name": "DSS_PT_KEY_FY_INDICATORS",	
               "dimensions": {	
-                "height": 250,	
-                "width": 4	
+                "height": 350,
+                "width": 12
               },	
-              "vizType": "performing-metric",	
-              "noUnit": false,	
-              "isCollapsible": false,	
-              "label": "",	
+               "vizType": "chart",
+              "noUnit": false,
+              "isCollapsible": false,
               "charts": [	
-                {	
-                  "id": "topPerformingUlbs",	
-                  "name": "DSS_TOP_PERFORMING_ULBS",	
-                  "code": "",	
-                  "chartType": "bar",	
-                  "filter": "",	
-                  "headers": []	
-                }	
+               {
+                  "id": "demandCollectionIndexDDRRevenue",
+                  "name": "DSS_PT_DEMAND_COLLECTION_BOUNDARY",
+                  "code": "",
+                  "chartType": "table",
+                  "filter": "",
+                  "headers": [],
+                  "tabName": "Boundary"
+                }
               ]	
             }	
           ]	
