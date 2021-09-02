@@ -778,7 +778,11 @@
                            {
                             "variable":"ownerShipPercentage",
                             "value":"ownerShipPercentage"
-                         }
+                         },
+                         {
+                          "variable":"ownerType",
+                          "value":"ownerType"
+                       }
                           ]
                     } 
                  },
