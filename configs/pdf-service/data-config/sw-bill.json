@@ -457,6 +457,23 @@
                 }
               },
               {
+                "variable": "oldConnectionNo",
+                "value": {
+                  "path": "$.connection.oldConnectionNo"
+                }
+              }, {
+                "variable": "rate",
+                "value": {
+                  "path": "$.additionalDetails.penaltyRate"
+                }
+              },
+              {
+                "variable": "ledgerId",
+                "value": {
+                  "path": "$.connection.additionalDetails.ledgerId"
+                }
+              },
+              {
                 "variable": "payerAddress",
                 "value": {
                   "path": "$.payerAddress"
@@ -706,7 +723,7 @@
           {
             "externalAPI": [
               {
-                "path": "http://localhost:8077/egov-mdms-service/v1/_get",
+                "path": "http://egov-mdms-service:8080/egov-mdms-service/v1/_get",
                 "queryParam": "moduleName=tenant&masterName=tenants&tenantId=pb&filter=%5B?(@.code=='{$.tenantId}')%5D",
                 "apiRequest": null,
                 "responseMapping": [
@@ -717,6 +734,9 @@
                   {
                     "variable": "phoneNumber",
                     "value": "$.MdmsRes.tenant.tenants[0].contactNumber"
+                  }, {
+                    "variable":"mcGrade",
+                    "value":"$.MdmsRes.tenant.tenants[0].city.ulbType"
                   },
                   {
                     "variable": "website",
@@ -743,8 +763,8 @@
                 ]
               },
               {
-                "path": "http://localhost:8078/billing-service/demand/_search",
-                "queryParam": "tenantId=$.tenantId,consumerCode=$.consumerCode,businessService=WS",
+                "path": "http://billing-service:8080/billing-service/demand/_search",
+                "queryParam": "tenantId=$.tenantId,consumerCode=$.consumerCode,businessService=SW",
                 "apiRequest": null,
                 "responseMapping": [
                   {
@@ -774,23 +794,8 @@
                 ]
               },
               {
-                "path": "http://localhost:8079/sw-services/swc/_search",
-                "queryParam": "tenantId=$.tenantId,connectionNumber=$.consumerCode",
-                "apiRequest": null,
-                "responseMapping": [
-                  {
-                    "variable": "oldConnectionNo",
-                    "value": "$.SewerageConnection[0].additionalDetails.oldConnectionNo"
-                  },
-                  {
-                    "variable": "ledgerId",
-                    "value": "$.SewerageConnection[0].additionalDetails.ledgerId"
-                  }
-                ]
-              },
-              {
                 "path": "http://property-services.egov:8080/property-services/property/_search",
-                "queryParam": "tenantId=$.tenantId,propertyIds=$.additionalDetails.propertyId",
+                "queryParam": "tenantId=$.tenantId,propertyIds=$.connection.propertyId",
                 "apiRequest": null,
                 "responseMapping": [
                   {
