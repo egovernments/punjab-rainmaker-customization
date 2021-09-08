@@ -23,7 +23,7 @@
               {
                 "stack": [
                   {
-                    "text": "{{logo_header}} {{ulbGrade}}",
+                    "text": "{{logo_header}} {{mcGrade}}",
                     "style": "receipt-logo-header"
                   },
                   {
@@ -318,7 +318,7 @@
                         "style": "receipt-table-value2"
                       },
                       {
-                        "text": "Street Name",
+                        "text": "Guardian Name",
                         "border": [
                           false,
                           false,
@@ -350,7 +350,7 @@
                         "style": "receipt-table2"
                       },
                       {
-                        "text": "{{payerName}}",
+                        "text": "{{ownerName}}",
                         "border": [
                           false,
                           false,
@@ -360,7 +360,7 @@
                         "style": "receipt-table2"
                       },
                       {
-                        "text": "{{streetName}}",
+                        "text": "{{guardianName}}",
                         "border": [
                           false,
                           false,
@@ -402,7 +402,7 @@
                         "style": "receipt-table-value2"
                       },
                       {
-                        "text": "Landmark",
+                        "text": "Street Name/Landmark",
                         "border": [
                           false,
                           false,
@@ -445,7 +445,7 @@
                         "style": "receipt-table2"
                       },
                       {
-                        "text":"{{landmark}}",
+                        "text":"{{streetName}}{{landmark}}",
                         "border": [
                           false,
                           false,
