@@ -159,28 +159,6 @@
                                  "body":[
                                      [
                                          {
-                                             "text":"{{financial_year}}",
-                                             "style":"receipt-sub-logo-sub-header"
-                                         },
-                                         {
-                                             "text":"{{financialYear}}",
-                                             "style":"receipt-sub-logo-sub-header"
-                                         }
-                                    ]
-                                 ]
-                               },
-                               "layout":"noBorders"
-                         },
-                                         {
-                               "style":"noc-head",
-                               "table":{
-                                 "widths":[
-                                   "35%",
-                                   "65%"
-                                 ],
-                                 "body":[
-                                     [
-                                         {
                                              "text":"{{trade_name}}",
                                              "style":"receipt-sub-logo-sub-header"
                                          },

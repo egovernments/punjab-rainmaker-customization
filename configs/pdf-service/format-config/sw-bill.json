@@ -23,7 +23,7 @@
               {
                 "stack": [
                   {
-                    "text": "{{logo_header}} {{Municipal_Corporation}}",
+                    "text": "{{logo_header}} {{mcGrade}}",
                     "style": "receipt-logo-header"
                   },
                   {
@@ -206,10 +206,10 @@
               {
                 "table": {
                   "widths": [
-                    "17%",
-                    "43%",
-                    "15%",
-                    "25%"
+                    "23%",
+                    "25%",
+                    "23%",
+                    "*"
                   ],
                   "body": [
                     [
@@ -717,7 +717,7 @@
             ],
             [
               {
-                "text": "1. Online payment can be done for water charges payment.",
+                "text": "1. Online payment can be done for {{serviceType}} charges payment.  http://bit.ly/{{logo_header}}{{serviceType}}",
                 "border": [
                   true,
                   false,
@@ -785,7 +785,7 @@
             ],
             [
               {
-                "text": "5. Late payment charges will be applied after due date",
+                "text": "5. {{rate}}% Late payment charges will be applied after due date",
                 "border": [
                   true,
                   false,
