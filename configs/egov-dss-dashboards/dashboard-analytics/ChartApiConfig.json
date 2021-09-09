@@ -3863,5 +3863,45 @@
     ],
     "insight": {},
     "_comment": ""
-  }
+  },
+    "collectionByModule": {
+    "chartName": "COLLECTION_BY_MODULE",
+    "queries": [
+      {
+        "module": "COMMON",
+        "requestQueryMap": "{\"tenantId\" : \"dataObject.tenantId\"}",
+        "dateRefField": "dataObject.paymentDetails.receiptDate",
+        "indexName": "dss-collection_v2",
+        "aggrQuery": "{\"aggs":{\"AGGR":{\"filter":{\"bool":{\"must_not":[{\"term":{\"dataObject.tenantId.keyword":"pb.testing"}},{\"terms":{\"dataObject.paymentDetails.bill.status.keyword":["Cancelled"]}}]}},"aggs":{\"AGGR":{\"terms":{\"field":"dataObject.tenantId.keyword"},"aggs":{\"PT":{\"sum":{\"field":"dataObject.paymentDetails.totalAmountPaid"}},"TL":{\"value_count":{\"field":"dataObject.transactionNumber.keyword"}}}}}}}}"
+      }
+    ],
+    "isMdmsEnabled": true,
+    "filterKeys": [
+      {
+        "key": "tenantId",
+        "column": "DDRs"
+      }
+    ],
+    "chartType": "table",
+    "valueType": "number",
+    "drillChart": "collectionByModule",
+    "action": "",
+    "plotLabel": "DDRs",
+    "isPostResponseHandler": true,
+    "postAggregationTheory": "repsonseToDifferenceOfDates",
+    "aggregationPaths": [
+      "PT",
+      "TL"
+    ],
+    "pathDataTypeMapping": [
+      {
+        "PT": "amount"
+      },
+      {
+        "TL": "amount"
+      }
+    ],
+    "insight": {},
+    "_comment": ""
+  },
 }
