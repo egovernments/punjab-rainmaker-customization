@@ -161,8 +161,8 @@
               "isCollapsible": false,
               "charts": [	
                {
-                  "id": "demandCollectionIndexDDRRevenue",
-                  "name": "DSS_PT_DEMAND_COLLECTION_BOUNDARY",
+                  "id": "collectionByModule",
+                  "name": "COLLECTION_BY_MODULE",
                   "code": "",
                   "chartType": "table",
                   "filter": "",
