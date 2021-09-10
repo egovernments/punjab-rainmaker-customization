@@ -786,7 +786,7 @@
     "queries": [
       {
         "module": "COMMON",
-        "requestQueryMap":"{\"tenantId\" : \"dataObject.tenantId\"}",
+        "requestQueryMap":"",
         "dateRefField": "",
         "indexName": "dss-collection_v2",
         "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"dataObject.tenantId.keyword\":\"pb.testing\"}},{\"terms\":{\"dataObject.paymentDetails.bill.status.keyword\":[\"Cancelled\"]}}]}},\"aggs\":{\"AGGR\":{\"terms\":{\"field\":\"dataObject.tenantId.keyword\",\"size\":\"200\"},\"aggs\":{\"PT\":{\"sum\":{\"field\":\"dataObject.paymentDetails.totalAmountPaid\"}},\"TL\":{\"sum\":{\"field\":\"dataObject.paymentDetails.totalAmountPaid\"}}}}}}}}"
