@@ -789,7 +789,7 @@
         "requestQueryMap":"{\"tenantId\" : \"dataObject.tenantId\"}",
         "dateRefField": "",
         "indexName": "dss-collection_v2",
-        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"dataObject.tenantId.keyword\":\"pb.testing\"}},{\"terms\":{\"dataObject.paymentDetails.bill.status.keyword\":[\"Cancelled\"]}}]}},\"aggs\":{\"AGGR\":{\"terms\":{\"field\":\"dataObject.tenantId.keyword\",\"size\":\"200\"},\"aggs\":{\"PT\":{\"sum\":{\"field\":\"dataObject.paymentDetails.totalAmountPaid\"}},\"TL\":{\"value_count\":{\"field\":\"dataObject.transactionNumber.keyword\"}}}}}}}}"
+        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"dataObject.tenantId.keyword\":\"pb.testing\"}},{\"terms\":{\"dataObject.paymentDetails.bill.status.keyword\":[\"Cancelled\"]}}]}},\"aggs\":{\"AGGR\":{\"terms\":{\"field\":\"dataObject.tenantId.keyword\",\"size\":\"200\"},\"aggs\":{\"PT\":{\"sum\":{\"field\":\"dataObject.paymentDetails.totalAmountPaid\"}},\"TL\":{\"sum\":{\"field\":\"dataObject.paymentDetails.totalAmountPaid\"}}}}}}}}"
       }
     ],
     "isMdmsEnabled": true,
