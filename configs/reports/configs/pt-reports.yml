@@ -6628,9 +6628,10 @@ ReportDefinitions:
           assessmentyears,
           zonename,
           sum(totalamount) as amount,
-          count(*) as totalcount
+          count(distinct receiptnumber) as totalcount
         from report_assessments as asmt
         inner join report_properties as pt on pt.propertyid=asmt.propertyid
+        inner join report_payments as payment on payment.billid=asmt.billid and (asmt.totalamount>0 or payment.amoutpaid=0)
         where paymentstatus!='CANCELLED' and pt.tenantid=$tenantid
         and asmt.createdtime>=$fromDate
         and asmt.createdtime<=$toDate
@@ -6794,9 +6795,10 @@ ReportDefinitions:
           assessmentyears,
           blockname,
           sum(totalamount) as amount,
-          count(*) as totalcount
+          count(distinct receiptnumber) as totalcount
         from report_assessments as asmt
         inner join report_properties as pt on pt.propertyid=asmt.propertyid
+        inner join report_payments as payment on payment.billid=asmt.billid and (asmt.totalamount>0 or payment.amoutpaid=0)
         where paymentstatus!='CANCELLED' and pt.tenantid=$tenantid
         and asmt.createdtime>=$fromDate
         and asmt.createdtime<=$toDate
