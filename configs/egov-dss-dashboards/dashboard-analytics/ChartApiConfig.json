@@ -805,7 +805,7 @@
     "action": "",
     "plotLabel": "DDRs",
     "isPostResponseHandler": true,
-    "postAggregationTheory": "",
+    "postAggregationTheory": "repsonseToDifferenceOfDates",
     "aggregationPaths": [
       "PT",
       "TL"
