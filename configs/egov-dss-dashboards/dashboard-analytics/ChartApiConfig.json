@@ -801,7 +801,47 @@
     ],
     "chartType": "table",
     "valueType": "number",
-    "drillChart": "collectionByModule",
+    "drillChart": "collectionByModuleULBWise",
+    "action": "",
+    "plotLabel": "ULBs",
+    "isPostResponseHandler": true,
+    "postAggregationTheory": "repsonseToDifferenceOfDates",
+    "aggregationPaths": [
+      "PT",
+      "TL"
+    ],
+    "pathDataTypeMapping": [
+      {
+        "PT": "amount"
+      },
+      {
+        "TL": "amount"
+      }
+    ],
+    "insight": {},
+    "_comment": ""
+  },
+  "collectionByModuleULBWise": {
+    "chartName": "COLLECTION_BY_MODULE",
+    "queries": [
+      {
+        "module": "COMMON",
+        "requestQueryMap":"{\"tenantId\" : \"dataObject.tenantId\", \"district\" : \"dataObject.tenantData.city.districtCode\" }",
+        "dateRefField": "",
+        "indexName": "dss-collection_v2",
+        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"dataObject.tenantId.keyword\":\"pb.testing\"}},{\"terms\":{\"dataObject.paymentDetails.bill.status.keyword\":[\"Cancelled\"]}}]}},\"aggs\":{\"AGGR\":{\"terms\":{\"field\":\"dataObject.tenantId.keyword\",\"size\":200},\"aggs\":{\"PT\":{\"sum\":{\"field\":\"dataObject.paymentDetails.totalAmountPaid\"}},\"TL\":{\"sum\":{\"field\":\"dataObject.paymentDetails.totalAmountPaid\"}}}}}}}}"
+      }
+    ],
+    "isMdmsEnabled": true,
+    "filterKeys": [
+      {
+        "key": "tenantId",
+        "column": "ULBs"
+      }
+    ],
+    "chartType": "table",
+    "valueType": "number",
+    "drillChart": "none",
     "action": "",
     "plotLabel": "ULBs",
     "isPostResponseHandler": true,
