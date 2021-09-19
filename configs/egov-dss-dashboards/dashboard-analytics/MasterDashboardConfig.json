@@ -151,7 +151,7 @@
           "vizArray": [	
             {	
               "id": 131,	
-              "name": "PT & TL TOTAL COLLECTION ",	
+              "name": "PT ,TL ,WS TOTAL COLLECTION ",	
               "dimensions": {	
                 "height": 350,
                 "width": 12
@@ -179,7 +179,7 @@
           "vizArray": [	
             {	
               "id": 141,	
-              "name": "W&S TOTAL COLLECTION",	
+              "name": "W&S ERP TOTAL COLLECTION",	
               "dimensions": {	
                 "height": 350,
                 "width": 12
