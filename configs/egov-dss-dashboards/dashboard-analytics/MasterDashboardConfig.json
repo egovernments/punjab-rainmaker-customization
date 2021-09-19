@@ -179,7 +179,7 @@
           "vizArray": [	
             {	
               "id": 141,	
-              "name": "DSS_PT_KEY_FY_INDICATORS",	
+              "name": "DSS_W&S_TAX_HEAD_BOUNDARY",	
               "dimensions": {	
                 "height": 350,
                 "width": 12
@@ -189,8 +189,8 @@
               "isCollapsible": false,
               "charts": [	
                {
-                  "id": "collectionByModule",
-                  "name": "COLLECTION_BY_MODULE",
+                 "id": "wsTaxHeadDDR",
+                  "name": "DSS_W&S_TAX_HEAD_BOUNDARY",
                   "code": "",
                   "chartType": "table",
                   "filter": "",
