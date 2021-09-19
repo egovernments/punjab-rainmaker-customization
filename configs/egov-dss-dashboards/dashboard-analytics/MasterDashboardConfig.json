@@ -172,13 +172,41 @@
               ]	
             }	
           ]	
-        },	
-        {	
+        },
+         {
           "row": 4,
+          "name": "DSS_REVENUE",	
+          "vizArray": [	
+            {	
+              "id": 141,	
+              "name": "DSS_PT_KEY_FY_INDICATORS",	
+              "dimensions": {	
+                "height": 350,
+                "width": 12
+              },	
+               "vizType": "chart",
+              "noUnit": false,
+              "isCollapsible": false,
+              "charts": [	
+               {
+                  "id": "collectionByModule",
+                  "name": "COLLECTION_BY_MODULE",
+                  "code": "",
+                  "chartType": "table",
+                  "filter": "",
+                  "headers": [],
+                  "tabName": "Boundary"
+                }
+              ]	
+            }	
+          ]	
+        },
+        {	
+          "row": 5,
           "name": "DSS_SERVICE",
           "vizArray": [
             {
-              "id": 141,
+              "id": 151,
               "name": "DSS_OVERVIEW",
               "dimensions": {
                 "height": 450,
@@ -223,7 +251,7 @@
               ]
             },
             {
-              "id": 142,
+              "id": 152,
               "name": "DSS_TOTAL_APPLICATION_&_CLOSED_APPLICATION",
               "dimensions": {
                 "height": 450,
@@ -245,11 +273,11 @@
           ]
         },
         {
-          "row": 5,
+          "row": 6,
           "name": "DSS_SERVICE",
           "vizArray": [
             {
-              "id": 151,
+              "id": 161,
               "name": "DSS_TOP_PERFORMING_ULBS",
               "dimensions": {
                 "height": 250,
@@ -270,7 +298,7 @@
               ]
             },
             {
-              "id": 152,
+              "id": 162,
               "name": "DSS_BOTTOM_PERFORMING_ULBS",
               "dimensions": {
                 "height": 250,
@@ -290,7 +318,7 @@
               ]
             },
             {
-              "id": 153,
+              "id": 163,
               "name": "DSS_TOTAL_APPLICATIONS:_DEPARTMENT_WISE",
               "dimensions": {
                 "height": 250,
