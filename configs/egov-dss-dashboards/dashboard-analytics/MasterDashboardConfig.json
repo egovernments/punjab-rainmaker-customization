@@ -151,7 +151,7 @@
           "vizArray": [	
             {	
               "id": 131,	
-              "name": "DSS_PT_KEY_FY_INDICATORS",	
+              "name": "PT & TL TOTAL COLLECTION ",	
               "dimensions": {	
                 "height": 350,
                 "width": 12
@@ -179,7 +179,7 @@
           "vizArray": [	
             {	
               "id": 141,	
-              "name": "DSS_W&S_TAX_HEAD_BOUNDARY",	
+              "name": "W&S TOTAL COLLECTION",	
               "dimensions": {	
                 "height": 350,
                 "width": 12
