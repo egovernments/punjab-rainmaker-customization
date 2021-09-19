@@ -167,7 +167,7 @@
                   "chartType": "table",
                   "filter": "",
                   "headers": [],
-                  "tabName": "Boundary"
+                  "tabName": ""
                 }
               ]	
             }	
@@ -186,7 +186,7 @@
               },	
                "vizType": "chart",
               "noUnit": false,
-              "isCollapsible": true,
+              "isCollapsible": false,
               "charts": [	
                {
                  "id": "wsTaxHeadDDR",
@@ -195,7 +195,7 @@
                   "chartType": "table",
                   "filter": "",
                   "headers": [],
-                  "tabName": "Boundary"
+                  "tabName": ""
                 }
               ]	
             }	
