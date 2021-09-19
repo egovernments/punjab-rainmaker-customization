@@ -186,7 +186,7 @@
               },	
                "vizType": "chart",
               "noUnit": false,
-              "isCollapsible": false,
+              "isCollapsible": true,
               "charts": [	
                {
                  "id": "wsTaxHeadDDR",
