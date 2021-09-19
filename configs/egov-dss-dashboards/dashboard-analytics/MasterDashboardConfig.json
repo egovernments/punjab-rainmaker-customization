@@ -165,8 +165,7 @@
                   "name": "COLLECTION_BY_MODULE",
                   "code": "",
                   "chartType": "table",
-                  "filter": "",
-                  "headers": []
+                  "filter": ""
                 }
               ]	
             }	
