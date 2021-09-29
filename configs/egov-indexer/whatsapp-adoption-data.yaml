@@ -1,0 +1,12 @@
+ServiceMaps:
+ serviceName: Collection Service
+ version: 1.0.0
+ mappings:
+  - topic: whatsapp-adoption-data
+    configKey: INDEX
+    indexes:
+    - name: whatsapp-adoption-data
+      type: general
+      id: $.id
+      isBulk: true
+      jsonPath: $.*
