@@ -9,3 +9,4 @@ ServiceMaps:
       type: general
       id: $.id
       isBulk: true
+      jsonPath: $.*
