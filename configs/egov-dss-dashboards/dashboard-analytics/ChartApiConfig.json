@@ -3466,7 +3466,26 @@
       },
       {
         "Total Receipt": "number"
+      },
+      {
+        "No of Bill": "number"
+      },
+      {
+        "Late charges": "amount"
+      },
+      {
+        "Interest": "amount"
+      },
+      {
+        "Advance": "amount"
+      },
+      {
+        "Current Charges": "amount"
+      },
+      {
+        "Arrear Charges": "amount"
       }
+      
     ],
     "insight": {
     },
