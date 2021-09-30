@@ -594,7 +594,7 @@
     "documentType": "_doc",
     "drillChart": "none",
     "aggregationPaths": [
-      "Usage Type"
+      "Payment Mode"
     ],
     "insight": {
     },
