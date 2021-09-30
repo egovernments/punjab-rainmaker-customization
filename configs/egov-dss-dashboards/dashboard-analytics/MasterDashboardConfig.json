@@ -188,7 +188,7 @@
               "isCollapsible": false,
               "charts": [	
                {
-                 "id": "wsTaxHeadDDR",
+                 "id": "wsTaxHeadDDROverview",
                   "name": "DSS_W&S_TAX_HEAD_BOUNDARY",
                   "code": "",
                   "chartType": "table",
