@@ -447,7 +447,7 @@
             },
             {
               "id": 222,
-              "name": "DSS_PT_BOTTOM_3_PERFORMING_ULBS",
+              "name": "DSS_PT_COLLECTION_BY_PAYMENT_MODE",
               "dimensions": {
                 "height": 250,
                 "width": 4
@@ -457,8 +457,8 @@
               "isCollapsible": false,
               "charts": [
                 {
-                  "id": "collectionByUsageType",
-                  "name": "DSS_PT_BOTTOM_3_PERFORMING_ULBS",
+                  "id": "ptcollectionByPaymentMode",
+                  "name": "DSS_PT_COLLECTION_BY_PAYMENT_MODE",
                   "code": "",
                   "chartType": "donut",
                   "filter": "",
