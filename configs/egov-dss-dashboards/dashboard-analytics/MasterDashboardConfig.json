@@ -452,15 +452,15 @@
                 "height": 250,
                 "width": 4
               },
-              "vizType": "performing-metric",
-              "noUnit": false,
+              "vizType": "chart",
+              "noUnit": true,
               "isCollapsible": false,
               "charts": [
                 {
-                  "id": "bottomPerformingUlbs",
+                  "id": "collectionByUsageType",
                   "name": "DSS_PT_BOTTOM_3_PERFORMING_ULBS",
                   "code": "",
-                  "chartType": "bar",
+                  "chartType": "donut",
                   "filter": "",
                   "headers": []
                 }
