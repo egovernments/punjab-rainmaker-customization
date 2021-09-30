@@ -3451,14 +3451,7 @@
     "postAggregationTheory" : "",
     "aggregationPaths": [
       "Total Collection",
-      "Total Receipt",
-      "No of Bill",
-      "Late charges",
-      "Interest",
-      "Advance",
-      "Current Charges",
-      "Arrear Charges"
-
+      "Total Receipt"
     ],
     "pathDataTypeMapping": [
       {
@@ -3466,26 +3459,7 @@
       },
       {
         "Total Receipt": "number"
-      },
-      {
-        "No of Bill": "number"
-      },
-      {
-        "Late charges": "amount"
-      },
-      {
-        "Interest": "amount"
-      },
-      {
-        "Advance": "amount"
-      },
-      {
-        "Current Charges": "amount"
-      },
-      {
-        "Arrear Charges": "amount"
-      }
-      
+      }      
     ],
     "insight": {
     },
