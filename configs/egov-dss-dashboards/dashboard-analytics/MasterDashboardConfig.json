@@ -188,7 +188,7 @@
               "isCollapsible": false,
               "charts": [	
                {
-                 "id": "wsTaxHeadDDR",
+                 "id": "wsTaxHeadDDROverview",
                   "name": "DSS_W&S_TAX_HEAD_BOUNDARY",
                   "code": "",
                   "chartType": "table",
@@ -447,20 +447,20 @@
             },
             {
               "id": 222,
-              "name": "DSS_PT_BOTTOM_3_PERFORMING_ULBS",
+              "name": "DSS_PT_COLLECTION_BY_PAYMENT_MODE",
               "dimensions": {
                 "height": 250,
                 "width": 4
               },
-              "vizType": "performing-metric",
-              "noUnit": false,
+              "vizType": "chart",
+              "noUnit": true,
               "isCollapsible": false,
               "charts": [
                 {
-                  "id": "bottomPerformingUlbs",
-                  "name": "DSS_PT_BOTTOM_3_PERFORMING_ULBS",
+                  "id": "ptcollectionByPaymentMode",
+                  "name": "DSS_PT_COLLECTION_BY_PAYMENT_MODE",
                   "code": "",
-                  "chartType": "bar",
+                  "chartType": "donut",
                   "filter": "",
                   "headers": []
                 }
