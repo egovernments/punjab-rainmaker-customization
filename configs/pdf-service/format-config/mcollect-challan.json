@@ -20,15 +20,29 @@
                         "33%",
                         "33%"
                     ],
-                    "body": [
+                    "body":  [
                         [
-                        
+                            {
+                                "text": " ",
+                                "style": "receipt-logo-header"
+                            },
                             {
                                 "text": "{{letter-header}}",
                                 "alignment": "center",
                                 "style": "receipt-logo-header"
                             },
-                           
+                            {
+                                "text": " ",
+                                "alignment": "right",
+                                "color": "#484848",
+                                "style": "receipt-logo-header",
+                                "margin": [
+                                    0,
+                                    0,
+                                    -30,
+                                    0
+                                ]
+                            }
                         ]
                     ]
                 },
