@@ -821,6 +821,14 @@
                   {
                     "variable": "landmark",
                     "value": "$.Properties[0].address.landmark"
+                  },
+                  {
+                    "variable": "ownerName",
+                    "value": "$.Properties[0].owners[0].name"
+                  },
+                  {
+                    "variable": "guardianName",
+                    "value": "$.Properties[0].owners[0].fatherOrHusbandName"
                   }
 
                 ]
