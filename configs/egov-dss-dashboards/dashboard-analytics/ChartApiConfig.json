@@ -3459,6 +3459,13 @@
         "dateRefField": "billdate",
         "indexName": "demandbillconsumers",
         "aggrQuery": "{\"aggs\":{\"No of Bill\":{\"filter\":{\"term\":{\"billgenerated\":true}},\"aggs\":{\"approved\":{\"value_count\":{\"field\":\"installmentfrom.keyword\"}}}},\"Late charges\":{\"filter\":{\"term\":{\"billgenerated\":true}},\"aggs\":{\"penalty\":{\"sum\":{\"field\":\"penaltycollection\"}}}},\"Interest\":{\"filter\":{\"term\":{\"billgenerated\":true}},\"aggs\":{\"interest\":{\"sum\":{\"field\":\"interestcollection\"}}}},\"Advance\":{\"filter\":{\"term\":{\"billgenerated\":true}},\"aggs\":{\"advance\":{\"sum\":{\"field\":\"advancecollection\"}}}},\"Current Charges\":{\"filter\":{\"term\":{\"billgenerated\":true}},\"aggs\":{\"advance\":{\"sum\":{\"field\":\"currentcharges\"}}}},\"Arrear Charges\":{\"filter\":{\"term\":{\"billgenerated\":true}},\"aggs\":{\"advance\":{\"sum\":{\"field\":\"arrearcharges\"}}}}}}}"
+      },
+      {
+        "module": "W&S",
+        "requestQueryMap": "{\"tenantId\" : \"cityname.keyword\", \"wardId\" : \"block.keyword\" }",
+        "dateRefField": "",
+        "indexName": "dss-target_v1",
+        "aggrQuery": "{\"aggs\":{\"Target Collection\":{\"sum\":{\"field\":\"budgetProposedForMunicipalCorporation\"}}}}"
       }
     ],
     "translateTenantCode": true,
@@ -3468,13 +3475,14 @@
     ],
     "chartType": "table",
     "valueType": "number",
-    "drillChart": "wsTaxHeadUlb",
+    "drillChart": "none",
     "action": "",
     "plotLabel": "DDRs",
     "postAggregationTheory" : "",
     "aggregationPaths": [
       "Total Collection",
-      "Total Receipt"
+      "Total Receipt",
+      "Target Collection"
     ],
     "pathDataTypeMapping": [
       {
@@ -3482,7 +3490,10 @@
       },
       {
         "Total Receipt": "number"
-      }      
+      },
+      {
+        "Target Collection": "number"
+      }
     ],
     "insight": {
     },
