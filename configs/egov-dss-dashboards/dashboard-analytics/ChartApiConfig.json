@@ -3475,7 +3475,7 @@
     ],
     "chartType": "table",
     "valueType": "number",
-    "drillChart": "wsTaxHeadUlb",
+    "drillChart": "none",
     "action": "",
     "plotLabel": "DDRs",
     "postAggregationTheory" : "",
