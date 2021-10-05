@@ -819,7 +819,7 @@
         "requestQueryMap": "{\"module\" : \"businessService.keyword\", \"tenantId\" : \"tenantIdForMunicipalCorporation.keyword\"}",
         "dateRefField": "startdate",
         "indexName": "dss-target_v1",
-        "aggrQuery": "{\"aggs\":{\"Target Collection PT\":{\"sum\":{\"field\":\"budgetProposedForMunicipalCorporation\"}}}}"
+        "aggrQuery": "{\"aggs\":{\"Target Collection\":{\"sum\":{\"field\":\"budgetProposedForMunicipalCorporation\"}}}}"
       }
     ],
     "isMdmsEnabled": false,
@@ -838,7 +838,7 @@
     "postAggregationTheory": "repsonseToDifferenceOfDates",
     "aggregationPaths": [
       "PT",
-      "Target Collection PT"
+      "Target Collection"
       "TL",
       "WS"
     ],
@@ -847,7 +847,7 @@
         "PT": "amount"
       },
       {
-      "Target Collection PT": "amount"
+      "Target Collection": "amount"
       },
       {
         "TL": "amount"
