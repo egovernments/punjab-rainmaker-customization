@@ -816,7 +816,7 @@
       },
       {
         "module": "PT",
-        "requestQueryMap": "{\"tenantId\" : \"tenantIdForMunicipalCorporation.keyword\"}",
+        "requestQueryMap": "{\"tenantId\" : \"dataObject.tenantId\"}",
         "dateRefField": "startdate",
         "indexName": "dss-target_v1",
         "aggrQuery": "{\"aggs\":{\"Target Collection\":{\"sum\":{\"field\":\"budgetProposedForMunicipalCorporation\"}}}}"
