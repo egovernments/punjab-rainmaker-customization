@@ -128,12 +128,7 @@
                    "path": "$.additionalDetails.comment"
                 }
               },
-              {
-                "variable": "comments", 
-                "value": {
-                  "path": "$.paymentDetails[0].bill.billDetails[0].additionalDetails.comment"
-                }
-              },
+          
               {
                 "variable": "paymentMode", 
                 "value": {
@@ -567,6 +562,17 @@
                         "prefix": "TENANT_TENANTS",
                         "module":"rainmaker-common"
                         }
+                    }
+                  ]
+              },
+              { 
+                "path": "http://echallan-services:8080/echallan-services/eChallan/v1/_search",
+                "queryParam": "tenantId=$.tenantId,offset=0,challanNo=$.paymentDetails[0].bill.consumerCode", 
+                "apiRequest": null,
+                  "responseMapping":[
+                    {             
+                      "variable":"comments",
+                      "value":"$.challans[0].description"
                     }
                   ]
               }

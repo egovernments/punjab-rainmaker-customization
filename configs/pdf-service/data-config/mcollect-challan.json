@@ -333,7 +333,7 @@
                             {
                                 "variable": "challanRemarks",
                                 "value": {
-                                    "path": "$.additionalDetail.cancellComment"
+                                    "path": "$.description"
                                 },
                                 "type": "statusMessage"
                             },
