@@ -819,7 +819,7 @@
         "requestQueryMap": "{\"tenantId\" : \"tenantIdForMunicipalCorporation.keyword\"}",
         "dateRefField": "startdate",
         "indexName": "dss-target_v1",
-        "aggrQuery": "{\"size\":0,\"query\":{\"bool\":{\"filter\":[{\"terms\":{\"businessService.keyword\":[\"PT\"],\"boost\":1}}],\"adjust_pure_negative\":true,\"boost\":1}},\"aggs\":{\"ULBs \":{\"terms\":{\"field\":\"tenantIdForMunicipalCorporation.keyword\",\"size\":200},\"aggs\":{\"Target Collection\":{\"sum\":{\"field\":\"budgetProposedForMunicipalCorporation\"}}}}}}"
+        "aggrQuery": "{\"size\":0,\"query\":{\"bool\":{\"filter\":[{\"terms\":{\"businessService.keyword\":[\"PT\"],\"boost\":1}}],\"adjust_pure_negative\":true,\"boost\":1}},\"aggs\":{\"ULBs \":{\"terms\":{\"field\":\"tenantIdForMunicipalCorporation.keyword\",\"size\":200},\"aggs\":{\"Target Collection PT\":{\"sum\":{\"field\":\"budgetProposedForMunicipalCorporation\"}}}}}}"
       }
     ],
     "isMdmsEnabled": false,
@@ -838,7 +838,7 @@
     "postAggregationTheory": "repsonseToDifferenceOfDates",
     "aggregationPaths": [
       "PT",
-      "Target Collection",
+      "Target Collection PT",
       "TL",
       "WS"
     ],
@@ -847,7 +847,7 @@
         "PT": "amount"
       },
       {
-        "Target Collection": "amount"
+        "Target Collection PT": "amount"
       },
       {
         "TL": "amount"
