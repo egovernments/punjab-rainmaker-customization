@@ -566,7 +566,7 @@
               },
               { 
                 "path": "http://echallan-services:8080/echallan-services/eChallan/v1/_search?",
-                "queryParam": "tenantId=$.tenantId&offset=0&challanNo=$.challanNo",
+                "queryParam": "tenantId=$.tenantId,challanNo=$.paymentDetails[0].bill.consumerCode",
                   "apiRequest": null,
                   "responseMapping":[
                     {             
