@@ -187,6 +187,12 @@
                   "path": "$.paymentDetails[0].bill.consumerCode"
                 }
               },
+               {
+                "variable": "comments", 
+                "value": {
+                  "path": "$.paymentDetails[0].bill.billDetails[0].additionalDetails.comment"
+                }
+              },
               {
                 "variable": "transactionID", 
                 "value": {
@@ -563,19 +569,7 @@
                         }
                     }
                   ]
-              },
-              { 
-                "path": "http://echallan-services:8080/echallan-services/eChallan/v1/_search?",
-                "queryParam": "tenantId=$.challans[0].tenantId&offset=0&challanNo=$.challans[0].challanNo",
-                  "apiRequest": null,
-                  "responseMapping":[
-                    {             
-                      "variable":"comments",
-                      "value":"$.challans[0].description"
-                    }
-                  ]
               }
-
             ]
           }
         ]
