@@ -43,6 +43,7 @@
                                     0
                                 ]
                             }
+                            
                         ]
                     ]
                 },
@@ -60,7 +61,7 @@
                             {
                                 "stack": [
                                     {
-                                        "text": "{{cb-name}} {{cantonment-board}}",
+                                        "text": "{{cb-name}} {{mcGrade}}",
                                         "alignment": "center",
                                         "style": "receipt-logo-title-name"
                                     },
@@ -389,7 +390,7 @@
                                                         "style": "receipt-table-value"
                                                     },
                                                     {
-                                                        "text": "{{doorHouseNo}}, {{buildingName}}, {{streetName}}, {{mohalla}}, {{pinCode}}",
+                                                        "text": "{{doorHouseNo}}, {{buildingName}}, {{streetName}},{{pinCode}}",
                                                         "border": [
                                                             false,
                                                             false,
