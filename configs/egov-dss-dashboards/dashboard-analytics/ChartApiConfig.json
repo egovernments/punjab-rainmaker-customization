@@ -844,26 +844,6 @@
       "WS",
       "Target Collection WS"
     ],
-    "pathDataTypeMapping": [
-      {
-        "PT": "amount"
-      },
-      {
-        "Target Collection PT": "amount"
-      },
-      {
-        "TL": "amount"
-      },
-      {
-        "Target Collection TL": "amount"
-      },
-      {
-        "WS": "amount"
-      },
-      {
-        "Target Collection WS": "amount"
-      }
-    ],
     "insight": {},
     "_comment": ""
   },
