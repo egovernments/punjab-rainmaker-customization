@@ -333,9 +333,8 @@
                             {
                                 "variable": "challanRemarks",
                                 "value": {
-                                    "path": "$.additionalDetail.cancellComment"
-                                },
-                                "type": "statusMessage"
+                                    "path": "$.description"
+                                }
                             },
                             {
                                 "variable": "mohalla",
