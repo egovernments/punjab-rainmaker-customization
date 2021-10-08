@@ -345,8 +345,10 @@
                                 "type": "label",
                                 "localisation": {
                                     "required": true,
-                                    "prefix": null,
-                                    "module": "rainmaker-common"
+                                    "prefix": "TENANTS_MOHALLA",
+                                    "module": "rainmaker-common",
+                                    "prefixCbName": true
+                                    
                                 }    
                             },
                             {
