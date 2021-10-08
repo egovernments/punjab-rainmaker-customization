@@ -686,7 +686,11 @@
                                             "prefix": "TENANT_TENANTS",
                                             "module": "rainmaker-common"
                                         }
-                                    }
+                                    },
+                                    {
+                                        "variable":"mcGrade",
+                                        "value":"$.MdmsRes.tenant.tenants[0].city.ulbType"
+                                      }
                                 ]
                             },
                             { 
@@ -698,6 +702,8 @@
                                       "variable":"mohalla",
                                       "value":"$.address.locality.code"
                                     }
+                                ]
+                            }
                         ]
                     },
                     {
