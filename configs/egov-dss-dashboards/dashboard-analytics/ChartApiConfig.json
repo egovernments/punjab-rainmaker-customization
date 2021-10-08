@@ -819,7 +819,7 @@
         "requestQueryMap": "{\"module\" : \"businessService.keyword\", \"tenantId\" : \"tenantIdForMunicipalCorporation.keyword\"}",
         "dateRefField": "startdate",
         "indexName": "dss-target_v1",
-         "aggrQuery": "{\"aggs\":{\"AGGR":{\"terms\":{\"field\":\"tenantIdForMunicipalCorporation.keyword\",\"size\":200},\"aggs\":{\"Target Collection PT\":{\"filter\":{\"bool\":{\"must\":[{\"term\":{\"businessService.keyword\":\"PT\"}}]}},\"aggs\":{\"AGGRS\":{\"sum\":{\"field\":\"budgetProposedForMunicipalCorporation\"}}}},\"Target Collection TL\":{\"filter\":{\"bool\":{\"must\":[{\"term\":{\"businessService.keyword\":\"TL\"}}]}},\"aggs\":{\"AGGRS\":{\"sum\":{\"field\":\"budgetProposedForMunicipalCorporation\"}}}},\"Target Collection WS\":{\"filter\":{\"bool\":{\"must\":[{\"term\":{\"businessService.keyword\":\"WS\"}}]}},\"aggs\":{\"AGGRS\":{\"sum\":{\"field\":\"budgetProposedForMunicipalCorporation\"}}}}}}}}"      
+         "aggrQuery": "{\"aggs\":{\"AGGR\":{\"terms\":{\"field\":\"tenantIdForMunicipalCorporation.keyword\",\"size\":200},\"aggs\":{\"Target Collection PT\":{\"filter\":{\"bool\":{\"must\":[{\"term\":{\"businessService.keyword\":\"PT\"}}]}},\"aggs\":{\"AGGRS\":{\"sum\":{\"field\":\"budgetProposedForMunicipalCorporation\"}}}},\"Target Collection TL\":{\"filter\":{\"bool\":{\"must\":[{\"term\":{\"businessService.keyword\":\"TL\"}}]}},\"aggs\":{\"AGGRS\":{\"sum\":{\"field\":\"budgetProposedForMunicipalCorporation\"}}}},\"Target Collection WS\":{\"filter\":{\"bool\":{\"must\":[{\"term\":{\"businessService.keyword\":\"WS\"}}]}},\"aggs\":{\"AGGRS\":{\"sum\":{\"field\":\"budgetProposedForMunicipalCorporation\"}}}}}}}}"      
       }
     ],
     "isMdmsEnabled": false,
