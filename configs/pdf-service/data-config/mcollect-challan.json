@@ -334,21 +334,20 @@
                                 "variable": "challanRemarks",
                                 "value": {
                                     "path": "$.description"
-                                },
-                                "type": "statusMessage"
+
+                                }
                             },
                             {
                                 "variable": "mohalla",
                                 "value": {
                                     "path": "$.address.locality.code"
                                 },
+                                "type": "label",
                                 "localisation": {
                                     "required": true,
-                                    "prefix": "TENANTS_MOHALLA",
-                                    "module": "rainmaker-common",
-                                    "prefixCbName": true
-                                },
-                                "type": "boundary"
+                                    "prefix": null,
+                                    "module": "rainmaker-common"
+                                }    
                             },
                             {
                                 "variable": "mcollect_comment",

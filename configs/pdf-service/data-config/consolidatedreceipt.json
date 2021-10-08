@@ -574,9 +574,7 @@
                       "value":"$.challans[0].description"       },
                      {
                       "variable": "payerAddress",
-                      "value": {
-                          "path": "$.challans[0].address.locality.code"
-                      },
+                      "value": "$.challans[0].address.locality.code",
                       "localisation": {
                           "required": true,
                           "prefix": "TENANTS_MOHALLA",
