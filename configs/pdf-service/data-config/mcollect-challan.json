@@ -345,10 +345,8 @@
                                 "localisation": {
                                     "required": true,
                                     "prefix": null,
-                                    "module": "rainmaker-common",
-                   
-                                },
-                                
+                                    "module": "rainmaker-common"
+                                }    
                             },
                             {
                                 "variable": "mcollect_comment",
