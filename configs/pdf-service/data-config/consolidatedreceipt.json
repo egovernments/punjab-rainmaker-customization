@@ -571,17 +571,24 @@
                  "responseMapping":[
                     {             
                       "variable":"comments",
-                      "value":"$.challans[0].description"       },
-                     {
-                      "variable": "payerAddress",
-                      "value": "$.challans[0].address.locality.code",
-                      "localisation": {
-                          "required": true,
-                          "prefix": "TENANTS_MOHALLA",
-                          "module": "rainmaker-common",
-                          "prefixCbName": true
-                      },
-                      "type": "boundary"
+                      "value":"$.challans[0].description"       
+                    },
+                    {
+                      "variable": "doorHouseNo",
+                      "value": "$.challans[0].address.doorNo"
+                    },
+                    {
+                      "variable": "streetName",
+                      "value":  "$.challans[0].address.street"
+                    
+                  },
+                  {
+                      "variable": "buildingName",
+                      "value": "$.challans[0].address.buildingName"
+                  },
+                  {
+                      "variable": "pinCode",
+                      "value":"$.challans[0].address.pincode"
                   }
                   ]
               }

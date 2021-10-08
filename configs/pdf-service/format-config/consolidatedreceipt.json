@@ -836,7 +836,7 @@
                 "style": "receipt-table-value"
               },
               { 
-                "text": "{{payerAddress}}",
+                "text": "{{doorHouseNo}}, {{buildingName}}, {{streetName}},{{pinCode}}",
                 "border": [
                   false,
                   false,
