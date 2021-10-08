@@ -865,6 +865,7 @@
       }
     ],
     "insight": {
+            "colorCode" : "#FFFFFF",
     },
     "_comment": ""
   },
