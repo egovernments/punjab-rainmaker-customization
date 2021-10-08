@@ -815,11 +815,11 @@
         "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"dataObject.tenantId.keyword\":\"pb.testing\"}},{\"terms\":{\"dataObject.paymentDetails.bill.status.keyword\":[\"Cancelled\"]}}]}},\"aggs\":{\"AGGR\":{\"terms\":{\"field\":\"dataObject.tenantId.keyword\",\"size\":200},\"aggs\":{\"PT\":{\"filter\":{\"bool\":{\"must\":[{\"term\":{\"dataObject.paymentDetails.businessService.keyword\":\"PT\"}}]}},\"aggs\":{\"AGGRS\":{\"sum\":{\"field\":\"dataObject.paymentDetails.totalAmountPaid\"}}}},\"TL\":{\"filter\":{\"bool\":{\"must\":[{\"term\":{\"dataObject.paymentDetails.businessService.keyword\":\"TL\"}}]}},\"aggs\":{\"AGGRS\":{\"sum\":{\"field\":\"dataObject.paymentDetails.totalAmountPaid\"}}}},\"WS\":{\"filter\":{\"bool\":{\"must\":[{\"term\":{\"dataObject.paymentDetails.businessService.keyword\":\"WS\"}}]}},\"aggs\":{\"AGGRS\":{\"sum\":{\"field\":\"dataObject.paymentDetails.totalAmountPaid\"}}}}}}}}}}"
       },
       {
-        "module": "PT",
+        "module": "COMMON",
         "requestQueryMap": "{\"module\" : \"businessService.keyword\", \"tenantId\" : \"tenantIdForMunicipalCorporation.keyword\"}",
         "dateRefField": "startdate",
         "indexName": "dss-target_v1",
-        "aggrQuery": "{\"aggs\":{\"Target Collection\":{\"sum\":{\"field\":\"budgetProposedForMunicipalCorporation\"}}}}"
+         "aggrQuery": "{\"aggs\":{\"AGGR":{\"terms\":{\"field\":\"tenantIdForMunicipalCorporation.keyword\",\"size\":200},\"aggs\":{\"Target Collection PT\":{\"filter\":{\"bool\":{\"must\":[{\"term\":{\"businessService.keyword\":\"PT\"}}]}},\"aggs\":{\"AGGRS\":{\"sum\":{\"field\":\"budgetProposedForMunicipalCorporation\"}}}},\"Target Collection TL\":{\"filter\":{\"bool\":{\"must\":[{\"term\":{\"businessService.keyword\":\"TL\"}}]}},\"aggs\":{\"AGGRS\":{\"sum\":{\"field\":\"budgetProposedForMunicipalCorporation\"}}}},\"Target Collection WS\":{\"filter\":{\"bool\":{\"must\":[{\"term\":{\"businessService.keyword\":\"WS\"}}]}},\"aggs\":{\"AGGRS\":{\"sum\":{\"field\":\"budgetProposedForMunicipalCorporation\"}}}}}}}}"      
       }
     ],
     "isMdmsEnabled": false,
@@ -838,22 +838,30 @@
     "postAggregationTheory": "repsonseToDifferenceOfDates",
     "aggregationPaths": [
       "PT",
-      "Target Collection",
+      "Target Collection PT",
       "TL",
-      "WS"
+      "Target Collection TL",
+      "WS",
+      "Target Collection WS"
     ],
     "pathDataTypeMapping": [
       {
         "PT": "amount"
       },
       {
-        "Target Collection": "amount"
+        "Target Collection PT": "amount"
       },
       {
         "TL": "amount"
       },
       {
+        "Target Collection TL": "amount"
+      },
+      {
         "WS": "amount"
+      },
+      {
+        "Target Collection WS": "amount"
       }
     ],
     "insight": {},
