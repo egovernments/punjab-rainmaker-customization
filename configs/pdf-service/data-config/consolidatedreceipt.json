@@ -568,11 +568,28 @@
                 "path": "http://echallan-services:8080/echallan-services/eChallan/v1/_search",
                 "queryParam": "tenantId=$.tenantId,challanNo=$.paymentDetails[0].bill.consumerCode,businessService=$.paymentDetails[0].businessService,offset=0",
                   "apiRequest": null,
-                  "responseMapping":[
+                 "responseMapping":[
                     {             
                       "variable":"comments",
-                      "value":"$.challans[0].description"
-                    }
+                      "value":"$.challans[0].description"       
+                    },
+                    {
+                      "variable": "doorHouseNo",
+                      "value": "$.challans[0].address.doorNo"
+                    },
+                    {
+                      "variable": "streetName",
+                      "value":  "$.challans[0].address.street"
+                    
+                  },
+                  {
+                      "variable": "buildingName",
+                      "value": "$.challans[0].address.buildingName"
+                  },
+                  {
+                      "variable": "pinCode",
+                      "value":"$.challans[0].address.pincode"
+                  }
                   ]
               }
 
