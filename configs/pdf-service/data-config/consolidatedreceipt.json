@@ -128,7 +128,6 @@
                    "path": "$.additionalDetails.comment"
                 }
               },
-          
               {
                 "variable": "paymentMode", 
                 "value": {
@@ -567,15 +566,28 @@
               },
               { 
                 "path": "http://echallan-services:8080/echallan-services/eChallan/v1/_search",
-                "queryParam": "tenantId=$.tenantId,offset=0,challanNo=$.paymentDetails[0].bill.consumerCode", 
-                "apiRequest": null,
-                  "responseMapping":[
+                "queryParam": "tenantId=$.tenantId,challanNo=$.paymentDetails[0].bill.consumerCode,businessService=$.paymentDetails[0].businessService,offset=0",
+                  "apiRequest": null,
+                 "responseMapping":[
                     {             
                       "variable":"comments",
-                      "value":"$.challans[0].description"
-                    }
+                      "value":"$.challans[0].description"       },
+                     {
+                      "variable": "payerAddress",
+                      "value": {
+                          "path": "$.challans[0].address.locality.code"
+                      },
+                      "localisation": {
+                          "required": true,
+                          "prefix": "TENANTS_MOHALLA",
+                          "module": "rainmaker-common",
+                          "prefixCbName": true
+                      },
+                      "type": "boundary"
+                  }
                   ]
               }
+
             ]
           }
         ]
