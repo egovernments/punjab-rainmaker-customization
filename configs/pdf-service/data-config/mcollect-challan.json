@@ -688,7 +688,16 @@
                                         }
                                     }
                                 ]
-                            }
+                            },
+                            { 
+                                "path": "http://egov-location:8080/egov-location/location/v11/boundarys/_search",
+                                "queryParam": "tenantId=$.tenantId,hierarchyTypeCode=ADMIN,boundaryType=Locality,codes=$.address.locality.code",
+                                  "apiRequest": null,
+                                  "responseMapping":[
+                                    {             
+                                      "variable":"mohalla",
+                                      "value":"$.address.locality.code"
+                                    }
                         ]
                     },
                     {
