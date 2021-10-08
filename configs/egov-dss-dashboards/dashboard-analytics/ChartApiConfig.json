@@ -830,7 +830,7 @@
       }
     ],
     "chartType": "table",
-    "valueType": "amount",
+    "valueType": "",
     "drillChart": "none",
     "action": "",
     "plotLabel": "ULBs",
