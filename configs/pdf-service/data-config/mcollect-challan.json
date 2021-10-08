@@ -333,22 +333,23 @@
                             {
                                 "variable": "challanRemarks",
                                 "value": {
-                                    "path": "$.additionalDetail.cancellComment"
-                                },
-                                "type": "statusMessage"
+                                    "path": "$.description"
+
+                                }
                             },
                             {
                                 "variable": "mohalla",
                                 "value": {
                                     "path": "$.address.locality.code"
                                 },
+                                "type": "label",
                                 "localisation": {
                                     "required": true,
                                     "prefix": "TENANTS_MOHALLA",
                                     "module": "rainmaker-common",
                                     "prefixCbName": true
-                                },
-                                "type": "boundary"
+                                    
+                                }    
                             },
                             {
                                 "variable": "mcollect_comment",
@@ -687,6 +688,21 @@
                                             "prefix": "TENANT_TENANTS",
                                             "module": "rainmaker-common"
                                         }
+                                    },
+                                    {
+                                        "variable":"mcGrade",
+                                        "value":"$.MdmsRes.tenant.tenants[0].city.ulbType"
+                                      }
+                                ]
+                            },
+                            { 
+                                "path": "http://egov-location:8080/egov-location/location/v11/boundarys/_search",
+                                "queryParam": "tenantId=$.tenantId,hierarchyTypeCode=ADMIN,boundaryType=Locality,codes=$.address.locality.code",
+                                  "apiRequest": null,
+                                  "responseMapping":[
+                                    {             
+                                      "variable":"mohalla",
+                                      "value":"$.address.locality.code"
                                     }
                                 ]
                             }
