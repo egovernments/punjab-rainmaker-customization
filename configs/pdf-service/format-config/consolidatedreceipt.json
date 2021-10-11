@@ -214,7 +214,7 @@
                 "style": "receipt-table-value"
               },
               {
-                "text": "{{doorHouseNo}}, {{buildingName}}, {{streetName}},{{pinCode}}",
+                "text": "{{doorHouseNo || ' '}} {{buildingName || ' '}} {{streetName || ' '}}{{pinCode || ' '}}",
                 "border": [
                   false,
                   false,
@@ -836,7 +836,7 @@
                 "style": "receipt-table-value"
               },
               { 
-                "text": "{{doorHouseNo}}, {{buildingName}}, {{streetName}},{{pinCode}}",
+                "text": "{{doorHouseNo || ' '}} {{buildingName || ' '}} {{streetName || ' '}}{{pinCode || ' '}}",
                 "border": [
                   false,
                   false,

@@ -182,12 +182,6 @@
                 "type": "date"
               },
               {
-                "variable": "consumerID", 
-                "value": {
-                  "path": "$.paymentDetails[0].bill.consumerCode"
-                }
-              },
-              {
                 "variable": "transactionID", 
                 "value": {
                   "path": "$.transactionNumber"
@@ -572,6 +566,10 @@
                     {             
                       "variable":"comments",
                       "value":"$.challans[0].description"       
+                    },
+                    {             
+                      "variable":"consumerID",
+                      "value":"$.challans[0].citizen.name"       
                     },
                     {
                       "variable": "doorHouseNo",
