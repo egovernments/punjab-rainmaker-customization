@@ -793,7 +793,7 @@
                 "style": "receipt-table-value"
               },
               {
-                "text": "{{payerName}}",
+                "text": "{{consumerName}}",
                 "border": [
                   false,
                   false,

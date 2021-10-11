@@ -188,6 +188,12 @@
                 }
               },
               {
+                "variable": "consumerID", 
+                "value": {
+                  "path": "$.paymentDetails[0].bill.consumerCode"
+                }
+              },
+              {
                 "variable": "dueAmount", 
                 "value": {
                   "path": "$.paymentDetails[0].totalDue"
@@ -568,7 +574,7 @@
                       "value":"$.challans[0].description"       
                     },
                     {             
-                      "variable":"consumerID",
+                      "variable":"consumerName",
                       "value":"$.challans[0].citizen.name"       
                     },
                     {
