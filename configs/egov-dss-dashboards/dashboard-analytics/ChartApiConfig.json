@@ -866,11 +866,11 @@
     ],
     "insight": {
       "chartResponseMap" : "collectionByModule",
-      "action" : "differenceOfNumbers",
+      "action" : "",
       "upwardIndicator" : "positive",
       "downwardIndicator" : "negative",
       "textMessage" : "",
-      "colorCode" : "#FFFFFF",
+      "colorCode" : "#F28000",
       "insightInterval" : "year"
     },
     "_comment": ""
