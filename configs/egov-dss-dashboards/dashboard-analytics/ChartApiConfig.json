@@ -3501,8 +3501,7 @@
     "postAggregationTheory" : "",
     "aggregationPaths": [
       "Total Collection",
-      "Total Receipt",
-      "Target Collection"
+      "Total Receipt"
     ],
     "pathDataTypeMapping": [
       {
@@ -3510,10 +3509,7 @@
       },
       {
         "Total Receipt": "number"
-      },
-      {
-        "Target Collection": "number"
-      }  
+      }
     ],
     "insight": {
     },
