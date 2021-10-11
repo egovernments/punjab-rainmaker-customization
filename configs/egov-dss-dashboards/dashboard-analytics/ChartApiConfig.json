@@ -865,7 +865,13 @@
       }
     ],
     "insight": {
-            "colorCode" : "#FFFFFF"
+      "chartResponseMap" : "collectionByModule",
+      "action" : "differenceOfNumbers",
+      "upwardIndicator" : "positive",
+      "downwardIndicator" : "negative",
+      "textMessage" : "",
+      "colorCode" : "#FFFFFF",
+      "insightInterval" : "year"
     },
     "_comment": ""
   },
