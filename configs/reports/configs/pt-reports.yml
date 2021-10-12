@@ -5676,4 +5676,153 @@ ReportDefinitions:
         owners.mobileNumber as mobileno
     from report_properties props
     inner join assessments on assessments.propertyid=props.propertyid
-    inner join owners on owners.propertyid=props.propertyid 
+    inner join owners on owners.propertyid=props.propertyid
+    
+- reportName: DAILY_CHALLAN_REPORT
+  summary: Daily Challan Report
+  version: 1.0.0
+  moduleName: rainmaker-pt
+  sourceColumns:
+  - name: paymentmode
+    label: reports.pt.paymentmode
+    type: string
+    source: pt
+    total: false  
+  - name: amount
+    label: reports.pt.amount
+    type: string
+    source: pt
+    total: true
+  - name: nos
+    label: reports.pt.nos
+    type: string
+    source: pt
+    total: true  
+  - name: firecess
+    label: reports.pt.firecess
+    type: string
+    source: pt
+    total: true  
+  - name: cancercess
+    label: reports.pt.cancercess
+    type: string
+    source: pt
+    total: true   
+  searchParams:
+  - name: ulb
+    label: ULB
+    type: singlevaluelist
+    pattern: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?tenantId=$tenantid&moduleName=tenant&masterName=tenants|$.MdmsRes.tenant.tenants.*.code|$.MdmsRes.tenant.tenants.*.name
+    source: pt
+    wrapper: true
+    isMandatory: false
+    searchClause: AND tenantid = $ulb
+  query: |
+   --S.no    Service Name	ULB    Property Tax Unique ID    Date Of Transcation    Receipt Number	Existing Property ID    Type Of Property	Mobile Number   	Addr
+   with paidbills as
+   (
+     SELECT 
+       --sum(payment.totalamountpaid) as totalamount,
+       bd.billid as billid,
+       sum(bd.amountpaid) as totalamount,
+       count(distinct bd.billid) as totalcount,
+       sum(case when bad.taxheadcode='PT_FIRE_CESS' then bad.amount else 0 end) as "totalfirecess",
+       sum(case when bad.taxheadcode='PT_CANCER_CESS' then bad.amount else 0 end) as "totalcancercess",
+       sum(case when payment.paymentmode='ONLINE' then bd.amountpaid else 0 end) as "online",
+       sum(case when payment.paymentmode='ONLINE' and bad.taxheadcode='PT_FIRE_CESS' then bad.amount else 0 end) as "firecess_online",
+       sum(case when payment.paymentmode='ONLINE' and bad.taxheadcode='PT_CANCER_CESS' then bad.amount else 0 end) as "cancercess_online",
+       count(distinct case when payment.paymentmode='ONLINE' then bd.billid else NULL end) as "countonline",
+       sum(case when payment.paymentmode='CASH' then bd.amountpaid else 0 end) as "cash",
+       sum(case when payment.paymentmode='CASH' and bad.taxheadcode='PT_FIRE_CESS' then bad.amount else 0 end) as "firecess_cash",
+       sum(case when payment.paymentmode='CASH' and bad.taxheadcode='PT_CANCER_CESS' then bad.amount else 0 end) as "cancercess_cash",
+       count(distinct case when payment.paymentmode='CASH' then bd.billid else NULL end) as "countcash",	
+       sum(case when payment.paymentmode='CHEQUE' then bd.amountpaid else 0 end) as "cheque",
+       sum(case when payment.paymentmode='CHEQUE' and bad.taxheadcode='PT_FIRE_CESS' then bad.amount else 0 end) as "firecess_cheque",
+       sum(case when payment.paymentmode='CHEQUE' and bad.taxheadcode='PT_CANCER_CESS' then bad.amount else 0 end) as "cancercess_cheque",
+       count(distinct case when payment.paymentmode='CHEQUE' then bd.billid else NULL end) as "countcheque",
+       sum(case when payment.paymentmode='DD' then bd.amountpaid  else 0 end) as "dd",
+       sum(case when payment.paymentmode='DD' and bad.taxheadcode='PT_FIRE_CESS' then bad.amount else 0 end) as "firecess_dd",
+       sum(case when payment.paymentmode='DD' and bad.taxheadcode='PT_CANCER_CESS' then bad.amount else 0 end) as "cancercess_dd",
+       count(distinct case when payment.paymentmode='DD' then bd.billid else NULL end) as "countdd",
+       sum(case when payment.paymentmode='CARD' then bd.amountpaid  else 0 end) as "card",
+       sum(case when payment.paymentmode='CARD' and bad.taxheadcode='PT_FIRE_CESS' then bad.amount else 0 end) as "firecess_card",
+       sum(case when payment.paymentmode='CARD' and bad.taxheadcode='PT_CANCER_CESS' then bad.amount else 0 end) as "cancercess_card",
+       count(distinct case when payment.paymentmode='CARD' then bd.billid else NULL end) as "countcard",
+       sum(case when payment.paymentmode='OFFLINE_RTGS' then bd.amountpaid  else 0 end) as "rtgs",
+       sum(case when payment.paymentmode='OFFLINE_RTGS' and bad.taxheadcode='PT_FIRE_CESS' then bad.amount else 0 end) as "firecess_rtgs",
+       sum(case when payment.paymentmode='OFFLINE_RTGS' and bad.taxheadcode='PT_CANCER_CESS' then bad.amount else 0 end) as "cancercess_rtgs",
+       count(distinct case when payment.paymentmode='OFFLINE_RTGS' then bd.billid else NULL end) as "countrtgs",
+       sum(case when payment.paymentmode='OFFLINE_NEFT' then bd.amountpaid else 0 end) as "neft",
+       sum(case when payment.paymentmode='OFFLINE_NEFT' and bad.taxheadcode='PT_FIRE_CESS' then bad.amount else 0 end) as "firecess_neft",
+       sum(case when payment.paymentmode='OFFLINE_NEFT' and bad.taxheadcode='PT_CANCER_CESS' then bad.amount else 0 end) as "cancercess_neft",
+       count(distinct case when payment.paymentmode='OFFLINE_NEFT' then bd.billid else NULL end) as "countneft",
+       sum(case when payment.paymentmode='POSTAL_ORDER' then bd.amountpaid else 0 end) as "po",
+       sum(case when payment.paymentmode='POSTAL_ORDER' and bad.taxheadcode='PT_FIRE_CESS' then bad.amount else 0 end) as "firecess_po",
+       sum(case when payment.paymentmode='POSTAL_ORDER' and bad.taxheadcode='PT_CANCER_CESS' then bad.amount else 0 end) as "cancercess_po",
+       count(distinct case when payment.paymentmode='POTAL_ORDER' then bd.billid else NULL end) as "countpo"
+     FROM egcl_paymentdetail as pd  
+     inner join egcl_payment payment on pd.paymentid=payment.id  and payment.paymentstatus != 'CANCELLED'
+     inner join egcl_billdetial bd on bd.billid=pd.billid
+     inner join egcl_billaccountdetail bad on bad.billdetailid=bd.id
+     where  pd.businessservice='PT' and payment.tenantid=$tenantid
+     group by bd.billid
+     ) 
+    select 
+      'ONLINE' as paymentmode,
+      sum(online),
+      sum(countonline),
+      sum(firecess_online),
+      sum(cancercess_online)
+      from paidbills
+    union
+    select 
+      'CASH' as paymentmode,
+      sum(cash),
+      sum(countcash),
+      sum(firecess_cash),
+      sum(cancercess_cash)
+      from paidbills
+    union
+    select 
+      'DD' as paymentmode,
+      sum(dd),
+      sum(countdd),
+      sum(firecess_dd),
+      sum(cancercess_dd)
+      from paidbills
+    union
+    select 'CARD',
+      sum(card),
+      sum(countcard),
+      sum(firecess_card),
+      sum(cancercess_card)
+      from paidbills
+    union
+    select 'RTGS',
+      sum(rtgs),
+      sum(countrtgs),
+      sum(firecess_rtgs),
+      sum(cancercess_rtgs)
+      from paidbills
+    union
+    select'CHEQUE',
+      sum(cheque),
+      sum(countcheque),
+      sum(firecess_cheque),
+      sum(cancercess_cheque)
+      from paidbills
+    union
+    select 'NEFT',
+      sum(neft),
+      sum(countneft),
+      sum(firecess_neft),
+      sum(cancercess_neft)
+      from paidbills
+    union
+    select 'PO',
+      sum(po),
+      sum(countpo),
+      sum(firecess_po),
+      sum(cancercess_po)
+    from paidbills
+  
