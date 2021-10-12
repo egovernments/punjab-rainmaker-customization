@@ -5828,5 +5828,5 @@ ReportDefinitions:
       sum(countpo),
       sum(firecess_po),
       sum(cancercess_po)
-    from paidbills
+    from paidbills where 1=1 
   
