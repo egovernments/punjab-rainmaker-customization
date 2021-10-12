@@ -630,9 +630,9 @@
     "queries": [
       {
         "module": "PT",
-        "indexName": "property-assessments",
-        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tenantId.keyword\":\"pb.testing\"}}]}},\"aggs\":{\"Assessed Properties\":{\"value_count\":{\"field\":\"Data.assessmentNumber.keyword\"}}}}}}",
-        "requestQueryMap": "{\"wardId\" : \"Data.ward.name.keyword\",\"tenantId\" : \"Data.tenantId\" ,\"district\" : \"Data.tenantData.city.districtCode\"}",
+        "indexName": "property-services",	
+        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tenantId.keyword\":\"pb.testing\"}}]}},\"aggs\":{\"Total Application\":{\"value_count\":{\"field\":\"Data.propertyId.keyword\"}}}}}}",	
+        "requestQueryMap": "{\"wardId\" : \"Data.ward.name.keyword\", \r\n  \"district\" : \"Data.tenantData.city.districtCode\", \r\n\"tenantId\" : \"Data.tenantId\" \r\n}",
         "dateRefField": "Data.@timestamp"
       }
     ],
@@ -642,7 +642,7 @@
     "documentType": "_doc",
     "drillChart": "none",
     "aggregationPaths": [
-      "Assessed Properties"
+      "Total Application"	
     ],
     "insight": {
       "chartResponseMap" : "propertiesAssessed",
@@ -813,7 +813,14 @@
         "dateRefField": "dataObject.paymentDetails.receiptDate",
         "indexName": "dss-collection_v2",
         "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"dataObject.tenantId.keyword\":\"pb.testing\"}},{\"terms\":{\"dataObject.paymentDetails.bill.status.keyword\":[\"Cancelled\"]}}]}},\"aggs\":{\"AGGR\":{\"terms\":{\"field\":\"dataObject.tenantId.keyword\",\"size\":200},\"aggs\":{\"PT\":{\"filter\":{\"bool\":{\"must\":[{\"term\":{\"dataObject.paymentDetails.businessService.keyword\":\"PT\"}}]}},\"aggs\":{\"AGGRS\":{\"sum\":{\"field\":\"dataObject.paymentDetails.totalAmountPaid\"}}}},\"TL\":{\"filter\":{\"bool\":{\"must\":[{\"term\":{\"dataObject.paymentDetails.businessService.keyword\":\"TL\"}}]}},\"aggs\":{\"AGGRS\":{\"sum\":{\"field\":\"dataObject.paymentDetails.totalAmountPaid\"}}}},\"WS\":{\"filter\":{\"bool\":{\"must\":[{\"term\":{\"dataObject.paymentDetails.businessService.keyword\":\"WS\"}}]}},\"aggs\":{\"AGGRS\":{\"sum\":{\"field\":\"dataObject.paymentDetails.totalAmountPaid\"}}}}}}}}}}"
-     }
+      },	
+      {	
+        "module": "PT",	
+        "requestQueryMap": "{\"module\" : \"businessService.keyword\", \"tenantId\" : \"tenantIdForMunicipalCorporation.keyword\"}",	
+        "dateRefField": "startdate",	
+        "indexName": "dss-target_v1",	
+         "aggrQuery": "{\"aggs\":{\"AGGR\":{\"terms\":{\"field\":\"tenantIdForMunicipalCorporation.keyword\",\"size\":200},\"aggs\":{\"Target Collection PT\":{\"filter\":{\"bool\":{\"must\":[{\"term\":{\"businessService.keyword\":\"PT\"}}]}},\"aggs\":{\"AGGRS\":{\"sum\":{\"field\":\"budgetProposedForMunicipalCorporation\"}}}},\"Target Collection TL\":{\"filter\":{\"bool\":{\"must\":[{\"term\":{\"businessService.keyword\":\"TL\"}}]}},\"aggs\":{\"AGGRS\":{\"sum\":{\"field\":\"budgetProposedForMunicipalCorporation\"}}}},\"Target Collection WS\":{\"filter\":{\"bool\":{\"must\":[{\"term\":{\"businessService.keyword\":\"WS\"}}]}},\"aggs\":{\"AGGRS\":{\"sum\":{\"field\":\"budgetProposedForMunicipalCorporation\"}}}}}}}}"      	
+      }
     ],
     "isMdmsEnabled": false,
     "filterKeys": [
@@ -823,7 +830,7 @@
       }
     ],
     "chartType": "table",
-    "valueType": "number",
+    "valueType": "",
     "drillChart": "none",
     "action": "",
     "plotLabel": "ULBs",
@@ -831,18 +838,30 @@
     "postAggregationTheory": "repsonseToDifferenceOfDates",
     "aggregationPaths": [
       "PT",
+      "Target Collection PT",
       "TL",
-      "WS"
-    ],
+      "Target Collection TL",	
+      "WS",	
+      "Target Collection WS"
+     ],
     "pathDataTypeMapping": [
-      {
-        "PT": "amount"
-      },
-      {
-        "TL": "amount"
-      },
-      {
-        "WS": "amount"
+      {	
+        "PT": "amount"	
+      },	
+      {	
+        "Target Collection PT": "amount"	
+      },	
+      {	
+        "TL": "amount"	
+      },	
+      {	
+        "Target Collection TL": "amount"	
+      },	
+      {	
+        "WS": "amount"	
+      },	
+      {	
+        "Target Collection WS": "amount"	
       }
     ],
     "insight": {},
@@ -2982,7 +3001,7 @@
       {
         "module": "COMMON",
         "requestQueryMap": "{\"module\" : \"businessService.keyword\", \"tenantId\" : \"tenantIdForMunicipalCorporation.keyword\"}",
-        "dateRefField": "",
+        "dateRefField": "startdate",	
         "indexName": "dss-target_v1",
         "aggrQuery": "{\"aggs\":{\"Target Collection\":{\"sum\":{\"field\":\"budgetProposedForMunicipalCorporation\"}}}}"
       }
