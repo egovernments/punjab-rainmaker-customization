@@ -5707,7 +5707,12 @@ ReportDefinitions:
     label: reports.pt.cancercess
     type: string
     source: pt
-    total: true   
+    total: true
+  - name: total
+    label: reports.pt.total
+    type: string
+    source: pt
+    total: true
   searchParams:
   - name: fromDate
     label: reports.pt.fromDate
@@ -5773,60 +5778,68 @@ ReportDefinitions:
      ) 
     select 
       'ONLINE' as paymentmode,
-      sum(online),
-      sum(countonline),
-      sum(firecess_online),
-      sum(cancercess_online)
+      sum(online)-sum(firecess_online)-sum(cancercess_online) as amount,
+      sum(countonline) as nos,
+      sum(firecess_online) as firecess,
+      sum(cancercess_online) as cancercess,
+      sum(online) as total
       from paidbills
     union
     select 
       'CASH' as paymentmode,
-      sum(cash),
+      sum(cash)-sum(firecess_cash)-sum(cancercess_cash),
       sum(countcash),
       sum(firecess_cash),
-      sum(cancercess_cash)
+      sum(cancercess_cash),
+      sum(cash)
       from paidbills
     union
     select 
       'DD' as paymentmode,
-      sum(dd),
+      sum(dd)-sum(firecess_dd)-sum(cancercess_dd),
       sum(countdd),
       sum(firecess_dd),
-      sum(cancercess_dd)
+      sum(cancercess_dd),
+      sum(dd)
       from paidbills
     union
     select 'CARD',
-      sum(card),
+      sum(card)-sum(firecess_card)-sum(cancercess_card),
       sum(countcard),
       sum(firecess_card),
-      sum(cancercess_card)
+      sum(cancercess_card),
+      sum(card)
       from paidbills
     union
     select 'RTGS',
-      sum(rtgs),
+      sum(rtgs)-sum(firecess_rtgs)-sum(cancercess_rtgs),
       sum(countrtgs),
       sum(firecess_rtgs),
-      sum(cancercess_rtgs)
+      sum(cancercess_rtgs),
+      sum(rtgs)
       from paidbills
     union
     select'CHEQUE',
-      sum(cheque),
+      sum(cheque)-sum(firecess_cheque)-sum(cancercess_cheque),
       sum(countcheque),
       sum(firecess_cheque),
-      sum(cancercess_cheque)
+      sum(cancercess_cheque),
+      sum(cheque)
       from paidbills
     union
     select 'NEFT',
-      sum(neft),
+      sum(neft)-sum(firecess_neft)-sum(cancercess_neft),
       sum(countneft),
       sum(firecess_neft),
-      sum(cancercess_neft)
+      sum(cancercess_neft),
+      sum(neft)
       from paidbills
     union
     select 'PO',
-      sum(po),
+      sum(po)-sum(firecess_po)-sum(cancercess_po),
       sum(countpo),
       sum(firecess_po),
-      sum(cancercess_po)
+      sum(cancercess_po),
+      sum(po)
     from paidbills where 1=1 
   
