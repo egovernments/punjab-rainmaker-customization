@@ -5709,14 +5709,18 @@ ReportDefinitions:
     source: pt
     total: true   
   searchParams:
-  - name: ulb
-    label: ULB
-    type: singlevaluelist
-    pattern: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?tenantId=$tenantid&moduleName=tenant&masterName=tenants|$.MdmsRes.tenant.tenants.*.code|$.MdmsRes.tenant.tenants.*.name
+  - name: fromDate
+    label: reports.pt.fromDate
+    type: epoch
     source: pt
-    wrapper: true
-    isMandatory: false
-    searchClause: AND tenantid = $ulb
+    isMandatory: true
+    searchClause: AND 1=1
+  - name: toDate
+    label: reports.pt.toDate
+    type: epoch
+    source: pt
+    isMandatory: true
+    searchClause: AND 1=1
   query: |
    --S.no    Service Name	ULB    Property Tax Unique ID    Date Of Transcation    Receipt Number	Existing Property ID    Type Of Property	Mobile Number   	Addr
    with paidbills as
@@ -5764,7 +5768,7 @@ ReportDefinitions:
      inner join egcl_payment payment on pd.paymentid=payment.id  and payment.paymentstatus != 'CANCELLED'
      inner join egcl_billdetial bd on bd.billid=pd.billid
      inner join egcl_billaccountdetail bad on bad.billdetailid=bd.id
-     where  pd.businessservice='PT' and payment.tenantid=$tenantid
+     where  pd.businessservice='PT' and payment.tenantid=$tenantid and payment.createdtime>=$fromDate and payment.createdtime<=$toDate
      group by bd.billid
      ) 
     select 
