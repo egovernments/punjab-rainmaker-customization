@@ -1748,5 +1748,60 @@ ReportDefinitions:
         JOIN eg_user ON payment.createdby::INTEGER=eg_user.id
         WHERE payment.tenantid=$tenantid AND businessservice not in ('PT','TL','FIRENOC') and payment.paymentstatus != 'CANCELLED'
     groupby: group by collectorname , paymentmode
+    
+   
+     - reportName: echallanReport_v2
+    decryptionPathId: MiscReceiptULB_v2
+    summary: Receipt Register Miscellaneous
+    version: 1.0.0
+    moduleName: rainmaker-uc
+    additionalConfig:
+      print:
+        pdfPageSize: "A3"
+    sourceColumns:
+      - name: ulb
+        label: reports.uc.ulb
+        type: string
+        source: uc
+        total: false
+      - name: challanno
+        label: reports.uc.challanno
+        type: string
+        source: uc
+        total: false
+      - name: status
+        label: reports.uc.status
+        type: string
+        source: uc
+        total: false
+      - name: servicecategory
+        label: reports.uc.businessdetails
+        type: string
+        source: uc
+        total: false
+      - name: description
+        label: reports.uc.description
+        type: string
+        source: uc
+        total: false
+    searchParams:
+      - name: fromDate
+        label: reports.uc.fromDate
+        type: epoch
+        source: uc
+        isMandatory: false
+        searchClause: AND paydetail.receiptdate >= $fromDate
+      - name: toDate
+        label: reports.uc.toDate
+        type: epoch
+        source: uc
+        isMandatory: false
+        searchClause: AND paydetail.receiptdate <= $toDate
+    query: |
+      select b.status,b.tenantid,ch.challanno,ch.businessservice,ch.description
+        from eg_echallan AS ch
+        left JOIN egcl_bill AS b
+        ON ch.challanno=b.consumercode where b.tenantid='$tenantid'
+
 
 
