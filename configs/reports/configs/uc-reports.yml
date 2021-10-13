@@ -1752,7 +1752,7 @@ ReportDefinitions:
    
      - reportName: echallanReport_v2
     decryptionPathId: MiscReceiptULB_v2
-    summary: Receipt Register Miscellaneous
+    summary: eChallan Report
     version: 1.0.0
     moduleName: rainmaker-uc
     additionalConfig:
