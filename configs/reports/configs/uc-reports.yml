@@ -1774,8 +1774,8 @@ ReportDefinitions:
         type: string
         source: uc
         total: false
-      - name: servicecategory
-        label: reports.uc.businessdetails
+      - name: businessservice
+        label: reports.uc.businessservice
         type: string
         source: uc
         total: false
@@ -1803,7 +1803,9 @@ ReportDefinitions:
         isMandatory: false
         searchClause: AND ch.createdtime <= $toDate
     query: |
-      select b.status,b.tenantid,ch.challanno,ch.businessservice,ch.description,ch.applicationstatus
+        -- Use CTE to force query plan, compute & use CTE later
+        SELECT 
+        b.status,b.tenantid,ch.challanno,ch.businessservice,ch.description,ch.applicationstatus
         from eg_echallan AS ch
         left JOIN egcl_bill AS b
         ON ch.challanno=b.consumercode where b.tenantid='$tenantid'
