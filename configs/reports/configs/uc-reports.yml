@@ -1759,11 +1759,11 @@ ReportDefinitions:
       print:
         pdfPageSize: "A3"
     sourceColumns:
-      - name: ulb
-        label: reports.uc.ulb
+      - name: totalamount
+        label: reports.uc.totalamount
         type: string
         source: uc
-        total: false
+        total: true
       - name: challanno
         label: reports.uc.challanno
         type: string
@@ -1805,7 +1805,7 @@ ReportDefinitions:
     query: |
         -- Use CTE to force query plan, compute & use CTE later
         SELECT 
-        b.status,b.tenantid,ch.challanno,ch.businessservice,ch.description,ch.applicationstatus
+        b.status,b.totalamount,ch.challanno,ch.businessservice,ch.description,ch.applicationstatus
         from eg_echallan AS ch
         inner JOIN egcl_bill AS b
         ON ch.challanno=b.consumercode where ch.tenantid=$tenantid
