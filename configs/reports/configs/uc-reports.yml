@@ -1750,7 +1750,7 @@ ReportDefinitions:
     groupby: group by collectorname , paymentmode
     
    
-     - reportName: echallanReport_v2
+  - reportName: echallanReport_v2
     decryptionPathId: MiscReceiptULB_v2
     summary: eChallan Report
     version: 1.0.0
@@ -1808,7 +1808,5 @@ ReportDefinitions:
         b.status,b.tenantid,ch.challanno,ch.businessservice,ch.description,ch.applicationstatus
         from eg_echallan AS ch
         left JOIN egcl_bill AS b
-        ON ch.challanno=b.consumercode where b.tenantid='$tenantid'
-
-
+        ON ch.challanno=b.consumercode where b.tenantid=$tenantid
 
