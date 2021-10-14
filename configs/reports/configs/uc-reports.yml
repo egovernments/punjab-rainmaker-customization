@@ -1809,5 +1809,7 @@ ReportDefinitions:
         from eg_echallan AS ch
         inner JOIN egcl_bill AS b
         ON ch.challanno=b.consumercode where ch.tenantid=$tenantid
-        orderby: ORDER BY ch.createdtime DESC
+        where 1=1 
+    orderby: ORDER BY ch.createdtime DESC
+        
 
