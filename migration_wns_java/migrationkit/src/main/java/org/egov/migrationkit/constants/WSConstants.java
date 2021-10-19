@@ -25,6 +25,8 @@ public class WSConstants {
 	public static final String CONNECTION_NUMBER_URL = "connectionNumber=";
 	
 	public static final String UUIDS_URL = "uuids=";
+	
+	public static final String PROPERTY_IDS_URL="propertyIds=";
 
 	public static final String WATER_TAX_SERVICE_CODE = "WS";
 	

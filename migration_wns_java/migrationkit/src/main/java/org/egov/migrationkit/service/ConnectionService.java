@@ -137,10 +137,12 @@ public class ConnectionService {
 				cityCode = (String) data.get("citycode");
 
 				List<String> isConnectionMigrated = recordService.recordWaterMigration(connection, tenantId);
+				log.info("isConnectionMigrated: " + isConnectionMigrated);
 				if (isConnectionMigrated != null && !isConnectionMigrated.isEmpty() && isConnectionMigrated.contains("Saved")) {
 					try {
 						OwnerInfo ownerInfo = commonService.searchConnection(requestInfo, connectionNo, connection.getTenantId(), "water");
 						if( ownerInfo != null) {
+							log.info("ownerInfo: " + ownerInfo.toString());
 							createWaterDemand(data, connection.getId(), connectionNo, requestInfo, ownerInfo, tenantId);
 							connectionDuration = System.currentTimeMillis() - connStartTime;
 							log.info("Migration completed for connection no : " + connection.getConnectionNo() + "in "
@@ -391,14 +393,16 @@ public class ConnectionService {
 
 	}
 
+	@SuppressWarnings("deprecation")
 	private String findLocality(String code, String tenantId) {
-		// log.debug("Seraching for digit locality maping " + code);
+		 log.debug("Searching for digit locality mapping code: {} and schemaname: {}" , code,tenantId);
 		String digitcode = null;
 		try {
 			digitcode = jdbcTemplate.queryForObject(
 					"select digitcode as digitCode from " + tenantId + ".finallocation where code=?",
 					new Object[] { code }, String.class);
 		} catch (DataAccessException e) {
+			e.printStackTrace();
 
 			log.error("digit Location code is not mapped for " + code); // no
 			// default

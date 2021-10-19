@@ -166,7 +166,7 @@ public class CommonService {
 			                   .append(WSConstants.TENANT_ID_FIELD_FOR_SEARCH_URL)
 			                   .append(tenantId)
 			                   .append(WSConstants.SEPARATER)
-			                   .append(WSConstants.UUIDS_URL)
+			                   .append(WSConstants.PROPERTY_IDS_URL)
 			                   .append(uuid).toString();
 			
 			PropertyResponse response = restTemplate.postForObject(host +"/"+ searchURL, requestInfoWrapper,
