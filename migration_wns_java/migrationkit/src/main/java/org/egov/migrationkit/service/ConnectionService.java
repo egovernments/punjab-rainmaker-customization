@@ -126,6 +126,7 @@ public class ConnectionService {
 				String connectionNo = connection.getConnectionNo() != null ? connection.getConnectionNo()
 						: (String) data.get("applicationNo");
 				connection.setConnectionNo(connectionNo);
+				//connection.setConnectionNo("2102000013");
 				connection.setTenantId(requestInfo.getUserInfo().getTenantId());
 				connection.setProposedPipeSize(connection.getPipeSize());
 				log.info(" Water connection migrating for " + connectionNo +" MobileNumber "+connection.getMobilenumber() +""+connection.getId());
@@ -300,10 +301,11 @@ public class ConnectionService {
 				
 			
 				//connection.setPropertyId(approvedProperty.getId());
-
+				
+				Boolean isMigration=true;
 				String response = null;
 				try {
-					response = restTemplate.postForObject(host + "/" + waterUrl, waterRequest, String.class);
+					response = restTemplate.postForObject(host + "/" + waterUrl+"?isMigration="+isMigration, waterRequest, String.class);
 				} catch (Exception e) {
 					e.printStackTrace();
 					recordService.recordError("water", tenantId, e.toString(), connection.getId());
@@ -646,9 +648,10 @@ public class ConnectionService {
 				workflow.setModuleName("sw-services");
 				swConnection.setProcessInstance(workflow);
 				
+				Boolean isMigration=true;
 				String response = null;
 				try {
-					response = restTemplate.postForObject(host + "/" + sewerageUrl, sewerageRequest, String.class);
+					response = restTemplate.postForObject(host + "/" + sewerageUrl+"?isMigration=" + isMigration, sewerageRequest, String.class);
 					recordService.setStatus("sewerage", erpSchema, "Saved", swConnection.getId());
 
 				} catch (RestClientException e) {

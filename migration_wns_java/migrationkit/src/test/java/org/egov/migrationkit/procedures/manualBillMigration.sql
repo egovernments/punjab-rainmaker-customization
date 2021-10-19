@@ -1,4 +1,4 @@
-set search_path to fazilka_prod ;
+set search_path to ghagga_prod ;
 create or replace function migrate_manual_bills( tenantId varchar)
    returns text as $$ 
 declare 
@@ -25,7 +25,7 @@ declare
         union
 		   select bill.* from eg_bill bill, egcl_collectionheader ch where ch.referencenumber::bigint=bill.id and 
 		   bill.service_code in ('WT','STAX') and bill.id not in (select erpbillid from ws_latest_bill_data)
-		       and id_bill_type=(select id from eg_bill_type where code='AUTO')  and  is_cancelled='N' and is_history='N' 
+		       and bill.id_bill_type=(select id from eg_bill_type where code='AUTO')  and  is_cancelled='N' and is_history='N' 
 		       and ch.status = (select id from egw_status where moduletype='ReceiptHeader' and description='Approved') 
 					  ;
 		       
@@ -262,7 +262,7 @@ language plpgsql;
 
 
 
---select migrate_manual_bills('pb.fazilka');
+--select migrate_manual_bills('pb.ghagga');
 --delete from public.egbs_billaccountdetail_v1 where additionaldetails ='{"migrated":true}';
 --delete from public.egbs_billdetail_v1 where additionaldetails ='{"migrated":true}';
 --delete from public.egbs_bill_v1 where additionaldetails ='{"migrated":true}';

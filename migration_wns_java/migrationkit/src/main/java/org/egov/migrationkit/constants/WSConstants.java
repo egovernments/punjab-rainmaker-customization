@@ -56,6 +56,9 @@ public class WSConstants {
     public static final String PERIOD_TO_FIELD_NAME = "periodTo=";
     
     public static final String BILL_NUMBER_FIELD_NAME = "billNumber=";
+//    
+//	public static final HashMap<String, String> PROP_USAGE_TYPE = new HashMap<>();
+//
 
     static {
     	
@@ -221,10 +224,12 @@ public class WSConstants {
         DOCTYPEMAP.put("PLUMBER_REPORT_DRAWING", "PLUMBER_REPORT_DRAWING");
         DOCTYPEMAP.put("BUILDING_PLAN_OR_COMPLETION_CERTIFICATE", "BUILDING_PLAN_OR_COMPLETION_CERTIFICATE");
         DOCTYPEMAP.put("PROPERTY_TAX_RECIEPT", "PROPERTY_TAX_RECIEPT");
-       
         
-        
-        
+//        PROP_USAGE_TYPE.put("DOMESTIC","RESIDENTIAL");
+//        PROP_USAGE_TYPE.put("COMMERCIAL","NONRESIDENTIAL.COMMERCIAL");
+//        PROP_USAGE_TYPE.put("INDUSTRIAL","NONRESIDENTIAL.INDUSTRIAL");
+//        PROP_USAGE_TYPE.put("INSTITUTIONAL","NONRESIDENTIAL.INSTITUTIONAL");
+//        PROP_USAGE_TYPE.put("OTHERS","NONRESIDENTIAL.OTHERS");
         
     }
     

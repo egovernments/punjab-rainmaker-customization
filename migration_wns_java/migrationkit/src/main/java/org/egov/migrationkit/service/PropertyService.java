@@ -4,7 +4,9 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+//import java.util.Map.Entry;
 
+//import static org.egov.migrationkit.constants.WSConstants.PROP_USAGE_TYPE;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -34,6 +36,7 @@ import io.swagger.client.model.Unit;
 import io.swagger.client.model.WaterConnection;
 import io.swagger.client.model.WaterConnectionRequest;
 import lombok.extern.slf4j.Slf4j;
+
 
 @Service
 @Slf4j
@@ -135,22 +138,35 @@ public class PropertyService {
 		owner.setRelationship(Relationship.valueOf((String)data.getOrDefault("guardianrelation", "OTHER")));
 
 		property.creationReason(CreationReason.CREATE);
-		 
+		
+
 		if (data.getOrDefault("usage", null) != null) {
-			String usageCategory = (String) data.get("usageType");
-			if (usageCategory == "DOMESTIC")
+			String usageCategory = (String) data.get("usage");
+			System.out.println("usageCategoryInitial:" + usageCategory);
+			
+			if (usageCategory.equals("DOMESTIC")  ) {
 				usageCategory="RESIDENTIAL";
-			else if (usageCategory == "COMMERCIAL")
+				System.out.println("usageCategoryDomestic:" + usageCategory);
+				}
+			else if (usageCategory.equals("COMMERCIAL")) {
 				usageCategory="NONRESIDENTIAL.COMMERCIAL";
-			else if (usageCategory == "INDUSTRIAL")
+				System.out.println("usageCategoryCommercial:" + usageCategory);
+			}
+			else if (usageCategory.equals("INDUSTRIAL")) {
 				usageCategory="NONRESIDENTIAL.INDUSTRIAL";
-			else
-				usageCategory="NONRESIDENTIAL.OTHERS";
+				System.out.println("usageCategoryIndustrial:" + usageCategory);
+				}
+			else {
+			usageCategory="NONRESIDENTIAL.OTHERS";
+			System.out.println("usageCategoryinothers:" + usageCategory);
+			}
 
 			property.setUsageCategory(usageCategory);
+			System.out.println("usageCategoryfinal:" + usageCategory);
 		} else {
 			property.setUsageCategory("RESIDENTIAL");
 		}
+
 
 		List<OwnerInfo> owners = new ArrayList<>();
 		owners.add(owner);
@@ -262,21 +278,33 @@ public class PropertyService {
 		property.creationReason(CreationReason.CREATE);
 		
 		if (json.getOrDefault("usage", null) != null) {
-			String usageCategory = (String) json.get("usageType");
-			if (usageCategory == "DOMESTIC")
+			String usageCategory = (String) json.get("usage");
+			System.out.println("usageCategoryInitial:" + usageCategory);
+			
+			if (usageCategory.equals("DOMESTIC")  ) {
 				usageCategory="RESIDENTIAL";
-			else if (usageCategory == "COMMERCIAL")
+				System.out.println("usageCategoryDomestic:" + usageCategory);
+				}
+			else if (usageCategory.equals("COMMERCIAL")) {
 				usageCategory="NONRESIDENTIAL.COMMERCIAL";
-			else if (usageCategory == "INDUSTRIAL")
+				System.out.println("usageCategoryCommercial:" + usageCategory);
+			}
+			else if (usageCategory.equals("INDUSTRIAL")) {
 				usageCategory="NONRESIDENTIAL.INDUSTRIAL";
-			else
-				usageCategory="NONRESIDENTIAL.OTHERS";
+				System.out.println("usageCategoryIndustrial:" + usageCategory);
+				}
+			else {
+			usageCategory="NONRESIDENTIAL.OTHERS";
+			System.out.println("usageCategoryinothers:" + usageCategory);
+			}
 
 			property.setUsageCategory(usageCategory);
+			System.out.println("usageCategoryfinal:" + usageCategory);
 		} else {
 			property.setUsageCategory("RESIDENTIAL");
 		}
 		
+
 		owner.setGender((String)json.get("gender"));
 		owner.setEmailId((String)json.getOrDefault("emailId", null));
 		owner.setRelationship(Relationship.valueOf((String)json.getOrDefault("guardianrelation", "OTHER")));

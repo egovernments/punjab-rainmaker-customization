@@ -1,3 +1,4 @@
+set search_path to ghagga_prod ;
 
 CREATE TABLE ws_latest_bill_data (erpbillid bigint,consumercode character varying(256), billno character varying(256), businessservice character varying(256));
 
@@ -119,10 +120,10 @@ DECLARE
 		    END IF;
 		END LOOP;
 	END LOOP;
-	return 'Latest bills got migra successfully';
+	return 'Latest bills got migrated successfully';
 	EXCEPTION WHEN others THEN
   raise notice 'exception while migrating bill acount details %: %',SQLERRM,SQLSTATE;
 END$$  language plpgsql;
 
 --TO start the latest bill migration
-select migrate_latest_manual_bills('pb.fazilka');
+select migrate_latest_manual_bills('pb.ghagga');
