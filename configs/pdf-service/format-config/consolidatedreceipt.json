@@ -171,7 +171,7 @@
                 "style": "receipt-table-value"
               },
               {
-                "text": "{{consumerName}}",
+                "text": "{{payerName}}",
                 "border": [
                   false,
                   false,
@@ -214,7 +214,7 @@
                 "style": "receipt-table-value"
               },
               {
-                "text": "{{doorHouseNo}} {{buildingName}} {{streetName}} {{pinCode}}",
+                "text": "{{payerAddress}}",
                 "border": [
                   false,
                   false,
@@ -322,9 +322,7 @@
                 "style": "receipt-table"
               },
               {
-
                 "text": "{{payment_mode}}",
-
                 "border": [
                   false,
                   false,
@@ -335,7 +333,6 @@
               },
               {
                 "text": "{{paymentMode}}",
-
                 "border": [
                   false,
                   false,
@@ -367,9 +364,7 @@
                 "style": "receipt-table"
               },
               {
-
                 "text": "Field Fee",
-
                 "border": [
                   false,
                   false,
@@ -379,9 +374,7 @@
                 "style": "receipt-table-value"
               },
               {
-
                 "text": "₹ {{fieldFee}}",
-
                 "border": [
                   false,
                   false,
@@ -412,9 +405,7 @@
                 "style": "receipt-table"
               },
               {
-
                 "text": "SGST(if applicable)",
-
                 "border": [
                   false,
                   false,
@@ -424,9 +415,7 @@
                 "style": "receipt-table-value"
               },
               {
-
                 "text": "₹ {{sgst}}",
-
                 "border": [
                   false,
                   false,
@@ -793,7 +782,7 @@
                 "style": "receipt-table-value"
               },
               {
-                "text": "{{consumerName}}",
+                "text": "{{payerName}}",
                 "border": [
                   false,
                   false,
@@ -836,8 +825,8 @@
                 "style": "receipt-table-value"
               },
               { 
-                "text": "{{doorHouseNo}} {{buildingName}} {{streetName}} {{pinCode}}",
-                "border": [
+                "text": "{{payerAddress}}",
+                 "border": [
                   false,
                   false,
                   false,
@@ -945,9 +934,7 @@
                 "style": "receipt-table"
               },
               {
-
                 "text": "{{payment_mode}}",
-
                 "border": [
                   false,
                   false,
@@ -957,9 +944,7 @@
                 "style": "receipt-table-value"
               },
               {
-
                 "text": "{{paymentMode}}",
-
                 "border": [
                   false,
                   false,
@@ -990,9 +975,7 @@
                 "style": "receipt-table"
               },
               {
-
                 "text": "Field Fee",
-
                 "border": [
                   false,
                   false,
@@ -1002,9 +985,7 @@
                 "style": "receipt-table-value"
               },
               {
-
                 "text": "₹ {{fieldFee}}",
-
                 "border": [
                   false,
                   false,
@@ -1035,9 +1016,7 @@
                 "style": "receipt-table"
               },
               {
-
                 "text": "SGST(if applicable)",
-
                 "border": [
                   false,
                   false,
@@ -1047,9 +1026,7 @@
                 "style": "receipt-table-value"
               },
               {
-
                 "text": "₹ {{sgst}}",
-
                 "border": [
                   false,
                   false,
@@ -1390,3 +1367,5 @@
    }
   }
 }
+
+
