@@ -1789,27 +1789,43 @@ ReportDefinitions:
         type: string
         source: uc
         total: false
+      - name: receiptnumber
+        label: reports.uc.receiptnumber
+        type: string
+        source: uc
+        total: false
+      - name: receiptdate
+        label: reports.uc.receiptdate
+        type: string
+        source: uc
+        total: false
     searchParams:
       - name: fromDate
         label: reports.uc.fromDate
         type: epoch
         source: uc
         isMandatory: false
-        searchClause: AND ch.createdtime >= $fromDate
+        searchClause: AND eg_echallan.createdtime >= $fromDate
       - name: toDate
         label: reports.uc.toDate
         type: epoch
         source: uc
         isMandatory: false
-        searchClause: AND ch.createdtime <= $toDate
+        searchClause: AND eg_echallan.createdtime <= $toDate
     query: |
         -- Use CTE to force query plan, compute & use CTE later
         SELECT 
-        b.status,b.totalamount,ch.challanno,ch.businessservice,ch.description,ch.applicationstatus
-        from eg_echallan AS ch
-        inner JOIN egcl_bill AS b
-        ON ch.challanno=b.consumercode where ch.tenantid=$tenantid
+        egcl_bill.status,
+        egcl_bill.totalamount,
+        eg_echallan.challanno,
+        eg_echallan.businessservice,
+        eg_echallan.description,
+        eg_echallan.applicationstatus,
+        egcl_paymentdetail.receiptnumber,
+        To_char((To_timestamp(egcl_paymentdetail.receiptdate / 1000) at time Zone 'Asia/Kolkata'), 'DD/MM/YYYY') as receiptdate
+        from eg_echallan left JOIN egcl_bill ON eg_echallan.challanno=egcl_bill.consumercode left join egcl_paymentdetail on egcl_bill.id=egcl_paymentdetail.billid 
+        where eg_echallan.tenantid=$tenantid
         where 1=1 
-    orderby: ORDER BY ch.createdtime DESC
+    orderby: ORDER BY eg_echallan.createdtime DESC
         
 
