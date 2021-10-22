@@ -1814,7 +1814,7 @@ ReportDefinitions:
         searchClause: AND eg_echallan.createdtime <= $toDate
     query: |
         -- Use CTE to force query plan, compute & use CTE later
-        SELECT 
+        SELECT
         egcl_bill.status,
         egcl_bill.totalamount,
         eg_echallan.challanno,
@@ -1825,7 +1825,6 @@ ReportDefinitions:
         To_char((To_timestamp(egcl_paymentdetail.receiptdate / 1000) at time Zone 'Asia/Kolkata'), 'DD/MM/YYYY') as receiptdate
         from eg_echallan left JOIN egcl_bill ON eg_echallan.challanno=egcl_bill.consumercode left join egcl_paymentdetail on egcl_bill.id=egcl_paymentdetail.billid 
         where eg_echallan.tenantid=$tenantid
-        where 1=1 
     orderby: ORDER BY eg_echallan.createdtime DESC
         
 
