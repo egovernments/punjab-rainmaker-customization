@@ -1,6 +1,6 @@
 {
-  "key": "consolidatedreceipt",
-  "documentType":"CONSOLIDATED_RECEIPT",
+  "key": "firenocreceipt",
+  "documentType":"FIRENOC_RECEIPT",
   "DataConfigs": {
     "moduleName": "rainmaker-common",
     "version": "1.0.0",
