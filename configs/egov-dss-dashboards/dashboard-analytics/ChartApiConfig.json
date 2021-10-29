@@ -831,9 +831,7 @@
       "PT",
       "Target Collection PT",
       "TL",
-      "Target Collection TL",	
-      "WS",	
-      "Target Collection WS"
+      "Target Collection TL"
      ],
     "pathDataTypeMapping": [
       {	
@@ -847,12 +845,6 @@
       },	
       {	
         "Target Collection TL": "amount"	
-      },	
-      {	
-        "WS": "amount"	
-      },	
-      {	
-        "Target Collection WS": "amount"	
       }
     ],
     "insight": {},
