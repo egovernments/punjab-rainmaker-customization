@@ -1825,3 +1825,197 @@ ReportDefinitions:
         from eg_echallan left JOIN egcl_bill ON eg_echallan.challanno=egcl_bill.consumercode left join egcl_paymentdetail on egcl_bill.id=egcl_paymentdetail.billid 
         where eg_echallan.tenantid=$tenantid
     orderby: ORDER BY eg_echallan.createdtime DESC
+    
+  - reportName: NewMiscReceiptULB_v2
+    decryptionPathId: MiscReceiptULB_v2
+    summary: Receipt Register Miscellaneous
+    version: 1.0.0
+    moduleName: rainmaker-uc
+    additionalConfig:
+      print:
+        pdfPageSize: "A3"
+    sourceColumns:
+      - name: ulb
+        label: reports.uc.ulb
+        type: string
+        source: uc
+        total: false
+      - name: receiptnumber
+        label: reports.uc.receiptnumber
+        type: string
+        source: uc
+        total: false
+      - name: receiptdate
+        label: reports.uc.receiptdate
+        type: string
+        source: uc
+        total: false
+      - name: g8issuedate
+        label: reports.uc.g8issuedate
+        type: string
+        source: uc
+        total: false
+      - name: challanno
+        label: reports.uc.challanno
+        type: string
+        source: uc
+        total: false
+      - name: g8receiptno
+        label: reports.uc.g8receiptno
+        type: string
+        source: uc
+        total: false
+      - name: status
+        label: reports.uc.receiptstatus
+        type: string
+        source: uc
+        total: false
+      - name: servicecategory
+        label: reports.uc.businessdetails
+        type: string
+        source: uc
+        total: false
+      - name: cgst
+        label: reports.uc.cgst
+        type: string
+        source: uc
+        total: true
+      - name: tax
+        label: reports.uc.tax
+        type: string
+        source: uc
+        total: true
+      - name: fieldcollection
+        label: reports.uc.fieldcollection
+        type: string
+        source: uc
+        total: true
+      - name: sgst
+        label: reports.uc.sgst
+        type: string
+        source: uc
+        total: true
+      - name: ddorchequenumber
+        label: reports.uc.ddorchequenumber
+        type: string
+        source: uc
+        total: false
+      - name: ddchequedate
+        label: reports.uc.ddorchequedate
+        type: string
+        source: uc
+        total: false
+      - name: bankname
+        label: reports.uc.bankname
+        type: string
+        source: uc
+        total: false
+      - name: branchname
+        label: reports.uc.branchname
+        type: string
+        source: uc
+        total: false
+      - name: transactionnumber
+        label: reports.uc.transactionnumber
+        type: string
+        source: uc
+        total: false
+      - name: collectiontype
+        label: reports.uc.collectiontype
+        type: string
+        source: uc
+        total: false
+      - name: collectorname
+        label: reports.uc.collectorname
+        type: string
+        source: uc
+        total: false
+      - name: totalamount
+        label: reports.uc.totalamount
+        type: string
+        source: uc
+        total: true
+      - name: paymentmode
+        label: reports.uc.paymentmode
+        type: string
+        source: uc
+        total: false
+      - name: remarks
+        label: reports.uc.remarks
+        type: string
+        source: uc
+        total: false
+    searchParams:
+      - name: fromDate
+        label: reports.uc.fromDate
+        type: epoch
+        source: uc
+        isMandatory: true
+        searchClause: AND paydetail.receiptdate >= $fromDate
+      - name: toDate
+        label: reports.uc.toDate
+        type: epoch
+        source: uc
+        isMandatory: true
+        searchClause: AND paydetail.receiptdate <= $toDate
+      - name: businessservice
+        label: reports.uc.businessservice
+        type: singlevaluelist
+        pattern: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?moduleName=BillingService&masterName=BusinessService&tenantId=$tenantid|$.MdmsRes.BillingService.BusinessService[*].code|$.MdmsRes.BillingService.BusinessService[*].code
+        source: uc
+        wrapper: true
+        isMandatory: false
+        searchClause: AND businessservice = $businessservice
+      - name: collectorname
+        label: reports.uc.collectorname
+        type: singlevaluelist
+        pattern: http://egov-hrms:8080/egov-hrms/employees/_search?tenantId=$tenantid&roles=UC_EMP|$.Employees[*].user.id|$.Employees[*].user.name
+        source: uc
+        wrapper: true
+        isMandatory: false
+        searchClause: AND eg_user.id = $collectorname::INTEGER
+    query: |
+        -- Use CTE to force query plan, compute & use CTE later
+        WITH receipt_breakup AS (
+                    SELECT 
+                      bill.id as bill_id, 
+                      SUM(CASE WHEN taxheadcode LIKE '%_CGST' THEN adjustedamount ELSE 0 END) as cgst, 
+                      SUM(CASE WHEN taxheadcode LIKE '%_TAX' THEN adjustedamount ELSE 0 END) as tax, 
+                      SUM(CASE WHEN taxheadcode LIKE '%_SGST' THEN adjustedamount ELSE 0 END) as sgst, 
+                      SUM(CASE WHEN taxheadcode LIKE '%_FEE' THEN adjustedamount ELSE 0 END) as fieldcollection            
+                    FROM egcl_billaccountdetail 
+                    INNER JOIN egcl_billdetial as billd on billd.id = egcl_billaccountdetail.billdetailid
+                    INNER JOIN egcl_bill as bill on bill.id=billd.billid
+                    WHERE  billd.tenantid=$tenantid AND businessservice not in ('PT','TL','FIRENOC','WS','SW','WS.ONE_TIME_FEE') 
+                    GROUP BY billdetailid,bill.id
+                    )
+        SELECT 
+          payment.tenantid as ulb,
+          paydetail.receiptnumber as receiptnumber,
+          To_char((To_timestamp(paydetail.receiptdate / 1000) at time Zone 'Asia/Kolkata'), 'DD/MM/YYYY') as receiptdate,
+          To_char((To_timestamp(paydetail.manualreceiptdate / 1000) at time Zone 'Asia/Kolkata'), 'DD/MM/YYYY') as g8issuedate,
+          paydetail.manualreceiptnumber as g8receiptno,
+          challan.challanno as challanno,
+          bank_branches.bank_name as bankname,
+          bank_branches.branch as branchname,
+          payment.transactionnumber as transactionnumber,
+          payment.paymentstatus as status,
+          bill.businessservice as servicecategory,
+          receipt_breakup.*,  
+          payment.totalamountpaid as totalamount, 
+          paymentmode as paymentmode,
+          (case when paymentmode like 'CASH' then '' else  transactionnumber end) as ddorchequenumber,
+          (case when paymentmode like 'DD' or paymentmode like 'CHEQUE' then To_char((To_timestamp(payment.instrumentdate / 1000) at time Zone 'Asia/Kolkata'), 'DD/MM/YYYY') else '' end) as ddchequedate,
+          'System' as collectiontype,
+          eg_user.name as collectorname,
+          challan.description as remarks
+        FROM egcl_payment AS payment
+        JOIN egcl_paymentdetail as paydetail on paydetail.paymentid=payment.id
+        JOIN receipt_breakup ON paydetail.billid = receipt_breakup.bill_id
+        JOIN egcl_billdetial as billd on billd.billid=paydetail.billid
+        LEFT OUTER JOIN egcl_bill as bill on bill.id=paydetail.billid
+        LEFT OUTER JOIN eg_echallan as challan on challan.challanno=bill.consumercode
+        JOIN eg_user ON payment.createdby::INTEGER=eg_user.id
+        LEFT OUTER JOIN bank_branches on bank_branches.ifsc=payment.ifsccode 
+        WHERE  payment.tenantid=$tenantid AND bill.businessservice not in ('PT','TL','FIRENOC','WS','SW','WS.ONE_TIME_FEE') and payment.paymentstatus != 'CANCELLED'
+    orderby: ORDER BY paydetail.receiptdate DESC
