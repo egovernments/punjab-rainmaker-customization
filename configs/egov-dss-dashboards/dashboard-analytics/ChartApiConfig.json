@@ -3230,8 +3230,8 @@
         "module": "W&S",
         "requestQueryMap": "{ \"tenantId\" : \"cityname.keyword\", \"wardId\" : \"block.keyword\"}",
         "dateRefField": "@timestamp",
-        "indexName": "projecteddemand-consumers",
-        "aggrQuery": "{\"aggs\":{\"Project Demand\":{\"sum\":{\"field\":\"projecteddemand\"}}}}"
+        "indexName": "demandbillconsumers",
+        "aggrQuery": "{\"aggs\":{\"Project Demand\":{\"sum\":{\"field\":\"billamount\"}}}}"
       }
     ],
     "isMdmsEnabled": true,
@@ -3292,8 +3292,8 @@
         "module": "W&S",
         "requestQueryMap": "{ \"tenantId\" : \"cityname.keyword\", \"wardId\" : \"block.keyword\"}",
         "dateRefField": "@timestamp",
-        "indexName": "projecteddemand-consumers",
-        "aggrQuery": "{\"aggs\":{\"ULB\":{\"terms\":{\"field\":\"cityname.keyword\",\"size\":200},\"aggs\":{\"Project Demand\":{\"sum\":{\"field\":\"projecteddemand\"}}}}}}"
+        "indexName": "demandbillconsumers",
+        "aggrQuery": "{\"aggs\":{\"ULB\":{\"terms\":{\"field\":\"cityname.keyword\",\"size\":200},\"aggs\":{\"Project Demand\":{\"sum\":{\"field\":\"billamount\"}}}}}}"
       }
     ],
     "isMdmsEnabled": false,
@@ -3354,8 +3354,8 @@
         "module": "W&S",
         "requestQueryMap": "{ \"tenantId\" : \"cityname.keyword\", \"wardId\" : \"block.keyword\" }",
         "dateRefField": "@timestamp",
-        "indexName": "projecteddemand-consumers",
-        "aggrQuery": "{\"aggs\":{\"Ward\":{\"terms\":{\"field\":\"block.keyword\",\"size\":200},\"aggs\":{\"Project Demand\":{\"sum\":{\"field\":\"projecteddemand\"}}}}}}"
+        "indexName": "demandbillconsumers",
+        "aggrQuery": "{\"aggs\":{\"Ward\":{\"terms\":{\"field\":\"block.keyword\",\"size\":200},\"aggs\":{\"Project Demand\":{\"sum\":{\"field\":\"billamount\"}}}}}}"
       }
     ],
     "isMdmsEnabled": false,
