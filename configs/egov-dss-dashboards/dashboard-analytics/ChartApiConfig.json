@@ -3231,8 +3231,8 @@
         "module": "W&S",
         "requestQueryMap": "{ \"tenantId\" : \"cityname.keyword\", \"wardId\" : \"block.keyword\"}",
         "dateRefField": "@timestamp",
-        "indexName": "projecteddemand-consumers",
-        "aggrQuery": "{\"aggs\":{\"Project Demand\":{\"sum\":{\"field\":\"projecteddemand\"}}}}"
+        "indexName": "demandbillconsumers",
+        "aggrQuery": "{\"aggs\":{\"Project Demand\":{\"sum\":{\"field\":\"billamount\"}}}}"
       }
     ],
     "isMdmsEnabled": true,
