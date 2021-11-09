@@ -1755,9 +1755,9 @@
       {
         "module": "TL",
         "requestQueryMap": "{\"wardId\" : \"Data.ward.name.keyword\", \"tenantId\" : \"Data.tradelicense.tenantId.keyword\" }",
-        "dateRefField": "Data.tradelicense.issuedDate",
+        "dateRefField": "Data.tradelicense.applicationDate",
         "indexName": "tlindex-v1",
-        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tradelicense.tenantId.keyword\":\"pb.testing\"}}]}},\"aggs\":{\"Status\":{\"terms\":{\"field\":\"Data.tradelicense.status.keyword\",\"size\":1000,\"min_doc_count\":0},\"aggs\":{\"License Issued\":{\"value_count\":{\"field\":\"Data.tradelicense.licenseNumber.keyword\"}}}}}}}}",
+        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tradelicense.tenantId.keyword\":\"pb.testing\"}}]}},\"aggs\":{\"Status\":{\"terms\":{\"field\":\"Data.tradelicense.status.keyword\",\"size\":1000,\"min_doc_count\":0},\"aggs\":{\"License Issued\":{\"value_count\":{\"field\":\"Data.tradelicense.applicationNumber.keyword\"}}}}}}}}",
         "aggrQueryBC": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tradelicense.tenantId.keyword\":\"pb.testing\"}}]}},\"aggs\":{\"Status\":{\"filters\":{\"filters\":{\"Approved\":{\"match\":{\"Data.tradelicense.status.keyword\":\"APPROVED\"}},\"Initiated\":{\"match\":{\"Data.tradelicense.status.keyword\":\"INITIATED\"}},\"Applied\":{\"match\":{\"Data.tradelicense.status.keyword\":\"APPLIED\"}},\"Rejected\":{\"match\":{\"Data.tradelicense.status.keyword\":\"REJECTED\"}},\"Pending Approval\":{\"match\":{\"Data.tradelicense.status.keyword\":\"PENDINGAPPROVAL\"}},\"Field Inspection\":{\"match\":{\"Data.tradelicense.status.keyword\":\"FIELDINSPECTION\"}},\"Cancelled\":{\"match\":{\"Data.tradelicense.status.keyword\":\"CANCELLED\"}},\"Pending Payment\":{\"match\":{\"Data.tradelicense.status.keyword\":\"PENDINGPAYMENT\"}},\"Paid\":{\"match\":{\"Data.tradelicense.status.keyword\":\"PAID\"}}}}}}}}}"
       }
     ],
