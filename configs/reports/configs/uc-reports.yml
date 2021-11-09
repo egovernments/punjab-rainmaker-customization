@@ -1965,7 +1965,7 @@ ReportDefinitions:
         source: uc
         wrapper: true
         isMandatory: false
-        searchClause: AND businessservice = $businessservice
+        searchClause: AND bill.businessservice = $businessservice
       - name: collectorname
         label: reports.uc.collectorname
         type: singlevaluelist
@@ -1996,6 +1996,7 @@ ReportDefinitions:
           To_char((To_timestamp(paydetail.manualreceiptdate / 1000) at time Zone 'Asia/Kolkata'), 'DD/MM/YYYY') as g8issuedate,
           paydetail.manualreceiptnumber as g8receiptno,
           challan.challanno as challanno,
+          payment.payername as payername,
           bank_branches.bank_name as bankname,
           bank_branches.branch as branchname,
           payment.transactionnumber as transactionnumber,
