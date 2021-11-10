@@ -1860,6 +1860,11 @@ ReportDefinitions:
         type: string
         source: uc
         total: false
+      - name: payername
+        label: reports.uc.payername
+        type: string
+        source: uc
+        total: false
       - name: g8receiptno
         label: reports.uc.g8receiptno
         type: string
