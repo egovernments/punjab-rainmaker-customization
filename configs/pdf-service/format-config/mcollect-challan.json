@@ -654,7 +654,7 @@
                 ]
             },
             "receipt-logo-title-status": {
-                "color": "#FF0000",
+                "color": "#000000",
                 "alignment": "right",
                 "bold": true,
                 "fontSize": 13,
@@ -680,7 +680,7 @@
                 ]
             },
             "receipt-logo-title-remarks-new": {
-                "color": "#FF0000",
+                "color": "#000000",
                 "bold": true,
                 "fontSize": 10,
                 "fontWeight": 500,
