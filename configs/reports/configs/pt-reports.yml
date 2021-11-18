@@ -7084,17 +7084,12 @@ ReportDefinitions:
     source: pt
     total: false
   - name: surveyid
-    label: reports.pt.ddChequeTransactionNo
-    type: string
-    source: pt
-    total: false
-  - name: pdid
-    label: reports.pt.ddChequeTransactionNo
+    label: reports.pt.surveyid
     type: string
     source: pt
     total: false
   - name: transactiondate
-    label: reports.pt.ddChequeTransactionDate
+    label: reports.pt.transactiondate
     type: string
     source: pt
     total: false
