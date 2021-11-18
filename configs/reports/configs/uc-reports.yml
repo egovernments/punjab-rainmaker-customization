@@ -2033,3 +2033,116 @@ ReportDefinitions:
         LEFT OUTER JOIN bank_branches on bank_branches.ifsc=payment.ifsccode 
         WHERE  payment.tenantid=$tenantid AND bill.businessservice not in ('PT','TL','FIRENOC','WS','SW','WS.ONE_TIME_FEE') and payment.paymentstatus != 'CANCELLED'
     orderby: ORDER BY paydetail.receiptdate DESC
+    
+  - reportName:  uc_7to10sept2020_receipts
+    decryptionPathId: MiscReceiptULB_v2
+    summary: uc_7to10sept2020_receipts
+    version: 1.0.0
+    moduleName: rainmaker-uc
+    additionalConfig:
+      print:
+        pdfPageSize: "A3"
+    sourceColumns:
+      - name: ulb
+        label: reports.uc.ulb
+        type: string
+        source: uc
+        total: false
+      - name: receiptnumber
+        label: reports.uc.receiptnumber
+        type: string
+        source: uc
+        total: false
+      - name: receiptdate
+        label: reports.uc.receiptdate
+        type: string
+        source: uc
+        total: false
+      - name: g8issuedate
+        label: reports.uc.g8issuedate
+        type: string
+        source: uc
+        total: false
+      - name: g8receiptno
+        label: reports.uc.g8receiptno
+        type: string
+        source: uc
+        total: false
+      - name: payername
+        label: reports.uc.payername
+        type: string
+        source: uc
+        total: false
+      - name: status
+        label: reports.uc.receiptstatus
+        type: string
+        source: uc
+        total: false
+      - name: servicecategory
+        label: reports.uc.businessdetails
+        type: string
+        source: uc
+        total: false
+      - name: cgst
+        label: reports.uc.cgst
+        type: string
+        source: uc
+        total: true
+      - name: tax
+        label: reports.uc.tax
+        type: string
+        source: uc
+        total: true
+      - name: fieldcollection
+        label: reports.uc.fieldcollection
+        type: string
+        source: uc
+        total: true
+      - name: sgst
+        label: reports.uc.sgst
+        type: string
+        source: uc
+        total: true
+      - name: totalamount
+        label: reports.uc.totalamount
+        type: string
+        source: uc
+        total: true
+      - name: paymentmode
+        label: reports.uc.paymentmode
+        type: string
+        source: uc
+        total: false
+      - name: ddorchequenumber
+        label: reports.uc.ddorchequenumber
+        type: string
+        source: uc
+        total: false
+      - name: ddchequedate
+        label: reports.uc.ddorchequedate
+        type: string
+        source: uc
+        total: false
+      - name: collectiontype
+        label: reports.uc.collectiontype
+        type: string
+        source: uc
+        total: false 
+      - name: collectorname
+        label: reports.uc.collectorname
+        type: string
+        source: uc
+        total: false
+      - name: remarks
+        label: reports.uc.remarks
+        type: string
+        source: uc
+        total: false
+  
+    query: |
+      -- Use CTE to force query plan, compute & use CTE later
+      SELECT
+         ulb,receiptnumber,receiptdate,g8issuedate,g8receiptno,payername,status,servicecategory,bill_id,cgst,tax,sgst,fieldcollection,totalamount,paymentmode,ddorchequenumber,ddchequedate, collectiontype,collectorname,remarks from uc_7to10sept2020_receipts
+         where tenantid=$tenantid 
+    orderby: ORDER BY receiptdate DESC;
+
