@@ -2886,6 +2886,7 @@ ReportDefinitions:
     total: false
   - name: mobilenumber
     label: reports.tl.mobilenumber
+    type: string
     source: tl
     total: false 
   - name: collectorname
