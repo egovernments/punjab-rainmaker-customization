@@ -2034,7 +2034,7 @@ ReportDefinitions:
         WHERE  payment.tenantid=$tenantid AND bill.businessservice not in ('PT','TL','FIRENOC','WS','SW','WS.ONE_TIME_FEE') and payment.paymentstatus != 'CANCELLED'
     orderby: ORDER BY paydetail.receiptdate DESC
     
-  - reportName:  uc_7to10sept2020_receipts
+  - reportName: uc_7to10sept2020_receipts
     decryptionPathId: MiscReceiptULB_v2
     summary: uc_7to10sept2020_receipts
     version: 1.0.0
@@ -2142,7 +2142,7 @@ ReportDefinitions:
     query: |
       -- Use CTE to force query plan, compute & use CTE later
       SELECT
-         ulb,receiptnumber,receiptdate,g8issuedate,g8receiptno,payername,status,servicecategory,cgst,tax,sgst,fieldcollection,totalamount,paymentmode,ddorchequenumber,ddchequedate, collectiontype,collectorname,remarks from uc_7to10sept2020_receipts
-         where tenantid=$tenantid 
+         ulb,receiptnumber,receiptdate,g8issuedate,g8receiptno,payername,status,servicecategory,bill_id,cgst,tax,sgst,fieldcollection,totalamount,paymentmode,ddorchequenumber,ddchequedate, collectiontype,collectorname,remarks from uc_7to10sept2020_receipts
+         where ulb=$tenantid
     orderby: ORDER BY receiptdate DESC
 
