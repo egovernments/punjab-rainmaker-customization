@@ -2801,98 +2801,98 @@ ReportDefinitions:
   groupby: GROUP BY collectorname , paymentmode
         
 - reportName:  TLReceiptRegister_7to10Sept2020
-    decryptionPathId: TradeLicenseRegistryReport_v2
-    summary: TLReceiptRegister_7to10Sept2020
-    version: 1.0.0
-    moduleName: rainmaker-tl
-    additionalConfig:
-      print:
-        pdfPageSize: "A3"
-    sourceColumns:
-      - name: tenantid
-        label: reports.tl.tenantid
-        type: string
-        source: tl
-        total: false
-      - name: receiptnumber
-        label: reports.tl.receiptnumber
-        type: string
-        source: tl
-        total: false
-      - name: receiptissuedate
-        label: reports.tl.receiptissuedate
-        type: string
-        source: tl
-        total: false
-      - name: g8issuedate
-        label: reports.tl.g8issuedate
-        type: string
-        source: tl
-        total: false
-      - name: g8receiptno
-        label: reports.tl.g8receiptno
-        type: string
-        source: tl
-        total: false
-      -  name: name
-        label: reports.tl.name
-        type: string
-        source: tl
-        total: false
-      - name: formattedissueddate
-        label: reports.tl.formattedissueddate
-        type: string
-        source: tl
-        total: false
-      - name: licensenumber
-        label: reports.tl.licensenumber
-        type: string
-        source: tl
-        total: false
-      - name: acc
-        label: reports.tl.acc
-        type: string
-        source: tl
-        total: false
-      - name: tradename
-        label: reports.tl.tradename
-        type: string
-        source: tl
-        total: true
-      - name: status
-        label: reports.tl.status
-        type: string
-        source: tl
-        total: false
-      - name: tradetypename
-        label: reports.tl.tradetypename
-        type: string
-        source: tl
-        total: true
-      - name: totalamount
-        label: reports.tl.totalamount
-        type: string
-        source: tl
-        total: true
-      - name: transactionnumber
-        label: reports.tl.transactionnumber
-        type: string
-        source: tl
-        total: false
-      - name: instrumenttype
-        label: reports.tl.instrumenttype
-        type: string
-        source: tl
-        total: false
-      - name: mobilenumber
-        label: reports.tl.mobilenumber
-        source: tl
-        total: false 
-      - name: collectorname
-        label: reports.tl.collectorname
-        type: string
-        source: tl
-        total: false
+  decryptionPathId: TradeLicenseRegistryReport_v2
+  summary: TLReceiptRegister_7to10Sept2020
+  version: 1.0.0
+  moduleName: rainmaker-tl
+  additionalConfig:
+    print:
+      pdfPageSize: "A3"
+  sourceColumns:
+  - name: tenantid
+    label: reports.tl.tenantid
+    type: string
+    source: tl
+    total: false
+  - name: receiptnumber
+    label: reports.tl.receiptnumber
+    type: string
+    source: tl
+    total: false
+  - name: receiptissuedate
+    label: reports.tl.receiptissuedate
+    type: string
+    source: tl
+    total: false
+  - name: g8issuedate
+    label: reports.tl.g8issuedate
+    type: string
+    source: tl
+    total: false
+  - name: g8receiptno
+    label: reports.tl.g8receiptno
+    type: string
+    source: tl
+    total: false
+  - name: name
+    label: reports.tl.name
+    type: string
+    source: tl
+    total: false
+  - name: formattedissueddate
+    label: reports.tl.formattedissueddate
+    type: string
+    source: tl
+    total: false
+  - name: licensenumber
+    label: reports.tl.licensenumber
+    type: string
+    source: tl
+    total: false
+  - name: acc
+    label: reports.tl.acc
+    type: string
+    source: tl
+    total: false
+  - name: tradename
+    label: reports.tl.tradename
+    type: string
+    source: tl
+    total: true
+  - name: status
+    label: reports.tl.status
+    type: string
+    source: tl
+    total: false
+  - name: tradetypename
+    label: reports.tl.tradetypename
+    type: string
+    source: tl
+    total: true
+  - name: totalamount
+    label: reports.tl.totalamount
+    type: string
+    source: tl
+    total: true
+  - name: transactionnumber
+    label: reports.tl.transactionnumber
+    type: string
+    source: tl
+    total: false
+  - name: instrumenttype
+    label: reports.tl.instrumenttype
+    type: string
+    source: tl
+    total: false
+  - name: mobilenumber
+    label: reports.tl.mobilenumber
+    source: tl
+    total: false 
+  - name: collectorname
+    label: reports.tl.collectorname
+    type: string
+    source: tl
+    total: false
   
   query: |
       -- Use CTE to force query plan, compute & use CTE later
