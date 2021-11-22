@@ -2142,7 +2142,7 @@ ReportDefinitions:
     query: |
       -- Use CTE to force query plan, compute & use CTE later
       SELECT
-         ulb,receiptnumber,receiptdate,g8issuedate,g8receiptno,payername,status,servicecategory,bill_id,cgst,tax,sgst,fieldcollection,totalamount,paymentmode,ddorchequenumber,ddchequedate, collectiontype,collectorname,remarks from uc_7to10sept2020_receipts
+         ulb,receiptnumber,receiptdate,g8issuedate,g8receiptno,payername,status,servicecategory,cgst,tax,sgst,fieldcollection,totalamount,paymentmode,ddorchequenumber,ddchequedate, collectiontype,collectorname,remarks from uc_7to10sept2020_receipts
          where tenantid=$tenantid 
-    orderby: ORDER BY receiptdate DESC;
+    orderby: ORDER BY receiptdate DESC
 
