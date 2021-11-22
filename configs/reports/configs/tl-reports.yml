@@ -2800,7 +2800,7 @@ ReportDefinitions:
         WHERE payment.tenantid=$tenantid AND businessservice in ('TL') and payment.paymentstatus != 'CANCELLED'
   groupby: GROUP BY collectorname , paymentmode
         
-- reportName:  TLReceiptRegister_7to10Sept2020
+- reportName: TLReceiptRegister_7to10Sept2020
   decryptionPathId: TradeLicenseRegistryReport_v2
   summary: TLReceiptRegister_7to10Sept2020
   version: 1.0.0
@@ -2900,4 +2900,4 @@ ReportDefinitions:
          licensenumber, formattedissueddate, tradename, status, receiptissuedate, receiptnumber, tradetypename, acc, 
          name, mobilenumber,transactionnumber, instrumenttype, totalamount, g8issuedate, g8receiptno, collectorname,tenantid from tl_7to10sept2020_receipts
          where tenantid=$tenantid 
-  orderby: ORDER BY receiptissuedate DESC;
+  orderby: ORDER BY receiptissuedate DESC
