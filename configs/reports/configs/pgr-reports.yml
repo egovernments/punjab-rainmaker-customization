@@ -1223,7 +1223,8 @@ ReportDefinitions:
     left outer join eg_user on eg_user.id = eg_pgr_service.accountid::int
     left outer join eg_pgr_action as epa on epa.businesskey = eg_pgr_service.servicerequestid and epa.action in ('assign','reassign','resolve')
     inner join comps on concat(comps.actiontime,comps.businesskey)=concat(epa.when,epa.businesskey) and comps.businesskey=eg_pgr_service.servicerequestid and comps.actiontime=epa.when
-    left outer join eg_user as ua on (ua.id = epa.assignee::integer  or ua.id = split_part(epa.by,':',1)::INTEGER)
+    --left outer join eg_user as ua on (ua.id = epa.assignee::integer  or ua.id = split_part(epa.by,':',1)::INTEGER)
+    left outer join eg_user as ua on (ua.id = (case when epa.assignee is not null then epa.assignee::integer  else  split_part(epa.by,':',1)::INTEGER end))
     WHERE
     eg_pgr_service.tenantid LIKE  $tenantid
     AND eg_pgr_address.uuid = eg_pgr_service.addressid
