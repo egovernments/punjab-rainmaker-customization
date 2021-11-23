@@ -5964,3 +5964,129 @@ ReportDefinitions:
       and  receipt_breakup.pdid=pd.id 
       and payment.paymentmode in ('CHEQUE','DD','OFFLINE_NEFT')
   orderby: ORDER BY pd.receiptdate DESC
+  
+- reportName: DigitData_PT
+    summary: Online DigitData_PT
+    version: 1.0.0
+    moduleName: rainmaker-pt
+    additionalConfig:
+       print:
+         pdfPageSize: "A1"
+    sourceColumns:
+      - name: tenantid
+        label: reports.pt.tenant
+        type: string
+        source: pt
+        total: false
+      - name: amountpaid
+        label: reports.pt.amountpaid
+        type: string
+        source: pt
+        total: true
+      - name: receiptnumber
+        label: reports.pt.receiptnumber
+        type: string
+        source: pt
+        total: false
+      - name: receiptdate
+        label: reports.pt.receiptdate
+        type: string
+        source: pt
+        total: false
+      - name: businessservice
+        label: reports.pt.businessservice
+        type: string
+        source: pt
+        total: false
+      - name: transactionnumber
+        label: reports.pt.transactionnumber
+        type: string
+        source: pt
+        total: false
+      - name: paymentmode
+        label: reports.pt.paymentmode
+        type: string
+        source: pt
+        total: false
+      - name: instrumentnumber
+        label: reports.pt.instrumentnumber
+        type: string
+        source: pt
+        total: false
+      - name: paidby
+        label: reports.pt.paidby
+        type: string
+        source: pt
+        total: false
+      - name: txn id
+        label: reports.pt.txn_id
+        type: string
+        source: pt
+        total: false
+      - name: txn status
+        label: reports.pt.txn_status
+        type: string
+        source: pt
+        total: false
+      - name: txn status msg
+        label: reports.pt.txn_status_msg
+        type: string
+        source: pt
+        total: false
+      - name: gateway
+        label: reports.pt.gateway
+        type: string
+        source: pt
+        total: false
+      - name: product info
+        label: reports.pt.product_info
+        type: string
+        source: pt
+        total: false
+      - name: gatewaytxnid
+        label: reports.pt.gatewaytxnid
+        type: string
+        source: pt
+        total: false
+      - name: gateway payment mode
+        label: reports.pt.gateway_payment_mode
+        type: string
+        source: pt
+        total: false
+      - name: gateway status msg
+        label: reports.pt.gateway_status_msg
+        type: string
+        source: pt
+        total: false
+    searchParams:
+      - name: gateway
+        label: report.pt.gateway
+        type: singlevaluelist
+        pattern: 'list://Razorpay:Razorpay,Paytm:Paytm,Other:Other'
+        source: pt
+        isMandatory: true
+    query: |
+        ---Use CTE to force query plan, compute & use CTE later
+        select 
+         txn.txn_id, 
+         txn.txn_status, 
+         txn.txn_status_msg, 
+         txn.gateway,
+         txn.product_info,
+         txn.gateway_txn_id,
+         txn.gateway_payment_mode,
+         txn.gateway_status_msg,
+         pyd.tenantid,
+         pyd.amountpaid,
+         pyd.receiptnumber, 
+         pyd.receiptdate,
+         pyd.businessservice,
+         to_char((To_timestamp(receiptdate/1000) at time Zone 'Asia/Kolkata'),'YYYY-MM-DD') as receiptdate,
+         egp.transactionnumber,
+         egp.paymentmode,
+         egp.instrumentnumber,egp.paidby
+         from eg_pg_transactions as txn
+        join egcl_payment as egp on egp.transactionnumber=txn.txn_id
+        join egcl_paymentdetail as pyd on pyd.paymentid=egp.id --pyd.receiptdate>=1625097660000 and pyd.receiptdate<=1627689660000
+        where egp.paymentmode='ONLINE' and egp.tenantid= $tenantid
+    orderby: ORDER BY egp.transactiondate asc  
