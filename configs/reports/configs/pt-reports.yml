@@ -6078,10 +6078,9 @@ ReportDefinitions:
          txn.gateway_status_msg,
          pyd.tenantid,
          pyd.amountpaid,
-         pyd.receiptnumber, 
-         pyd.receiptdate,
+         pyd.receiptnumber,
          pyd.businessservice,
-         to_char((To_timestamp(receiptdate/1000) at time Zone 'Asia/Kolkata'),'YYYY-MM-DD') as receiptdate,
+         to_char((To_timestamp(pyd.receiptdate/1000) at time Zone 'Asia/Kolkata'),'YYYY-MM-DD') as receiptdate,
          egp.transactionnumber,
          egp.paymentmode,
          egp.instrumentnumber,egp.paidby
