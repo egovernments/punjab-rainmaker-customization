@@ -42,7 +42,7 @@
                   "headers": []
                 },
                 {
-                  "id": "targetAchieved",
+                  "id": "overviewTargetAchieved",
                   "name": "DSS_TARGET_ACHIEVED",
                   "code": "",
                   "chartType": "metric",
