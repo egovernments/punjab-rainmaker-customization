@@ -6127,6 +6127,11 @@ ReportDefinitions:
     type: string
     source: pt
     total: false
+  - name: transactiondate
+    label: reports.pt.transactiondate
+    type: string
+    source: pt
+    total: false	
   - name: g8issuedate
     label: reports.pt.g8issuedate
     type: string
@@ -6255,7 +6260,8 @@ ReportDefinitions:
       select 
         rp.receiptnumber,
         rp.propertyid as consumercode,
-        rp.receiptdate,
+        to_char((To_timestamp(rp.receiptdate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY') as "receiptdate",
+        to_char((To_timestamp(rp.transactiondate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY')  as  "transactiondate",
         rp.paymentmode,
         rp.g8_issuedate as g8issuedate,
         rp.g8_receiptnumber as g8receiptno,
@@ -6277,6 +6283,8 @@ ReportDefinitions:
       inner join assessments as asmt on  asmt.billid = rp.billid -- asmt.billid like concat('%',rp.billid,'%')
       where rp.paymentstatus!='CANCELLED' and rp.tenantid=$tenantid
   orderby: order by receiptnumber
+  
+  
   
   
 - reportName: PT_DATA_DUMP_REPORT_V2
@@ -6365,6 +6373,11 @@ ReportDefinitions:
     type: string
     source: pt
     total: true 
+  - name: paymentmode
+    label: reports.pt.paymentmode
+    type: string
+    source: pt
+    total: false 
   - name: paymentdate
     label: reports.pt.paymentdate
     type: string
@@ -6377,6 +6390,11 @@ ReportDefinitions:
     total: false 
   - name: address
     label: reports.pt.address
+    type: string
+    source: pt
+    total: false
+  - name: surveyid
+    label: reports.pt.surveyid
     type: string
     source: pt
     total: false
@@ -6461,7 +6479,7 @@ ReportDefinitions:
         pt.propertyid as propertytaxuniqueid,
         rp.transactiondate as dateoftransaction,
         rp.receiptnumber as receiptnumber,
-        rp.receiptdate as paymentdate,
+        to_char((To_timestamp(rp.receiptdate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY')  AS  "paymentdate",
         rp.paymentmode as paymentmode,
         pt.oldpropertyid as existingpropertyid,
         --ra.assessmentyears as financialyear,
@@ -6480,6 +6498,7 @@ ReportDefinitions:
         --rp.transactiondate as transcationdate,
         owners.emailid as emailid,
         pt.address as address,
+        pt.surveyid,
         pt.additionaldetails->>'remarks' as remarks,
         --pt.additionaldetails->>'businessName' as firmbusinessname,
         pt.firmbusinessname as businessname,
