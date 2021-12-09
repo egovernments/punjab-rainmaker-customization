@@ -6423,6 +6423,16 @@ ReportDefinitions:
     type: string
     source: pt
     total: false
+  - name: zonename
+    label: reports.pt.zonename
+    type: string
+    source: pt
+    total: false
+  - name: blockname
+    label: reports.pt.blockname
+    type: string
+    source: pt
+    total: false
   searchParams:
   - name: fromDate
     label: reports.pt.fromDate
@@ -6503,7 +6513,9 @@ ReportDefinitions:
         --pt.additionaldetails->>'businessName' as firmbusinessname,
         --pt.firmbusinessname as businessname,
         pt.localitycode as localitycode,
-        pt.localityname as localityname
+        pt.localityname as localityname,
+        pt.zonename as zonename,
+        pt.blockname as blockname
       from report_properties pt
       --inner join units as ru on ru.propertyid=pt.propertyid 
       inner join report_payments as rp on  rp.propertyid=pt.propertyid and rp.paymentstatus!='CANCELLED'
