@@ -6473,39 +6473,39 @@ ReportDefinitions:
       group by propertyid
       )
       select
-        rp.billid,
+        --rp.billid,
         --ra.billid,
         pt.tenantid as ulb,
-        pt.propertyid as propertytaxuniqueid,
-        rp.transactiondate as dateoftransaction,
-        rp.receiptnumber as receiptnumber,
+        --pt.propertyid as propertytaxuniqueid,
+        --rp.transactiondate as dateoftransaction,
+        --rp.receiptnumber as receiptnumber,
         to_char((To_timestamp(rp.receiptdate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY')  AS  "paymentdate",
         rp.paymentmode as paymentmode,
-        pt.oldpropertyid as existingpropertyid,
+        --pt.oldpropertyid as existingpropertyid,
         --ra.assessmentyears as financialyear,
         getfinancialyear(rp.billid) as financialyear,
         owners.ownername as ownername,
         owners.guardianname as guardianname,
         owners.mobilenumber as mobileno,
-        pt.plotsize as totalarea,
-        ru.builtuparea as builtarea,
-        pt.nooffloors as floors,
-        ru.occupancytype as occupancy,
-        pt.propertytype as propertytype,
+        --pt.plotsize as totalarea,
+        --ru.builtuparea as builtarea,
+        --pt.nooffloors as floors,
+        --ru.occupancytype as occupancy,
+        --pt.propertytype as propertytype,
         rp.payermobilenumber as mobilenumber,
         --ra.totalamount as paymentamount,
-        rp.amoutpaid as paymentamount,
+        --rp.amoutpaid as paymentamount,
         --rp.transactiondate as transcationdate,
-        owners.emailid as emailid,
+        --owners.emailid as emailid,
         pt.address as address,
         pt.surveyid,
-        pt.additionaldetails->>'remarks' as remarks,
+        --pt.additionaldetails->>'remarks' as remarks,
         --pt.additionaldetails->>'businessName' as firmbusinessname,
-        pt.firmbusinessname as businessname,
+        --pt.firmbusinessname as businessname,
         pt.localitycode as localitycode,
         pt.localityname as localityname
       from report_properties pt
-      inner join units as ru on ru.propertyid=pt.propertyid 
+      --inner join units as ru on ru.propertyid=pt.propertyid 
       inner join report_payments as rp on  rp.propertyid=pt.propertyid and rp.paymentstatus!='CANCELLED'
       --inner join report_assessments ra on split_part(ra.billid,',',1)=rp.billid and  ra.propertyid=rp.propertyid
       inner join owners on owners.propertyid=pt.propertyid
