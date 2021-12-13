@@ -6303,8 +6303,8 @@ ReportDefinitions:
     type: string
     source: pt
     total: false  
-  - name: transcationdate
-    label: reports.pt.transcationdate
+  - name: transactiondate
+    label: reports.pt.transactiondate
     type: string
     source: pt
     total: false  
@@ -6487,7 +6487,7 @@ ReportDefinitions:
         --ra.billid,
         pt.tenantid as ulb,
         pt.propertyid as propertytaxuniqueid,
-        rp.transactiondate as dateoftransaction,
+        to_char((To_timestamp(rp.transactiondate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY')  as  "transactiondate",
         rp.receiptnumber as receiptnumber,
         to_char((To_timestamp(rp.receiptdate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY')  AS  "paymentdate",
         rp.paymentmode as paymentmode,
