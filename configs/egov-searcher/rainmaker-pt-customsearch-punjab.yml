@@ -118,7 +118,7 @@ SearchDefinitions:
     orderBy:
    searchParams:
     condition: AND
-   params:
+    params:
     - name: tenantid
       isMandatory: true
       jsonPath: $.searchCriteria.tenantId
