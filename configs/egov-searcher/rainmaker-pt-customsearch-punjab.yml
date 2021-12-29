@@ -119,7 +119,7 @@ SearchDefinitions:
    searchParams:
     condition: AND
     params:
-    - name: tenantid
+    - name: fn.tenantid
       isMandatory: true
       jsonPath: $.searchCriteria.tenantId
       operator: =
