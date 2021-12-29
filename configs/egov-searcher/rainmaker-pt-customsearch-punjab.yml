@@ -108,7 +108,10 @@ SearchDefinitions:
    query:
     baseQuery: |
       select array_to_json(array_agg(row_to_json(data))) from (
-        select fnd.uuid,firenocuuid,applicationnumber,firenocnumber,firenoctype,firestationid,validfrom,validto,status,concat(addressline1,' ',addressline2,' ',street,' ',city,' ',locality,' ',subdistrict,' ') as address,fnb.name,concat(fnb.usagetype,' ',fnb.usagesubtype)
+        select fnd.uuid,firenocuuid,applicationnumber,firenocnumber,firenoctype,firestationid,
+          to_char(to_timestamp(cast(validfrom/1000 as bigint))::date , 'dd/mm/yyyy') as validfrom,
+          to_char(to_timestamp(cast(validto/1000 as bigint))::date , 'dd/mm/yyyy') as validto,
+          status,concat(addressline1,' ',addressline2,' ',street,' ',city,' ',locality,' ',subdistrict,' ') as address,fnb.name,concat(fnb.usagetype,' ',fnb.usagesubtype)
           from eg_fn_firenoc fn
           inner join eg_fn_firenocdetail fnd on fnd.firenocuuid=fn.uuid
           inner join eg_fn_address fna on fna.firenocdetailsuuid=fnd.uuid
