@@ -122,10 +122,6 @@ SearchDefinitions:
    searchParams:
     condition: AND
     params:
-    - name: fn.tenantid
-      isMandatory: false
-      jsonPath: $.searchCriteria.tenantId
-      operator: =
     - name: firenocnumber
       isMandatory: true
       jsonPath: $.searchCriteria.firenocNumber
