@@ -851,7 +851,7 @@ serviceMaps:
     isTransaction: true
     queryMaps:
 
-    - query: UPDATE eg_tl_tradelicense  SET applicationstatus=?, lastmodifiedby=?, lastmodifiedtime=? WHERE applicationnumber=? AND tenantId=?;
+    - query: UPDATE eg_tl_tradelicense  SET status=?, lastmodifiedby=?, lastmodifiedtime=? WHERE applicationnumber=? AND tenantId=?;
       basePath: ProcessInstances.*
       jsonMaps:
       - jsonPath: $.ProcessInstances.*.state.applicationStatus
