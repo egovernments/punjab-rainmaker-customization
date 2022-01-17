@@ -7268,3 +7268,124 @@ ReportDefinitions:
       where pd.paymentid=payment.id and payment.paymentstatus != 'CANCELLED' and pd.businessservice='PT' and payment.tenantid=$tenantid 
       and receipt_breakup.pdid=pd.id
   groupby: group by instrumenttype
+
+
+- reportName: DailyChequeDetail
+  summary: Cheque DD Collection Register
+  version: 1.0.0
+  moduleName: rainmaker-pt
+  additionalConfig:
+    print:
+      pdfPageSize: "A4"
+  sourceColumns:
+  - name: instrumenttype
+    label: reports.pt.paymentMode
+    type: string
+    source: pt
+    total: false
+  - name: receiptnumber
+    label: reports.pt.receiptno
+    type: string
+    source: pt
+    total: false
+  - name: receiptdate
+    label: reports.pt.receiptdate
+    type: string
+    source: pt
+    total: false
+  - name: transactionnumber
+    label: reports.pt.transactionno
+    type: string
+    source: pt
+    total: false
+  - name: transactiondate
+    label: reports.pt.transactiondate
+    type: string
+    source: pt
+    total: false
+  - name: ifsc
+    label: reports.pt.ifsccode
+    type: string
+    source: pt
+    total: false
+  - name: bankname
+    label: reports.pt.bankname
+    type: string
+    source: pt
+    total: false
+  - name: amount_without_cess
+    label: reports.pt.withoutCess
+    type: string
+    source: pt
+    total: true
+  - name: firecess
+    label: reports.pt.fireCess
+    type: string
+    source: pt
+    total: true
+  - name: cancercess
+    label: reports.pt.cancerCess
+    type: string
+    source: pt
+    total: true
+  - name: amount
+    label: reports.pt.total
+    type: string
+    source: pt
+    total: true
+  searchParams:
+  - name: fromDate
+    label: reports.pt.fromDate
+    type: epoch
+    source: pt
+    isMandatory: true
+    searchClause: AND pd.receiptdate >= $fromDate
+  - name: toDate
+    label: reports.pt.toDate
+    type: epoch
+    source: pt
+    isMandatory: true
+    searchClause: AND pd.receiptdate <= $toDate
+  query: |
+      -- Use CTE to force query plan, compute & use CTE later
+      WITH receipt_breakup AS (
+                  SELECT
+                    pd.id as pdid,
+                    SUM(CASE WHEN taxheadcode LIKE 'PT_ADHOC_PENALTY' THEN adjustedamount ELSE 0 END) as adhocpenalty, 
+                    SUM(CASE WHEN taxheadcode LIKE 'PT_ADHOC_REBATE' THEN adjustedamount ELSE 0 END) as adhocrebate, 
+                    SUM(CASE WHEN taxheadcode LIKE 'PT_FIRE_CESS' THEN adjustedamount ELSE 0 END) as firecess, 
+                    SUM(CASE WHEN taxheadcode LIKE 'PT_CANCER_CESS' THEN adjustedamount ELSE 0 END) as cancercess, 
+                    SUM(CASE WHEN taxheadcode LIKE 'PT_TIME_INTEREST' THEN adjustedamount ELSE 0 END) as interest, 
+                    SUM(CASE WHEN taxheadcode LIKE 'PT_TIME_PENALTY' THEN adjustedamount ELSE 0 END) as penalty, 
+                    SUM(CASE WHEN taxheadcode LIKE 'PT_TIME_REBATE' THEN adjustedamount ELSE 0 END) as rebate,
+                    SUM(CASE WHEN taxheadcode LIKE 'PT_TAX' THEN bad.amount ELSE 0 END) as propertytax,
+                    SUM(CASE WHEN taxheadcode LIKE 'PT_TAX' THEN adjustedamount ELSE 0 END) as paidpropertytax, 
+                    (SUM(CASE WHEN taxheadcode LIKE 'PT_UNIT_USAGE_EXEMPTION' THEN bad.amount ELSE 0 END)
+                    + SUM(CASE WHEN taxheadcode LIKE 'PT_OWNER_EXEMPTION' THEN bad.amount ELSE 0 END) ) as exemption,
+                    (SUM(CASE WHEN taxheadcode LIKE 'PT_ROUNDOFF' THEN adjustedamount ELSE 0 END)
+                    + SUM(CASE WHEN taxheadcode LIKE 'PT_DECIMAL_CEILING_DEBIT' THEN adjustedamount ELSE 0 END)
+                    + SUM(CASE WHEN taxheadcode LIKE 'PT_DECIMAL_CEILING_CREDIT' THEN adjustedamount ELSE 0 END)) as adjustment
+                  FROM egcl_billaccountdetail as bad
+                  INNER JOIN egcl_billdetial as bd on bd.id = bad.billdetailid
+                  INNER JOIN egcl_paymentdetail as pd on pd.billid = bd.billid
+                  INNER JOIN egcl_payment as payment on pd.paymentid=payment.id
+                  WHERE payment.tenantid = $tenantid and payment.paymentstatus != 'CANCELLED' and  pd.businessservice='PT'
+                  AND pd.receiptdate >= $fromDate AND pd.receiptdate <= $toDate
+                  GROUP BY pdid
+      )
+      SELECT 
+        payment.paymentmode as instrumenttype, 
+        receiptnumber,
+        to_char((To_timestamp(receiptdate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY') AS receiptdate,
+        payment.transactionnumber,
+        to_char((To_timestamp(payment.instrumentdate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY') AS transactiondate, 
+        payment.ifsccode AS ifsc,
+        concat(bank_branches.bank_name,' ',bank_branches.branch) as bankname, 
+        payment.totalamountpaid-firecess-cancercess as amount_without_cess,
+        receipt_breakup.firecess as firecess,
+        receipt_breakup.cancercess as cancercess,
+        payment.totalamountpaid as amount
+      FROM egcl_paymentdetail pd, egcl_payment payment left outer join bank_branches on bank_branches.ifsc=payment.ifsccode,  receipt_breakup
+      where pd.paymentid=payment.id and payment.paymentstatus != 'CANCELLED' and pd.businessservice='PT' and payment.tenantid=$tenantid 
+      and receipt_breakup.pdid=pd.id and payment.paymentmode in ('CHEQUE','CARD','DD')
+  orderby: ORDER BY pd.receiptdate DESC;
