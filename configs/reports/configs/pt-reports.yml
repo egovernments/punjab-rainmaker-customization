@@ -7276,7 +7276,7 @@ ReportDefinitions:
   moduleName: rainmaker-pt
   additionalConfig:
     print:
-      pdfPageSize: "A4"
+      pdfPageSize: "A3"
   sourceColumns:
   - name: instrumenttype
     label: reports.pt.paymentMode
