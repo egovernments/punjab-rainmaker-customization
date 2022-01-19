@@ -7267,7 +7267,7 @@ ReportDefinitions:
       FROM egcl_paymentdetail pd, egcl_payment payment ,  receipt_breakup
       where pd.paymentid=payment.id and payment.paymentstatus != 'CANCELLED' and pd.businessservice='PT' and payment.tenantid=$tenantid 
       and receipt_breakup.pdid=pd.id
-  groupby: group by instrumenttype
+  groupby: group by instrumenttype,substring(instrumentnumber,0,position ('/' in instrumentnumber))
 
 
 - reportName: DailyChequeDetail
