@@ -7258,7 +7258,7 @@ ReportDefinitions:
                   GROUP BY pdid
                )
       SELECT 
-        payment.paymentmode as instrumenttype, 
+        concat(payment.paymentmode,substring(instrumentnumber,0,position ('/' in instrumentnumber))) as instrumenttype, 
         count(*) as count_receipts,
         sum(payment.totalamountpaid)-sum(receipt_breakup.firecess+receipt_breakup.cancercess) as paid_without_cess,
         sum(receipt_breakup.firecess) as firecess,
@@ -7266,12 +7266,12 @@ ReportDefinitions:
         sum(payment.totalamountpaid) as totalpaid
       FROM egcl_paymentdetail pd, egcl_payment payment ,  receipt_breakup
       where pd.paymentid=payment.id and payment.paymentstatus != 'CANCELLED' and pd.businessservice='PT' and payment.tenantid=$tenantid 
-      and receipt_breakup.pdid=pd.id
+      and receipt_breakup.pdid=pd.id  and paymentmode not in ('CHEQUE','OFFLINE_NEFT','OFFLINE_RTGS')
   groupby: group by instrumenttype,substring(instrumentnumber,0,position ('/' in instrumentnumber))
 
 
 - reportName: DailyChequeDetail
-  summary: Cheque DD Collection Register
+  summary: Cheque RTGS NEFT Collection Register
   version: 1.0.0
   moduleName: rainmaker-pt
   additionalConfig:
@@ -7370,6 +7370,7 @@ ReportDefinitions:
                   INNER JOIN egcl_paymentdetail as pd on pd.billid = bd.billid
                   INNER JOIN egcl_payment as payment on pd.paymentid=payment.id
                   WHERE payment.tenantid = $tenantid and payment.paymentstatus != 'CANCELLED' and  pd.businessservice='PT'
+                  and paymentmode in ('CHEQUE','OFFLINE_NEFT','OFFLINE_RTGS')
                   AND pd.receiptdate >= $fromDate AND pd.receiptdate <= $toDate
                   GROUP BY pdid
       )
