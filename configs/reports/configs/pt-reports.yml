@@ -7165,7 +7165,15 @@ ReportDefinitions:
     label: reports.pt.mobilenumber
     type: string
     source: pt
-    total: false  
+    total: false
+  searchParams:
+  - name: finYear
+    label: Financial Year
+    type: singlevaluelist
+    pattern: 'list://1554057000000:2019-20,1585679400000:2020-21,1617215400000:2021-22'
+    source: pt
+    isMandatory: true
+    searchClause: AND taxperiodfrom=$finYear
   query: |
     select propertyid as propertyuid,
       name as owenrrname,
@@ -7175,7 +7183,7 @@ ReportDefinitions:
     where propertyid in
       (select id 
       from eg_pt_property
-      where tenantid='pb.patiala' and status='ACTIVE' and propertyid not in (select consumercode from egbs_demand_v1 where tenantid='pb.patiala' and businessservice='PT' and taxperiodfrom=1617215400000) -- 2021-22
+      where tenantid='pb.patiala' and status='ACTIVE' and propertyid not in (select consumercode from egbs_demand_v1 where tenantid=$tenantid and businessservice='PT') -- and taxperiodfrom=1617215400000 -- 2021-22
       )
 
 
