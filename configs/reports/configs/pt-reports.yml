@@ -7183,7 +7183,7 @@ ReportDefinitions:
     where propertyid in
       (select id 
       from eg_pt_property
-      where tenantid='pb.patiala' and status='ACTIVE' and propertyid not in (select consumercode from egbs_demand_v1 where tenantid=$tenantid and businessservice='PT' and taxperiodfrom=$finYear ) -- and taxperiodfrom=1617215400000) -- 2021-22
+      where tenantid='pb.patiala' and status='ACTIVE' and propertyid not in (select consumercode from egbs_demand_v1 where tenantid=$tenantid and businessservice='PT' and taxperiodfrom=$finYear::bigint ) -- and taxperiodfrom=1617215400000) -- 2021-22
       )
 
 
