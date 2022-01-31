@@ -7156,6 +7156,11 @@ ReportDefinitions:
     type: string
     source: pt
     total: false  
+  - name: propertyid
+    label: reports.pt.propertyid
+    type: string
+    source: pt
+    total: false  
   - name: ownername
     label: reports.pt.ownername
     type: string
@@ -7176,7 +7181,7 @@ ReportDefinitions:
     searchClause: AND 1=1
   query: |
     select eg_pt_owner.propertyid as propertyuid,
-      pt.propertyid,
+      pt.propertyid as propertyid,
       name as ownername,
       mobilenumber as mobileno
     from eg_pt_owner 
