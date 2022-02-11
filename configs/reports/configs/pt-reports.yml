@@ -7161,6 +7161,16 @@ ReportDefinitions:
     type: string
     source: pt
     total: false  
+  - name: oldpropertyid
+    label: reports.pt.oldpropertyid
+    type: string
+    source: pt
+    total: false
+  - name: address
+    label: reports.pt.address
+    type: string
+    source: pt
+    total: false    
   - name: ownername
     label: reports.pt.ownername
     type: string
@@ -7182,11 +7192,14 @@ ReportDefinitions:
   query: |
     select eg_pt_owner.propertyid as propertyuid,
       pt.propertyid as propertyid,
+      oldpropertyid,
+      concat(case when pta.doorno is null then '' else 'door no ' end,pta.doorno,' location ',pta.plotno,pta.buildingname,pta.street) as address,
       name as ownername,
       mobilenumber as mobileno
     from eg_pt_owner 
     inner join eg_user on eg_pt_owner.userid=eg_user.uuid
     inner join eg_pt_property pt on pt.id=eg_pt_owner.propertyid
+    inner join eg_pt_address pta on pta.propertyid=pt.id
     where eg_pt_owner.propertyid in
       (select id 
       from eg_pt_property
