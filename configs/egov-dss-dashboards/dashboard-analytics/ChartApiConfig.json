@@ -396,7 +396,7 @@
     "drillChart": "none",
     "aggregationPaths": [
       "Property Tax",
-      "Trade Licence"
+      "Trade Licence",
       "PGR"
     ],
     "insight": {
