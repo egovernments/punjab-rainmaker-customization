@@ -384,7 +384,7 @@ ServiceMaps:
         jsonPath: $.Assessment
         timeStampField: $.auditDetails.createdTime
         customJsonMapping:
-          indexMapping: {"Data":{"workflow":{"state":{},"action":"","assignes":[]},"id":"","tenantId":"","additionalDetails":"","assessmentNumber":"","financialYear":"","propertyId":"","assessmentDate":"","status":"","source":"","unitUsageList":{},"channel":"","auditDetails":{},"@timestamp":"timestamp","address":{},"ward":{},"tenantData":{}}}
+          indexMapping: {"Data":{"workflow":{"state":{},"action":"","assignes":[]},"id":"","tenantId":"","additionalDetails":"","assessmentNumber":"","financialYear":"","propertyId":"","assessmentDate":"","status":"","source":"","unitUsageList":{},"channel":"","auditDetails":{},"@timestamp":"timestamp","tenantData":{},"address":{},"ward":{}}}
           fieldMapping:
           - inJsonPath: $.workflow.state
             outJsonPath: $.Data.workflow.state
@@ -450,7 +450,7 @@ ServiceMaps:
         jsonPath: $.Assessment
         timeStampField: $.auditDetails.createdTime
         customJsonMapping:
-          indexMapping: {"Data":{"workflow":{"state":{},"action":"","assignes":[]},"id":"","tenantId":"","additionalDetails":"","assessmentNumber":"","financialYear":"","propertyId":"","assessmentDate":"","status":"","source":"","unitUsageList":{},"channel":"","auditDetails":{},"@timestamp":"timestamp","address":{},"ward":{},"tenantData":{}}}
+          indexMapping: {"Data":{"workflow":{"state":{},"action":"","assignes":[]},"id":"","tenantId":"","additionalDetails":"","assessmentNumber":"","financialYear":"","propertyId":"","assessmentDate":"","status":"","source":"","unitUsageList":{},"channel":"","auditDetails":{},"@timestamp":"timestamp","tenantData":{},"address":{},"ward":{}}}
           fieldMapping:
           - inJsonPath: $.workflow.state
             outJsonPath: $.Data.workflow.state
@@ -516,7 +516,7 @@ ServiceMaps:
         jsonPath: $.Assessment
         timeStampField: $.auditDetails.createdTime
         customJsonMapping:
-          indexMapping: {"Data":{"workflow":{"state":{},"action":"","assignes":[]},"id":"","tenantId":"","additionalDetails":"","assessmentNumber":"","financialYear":"","propertyId":"","assessmentDate":"","status":"","source":"","unitUsageList":{},"channel":"","auditDetails":{},"@timestamp":"timestamp","address":{},"ward":{},"tenantData":{}}}
+          indexMapping: {"Data":{"workflow":{"state":{},"action":"","assignes":[]},"id":"","tenantId":"","additionalDetails":"","assessmentNumber":"","financialYear":"","propertyId":"","assessmentDate":"","status":"","source":"","unitUsageList":{},"channel":"","auditDetails":{},"@timestamp":"timestamp","tenantData":{},"address":{},"ward":{}}}
           fieldMapping:
           - inJsonPath: $.workflow.state
             outJsonPath: $.Data.workflow.state
@@ -583,7 +583,7 @@ ServiceMaps:
         isBulk: true
         timeStampField: $.auditDetails.createdTime 
         customJsonMapping:
-          indexMapping: {"Data":{"workflow":{"state":{},"action":"","assignes":[]},"id":"","tenantId":"","additionalDetails":"","assessmentNumber":"","financialYear":"","propertyId":"","assessmentDate":"","status":"","source":"","unitUsageList":{},"channel":"","auditDetails":{},"@timestamp":"timestamp","address":{},"ward":{},"tenantData":{}}}
+          indexMapping: {"Data":{"workflow":{"state":{},"action":"","assignes":[]},"id":"","tenantId":"","additionalDetails":"","assessmentNumber":"","financialYear":"","propertyId":"","assessmentDate":"","status":"","source":"","unitUsageList":{},"channel":"","auditDetails":{},"@timestamp":"timestamp","tenantData":{},"address":{},"ward":{}}}
           fieldMapping:
           - inJsonPath: $.workflow.state
             outJsonPath: $.Data.workflow.state
