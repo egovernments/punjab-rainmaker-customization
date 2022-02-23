@@ -7590,3 +7590,214 @@ ReportDefinitions:
   query: |
         select * from patiala_cybertech_additional_transactions
         orderby: ORDER BY paymentdate
+
+- reportName: WithoutUpinTransactions
+  decryptionPathId: ULBDEFAULTERPTREPORT_V2
+  summary: WithoutUpinTransactions
+  version: 1.0.0
+  moduleName: rainmaker-pt
+  sourceColumns:
+  - name: client_data_property_id
+    label: reports.pt.client_data_property_id
+    type: string
+    source: pt
+    total: false
+  - name: level_detail_name
+    label: reports.pt.returnid
+    type: string
+    source: pt
+    total: false  
+  - name: previousyearid
+    label: reports.pt.previousyearid
+    type: string
+    source: pt
+    total: false  
+  - name: acknowledgementno
+    label: reports.pt.acknowledgementno
+    type: string
+    source: pt
+    total: false
+  - name: upin
+    label: reports.pt.acknowledgementno
+    type: string
+    source: pt
+    total: false  
+  - name: entrydate
+    label: reports.pt.entrydate
+    type: string
+    source: pt
+    total: false
+  - name: zone
+    label: reports.pt.zone
+    type: string
+    source: pt
+    total: false
+  - name: sector
+    label: reports.pt.sector
+    type: string
+    source: pt
+    total: false  
+  - name: colony
+    label: reports.pt.colony
+    type: string
+    source: pt
+    total: false  
+  - name: house_no
+    label: reports.pt.house_no
+    type: string
+    source: pt
+    total: false  
+  - name: owner_detail
+    label: reports.pt.owner_detail
+    type: string
+    source: pt
+    total: false   
+  - name: lease_detail
+    label: reports.pt.lease_detail
+    type: string
+    source: pt
+    total: false
+  - name: property_address
+    label: reports.pt.property_address
+    type: string
+    source: pt
+    total: false
+  - name: covered_measure_detail
+    label: reports.pt.covered_measure_detail
+    type: string
+    source: pt
+    total: false  
+  - name: uncovered_measure_detail
+    label: reports.pt.uncovered_measure_detail
+    type: string
+    source: pt
+    total: false
+  - name: land_usage_type
+    label: reports.pt.land_usage_type
+    type: string
+    source: pt
+    total: false
+  - name: usage
+    label: reports.pt.usage
+    type: string
+    source: pt
+    total: false
+  - name: plot_area
+    label: reports.pt.plot_area
+    type: string
+    source: pt
+    total: false  
+  - name: covered_area
+    label: reports.pt.covered_area
+    type: string
+    source: pt
+    total: false  
+  - name: applicable_tax
+    label: reports.pt.applicable_tax
+    type: string
+    source: pt
+    total: true  
+  - name: fire_charges
+    label: reports.pt.fire_charges
+    type: string
+    source: pt
+    total: true   
+  - name: interest
+    label: reports.pt.interest
+    type: string
+    source: pt
+    total: true
+  - name: penalty
+    label: reports.pt.penalty
+    type: string
+    source: pt
+    total: true 
+  - name: rebate
+    label: reports.pt.rebate
+    type: string
+    source: pt
+    total: true
+  - name: exemption_amount
+    label: reports.pt.exemption_amount
+    type: string
+    source: pt
+    total: true
+  - name: total_payable_tax
+    label: reports.pt.total_payable_tax
+    type: string
+    source: pt
+    total: true  
+  - name: payment_mode
+    label: reports.pt.payment_mode
+    type: string
+    source: pt
+    total: false
+  - name: cheque_no
+    label: reports.pt.cheque_no
+    type: string
+    source: pt
+    total: false
+  - name: cheque_realisation_date
+    label: reports.pt.cheque_realisation_date
+    type: string
+    source: pt
+    total: false 
+  - name: cheque_status
+    label: reports.pt.cheque_status
+    type: string
+    source: pt
+    total: false
+  - name: remark
+    label: reports.pt.remark
+    type: string
+    source: pt
+    total: false
+  - name: post_tid
+    label: reports.pt.pos_id
+    type: string
+    source: pt
+    total: false  
+  - name: pos_invoice_num
+    label: reports.pt.pos_invoice_num
+    type: string
+    source: pt
+    total: false
+  - name: transaction_id
+    label: reports.pt.transaction_id
+    type: string
+    source: pt
+    total: false  
+  - name: g8_book_no
+    label: reports.pt.g8_book_no
+    type: string
+    source: pt
+    total: false   
+  - name: g8receiptno
+    label: reports.pt.g8receiptno
+    type: string
+    source: pt
+    total: false
+  - name: paymentdate
+    label: reports.pt.paymentdate
+    type: string
+    source: pt
+    total: false
+  - name: property_type
+    label: reports.pt.property_type
+    type: string
+    source: pt
+    total: false
+  - name: session
+    label: reports.pt.session
+    type: string
+    source: pt
+    total: false
+  - name: buildingcategory
+    label: reports.pt.buildingcategory
+    type: string
+    source: pt
+    total: false
+  searchParams:
+  query: |
+        select * from patiala_without_upin_transactions
+        orderby: ORDER BY paymentdate
