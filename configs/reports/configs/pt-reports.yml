@@ -7421,8 +7421,7 @@ ReportDefinitions:
   
   
 - reportName: cybertech_additional_transactions
-  decryptionPathId: ULBDEFAULTERPTREPORT_V2
-  summary: ULB Defaulter Pt report
+  summary: CyberTech Additional Transactions
   version: 1.0.0
   moduleName: rainmaker-pt
   sourceColumns:
@@ -7586,13 +7585,11 @@ ReportDefinitions:
     type: string
     source: pt
     total: false
-  searchParams:
   query: |
         select * from patiala_cybertech_additional_transactions
   orderby: ORDER BY paymentdate
 
 - reportName: WithoutUpinTransactions
-  decryptionPathId: ULBDEFAULTERPTREPORT_V2
   summary: WithoutUpinTransactions
   version: 1.0.0
   moduleName: rainmaker-pt
@@ -7797,7 +7794,6 @@ ReportDefinitions:
     type: string
     source: pt
     total: false
-  searchParams:
   query: |
         select * from patiala_without_upin_transactions
   orderby: ORDER BY paymentdate
