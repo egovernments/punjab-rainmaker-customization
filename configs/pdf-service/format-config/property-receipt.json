@@ -1196,11 +1196,11 @@
        {"text":"4. Assessment & Payment is subject to verification/Scrutiny by competitive authority."},
        {"text":"5. Please deposit property tax dues for earlier years also. Ignore, if already paid."},
        {"text":[{"text":"6. Citizen for Online Payments please refer to the link "},
-      {"text": "https://mseva.lgpunjab.gov.in/", "bold": true, "fontSize": 10, "color": "blue", "decoration": "underline"}
+      {"text": "https://mseva.lgpunjab.gov.in/", "bold": true, "fontSize": 8, "color": "blue", "decoration": "underline"}
        ]
       }, 
       {
-        "text":"Now log a complaint from WhatsApp, give a missed call on 8750975975 or send a Hi message on WhatsApp to this number", "bold": true, "fontSize": 10, "color": "blue", "decoration": "underline"}
+        "text":"Now log a complaint from WhatsApp, give a missed call on 8750975975 or send a Hi message on WhatsApp to this number", "bold": true, "fontSize": 8, "color": "blue", "decoration": "underline"}
         ]
       }
     ],
@@ -1214,7 +1214,7 @@
       ]
     },
     "block-head": {
-      "fontSize": 9,
+      "fontSize": 7,
       "bold": true,
       "letterSpacing": 0.74,
       "margin": [
@@ -1225,7 +1225,7 @@
       ]
     },
     "pt-reciept-citizen-table": {
-      "fontSize": 9,
+      "fontSize": 7,
       "color": "#484848"
     },
     "receipt-assess-table-header": {
@@ -1235,7 +1235,7 @@
     },
     "receipt-logo-header": {
       "color": "#000000",
-      "fontSize": 10,
+      "fontSize": 8.5,
       "bold": true,
       "letterSpacing": 0.74,
       "margin": [
@@ -1247,11 +1247,11 @@
     },
     "receipt-logo-sub-header": {
       "color": "#000000",
-      "fontSize": 10,
+      "fontSize": 8.5,
       "letterSpacing": 0.6
     },
      "noc-table": {
-      "fontSize": 9,
+      "fontSize": 7,
       "color": "#000000",
       "margin": [
         -25,
@@ -1261,7 +1261,7 @@
       ]
     },
     "next-noc-table": {
-      "fontSize": 9,
+      "fontSize": 7,
       "color": "#000000",
       "margin": [
         -25,
@@ -1270,7 +1270,7 @@
         -8
       ]
     }, "next-noc-table2": {
-      "fontSize": 9,
+      "fontSize": 7,
       "color": "#000000",
       "margin": [
         -25,
@@ -1282,7 +1282,7 @@
      "receipt-table-value": {
       "color": "#000000",
       "bold": true,
-      "fontSize": 9,
+      "fontSize": 7,
       "fontWeight": 500,
       "margin": [
         8,
@@ -1294,7 +1294,7 @@
     "receipt-table-value22": {
       "color": "#000000",
       "bold": true,
-      "fontSize": 9,
+      "fontSize": 7,
       "fontWeight": 500,
       "backgroundColor": "#D3D3D3",
       "margin": [
@@ -1307,7 +1307,7 @@
     "receipt-table": {
       "color": "#000000",
       "bold": false,
-      "fontSize": 9,
+      "fontSize": 7,
       "fontWeight": 400,
       "margin": [
         0,
@@ -1318,7 +1318,7 @@
     },"receipt-tableee": {
       "color": "#000000",
       "bold": true,
-      "fontSize": 9,
+      "fontSize": 7,
       "fontWeight": 500,
       "margin": [
         0,
@@ -1328,7 +1328,7 @@
       ]
     },
      "receipt-approver": {
-      "fontSize": 9,
+      "fontSize": 7,
       "bold": true,
       "margin": [
         -27,
@@ -1338,7 +1338,7 @@
       ],
       "color": "#484848"
     },"receipt-approver2": {
-      "fontSize": 9,
+      "fontSize": 7,
       "bold": true,
       "margin": [
         -27,
@@ -1349,7 +1349,7 @@
       "color": "#484848"
     },
     "no-signature": {
-      "fontSize": 9,
+      "fontSize": 7,
       "margin": [
         -27,
         20,
@@ -1359,7 +1359,7 @@
       "color": "#484848"
     },
     "pt-disclaimer": {
-      "fontSize": 10,
+      "fontSize": 8,
       "margin": [
         -27,
         10,
@@ -1369,7 +1369,7 @@
       "color": "#484848"
     },
     "pt-disclaimer-value": {
-      "fontSize": 10,
+      "fontSize": 8,
       "margin": [
         2,
         0,
@@ -1380,12 +1380,12 @@
      },
 	 "amounts":
 	 {
-       "fontSize": 10,
+       "fontSize": 8,
        "backgroundColor": "#D3D3D3"
    }, 
    "amountss":
 	 {
-       "fontSize": 10
+       "fontSize": 8
 	 }
    }
   }
