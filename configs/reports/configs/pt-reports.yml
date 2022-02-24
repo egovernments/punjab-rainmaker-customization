@@ -7589,7 +7589,7 @@ ReportDefinitions:
   searchParams:
   query: |
         select * from patiala_cybertech_additional_transactions
-        orderby: ORDER BY paymentdate
+  orderby: ORDER BY paymentdate
 
 - reportName: WithoutUpinTransactions
   decryptionPathId: ULBDEFAULTERPTREPORT_V2
@@ -7800,4 +7800,4 @@ ReportDefinitions:
   searchParams:
   query: |
         select * from patiala_without_upin_transactions
-        orderby: ORDER BY paymentdate
+  orderby: ORDER BY paymentdate
