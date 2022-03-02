@@ -193,7 +193,7 @@
                 false,
                 false
               ],
-              "style": "receipt-table"
+              "style": "receipt-tableee"
             },
             {
               "text": "Survey Id/UID",
@@ -213,7 +213,7 @@
                 true,
                 false
               ],
-              "style": "receipt-table"
+              "style": "receipt-tableee"
             }
           ],
           [
@@ -235,7 +235,7 @@
                 false,
                 true
               ],
-              "style": "receipt-table"
+              "style": "receipt-tableee"
             },
             {
               "text" : "Payment Status",
@@ -255,7 +255,7 @@
                 true,
                 true
               ],
-              "style": "receipt-table"
+              "style": "receipt-tableee"
             }
           ]
         ]
@@ -291,7 +291,7 @@
                   false,
                   false
                 ],
-                "style": "receipt-table"
+                "style": "receipt-tableee"
               },
               {
                 "text": "Building/Colony Name: ",
@@ -311,7 +311,7 @@
                   true,
                   false
                 ],
-                "style": "receipt-table"
+                "style": "receipt-tableee"
               }
             ],
 			[
@@ -333,7 +333,7 @@
                   false,
                   false
                 ],
-                "style": "receipt-table"
+                "style": "receipt-tableee"
               },
               {
                 "text": "Locality/Mohalla :",
@@ -353,7 +353,7 @@
                   true,
                   false
                 ],
-                "style": "receipt-table"
+                "style": "receipt-tableee"
               }
             ],
 			[
@@ -375,7 +375,7 @@
                   false,
                   false
                 ],
-                "style": "receipt-table"
+                "style": "receipt-tableee"
               },
               {
                 "text": "Property Type: ",
@@ -395,7 +395,7 @@
                   true,
                   false
                 ],
-                "style": "receipt-table"
+                "style": "receipt-tableee"
               }
             ],
             [
@@ -418,7 +418,7 @@
                           false,
                           true
                         ],
-                        "style": "receipt-table"
+                        "style": "receipt-tableee"
                       },
                       {
                         "text": " ",
@@ -438,7 +438,7 @@
                           true,
                           true
                         ],
-                        "style": "receipt-table"
+                        "style": "receipt-tableee"
                       }
                     ]
           ]
@@ -446,7 +446,82 @@
         "layout": {}
       },
       {
-        "text":"PAYABLE AMOUNT",
+        "text":"AMOUNT TO BE PAID",
+        "style":"block-head"
+      },
+      {
+        "style": "next-noc-table",
+        "table": {
+          "widths": [
+  
+            "7%","9%","7%","7%","7%","7%","8%","8%","8%","8%","8%","7%","9%"
+          ],
+          "body": [
+            
+      [     {
+        "text": "Year",
+        "style": "amounts"
+      },
+              {
+                "text": "Property Tax",
+                "style": "amounts"
+              },
+        {
+                "text": "Fire Cess",
+                "style": "amounts"
+              },
+        {
+                "text": "Cancer Cess",
+                "style": "amounts"
+              },
+        {
+                "text": "Penalty",
+                "style": "amounts"
+              },
+        {
+                "text": "Rebate",
+                "style": "amounts"
+              },
+        {
+                "text": "Interest",
+                "style": "amounts"
+              },
+        {
+                "text": "Usage Exemp.",
+                "style": "amounts"
+              },
+        {
+                "text": "Category Exemp.",
+                "style": "amounts"
+              },
+              {
+                "text": "Adhoc Penalty",
+                "style": "amounts"
+              },
+              {
+                "text": "Adhoc Rebate",
+                "style": "amounts"
+              },
+        {
+                "text": "Round Off",
+                "style": "amounts"
+              },
+        {
+                "text": "Total",
+                "style": "amounts"
+              }
+        
+      ],
+      
+      "{{#var_tax}}[{\"text\":\"{{year}}\",\"style\":\"receipt-table\"},{\"text\":\"{{tax}}\",\"style\":\"receipt-table\"},{\"text\":\"{{firecess}}\",\"style\":\"receipt-table\"},{\"text\":\"{{cancercess}}\",\"style\":\"receipt-table\"},{\"text\":\"{{penalty}}\",\"style\":\"receipt-table\"},{\"text\":\"{{rebate}}\",\"style\":\"receipt-table\"},{\"text\":\"{{interest}}\",\"style\":\"receipt-table\"},{\"text\":\"{{usage_exemption}}\",\"style\":\"receipt-table\"},{\"text\":\"{{special_category_exemption}}\",\"style\":\"receipt-table\"},{\"text\":\"{{adhoc_penalty}}\",\"style\":\"receipt-table\"},{\"text\":\"{{adhoc_rebate}}\",\"style\":\"receipt-table\"},{\"text\":\"{{roundoff}}\",\"style\":\"receipt-table\"},{\"text\":\"{{total}}\",\"style\":\"receipt-table\"}]{{/var_tax}}"
+  
+        
+    ]
+    },
+    "layout":{}
+    }, 
+      {
+        "text":"SUMMARY OF PAID AMOUNT",
         "style":"block-head"
       },
 	    {
@@ -454,7 +529,7 @@
         "table": {
           "widths": [
 
-            "7%","7%","7%","5%","7%","6%","7%","8%","8%","8%","8%","7%","*"
+            "7%","9%","7%","7%","7%","7%","8%","8%","8%","8%","8%","7%","9%"
           ],
           "body": [
             
@@ -487,11 +562,11 @@
                 "style": "amounts"
               },
 			  {
-                "text": "Usage Exemption",
+                "text": "Usage Exemp.",
                 "style": "amounts"
               },
 			  {
-                "text": "Special Category Exemption",
+                "text": "Category Exemp.",
                 "style": "amounts"
               },
               {
@@ -536,52 +611,10 @@
           "body": [
             [
               {
-                "text": "{{service_type}}",
-                "border": [
-                  true,
-                  true,
-                  false,
-                  false
-                ],
-                "style": "receipt-table-value"
-              },
-              {
-                "text": "{{serviceType}}",
-                "border": [
-                  false,
-                  true,
-                  false,
-                  false
-                ],
-                "style": "receipt-table"
-              },
-              {
-                "text": " ",
-                "border": [
-                  false,
-                  true,
-                  false,
-                  false
-                ],
-                "style": "receipt-table-value"
-              },
-              {
-                "text": " ",
-                "border": [
-                  false,
-                  true,
-                  true,
-                  false
-                ],
-                "style": "receipt-table"
-              }
-            ],
-            [
-              {
                 "text": "Amount to be Paid",
                 "border": [
                   true,
-                  false,
+                  true,
                   false,
                   false
                 ],
@@ -591,7 +624,7 @@
                 "text": "₹ {{dueAmount}}",
                 "border": [
                   false,
-                  false,
+                  true,
                   false,
                   false
                 ],
@@ -601,7 +634,7 @@
                 "text": "{{paid_amount}}",
                 "border": [
                   false,
-                  false,
+                  true,
                   false,
                   false
                 ],
@@ -611,7 +644,7 @@
                 "text": "₹ {{paidAmount}}",
                 "border": [
                   false,
-                  false,
+                  true,
                   true,
                   false
                 ],
@@ -750,7 +783,7 @@
                   true,
                   false,
                   false,
-                  true
+                  false
                 ],
                 "style": "receipt-table-value"
               },
@@ -760,7 +793,7 @@
                   false,
                   false,
                   false,
-                  true
+                  false
                 ],
                 "style": "receipt-table"
               },
@@ -770,7 +803,7 @@
                   false,
                   false,
                   false,
-                  true
+                  false
                 ],
                 "style": "receipt-table-value"
               },
@@ -780,34 +813,17 @@
                   false,
                   false,
                   true,
-                  true
+                  false
                 ],
                 "style": "receipt-table"
               }
-            ]
-          ]
-        },
-        "layout": {}
-      },{
-        "text":"ADDITIONAL REBATE/PENALTY REASON",
-        "style":"block-head"
-      },
-       {
-        "style": "next-noc-table",
-        "table": {
-          "widths": [
-            "25%",
-            "25%",
-            "25%",
-            "25%"
-          ],
-          "body": [
+            ],
             [
               {
                 "text": "Penalty Reason",
                 "border": [
                   true,
-                  true,
+                  false,
                   false,
                   true
                 ],
@@ -817,7 +833,7 @@
                 "text": "{{penaltyReason}}",
                 "border": [
                   false,
-                  true,
+                  false,
                   false,
                   true
                 ],
@@ -827,7 +843,7 @@
                 "text": "Rebate Reason",
                 "border": [
                   false,
-                  true,
+                  false,
                   false,
                   true
                 ],
@@ -837,12 +853,13 @@
                 "text": "{{rebateReason}}",
                 "border": [
                   false,
-                  true,
+                  false,
                   true,
                   true
                 ],
                 "style": "receipt-table"
               }
+
             ]
           ]
         },
@@ -864,7 +881,7 @@
           "*",
           "*"
         ],
-        "body": ["{{#var_owners}}[{\"text\":\"Owner Name\",\"border\":[true,true,false,true],\"style\":\"receipt-table-key\"},{\"text\":\"{{name2}}\",\"border\":[false,true,true,true]},{\"text\":\"Father/Husband Name\",\"border\":[true,true,false,true],\"style\":\"receipt-table-key\"},{\"text\":\"{{fatherOrHusbandName2}}\",\"border\":[false,true,true,true]},{\"text\":\"Ownership %\",\"border\":[false,true,false,true],\"style\":\"receipt-table-key\"},{\"text\":\"{{ownerShipPercentage}}\",\"border\":[false,true,true,true]}]{{/var_owners}}"]
+        "body": ["{{#var_owners}}[{\"text\":\"Owner Name\",\"border\":[true,true,false,true],\"style\":\"receipt-table-key\"},{\"text\":\"{{name2}}\",\"border\":[false,true,true,true]},{\"text\":\"Father/Husband Name\",\"border\":[true,true,false,true],\"style\":\"receipt-table-key\"},{\"text\":\"{{fatherOrHusbandName2}}\",\"border\":[false,true,true,true]},{\"text\":\"Share % (Category)\",\"border\":[true,true,false,true],\"style\":\"receipt-table-key\"},{\"text\":\"{{ownerShipPercentage}} ({{ownerType}}) \",\"border\":[false,true,true,true]}]{{/var_owners}}"]
       },
       "layout": {}
     }, {
@@ -956,7 +973,7 @@
                   "style": "receipt-table-value22"
                 },
                {
-                  "text": "Built Area (Sq. Yard) / Total Annual Rent",
+                  "text": "Built Area (Sq. Yard) /annual Rent",
                   "style": "receipt-table-value22"
                 }
               ],
@@ -1112,26 +1129,13 @@
       "layout": {}
     },
 	    {
-	     "text": "Mobile Number {{ownerMobileNumber}}                                    Assessee Signature: ",
+	     "text": "Mobile Number {{ownerMobileNumber}}              Assessee Signature:                                     {{generated_by}}: {{user-name}}                        Approved By: {{approvedBy}}  ",
 	     "style": "receipt-approver"
 	  }
 	  ,
       {
         "style": "receipt-approver",
         "columns": [
-          {
-            "text": [
-              {
-                "text": "{{generated_by}}: ",
-                "bold": true
-              },
-              {
-                "text": "{{user-name}}",
-                "bold": false
-              }
-            ],
-            "alignment": "left"
-          },
           {
             "text": [
               {
@@ -1149,56 +1153,16 @@
           }
         ]
       },
-	     {
-        "style": "receipt-approver2",
-        "columns": [
-          {
-            "text": [
-              {
-                "text": "Approved By ",
-                "bold": true
-              },
-              {
-                "text": "{{approvedBy}}",
-                "bold": false
-              }
-            ],
-            "alignment": "left"
-          },
-          {
-            "text": [
-              {
-                "text": " ",
-                "bold": true
-              }
-            ],
-            "alignment": "right",
-            "margin": [
-                0,
-                0,
-               0,
-                0
-            ]
-          }
-        ]
-      },
       {
         "style": "pt-disclaimer",
-        "stack": [
+        "stack": 
+        [
           {
-            "text": "{{disclamer}}",
-            "bold": true,
-            "style": "pt-disclaimer-value"
-          },
-       { "text": "1. Payment received by cheque/demand draft shall be subject to realization."},
+            "text": [{"text": "{{disclamer}} : Citizen for Online Payments please refer to the link ", "bold": true, "style": "pt-disclaimer-value"},
+            {"text": "https://mseva.lgpunjab.gov.in/", "bold": true, "fontSize": 8, "color": "blue", "decoration": "underline"}]},
+       { "text": "1. Payment received by cheque/demand draft shall be subject to realization, This is a computer generated document, hence requires no signature."},
        {"text":"2. This document is not a proof of Property Ownership and regularization of unauthorized construction."},
-       {"text":"3. This is a computer generated document, hence requires no signature."},
-       {"text":"4. Assessment & Payment is subject to verification/Scrutiny by competitive authority."},
-       {"text":"5. Please deposit property tax dues for earlier years also. Ignore, if already paid."},
-       {"text":[{"text":"6. Citizen for Online Payments please refer to the link "},
-      {"text": "https://mseva.lgpunjab.gov.in/", "bold": true, "fontSize": 8, "color": "blue", "decoration": "underline"}
-       ]
-      }, 
+       {"text":"3. Assessment & Payment is subject to verification/Scrutiny by competitive authority.Also deposit property tax dues for earlier years. Ignore, if already paid."}, 
       {
         "text":"Now log a complaint from WhatsApp, give a missed call on 8750975975 or send a Hi message on WhatsApp to this number", "bold": true, "fontSize": 8, "color": "blue", "decoration": "underline"}
         ]
@@ -1265,7 +1229,7 @@
       "color": "#000000",
       "margin": [
         -25,
-        10,
+       7,
         -22,
         -8
       ]
@@ -1286,9 +1250,9 @@
       "fontWeight": 500,
       "margin": [
         8,
+        2,
         0,
-        0,
-        0
+        -5
       ]
     },
     "receipt-table-value22": {
@@ -1298,7 +1262,7 @@
       "fontWeight": 500,
       "backgroundColor": "#D3D3D3",
       "margin": [
-        8,
+        -4,
         0,
         0,
         0
@@ -1322,9 +1286,9 @@
       "fontWeight": 500,
       "margin": [
         0,
+        2,
         0,
-        0,
-        0
+        -6
       ]
     },
      "receipt-approver": {
