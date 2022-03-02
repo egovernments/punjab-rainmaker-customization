@@ -446,7 +446,82 @@
         "layout": {}
       },
       {
-        "text":"PAYABLE AMOUNT",
+        "text":"AMOUNT TO BE PAID",
+        "style":"block-head"
+      },
+      {
+        "style": "next-noc-table",
+        "table": {
+          "widths": [
+  
+            "7%","9%","7%","7%","7%","7%","8%","8%","8%","8%","8%","7%","9%"
+          ],
+          "body": [
+            
+      [     {
+        "text": "Year",
+        "style": "amounts"
+      },
+              {
+                "text": "Property Tax",
+                "style": "amounts"
+              },
+        {
+                "text": "Fire Cess",
+                "style": "amounts"
+              },
+        {
+                "text": "Cancer Cess",
+                "style": "amounts"
+              },
+        {
+                "text": "Penalty",
+                "style": "amounts"
+              },
+        {
+                "text": "Rebate",
+                "style": "amounts"
+              },
+        {
+                "text": "Interest",
+                "style": "amounts"
+              },
+        {
+                "text": "Usage Exemp.",
+                "style": "amounts"
+              },
+        {
+                "text": "Category Exemp.",
+                "style": "amounts"
+              },
+              {
+                "text": "Adhoc Penalty",
+                "style": "amounts"
+              },
+              {
+                "text": "Adhoc Rebate",
+                "style": "amounts"
+              },
+        {
+                "text": "Round Off",
+                "style": "amounts"
+              },
+        {
+                "text": "Total",
+                "style": "amounts"
+              }
+        
+      ],
+      
+      "{{#var_tax}}[{\"text\":\"{{year}}\",\"style\":\"receipt-table\"},{\"text\":\"{{tax}}\",\"style\":\"receipt-table\"},{\"text\":\"{{firecess}}\",\"style\":\"receipt-table\"},{\"text\":\"{{cancercess}}\",\"style\":\"receipt-table\"},{\"text\":\"{{penalty}}\",\"style\":\"receipt-table\"},{\"text\":\"{{rebate}}\",\"style\":\"receipt-table\"},{\"text\":\"{{interest}}\",\"style\":\"receipt-table\"},{\"text\":\"{{usage_exemption}}\",\"style\":\"receipt-table\"},{\"text\":\"{{special_category_exemption}}\",\"style\":\"receipt-table\"},{\"text\":\"{{adhoc_penalty}}\",\"style\":\"receipt-table\"},{\"text\":\"{{adhoc_rebate}}\",\"style\":\"receipt-table\"},{\"text\":\"{{roundoff}}\",\"style\":\"receipt-table\"},{\"text\":\"{{total}}\",\"style\":\"receipt-table\"}]{{/var_tax}}"
+  
+        
+    ]
+    },
+    "layout":{}
+    }, 
+      {
+        "text":"SUMMARY OF PAID AMOUNT",
         "style":"block-head"
       },
 	    {
@@ -454,7 +529,7 @@
         "table": {
           "widths": [
 
-            "7%","7%","7%","5%","7%","6%","7%","8%","8%","8%","8%","7%","*"
+            "7%","9%","7%","7%","7%","7%","8%","8%","8%","8%","8%","7%","9%"
           ],
           "body": [
             
@@ -520,81 +595,6 @@
 	  },
 	  "layout":{}
     }, 
-    {
-      "text":"ESTIMATED AMOUNT",
-      "style":"block-head"
-    },
-    {
-      "style": "next-noc-table",
-      "table": {
-        "widths": [
-
-          "7%","7%","7%","5%","7%","6%","7%","8%","8%","8%","8%","7%","*"
-        ],
-        "body": [
-          
-    [     {
-      "text": "Year",
-      "style": "amounts"
-    },
-            {
-              "text": "Property Tax",
-              "style": "amounts"
-            },
-      {
-              "text": "Fire Cess",
-              "style": "amounts"
-            },
-      {
-              "text": "Cancer Cess",
-              "style": "amounts"
-            },
-      {
-              "text": "Penalty",
-              "style": "amounts"
-            },
-      {
-              "text": "Rebate",
-              "style": "amounts"
-            },
-      {
-              "text": "Interest",
-              "style": "amounts"
-            },
-      {
-              "text": "Usage Exemp.",
-              "style": "amounts"
-            },
-      {
-              "text": "Category Exemp.",
-              "style": "amounts"
-            },
-            {
-              "text": "Adhoc Penalty",
-              "style": "amounts"
-            },
-            {
-              "text": "Adhoc Rebate",
-              "style": "amounts"
-            },
-      {
-              "text": "Round Off",
-              "style": "amounts"
-            },
-      {
-              "text": "Total",
-              "style": "amounts"
-            }
-      
-    ],
-    
-    "{{#var_tax}}[{\"text\":\"{{year}}\",\"style\":\"receipt-table\"},{\"text\":\"{{tax}}\",\"style\":\"receipt-table\"},{\"text\":\"{{firecess}}\",\"style\":\"receipt-table\"},{\"text\":\"{{cancercess}}\",\"style\":\"receipt-table\"},{\"text\":\"{{penalty}}\",\"style\":\"receipt-table\"},{\"text\":\"{{rebate}}\",\"style\":\"receipt-table\"},{\"text\":\"{{interest}}\",\"style\":\"receipt-table\"},{\"text\":\"{{usage_exemption}}\",\"style\":\"receipt-table\"},{\"text\":\"{{special_category_exemption}}\",\"style\":\"receipt-table\"},{\"text\":\"{{adhoc_penalty}}\",\"style\":\"receipt-table\"},{\"text\":\"{{adhoc_rebate}}\",\"style\":\"receipt-table\"},{\"text\":\"{{roundoff}}\",\"style\":\"receipt-table\"},{\"text\":\"{{total}}\",\"style\":\"receipt-table\"}]{{/var_tax}}"
-
-      
-  ]
-  },
-  "layout":{}
-  }, 
         {
         "text":"PAYMENT INFORMATION",
         "style":"block-head"
