@@ -15,11 +15,10 @@
 				"applicationDate": "tradelicense.applicationDate",
 				"oldPropertyId": "tradelicense.oldPropertyId",
 				"action": "tradelicense.action",
-                                "tradeLicenseDetail": "tradelicense.tradeLicenseDetail"
+                                "tradeLicenseDetail": "tradelicense.tradeLicenseDetail",
+				"tradeType": "tradelicense.tradeType"
 			},
-		        "ward": "ward",
-			"tradeType": "tradeType"
-      
+		        "ward": "ward"      
 		}
 	}
 ]
