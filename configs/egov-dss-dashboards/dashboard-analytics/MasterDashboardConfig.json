@@ -861,7 +861,7 @@
                 }
               ]
             },
-            {
+           {
               "id": 323,
               "name": "DSS_TL_LICENSE_BY_TYPE",
               "dimensions": {
@@ -870,7 +870,7 @@
               },
               "vizType": "chart",
               "label": "",
-              "noUnit": false,
+              "noUnit": true,
               "isCollapsible": false,
               "charts": [
                 {
@@ -2384,7 +2384,7 @@
               },
               "vizType": "chart",
               "label": "",
-              "noUnit": false,
+              "noUnit": true,
               "isCollapsible": false,
               "charts": [
                 {
