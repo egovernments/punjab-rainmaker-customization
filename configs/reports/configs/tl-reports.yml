@@ -2479,16 +2479,21 @@ ReportDefinitions:
     total: false
   query: |
     select 
-      split_part(tenantid,'.',2) as ulb,
+      distinct on (tl.applicationnumber)
+       applicationnumber,
+      split_part(tl.tenantid,'.',2) as ulb,
       licensenumber,
-      applicationnumber,
       oldlicensenumber,
       financialyear,
       tradename,
+      zonename,
+      blockname,
       split_part(name,',',1) as ownername,
       split_part(mobilenumber,',',1) as mobilenumber
     from eg_tl_tradelicense tl
     INNER JOIN eg_tl_tradelicensedetail tld ON tld.tradelicenseid = tl.id 
+    inner join eg_tl_address as tla on tla.tradelicensedetailid = tld.id
+    inner join eg_bndry_mohalla on eg_bndry_mohalla.localitycode=tla.locality
     INNER JOIN (
       SELECT tradelicensedetailid, array_to_string(array_agg(name),', ') as name, array_to_string(array_agg(mobilenumber),', ') as mobilenumber 
       FROM eg_tl_owner tlowner 
@@ -2497,6 +2502,8 @@ ReportDefinitions:
     ) tlown ON tlown.tradelicensedetailid = tld.id
     where validto < extract (epoch from NOW())*1000 and licensenumber is not null and licensenumber not in (select oldlicensenumber from eg_tl_tradelicense where oldlicensenumber is not null)
     and tenantid = $tenantid
+  
+    
     
 - reportName: StateTradeLicenseDetailsReport_v2
   decryptionPathId: TradeLicenseDetailsReport_v2                   
