@@ -2472,6 +2472,16 @@ ReportDefinitions:
     type: string
     source: tl
     total: false
+  - name: zonename
+    label: report.tl.zonename
+    type: string
+    source: tl
+    total: false
+  - name: blockname
+    label: report.tl.blockname
+    type: string
+    source: tl
+    total: false
   - name: mobilenumber
     label: report.tl.mobilenumber
     type: string
@@ -2501,7 +2511,7 @@ ReportDefinitions:
       group by tradelicensedetailid
     ) tlown ON tlown.tradelicensedetailid = tld.id
     where validto < extract (epoch from NOW())*1000 and licensenumber is not null and licensenumber not in (select oldlicensenumber from eg_tl_tradelicense where oldlicensenumber is not null)
-    and tenantid = $tenantid
+    and tl.tenantid = $tenantid
   
     
     
