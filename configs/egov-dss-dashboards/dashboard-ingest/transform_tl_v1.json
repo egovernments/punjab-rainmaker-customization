@@ -19,7 +19,7 @@
 
 			},
 		        "ward": "ward",
-		        "tradeType": "tradeType"
+		        "tradeType": "tradelicense.tradeLicenseDetail.tradeUnits[0].tradeType"
 		}
 	}
 ]
