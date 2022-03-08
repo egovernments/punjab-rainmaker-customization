@@ -3,20 +3,20 @@
 		"operation": "shift",
 		"spec": {
 			"tradelicense": {
-				"tenantId": "Data.tradelicense.tenantId",
-				"calculation": "Data.tradelicense.calculation",
-				"licenseNumber": "Data.tradelicense.licenseNumber",
-				"commencementDate": "Data.tradelicense.commencementDate",
-				"licenseType": "Data.tradelicense.licenseType",
-				"financialYear": "Data.tradelicense.financialYear",
-				"tradeName": "Data.tradelicense.tradeName",
-				"applicationNumber": "Data.tradelicense.applicationNumber",
-				"accountId": "Data.tradelicense.accountId",
-				"applicationDate": "Data.tradelicense.applicationDate",
-				"oldPropertyId": "Data.tradelicense.oldPropertyId",
-				"action": "Data.tradelicense.action",
-                                "tradeLicenseDetail": "Data.tradelicense.tradeLicenseDetail",
-				"tradeType": "Data.tradelicense.tradeLicenseDetail.tradeUnits.tradeType"
+				"tenantId": "tradelicense.tenantId",
+				"calculation": "tradelicense.calculation",
+				"licenseNumber": "tradelicense.licenseNumber",
+				"commencementDate": "tradelicense.commencementDate",
+				"licenseType": "tradelicense.licenseType",
+				"financialYear": "tradelicense.financialYear",
+				"tradeName": "tradelicense.tradeName",
+				"applicationNumber": "tradelicense.applicationNumber",
+				"accountId": "tradelicense.accountId",
+				"applicationDate": "tradelicense.applicationDate",
+				"oldPropertyId": "tradelicense.oldPropertyId",
+				"action": "tradelicense.action",
+                                "tradeLicenseDetail": "tradelicense.tradeLicenseDetail",
+				"tradeType": "tradelicense.tradeLicenseDetail.tradeUnits[0].tradeType"
 
 			},
 		        "ward": "ward"
