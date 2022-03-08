@@ -3,7 +3,7 @@
 		"operation": "shift",
 		"spec": {
 			"tradelicense": {
-				"tenantId": "tenantId",
+				"tenantId": "Data.tradelicense.tenantId",
 				"calculation": "Data.tradelicense.calculation",
 				"licenseNumber": "Data.tradelicense.licenseNumber",
 				"commencementDate": "Data.tradelicense.commencementDate",
