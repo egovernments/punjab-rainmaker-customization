@@ -512,6 +512,7 @@
     "plotLabel": "DSS_COMPLETION_RATE",
     "order": "asc",
     "limit": 3,
+    "isRoundOff": true,
     "aggregationPaths": [
       "Closed Application",
       "Total Application"
