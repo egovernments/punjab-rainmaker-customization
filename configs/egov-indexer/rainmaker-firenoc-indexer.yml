@@ -5,8 +5,8 @@ ServiceMaps:
   - topic: save-fn-firenoc
     configKey: INDEX
     indexes:
-      - name: firenoc-services
-        type: general
+      - name: firenoc-index
+        type: FireNOCs
         id: $.id,$.tenantId
         isBulk: true
         jsonPath: $.FireNOCs
@@ -81,8 +81,8 @@ ServiceMaps:
   - topic: update-fn-firenoc
     configKey: INDEX
     indexes:
-      - name: firenoc-services
-        type: general
+      - name: firenoc-index
+        type: FireNOCs
         id: $.id,$.tenantId
         isBulk: true
         jsonPath: $.FireNOCs
@@ -156,8 +156,8 @@ ServiceMaps:
   - topic: update-fn-workflow
     configKey: INDEX
     indexes:
-      - name: firenoc-services
-        type: general
+      - name: firenoc-index
+        type: FireNOCs
         id: $.id,$.tenantId
         isBulk: true
         jsonPath: $.FireNOCs
@@ -231,8 +231,8 @@ ServiceMaps:
      topic: save-firenoc-legacyIndex
     configKey: INDEX
     indexes:
-      - name: firenoc-services
-        type: general
+      - name: firenoc-index
+        type: FireNOCs
         id: $.id,$.tenantId
         isBulk: true
         jsonPath: $.FireNOCs
