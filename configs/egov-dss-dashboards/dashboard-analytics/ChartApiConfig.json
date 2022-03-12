@@ -368,13 +368,6 @@
     "chartName": "DSS_TOTAL_APPLICATIONS:_DEPARTMENT_WISE",
     "queries": [
       {
-        "module": "PT",
-        "dateRefField": "Data.@timestamp",
-        "requestQueryMap": "{\"wardId\" : \"Data.ward.name.keyword\", \r\n  \"district\" : \"Data.tenantData.city.districtCode\", \r\n\"tenantId\" : \"Data.tenantId\" \r\n}",
-        "indexName": "property-services",
-        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tenantId.keyword\":\"pb.testing\"}}]}},\"aggs\":{\"Property Tax\":{\"value_count\":{\"field\":\"Data.tenantId.keyword\"}}}}}}"
-      },
-      {
         "module": "TL",
         "dateRefField": "Data.@timestamp",
         "requestQueryMap": "{\"wardId\" : \"Data.ward.name.keyword\", \r\n  \"district\" : \"Data.tenantData.city.districtCode\", \r\n\"tenantId\" : \"Data.tenantId\" \r\n}",
