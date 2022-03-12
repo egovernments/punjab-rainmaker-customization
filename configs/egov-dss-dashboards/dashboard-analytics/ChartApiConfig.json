@@ -396,7 +396,9 @@
     "drillChart": "none",
     "aggregationPaths": [
       "Property Tax",
-      "Trade Licence"
+      "TL",
+      "WS",
+      "SW"
     ],
     "insight": {
     },
