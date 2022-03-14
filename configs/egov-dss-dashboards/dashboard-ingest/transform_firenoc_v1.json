@@ -4,8 +4,8 @@
       "spec": {
         "tenantId": "tenantId",
         "Department": "Department",
-        "ward" : "ward",
         "fireNOCDetails" : "fireNOCDetails"
-      }
+      },
+        "ward" : "ward"
     }
 ]
