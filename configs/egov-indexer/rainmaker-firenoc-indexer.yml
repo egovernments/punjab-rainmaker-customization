@@ -18,8 +18,8 @@ ServiceMaps:
             outJsonPath: $.id
           - inJsonPath: $.tenantId
             outJsonPath: $.tenantId
-          - inJsonPath: $.fireNOCDetails.channel
-            outJsonPath: $.channel
+          - inJsonPath: $.fireNOCDetails
+            outJsonPath: $.fireNOCDetails
           - inJsonPath: $.fireNOCDetails.status
             outJsonPath: $.fireNOCDetails.status
           - inJsonPath: $.fireNOCDetails.action
@@ -94,8 +94,8 @@ ServiceMaps:
             outJsonPath: $.id
           - inJsonPath: $.tenantId
             outJsonPath: $.tenantId
-          - inJsonPath: $.fireNOCDetails.channel
-            outJsonPath: $.channel
+          - inJsonPath: $.fireNOCDetails
+            outJsonPath: $.fireNOCDetails
           - inJsonPath: $.fireNOCDetails.status
             outJsonPath: $.fireNOCDetails.status
           - inJsonPath: $.fireNOCDetails.action
@@ -169,8 +169,8 @@ ServiceMaps:
             outJsonPath: $.id
           - inJsonPath: $.tenantId
             outJsonPath: $.tenantId
-          - inJsonPath: $.fireNOCDetails.channel
-            outJsonPath: $.channel
+          - inJsonPath: $.fireNOCDetails
+            outJsonPath: $.fireNOCDetails
           - inJsonPath: $.fireNOCDetails.status
             outJsonPath: $.fireNOCDetails.status
           - inJsonPath: $.fireNOCDetails.action
