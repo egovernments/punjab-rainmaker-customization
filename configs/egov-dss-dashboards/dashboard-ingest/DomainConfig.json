@@ -83,7 +83,7 @@
    {
       "id": "4",
       "domain": "FireNOCs",
-      "indexName": "firenoc-index",
+      "indexName": "firenoc-services",
       "documentType": "",
       "query": "{\"query\":{\"bool\":{\"must\":[{\"match_phrase\":{\"fireNOCDetails.applicationNumber\":\"value\"}}]}}}}",
       "targetReferences": [
