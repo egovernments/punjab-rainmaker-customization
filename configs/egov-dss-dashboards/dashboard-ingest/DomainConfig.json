@@ -108,16 +108,16 @@
         }
       ]
     },
-    {
+   {
       "id": "5",
-      "domain": "FireNOC",
+      "domain": "FIRENOC",
       "indexName": "firenoc-services",
       "documentType": "",
-      "query": "{\"query\":{\"bool\":{\"must\":[{\"match_phrase\":{\"fireNOCDetails.applicationNumber\":\"value\"}}]}}}}",
+      "query": "{\"query\":{\"bool\":{\"must\":[{\"match_phrase\":{\"Data.fireNOCDetails.applicationNumber\":\"value\"}}]}}}}",
       "targetReferences": [
         {
           "fieldName": "applicationNumber",
-          "argument": "fireNOCDetails.applicationNumber",
+          "argument": "Data.fireNOCDetails.applicationNumber",
           "dataType": "String",
           "value": "$value",
           "seperator": " ",
