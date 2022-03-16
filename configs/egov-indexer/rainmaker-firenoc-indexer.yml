@@ -228,7 +228,7 @@ ServiceMaps:
             - inJsonPath: $.MdmsRes.tenant.tenants
               outJsonPath: $.Data.tenantData
               
-        - topic: save-firenoc-legacyIndex
+  - topic: save-firenoc-legacyIndex
     configKey: INDEX
     indexes:
       - name: firenoc-services
