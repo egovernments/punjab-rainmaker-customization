@@ -12,7 +12,49 @@ ServiceMaps:
       timeStampField: $.auditDetails.createdTime
       jsonPath: $.Payment
       customJsonMapping:
-        indexMapping: {"Data":{"tenantId":"","id":"","transactionNumber":"","transactionDate":1,"paymentMode":"","paymentStatus":"","payer":{"id":"","name":""},"paidBy":"","paymentDetails":{},"auditDetails":{},"additionalDetails":{},"tenantData":{},"@timestamp":"timestamp","ward":{}}}
+        indexMapping: {"Data":{"tenantId":"","id":"","transactionNumber":"","transactionDate":1,"paymentMode":"","paymentStatus":"","payer":{"id":"","name":""},"paidBy":"","paymentDetails":{},"auditDetails":{},"additionalDetails":{},"tenantData":{},"@timestamp":"timestamp","address":{},"ward":{}}}
+        fieldMapping:
+        - inJsonPath: $.tenantId
+          outJsonPath: $.Data.tenantId
+        - inJsonPath: $.id
+          outJsonPath: $.Data.id
+        - inJsonPath: $.transactionNumber
+          outJsonPath: $.Data.transactionNumber
+        - inJsonPath: $.transactionDate
+          outJsonPath: $.Data.transactionDate
+        - inJsonPath: $.paymentMode
+          outJsonPath: $.Data.paymentMode
+        - inJsonPath: $.paymentStatus
+          outJsonPath: $.Data.paymentStatus	
+        - inJsonPath: $.payerId
+          outJsonPath: $.Data.payer.id
+        - inJsonPath: $.payerName
+          outJsonPath: $.Data.payer.name
+        - inJsonPath: $.paidBy
+          outJsonPath: $.Data.paidBy
+        - inJsonPath: $.paymentDetails
+          outJsonPath: $.Data.paymentDetails
+        - inJsonPath: $.auditDetails
+          outJsonPath: $.Data.auditDetails
+        - inJsonPath: $.additionalDetails
+          outJsonPath: $.Data.additionalDetails
+        - inJsonPath: $.@timestamp
+          outJsonPath: $.Data.@timestamp
+        ServiceMaps:
+ serviceName: Collection Services
+ version: 1.0.0
+ mappings:
+  - topic: egov.collection.payment-create
+    configKey: INDEX
+    indexes:
+    - name: paymentsindex-v1
+      type: payments
+      id: $.id
+      isBulk: false
+      timeStampField: $.auditDetails.createdTime
+      jsonPath: $.Payment
+      customJsonMapping:
+        indexMapping: {"Data":{"tenantId":"","id":"","transactionNumber":"","transactionDate":1,"paymentMode":"","paymentStatus":"","payer":{"id":"","name":""},"paidBy":"","paymentDetails":{},"auditDetails":{},"additionalDetails":{},"tenantData":{},"@timestamp":"timestamp","address":{},"ward":{}}}
         fieldMapping:
         - inJsonPath: $.tenantId
           outJsonPath: $.Data.tenantId
@@ -73,7 +115,7 @@ ServiceMaps:
       timeStampField: $.auditDetails.createdTime
       jsonPath: $.Payment
       customJsonMapping:
-        indexMapping: {"Data":{"tenantId":"","id":"","transactionNumber":"","transactionDate":1,"paymentMode":"","paymentStatus":"","payer":{"id":"","name":""},"paidBy":"","paymentDetails":{},"auditDetails":{},"additionalDetails":{},"tenantData":{},"@timestamp":"timestamp","ward":{}}}
+        indexMapping: {"Data":{"tenantId":"","id":"","transactionNumber":"","transactionDate":1,"paymentMode":"","paymentStatus":"","payer":{"id":"","name":""},"paidBy":"","paymentDetails":{},"auditDetails":{},"additionalDetails":{},"tenantData":{},"@timestamp":"timestamp","address":{},"ward":{}}}
         fieldMapping:
         - inJsonPath: $.tenantId
           outJsonPath: $.Data.tenantId
@@ -101,6 +143,8 @@ ServiceMaps:
           outJsonPath: $.Data.additionalDetails
         - inJsonPath: $.@timestamp
           outJsonPath: $.Data.@timestamp
+        - inJsonPath: $.address
+          outJsonPath: $.Data.address 
         externalUriMapping:
           - path: http://egov-location:8080/egov-location/location/v11/boundarys/_search
             queryParam: hierarchyTypeCode=REVENUE,boundaryType=Block,codes=$.address.locality.code,tenantId=$.tenantId
@@ -133,7 +177,7 @@ ServiceMaps:
       timeStampField: $.auditDetails.createdTime
       jsonPath: $.Payments.*
       customJsonMapping:
-        indexMapping: {"Data":{"tenantId":"","id":"","transactionNumber":"","transactionDate":1,"paymentMode":"","paymentStatus":"","payer":{"id":"","name":""},"paidBy":"","paymentDetails":{},"auditDetails":{},"additionalDetails":{},"tenantData":{},"@timestamp":"timestamp","ward":{}}}
+        indexMapping: {"Data":{"tenantId":"","id":"","transactionNumber":"","transactionDate":1,"paymentMode":"","paymentStatus":"","payer":{"id":"","name":""},"paidBy":"","paymentDetails":{},"auditDetails":{},"additionalDetails":{},"tenantData":{},"@timestamp":"timestamp","address":{},"ward":{}}}
         fieldMapping:
         - inJsonPath: $.tenantId
           outJsonPath: $.Data.tenantId
@@ -161,6 +205,8 @@ ServiceMaps:
           outJsonPath: $.Data.additionalDetails
         - inJsonPath: $.@timestamp
           outJsonPath: $.Data.@timestamp
+        - inJsonPath: $.address
+          outJsonPath: $.Data.address   
         externalUriMapping:
           - path: http://egov-location:8080/egov-location/location/v11/boundarys/_search
             queryParam: hierarchyTypeCode=REVENUE,boundaryType=Block,codes=$.address.locality.code,tenantId=$.tenantId
@@ -192,7 +238,7 @@ ServiceMaps:
       timeStampField: $.auditDetails.createdTime
       jsonPath: $.Payment
       customJsonMapping:
-        indexMapping: {"Data":{"tenantId":"","id":"","transactionNumber":"","transactionDate":1,"paymentMode":"","paymentStatus":"","payer":{"id":"","name":""},"paidBy":"","paymentDetails":{},"auditDetails":{},"additionalDetails":{},"tenantData":{},"@timestamp":"timestamp","ward":{}}}
+        indexMapping: {"Data":{"tenantId":"","id":"","transactionNumber":"","transactionDate":1,"paymentMode":"","paymentStatus":"","payer":{"id":"","name":""},"paidBy":"","paymentDetails":{},"auditDetails":{},"additionalDetails":{},"tenantData":{},"@timestamp":"timestamp","address":{},"ward":{}}}
         fieldMapping:
         - inJsonPath: $.tenantId
           outJsonPath: $.Data.tenantId
@@ -220,6 +266,213 @@ ServiceMaps:
           outJsonPath: $.Data.additionalDetails
         - inJsonPath: $.@timestamp
           outJsonPath: $.Data.@timestamp
+        - inJsonPath: $.address
+          outJsonPath: $.Data.address   
+        externalUriMapping:
+          - path: http://egov-location:8080/egov-location/location/v11/boundarys/_search
+            queryParam: hierarchyTypeCode=REVENUE,boundaryType=Block,codes=$.address.locality.code,tenantId=$.tenantId
+            apiRequest: {"RequestInfo": {"apiId": "org.egov.pt","ver": "1.0","ts": 1502890899493,"action": "asd","did": "4354648646","key": "xyz","msgId": "654654", "requesterId": "61",
+            "authToken": "02dbe5be-28df-4d82-954f-3d27c56cca7d","userInfo":{"id":73}}}
+            uriResponseMapping:
+            - inJsonPath: $.TenantBoundary[0].boundary[0]
+              outJsonPath: $.Data.ward
+        mdmsMapping:
+          - path: http://egov-mdms-service:8080/egov-mdms-service/v1/_search
+            moduleName: tenant
+            masterName: tenants
+            tenantId: pb
+            filter: "[?(@.code == $tenant)]"
+            filterMapping:
+            - variable: $tenant
+              valueJsonpath: $.tenantId
+            uriResponseMapping:
+            - inJsonPath: $.MdmsRes.tenant.tenants
+              outJsonPath: $.Data.tenantData
+        externalUriMapping:
+          - path: http://egov-location:8080/egov-location/location/v11/boundarys/_search
+            queryParam: hierarchyTypeCode=REVENUE,boundaryType=Block,codes=$.address.locality.code,tenantId=$.tenantId
+            apiRequest: {"RequestInfo": {"apiId": "org.egov.pt","ver": "1.0","ts": 1502890899493,"action": "asd","did": "4354648646","key": "xyz","msgId": "654654", "requesterId": "61",
+            "authToken": "02dbe5be-28df-4d82-954f-3d27c56cca7d","userInfo":{"id":73}}}
+            uriResponseMapping:
+            - inJsonPath: $.TenantBoundary[0].boundary[0]
+              outJsonPath: $.Data.ward
+        mdmsMapping:
+          - path: http://egov-mdms-service:8080/egov-mdms-service/v1/_search
+            moduleName: tenant
+            masterName: tenants
+            tenantId: pb
+            filter: "[?(@.code == $tenant)]"
+            filterMapping:
+            - variable: $tenant
+              valueJsonpath: $.tenantId
+            uriResponseMapping:
+            - inJsonPath: $.MdmsRes.tenant.tenants
+              outJsonPath: $.Data.tenantData
+            
+            
+  - topic: egov.collection.payment-update
+    configKey: INDEX
+    indexes:
+    - name: paymentsindex-v1
+      type: payments
+      id: $.id
+      isBulk: false
+      timeStampField: $.auditDetails.createdTime
+      jsonPath: $.Payment
+      customJsonMapping:
+        indexMapping: {"Data":{"tenantId":"","id":"","transactionNumber":"","transactionDate":1,"paymentMode":"","paymentStatus":"","payer":{"id":"","name":""},"paidBy":"","paymentDetails":{},"auditDetails":{},"additionalDetails":{},"tenantData":{},"@timestamp":"timestamp","address":{},"ward":{}}}
+        fieldMapping:
+        - inJsonPath: $.tenantId
+          outJsonPath: $.Data.tenantId
+        - inJsonPath: $.id
+          outJsonPath: $.Data.id
+        - inJsonPath: $.transactionNumber
+          outJsonPath: $.Data.transactionNumber
+        - inJsonPath: $.transactionDate
+          outJsonPath: $.Data.transactionDate
+        - inJsonPath: $.paymentMode
+          outJsonPath: $.Data.paymentMode
+        - inJsonPath: $.paymentStatus
+          outJsonPath: $.Data.paymentStatus
+        - inJsonPath: $.payerId
+          outJsonPath: $.Data.payer.id
+        - inJsonPath: $.payerName
+          outJsonPath: $.Data.payer.name
+        - inJsonPath: $.paidBy
+          outJsonPath: $.Data.paidBy
+        - inJsonPath: $.paymentDetails
+          outJsonPath: $.Data.paymentDetails
+        - inJsonPath: $.auditDetails
+          outJsonPath: $.Data.auditDetails
+        - inJsonPath: $.additionalDetails
+          outJsonPath: $.Data.additionalDetails
+        - inJsonPath: $.@timestamp
+          outJsonPath: $.Data.@timestamp
+        - inJsonPath: $.address
+          outJsonPath: $.Data.address 
+        externalUriMapping:
+          - path: http://egov-location:8080/egov-location/location/v11/boundarys/_search
+            queryParam: hierarchyTypeCode=REVENUE,boundaryType=Block,codes=$.address.locality.code,tenantId=$.tenantId
+            apiRequest: {"RequestInfo": {"apiId": "org.egov.pt","ver": "1.0","ts": 1502890899493,"action": "asd","did": "4354648646","key": "xyz","msgId": "654654", "requesterId": "61",
+            "authToken": "02dbe5be-28df-4d82-954f-3d27c56cca7d","userInfo":{"id":73}}}
+            uriResponseMapping:
+            - inJsonPath: $.TenantBoundary[0].boundary[0]
+              outJsonPath: $.Data.ward
+        mdmsMapping:
+          - path: http://egov-mdms-service:8080/egov-mdms-service/v1/_search
+            moduleName: tenant
+            masterName: tenants
+            tenantId: pb
+            filter: "[?(@.code == $tenant)]"
+            filterMapping:
+            - variable: $tenant
+              valueJsonpath: $.tenantId
+            uriResponseMapping:
+            - inJsonPath: $.MdmsRes.tenant.tenants
+              outJsonPath: $.Data.tenantData
+            
+            
+  - topic: egov-payment-legacy-index
+    configKey: LEGACYINDEX
+    indexes:
+    - name: paymentsindex-v1
+      type: payments
+      id: $.id
+      isBulk: true
+      timeStampField: $.auditDetails.createdTime
+      jsonPath: $.Payments.*
+      customJsonMapping:
+        indexMapping: {"Data":{"tenantId":"","id":"","transactionNumber":"","transactionDate":1,"paymentMode":"","paymentStatus":"","payer":{"id":"","name":""},"paidBy":"","paymentDetails":{},"auditDetails":{},"additionalDetails":{},"tenantData":{},"@timestamp":"timestamp","address":{},"ward":{}}}
+        fieldMapping:
+        - inJsonPath: $.tenantId
+          outJsonPath: $.Data.tenantId
+        - inJsonPath: $.id
+          outJsonPath: $.Data.id
+        - inJsonPath: $.transactionNumber
+          outJsonPath: $.Data.transactionNumber
+        - inJsonPath: $.transactionDate
+          outJsonPath: $.Data.transactionDate
+        - inJsonPath: $.paymentMode
+          outJsonPath: $.Data.paymentMode
+        - inJsonPath: $.paymentStatus
+          outJsonPath: $.Data.paymentStatus
+        - inJsonPath: $.payerId
+          outJsonPath: $.Data.payer.id
+        - inJsonPath: $.payerName
+          outJsonPath: $.Data.payer.name
+        - inJsonPath: $.paidBy
+          outJsonPath: $.Data.paidBy
+        - inJsonPath: $.paymentDetails
+          outJsonPath: $.Data.paymentDetails
+        - inJsonPath: $.auditDetails
+          outJsonPath: $.Data.auditDetails
+        - inJsonPath: $.additionalDetails
+          outJsonPath: $.Data.additionalDetails
+        - inJsonPath: $.@timestamp
+          outJsonPath: $.Data.@timestamp
+        - inJsonPath: $.address
+          outJsonPath: $.Data.address   
+        externalUriMapping:
+          - path: http://egov-location:8080/egov-location/location/v11/boundarys/_search
+            queryParam: hierarchyTypeCode=REVENUE,boundaryType=Block,codes=$.address.locality.code,tenantId=$.tenantId
+            apiRequest: {"RequestInfo": {"apiId": "org.egov.pt","ver": "1.0","ts": 1502890899493,"action": "asd","did": "4354648646","key": "xyz","msgId": "654654", "requesterId": "61",
+            "authToken": "02dbe5be-28df-4d82-954f-3d27c56cca7d","userInfo":{"id":73}}}
+            uriResponseMapping:
+            - inJsonPath: $.TenantBoundary[0].boundary[0]
+              outJsonPath: $.Data.ward
+        mdmsMapping:
+          - path: http://egov-mdms-service:8080/egov-mdms-service/v1/_search
+            moduleName: tenant
+            masterName: tenants
+            tenantId: pb
+            filter: "[?(@.code == $tenant)]"
+            filterMapping:
+            - variable: $tenant
+              valueJsonpath: $.tenantId
+            uriResponseMapping:
+            - inJsonPath: $.MdmsRes.tenant.tenants
+              outJsonPath: $.Data.tenantData
+
+  - topic: egov.collection.payment-cancel
+    configKey: INDEX
+    indexes:
+    - name: paymentsindex-v1
+      type: payments
+      id: $.id
+      isBulk: false
+      timeStampField: $.auditDetails.createdTime
+      jsonPath: $.Payment
+      customJsonMapping:
+        indexMapping: {"Data":{"tenantId":"","id":"","transactionNumber":"","transactionDate":1,"paymentMode":"","paymentStatus":"","payer":{"id":"","name":""},"paidBy":"","paymentDetails":{},"auditDetails":{},"additionalDetails":{},"tenantData":{},"@timestamp":"timestamp","address":{},"ward":{}}}
+        fieldMapping:
+        - inJsonPath: $.tenantId
+          outJsonPath: $.Data.tenantId
+        - inJsonPath: $.id
+          outJsonPath: $.Data.id
+        - inJsonPath: $.transactionNumber
+          outJsonPath: $.Data.transactionNumber
+        - inJsonPath: $.transactionDate
+          outJsonPath: $.Data.transactionDate
+        - inJsonPath: $.paymentMode
+          outJsonPath: $.Data.paymentMode
+        - inJsonPath: $.paymentStatus
+          outJsonPath: $.Data.paymentStatus	
+        - inJsonPath: $.payerId
+          outJsonPath: $.Data.payer.id
+        - inJsonPath: $.payerName
+          outJsonPath: $.Data.payer.name
+        - inJsonPath: $.paidBy
+          outJsonPath: $.Data.paidBy
+        - inJsonPath: $.paymentDetails
+          outJsonPath: $.Data.paymentDetails
+        - inJsonPath: $.auditDetails
+          outJsonPath: $.Data.auditDetails
+        - inJsonPath: $.additionalDetails
+          outJsonPath: $.Data.additionalDetails
+        - inJsonPath: $.@timestamp
+          outJsonPath: $.Data.@timestamp
+        - inJsonPath: $.address
+          outJsonPath: $.Data.address   
         externalUriMapping:
           - path: http://egov-location:8080/egov-location/location/v11/boundarys/_search
             queryParam: hierarchyTypeCode=REVENUE,boundaryType=Block,codes=$.address.locality.code,tenantId=$.tenantId
