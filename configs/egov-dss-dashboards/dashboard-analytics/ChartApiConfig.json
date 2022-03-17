@@ -1706,7 +1706,7 @@
         "dateRefField": "Data.tradelicense.applicationDate",
         "indexName": "tlindex-v1",
         "aggrQueryBc": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tradelicense.tenantId.keyword\":\"pb.testing\"}}]}},\"aggs\":{\"TL\":{\"terms\":{\"field\":\"Data.tradelicense.status.keyword\"},\"aggs\":{\"TL\":{\"value_count\":{\"field\":\"Data.tradelicense.status.keyword\"}}}}}}}}",
-        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tradelicense.tenantId.keyword\":\"pb.testing\"}}]}},\"aggs\":{\"TL\":{\"terms\":{\"field\":\"Data.tradelicense.status.keyword\",\"size\":200},\"aggs\":{\"TL\":{\"value_count\":{\"field\":\"Data.tradelicense.applicationNumber.keyword\"}}}}}}}}",
+        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tradelicense.tenantId.keyword\":\"pb.testing\"}}]}},\"aggs\":{\"TL\":{\"terms\":{\"field\":\"Data.tradelicense.status.keyword\",\"size\":200},\"aggs\":{\"TL\":{\"value_count\":{\"field\":\"Data.tradelicense.applicationNumber.keyword\"}}}}}}}}"
            }
     ],
     "chartType": "pie",
