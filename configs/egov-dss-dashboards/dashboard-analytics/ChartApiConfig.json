@@ -1702,11 +1702,11 @@
     "queries": [
       {
         "module": "TL",
-        "requestQueryMap": "{\"wardId\" : \"Data.ward.name.keyword\",  \"tenantId\" : \"Data.tenantData.code\", \"district\" : \"Data.tenantData.cityDistrictCode\"}",
-        "dateRefField": "Data.tradelicense.issuedDate",
+        "requestQueryMap": "{\"wardId\" : \"Data.ward.name.keyword\", \r\n  \"district\" : \"Data.tenantData.city.districtCode\", \r\n\"tenantId\" : \"Data.tradelicense.tenantId.keyword\" \r\n}",
+        "dateRefField": "Data.tradelicense.applicationDate",
         "indexName": "tlindex-v1",
-         "aggrQueryBc": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tradelicense.tenantId.keyword\":\"pb.testing\"}}]}},\"aggs\":{\"Status\":{\"terms\":{\"field\":\"Data.tradelicense.status.keyword\"},\"aggs\":{\"Status\":{\"value_count\":{\"field\":\"Data.tradelicense.status.keyword\"}}}}}}}}",
-        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tradelicense.tenantId.keyword\":\"pb.testing\"}}]}},\"aggs\":{\"Status\":{\"terms\":{\"field\":\"Data.tradelicense.status.keyword\",\"size\":200},\"aggs\":{\"Status\":{\"value_count\":{\"field\":\"Data.tradelicense.applicationNumber.keyword\"}}}}}}}}"
+        "aggrQueryBc": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tradelicense.tenantId.keyword\":\"pb.testing\"}}]}},\"aggs\":{\"TL\":{\"terms\":{\"field\":\"Data.tradelicense.status.keyword\"},\"aggs\":{\"TL\":{\"value_count\":{\"field\":\"Data.tradelicense.status.keyword\"}}}}}}}}",
+        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tradelicense.tenantId.keyword\":\"pb.testing\"}}]}},\"aggs\":{\"TL\":{\"terms\":{\"field\":\"Data.tradelicense.status.keyword\",\"size\":200},\"aggs\":{\"TL\":{\"value_count\":{\"field\":\"Data.tradelicense.applicationNumber.keyword\"}}}}}}}}",
            }
     ],
     "chartType": "pie",
@@ -1715,7 +1715,7 @@
     "documentType": "_doc",
     "drillChart": "none",
     "aggregationPaths": [
-      "Status"
+      "TL"
     ],
     "insight": {
     },
