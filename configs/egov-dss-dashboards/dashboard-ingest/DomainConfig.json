@@ -1,19 +1,19 @@
 {
   "domainConfig": [
-    {
+     {
       "id": "1",
-      "domain": "PT",
-      "indexName": "property-services",
+      "domain": "MCOLLECT",
+      "indexName": "echallan-services",
       "documentType": "",
-      "query": "{\"query\":{\"bool\":{\"must\":[{\"match_phrase\":{\"Data.propertyId\":\"value\"}}]}}}",
+      "query": "{\"query\":{\"bool\":{\"must\":[{\"match_phrase\":{\"Data.challanNo\":\"value\"}}]}}}",
       "targetReferences": [
         {
-          "fieldName": "propertyId",
-          "argument": "Data.propertyId",
+          "fieldName": "challanNo",
+          "argument": "Data.challanNo",
           "dataType": "String",
           "value": "$value",
           "seperator": " ",
-          "expression": "propertyId"
+          "expression": "challanNo"
         }
       ],
       "sourceReferences": [
@@ -23,7 +23,7 @@
           "dataType": "String",
           "value": "$value",
           "seperator": " ",
-          "expression": "propertyId"
+          "expression": "challanNo"
         }
       ]
     },
@@ -218,18 +218,18 @@
     },
     {
       "id": "9",
-      "domain": "MCOLLECT",
-      "indexName": "echallan-services",
+      "domain": "PT",
+      "indexName": "property-services",
       "documentType": "",
-      "query": "{\"query\":{\"bool\":{\"must\":[{\"match_phrase\":{\"Data.challanNo\":\"value\"}}]}}}",
+      "query": "{\"query\":{\"bool\":{\"must\":[{\"match_phrase\":{\"Data.propertyId\":\"value\"}}]}}}",
       "targetReferences": [
         {
-          "fieldName": "challanNo",
-          "argument": "Data.challanNo",
+          "fieldName": "propertyId",
+          "argument": "Data.propertyId",
           "dataType": "String",
           "value": "$value",
           "seperator": " ",
-          "expression": "challanNo"
+          "expression": "propertyId"
         }
       ],
       "sourceReferences": [
@@ -239,7 +239,7 @@
           "dataType": "String",
           "value": "$value",
           "seperator": " ",
-          "expression": "challanNo"
+          "expression": "propertyId"
         }
       ]
     }
