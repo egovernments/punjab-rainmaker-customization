@@ -2,7 +2,7 @@
     {
       "operation": "shift",
       "spec": {
-        "ward" : "ward"
+        "ward" : "Data.ward"
       }
     }
 ]
