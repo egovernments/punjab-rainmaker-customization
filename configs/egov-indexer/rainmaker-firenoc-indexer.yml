@@ -12,7 +12,7 @@ ServiceMaps:
         jsonPath: $.FireNOCs
         timeStampField: $.auditDetails.createdTime
         customJsonMapping:
-          indexMapping: {"Data":{"channel":"","id":"","tenantId":"","fireNOCDetails":{"status":"","action":"","firestationId":"","applicationNumber":"","fireNOCType":"","buildings":[],"propertyDetails":{},"additionalDetail":{},"applicantDetails":{}},"auditDetails":{},"@timestamp":"timestamp"}}
+          indexMapping: {"Data":{"channel":"","id":"","tenantId":"","fireNOCDetails":{"status":"","action":"","firestationId":"","applicationNumber":"","fireNOCType":"","buildings":[],"propertyDetails":{},"additionalDetail":{},"applicantDetails":{}},"auditDetails":{},"@timestamp":"timestamp","Department":"NA"}}
           fieldMapping:
           - inJsonPath: $.id
             outJsonPath: $.Data.id
