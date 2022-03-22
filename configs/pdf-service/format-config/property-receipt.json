@@ -866,7 +866,7 @@
         "layout": {}
       },
     {
-       "text":"OWNERSHIP INFORMATION",
+       "text":"OWNER/OCCUPIER INFORMATION",
        "style":"block-head"
     }
     ,
@@ -1162,7 +1162,8 @@
             {"text": "https://mseva.lgpunjab.gov.in/", "bold": true, "fontSize": 8, "color": "blue", "decoration": "underline"}]},
        { "text": "1. Payment received by cheque/demand draft shall be subject to realization, This is a computer generated document, hence requires no signature."},
        {"text":"2. This document is not a proof of Property Ownership and regularization of unauthorized construction."},
-       {"text":"3. Assessment & Payment is subject to verification/Scrutiny by competitive authority.Also deposit property tax dues for earlier years. Ignore, if already paid."}, 
+       {"text":"3. Assessment & Payment is subject to verification/Scrutiny by competitive authority.Also deposit property tax dues for earlier years. Ignore, if already paid."},
+       {"text":"4. Residential Property will not be considered Commercial even if Commercial property tax  is paid."}, 
       {
         "text":"Now log a complaint from WhatsApp, give a missed call on 8750975975 or send a Hi message on WhatsApp to this number", "bold": true, "fontSize": 8, "color": "blue", "decoration": "underline"}
         ]
