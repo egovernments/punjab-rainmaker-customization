@@ -250,7 +250,7 @@ ServiceMaps:
         jsonPath: $.Challan
         timeStampField: $.auditDetails.createdTime
         customJsonMapping:
-          indexMapping: {"Data":{"workflow": {"state": {}, "action": "", "assignes": []},"applicationNo":"","tenantId":"","businessService":"","challanNo":"","referenceId":"","description":"","accountId":"","additionalDetail":{},"source":"","taxPeriodFrom":"","taxPeriodTo":"","amount":[],"filestoreid":"","additionalDetails":{},"applicationStatus":"","vendor":"","typeOfExpense":"","billDate":"","billIssuedDate":"","paidDate":"","isBillPaid":"","vendorName":"","totalAmount":"","@timestamp":"timestamp","history":{},"ward":{NA}}}
+          indexMapping: {"Data":{"workflow": {"state": {}, "action": "", "assignes": []},"applicationNo":"","tenantId":"","businessService":"","challanNo":"","referenceId":"","description":"","accountId":"","additionalDetail":{},"source":"","taxPeriodFrom":"","taxPeriodTo":"","amount":[],"filestoreid":"","additionalDetails":{},"applicationStatus":"","vendor":"","typeOfExpense":"","billDate":"","billIssuedDate":"","paidDate":"","isBillPaid":"","vendorName":"","totalAmount":"","@timestamp":"timestamp","history":{},"ward":{"code":"NA"}}}
           fieldMapping:
           - inJsonPath: $.applicationStatus.state
             outJsonPath: $.Data.workflow.state
