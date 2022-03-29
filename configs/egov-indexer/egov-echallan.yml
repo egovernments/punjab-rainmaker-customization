@@ -2,7 +2,7 @@ ServiceMaps:
  serviceName: echallan Service - rainmaker
  version: 1.0.0
  mappings:
-  - topic: save-challan
+ - topic: save-challan
     configKey: INDEX
     indexes:
       - name: echallan-services
@@ -11,7 +11,7 @@ ServiceMaps:
         jsonPath: $.Challan
         timeStampField: $.auditDetails.createdTime
         customJsonMapping:
-          indexMapping: {"Data":{"workflow": {"state": {}, "action": "", "assignes": []},"applicationNo":"","tenantId":"","businessService":"","challanNo":"","referenceId":"","description":"","accountId":"","additionalDetail":{},"source":"","taxPeriodFrom":"","taxPeriodTo":"","amount":[],"filestoreid":"","additionalDetails":{},"applicationStatus":"","vendor":"","typeOfExpense":"","billDate":"","billIssuedDate":"","paidDate":"","isBillPaid":"","vendorName":"","totalAmount":"","@timestamp":"timestamp","history":{},"ward":"" }}
+          indexMapping: {"Data":{"workflow": {"state": {}, "action": "", "assignes": []},"applicationNo":"","tenantId":"","businessService":"","challanNo":"","referenceId":"","description":"","accountId":"","additionalDetail":{},"source":"","taxPeriodFrom":"","taxPeriodTo":"","amount":[],"filestoreid":"","additionalDetails":{},"applicationStatus":"","vendor":"","typeOfExpense":"","billDate":"","billIssuedDate":"","paidDate":"","isBillPaid":"","vendorName":"","totalAmount":"","@timestamp":"timestamp","history":{},"ward":{"name": "NA"}}}
           fieldMapping:
           - inJsonPath: $.applicationStatus.state
             outJsonPath: $.Data.workflow.state
@@ -92,7 +92,7 @@ ServiceMaps:
         jsonPath: $.Challan
         timeStampField: $.auditDetails.createdTime
         customJsonMapping:
-          indexMapping: {"Data":{"workflow": {"state": {}, "action": "", "assignes": []},"applicationNo":"","tenantId":"","businessService":"","challanNo":"","referenceId":"","description":"","accountId":"","additionalDetail":{},"source":"","taxPeriodFrom":"","taxPeriodTo":"","amount":[],"filestoreid":"","additionalDetails":{},"applicationStatus":"","vendor":"","typeOfExpense":"","billDate":"","billIssuedDate":"","paidDate":"","isBillPaid":"","vendorName":"","totalAmount":"","@timestamp":"timestamp","history":{},"ward":""  }}
+          indexMapping: {"Data":{"workflow": {"state": {}, "action": "", "assignes": []},"applicationNo":"","tenantId":"","businessService":"","challanNo":"","referenceId":"","description":"","accountId":"","additionalDetail":{},"source":"","taxPeriodFrom":"","taxPeriodTo":"","amount":[],"filestoreid":"","additionalDetails":{},"applicationStatus":"","vendor":"","typeOfExpense":"","billDate":"","billIssuedDate":"","paidDate":"","isBillPaid":"","vendorName":"","totalAmount":"","@timestamp":"timestamp","history":{},"ward":{"name": "NA"}}}
           fieldMapping:
           - inJsonPath: $.applicationStatus.state
             outJsonPath: $.Data.workflow.state
@@ -174,7 +174,7 @@ ServiceMaps:
         jsonPath: $.challans.*
         timeStampField: $.auditDetails.createdTime
         customJsonMapping:
-          indexMapping: {"Data":{"workflow": {"state": {}, "action": "", "assignes": []},"applicationNo":"","tenantId":"","businessService":"","challanNo":"","referenceId":"","description":"","accountId":"","additionalDetail":{},"source":"","taxPeriodFrom":"","taxPeriodTo":"","amount":[],"filestoreid":"","additionalDetails":{},"applicationStatus":"","vendor":"","typeOfExpense":"","billDate":"","billIssuedDate":"","paidDate":"","isBillPaid":"","vendorName":"","totalAmount":"","@timestamp":"timestamp","history":{},"ward":""  }}
+          indexMapping: {"Data":{"workflow": {"state": {}, "action": "", "assignes": []},"applicationNo":"","tenantId":"","businessService":"","challanNo":"","referenceId":"","description":"","accountId":"","additionalDetail":{},"source":"","taxPeriodFrom":"","taxPeriodTo":"","amount":[],"filestoreid":"","additionalDetails":{},"applicationStatus":"","vendor":"","typeOfExpense":"","billDate":"","billIssuedDate":"","paidDate":"","isBillPaid":"","vendorName":"","totalAmount":"","@timestamp":"timestamp","history":{},"ward":{"name": "NA"}}}
           fieldMapping:
           - inJsonPath: $.processInstance.action
             outJsonPath: $.Data.workflow.action
@@ -242,3 +242,4 @@ ServiceMaps:
             uriResponseMapping:
             - inJsonPath: $.TenantBoundary[0].boundary[0]
               outJsonPath: $.Data.ward
+    
