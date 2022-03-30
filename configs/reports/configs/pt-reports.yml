@@ -2279,10 +2279,12 @@ ReportDefinitions:
         receipt_breakup.*,
         to_char((To_timestamp(pd.manualreceiptdate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY') AS g8issuedate, 
         manualreceiptnumber as g8receiptno
-      FROM egcl_paymentdetail pd Left outer join eg_user on eg_user.id = pd.createdby::INTEGER, egcl_payment payment, eg_pt_property as pt, receipt_breakup, egcl_bill bill,
+      FROM egcl_paymentdetail pd Left outer join eg_user on eg_user.id = pd.createdby::INTEGER, egcl_payment payment, 
+      (select * from (select *,(row_number() over(partition by propertyid order by lastmodifiedtime desc)) as rw from eg_pt_property  where tenantid=$tenantid) pts where rw=1) as pt, 
+      receipt_breakup, egcl_bill bill,
       (select string_agg(distinct propertyid,',') as propertyid, string_agg(distinct locality,',') as locality from eg_pt_address where tenantid=$tenantid group by propertyid ) pt_addr
       where pd.paymentid=payment.id and bill.id=pd.billid and payment.paymentstatus != 'CANCELLED' and pd.businessservice='PT' and payment.tenantid=$tenantid 
-      and pt.propertyid = bill.consumercode and receipt_breakup.pdid=pd.id  and pt.status!='INACTIVE' 
+      and pt.propertyid = bill.consumercode and receipt_breakup.pdid=pd.id  --and pt.status!='INACTIVE' 
       and pt_addr.propertyid=pt.id 
       --and pt.propertyid='PT-1012-978737'
       --and receiptnumber='PT/1012/2020-21/001021'
@@ -2492,10 +2494,12 @@ ReportDefinitions:
         receipt_breakup.*,
         to_char((To_timestamp(pd.manualreceiptdate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY') AS g8issuedate, 
         manualreceiptnumber as g8receiptno
-      FROM egcl_paymentdetail pd Left outer join eg_user on eg_user.id = pd.createdby::INTEGER, egcl_payment payment left outer join bank_branches on bank_branches.ifsc=payment.ifsccode, eg_pt_property as pt, receipt_breakup, egcl_bill bill
+      FROM egcl_paymentdetail pd Left outer join eg_user on eg_user.id = pd.createdby::INTEGER, egcl_payment payment left outer join bank_branches on bank_branches.ifsc=payment.ifsccode, 
+      (select * from (select *,(row_number() over(partition by propertyid order by lastmodifiedtime desc)) as rw from eg_pt_property  where tenantid=$tenantid) pts where rw=1) as pt,
+      receipt_breakup, egcl_bill bill
       --,(select string_agg(distinct propertyid,',') as propertyid, string_agg(distinct locality,',') as locality from eg_pt_address where tenantid=$tenantid group by propertyid ) pt_addr
       where pd.paymentid=payment.id and bill.id=pd.billid and payment.paymentstatus != 'CANCELLED' and pd.businessservice='PT' and payment.tenantid=$tenantid 
-      and pt.propertyid = bill.consumercode and receipt_breakup.pdid=pd.id  and pt.status!='INACTIVE' 
+      and pt.propertyid = bill.consumercode and receipt_breakup.pdid=pd.id  --and pt.status!='INACTIVE' 
       --and pt_addr.propertyid=pt.id 
   orderby: ORDER BY pd.receiptdate DESC;
   
