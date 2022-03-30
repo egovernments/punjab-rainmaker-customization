@@ -4015,7 +4015,7 @@ ReportDefinitions:
         + SUM(CASE WHEN taxheadcode LIKE 'PT_DECIMAL_CEILING_CREDIT' THEN adjustedamount ELSE 0 END)) as adjustment,
         sum(case when payment.paymentmode='CASH' then bad.adjustedamount else 0 end) as sumcash,
         sum(case when payment.paymentmode='CHEQUE' then bad.adjustedamount else 0 end) as sumcheque,
-        COUNT(distinct case when payment.paymentmode='CHEQUE' then  concat(payment.paymentmode,payment.instrumentnumber,payment.ifsccode)  end) as countcheque,
+        COUNT(distinct case when payment.paymentmode='CHEQUE' then  concat(payment.paymentmode,payment.instrumentnumber,payment.ifsccode,payment.totalamountpaid)  end) as countcheque,
         sum(case when payment.paymentmode='ONLINE' then bad.adjustedamount else 0 end) as sumonline,
         (CASE WHEN payment.paymentmode!='ONLINE' THEN eg_user.name ELSE '30048|23/xn3x2FAxn8vYAN0IdplsOxaE=' END) as collectorname, --for Online collecion show None as collectorname
         sum(adjustedamount) as totalamount
