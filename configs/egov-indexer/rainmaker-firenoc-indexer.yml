@@ -229,7 +229,7 @@ ServiceMaps:
               outJsonPath: $.Data.tenantData
               
   - topic: legacy-fn-firenoc
-    configKey: LEGACYINDEX
+    configKey: INDEX
     indexes:
       - name: firenoc-services
         type: general
