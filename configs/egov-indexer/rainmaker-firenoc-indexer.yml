@@ -231,7 +231,7 @@ ServiceMaps:
   - topic: legacy-fn-firenoc
     configKey: LEGACYINDEX
     indexes:
-      - name: firenoc-services
+      - name: firenoc-services-enriched
         type: general
         id: $.id,$.tenantId
         isBulk: true
