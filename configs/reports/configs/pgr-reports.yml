@@ -2117,6 +2117,11 @@ ReportDefinitions:
     type: string
     source: eg_pgr_service
     total: false
+  - name: employeeid_lastassignedto
+    label: reports.rainmaker-pgr.employeeid_lastassignedto
+    type: string
+    source: eg_pgr_service
+    total: false
   - name: status
     label: reports.rainmaker-pgr.status
     type: string
@@ -2166,7 +2171,8 @@ ReportDefinitions:
   query: |
     SELECT 
     DISTINCT ON (servicerequestid)
-    (case when ua.name is null then '30048|23/xn3x2FAxn8vYAN0IdplsOxaE=' else eg_hrms_employee.code end) as lastassignedto,  --value for Unassigned
+    (case when ua.name is null then '30048|23/xn3x2FAxn8vYAN0IdplsOxaE=' else ua.name end) as lastassignedto,  --value for Unassigned
+    (case when ua.name is null then '30048|23/xn3x2FAxn8vYAN0IdplsOxaE=' else eg_hrms_employee.code end) as employeeid_lastassignedto,
     (SELECT deptmap_def.name FROM (VALUES tbl_def_dept) AS deptmap_def(name,code) INNER JOIN (VALUES tbl_dept) AS deptmap(serviceCode, department, slaHours) on deptmap.serviceCode = eg_pgr_service.servicecode and deptmap_def.code = deptmap.department) AS department, 
     regexp_replace(servicecode, '([a-z])([A-Z])', '\1 \2','g') AS servicecode, 
     --(SELECT boundary_def.name FROM (VALUES tbl_boundary) AS boundary_def(name,code) where code=eg_pgr_address.mohalla) as locality, 
