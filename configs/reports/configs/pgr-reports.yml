@@ -2143,6 +2143,14 @@ ReportDefinitions:
     source: eg_pgr_service
     total: false
   searchParams:
+  - name: ulb
+    label: ULB
+    type: singlevaluelist
+    pattern: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?tenantId=$tenantid&moduleName=tenant&masterName=tenants|$.MdmsRes.tenant.tenants.*.code|$.MdmsRes.tenant.tenants.*.name
+    source: pt
+    wrapper: true
+    isMandatory: false
+    searchClause: AND tenantid = $ulb
   - name: fromDate
     label: reports.rainmaker-pgr.datefrom
     type: epoch
@@ -2158,7 +2166,7 @@ ReportDefinitions:
   query: |
     SELECT 
     DISTINCT ON (servicerequestid)
-    (case when ua.name is null then '30048|23/xn3x2FAxn8vYAN0IdplsOxaE=' else ua.name end) as lastassignedto,  --value for Unassigned
+    (case when ua.name is null then '30048|23/xn3x2FAxn8vYAN0IdplsOxaE=' else eg_hrms_employee.code end) as lastassignedto,  --value for Unassigned
     (SELECT deptmap_def.name FROM (VALUES tbl_def_dept) AS deptmap_def(name,code) INNER JOIN (VALUES tbl_dept) AS deptmap(serviceCode, department, slaHours) on deptmap.serviceCode = eg_pgr_service.servicecode and deptmap_def.code = deptmap.department) AS department, 
     regexp_replace(servicecode, '([a-z])([A-Z])', '\1 \2','g') AS servicecode, 
     --(SELECT boundary_def.name FROM (VALUES tbl_boundary) AS boundary_def(name,code) where code=eg_pgr_address.mohalla) as locality, 
@@ -2179,6 +2187,7 @@ ReportDefinitions:
     left outer join eg_user on eg_user.id = eg_pgr_service.accountid::int
     left outer join eg_pgr_action as epa on epa.businesskey = eg_pgr_service.servicerequestid and epa.action in ('assign','reassign','resolve')
     left outer join eg_user as ua on (ua.id = epa.assignee::int or ua.id = split_part(epa.by,':',1)::INTEGER)
+    left outer join eg_hrms_employee on eg_pgr_service.lastmodifiedby::bigint = eg_hrms_employee.id
     WHERE 
     eg_pgr_service.tenantid !='pb.testing'
     AND eg_pgr_address.uuid = eg_pgr_service.addressid
