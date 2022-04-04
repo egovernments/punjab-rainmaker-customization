@@ -3426,11 +3426,12 @@ ReportDefinitions:
         to_char((To_timestamp(pd.manualreceiptdate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY') AS g8issuedate, 
         manualreceiptnumber as g8receiptno,
         'NA' as remarks
-      FROM egcl_paymentdetail pd Left outer join eg_user on eg_user.id = pd.createdby::INTEGER, egcl_payment payment, eg_pt_property as pt, 
+      FROM egcl_paymentdetail pd Left outer join eg_user on eg_user.id = pd.createdby::INTEGER, egcl_payment payment, 
+      (select * from (select *,(row_number() over(partition by propertyid order by lastmodifiedtime desc)) as rw from eg_pt_property  where tenantid=$tenantid) pts where rw=1) as pt, 
       (select bill.id as billid, bill.consumercode as consumercodei, min(bd.fromperiod) fromperiod, max(bd.toperiod) toperiod from egcl_billdetial bd, egcl_bill bill 
       where bill.id=bd.billid and bill.tenantid = $tenantid group by bill.id) bd
       where pd.paymentid=payment.id and bd.billid=pd.billid and payment.paymentstatus != 'CANCELLED' and pd.businessservice='PT' and payment.tenantid=$tenantid 
-      and pt.propertyid = bd.consumercodei and pt.status!='INACTIVE'
+      and pt.propertyid = bd.consumercodei --and pt.status!='INACTIVE'
   orderby: ORDER BY pd.receiptdate DESC;
 
 
