@@ -5,7 +5,7 @@ ServiceMaps:
  - topic: save-challan
     configKey: INDEX
     indexes:
-      - name: echallan-services
+      - name: echallan-services-temp
         type: general
         id: $.id,$.tenantId
         jsonPath: $.Challan
@@ -86,7 +86,7 @@ ServiceMaps:
   - topic: update-challan
     configKey: INDEX
     indexes:
-      - name: echallan-services
+      - name: echallan-services-temp
         type: general
         id: $.id,$.tenantId
         jsonPath: $.Challan
@@ -167,7 +167,7 @@ ServiceMaps:
   - topic: echallan-legacyIndex
     configKey: LEGACYINDEX
     indexes:
-      - name: echallan-services
+      - name: echallan-services-temp
         type: general
         isBulk: true
         id: $.id,$.tenantId
