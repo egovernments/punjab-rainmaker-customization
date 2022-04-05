@@ -596,7 +596,7 @@
 	  "layout":{}
     }, 
         {
-        "text":"PAYMENT INFORMATION",
+        "text":"{{PAYMENT INFORMATION}}",
         "style":"block-head"
       },
       {

@@ -711,9 +711,23 @@
                   "module":"rainmaker-common",
                   "locale":"en_IN"
                }
+              },
+              {
+                "variable": "PAYMENT INFORMATION",
+              "value" : {
+                 "path": "PDF_STATIC_LABEL_PROPERTY_RECEIPT_PAYMENT_INFORMATION"
+                },
+              "type":"label",
+              "localisation":{
+                  "required":true,
+                  "prefix": null,
+                  "module":"rainmaker-common",
+                  "locale":"en_IN"
+               }
               }
             ]
           },
+
           {
             "derived": [
                {
