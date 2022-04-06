@@ -406,7 +406,7 @@ ServiceMaps:
   - topic: echallan-legacyIndex
     configKey: LEGACYINDEX
     indexes:
-      - name: echallan-services-enriched
+      - name: echallan-services
         type: general
         isBulk: true
         id: $.id,$.tenantId
