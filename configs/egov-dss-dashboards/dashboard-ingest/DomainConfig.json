@@ -219,7 +219,7 @@
     {
       "id": "9",
       "domain": "MCOLLECT",
-      "indexName": "echallan-services",
+      "indexName": "echallan-services-enriched",
       "documentType": "",
       "query": "{\"query\":{\"bool\":{\"must\":[{\"match_phrase\":{\"Data.challanNo\":\"value\"}}]}}}",
       "targetReferences": [
