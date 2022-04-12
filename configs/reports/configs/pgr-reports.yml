@@ -1798,7 +1798,6 @@ ReportDefinitions:
   groupby: GROUP BY assignee
   orderby: ORDER BY assignee NULLS FIRST
 
-  
 - reportName: UlbPgrSlaReport_v2
   summary: Fetches employee sla
   version: 1.0.0
