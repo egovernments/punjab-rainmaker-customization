@@ -667,14 +667,14 @@ ServiceMaps:
             queryParam: propertyIds=$.propertyId,tenantId=$.tenantId
             apiRequest: {"RequestInfo":{"apiId":"org.egov.pt","ver":"1.0","ts":1502890899493,"action":"asd","did":"4354648646","key":"xyz","msgId":"654654","requesterId":"61","authToken":"d9994555-7656-4a67-ab3a-a952a0d4dfc8","userInfo":{"id":1,"uuid":"1fec8102-0e02-4d0a-b283-cd80d5dab067","type":"EMPLOYEE","tenantId":"pb.amritsar","roles":[{"name":"Employee","code":"EMPLOYEE","tenantId":"pb.amritsar"}]}}}
             uriResponseMapping:
-            - inJsonPath: $.TenantBoundary[0].boundary[0]
+            - inJsonPath: $.Properties[0].address
               outJsonPath: $.Data.ward
             - inJsonPath: $.TenantBoundary[0].boundary[0].children
               outJsonPath: $.Data.ward.children
               filter: "[?(@.code == $locality)]"
               filterMapping:
               - variable: $locality
-                valueJsonpath: $.address.locality.code
+                valueJsonpath: $.address.locality.code   
           mdmsMapping:
           - path: http://egov-mdms-service.egov:8080/egov-mdms-service/v1/_search
             moduleName: tenant
@@ -729,14 +729,14 @@ ServiceMaps:
             queryParam: propertyIds=$.propertyId,tenantId=$.tenantId
             apiRequest: {"RequestInfo":{"apiId":"org.egov.pt","ver":"1.0","ts":1502890899493,"action":"asd","did":"4354648646","key":"xyz","msgId":"654654","requesterId":"61","authToken":"d9994555-7656-4a67-ab3a-a952a0d4dfc8","userInfo":{"id":1,"uuid":"1fec8102-0e02-4d0a-b283-cd80d5dab067","type":"EMPLOYEE","tenantId":"pb.amritsar","roles":[{"name":"Employee","code":"EMPLOYEE","tenantId":"pb.amritsar"}]}}}
             uriResponseMapping:
-            - inJsonPath: $.TenantBoundary[0].boundary[0]
+            - inJsonPath: $.Properties[0].address
               outJsonPath: $.Data.ward
             - inJsonPath: $.TenantBoundary[0].boundary[0].children
               outJsonPath: $.Data.ward.children
               filter: "[?(@.code == $locality)]"
               filterMapping:
               - variable: $locality
-                valueJsonpath: $.address.locality.code
+                valueJsonpath: $.address.locality.code   
           mdmsMapping:
           - path: http://egov-mdms-service.egov:8080/egov-mdms-service/v1/_search
             moduleName: tenant
@@ -792,14 +792,14 @@ ServiceMaps:
             queryParam: propertyIds=$.propertyId,tenantId=$.tenantId
             apiRequest: {"RequestInfo":{"apiId":"org.egov.pt","ver":"1.0","ts":1502890899493,"action":"asd","did":"4354648646","key":"xyz","msgId":"654654","requesterId":"61","authToken":"d9994555-7656-4a67-ab3a-a952a0d4dfc8","userInfo":{"id":1,"uuid":"1fec8102-0e02-4d0a-b283-cd80d5dab067","type":"EMPLOYEE","tenantId":"pb.amritsar","roles":[{"name":"Employee","code":"EMPLOYEE","tenantId":"pb.amritsar"}]}}}
             uriResponseMapping:
-            - inJsonPath: $.TenantBoundary[0].boundary[0]
+            - inJsonPath: $.Properties[0].address
               outJsonPath: $.Data.ward
-            - inJsonPath: $.TenantBoundary[0].boundary[0].children
+             - inJsonPath: $.TenantBoundary[0].boundary[0].children
               outJsonPath: $.Data.ward.children
               filter: "[?(@.code == $locality)]"
               filterMapping:
               - variable: $locality
-                valueJsonpath: $.address.locality.code
+                valueJsonpath: $.address.locality.code  
           mdmsMapping:
           - path: http://egov-mdms-service.egov:8080/egov-mdms-service/v1/_search
             moduleName: tenant
@@ -856,14 +856,14 @@ ServiceMaps:
             queryParam: propertyIds=$.propertyId,tenantId=$.tenantId
             apiRequest: {"RequestInfo":{"apiId":"org.egov.pt","ver":"1.0","ts":1502890899493,"action":"asd","did":"4354648646","key":"xyz","msgId":"654654","requesterId":"61","authToken":"d9994555-7656-4a67-ab3a-a952a0d4dfc8","userInfo":{"id":1,"uuid":"1fec8102-0e02-4d0a-b283-cd80d5dab067","type":"EMPLOYEE","tenantId":"pb.amritsar","roles":[{"name":"Employee","code":"EMPLOYEE","tenantId":"pb.amritsar"}]}}}
             uriResponseMapping:
-          - inJsonPath: $.TenantBoundary[0].boundary[0]
+            - inJsonPath: $.Properties[0].address
               outJsonPath: $.Data.ward
             - inJsonPath: $.TenantBoundary[0].boundary[0].children
               outJsonPath: $.Data.ward.children
               filter: "[?(@.code == $locality)]"
               filterMapping:
               - variable: $locality
-                valueJsonpath: $.address.locality.code
+                valueJsonpath: $.address.locality.code   
           mdmsMapping:
           - path: http://egov-mdms-service.egov:8080/egov-mdms-service/v1/_search
             moduleName: tenant
