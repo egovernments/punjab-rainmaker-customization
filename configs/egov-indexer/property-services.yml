@@ -841,8 +841,6 @@ ServiceMaps:
             uriResponseMapping:
             - inJsonPath: $.TenantBoundary[0].boundary[0]
               outJsonPath: $.Data.ward
-            - inJsonPath: $.TenantBoundary[0].boundary[0].children
-              outJsonPath: $.Data.ward.children
               filter: "[?(@.code == $locality)]"
               filterMapping:
               - variable: $locality
