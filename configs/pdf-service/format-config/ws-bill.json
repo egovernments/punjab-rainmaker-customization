@@ -822,6 +822,10 @@
         "layout": {}
       },
       {
+        "text": "Authorized Signatory",
+        "style": "footer-bottom"
+      },
+      {
         "canvas": [
           {
             "type": "line",
