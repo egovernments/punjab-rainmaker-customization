@@ -764,7 +764,7 @@
               },
               {
                 "path": "http://billing-service:8080/billing-service/demand/_search",
-                "queryParam": "tenantId=$.tenantId&consumerCode=$.consumerCode&businessService=SW&filter=%5B?(@.status=='ACTIVE')%5D",
+                "queryParam": "tenantId=$.tenantId,consumerCode=$.consumerCode,businessService=SW,filter=%5B?(@.status=='ACTIVE')%5D",
                 "apiRequest": null,
                 "responseMapping": [
                   {
