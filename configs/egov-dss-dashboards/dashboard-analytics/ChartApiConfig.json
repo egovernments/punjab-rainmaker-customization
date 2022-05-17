@@ -2450,7 +2450,7 @@
         "requestQueryMap": "{\"wardId\" : \"Data.complaintWard.name.keyword\",\"tenantId\" : \"Data.tenantId\"}",
         "dateRefField": "Data.dateOfComplaint",
         "indexName": "pgrindex-v1",
-        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tenantId.keyword\":\"pb.testing\"}}]}},\"aggs\":{\"Complaints By Status\":{\"terms\":{\"field\":\"Data.status.keyword\"},\"aggs\":{\"Count\":{\"value_count\":{\"field\":\"Data.dateOfComplaint\"}}}}}}}}"
+        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{}},\"aggs\":{\"Complaints By Status\":{\"terms\":{\"field\":\"Data.status.keyword\"},\"aggs\":{\"Count\":{\"value_count\":{\"field\":\"Data.dateOfComplaint\"}}}}}}}}"
       }
     ],
     "chartType": "pie",
