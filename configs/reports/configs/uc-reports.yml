@@ -1855,8 +1855,8 @@ ReportDefinitions:
         street,
         payment.mobilenumber,
         To_char((To_timestamp(egcl_paymentdetail.receiptdate / 1000) at time Zone 'Asia/Kolkata'), 'DD/MM/YYYY') as receiptdate
-        from eg_echallan inner JOIN egcl_bill ON (eg_echallan.tenantid='$tenantid' and eg_echallan.challanno=egcl_bill.consumercode ) inner join egcl_paymentdetail on (egcl_paymentdetail.tenantid='$tenantid' and egcl_bill.id=egcl_paymentdetail.billid)
-        inner JOIN eg_challan_address egchallan ON egchallan.echallanid=eg_echallan.id inner JOIN  egcl_payment as payment on (payment.tenantid='$tenantid'  and egcl_paymentdetail.paymentid=payment.id)
+        from eg_echallan inner JOIN egcl_bill ON (eg_echallan.tenantid=$tenantid and eg_echallan.challanno=egcl_bill.consumercode ) inner join egcl_paymentdetail on (egcl_paymentdetail.tenantid=$tenantid and egcl_bill.id=egcl_paymentdetail.billid)
+        inner JOIN eg_challan_address egchallan ON egchallan.echallanid=eg_echallan.id inner JOIN  egcl_payment as payment on (payment.tenantid=$tenantid  and egcl_paymentdetail.paymentid=payment.id)
         where eg_echallan.tenantid=$tenantid and egcl_bill.businessservice not in ('PT','TL','FIRENOC','WS','SW','WS.ONE_TIME_FEE')  and payment.paymentstatus != 'CANCELLED'
     orderby: ORDER BY eg_echallan.createdtime DESC
     
