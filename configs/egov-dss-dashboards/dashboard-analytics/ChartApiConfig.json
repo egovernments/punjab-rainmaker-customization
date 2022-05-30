@@ -154,7 +154,7 @@
       {
         "module": "COMMON",
         "requestQueryMap": "{\r\n  \"module\" : \"businessService.keyword\", \n\"tenantId\" : \"tenantIdForMunicipalCorporation\"}",
-        "dateRefField": "startdate",
+        "dateRefField": "",
         "indexName": "dss-target_v1",
         "aggrQuery": "{\"aggs\":{\"Target Collection\":{\"terms\":{\"field\":\"tenantIdForMunicipalCorporation.keyword\",\"size\":\"200\",\"order\":{\"Sum\":\"desc\"}},\"aggs\":{\"Sum\":{\"sum\":{\"field\":\"budgetProposedForMunicipalCorporation\"}}}}}}"
       },
