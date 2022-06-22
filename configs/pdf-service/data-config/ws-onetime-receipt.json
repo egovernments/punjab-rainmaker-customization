@@ -50,6 +50,50 @@
                 }
               },
               {
+                "variable": "serviceType",
+                "value": {
+                  "path": "$.paymentDetails[0].guardianName"
+                },
+                "localisation": {
+                  "required": true,
+                  "prefix": "MODULE",
+                  "module": "rainmaker-common"
+                }
+              },
+              {
+                "variable": "propertyID",
+                "value": {
+                  "path": "$.paymentDetails[0].propertyID"
+                },
+                "localisation": {
+                  "required": true,
+                  "prefix": "MODULE",
+                  "module": "rainmaker-common"
+                }
+              },
+              {
+                "variable": "landMark",
+                "value": {
+                  "path": "$.paymentDetails[0].landMark"
+                },
+                "localisation": {
+                  "required": true,
+                  "prefix": "MODULE",
+                  "module": "rainmaker-common"
+                }
+              },
+              {
+                "variable": "communicationAddress",
+                "value": {
+                  "path": "$.paymentDetails[0].communicationAddress"
+                },
+                "localisation": {
+                  "required": true,
+                  "prefix": "MODULE",
+                  "module": "rainmaker-common"
+                }
+              },
+              {
                 "variable": "paidAmount",
                 "value": {
                   "path": "$.paymentDetails[0].totalAmountPaid"
