@@ -6,7 +6,7 @@ attrdict==2.0.0
 requests==2.19.1
 psycopg2==2.7.7
 pandas==0.24.2
-numpy==1.16.3
+numpy==1.22.0
 attrdict==2.0.0
 jsonpath==0.81
 jsonpath-rw==1.4.0
