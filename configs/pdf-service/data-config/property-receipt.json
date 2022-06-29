@@ -490,16 +490,7 @@
               },
               {
                 "variable": "generated_by",
-                "value": {
-                  "path": "PDF_STATIC_LABEL_CONSOLIDATED_RECEIPT_GENERATED_BY"
-                },
-                "type": "label",
-                "localisation":{
-                  "required":true,
-                  "prefix": null,
-                  "module":"rainmaker-common",
-                  "locale":"en_IN"
-               }
+                "value": "Printed By"
               },
               {
                 "variable": "commissioner/eo",
