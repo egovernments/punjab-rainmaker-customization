@@ -8024,6 +8024,7 @@ ReportDefinitions:
       from report_properties props
       inner join  units on units.propertyid=props.propertyid
       left outer join assessments on assessments.propertyid=props.propertyid
+      inner join owners on owners.propertyid=props.propertyid 
       where props.tenantid=$tenantid and propertystatus!='INACTIVE'
       --and assessments.fy not like '%2021-22%'
       
