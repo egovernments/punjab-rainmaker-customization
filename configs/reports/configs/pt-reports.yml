@@ -7936,34 +7936,38 @@ ReportDefinitions:
     label: reports.pt.propertyusage
     type: string
     source: pt
-    total: true
+    total: false
   - name: propertytype
     label: reports.pt.propertytype
     type: string
     source: pt
-    total: true
+    total: false
   - name: plotsize
     label: reports.pt.plotsize
     type: string
     source: pt
-    total: true
+    total: false
   - name: unit
     label: reports.pt.units
     type: string
     source: pt
-    total: true
+    total: false
   - name: fy
     label: reports.pt.financialyear
     type: string
     source: pt
-    total: true
-  searchParams:
-  - name: fromDate
-    label: reports.pt.fromDate
-    type: epoch
+    total: false
+  - name: ownername
+    label: reports.pt.ownername
+    type: string
     source: pt
-    isMandatory: true
-    searchClause: AND pd.receiptdate >= $fromDate
+    total: false
+  - name: mobileno
+    label: reports.pt.mobileno
+    type: string
+    source: pt
+    total: false
+  searchParams:
   - name: occupacny
     label: Occupancy Type
     type: singlevaluelist
@@ -7971,12 +7975,6 @@ ReportDefinitions:
     source: pt
     isMandatory: false
     searchClause: and units.unit like $occupancy
-  - name: toDate
-    label: reports.pt.toDate
-    type: epoch
-    source: pt
-    isMandatory: true
-    searchClause: AND pd.receiptdate <= $toDate
   query: |
       -- Use CTE to force query plan, compute & use CTE later
       with units as
