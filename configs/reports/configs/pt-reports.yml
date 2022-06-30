@@ -7968,7 +7968,7 @@ ReportDefinitions:
     source: pt
     total: false
   searchParams:
-  - name: occupacny
+  - name: occupancy
     label: Occupancy Type
     type: singlevaluelist
     pattern: 'list://RENTED:Rented,SELFOCCUPIED:SelfOccupied,UNOCCUPIED:UnOccupied,PG:Paying Guest'
