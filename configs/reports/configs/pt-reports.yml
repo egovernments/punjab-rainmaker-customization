@@ -7974,7 +7974,7 @@ ReportDefinitions:
     pattern: 'list://RENTED:Rented,SELFOCCUPIED:SelfOccupied,UNOCCUPIED:UnOccupied,PG:Paying Guest'
     source: pt
     isMandatory: false
-    searchClause: and units.unit like $occupancy
+    searchClause: and units.unit like '%$occupancy%'
   query: |
       -- Use CTE to force query plan, compute & use CTE later
       with units as
