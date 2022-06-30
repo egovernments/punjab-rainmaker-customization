@@ -7889,6 +7889,7 @@ ReportDefinitions:
   orderby: ORDER BY paymentdate
   
 - reportName: OCCUPANCY_TYPE_REPORT
+  decryptionPathId: ULBDEFAULTERPTREPORT_V2
   summary: Occupancy Type Report
   version: 1.0.0
   moduleName: rainmaker-pt
@@ -7996,6 +7997,16 @@ ReportDefinitions:
       from eg_pt_asmt_assessment
       where tenantid=$tenantid
       group by propertyid
+      ),
+      owners as 
+      (
+        select 
+          split_part(string_agg(ownername,','),',',1) as ownername,
+          split_part(string_agg(mobileNumber,','),',',1) as mobilenumber,
+          propertyid
+        from report_owners
+        where tenantid=$tenantid
+        group by propertyid
       )
       select
         props.propertyid,
@@ -8009,7 +8020,9 @@ ReportDefinitions:
         propertytype,
         plotsize,
         units.unit as unit,
-        assessments.fy as fy
+        assessments.fy as fy,
+        owners.ownername as ownername,
+        owners.mobilenumber as mobileno
       from report_properties props
       inner join  units on units.propertyid=props.propertyid
       left outer join assessments on assessments.propertyid=props.propertyid
