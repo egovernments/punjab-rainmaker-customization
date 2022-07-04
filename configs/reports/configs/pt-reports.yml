@@ -8172,21 +8172,6 @@ ReportDefinitions:
     type: string
     source: pt
     total: true
-  - name: residential
-    label: reports.pt.residential
-    type: string
-    source: pt
-    total: true
-  - name: nonresidential
-    label: reports.pt.nonresidential
-    type: string
-    source: pt
-    total: true
-  - name: mixed
-    label: reports.pt.mixed
-    type: string
-    source: pt
-    total: true    
   query: |
       -- Use CTE to force query plan, compute & use CTE later
         SELECT
