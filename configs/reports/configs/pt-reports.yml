@@ -8121,7 +8121,7 @@ ReportDefinitions:
             --max(totalamount) as maxtotal,
             --max(propertytax) as max_pt_tax
         from eg_pt_asmt_assessment
-        where tenantid='pb.patiala'
+        where tenantid=$tenantid
         group by propertyid
         ),
         owners as 
@@ -8131,7 +8131,7 @@ ReportDefinitions:
           split_part(string_agg(mobileNumber,','),',',1) as mobilenumber,
           propertyid
         from report_owners
-        where tenantid='pb.patiala'
+        where tenantid=$tenantid
         group by propertyid
         )
         select 
@@ -8151,6 +8151,6 @@ ReportDefinitions:
         from report_properties props
         left outer join assessments on assessments.propertyid=props.propertyid
         left outer join owners on owners.propertyid=props.propertyid
-        where props.tenantid='pb.patiala' and propertystatus!='INACTIVE'
+        where props.tenantid=$tenantid and propertystatus!='INACTIVE'
 
   
