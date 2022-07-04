@@ -8175,7 +8175,7 @@ ReportDefinitions:
   query: |
       -- Use CTE to force query plan, compute & use CTE later
         SELECT
-        usagecategory , count(propertyid) from eg_pt_property   where tenantid='pb.zirakpur' and status='ACTIVE'
-         where tenantid=$tenantid and  status='ACTIVE'
+        usagecategory , count(propertyid) from eg_pt_property where tenantid=$tenantid and status='ACTIVE'
+        
   groupby: GROUP BY usagecategory
   
