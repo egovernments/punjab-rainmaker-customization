@@ -8178,5 +8178,4 @@ ReportDefinitions:
         (case when position('.' in usagecategory)=0 then usagecategory else split_part(usagecategory,'.',2) end) as category ,count  (propertyid) as count  from eg_pt_property
          where tenantid=$tenantid and  status='ACTIVE'
   groupby: GROUP BY category
-
   
