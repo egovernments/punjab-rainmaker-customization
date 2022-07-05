@@ -8167,6 +8167,11 @@ ReportDefinitions:
     type: string
     source: pt
     total: false
+  - name: property_type
+    label: reports.pt.property_type
+    type: string
+    source: pt
+    total: false   
   - name: count
     label: reports.pt.count
     type: string
