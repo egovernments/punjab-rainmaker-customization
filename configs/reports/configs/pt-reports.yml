@@ -8175,7 +8175,7 @@ ReportDefinitions:
   query: |
       -- Use CTE to force query plan, compute & use CTE later
         SELECT
-        (case when position('.' in usagecategory)=0 then usagecategory else split_part(usagecategory,'.',2) end) as category ,count  (propertyid) as count  from eg_pt_property
+        (case when position('.' in usagecategory)=0 then usagecategory else split_part(usagecategory,'.',2) end) as category,(case when position('.' in propertytype)=0 then propertytype else split_part(propertytype,'.',1) end) as property_type ,count (propertyid) as count  from eg_pt_property
          where tenantid=$tenantid and  status='ACTIVE'
-  groupby: GROUP BY category
-  
+  groupby: GROUP BY category,property_type
+  orderby: ORDER BY category 
