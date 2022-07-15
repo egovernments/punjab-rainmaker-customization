@@ -833,7 +833,7 @@
           {
             "text": [
               {
-                "text": "{{generated_by}}: ",
+                "text": "{{printed_by}}: ",
                 "bold": true
               },
               {

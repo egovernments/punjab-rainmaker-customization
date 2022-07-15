@@ -489,7 +489,7 @@
                }
               },
               {
-                "variable": "generated_by",
+                "variable": "printed_by",
                 "value": "Printed By"
               },
               {
