@@ -5711,7 +5711,7 @@ ReportDefinitions:
     select distinct bill.consumercode,pt.usagecategory,pd.receiptnumber ,p.totalamountpaid,
       concat(pa.doorno,' ',pa.buildingname,pa.street,' ',pa.city,' ,',pa.pincode), u.name, u.mobilenumber
       from egcl_payment p inner join
-      egcl_paymentdetail pd on pd.paymentid=p.id and p.paymentstatus !='CANCELLED' and p.tenantid='pb.amritsar'
+      egcl_paymentdetail pd on pd.paymentid=p.id and p.paymentstatus !='CANCELLED' and p.tenantid=$tenantid
       and pd.businessservice='PT'  inner join  egcl_bill bill on bill.id=pd.billid inner join eg_pt_property pt
       on bill.consumercode=pt.propertyid  and pt.status='ACTIVE' and
       pt.usagecategory like '%NONRESIDENTIAL.INDUSTRIAL%' inner join eg_pt_address pa on pa.propertyid=pt.id inner join eg_pt_owner po on 
