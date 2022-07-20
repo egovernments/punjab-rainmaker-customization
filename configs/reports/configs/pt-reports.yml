@@ -5662,23 +5662,23 @@ ReportDefinitions:
   version: 1.0.0
   moduleName: rainmaker-pt
   sourceColumns:
-  - name: propertytaxuniqueid
-    label: reports.pt.propertytaxuniqueid
+  - name: consumercode
+    label: reports.pt.consumercode
     type: string
     source: pt
     total: false  
-  - name: existingpropertyid
-    label: reports.pt.existingpropertyid
+  - name: receiptnumber
+    label: reports.pt.receiptnumber
     type: string
     source: pt
     total: false
-  - name: amountpaid
-    label: reports.pt.amountpaid
+  - name: totalamountpaid
+    label: reports.pt.totalamountpaid
     type: string
     source: pt
     total: true
-  - name: ownername
-    label: reports.pt.ownername
+  - name: name
+    label: reports.pt.name
     type: string
     source: pt
     total: false  
@@ -5687,8 +5687,8 @@ ReportDefinitions:
     type: string
     source: pt
     total: false        
-  - name: mobileno
-    label: reports.pt.mobileno
+  - name: mobilenumber
+    label: reports.pt.mobilenumber
     type: string
     source: pt
     total: false   
@@ -5709,7 +5709,7 @@ ReportDefinitions:
   query: |
    --S.no    Service Name	ULB    Property Tax Unique ID    Date Of Transcation    Receipt Number	Existing Property ID    Type Of Property	Mobile Number   	Address
     select distinct bill.consumercode,pt.usagecategory,pd.receiptnumber ,p.totalamountpaid,
-      concat(pa.doorno,' ',pa.buildingname,pa.street,' ',pa.city,' ,',pa.pincode), u.name, u.mobilenumber
+      concat(pa.doorno,' ',pa.buildingname,pa.street,' ',pa.city,' ,',pa.pincode) as address, u.name, u.mobilenumber
       from egcl_payment p inner join
       egcl_paymentdetail pd on pd.paymentid=p.id and p.paymentstatus !='CANCELLED' and p.tenantid=$tenantid
       and pd.businessservice='PT'  inner join  egcl_bill bill on bill.id=pd.billid inner join eg_pt_property pt
