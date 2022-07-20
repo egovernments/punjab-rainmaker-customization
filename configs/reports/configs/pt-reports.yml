@@ -5657,8 +5657,8 @@ ReportDefinitions:
   orderby: order by blockname
 
 - reportName: TopPayersReport_V2
-  decryptionPathId: ULBDEFAULTERPTREPORT_V2
-  summary: ULB Defaulter Pt report
+  decryptionPathId: PT_DATA_DUMP_REPORT_V2
+  summary: Top Payers Report
   version: 1.0.0
   moduleName: rainmaker-pt
   sourceColumns:
