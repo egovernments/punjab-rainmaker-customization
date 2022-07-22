@@ -8251,8 +8251,8 @@ ReportDefinitions:
     type: string
     source: pt
     total: false
-  - name: name
-    label: reports.pt.name
+  - name: ownername
+    label: reports.pt.ownername
     type: string
     source: pt
     total: false  
@@ -8261,7 +8261,7 @@ ReportDefinitions:
     type: string
     source: pt
     total: false        
-  - name: mobilenumber
+  - name: mobileno
     label: reports.pt.mobilenumber
     type: string
     source: pt
@@ -8282,14 +8282,14 @@ ReportDefinitions:
     searchClause: AND egcl_billdetial.tenantid=$ulb
   query: |
    --S.no    Service Name	ULB    Property Tax Unique ID    Date Of Transcation    Receipt Number	Existing Property ID    Type Of Property	Mobile Number   	Address
-    select distinct bill.consumercode,pt.usagecategory,pd.receiptnumber ,p.totalamountpaid,
-      concat(pa.doorno,' ',pa.buildingname,pa.street,' ',pa.city,' ,',pa.pincode) as address, u.name, u.mobilenumber
-      from egcl_payment p inner join
-      egcl_paymentdetail pd on pd.paymentid=p.id and p.paymentstatus !='CANCELLED' and p.tenantid=$tenantid
-      and pd.businessservice='PT'  inner join  egcl_bill bill on bill.id=pd.billid inner join eg_pt_property pt
-      on bill.consumercode=pt.propertyid  and pt.status='ACTIVE' and
-      pt.usagecategory in ('RESIDENTIAL')  inner join eg_pt_address pa on pa.propertyid=pt.id inner join eg_pt_owner po on 
-      po.propertyid=pt.id inner join eg_user u on u.uuid=po.userid and u.active=true
-      
+     select distinct bill.consumercode,pt.usagecategory,pd.receiptnumber ,p.totalamountpaid,
+       concat(pa.doorno,' ',pa.buildingname,pa.street,' ',pa.city,' ,',pa.pincode) as address, u.name as ownername, u.mobilenumber as mobileno
+     from egcl_payment p 
+     inner join egcl_paymentdetail pd on pd.paymentid=p.id and p.paymentstatus !='CANCELLED' and p.tenantid=$tenantid and pd.businessservice='PT'
+     inner join  egcl_bill bill on bill.id=pd.billid 
+     inner join eg_pt_property pt on bill.consumercode=pt.propertyid  and pt.status='ACTIVE' and pt.usagecategory='RESIDENTIAL'  
+     inner join eg_pt_address pa on pa.propertyid=pt.id 
+     inner join eg_pt_owner po on po.propertyid=pt.id 
+     inner join eg_user u on u.uuid=po.userid and u.active=true 
   orderby: order by p.totalamountpaid desc limit 150
   
