@@ -8295,7 +8295,7 @@ ReportDefinitions:
    --S.no    Service Name	ULB    Property Tax Unique ID    Date Of Transcation    Receipt Number	Existing Property ID    Type Of Property	Mobile Number   	Address
     select distinct bd.consumercode,pt.usagecategory,pd.receiptnumber ,p.totalamountpaid,
       to_char((To_timestamp(bd.fromperiod/1000) at time Zone 'Asia/Kolkata'),'YYYY') || '-' || to_char((To_timestamp(bd.toperiod/1000) at time Zone 'Asia/Kolkata'),'YY') as fy,
-      concat(pa.doorno,' ',pa.buildingname,pa.street,' ',pa.city,' ,',pa.pincode), u.name, u.mobilenumber
+      concat(pa.doorno,' ',pa.buildingname,pa.street,' ',pa.city,' ,',pa.pincode) as address, u.name as ownername, u.mobilenumber as mobileno
     from egcl_payment p 
     inner join egcl_paymentdetail pd on pd.paymentid=p.id and p.paymentstatus !='CANCELLED' and p.tenantid=$ulb and pd.businessservice='PT'
     inner join  egbs_bill_v1 bill on bill.id=pd.billid
