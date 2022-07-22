@@ -8188,7 +8188,7 @@ ReportDefinitions:
     type: string
     source: pt
     total: false
-  - name: name
+  - name: ownername
     label: reports.pt.name
     type: string
     source: pt
@@ -8198,7 +8198,7 @@ ReportDefinitions:
     type: string
     source: pt
     total: false        
-  - name: mobilenumber
+  - name: mobileno
     label: reports.pt.mobilenumber
     type: string
     source: pt
