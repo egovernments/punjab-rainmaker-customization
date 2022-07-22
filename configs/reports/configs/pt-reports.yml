@@ -8297,7 +8297,7 @@ ReportDefinitions:
       to_char((To_timestamp(bd.fromperiod/1000) at time Zone 'Asia/Kolkata'),'YYYY') || '-' || to_char((To_timestamp(bd.toperiod/1000) at time Zone 'Asia/Kolkata'),'YY') as fy,
       concat(pa.doorno,' ',pa.buildingname,pa.street,' ',pa.city,' ,',pa.pincode), u.name, u.mobilenumber
     from egcl_payment p 
-    inner join egcl_paymentdetail pd on pd.paymentid=p.id and p.paymentstatus !='CANCELLED' and p.tenantid='pb.amritsar' and pd.businessservice='PT'
+    inner join egcl_paymentdetail pd on pd.paymentid=p.id and p.paymentstatus !='CANCELLED' and p.tenantid=$ulb and pd.businessservice='PT'
     inner join  egbs_bill_v1 bill on bill.id=pd.billid
     inner join egbs_billdetail_v1 bd on bill.id=bd.billid
     inner join eg_pt_property pt on bd.consumercode=pt.propertyid and pt.status='ACTIVE' and pt.usagecategory='RESIDENTIAL'
