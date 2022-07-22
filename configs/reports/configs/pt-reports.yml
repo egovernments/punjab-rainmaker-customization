@@ -8188,8 +8188,13 @@ ReportDefinitions:
     type: string
     source: pt
     total: false
+  - name: fy
+    label: reports.pt.fy
+    type: string
+    source: pt
+    total: false
   - name: ownername
-    label: reports.pt.name
+    label: reports.pt.ownername
     type: string
     source: pt
     total: false  
@@ -8217,16 +8222,33 @@ ReportDefinitions:
     wrapper: true
     isMandatory: false
     searchClause: AND 1=1
+  - name: finYear
+    label: Financial Year
+    type: singlevaluelist
+    pattern: 'list://2015-16:2015-16,2016-17:2016-17,2017-18:2017-18,2017-18:2017-18,2018-19:2018-19,2019-20:2019-20,2020-21:2020-21,2021-22:2021-22,2022-23:2022-23'
+    source: pt
+    isMandatory: true
+    searchClause: AND to_char((To_timestamp(bd.fromperiod/1000) at time Zone 'Asia/Kolkata'),'YYYY') || '-' || to_char((To_timestamp(bd.toperiod/1000) at time Zone 'Asia/Kolkata'),'YY')=$finYear
+  - name: usageCat
+    label: Usage Category
+    type: singlevaluelist
+    pattern: 'list://NONRESIDENTIAL.COMMERCIAL:Commercial,MIXED:Mixed,NONRESIDENTIAL.INDUSTRIAL:Industrial,NONRESIDENTIAL.INSTITUTIONAL:Institutional'
+    source: pt
+    isMandatory: false
+    searchClause: and 1=1
   query: |
    --S.no    Service Name	ULB    Property Tax Unique ID    Date Of Transcation    Receipt Number	Existing Property ID    Type Of Property	Mobile Number   	Address
-    select distinct bill.consumercode,pt.usagecategory,pd.receiptnumber ,p.totalamountpaid,
+    select distinct bd.consumercode,pt.usagecategory,pd.receiptnumber ,p.totalamountpaid,
+      to_char((To_timestamp(bd.fromperiod/1000) at time Zone 'Asia/Kolkata'),'YYYY') || '-' || to_char((To_timestamp(bd.toperiod/1000) at time Zone 'Asia/Kolkata'),'YY') as fy,
       concat(pa.doorno,' ',pa.buildingname,pa.street,' ',pa.city,' ,',pa.pincode) as address, u.name as ownername, u.mobilenumber as mobileno
-    from egcl_payment p inner join
-    egcl_paymentdetail pd on pd.paymentid=p.id and p.paymentstatus !='CANCELLED' and p.tenantid=$ulb
-      and pd.businessservice='PT'  inner join  egcl_bill bill on bill.id=pd.billid 
-    inner join eg_pt_property pt on bill.consumercode=pt.propertyid  and pt.status='ACTIVE' and pt.usagecategory like 'NONRESIDENTIAL%'
-    inner join eg_pt_address pa on pa.propertyid=pt.id 
-    inner join eg_pt_owner po on po.propertyid=pt.id inner join eg_user u on u.uuid=po.userid and u.active=true 
+    from egcl_payment p 
+    inner join egcl_paymentdetail pd on pd.paymentid=p.id and p.paymentstatus !='CANCELLED' and p.tenantid=$ulb and pd.businessservice='PT'
+    inner join  egbs_bill_v1 bill on bill.id=pd.billid
+    inner join egbs_billdetail_v1 bd on bill.id=bd.billid
+    inner join eg_pt_property pt on bd.consumercode=pt.propertyid and pt.status='ACTIVE' and pt.usagecategory like concat('%',$usageCat,'%')
+    inner join eg_pt_address pa on pa.propertyid=pt.id
+    inner join eg_pt_owner po on po.propertyid=pt.id inner join eg_user u on u.uuid=po.userid and u.active=true
+    where 1=1
   orderby: order by p.totalamountpaid desc limit 150
  
 - reportName: TopPayersReportRESD_V2
