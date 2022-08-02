@@ -8134,7 +8134,129 @@ ReportDefinitions:
         left outer join assessments on assessments.propertyid=props.propertyid
         left outer join owners on owners.propertyid=props.propertyid
         where props.tenantid=$tenantid and propertystatus!='INACTIVE'
-        
+
+- reportName: DEFAULTER_REPORT_WITH_LOCALITY_UNPAID_DEMAND
+  decryptionPathId: ULBDEFAULTERPTREPORT_V2
+  summary: Occupancy Type Report
+  version: 1.0.0
+  moduleName: rainmaker-pt
+  additionalConfig:
+    print:
+      pdfPageSize: "A3"
+  sourceColumns:
+  - name: propertyid
+    label: reports.pt.propertyid
+    type: string
+    source: pt
+    total: false
+  - name: oldpropertyid
+    label: reports.pt.oldpropertyid
+    type: string
+    source: pt
+    total: false
+  - name: propertystatus
+    label: reports.pt.status
+    type: string
+    source: pt
+    total: false
+  - name: firmbusinessname
+    label: reports.pt.businessname
+    type: string
+    source: pt
+    total: false
+  - name: address
+    label: reports.pt.address
+    type: string
+    source: pt
+    total: false
+  - name: localityname
+    label: reports.pt.locality
+    type: string
+    source: pt
+    total: false
+  - name: blockname
+    label: reports.pt.blockname
+    type: string
+    source: pt
+    total: false
+  - name: propertyusagetype
+    label: reports.pt.propertyusage
+    type: string
+    source: pt
+    total: false
+  - name: propertytype
+    label: reports.pt.propertytype
+    type: string
+    source: pt
+    total: false
+  - name: plotsize
+    label: reports.pt.plotsize
+    type: string
+    source: pt
+    total: false
+  - name: fy
+    label: reports.pt.financialyear
+    type: string
+    source: pt
+    total: false
+  - name: ownername
+    label: reports.pt.ownername
+    type: string
+    source: pt
+    total: false
+  - name: mobileno
+    label: reports.pt.mobileno
+    type: string
+    source: pt
+    total: false
+  searchParams:
+  - name: fy
+    label: Financial Year
+    type: singlevaluelist
+    pattern: 'list://1427826600000:2015-16,1459449000000:2016-17,1490985000000:2017-18,1522521000000:2018-19,1554057000000:2019-20,1585679400000:2020-21,1617215400000:2021-22,1648751400000:2022-23'
+    source: pt
+    isMandatory: true
+    searchClause: and 1=1
+  query: |
+      -- Use CTE to force query plan, compute & use CTE later
+      with properties as
+      (
+      select distinct consumercode as propertyid from egbs_demand_v1 where taxperiodfrom=$fy and businessservice='PT' and status!='CANCELLED' 
+        and ispaymentcompleted=false and tenantid=$tenantid
+      ),
+      props as
+      (
+      select * from report_properties where  tenantid=$tenantid and propertystatus='ACTIVE'
+      ),
+      owners as 
+      (
+      select 
+        split_part(string_agg(ownername,','),',',1) as ownername,
+        split_part(string_agg(mobileNumber,','),',',1) as mobilenumber,
+        propertyid
+      from report_owners
+      where tenantid=$tenantid
+      group by propertyid
+      )
+      select 
+        props.propertyid,
+        props.oldpropertyid,
+        props.propertystatus,
+        firmbusinessname,
+        address,
+        localityname,
+        blockname,
+        propertyusagetype,
+        propertytype,
+        plotsize,
+        '2021-22', --assessments.fy as fy,
+        owners.ownername as ownername,
+        owners.mobilenumber as mobileno
+      from properties 
+      inner join props on props.propertyid=properties.propertyid
+      inner join owners on owners.propertyid=properties.propertyid
+      where 1=1 
+
 - reportName: Count_UsageCategory_V2
   decryptionPathId: ReceiptRegisterShort_V2
   summary: Count Usagecategory
