@@ -8088,26 +8088,26 @@ ReportDefinitions:
   - name: fy
     label: Financial Year
     type: singlevaluelist
-    pattern: 'list://2015-16:2015-16,2016-17:2016-17,2017-18:2017-18,2017-18:2017-18,2018-19:2018-19,2019-20:2019-20,2020-21:2020-21,2021-22_1617215400000:2021-22,2022-23:2022-23'
+    pattern: 'list://2015-16:2015-16,2016-17:2016-17,2017-18:2017-18,2017-18:2017-18,2018-19:2018-19,2019-20:2019-20,2020-21:2020-21,2021-22:2021-22,2022-23:2022-23'
     source: pt
     isMandatory: true
     searchClause: and assessments.fy not like concat('%',$fy,'%')
   query: |
       -- Use CTE to force query plan, compute & use CTE later
-      with properties as
+      with assessments as
       (
-      select distinct consumercode as propertyid from egbs_demand_v1 where taxperiodfrom=split_part(concat($fy,'_',2)::bigint and businessservice='PT' and status!='CANCELLED' 
-      and ispaymentcompleted=false and tenantid=$tenantid
-      union
-      select propertyid from eg_pt_property where tenantid=$tenantid and status='ACTIVE' 
-      and propertyid not in(select distinct propertyid from eg_pt_asmt_assessment where financialyear=split_part($fy,'_',1) and tenantid=$tenantid and status='ACTIVE' ) 
-      ),
-      props as
-      (
-      select * from report_properties where  tenantid=$tenantid and propertystatus='ACTIVE'
-      ),
-      owners as 
-      (
+        select 
+            propertyid,
+            string_agg(distinct concat(financialyear),', ') as fy
+            --max(assessmentyears) as latest_fy,
+            --max(totalamount) as maxtotal,
+            --max(propertytax) as max_pt_tax
+        from eg_pt_asmt_assessment
+        where tenantid=$tenantid
+        group by propertyid
+        ),
+        owners as 
+        (
         select 
           split_part(string_agg(ownername,','),',',1) as ownername,
           split_part(string_agg(mobileNumber,','),',',1) as mobilenumber,
@@ -8115,25 +8115,26 @@ ReportDefinitions:
         from report_owners
         where tenantid=$tenantid
         group by propertyid
-      )
-      select 
-        props.propertyid,
-        props.oldpropertyid,
-        props.propertystatus,
-        firmbusinessname,
-        address,
-        localityname,
-        blockname,
-        propertyusagetype,
-        propertytype,
-        plotsize,		  
-        $fy, --assessments.fy as fy,
-        owners.ownername as ownername,
-        owners.mobilenumber as mobileno
-      from properties 
-      inner join props on props.propertyid=properties.propertyid
-      inner join owners on owners.propertyid=properties.propertyid
-
+        )
+        select 
+          props.propertyid,
+          oldpropertyid,
+          propertystatus,
+          firmbusinessname,
+          address,
+          localityname,
+          blockname,
+          propertyusagetype,
+          propertytype,
+          plotsize,
+          assessments.fy as fy,
+          owners.ownername as ownername,
+          owners.mobilenumber as mobileno
+        from report_properties props
+        left outer join assessments on assessments.propertyid=props.propertyid
+        left outer join owners on owners.propertyid=props.propertyid
+        where props.tenantid=$tenantid and propertystatus!='INACTIVE'
+        
 - reportName: Count_UsageCategory_V2
   decryptionPathId: ReceiptRegisterShort_V2
   summary: Count Usagecategory
