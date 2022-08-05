@@ -2181,11 +2181,6 @@ ReportDefinitions:
     type: string
     source: pt
     total: false
-  - name: gateway_txn_id
-    label: reports.pt.gateway_txn_id
-    type: string
-    source: pt
-    total: false
   - name: transactiondate
     label: reports.pt.ddChequeTransactionDate
     type: string
@@ -2274,8 +2269,7 @@ ReportDefinitions:
         payment.ifsccode AS bankname, 
         receiptnumber,
         payment.totalamountpaid as amount, 
-        payment.paymentmode as instrumenttype,
-        gateway_txn_id,
+        payment.paymentmode as instrumenttype,        
         payment.transactionnumber,
         concat(to_char((To_timestamp(get_fromperiod(pd.billid)/1000) at time Zone 'Asia/Kolkata'),'YYYY'),'-', to_char((To_timestamp(get_toperiod(pd.billid)/1000) at time Zone 'Asia/Kolkata'),'YY')) as financialyear, 
         to_char((To_timestamp(payment.transactiondate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY') AS transactiondate, 
