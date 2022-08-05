@@ -2181,6 +2181,16 @@ ReportDefinitions:
     type: string
     source: pt
     total: false
+  - name: gatewaytxnid
+    label: reports.pt.gateway_txn_id
+    type: string
+    source: pt
+    total: false    
+  - name: transactiondate
+    label: reports.pt.ddChequeTransactionDate
+    type: string
+    source: pt
+    total: false   
   - name: transactiondate
     label: reports.pt.ddChequeTransactionDate
     type: string
@@ -2240,6 +2250,7 @@ ReportDefinitions:
       WITH receipt_breakup AS (
                   SELECT
                     pd.id as pdid,
+                    gateway_txn_id as gatewaytxnid,
                     SUM(CASE WHEN taxheadcode LIKE 'PT_ADHOC_PENALTY' THEN adjustedamount ELSE 0 END) as adhocpenalty, 
                     SUM(CASE WHEN taxheadcode LIKE 'PT_ADHOC_REBATE' THEN adjustedamount ELSE 0 END) as adhocrebate, 
                     SUM(CASE WHEN taxheadcode LIKE 'PT_FIRE_CESS' THEN adjustedamount ELSE 0 END) as firecess, 
@@ -2258,8 +2269,9 @@ ReportDefinitions:
                   INNER JOIN egcl_billdetial as bd on bd.id = bad.billdetailid
                   INNER JOIN egcl_paymentdetail as pd on pd.billid = bd.billid
                   INNER JOIN egcl_payment as payment on pd.paymentid=payment.id
+                  LEFT JOIN eg_pg_transactions as pg on  pg.bill_id=bd.billid  and txn_status='SUCCESS'
                   WHERE payment.tenantid = $tenantid and payment.paymentstatus != 'CANCELLED' and  pd.businessservice='PT'
-                  GROUP BY pdid
+                  GROUP BY pdid ,gateway_txn_id
       )
       SELECT 
         pd.tenantid AS tenantid,
