@@ -2181,6 +2181,11 @@ ReportDefinitions:
     type: string
     source: pt
     total: false
+  - name: gateway_txn_id
+    label: reports.pt.gateway_txn_id
+    type: string
+    source: pt
+    total: false
   - name: transactiondate
     label: reports.pt.ddChequeTransactionDate
     type: string
@@ -2269,7 +2274,8 @@ ReportDefinitions:
         payment.ifsccode AS bankname, 
         receiptnumber,
         payment.totalamountpaid as amount, 
-        payment.paymentmode as instrumenttype, 
+        payment.paymentmode as instrumenttype,
+        gateway_txn_id,
         payment.transactionnumber,
         concat(to_char((To_timestamp(get_fromperiod(pd.billid)/1000) at time Zone 'Asia/Kolkata'),'YYYY'),'-', to_char((To_timestamp(get_toperiod(pd.billid)/1000) at time Zone 'Asia/Kolkata'),'YY')) as financialyear, 
         to_char((To_timestamp(payment.transactiondate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY') AS transactiondate, 
@@ -2279,11 +2285,11 @@ ReportDefinitions:
         receipt_breakup.*,
         to_char((To_timestamp(pd.manualreceiptdate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY') AS g8issuedate, 
         manualreceiptnumber as g8receiptno
-      FROM egcl_paymentdetail pd Left outer join eg_user on eg_user.id = pd.createdby::INTEGER, egcl_payment payment, eg_pt_property as pt, receipt_breakup, egcl_bill bill,
+      FROM egcl_paymentdetail pd Left outer join eg_user on eg_user.id = pd.createdby::INTEGER, egcl_payment payment,eg_pg_transactions as pg, eg_pt_property as pt, receipt_breakup, egcl_bill bill,
       (select string_agg(distinct propertyid,',') as propertyid, string_agg(distinct locality,',') as locality from eg_pt_address where tenantid=$tenantid group by propertyid ) pt_addr
       where pd.paymentid=payment.id and bill.id=pd.billid and payment.paymentstatus != 'CANCELLED' and pd.businessservice='PT' and payment.tenantid=$tenantid 
       and pt.propertyid = bill.consumercode and receipt_breakup.pdid=pd.id  and pt.status!='INACTIVE' 
-      and pt_addr.propertyid=pt.id 
+      and pt_addr.propertyid=pt.id and payment.transactionnumber = pg.txn_id
       --and pt.propertyid='PT-1012-978737'
       --and receiptnumber='PT/1012/2020-21/001021'
   orderby: ORDER BY pd.receiptdate DESC;
