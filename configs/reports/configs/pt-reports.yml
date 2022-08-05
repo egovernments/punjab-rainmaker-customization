@@ -2250,7 +2250,7 @@ ReportDefinitions:
       WITH receipt_breakup AS (
                   SELECT
                     pd.id as pdid,
-                    gateway_txn_id as gatewaytxnid,
+                    gateway_txn_id,
                     SUM(CASE WHEN taxheadcode LIKE 'PT_ADHOC_PENALTY' THEN adjustedamount ELSE 0 END) as adhocpenalty, 
                     SUM(CASE WHEN taxheadcode LIKE 'PT_ADHOC_REBATE' THEN adjustedamount ELSE 0 END) as adhocrebate, 
                     SUM(CASE WHEN taxheadcode LIKE 'PT_FIRE_CESS' THEN adjustedamount ELSE 0 END) as firecess, 
