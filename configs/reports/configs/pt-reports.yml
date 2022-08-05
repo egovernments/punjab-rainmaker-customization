@@ -2412,12 +2412,7 @@ ReportDefinitions:
     label: reports.pt.ddChequeTransactionNo
     type: string
     source: pt
-    total: false
-  - name: gatewaytxnid
-    label: reports.pt.gateway_txn_id
-    type: string
-    source: pt
-    total: false     
+    total: false    
   - name: transactiondate
     label: reports.pt.ddChequeTransactionDate
     type: string
