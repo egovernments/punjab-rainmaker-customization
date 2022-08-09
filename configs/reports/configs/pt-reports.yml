@@ -2490,7 +2490,7 @@ ReportDefinitions:
                   INNER JOIN egcl_billdetial as bd on bd.id = bad.billdetailid
                   INNER JOIN egcl_paymentdetail as pd on pd.billid = bd.billid
                   INNER JOIN egcl_payment as payment on pd.paymentid=payment.id
-                  LEFT JOIN eg_pg_transactions as pg on  pg.bill_id=bd.billid 
+                  LEFT JOIN eg_pg_transactions as pg on  (pg.bill_id=bd.billid and txn_status='SUCCESS')
                   WHERE payment.tenantid = $tenantid and payment.paymentstatus != 'CANCELLED' and  pd.businessservice='PT'
                   AND pd.receiptdate >= $fromDate AND pd.receiptdate <= $toDate
                   GROUP BY pdid,gateway_txn_id
