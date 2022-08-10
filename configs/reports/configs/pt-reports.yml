@@ -8462,3 +8462,117 @@ ReportDefinitions:
     where p.totalamountpaid>=1000
   orderby: order by p.totalamountpaid desc limit 300
   
+- reportName: ReceiptRegisterGatewayTxnId_V2
+  decryptionPathId: ReceiptRegisterShort_V2
+  summary: Receipt Register GatewayTxnId
+  version: 1.0.0
+  moduleName: rainmaker-pt
+  additionalConfig:
+    print:
+      pdfPageSize: "Legal"
+  sourceColumns:
+  - name: receiptnumber
+    label: reports.pt.receiptNo
+    type: string
+    source: pt
+    total: false
+  - name: transactiondate
+    label: reports.pt.receiptDate
+    type: string
+    source: pt
+    total: false
+  - name: propertyid
+    label: reports.pt.ptrId
+    type: string
+    source: pt
+    total: false
+  - name: financialyear
+    label: reports.pt.financialYear
+    type: string
+    source: pt
+    total: false
+  - name: instrumenttype
+    label: reports.pt.paymentMode
+    type: string
+    source: pt
+    total: false
+  - name: amount
+    label: reports.pt.taxamount
+    type: string
+    source: pt
+    total: true
+  - name: transactionnumber
+    label: reports.pt.ddChequeNo
+    type: string
+    source: pt
+    total: false
+  - name: gateway_txn_id
+    label: reports.pt.gateway_txn_id
+    type: string
+    source: pt
+    total: false
+  searchParams:
+  - name: fromDate
+    label: reports.pt.fromDate
+    type: epoch
+    source: pt
+    isMandatory: true
+    searchClause: AND pd.receiptdate >= $fromDate
+  - name: toDate
+    label: reports.pt.toDate
+    type: epoch
+    source: pt
+    isMandatory: true
+    searchClause: AND pd.receiptdate <= $toDate
+  - name: paymentMode
+    label: Payment Mode
+    type: singlevaluelist
+    pattern: 'list://CARD:Card,CASH:Cash,CHEQUE:Cheque,DD:DD,OFFLINE_NEFT:NEFT,OFFLINE_RTGS:RTGS,ONLINE:Online,POSTAL_ORDER:PostalOrder'
+    source: pt
+    isMandatory: false
+    searchClause: AND payment.paymentmode = replace($paymentMode,',','_')
+  - name: financialyear
+    label: Financial Year
+    type: singlevaluelist
+    pattern: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?tenantId=$tenantid&moduleName=egf-master&masterName=FinancialYear|$.MdmsRes.egf-master.FinancialYear.[?(@.module=='PT')].code|$.MdmsRes.egf-master.FinancialYear.[?(@.module=='PT')].name
+    source: pt
+    wrapper: true
+    isMandatory: false
+    searchClause: AND concat(to_char((To_timestamp(get_fromperiod(pd.billid)/1000) at time Zone 'Asia/Kolkata'),'YYYY'),'-', to_char((To_timestamp(get_toperiod(pd.billid)/1000) at time Zone 'Asia/Kolkata'),'YY')) = $financialyear
+  - name: collectorname
+    label: reports.pt.collectorname
+    type: singlevaluelist
+    pattern: http://egov-hrms:8080/egov-hrms/employees/_search?tenantId=$tenantid&roles=PTCEMP|$.Employees[*].user.id|$.Employees[*].user.name
+    source: pt
+    wrapper: true
+    isMandatory: false
+    searchClause: AND eg_user.id = $collectorname::INTEGER
+  query: |
+      -- Use CTE to force query plan, compute & use CTE later
+      SELECT 	
+        pt.propertyid as propertyid,
+        to_char((To_timestamp(pd.receiptdate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY') as transactiondate,        
+        receiptnumber,
+        payment.totalamountpaid as amount,
+        payment.paymentmode as instrumenttype,
+        payment.transactionnumber as transactionnumber,
+        pg.gateway_txn_id,
+        --concat(to_char((To_timestamp(bd.fromperiod/1000) at time Zone 'Asia/Kolkata'),'YYYY'),'-', to_char((To_timestamp(bd.toperiod/1000) at time Zone 'Asia/Kolkata'),'YYYY')) AS financialyear,
+        --concat(to_char((To_timestamp(get_fromperiod(pd.billid)/1000) at time Zone 'Asia/Kolkata'),'YYYY'),'-', to_char((To_timestamp(get_toperiod(pd.billid)/1000) at time Zone 'Asia/Kolkata'),'YY')) as financialyear,
+        getfinancialyear(pd.billid) as financialyear,
+        (case when eg_user.name is null then '30048|23/xn3x2FAxn8vYAN0IdplsOxaE=' else eg_user.name end)  as collectorname
+        --receipt_breakup.*, 
+        
+      FROM egcl_paymentdetail pd Left outer join eg_user on eg_user.id = pd.createdby::INTEGER, egcl_payment payment, 
+      (select * from (select *,(row_number() over(partition by propertyid order by lastmodifiedtime desc)) as rw from eg_pt_property  where tenantid=$tenantid) pts where rw=1) as pt, 
+      (select bill.id as billid, bill.consumercode as consumercodei, min(bd.fromperiod) fromperiod, max(bd.toperiod) toperiod from egcl_billdetial bd, egcl_bill bill 
+      where bill.id=bd.billid and bill.tenantid = $tenantid group by bill.id) bd
+      LEFT JOIN eg_pg_transactions as pg on  ( txn_status='SUCCESS' and pg.bill_id=bd.billid )
+      where pd.paymentid=payment.id and bd.billid=pd.billid and payment.paymentstatus != 'CANCELLED' and pd.businessservice='PT' and payment.tenantid=$tenantid 
+      and pt.propertyid = bd.consumercodei --and pt.status!='INACTIVE'
+  orderby: ORDER BY pd.receiptdate DESC;  
+  
+  
+  
+  
+  
