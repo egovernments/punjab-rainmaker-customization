@@ -8254,7 +8254,7 @@ ReportDefinitions:
         propertyusagetype,
         propertytype,
         plotsize,
-        '2021-22', --assessments.fy as fy,
+        $fy as fy, --assessments.fy as fy,
         owners.ownername as ownername,
         owners.mobilenumber as mobileno
       from properties 
