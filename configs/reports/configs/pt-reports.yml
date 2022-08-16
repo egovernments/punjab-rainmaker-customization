@@ -8254,7 +8254,7 @@ ReportDefinitions:
         propertyusagetype,
         propertytype,
         plotsize,
-        to_char((To_timestamp(($fy::bigint)/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY') as fy, --assessments.fy as fy,
+        CONCAT(to_char((To_timestamp(($fy::bigint)/1000) at time Zone 'Asia/Kolkata'),'YYYY'),'-',((To_timestamp(($fy::bigint)/1000) at time Zone 'Asia/Kolkata'),'YYYY')::int + 1)::text) as fy, --assessments.fy as fy,
         owners.ownername as ownername,
         owners.mobilenumber as mobileno
       from properties 
