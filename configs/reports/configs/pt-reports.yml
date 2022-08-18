@@ -6466,6 +6466,11 @@ ReportDefinitions:
     type: string
     source: pt
     total: false
+  - name: usagetype
+    label: reports.pt.propertyusagetype
+    type: string
+    source: pt
+    total: false    
   - name: localitycode
     label: reports.pt.localitycode
     type: string
@@ -6568,7 +6573,8 @@ ReportDefinitions:
         pt.localitycode as localitycode,
         pt.localityname as localityname,
         pt.zonename as zonename,
-        pt.blockname as blockname
+        pt.blockname as blockname,
+        pt.propertyusagetype as usagetype
       from report_properties pt
       inner join units as ru on ru.propertyid=pt.propertyid 
       inner join report_payments as rp on  rp.propertyid=pt.propertyid and rp.paymentstatus!='CANCELLED'
