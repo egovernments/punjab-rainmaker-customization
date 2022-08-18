@@ -8254,7 +8254,7 @@ ReportDefinitions:
         propertyusagetype,
         propertytype,
         plotsize,
-        '2021-22', --assessments.fy as fy,
+        to_char((To_timestamp($fy::bigint/1000) at time Zone 'Asia/Kolkata'),'YYYY') || '-' || ((to_char((To_timestamp($fy::bigint/1000) at time Zone 'Asia/Kolkata'),'YY'))::int+1)::text as fy, --assessments.fy as fy,
         owners.ownername as ownername,
         owners.mobilenumber as mobileno
       from properties 
