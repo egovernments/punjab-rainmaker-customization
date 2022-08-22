@@ -8228,6 +8228,13 @@ ReportDefinitions:
     source: pt
     isMandatory: true
     searchClause: and 1=1
+  - name: usageCat
+    label: Usage Category
+    type: singlevaluelist
+    pattern: 'list://NONRESIDENTIAL.COMMERCIAL:Commercial,MIXED:Mixed,NONRESIDENTIAL.INDUSTRIAL:Industrial,NONRESIDENTIAL.INSTITUTIONAL:Institutional'
+    source: pt
+    isMandatory: false
+    searchClause: and 1=1    
   query: |
       -- Use CTE to force query plan, compute & use CTE later
       with properties as
@@ -8237,7 +8244,7 @@ ReportDefinitions:
       ),
       props as
       (
-      select * from report_properties where  tenantid=$tenantid and propertystatus='ACTIVE'
+      select * from report_properties where  tenantid=$tenantid and propertystatus='ACTIVE' and propertyusagetype like concat('%',$usageCat,'%')
       ),
       owners as 
       (
