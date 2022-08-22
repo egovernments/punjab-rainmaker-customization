@@ -8231,7 +8231,7 @@ ReportDefinitions:
   - name: usageCat
     label: Usage Category
     type: singlevaluelist
-    pattern: 'list://NONRESIDENTIAL.COMMERCIAL:Commercial,MIXED:Mixed,NONRESIDENTIAL.INDUSTRIAL:Industrial,NONRESIDENTIAL.INSTITUTIONAL:Institutional'
+    pattern: 'list://NONRESIDENTIAL.COMMERCIAL:Commercial,MIXED:Mixed,NONRESIDENTIAL.INDUSTRIAL:Industrial,NONRESIDENTIAL.INSTITUTIONAL:Institutional,RESIDENTIAL:ALL'
     source: pt
     isMandatory: false
     searchClause: and 1=1    
