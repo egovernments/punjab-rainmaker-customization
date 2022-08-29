@@ -24,6 +24,8 @@ ServiceMaps:
           outJsonPath: $.Data.phone
         - inJsonPath: $.auditDetails.createdTime
           outJsonPath: $.Data.dateOfComplaint
+        - inJsonPath: $.auditDetails
+          outJsonPath: $.Data.auditDetails
         - inJsonPath: $.description
           outJsonPath: $.Data.description
         - inJsonPath: $.address
@@ -113,7 +115,9 @@ ServiceMaps:
         - inJsonPath: $.phone
           outJsonPath: $.Data.phone
         - inJsonPath: $.auditDetails.createdTime
-          outJsonPath: $.Data.dateOfComplaint
+          outJsonPath: $.Data.dateOfComplaint      
+        - inJsonPath: $.auditDetails
+          outJsonPath: $.Data.auditDetails
         - inJsonPath: $.description
           outJsonPath: $.Data.description
         - inJsonPath: $.address
@@ -227,6 +231,8 @@ ServiceMaps:
           outJsonPath: $.Data.phone
         - inJsonPath: $.auditDetails.createdTime
           outJsonPath: $.Data.dateOfComplaint
+        - inJsonPath: $.auditDetails
+          outJsonPath: $.Data.auditDetails
         - inJsonPath: $.description
           outJsonPath: $.Data.description
         - inJsonPath: $.address
