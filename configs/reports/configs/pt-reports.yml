@@ -6280,27 +6280,12 @@ ReportDefinitions:
     label: reports.pt.propertytaxuniqueid
     type: string
     source: pt
-    total: false  
-  - name: transactiondate
-    label: reports.pt.transactiondate
-    type: string
-    source: pt
-    total: false  
-  - name: receiptnumber
-    label: reports.pt.receiptnumber
-    type: string
-    source: pt
-    total: false  
+    total: false
   - name: existingpropertyid
     label: reports.pt.existingpropertyid
     type: string
     source: pt
-    total: false
-  - name: financialyear
-    label: reports.pt.financialYear
-    type: string
-    source: pt
-    total: false
+    total: false 
   - name: ownername
     label: reports.pt.ownername
     type: string
@@ -6311,78 +6296,13 @@ ReportDefinitions:
     type: string
     source: pt
     total: false
-  - name: totalarea
-    label: reports.pt.totalarea
-    type: string
-    source: pt
-    total: false  
-  - name: builtarea
-    label: reports.pt.builtarea
-    type: string
-    source: pt
-    total: false
-  - name: floors
-    label: reports.pt.floors
-    type: string
-    source: pt
-    total: false  
-  - name: occupancy
-    label: reports.pt.occupancy
-    type: string
-    source: pt
-    total: false
-  - name: propertytype
-    label: reports.pt.propertytype
-    type: string
-    source: pt
-    total: false  
   - name: mobileno
     label: reports.pt.mobileno
     type: string
     source: pt
-    total: false  
-  - name: transcationmode
-    label: reports.pt.transcationmode
-    type: string
-    source: pt
-    total: false 
-  - name: paymentamount
-    label: reports.pt.paymentamount
-    type: string
-    source: pt
-    total: true 
-  - name: paymentmode
-    label: reports.pt.paymentmode
-    type: string
-    source: pt
-    total: false 
-  - name: paymentdate
-    label: reports.pt.paymentdate
-    type: string
-    source: pt
-    total: false 
-  - name: emailid
-    label: reports.pt.emailid
-    type: string
-    source: pt
-    total: false 
+    total: false
   - name: address
     label: reports.pt.address
-    type: string
-    source: pt
-    total: false
-  - name: surveyid
-    label: reports.pt.surveyid
-    type: string
-    source: pt
-    total: false
-  - name: payeraddress
-    label: reports.pt.payeraddress
-    type: string
-    source: pt
-    total: false
-  - name: remarks
-    label: reports.pt.remarks
     type: string
     source: pt
     total: false
@@ -6395,24 +6315,9 @@ ReportDefinitions:
     label: reports.pt.propertyusagetype
     type: string
     source: pt
-    total: false    
-  - name: localitycode
-    label: reports.pt.localitycode
-    type: string
-    source: pt
     total: false
   - name: localityname
     label: reports.pt.localityname
-    type: string
-    source: pt
-    total: false
-  - name: zonename
-    label: reports.pt.zonename
-    type: string
-    source: pt
-    total: false
-  - name: blockname
-    label: reports.pt.blockname
     type: string
     source: pt
     total: false
@@ -6458,7 +6363,7 @@ ReportDefinitions:
       units as
       (
       select 
-          propertyid,
+          propertyid
         --sum(builtuparea) as builtuparea,
         --string_agg(occupancytype,',') as occupancytype
       from report_units 
@@ -6496,7 +6401,7 @@ ReportDefinitions:
         pt.additionaldetails->>'businessName' as firmbusinessname,
         pt.firmbusinessname as businessname,
       --pt.localitycode as localitycode,
-        pt.localityname as localityname,
+        pt.localityname as localityname
       --pt.zonename as zonename,
       --pt.blockname as blockname,
       --pt.propertyusagetype as usagetype
