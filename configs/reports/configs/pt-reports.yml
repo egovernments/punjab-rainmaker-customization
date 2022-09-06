@@ -6450,7 +6450,7 @@ ReportDefinitions:
           split_part(string_agg(ownername,','),',',1) as ownername,
           split_part(string_agg(mobilenumber,','),',',1) as mobilenumber,
           split_part(string_agg(guardianname,','),',',1) as guardianname,
-          split_part(string_agg(emailid,','),',',1) as emailid,
+        --split_part(string_agg(emailid,','),',',1) as emailid,
           propertyid
           from report_owners where status='ACTIVE' and tenantid=$tenantid
           group by propertyid
@@ -6459,47 +6459,47 @@ ReportDefinitions:
       (
       select 
           propertyid,
-          sum(builtuparea) as builtuparea,
-          string_agg(occupancytype,',') as occupancytype
+        --sum(builtuparea) as builtuparea,
+        --string_agg(occupancytype,',') as occupancytype
       from report_units 
       where active='true' and tenantid=$tenantid
       group by propertyid
       )
       select
-        rp.billid,
+        --rp.billid,
         --ra.billid,
         pt.tenantid as ulb,
         pt.propertyid as propertytaxuniqueid,
-        to_char((To_timestamp(rp.transactiondate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY')  as  "transactiondate",
-        rp.receiptnumber as receiptnumber,
-        to_char((To_timestamp(rp.receiptdate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY')  AS  "paymentdate",
-        rp.paymentmode as paymentmode,
+      --to_char((To_timestamp(rp.transactiondate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY')  as  "transactiondate",
+      --rp.receiptnumber as receiptnumber,
+      --to_char((To_timestamp(rp.receiptdate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY')  AS  "paymentdate",
+      --rp.paymentmode as paymentmode,
         pt.oldpropertyid as existingpropertyid,
         --ra.assessmentyears as financialyear,
-        getfinancialyear(rp.billid) as financialyear,
+      --getfinancialyear(rp.billid) as financialyear,
         owners.ownername as ownername,
         owners.guardianname as guardianname,
         owners.mobilenumber as mobileno,
-        pt.plotsize as totalarea,
-        ru.builtuparea as builtarea,
-        pt.nooffloors as floors,
-        ru.occupancytype as occupancy,
-        pt.propertytype as propertytype,
+      --pt.plotsize as totalarea,
+      --ru.builtuparea as builtarea,
+      --pt.nooffloors as floors,
+      --ru.occupancytype as occupancy,
+      --pt.propertytype as propertytype,
         rp.payermobilenumber as mobilenumber,
         --ra.totalamount as paymentamount,
-        rp.amoutpaid as paymentamount,
+      --rp.amoutpaid as paymentamount,
         --rp.transactiondate as transcationdate,
-        owners.emailid as emailid,
+      --owners.emailid as emailid,
         pt.address as address,
-        pt.surveyid,
-        pt.additionaldetails->>'remarks' as remarks,
+      --pt.surveyid,
+      --pt.additionaldetails->>'remarks' as remarks,
         pt.additionaldetails->>'businessName' as firmbusinessname,
         pt.firmbusinessname as businessname,
-        pt.localitycode as localitycode,
+      --pt.localitycode as localitycode,
         pt.localityname as localityname,
-        pt.zonename as zonename,
-        pt.blockname as blockname,
-        pt.propertyusagetype as usagetype
+      --pt.zonename as zonename,
+      --pt.blockname as blockname,
+      --pt.propertyusagetype as usagetype
       from report_properties pt
       inner join units as ru on ru.propertyid=pt.propertyid 
       inner join report_payments as rp on  rp.propertyid=pt.propertyid and rp.paymentstatus!='CANCELLED'
