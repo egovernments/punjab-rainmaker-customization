@@ -6290,7 +6290,12 @@ ReportDefinitions:
     label: reports.pt.ownername
     type: string
     source: pt
-    total: false  
+    total: false
+  - name: surveyid
+    label: reports.pt.surveyid
+    type: string
+    source: pt
+    total: false    
   - name: guardianname
     label: reports.pt.guardianname
     type: string
@@ -6396,7 +6401,7 @@ ReportDefinitions:
         --rp.transactiondate as transcationdate,
       --owners.emailid as emailid,
         pt.address as address,
-      --pt.surveyid,
+        pt.surveyid,
       --pt.additionaldetails->>'remarks' as remarks,
         pt.additionaldetails->>'businessName' as firmbusinessname,
         pt.firmbusinessname as businessname,
