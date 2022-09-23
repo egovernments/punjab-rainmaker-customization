@@ -764,32 +764,32 @@
               },
               {
                 "path": "http://billing-service:8080/billing-service/demand/_search",
-                "queryParam": "tenantId=$.tenantId,consumerCode=$.consumerCode,businessService=SW",
+                "queryParam": "tenantId=$.tenantId,consumerCode=$.consumerCode,businessService=SW,filter=%5B?(@.status=='ACTIVE')%5D",
                 "apiRequest": null,
                 "responseMapping": [
                   {
                     "variable": "ws_advanceAmount",
-                    "value": "$.Demands[(@.length-1)].demandDetails[?(@.taxHeadMasterCode == 'WS_ADVANCE_CARRYFORWARD')].taxAmount"
+                    "value": "$.Demands[(@.length-1)].demandDetails[?(@.taxHeadMasterCode == 'SW_ADVANCE_CARRYFORWARD')].taxAmount"
                   },
                   {
                     "variable": "ws_roundoff",
-                    "value": "$.Demands[(@.length-1)].demandDetails[?(@.taxHeadMasterCode == 'WS_Round_Off')].taxAmount"
+                    "value": "$.Demands[(@.length-1)].demandDetails[?(@.taxHeadMasterCode == 'SW_Round_Off')].taxAmount"
                   },
                   {
                     "variable": "ws_charge",
-                    "value": "$.Demands[(@.length-1)].demandDetails[?(@.taxHeadMasterCode == 'WS_CHARGE')].taxAmount"
+                    "value": "$.Demands[(@.length-1)].demandDetails[?(@.taxHeadMasterCode == 'SW_CHARGE')].taxAmount"
                   },
                   {
                     "variable": "ws_water_cess",
-                    "value": "$.Demands[(@.length-1)].demandDetails[?(@.taxHeadMasterCode == 'WS_WATER_CESS')].taxAmount"
+                    "value": "$.Demands[(@.length-1)].demandDetails[?(@.taxHeadMasterCode == 'SW_WATER_CESS')].taxAmount"
                   },
                   {
                     "variable": "ws_time_interest",
-                    "value": "$.Demands[(@.length-1)].demandDetails[?(@.taxHeadMasterCode == 'WS_TIME_INTEREST')].taxAmount"
+                    "value": "$.Demands[(@.length-1)].demandDetails[?(@.taxHeadMasterCode == 'SW_TIME_INTEREST')].taxAmount"
                   },
                   {
                     "variable": "ws_time_penalty",
-                    "value": "$.Demands[(@.length-1)].demandDetails[?(@.taxHeadMasterCode == 'WS_TIME_PENALTY')].taxAmount"
+                    "value": "$.Demands[(@.length-1)].demandDetails[?(@.taxHeadMasterCode == 'SW_TIME_PENALTY')].taxAmount"
                   }
                 ]
               },

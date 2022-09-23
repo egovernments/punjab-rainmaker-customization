@@ -837,6 +837,10 @@
         ]
       },
       {
+        "text": "Authorized Signatory",
+        "style": "footer-bottom"
+      },
+      {
         "image": "{{scissorImage}}",
         "width": 19,
         "height": 19,
