@@ -1086,152 +1086,6 @@ ReportDefinitions:
     AND eg_pgr_service.status IN ('open','assigned','reassigrequested','rejected','closed','resolved')
   orderby: ORDER BY servicerequestid, epa."when" desc
 
-- reportName: DescriptionReport_NEW_v2
-  decryptionPathId: DescriptionReport_v2
-  summary: Fetches department wise reports based description of the complaint
-  version: 1.0.0
-  moduleName: rainmaker-pgr
-  externalService:
-  - entity: $.MdmsRes.RAINMAKER-PGR.ServiceDefs
-    apiURL: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?moduleName=RAINMAKER-PGR&masterName=ServiceDefs&tenantId=$tenantId
-    keyOrder: serviceCode,department,slaHours
-    tableName: tbl_dept
-  - entity: $.MdmsRes.common-masters.Department
-    apiURL: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?moduleName=common-masters&masterName=Department&tenantId=$tenantId
-    keyOrder: name,code
-    tableName: tbl_def_dept
-  - entity: $.TenantBoundary[0].boundary
-    apiURL: http://egov-location.egov:8080/egov-location/location/v11/boundarys/_search?hierarchyTypeCode=ADMIN&boundaryType=Locality&tenantId=$tenantId
-    keyOrder: name,code
-    tableName: tbl_boundary
-  sourceColumns:
-  - name: department
-    label: reports.rainmaker-pgr.department
-    type: string
-    source: eg_pgr_service
-    total: false
-  - name: servicecode
-    label: reports.rainmaker-pgr.servicecode
-    type: string
-    source: eg_pgr_service
-    total: false
-  - name: complaintNo
-    label: reports.rainmaker-pgr.complaintNo
-    type: string
-    source: eg_pgr_service
-    total: false
-  - name: date
-    label: reports.rainmaker-pgr.date
-    type: string
-    source: eg_pgr_service
-    total: false
-  - name: name
-    label: reports.rainmaker-pgr.name
-    type: string
-    source: eg_pgr_service
-    total: false
-  - name: phone
-    label: reports.rainmaker-pgr.phone
-    type: string
-    source: eg_pgr_service
-    total: false
-  - name: address
-    label: reports.rainmaker-pgr.address
-    type: string
-    source: eg_pgr_service
-    total: false
-  - name: locality
-    label: reports.rainmaker-pgr.locality
-    type: string
-    source: eg_pgr_service
-    total: false
-  - name: landmark
-    label: reports.rainmaker-pgr.landmark
-    type: string
-    source: eg_pgr_service
-    total: false
-  - name: description
-    label: reports.rainmaker-pgr.description
-    type: string
-    source: eg_pgr_service
-    total: false
-  - name: lastassignedto
-    label: reports.rainmaker-pgr.lastassignedto
-    type: string
-    source: eg_pgr_service
-    total: false
-  - name: status
-    label: reports.rainmaker-pgr.status
-    type: string
-    source: eg_pgr_service
-    total: false
-  - name: slahours
-    label: reports.rainmaker-pgr.slahours
-    type: string
-    source: eg_pgr_service
-    total: false
-  - name: actiondate
-    label: reports.rainmaker-pgr.actiondate
-    type: string
-    source: eg_pgr_service
-    total: false
-  - name: source
-    label: reports.rainmaker-pgr.source
-    type: string
-    source: eg_pgr_service
-    total: false
-  searchParams:
-  - name: fromDate
-    label: reports.rainmaker-pgr.datefrom
-    type: epoch
-    source: eg_pgr_service
-    isMandatory: false
-    searchClause: AND eg_pgr_service.createdtime >= $fromDate
-  - name: toDate
-    label: reports.rainmaker-pgr.dateto
-    type: epoch
-    source: eg_pgr_service
-    isMandatory: false
-    searchClause: AND eg_pgr_service.createdtime <= $toDate
-  query: |
-    with comps as
-    (
-      select businesskey,max(eg_pgr_action.when) as actiontime
-      from eg_pgr_action
-      where tenantid=$tenantid
-      group by businesskey
-    )
-    SELECT
-      DISTINCT ON (servicerequestid)
-      (case when ua.name is null then '30048|23/xn3x2FAxn8vYAN0IdplsOxaE=' else ua.name::varchar end) as lastassignedto,  --value for Unassigned
-      (SELECT deptmap_def.name FROM (VALUES tbl_def_dept) AS deptmap_def(name,code) INNER JOIN (VALUES tbl_dept) AS deptmap(serviceCode, department, slaHours) on deptmap.serviceCode = eg_pgr_service.servicecode and deptmap_def.code = deptmap.department) AS department,
-      regexp_replace(servicecode, '([a-z])([A-Z])', '\1 \2','g') AS servicecode,
-      (SELECT boundary_def.name FROM (VALUES tbl_boundary) AS boundary_def(name,code) where code=eg_pgr_address.mohalla) as locality,
-      servicerequestid AS complaintNo,
-      to_char(to_timestamp(TRUNC(CAST(eg_pgr_service.createdtime AS bigint) / 1000)), 'DD/MM/YYYY') AS date,
-      (case when eg_user.name is null then '30048|23/xn3x2FAxn8vYAN0IdplsOxaE=' else eg_user.name end) as name,  --value for NULL
-      phone,
-      eg_pgr_address.landmark,
-      eg_pgr_address.housenoandstreetname as address,
-      description,
-      source,
-      (SELECT (CASE WHEN (((SELECT deptmap.slaHours FROM (VALUES tbl_dept) AS deptmap(serviceCode, department, slaHours) WHERE deptmap.serviceCode = eg_pgr_service.servicecode)::integer / 24) - (epa.when - eg_pgr_service.createdtime)::bigint/86400000) < 1 THEN CONCAT('Overdue by ', ((epa.when - eg_pgr_service.createdtime)::bigint/86400000) - ((SELECT deptmap.slaHours FROM (VALUES tbl_dept) AS deptmap(serviceCode, department, slaHours) WHERE deptmap.serviceCode = eg_pgr_service.servicecode)::integer / 24), ' days') ELSE CONCAT(((SELECT deptmap.slaHours FROM (VALUES tbl_dept) AS deptmap(serviceCode, department, slaHours) WHERE deptmap.serviceCode = eg_pgr_service.servicecode)::integer / 24) - (epa.when - eg_pgr_service.createdtime)::bigint/86400000, ' days remaining') END) as slaHours),
-      Initcap(eg_pgr_service.status) as status,
-      to_char((To_timestamp(epa.when/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY')  AS actiondate
-    FROM eg_pgr_service
-    left outer join eg_pgr_address on eg_pgr_address.uuid = eg_pgr_service.addressid
-    left outer join eg_user on eg_user.id = eg_pgr_service.accountid::int
-    left outer join eg_pgr_action as epa on epa.businesskey = eg_pgr_service.servicerequestid and epa.action in ('assign','reassign','resolve')
-    inner join comps on concat(comps.actiontime,comps.businesskey)=concat(epa.when,epa.businesskey) and comps.businesskey=eg_pgr_service.servicerequestid and comps.actiontime=epa.when
-    --left outer join eg_user as ua on (ua.id = epa.assignee::integer  or ua.id = split_part(epa.by,':',1)::INTEGER)
-    left outer join eg_user as ua on (ua.id = (case when epa.assignee is not null then epa.assignee::integer  else  split_part(epa.by,':',1)::INTEGER end))
-    WHERE
-    eg_pgr_service.tenantid LIKE  $tenantid
-    AND eg_pgr_address.uuid = eg_pgr_service.addressid
-    AND eg_pgr_service.status IN ('open','assigned','reassigrequested','rejected','closed','resolved')
-  orderby: ORDER BY servicerequestid, epa."when" desc
-
-
 - reportName: StateSourceReport_v2
   summary: Source of complaints across tenants
   version: 1.0.0
@@ -1384,7 +1238,7 @@ ReportDefinitions:
     SELECT (SELECT deptmap.department FROM (VALUES tbl_dept) AS deptmap(serviceCode, department, slaHours) WHERE deptmap.serviceCode = eg_pgr_service.servicecode) AS department, 
     regexp_replace(eg_pgr_service.servicecode, '([a-z])([A-Z])', '\1 \2','g') AS servicecode, 
     servicerequestid AS complaintNo, 
-    to_char(to_timestamp(TRUNC(eg_pgr_service.createdtime::Integer / 1000)), 'DD/MM/YYYY') AS date, 
+    to_char(to_timestamp(TRUNC(CAST(eg_pgr_service.createdtime AS bigint) / 1000)), 'DD/MM/YYYY') AS date, 
     (SELECT boundary_def.name FROM (VALUES tbl_boundary) AS boundary_def(name,code) where code=eg_pgr_address.mohalla) as locality, 
     eg_user.name, 
     phone, 
@@ -1798,8 +1652,9 @@ ReportDefinitions:
   groupby: GROUP BY assignee
   orderby: ORDER BY assignee NULLS FIRST
 
+  
 - reportName: UlbPgrSlaReport_v2
-  summary: Fetches employee sla
+  summary: Fetches employee sla for state
   version: 1.0.0
   moduleName: rainmaker-pgr
   sourceColumns:
@@ -2049,8 +1904,10 @@ ReportDefinitions:
     WHERE tenantid != 'pb.testing'
   groupby: GROUP BY tenantid,servicecode
   orderby: ORDER BY tenantid,servicecode
-
-
+  
+  
+  
+  
 - reportName: StateDescriptionReport_v2
   decryptionPathId: DescriptionReport_v2
   summary: Fetches state description wise reports 
@@ -2116,11 +1973,6 @@ ReportDefinitions:
     type: string
     source: eg_pgr_service
     total: false
-  - name: employeeid_lastassignedto
-    label: reports.rainmaker-pgr.employeeid_lastassignedto
-    type: string
-    source: eg_pgr_service
-    total: false
   - name: status
     label: reports.rainmaker-pgr.status
     type: string
@@ -2147,14 +1999,6 @@ ReportDefinitions:
     source: eg_pgr_service
     total: false
   searchParams:
-  - name: ulb
-    label: ULB
-    type: singlevaluelist
-    pattern: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?tenantId=$tenantid&moduleName=tenant&masterName=tenants|$.MdmsRes.tenant.tenants.*.code|$.MdmsRes.tenant.tenants.*.name
-    source: pt
-    wrapper: true
-    isMandatory: false
-    searchClause: AND eg_pgr_service.tenantid = $ulb
   - name: fromDate
     label: reports.rainmaker-pgr.datefrom
     type: epoch
@@ -2171,7 +2015,6 @@ ReportDefinitions:
     SELECT 
     DISTINCT ON (servicerequestid)
     (case when ua.name is null then '30048|23/xn3x2FAxn8vYAN0IdplsOxaE=' else ua.name end) as lastassignedto,  --value for Unassigned
-    (case when ua.name is null then '30048|23/xn3x2FAxn8vYAN0IdplsOxaE=' else eg_hrms_employee.code end) as employeeid_lastassignedto,
     (SELECT deptmap_def.name FROM (VALUES tbl_def_dept) AS deptmap_def(name,code) INNER JOIN (VALUES tbl_dept) AS deptmap(serviceCode, department, slaHours) on deptmap.serviceCode = eg_pgr_service.servicecode and deptmap_def.code = deptmap.department) AS department, 
     regexp_replace(servicecode, '([a-z])([A-Z])', '\1 \2','g') AS servicecode, 
     --(SELECT boundary_def.name FROM (VALUES tbl_boundary) AS boundary_def(name,code) where code=eg_pgr_address.mohalla) as locality, 
@@ -2192,13 +2035,12 @@ ReportDefinitions:
     left outer join eg_user on eg_user.id = eg_pgr_service.accountid::int
     left outer join eg_pgr_action as epa on epa.businesskey = eg_pgr_service.servicerequestid and epa.action in ('assign','reassign','resolve')
     left outer join eg_user as ua on (ua.id = epa.assignee::int or ua.id = split_part(epa.by,':',1)::INTEGER)
-    left outer join eg_hrms_employee on eg_pgr_service.lastmodifiedby::bigint = eg_hrms_employee.id
     WHERE 
     eg_pgr_service.tenantid !='pb.testing'
     AND eg_pgr_address.uuid = eg_pgr_service.addressid
     AND eg_pgr_service.status IN ('open','assigned','reassigrequested','rejected','closed','resolved')
   orderby: ORDER BY servicerequestid, epa."when" desc
-  
+ 
 - reportName: UlbwisePgrSlaReport_v2
   summary: Fetches Ulb employee sla
   version: 1.0.0
@@ -2272,4 +2114,150 @@ ReportDefinitions:
     from eg_pgr_service,pgr_data
     WHERE tenantid = $tenantid and eg_pgr_service.servicerequestid=pgr_data.servicerequestid
   groupby: GROUP BY tenantid,eg_pgr_service.servicecode
-  orderby: ORDER BY tenantid,eg_pgr_service.servicecode  
+  orderby: ORDER BY tenantid,eg_pgr_service.servicecode
+  
+- reportName: WBDescriptionReport_NEW_v2
+  decryptionPathId: DescriptionReport_v2
+  summary: Fetches department wise reports based description of the complaint
+  version: 1.0.0
+  moduleName: rainmaker-pgr
+  externalService:
+  - entity: $.MdmsRes.RAINMAKER-PGR.ServiceDefs
+    apiURL: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?moduleName=RAINMAKER-PGR&masterName=ServiceDefs&tenantId=$tenantId
+    keyOrder: serviceCode,department,slaHours
+    tableName: tbl_dept
+  - entity: $.MdmsRes.common-masters.Department
+    apiURL: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?moduleName=common-masters&masterName=Department&tenantId=$tenantId
+    keyOrder: name,code
+    tableName: tbl_def_dept
+  - entity: $.TenantBoundary[0].boundary
+    apiURL: http://egov-location.egov:8080/egov-location/location/v11/boundarys/_search?hierarchyTypeCode=ADMIN&boundaryType=Locality&tenantId=$tenantId
+    keyOrder: name,code
+    tableName: tbl_boundary
+  sourceColumns:
+  - name: department
+    label: reports.rainmaker-pgr.department
+    type: string
+    source: eg_pgr_service
+    total: false
+  - name: servicecode
+    label: reports.rainmaker-pgr.servicecode
+    type: string
+    source: eg_pgr_service
+    total: false
+  - name: complaintNo
+    label: reports.rainmaker-pgr.complaintNo
+    type: string
+    source: eg_pgr_service
+    total: false
+  - name: date
+    label: reports.rainmaker-pgr.date
+    type: string
+    source: eg_pgr_service
+    total: false
+  - name: name
+    label: reports.rainmaker-pgr.name
+    type: string
+    source: eg_pgr_service
+    total: false
+  - name: phone
+    label: reports.rainmaker-pgr.phone
+    type: string
+    source: eg_pgr_service
+    total: false
+  - name: address
+    label: reports.rainmaker-pgr.address
+    type: string
+    source: eg_pgr_service
+    total: false
+  - name: locality
+    label: reports.rainmaker-pgr.locality
+    type: string
+    source: eg_pgr_service
+    total: false
+  - name: landmark
+    label: reports.rainmaker-pgr.landmark
+    type: string
+    source: eg_pgr_service
+    total: false
+  - name: description
+    label: reports.rainmaker-pgr.description
+    type: string
+    source: eg_pgr_service
+    total: false
+  - name: lastassignedto
+    label: reports.rainmaker-pgr.lastassignedto
+    type: string
+    source: eg_pgr_service
+    total: false
+  - name: status
+    label: reports.rainmaker-pgr.status
+    type: string
+    source: eg_pgr_service
+    total: false
+  - name: slahours
+    label: reports.rainmaker-pgr.slahours
+    type: string
+    source: eg_pgr_service
+    total: false
+  - name: actiondate
+    label: reports.rainmaker-pgr.actiondate
+    type: string
+    source: eg_pgr_service
+    total: false
+  - name: source
+    label: reports.rainmaker-pgr.source
+    type: string
+    source: eg_pgr_service
+    total: false
+  searchParams:
+  - name: fromDate
+    label: reports.rainmaker-pgr.datefrom
+    type: epoch
+    source: eg_pgr_service
+    isMandatory: false
+    searchClause: AND eg_pgr_service.createdtime >= $fromDate
+  - name: toDate
+    label: reports.rainmaker-pgr.dateto
+    type: epoch
+    source: eg_pgr_service
+    isMandatory: false
+    searchClause: AND eg_pgr_service.createdtime <= $toDate
+  query: |
+    with comps as
+    (
+      select businesskey,max(eg_pgr_action.when) as actiontime
+      from eg_pgr_action
+      where tenantid=$tenantid
+      group by businesskey
+    )
+    SELECT
+      DISTINCT ON (servicerequestid)
+      (case when ua.name is null then '30048|23/xn3x2FAxn8vYAN0IdplsOxaE=' else ua.name::varchar end) as lastassignedto,  --value for Unassigned
+      (SELECT deptmap_def.name FROM (VALUES tbl_def_dept) AS deptmap_def(name,code) INNER JOIN (VALUES tbl_dept) AS deptmap(serviceCode, department, slaHours) on deptmap.serviceCode = eg_pgr_service.servicecode and deptmap_def.code = deptmap.department) AS department,
+      regexp_replace(servicecode, '([a-z])([A-Z])', '\1 \2','g') AS servicecode,
+      (SELECT boundary_def.name FROM (VALUES tbl_boundary) AS boundary_def(name,code) where code=eg_pgr_address.mohalla) as locality,
+      servicerequestid AS complaintNo,
+      to_char(to_timestamp(TRUNC(CAST(eg_pgr_service.createdtime AS bigint) / 1000)), 'DD/MM/YYYY') AS date,
+      (case when eg_user.name is null then '30048|23/xn3x2FAxn8vYAN0IdplsOxaE=' else eg_user.name end) as name,  --value for NULL
+      phone,
+      eg_pgr_address.landmark,
+      eg_pgr_address.housenoandstreetname as address,
+      description,
+      source,
+      (SELECT (CASE WHEN (((SELECT deptmap.slaHours FROM (VALUES tbl_dept) AS deptmap(serviceCode, department, slaHours) WHERE deptmap.serviceCode = eg_pgr_service.servicecode)::integer / 24) - (epa.when - eg_pgr_service.createdtime)::bigint/86400000) < 1 THEN CONCAT('Overdue by ', ((epa.when - eg_pgr_service.createdtime)::bigint/86400000) - ((SELECT deptmap.slaHours FROM (VALUES tbl_dept) AS deptmap(serviceCode, department, slaHours) WHERE deptmap.serviceCode = eg_pgr_service.servicecode)::integer / 24), ' days') ELSE CONCAT(((SELECT deptmap.slaHours FROM (VALUES tbl_dept) AS deptmap(serviceCode, department, slaHours) WHERE deptmap.serviceCode = eg_pgr_service.servicecode)::integer / 24) - (epa.when - eg_pgr_service.createdtime)::bigint/86400000, ' days remaining') END) as slaHours),
+      Initcap(eg_pgr_service.status) as status,
+      to_char((To_timestamp(epa.when/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY')  AS actiondate
+    FROM eg_pgr_service
+    left outer join eg_pgr_address on eg_pgr_address.uuid = eg_pgr_service.addressid
+    left outer join eg_user on eg_user.id = eg_pgr_service.accountid::int
+    left outer join eg_pgr_action as epa on epa.businesskey = eg_pgr_service.servicerequestid and epa.action in ('assign','reassign','resolve')
+    inner join comps on concat(comps.actiontime,comps.businesskey)=concat(epa.when,epa.businesskey) and comps.businesskey=eg_pgr_service.servicerequestid and comps.actiontime=epa.when
+    --left outer join eg_user as ua on (ua.id = epa.assignee::integer  or ua.id = split_part(epa.by,':',1)::INTEGER)
+    left outer join eg_user as ua on (ua.id = (case when epa.assignee is not null then epa.assignee::integer  else  split_part(epa.by,':',1)::INTEGER end))
+    WHERE
+    eg_pgr_service.tenantid LIKE  $tenantid AND 
+    eg_pgr_service.servicecode in ('PipelineWorkTrafficJam','PipelineWorkTrenchpitNotBackfilled','PipelineWorkHouseConnectionDamaged','PipelineWorkRoadNotRestored','CivilWorksOverheadReservoirTank','CivilWorksWaterTreatmentPlant','EnvironmentalImpactHazardousMaterialAtSiteEtc','EnvironmentalImpactNoiseAndAirPollution','EnvironmentalImpactVehiclePollution','EnvironmentalImpactSoilContamination','EnvironmentalImpactSoilErosion','EnvironmentalImpactUnauthorisedTreeCutting','SocialImpactSexualHarrasmentAtWorkSiteEtc','SocialImpactResettlementOrRehabilitation','SocailImpactDamageOfProperty')
+    AND eg_pgr_address.uuid = eg_pgr_service.addressid
+    AND eg_pgr_service.status IN ('open','assigned','reassigrequested','rejected','closed','resolved')
+  orderby: ORDER BY servicerequestid, epa."when" desc
