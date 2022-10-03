@@ -8472,13 +8472,13 @@ ReportDefinitions:
     type: epoch
     source: pt
     isMandatory: true
-    searchClause: AND 1=1
+    searchClause: AND pt.createdtime>=$fromDate
   - name: toDate
     label: reports.pt.toDate
     type: epoch
     source: pt
     isMandatory: true
-    searchClause: AND 1=1
+    searchClause: AND pt.createdtime<=$toDate
   query: |
       -- Use CTE to force query plan, compute & use CTE later
       with owners as 
