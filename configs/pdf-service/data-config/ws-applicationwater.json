@@ -1084,6 +1084,10 @@
                     "type": "image"
                   },
                   {
+                    "variable":"mcGrade",
+                    "value":"$.MdmsRes.tenant.tenants[0].city.pwssbGrade"
+                  },
+                  {
                     "variable": "logo_header",
                     "value": "$.MdmsRes.tenant.tenants[0].code",
                     "localisation": {

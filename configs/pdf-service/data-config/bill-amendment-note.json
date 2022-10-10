@@ -554,6 +554,10 @@
                     "value":"$.MdmsRes.tenant.tenants[0].contactNumber"
                   },
                   {
+                    "variable":"mcGrade",
+                    "value":"$.MdmsRes.tenant.tenants[0].city.pwssbGrade"
+                  },
+                  {
                     "variable":"website",
                     "value":"$.MdmsRes.tenant.tenants[0].domainUrl"
                   },
