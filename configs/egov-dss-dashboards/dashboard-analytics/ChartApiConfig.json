@@ -1796,7 +1796,7 @@
     "filterKeys": [
       {"key": "tenantId", "column": "DDRs"}
     ],
-    "chartType": "table",
+    "chartType": "xtable",
     "valueType": "number",
     "drillChart": "tlStatusByTenant",
     "drillFields": [
@@ -1864,7 +1864,7 @@
     "filterKeys": [
       {"key": "tenantId", "column": "Boundary"}
     ],
-    "chartType": "table",
+    "chartType": "xtable",
     "valueType": "number",
     "drillChart": "tlStatusByTenantDrillDown",
     "drillFields": [
@@ -1931,7 +1931,7 @@
     ],
     "filterKeys": [
     ],
-    "chartType": "table",
+    "chartType": "xtable",
     "valueType": "number",
     "drillChart": "",
     "drillFields": [
