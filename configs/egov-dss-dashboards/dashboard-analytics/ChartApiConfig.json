@@ -1874,10 +1874,44 @@
     "action": "",
     "plotLabel": "ULBs",
     "aggregationPaths": [
-
+      "Approved",
+      "Initiated",
+      "Applied",
+      "Rejected",
+      "Pending Approval",
+      "Field Inspection",
+      "Cancelled",
+      "Pending Payment",
+      "Paid"
     ],
     "pathDataTypeMapping": [
-
+       {
+        "Approved": "number"
+      },
+      {
+        "Initiated": "number"
+      },
+      {
+        "Applied": "number"
+      },
+      {
+        "Rejected": "number"
+      },
+      {
+        "Pending Approval": "number"
+      },
+      {
+        "Field Inspection": "number"
+      },
+      {
+        "Cancelled": "number"
+      },
+      {
+        "Pending Payment": "number"
+      },
+      {
+        "Paid": "number"
+      }
     ],
     "insight": {
     },
