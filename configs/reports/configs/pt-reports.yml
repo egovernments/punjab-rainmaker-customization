@@ -8224,7 +8224,7 @@ ReportDefinitions:
     inner join eg_pt_address pa on pa.propertyid=pt.id
     inner join eg_pt_owner po on po.propertyid=pt.id inner join eg_user u on u.uuid=po.userid and u.active=true
     where p.totalamountpaid>=10000
-  orderby: order by p.totalamountpaid desc 
+  orderby: order by p.totalamountpaid desc limit 300
  
 - reportName: TopPayersReportRESD_V2
   decryptionPathId: ULBDEFAULTERPTREPORT_V2
