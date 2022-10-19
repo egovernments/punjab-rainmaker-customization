@@ -8203,7 +8203,7 @@ ReportDefinitions:
     pattern: 'list://2015-16:2015-16,2016-17:2016-17,2017-18:2017-18,2017-18:2017-18,2018-19:2018-19,2019-20:2019-20,2020-21:2020-21,2021-22:2021-22,2022-23:2022-23'
     source: pt
     isMandatory: true
-    searchClause: AND to_char((To_timestamp(bd.fromperiod/1000) at time Zone 'Asia/Kolkata'),'YYYY') || '-' || to_char((To_timestamp(bd.toperiod/1000) at time Zone 'Asia/Kolkata'),'YY')=$finYear
+    searchClause: AND (to_char((To_timestamp(bd.fromperiod/1000) at time Zone 'Asia/Kolkata'),'YYYY') || '-' || to_char((To_timestamp(bd.toperiod/1000) at time Zone 'Asia/Kolkata'),'YY'))=$finYear
   - name: usageCat
     label: Usage Category
     type: singlevaluelist
