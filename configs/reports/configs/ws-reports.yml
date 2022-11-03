@@ -58,6 +58,11 @@ ReportDefinitions:
     type: string
     source: ws
     total: false
+  - name: mobilenumber
+    label: reports.ws.mobilenumber
+    type: string
+    source: ws
+    total: false   
   searchParams:
   - name: fromDate
     label: reports.pt.fromDate
@@ -110,10 +115,12 @@ ReportDefinitions:
       amountpaid,
       paymentmode,
       paymentstatus,
+      usr.mobilenumber as mobilenumber,
       payername as ownername
     from egcl_paymentdetail pd
-    inner join egcl_bill as bill on bill.id=pd.billid 
-    inner join egcl_payment as payment on payment.id=pd.paymentid and payment.paymentstatus!='CANCELLED'
+    inner join egcl_bill as bill on bill.id=pd.billid    
+    inner join egcl_payment as payment on payment.id=pd.paymentid 
+    inner join eg_user as usr on usr.id=payment.createdby::integer and payment.paymentstatus!='CANCELLED'
     where payment.tenantid=$tenantid
   orderby: order by pd.receiptdate desc
 
