@@ -20,7 +20,7 @@ ReportDefinitions:
     source: ws
     total: false    
   - name: mobileno
-    label: reports.pt.mobileno
+    label: reports.ws.mobileno
     type: string
     source: ws
     total: false   
@@ -114,7 +114,7 @@ ReportDefinitions:
     select
       receiptnumber as receiptno,
       wsconnection.connectionno as connectionno,
-      usr.mobilenumber as mobilenumber,
+      usr.mobilenumber as mobileno,
       to_char((To_timestamp(pd.receiptdate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY') as receiptdate1,
       bill.businessservice as service,
       billnumber,
