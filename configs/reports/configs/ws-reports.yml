@@ -64,8 +64,8 @@ ReportDefinitions:
     type: string
     source: ws
     total: false
-  - name: ownername
-    label: reports.ws.ownername
+  - name: ownername1
+    label: reports.ws.ownername1
     type: string
     source: ws
     total: false   
@@ -123,7 +123,7 @@ ReportDefinitions:
       amountpaid,
       paymentmode,
       paymentstatus,      
-      payername as ownername
+      payername as ownername1
     from egcl_paymentdetail pd
     inner join egcl_bill as bill on bill.id=pd.billid    
     inner join egcl_payment as payment on payment.id=pd.paymentid
