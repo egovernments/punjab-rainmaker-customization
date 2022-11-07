@@ -16,6 +16,8 @@ ServiceMaps:
         fieldMapping:
         - inJsonPath: $
           outJsonPath: $.Data.tradelicense
+        - inJsonPath: $.tradeLicenseDetail.tradeUnits[0].tradeType
+          outJsonPath: $.Data.tradeType         
         externalUriMapping:
         - path: http://egov-location.egov:8080/egov-location/location/v11/boundarys/_search
           queryParam: hierarchyTypeCode=REVENUE,boundaryType=locality,codes=$.tradeLicenseDetail.address.locality.code,tenantId=$.tenantId
@@ -96,6 +98,9 @@ ServiceMaps:
         fieldMapping:
         - inJsonPath: $
           outJsonPath: $.Data.tradelicense
+        - inJsonPath: $.tradeLicenseDetail.tradeUnits[0].tradeType
+          outJsonPath: $.Data.tradeType         
+
         externalUriMapping:
         - path: http://egov-location.egov:8080/egov-location/location/v11/boundarys/_search
           queryParam: hierarchyTypeCode=REVENUE,boundaryType=locality,codes=$.tradeLicenseDetail.address.locality.code,tenantId=$.tenantId
