@@ -2528,7 +2528,7 @@ ReportDefinitions:
     (
       select businesskey,max(eg_pgr_action.when) as actiontime
       from eg_pgr_action
-      where tenantid!='pb.testing'
+      where tenantid !='pb.testing'
       group by businesskey
     )
     SELECT
@@ -2556,7 +2556,7 @@ ReportDefinitions:
     --left outer join eg_user as ua on (ua.id = epa.assignee::integer  or ua.id = split_part(epa.by,':',1)::INTEGER)
     left outer join eg_user as ua on (ua.id = (case when epa.assignee is not null then epa.assignee::integer  else  split_part(epa.by,':',1)::INTEGER end))
     WHERE
-    eg_pgr_service.tenantid!='pb.testing' AND 
+    eg_pgr_service.tenantid !='pb.testing' AND 
     eg_pgr_service.servicecode in ('PipelineWorkTrafficJam','PipelineWorkTrenchpitNotBackfilled','PipelineWorkHouseConnectionDamaged','PipelineWorkRoadNotRestored','CivilWorksOverheadReservoirTank','CivilWorksWaterTreatmentPlant','EnvironmentalImpactHazardousMaterialAtSiteEtc','EnvironmentalImpactNoiseAndAirPollution','EnvironmentalImpactVehiclePollution','EnvironmentalImpactSoilContamination','EnvironmentalImpactSoilErosion','EnvironmentalImpactUnauthorisedTreeCutting','SocialImpactSexualHarrasmentAtWorkSiteEtc','SocialImpactResettlementOrRehabilitation','SocailImpactDamageOfProperty','SocialImpactLossOfLivelihood')
     AND eg_pgr_address.uuid = eg_pgr_service.addressid
     AND eg_pgr_service.status IN ('open','assigned','reassigrequested','rejected','closed','resolved')
