@@ -2556,6 +2556,6 @@ ReportDefinitions:
     eg_pgr_service.servicecode in ('PipelineWorkTrafficJam','PipelineWorkTrenchpitNotBackfilled','PipelineWorkHouseConnectionDamaged','PipelineWorkRoadNotRestored','CivilWorksOverheadReservoirTank','CivilWorksWaterTreatmentPlant','EnvironmentalImpactHazardousMaterialAtSiteEtc','EnvironmentalImpactNoiseAndAirPollution','EnvironmentalImpactVehiclePollution','EnvironmentalImpactSoilContamination','EnvironmentalImpactSoilErosion','EnvironmentalImpactUnauthorisedTreeCutting','SocialImpactSexualHarrasmentAtWorkSiteEtc','SocialImpactResettlementOrRehabilitation','SocailImpactDamageOfProperty','SocialImpactLossOfLivelihood')
     AND eg_pgr_address.uuid = eg_pgr_service.addressid
     AND eg_pgr_service.status IN ('open','assigned','reassigrequested','rejected','closed','resolved')
-  orderby: ORDER BY servicerequestid, epa."when" desc  
+  orderby: ORDER BY servicerequestid, epa.when desc  
   
   
