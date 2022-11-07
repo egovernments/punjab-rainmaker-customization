@@ -2528,7 +2528,7 @@ ReportDefinitions:
     (
       select businesskey,max(eg_pgr_action.when) as actiontime
       from eg_pgr_action
-      where tenantid!=$tenantid
+      where tenantid!='pb.testing'
       group by businesskey
     )
     SELECT
