@@ -2018,7 +2018,7 @@ ReportDefinitions:
     source: pt
     wrapper: true
     isMandatory: false
-    searchClause: AND tenantid = $ulb  
+    searchClause: AND eg_pgr_service.tenantid = $ulb  
     
   query: |
     SELECT 
