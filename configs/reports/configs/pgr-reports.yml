@@ -2378,41 +2378,33 @@ ReportDefinitions:
     isMandatory: false
     searchClause: AND eg_pgr_service.createdtime <= $toDate
   query: |
-    with comps as
-    (
-      select businesskey,max(eg_pgr_action.when) as actiontime
-      from eg_pgr_action
-      where tenantid=$tenantid
-      group by businesskey
-    )
-    SELECT
-      DISTINCT ON (servicerequestid)
-      (case when ua.name is null then '30048|23/xn3x2FAxn8vYAN0IdplsOxaE=' else ua.name::varchar end) as lastassignedto,  --value for Unassigned
-      (SELECT deptmap_def.name FROM (VALUES tbl_def_dept) AS deptmap_def(name,code) INNER JOIN (VALUES tbl_dept) AS deptmap(serviceCode, department, slaHours) on deptmap.serviceCode = eg_pgr_service.servicecode and deptmap_def.code = deptmap.department) AS department,
-      regexp_replace(servicecode, '([a-z])([A-Z])', '\1 \2','g') AS servicecode,
-      (SELECT boundary_def.name FROM (VALUES tbl_boundary) AS boundary_def(name,code) where code=eg_pgr_address.mohalla) as locality,
-      servicerequestid AS complaintNo,
-      to_char(to_timestamp(TRUNC(CAST(eg_pgr_service.createdtime AS bigint) / 1000)), 'DD/MM/YYYY') AS date,
-      (case when eg_user.name is null then '30048|23/xn3x2FAxn8vYAN0IdplsOxaE=' else eg_user.name end) as name,  --value for NULL
-      phone,
-      eg_pgr_address.landmark,
-      eg_pgr_address.housenoandstreetname as address,
-      description,
-      source,
-      (SELECT (CASE WHEN (((SELECT deptmap.slaHours FROM (VALUES tbl_dept) AS deptmap(serviceCode, department, slaHours) WHERE deptmap.serviceCode = eg_pgr_service.servicecode)::integer / 24) - (epa.when - eg_pgr_service.createdtime)::bigint/86400000) < 1 THEN CONCAT('Overdue by ', ((epa.when - eg_pgr_service.createdtime)::bigint/86400000) - ((SELECT deptmap.slaHours FROM (VALUES tbl_dept) AS deptmap(serviceCode, department, slaHours) WHERE deptmap.serviceCode = eg_pgr_service.servicecode)::integer / 24), ' days') ELSE CONCAT(((SELECT deptmap.slaHours FROM (VALUES tbl_dept) AS deptmap(serviceCode, department, slaHours) WHERE deptmap.serviceCode = eg_pgr_service.servicecode)::integer / 24) - (epa.when - eg_pgr_service.createdtime)::bigint/86400000, ' days remaining') END) as slaHours),
-      Initcap(eg_pgr_service.status) as status,
-      to_char((To_timestamp(epa.when/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY')  AS actiondate
+    SELECT 
+    DISTINCT ON (servicerequestid)
+    (case when ua.name is null then '30048|23/xn3x2FAxn8vYAN0IdplsOxaE=' else ua.name end) as lastassignedto,  --value for Unassigned
+    (SELECT deptmap_def.name FROM (VALUES tbl_def_dept) AS deptmap_def(name,code) INNER JOIN (VALUES tbl_dept) AS deptmap(serviceCode, department, slaHours) on deptmap.serviceCode = eg_pgr_service.servicecode and deptmap_def.code = deptmap.department) AS department, 
+    regexp_replace(servicecode, '([a-z])([A-Z])', '\1 \2','g') AS servicecode, 
+    --(SELECT boundary_def.name FROM (VALUES tbl_boundary) AS boundary_def(name,code) where code=eg_pgr_address.mohalla) as locality, 
+    servicerequestid AS complaintNo, 
+    to_char(to_timestamp(TRUNC(CAST(eg_pgr_service.createdtime AS bigint) / 1000)), 'DD/MM/YYYY') AS date, 
+    (case when eg_user.name is null then '30048|23/xn3x2FAxn8vYAN0IdplsOxaE=' else eg_user.name end) as name,  --value for NULL
+    phone, 
+    eg_pgr_address.landmark, 
+    eg_pgr_address.housenoandstreetname as address, 
+    description,
+    source,
+    eg_pgr_service.tenantid,
+    (SELECT (CASE WHEN (((SELECT deptmap.slaHours FROM (VALUES tbl_dept) AS deptmap(serviceCode, department, slaHours) WHERE deptmap.serviceCode = eg_pgr_service.servicecode)::integer / 24) - (epa.when - eg_pgr_service.createdtime)::bigint/86400000) < 1 THEN CONCAT('Overdue by ', ((epa.when - eg_pgr_service.createdtime)::bigint/86400000) - ((SELECT deptmap.slaHours FROM (VALUES tbl_dept) AS deptmap(serviceCode, department, slaHours) WHERE deptmap.serviceCode = eg_pgr_service.servicecode)::integer / 24), ' days') ELSE CONCAT(((SELECT deptmap.slaHours FROM (VALUES tbl_dept) AS deptmap(serviceCode, department, slaHours) WHERE deptmap.serviceCode = eg_pgr_service.servicecode)::integer / 24) - (epa.when - eg_pgr_service.createdtime)::bigint/86400000, ' days remaining') END) as slaHours), 
+    Initcap(eg_pgr_service.status) as status,
+    to_char((To_timestamp(epa.when/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY')  AS actiondate
     FROM eg_pgr_service
     left outer join eg_pgr_address on eg_pgr_address.uuid = eg_pgr_service.addressid
     left outer join eg_user on eg_user.id = eg_pgr_service.accountid::int
     left outer join eg_pgr_action as epa on epa.businesskey = eg_pgr_service.servicerequestid and epa.action in ('assign','reassign','resolve')
-    inner join comps on concat(comps.actiontime,comps.businesskey)=concat(epa.when,epa.businesskey) and comps.businesskey=eg_pgr_service.servicerequestid and comps.actiontime=epa.when
-    --left outer join eg_user as ua on (ua.id = epa.assignee::integer  or ua.id = split_part(epa.by,':',1)::INTEGER)
-    left outer join eg_user as ua on (ua.id = (case when epa.assignee is not null then epa.assignee::integer  else  split_part(epa.by,':',1)::INTEGER end))
-    WHERE
-    eg_pgr_service.tenantid LIKE  $tenantid AND 
-    eg_pgr_service.servicecode in ('PipelineWorkTrafficJam','PipelineWorkTrenchpitNotBackfilled','PipelineWorkHouseConnectionDamaged','PipelineWorkRoadNotRestored','CivilWorksOverheadReservoirTank','CivilWorksWaterTreatmentPlant','EnvironmentalImpactHazardousMaterialAtSiteEtc','EnvironmentalImpactNoiseAndAirPollution','EnvironmentalImpactVehiclePollution','EnvironmentalImpactSoilContamination','EnvironmentalImpactSoilErosion','EnvironmentalImpactUnauthorisedTreeCutting','SocialImpactSexualHarrasmentAtWorkSiteEtc','SocialImpactResettlementOrRehabilitation','SocailImpactDamageOfProperty','SocialImpactLossOfLivelihood')
+    left outer join eg_user as ua on (ua.id = epa.assignee::int or ua.id = split_part(epa.by,':',1)::INTEGER)
+    WHERE 
+    eg_pgr_service.tenantid LIKE  $tenantid
     AND eg_pgr_address.uuid = eg_pgr_service.addressid
+    AND eg_pgr_service.servicecode in ('PipelineWorkTrafficJam','PipelineWorkTrenchpitNotBackfilled','PipelineWorkHouseConnectionDamaged','PipelineWorkRoadNotRestored','CivilWorksOverheadReservoirTank','CivilWorksWaterTreatmentPlant','EnvironmentalImpactHazardousMaterialAtSiteEtc','EnvironmentalImpactNoiseAndAirPollution','EnvironmentalImpactVehiclePollution','EnvironmentalImpactSoilContamination','EnvironmentalImpactSoilErosion','EnvironmentalImpactUnauthorisedTreeCutting','SocialImpactSexualHarrasmentAtWorkSiteEtc','SocialImpactResettlementOrRehabilitation','SocialImpactDamageOfProperty','SocialImpactLossOfLivelihood')
     AND eg_pgr_service.status IN ('open','assigned','reassigrequested','rejected','closed','resolved')
   orderby: ORDER BY servicerequestid, epa."when" desc
   
