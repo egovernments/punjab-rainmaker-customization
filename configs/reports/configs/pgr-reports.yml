@@ -2284,10 +2284,6 @@ ReportDefinitions:
     apiURL: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?moduleName=common-masters&masterName=Department&tenantId=$tenantId
     keyOrder: name,code
     tableName: tbl_def_dept
-  - entity: $.TenantBoundary[0].boundary
-    apiURL: http://egov-location.egov:8080/egov-location/location/v11/boundarys/_search?hierarchyTypeCode=ADMIN&boundaryType=Locality&tenantId=$tenantId
-    keyOrder: name,code
-    tableName: tbl_boundary
   sourceColumns:
   - name: department
     label: reports.rainmaker-pgr.department
