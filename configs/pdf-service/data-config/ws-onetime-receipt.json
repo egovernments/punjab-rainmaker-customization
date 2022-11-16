@@ -402,7 +402,7 @@
                 }
               },
               {
-                "variable": "Printed By",
+                "variable": "generated_by",
                 "value": {
                   "path": "PDF_STATIC_LABEL_CONSOLIDATED_RECEIPT_GENERATED_BY"
                 },
