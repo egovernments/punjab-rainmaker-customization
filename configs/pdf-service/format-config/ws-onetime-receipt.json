@@ -573,7 +573,9 @@
                   false
                 ],
                 "style": "receipt-table-value"
-              },
+              }
+              ],
+            [
               {
                 "text": "{{propertyID}}",
                 "border": [
