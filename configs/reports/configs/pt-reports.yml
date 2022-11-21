@@ -8582,7 +8582,7 @@ ReportDefinitions:
     pattern: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?tenantId=$tenantid&moduleName=tenant&masterName=tenants|$.MdmsRes.tenant.tenants.*.code|$.MdmsRes.tenant.tenants.*.name
     source: pt
     wrapper: true
-    isMandatory: false
+    isMandatory: true
     searchClause: AND pt.tenantid = $ulb
   query: |
     --S.no    Service Name	ULB    Property Tax Unique ID    Date Of Transcation    Receipt Number	Existing Property ID    Owner Name    Guardian Name    Total Area (SQ.YARD)    Covered  Area/Built Area (SQ.FEET)    Floors    Occupancy (Rented,Self /Unoccupied)    Type Of Property	Mobile Number    Transcation Mode of Payment    Payment Amount    Payment Date    Email Id	Address
@@ -8594,18 +8594,8 @@ ReportDefinitions:
           split_part(string_agg(guardianname,','),',',1) as guardianname,
           split_part(string_agg(emailid,','),',',1) as emailid,
           propertyid
-          from report_owners where status='ACTIVE' and tenantid !='pb.testing'
+          from report_owners where status='ACTIVE' and tenantid !='pb.testing' and tenantid = $ulb
           group by propertyid
-      ),
-      units as
-      (
-      select 
-          propertyid
-        --sum(builtuparea) as builtuparea,
-        --string_agg(occupancytype,',') as occupancytype
-      from report_units 
-      where active='true' and tenantid !='pb.testing'
-      group by propertyid
       )
       select
         --rp.billid,
@@ -8643,7 +8633,6 @@ ReportDefinitions:
       --pt.blockname as blockname,
         pt.propertyusagetype as usagetype
       from report_properties pt
-      inner join units as ru on ru.propertyid=pt.propertyid 
       inner join report_payments as rp on  rp.propertyid=pt.propertyid and rp.paymentstatus!='CANCELLED'
       --inner join report_assessments ra on split_part(ra.billid,',',1)=rp.billid and  ra.propertyid=rp.propertyid
       inner join owners on owners.propertyid=pt.propertyid
