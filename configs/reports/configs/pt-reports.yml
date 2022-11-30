@@ -8513,11 +8513,6 @@ ReportDefinitions:
     type: string
     source: pt
     total: false
-  - name: receiptnumber
-    label: reports.pt.receiptnumber
-    type: string
-    source: pt
-    total: false
   - name: totalarea
     label: reports.pt.totalarea
     type: string
@@ -8569,13 +8564,13 @@ ReportDefinitions:
     type: epoch
     source: pt
     isMandatory: true
-    searchClause: AND rp.receiptdate >= $fromDate
+    searchClause: AND pt.createdtime >= $fromDate
   - name: toDate
     label: reports.pt.toDate
     type: epoch
     source: pt
     isMandatory: true
-    searchClause: AND rp.receiptdate <= $toDate
+    searchClause: AND pt.createdtime <= $toDate
   - name: ulb
     label: ULB
     type: singlevaluelist
@@ -8603,7 +8598,7 @@ ReportDefinitions:
         pt.tenantid as ulb,
         pt.propertyid as propertytaxuniqueid,
       --to_char((To_timestamp(rp.transactiondate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY')  as  "transactiondate",
-        rp.receiptnumber as receiptnumber,
+      --rp.receiptnumber as receiptnumber,
       --to_char((To_timestamp(rp.receiptdate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY')  AS  "paymentdate",
       --rp.paymentmode as paymentmode,
       --pt.oldpropertyid as existingpropertyid,
@@ -8633,10 +8628,10 @@ ReportDefinitions:
       --pt.blockname as blockname,
         pt.propertyusagetype as usagetype
       from report_properties pt
-      inner join report_payments as rp on  rp.propertyid=pt.propertyid and rp.paymentstatus!='CANCELLED'
+      --inner join report_payments as rp on  rp.propertyid=pt.propertyid and rp.paymentstatus!='CANCELLED'
       --inner join report_assessments ra on split_part(ra.billid,',',1)=rp.billid and  ra.propertyid=rp.propertyid
       inner join owners on owners.propertyid=pt.propertyid
-      where pt.tenantid !='pb.testing'  and (propertytype='BUILTUP.INDEPENDENTPROPERTY' and plotsize>=100 and propertyusagetype='RESIDENTIAL') or ( propertytype='BUILTUP.SHAREDPROPERTY' and plotsize>=750 and propertyusagetype='RESIDENTIAL') or propertyusagetype!='RESIDENTIAL'
+      where pt.tenantid !='pb.testing'  and (propertytype='BUILTUP.INDEPENDENTPROPERTY' and plotsize>=100 and propertyusagetype='RESIDENTIAL') or ( propertytype='BUILTUP.SHAREDPROPERTY' and plotsize>=750 and propertyusagetype='RESIDENTIAL') or propertyusagetype!='RESIDENTIAL' and propertystatus ='ACTIVE'
       
       
       
