@@ -8581,7 +8581,7 @@ ReportDefinitions:
           split_part(string_agg(guardianname,','),',',1) as guardianname,
           split_part(string_agg(emailid,','),',',1) as emailid,			  
           propertyid
-          from report_owners where status='ACTIVE' and tenantid in ('pb.barnala','pb.bhadaur','pb.dhanaula','pb.handiaya','pb.tapa')
+          from report_owners where status='ACTIVE' and tenantid in ('pb.balianwali','pb.bhagtabhai','pb.bhairoopa','pb.bhuchomandi','pb.chaunke','pb.goniana','pb.kotfatta','pb.kothaguru','pb.kotshamir','pb.lehramohabbat','pb.maluka','pb.mandikalan','pb.maur','pb.mehraj','pb.nathana','pb.raman','pb.rampura','pb.rampuraphul','pb.sangatmandi','pb.talwandisabo')
           group by propertyid
       ),
     properties as
@@ -8598,7 +8598,7 @@ ReportDefinitions:
       and ((propertytype='BUILTUP.INDEPENDENTPROPERTY' and plotsize>=100 and propertyusagetype='RESIDENTIAL') 
           or ( propertytype='BUILTUP.SHAREDPROPERTY' and plotsize>=750 and propertyusagetype='RESIDENTIAL') 
           or propertyusagetype!='RESIDENTIAL')
-          and tenantid in ('pb.barnala','pb.bhadaur','pb.dhanaula','pb.handiaya','pb.tapa')
+          and tenantid in ('pb.balianwali','pb.bhagtabhai','pb.bhairoopa','pb.bhuchomandi','pb.chaunke','pb.goniana','pb.kotfatta','pb.kothaguru','pb.kotshamir','pb.lehramohabbat','pb.maluka','pb.mandikalan','pb.maur','pb.mehraj','pb.nathana','pb.raman','pb.rampura','pb.rampuraphul','pb.sangatmandi','pb.talwandisabo')
       group by propertyid
       )
       select
