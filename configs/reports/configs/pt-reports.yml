@@ -8581,7 +8581,7 @@ ReportDefinitions:
           split_part(string_agg(guardianname,','),',',1) as guardianname,
           split_part(string_agg(emailid,','),',',1) as emailid,
           propertyid
-          from report_owners where status='ACTIVE' and tenantid in ('pb.ajnala','pb.jandialaguru','pb.majitha','pb.rajasansi','pb.ramdass','pb.rayya') 
+          from report_owners where status='ACTIVE' and tenantid in ('pb.barnala','pb.bhadaur','pb.dhanaula','pb.handiaya','pb.tapa') 
           group by propertyid
       )
       select
@@ -8623,7 +8623,7 @@ ReportDefinitions:
       --inner join report_payments as rp on  rp.propertyid=pt.propertyid and rp.paymentstatus!='CANCELLED'
       --inner join report_assessments ra on split_part(ra.billid,',',1)=rp.billid and  ra.propertyid=rp.propertyid
       inner join owners on owners.propertyid=pt.propertyid
-      where pt.tenantid in ('pb.ajnala','pb.jandialaguru','pb.majitha','pb.rajasansi','pb.ramdass','pb.rayya')  and (propertytype='BUILTUP.INDEPENDENTPROPERTY' and plotsize>=100 and propertyusagetype='RESIDENTIAL') or ( propertytype='BUILTUP.SHAREDPROPERTY' and plotsize>=750 and propertyusagetype='RESIDENTIAL') or propertyusagetype!='RESIDENTIAL' and propertystatus ='ACTIVE' 
+      where pt.tenantid in ('pb.barnala','pb.bhadaur','pb.dhanaula','pb.handiaya','pb.tapa')  and (propertytype='BUILTUP.INDEPENDENTPROPERTY' and plotsize>=100 and propertyusagetype='RESIDENTIAL') or ( propertytype='BUILTUP.SHAREDPROPERTY' and plotsize>=750 and propertyusagetype='RESIDENTIAL') or propertyusagetype!='RESIDENTIAL' and propertystatus ='ACTIVE' 
       
       
       
