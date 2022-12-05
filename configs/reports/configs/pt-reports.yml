@@ -8579,10 +8579,27 @@ ReportDefinitions:
           split_part(string_agg(ownername,','),',',1) as ownername,
           split_part(string_agg(mobilenumber,','),',',1) as mobilenumber,
           split_part(string_agg(guardianname,','),',',1) as guardianname,
-          split_part(string_agg(emailid,','),',',1) as emailid,
+          split_part(string_agg(emailid,','),',',1) as emailid,			  
           propertyid
-          from report_owners where status='ACTIVE' and tenantid in ('pb.balianwali','pb.bhagtabhai','pb.bhairoopa','pb.bhuchomandi','pb.chaunke','pb.goniana','pb.kotfatta','pb.kothaguru','pb.kotshamir','pb.lehramohabbat','pb.maluka','pb.mandikalan','pb.maur','pb.mehraj','pb.nathana','pb.raman','pb.rampura','pb.rampuraphul','pb.sangatmandi','pb.talwandisabo')
+          from report_owners where status='ACTIVE' and tenantid in ('pb.ajnala','pb.majitha','pb.rajasansi','pb.ramdass','pb.rayya') 
           group by propertyid
+      ),
+    properties as
+    (
+      select 
+        propertyid,
+        split_part(string_agg(tenantid,'___'),'___',1) as tenantid,
+        split_part(string_agg(address,'___'),'___',1) as address,
+        split_part(string_agg(localityname,'___'),'___',1) as localityname,
+        split_part(string_agg(plotsize::text,'___'),'___',1) as plotsize,
+        split_part(string_agg(propertyusagetype,'___'),'___',1) as usagetype
+      from report_properties
+      where propertystatus='ACTIVE' 
+      and ((propertytype='BUILTUP.INDEPENDENTPROPERTY' and plotsize>=100 and propertyusagetype='RESIDENTIAL') 
+          or ( propertytype='BUILTUP.SHAREDPROPERTY' and plotsize>=750 and propertyusagetype='RESIDENTIAL') 
+          or propertyusagetype!='RESIDENTIAL')
+          and tenantid in ('pb.ajnala','pb.majitha','pb.rajasansi','pb.ramdass','pb.rayya') 
+      group by propertyid
       )
       select
         --rp.billid,
@@ -8618,13 +8635,11 @@ ReportDefinitions:
         pt.localityname as localityname,
       --pt.zonename as zonename,
       --pt.blockname as blockname,
-        pt.propertyusagetype as usagetype
-      from report_properties pt
+        pt.usagetype as usagetype
+      from properties pt
       --inner join report_payments as rp on  rp.propertyid=pt.propertyid and rp.paymentstatus!='CANCELLED'
       --inner join report_assessments ra on split_part(ra.billid,',',1)=rp.billid and  ra.propertyid=rp.propertyid
-      inner join owners on owners.propertyid=pt.propertyid
-      where pt.tenantid in ('pb.balianwali','pb.bhagtabhai','pb.bhairoopa','pb.bhuchomandi','pb.chaunke','pb.goniana','pb.kotfatta','pb.kothaguru','pb.kotshamir','pb.lehramohabbat','pb.maluka','pb.mandikalan','pb.maur','pb.mehraj','pb.nathana','pb.raman','pb.rampura','pb.rampuraphul','pb.sangatmandi','pb.talwandisabo')  and (propertytype='BUILTUP.INDEPENDENTPROPERTY' and plotsize>=100 and propertyusagetype='RESIDENTIAL') or ( propertytype='BUILTUP.SHAREDPROPERTY' and plotsize>=750 and propertyusagetype='RESIDENTIAL') or propertyusagetype!='RESIDENTIAL' and propertystatus ='ACTIVE' 
-      
+      inner join owners on owners.propertyid=pt.propertyid      
       
       
       
