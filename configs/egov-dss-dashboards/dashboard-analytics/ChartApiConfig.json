@@ -2422,6 +2422,66 @@
     },
     "_comment": " Total Number of Closed Complaints "
   },
+  "reopenedComplaints": {
+    "chartName": "DSS_PGR_REOPENED_COMPLAINTS",
+    "queries": [
+      {
+        "module": "PGR",
+        "requestQueryMap": "{\"wardId\" : \"Data.complaintWard.name.keyword\", \"tenantId\" : \"Data.tenantId\"}",
+        "dateRefField": "Data.dateOfComplaint",
+        "indexName": "pgrindex-v1",
+        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tenantId.keyword\":\"pb.testing\"}}]}},\"aggs\":{\"Reopened Complaints\":{\"filters\":{\"filters\":{\"reopen\":{\"match\":{\"Data.status.keyword\":\"reopen\"}}}}}}}}}"
+      }
+    ],
+    "chartType": "metric",
+    "valueType": "number",
+    "drillChart": "none",
+    "documentType": "_doc",
+    "action": "",
+    "aggregationPaths": [
+      "Reopened Complaints"
+    ],
+    "insight": {
+      "chartResponseMap" : "reopenedComplaints",
+      "action" : "differenceOfNumbers",
+      "upwardIndicator" : "positive",
+      "downwardIndicator" : "negative",
+      "textMessage" : "$indicator$value% than last $insightInterval",
+      "colorCode" : "#228B22",
+      "insightInterval" : "year"
+    },
+    "_comment": " Total Number of Resolved Complaints "
+  },
+  "resolvedComplaints": {
+    "chartName": "DSS_PGR_RESOLVED_COMPLAINTS",
+    "queries": [
+      {
+        "module": "PGR",
+        "requestQueryMap": "{\"wardId\" : \"Data.complaintWard.name.keyword\", \"tenantId\" : \"Data.tenantId\"}",
+        "dateRefField": "Data.dateOfComplaint",
+        "indexName": "pgrindex-v1",
+        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tenantId.keyword\":\"pb.testing\"}}]}},\"aggs\":{\"Resolved Complaints\":{\"filters\":{\"filters\":{\"resolved\":{\"match\":{\"Data.status.keyword\":\"resolved\"}}}}}}}}}"
+      }
+    ],
+    "chartType": "metric",
+    "valueType": "number",
+    "drillChart": "none",
+    "documentType": "_doc",
+    "action": "",
+    "aggregationPaths": [
+      "Resolved Complaints"
+    ],
+    "insight": {
+      "chartResponseMap" : "resolvedComplaints",
+      "action" : "differenceOfNumbers",
+      "upwardIndicator" : "positive",
+      "downwardIndicator" : "negative",
+      "textMessage" : "$indicator$value% than last $insightInterval",
+      "colorCode" : "#228B22",
+      "insightInterval" : "year"
+    },
+    "_comment": " Total Number of Resolved Complaints "
+  },
   "cumulativeClosedComplaints": {
     "chartName": "DSS_TOTAL_CUMULATIVE_CLOSED_COMPLAINTS",
     "queries": [
