@@ -1138,8 +1138,24 @@
                   "headers": []
                 },
                 {
+                  "id": "resolvedComplaints",
+                  "name": "DSS_PGR_RESOLVED_COMPLAINTS",
+                  "code": "",
+                  "chartType": "metric",
+                  "filter": "",
+                  "headers": []
+                },
+                {
                   "id": "closedComplaints",
                   "name": "DSS_PGR_CLOSED_COMPLAINTS",
+                  "code": "",
+                  "chartType": "metric",
+                  "filter": "",
+                  "headers": []
+                },
+                {
+                  "id": "reopenedComplaints",
+                  "name": "DSS_PGR_REOPENED_COMPLAINTS",
                   "code": "",
                   "chartType": "metric",
                   "filter": "",
