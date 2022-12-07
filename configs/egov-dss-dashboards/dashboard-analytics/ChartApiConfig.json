@@ -2576,7 +2576,7 @@
         "requestQueryMap": "{\"wardId\" : \"Data.complaintWard.name.keyword\",\"tenantId\" : \"Data.tenantId\"}",
         "dateRefField": "Data.dateOfComplaint",
         "indexName": "pgrindex-v1",
-        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tenantId.keyword\":\"pb.testing\"}}]}},\"aggs\":{\"Complaints By Status\":{\"filters\":{\"filters\":{\"Open\":{\"terms\":{\"Data.status.keyword\":[\"open\",\"reassignrequested\"]}},\"Reopen\":{\"match\":{\"Data.status.keyword\":\"reopen\"}},\"Assigned\":{\"match\":{\"Data.status.keyword\":\"assigned\"}},\"Closed\":{\"match\":{\"Data.status.keyword\":\"closed\"}},\"Resolved\":{\"match\":{\"Data.status.keyword\":\"resolved\"}},\"Rejected\":{\"match\":{\"Data.status.keyword\":\"rejected\"}}}},\"aggs\":{\"Count\":{\"value_count\":{\"field\":\"Data.dateOfComplaint\"}}}}}}}}"
+        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tenantId.keyword\":\"pb.testing\"}}]}},\"aggs\":{\"Complaints By Status\":{\"filters\":{\"filters\":{\"Open\":{\"terms\":{\"Data.status.keyword\":[\"open\",\"reassignrequested\"]}},\"Reopen\":{\"match\":{\"Data.status.keyword\":\"reopen\"}},\"Assigned\":{\"match\":{\"Data.status.keyword\":\"assigned\"}},\"Closed\":{\"match\":{\"Data.status.keyword\":\"closed\"}},\"Resolved\":{\"match\":{\"Data.status.keyword\":\"resolved\"}},\"Rejected\":{\"match\":{\"Data.status.keyword\":\"rejected\"}}}}}}}}}"
       }
     ],
     "chartType": "pie",
