@@ -2585,7 +2585,12 @@
     "documentType": "_doc",
     "drillChart": "none",
     "aggregationPaths": [
-      "Complaints By Status"
+      "Open",
+      "Reopen",
+      "Assigned",
+      "Closed",
+      "Resolved",
+      "Rejected"
     ],
     "insight": {
     },
