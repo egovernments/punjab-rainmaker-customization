@@ -1076,8 +1076,24 @@
                   "headers": []
                 },
                 {
+                  "id": "resolvedComplaints",
+                  "name": "DSS_PGR_RESOLVED_COMPLAINTS",
+                  "code": "",
+                  "chartType": "metric",
+                  "filter": "",
+                  "headers": []
+                },
+                {
                   "id": "closedComplaints",
                   "name": "DSS_PGR_CLOSED_COMPLAINTS",
+                  "code": "",
+                  "chartType": "metric",
+                  "filter": "",
+                  "headers": []
+                },
+                {
+                  "id": "reopenedComplaints",
+                  "name": "DSS_PGR_REOPENED_COMPLAINTS",
                   "code": "",
                   "chartType": "metric",
                   "filter": "",
@@ -1092,8 +1108,8 @@
                   "headers": []
                 },
                 {
-                  "id": "completionRate",
-                  "name": "DSS_PGR_COMPLETION_RATE",
+                  "id": "complaintsResolvingRate",
+                  "name": "DSS_PGR_COMPLAINTS_RESOLVING_RATE",
                   "code": "",
                   "chartType": "metric",
                   "filter": "",
@@ -1103,7 +1119,7 @@
             },
             {
               "id": 412,
-              "name": "DSS_TOTAL_CUMULATIVE_CLOSED_COMPLAINTS",
+              "name": "DSS_TOTAL_CUMULATIVE_COMPLAINTS",
               "dimensions": {
                 "height": 350,
                 "width": 7
@@ -1113,7 +1129,7 @@
               "label": "",
               "charts": [
                 {
-                  "id": "cumulativeClosedComplaints",
+                  "id": "cumulativeComplaints",
                   "name": "Monthly",
                   "code": "",
                   "chartType": "line",
