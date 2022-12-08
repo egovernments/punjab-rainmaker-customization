@@ -8598,7 +8598,7 @@ ReportDefinitions:
       and ((propertytype='BUILTUP.INDEPENDENTPROPERTY' and plotsize>=100 and propertyusagetype='RESIDENTIAL') 
           or ( propertytype='BUILTUP.SHAREDPROPERTY' and plotsize>=750 and propertyusagetype='RESIDENTIAL') 
           or propertyusagetype!='RESIDENTIAL')
-          and tenantid ='pb.patiala' and createdtime >=1656656832000 and  createdtime <=1659335232000         
+          and tenantid ='pb.patiala' and createdtime >=1659421632000 and  createdtime <=1662013632000          
       group by propertyid
       )
       select
