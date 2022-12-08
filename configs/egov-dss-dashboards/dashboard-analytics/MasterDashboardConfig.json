@@ -1146,6 +1146,14 @@
                   "headers": []
                 },
                 {
+                  "id": "rejectedComplaints",
+                  "name": "DSS_PGR_REJECTED_COMPLAINTS",
+                  "code": "",
+                  "chartType": "metric",
+                  "filter": "",
+                  "headers": []
+                },
+                {
                   "id": "closedComplaints",
                   "name": "DSS_PGR_CLOSED_COMPLAINTS",
                   "code": "",
