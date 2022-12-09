@@ -8598,7 +8598,7 @@ ReportDefinitions:
       and ((propertytype='BUILTUP.INDEPENDENTPROPERTY' and plotsize>=100 and propertyusagetype='RESIDENTIAL') 
           or ( propertytype='BUILTUP.SHAREDPROPERTY' and plotsize>=750 and propertyusagetype='RESIDENTIAL') 
           or propertyusagetype!='RESIDENTIAL')
-          and tenantid ='pb.amritsar' and createdtime >=1609560049000 and  createdtime <=1641096049000    
+          and tenantid ='pb.amritsar' and createdtime >=1641182449000 and  createdtime <=1670040049000   
       group by propertyid
       )
       select
