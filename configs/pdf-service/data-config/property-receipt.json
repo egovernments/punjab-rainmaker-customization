@@ -702,7 +702,7 @@
                   "module":"rainmaker-common",
                   "locale":"en_IN"
                }
-              },
+            /**  },
               {
                 "variable": "PAYMENT INFORMATION",
               "value" : {
@@ -714,7 +714,7 @@
                   "prefix": null,
                   "module":"rainmaker-common",
                   "locale":"en_IN"
-               }
+               } */
               }
             ]
           },
