@@ -17,7 +17,7 @@
           "receiptDate": "paymentDetails.receiptDate",
           "bill": {
             "billDetails": {
-              "*": {
+              "$j": {
                 "boundary": "paymentDetails.bill.billDetails.boundary",
                 "amount": "paymentDetails.bill.billDetails.amount",
                 "fromPeriod": "paymentDetails.bill.billDetails.fromPeriod",
