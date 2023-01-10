@@ -3342,6 +3342,11 @@ ReportDefinitions:
     type: string
     source: pt
     total: false
+  - name: oldpropertyid
+    label: reports.pt.oldpropertyid
+    type: string
+    source: pt
+    total: false    
   - name: financialyear
     label: reports.pt.financialYear
     type: string
@@ -3417,6 +3422,7 @@ ReportDefinitions:
       -- Use CTE to force query plan, compute & use CTE later
       SELECT 	
         pt.propertyid as propertyid,
+        oldpropertyid,
         to_char((To_timestamp(pd.receiptdate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY') as transactiondate,
         payment.ifsccode AS bankname,
         receiptnumber,
