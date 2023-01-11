@@ -6331,7 +6331,12 @@ ReportDefinitions:
     label: reports.pt.financialyear
     type: string
     source: pt
-    total: false    
+    total: false
+  - name: paymentamount
+    label: reports.pt.paymentamount
+    type: string
+    source: pt
+    total: false      
   - name: localityname
     label: reports.pt.localityname
     type: string
@@ -6408,7 +6413,7 @@ ReportDefinitions:
       --pt.propertytype as propertytype,
         rp.payermobilenumber as mobilenumber,
         --ra.totalamount as paymentamount,
-      --rp.amoutpaid as paymentamount,
+        rp.amoutpaid as paymentamount,
         --rp.transactiondate as transcationdate,
       --owners.emailid as emailid,
         pt.address as address,
