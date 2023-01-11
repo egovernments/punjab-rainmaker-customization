@@ -6327,6 +6327,11 @@ ReportDefinitions:
     type: string
     source: pt
     total: false
+  - name: financialyear
+    label: reports.pt.financialyear
+    type: string
+    source: pt
+    total: false    
   - name: localityname
     label: reports.pt.localityname
     type: string
@@ -6392,7 +6397,7 @@ ReportDefinitions:
       --rp.paymentmode as paymentmode,
         pt.oldpropertyid as existingpropertyid,
         --ra.assessmentyears as financialyear,
-      --getfinancialyear(rp.billid) as financialyear,
+        getfinancialyear(rp.billid) as financialyear,
         owners.ownername as ownername,
         owners.guardianname as guardianname,
         owners.mobilenumber as mobileno,
