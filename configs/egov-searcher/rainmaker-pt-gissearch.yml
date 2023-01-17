@@ -85,6 +85,7 @@ SearchDefinitions:
       select array_to_json(array_agg(row_to_json(data))) from (
         select 
           tl.applicationnumber,
+          tld.additionalDetail::text,
           tl.status,additionalDetail->>'IPIN' as iPin,
           additionalDetail->>'APPID' as appId,
           additionalDetail->>'mobileNo' as mobileNp 
