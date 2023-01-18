@@ -90,7 +90,7 @@ SearchDefinitions:
           additionalDetail->>'APPID' as appId,
           additionalDetail->>'mobileNo' as mobileNp 
         from eg_tl_tradelicense tl 
-        inner join eg_tl_tradelicensedetail tld on tld.tradelicenseid=tl.id and tld.additionalDetail->>'CHANNEL'='EODB' $where) data
+        inner join eg_tl_tradelicensedetail tld on tld.tradelicenseid=tl.id and tld.additionalDetail->>'CHANNEL'='EODB' where 1=1  $where) data
     groupBy:
     orderBy:
    searchParams:
