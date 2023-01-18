@@ -660,7 +660,7 @@ ReportDefinitions:
                       string_agg(distinct consumercode,',') as consumercode                               
                     FROM egcl_billaccountdetail 
                     LEFT JOIN egcl_bill as bill on bill.id = egcl_billaccountdetail.billdetailid
-                    WHERE  bill.tenantid!='pb.testing' AND businessservice in ('FIRENOC')
+                    WHERE  bill.tenantid!='pb.testing' AND businessservice='FIRENOC'
                     GROUP BY billdetailid
         )
         SELECT 
@@ -690,7 +690,7 @@ ReportDefinitions:
         JOIN eg_fn_firenocdetail AS fdet ON fdet.applicationnumber=bill.consumercode
         JOIN eg_fn_buidlings AS build ON build.firenocdetailsuuid=fdet.uuid
         INNER JOIN eg_fn_address as fad on fad.firenocdetailsuuid=fdet.uuid
-        WHERE  payment.tenantid!='pb.testing' AND paydetail.businessservice in ('FIRENOC') AND paydetail.receiptnumber NOT LIKE 'MP%' and payment.tenantid = $tenantid
+        WHERE  payment.tenantid!='pb.testing' AND paydetail.businessservice='FIRENOC' AND paydetail.receiptnumber NOT LIKE 'MP%' and payment.tenantid = $tenantid
         and payment.paymentstatus!='CANCELLED'
     orderby: ORDER BY paydetail.receiptdate DESC 
 
