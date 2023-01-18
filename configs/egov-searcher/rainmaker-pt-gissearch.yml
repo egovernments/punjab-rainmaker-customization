@@ -90,16 +90,13 @@ SearchDefinitions:
           additionalDetail->>'APPID' as appId,
           additionalDetail->>'mobileNo' as mobileNp 
         from eg_tl_tradelicense tl 
-        inner join eg_tl_tradelicensedetail tld on tld.tradelicenseid=tl.id and tld.additionalDetail->>'CHANNEL'='EODB' where 1=1  $where) data
+        inner join eg_tl_tradelicensedetail tld on tld.tradelicenseid=tl.id and tld.additionalDetail->>'CHANNEL'='EODB' ) data
     groupBy:
     orderBy:
    searchParams:
     condition: AND
     params:
-    - name: tl.tenantid
-      isMandatory: false
-      jsonPath: $.searchCriteria.tenantId
-      operator: =
+
     
    output:
     jsonFormat: {"ResponseInfo": {}}
