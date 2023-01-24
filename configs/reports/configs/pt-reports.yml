@@ -8734,6 +8734,16 @@ ReportDefinitions:
     type: string
     source: pt
     total: false
+  - name: addr_survey
+    label: reports.pt.survey_address
+    type: string
+    source: pt
+    total: false
+  - name: businessname
+    label: reports.pt.businessname
+    type: string
+    source: pt
+    total: false
   searchParams:
   - name: category
     label: reports.pt.usagecategory
@@ -8770,8 +8780,9 @@ ReportDefinitions:
       bndry.localityname as locality,
       eg_user.name as ownername,
       eg_user.mobilenumber as mobileno,
-      $category as unitcategory
-      --pt.additionaldetails as additionaldetails
+      $category as unitcategory,
+      pt.(additionalDetails->'legacyInfo')->>'address' as addr_survey,
+      pt.additionalDetails->>'businessName' as businessname
     from eg_pt_property pt
     inner join eg_pt_address adr on adr.propertyid =pt.id
     inner join properties props on props.propertyid=pt.id
