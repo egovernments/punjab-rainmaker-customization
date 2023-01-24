@@ -8734,11 +8734,6 @@ ReportDefinitions:
     type: string
     source: pt
     total: false
-  - name: additionaldetails
-    label: reports.pt.additionaldetails
-    type: string
-    source: pt
-    total: false       
   searchParams:
   - name: category
     label: reports.pt.usagecategory
