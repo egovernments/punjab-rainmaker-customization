@@ -8775,8 +8775,8 @@ ReportDefinitions:
       bndry.localityname as locality,
       eg_user.name as ownername,
       eg_user.mobilenumber as mobileno,
-      $category as unitcategory,
-      pt.additionaldetails as additionaldetails
+      $category as unitcategory
+      --pt.additionaldetails as additionaldetails
     from eg_pt_property pt
     inner join eg_pt_address adr on adr.propertyid =pt.id
     inner join properties props on props.propertyid=pt.id
