@@ -8781,7 +8781,7 @@ ReportDefinitions:
       eg_user.name as ownername,
       eg_user.mobilenumber as mobileno,
       $category as unitcategory,
-      pt.(additionalDetails->'legacyInfo')->>'address' as addr_survey,
+      (pt.additionalDetails->'legacyInfo')->>'address' as addr_survey,
       pt.additionalDetails->>'businessName' as businessname
     from eg_pt_property pt
     inner join eg_pt_address adr on adr.propertyid =pt.id
