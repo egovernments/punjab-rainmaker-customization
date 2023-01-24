@@ -8790,7 +8790,141 @@ ReportDefinitions:
     inner join eg_user on eg_user.uuid=owners.owner_userid
     inner join eg_bndry_mohalla bndry on bndry.localitycode=adr.locality
     where pt.status!='INACTIVE'
-      
+
+
+- reportName: PAID_PROPERTY_CATEGORY_REPORT_V2
+  decryptionPathId: ULBPTDataDumpReport_V2
+  summary: ULB level report
+  version: 1.0.0
+  moduleName: rainmaker-pt
+  sourceColumns:
+  - name: propertyid
+    label: reports.pt.propertyid
+    type: string
+    source: pt
+    total: false
+  - name: oldpropertyid
+    label: reports.pt.oldpropertyid
+    type: string
+    source: pt
+    total: false
+  - name: surveyid
+    label: reports.pt.surveyid
+    type: string
+    source: pt
+    total: false 
+  - name: propertytype
+    label: reports.pt.propertytype
+    type: string
+    source: pt
+    total: false
+  - name: ownership
+    label: reports.pt.ownership
+    type: string
+    source: pt
+    total: false    
+  - name: propertycategory
+    label: reports.pt.propertycategory
+    type: string
+    source: pt
+    total: false
+  - name: plotsize
+    label: reports.pt.plotsize
+    type: string
+    source: pt
+    total: false
+  - name: buildingname
+    label: reports.pt.buildingname
+    type: string
+    source: pt
+    total: false
+  - name: doorno
+    label: reports.pt.doorno
+    type: string
+    source: pt
+    total: false
+  - name: street
+    label: reports.pt.street
+    type: string
+    source: pt
+    total: false
+  - name: locality
+    label: reports.pt.locality
+    type: string
+    source: pt
+    total: false
+  - name: ownername
+    label: reports.pt.ownername
+    type: string
+    source: pt
+    total: false
+  - name: mobileno
+    label: reports.pt.mobileno
+    type: string
+    source: pt
+    total: false
+  - name: unitcategory
+    label: reports.pt.unitcategory
+    type: string
+    source: pt
+    total: false
+  - name: addr_survey
+    label: reports.pt.survey_address
+    type: string
+    source: pt
+    total: false
+  - name: businessname
+    label: reports.pt.businessname
+    type: string
+    source: pt
+    total: false
+  searchParams:
+  - name: category
+    label: reports.pt.usagecategory
+    type: string
+    source: pt
+    isMandatory: true
+    searchClause: AND 1=1
+  query: |
+    --S.no    Service Name	ULB    Property Tax Unique ID    Date Of Transcation    Receipt Number	Existing Property ID    Owner Name    Guardian Name    Total Area (SQ.YARD)    Covered  Area/Built Area (SQ.FEET)    Floors    Occupancy (Rented,Self /Unoccupied)    Type Of Property	Mobile Number    Transcation Mode of Payment    Payment Amount    Payment Date    Email Id	Address
+    with properties as
+    (
+    select distinct propertyid as propertyid from eg_pt_unit where tenantid=$tenantid and usagecategory LIKE CONCAT('%',$category,'%') --like '%EDUCATION%'
+    ),
+    owners as
+    ( 
+    select
+      split_part(string_agg(userid,','),',',1) as owner_userid,
+      propertyid
+    from eg_pt_owner
+    where tenantid=$tenantid and propertyid in (select propertyid from properties) and status='ACTIVE'
+    group by propertyid
+    )
+    select
+      pt.propertyid as propertyid,
+      pt.oldpropertyid as oldpropertyid,
+      pt.surveyid as surveyid,
+      pt.propertytype as propertytype,
+      pt.ownershipcategory as ownership,
+      pt.usagecategory as propertycategory,
+      pt.landarea as plotsize,
+      adr.buildingname as buildingname,
+      adr.doorno as doorno,
+      adr.street as street,
+      bndry.localityname as locality,
+      eg_user.name as ownername,
+      eg_user.mobilenumber as mobileno,
+      $category as unitcategory,
+      (pt.additionalDetails->'legacyInfo')->>'address' as addr_survey,
+      pt.additionalDetails->>'businessName' as businessname
+    from eg_pt_property pt
+    inner join eg_pt_address adr on adr.propertyid =pt.id
+    inner join properties props on props.propertyid=pt.id
+    inner join owners on owners.propertyid=pt.id
+    inner join eg_user on eg_user.uuid=owners.owner_userid
+    inner join eg_bndry_mohalla bndry on bndry.localitycode=adr.locality
+    inner join report_assessments on report_assessments.propertyid=pt.propertyid and report_assessments.assessmentyears like '%2022-23%'
+    where pt.status!='INACTIVE'
       
       
       
