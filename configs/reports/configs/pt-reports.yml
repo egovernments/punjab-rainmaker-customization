@@ -8928,7 +8928,7 @@ ReportDefinitions:
     select
       distinct propertyid 
     from report_assessments 
-    where tenantid='pb.patiala' AND assessmentyears like '%2022-23%' 
+    where tenantid=$tenantid AND assessmentyears like '%2022-23%' 
     )
     select
       pt.propertyid as propertyid,
