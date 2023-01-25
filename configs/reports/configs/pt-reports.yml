@@ -8719,6 +8719,11 @@ ReportDefinitions:
     type: string
     source: pt
     total: false
+  - name: blockname
+    label: reports.pt.blockname
+    type: string
+    source: pt
+    total: false
   - name: ownername
     label: reports.pt.ownername
     type: string
@@ -8749,7 +8754,7 @@ ReportDefinitions:
     label: reports.pt.usagecategory
     type: string
     source: pt
-    isMandatory: false
+    isMandatory: true
     searchClause: AND 1=1
   - name: nameofbusiness
     label: reports.pt.nameofbusinness
@@ -8784,6 +8789,7 @@ ReportDefinitions:
       adr.doorno as doorno,
       adr.street as street,
       bndry.localityname as locality,
+      bndry.blockname as blockname,
       eg_user.name as ownername,
       eg_user.mobilenumber as mobileno,
       $category as unitcategory,
@@ -8859,6 +8865,11 @@ ReportDefinitions:
     type: string
     source: pt
     total: false
+  - name: blockname
+    label: reports.pt.blockname
+    type: string
+    source: pt
+    total: false
   - name: ownername
     label: reports.pt.ownername
     type: string
@@ -8911,6 +8922,13 @@ ReportDefinitions:
     from eg_pt_owner
     where tenantid=$tenantid and propertyid in (select propertyid from properties) and status='ACTIVE'
     group by propertyid
+    ),
+    assessments as
+    ( 
+    select
+      distinct propertyid 
+    from report_assessments 
+    where tenantid='pb.patiala' AND assessmentyears like '%2022-23%' 
     )
     select
       pt.propertyid as propertyid,
@@ -8924,6 +8942,7 @@ ReportDefinitions:
       adr.doorno as doorno,
       adr.street as street,
       bndry.localityname as locality,
+      bndry.blockname as blockname,
       eg_user.name as ownername,
       eg_user.mobilenumber as mobileno,
       $category as unitcategory,
@@ -8935,8 +8954,7 @@ ReportDefinitions:
     inner join owners on owners.propertyid=pt.id
     inner join eg_user on eg_user.uuid=owners.owner_userid
     inner join eg_bndry_mohalla bndry on bndry.localitycode=adr.locality
-    inner join report_assessments on report_assessments.propertyid=pt.propertyid and report_assessments.assessmentyears like '%2022-23%'
+    inner join assessments on assessments.propertyid=pt.propertyid
     where pt.status!='INACTIVE'
-      
       
       
