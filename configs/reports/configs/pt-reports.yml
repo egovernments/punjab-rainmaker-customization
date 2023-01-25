@@ -8756,18 +8756,12 @@ ReportDefinitions:
     type: string
     source: pt
     isMandatory: false
-    searchClause: AND 1=1
+    searchClause: AND upper(pt.additionalDetails->>'businessName') LIKE CONCAT('%',upper($nameofbusiness),'%')
   query: |
     --S.no    Service Name	ULB    Property Tax Unique ID    Date Of Transcation    Receipt Number	Existing Property ID    Owner Name    Guardian Name    Total Area (SQ.YARD)    Covered  Area/Built Area (SQ.FEET)    Floors    Occupancy (Rented,Self /Unoccupied)    Type Of Property	Mobile Number    Transcation Mode of Payment    Payment Amount    Payment Date    Email Id	Address
     with properties as
     (
-    with props as
-      (
-      select distinct propertyid as propertyid from eg_pt_unit where tenantid=$tenantid and usagecategory LIKE CONCAT('%',upper($category),'%') --like '%EDUCATION%'
-      union
-      select id as propertyid from eg_pt_property where tenantid=$tenantid and upper(additionalDetails->>'businessName') LIKE CONCAT('%',upper(case when $nameofbusiness is null then '99999999' else $nameofbusiness end),'%')
-      )
-    select distinct propertyid from props
+      select distinct propertyid as propertyid from eg_pt_unit where tenantid=$tenantid and usagecategory LIKE CONCAT('%',upper($category),'%') --like '%EDUCATION%'  
     ),
     owners as
     ( 
@@ -8895,25 +8889,19 @@ ReportDefinitions:
     label: reports.pt.usagecategory
     type: string
     source: pt
-    isMandatory: false
+    isMandatory: true
     searchClause: AND 1=1
   - name: nameofbusiness
     label: reports.pt.nameofbusinness
     type: string
     source: pt
     isMandatory: false
-    searchClause: AND 1=1
+    searchClause: AND upper(pt.additionalDetails->>'businessName') LIKE CONCAT('%',upper($nameofbusiness),'%')
   query: |
     --S.no    Service Name	ULB    Property Tax Unique ID    Date Of Transcation    Receipt Number	Existing Property ID    Owner Name    Guardian Name    Total Area (SQ.YARD)    Covered  Area/Built Area (SQ.FEET)    Floors    Occupancy (Rented,Self /Unoccupied)    Type Of Property	Mobile Number    Transcation Mode of Payment    Payment Amount    Payment Date    Email Id	Address
     with properties as
     (
-    with props as
-      (
       select distinct propertyid as propertyid from eg_pt_unit where tenantid=$tenantid and usagecategory LIKE CONCAT('%',upper($category),'%') --like '%EDUCATION%'
-      union
-      select id as propertyid from eg_pt_property where tenantid=$tenantid and upper(additionalDetails->>'businessName') LIKE CONCAT('%',upper(case when $nameofbusiness is null then '99999999' else $nameofbusiness end),'%')
-      )
-    select distinct propertyid from props
     ),
     owners as
     ( 
