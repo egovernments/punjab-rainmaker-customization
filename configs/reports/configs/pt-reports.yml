@@ -8895,6 +8895,11 @@ ReportDefinitions:
     type: string
     source: pt
     total: false
+  - name: assessmentyear
+    label: reports.pt.assessmentyear
+    type: string
+    source: pt
+    total: false
   searchParams:
   - name: category
     label: reports.pt.usagecategory
@@ -8908,6 +8913,13 @@ ReportDefinitions:
     source: pt
     isMandatory: false
     searchClause: AND upper(pt.additionalDetails->>'businessName') LIKE CONCAT('%',upper($nameofbusiness),'%')
+  - name: finYear
+    label: Financial Year
+    type: singlevaluelist
+    pattern: 'list://2015-16:2015-16,2016-17:2016-17,2017-18:2017-18,2017-18:2017-18,2018-19:2018-19,2019-20:2019-20,2020-21:2020-21,2021-22:2021-22,2022-23:2022-23'
+    source: pt
+    isMandatory: true
+    searchClause: AND 1=1
   query: |
     --S.no    Service Name	ULB    Property Tax Unique ID    Date Of Transcation    Receipt Number	Existing Property ID    Owner Name    Guardian Name    Total Area (SQ.YARD)    Covered  Area/Built Area (SQ.FEET)    Floors    Occupancy (Rented,Self /Unoccupied)    Type Of Property	Mobile Number    Transcation Mode of Payment    Payment Amount    Payment Date    Email Id	Address
     with properties as
@@ -8928,7 +8940,7 @@ ReportDefinitions:
     select
       distinct propertyid 
     from report_assessments 
-    where tenantid=$tenantid AND assessmentyears like '%2022-23%' 
+    where tenantid=$tenantid AND assessmentyears=$finYear
     )
     select
       pt.propertyid as propertyid,
@@ -8947,7 +8959,8 @@ ReportDefinitions:
       eg_user.mobilenumber as mobileno,
       $category as unitcategory,
       (pt.additionalDetails->'legacyInfo')->>'address' as addr_survey,
-      pt.additionalDetails->>'businessName' as businessname
+      pt.additionalDetails->>'businessName' as businessname,
+      $finYear as assessmentyear
     from eg_pt_property pt
     inner join eg_pt_address adr on adr.propertyid =pt.id
     inner join properties props on props.propertyid=pt.id
