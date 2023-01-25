@@ -8749,7 +8749,7 @@ ReportDefinitions:
     label: reports.pt.usagecategory
     type: string
     source: pt
-    isMandatory: true
+    isMandatory: false
     searchClause: AND 1=1
   - name: nameofbusiness
     label: reports.pt.nameofbusinness
@@ -8765,7 +8765,7 @@ ReportDefinitions:
       (
       select distinct propertyid as propertyid from eg_pt_unit where tenantid=$tenantid and usagecategory LIKE CONCAT('%',upper($category),'%') --like '%EDUCATION%'
       union
-      select id as propertyid from eg_pt_property where tenantid=$tenantid and upper(additionalDetails->>'businessName') LIKE CONCAT('%',upper($nameofbusiness),'%')
+      select id as propertyid from eg_pt_property where tenantid=$tenantid and upper(additionalDetails->>'businessName') LIKE CONCAT('%',upper(case when $nameofbusiness is null then '99999999' else $nameofbusiness end),'%')
       )
     select distinct propertyid from props
     ),
@@ -8911,7 +8911,7 @@ ReportDefinitions:
       (
       select distinct propertyid as propertyid from eg_pt_unit where tenantid=$tenantid and usagecategory LIKE CONCAT('%',upper($category),'%') --like '%EDUCATION%'
       union
-      select id as propertyid from eg_pt_property where tenantid=$tenantid and upper(additionalDetails->>'businessName') LIKE CONCAT('%',upper($nameofbusiness),'%')
+      select id as propertyid from eg_pt_property where tenantid=$tenantid and upper(additionalDetails->>'businessName') LIKE CONCAT('%',upper(case when $nameofbusiness is null then '99999999' else $nameofbusiness end),'%')
       )
     select distinct propertyid from props
     ),
