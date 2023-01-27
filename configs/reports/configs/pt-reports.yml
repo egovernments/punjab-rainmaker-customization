@@ -8083,7 +8083,7 @@ ReportDefinitions:
     type: singlevaluelist
     pattern: 'list://NONRESIDENTIAL.COMMERCIAL:Commercial,MIXED:Mixed,NONRESIDENTIAL.INDUSTRIAL:Industrial,NONRESIDENTIAL.INSTITUTIONAL:Institutional,RESIDENTIAL:ALL'
     source: pt
-    isMandatory: false
+    isMandatory: true
     searchClause: and 1=1    
   query: |
       -- Use CTE to force query plan, compute & use CTE later
