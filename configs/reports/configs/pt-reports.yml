@@ -6354,14 +6354,7 @@ ReportDefinitions:
     type: epoch
     source: pt
     isMandatory: true
-    searchClause: AND rp.receiptdate <= $toDate
-  - name: paymentMode
-    label: Payment Mode
-    type: singlevaluelist
-    pattern: 'list://CARD:Card,CASH:Cash,CHEQUE:Cheque,DD:DD,OFFLINE_NEFT:NEFT,OFFLINE_RTGS:RTGS,ONLINE:Online,POSTAL_ORDER:PostalOrder'
-    source: pt
-    isMandatory: false
-    searchClause: AND rp.paymentmode = replace($paymentMode,',','_')
+    searchClause: AND rp.receiptdate <= $toDate 
   - name: localityArray
     label: reports.pt.zoneList
     type: boundarylist
