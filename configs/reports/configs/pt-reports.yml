@@ -8081,7 +8081,7 @@ ReportDefinitions:
   - name: usageCat
     label: Usage Category
     type: singlevaluelist
-    pattern: 'list://NONRESIDENTIAL.COMMERCIAL:Commercial,MIXED:Mixed,NONRESIDENTIAL.INDUSTRIAL:Industrial,NONRESIDENTIAL.INSTITUTIONAL:Institutional,RESIDENTIAL:ALL'
+    pattern: 'list://NONRESIDENTIAL:NONRESIDENTIAL,MIXED:MIXED,RESIDENTIAL:RESIDENTIAL'
     source: pt
     isMandatory: true
     searchClause: and 1=1    
@@ -8094,7 +8094,7 @@ ReportDefinitions:
       ),
       props as
       (
-      select * from report_properties where  tenantid=$tenantid and propertystatus='ACTIVE' and propertyusagetype like concat('%',$usageCat,'%')
+      select * from report_properties where  tenantid=$tenantid and propertystatus='ACTIVE' and propertyusagetype like concat($usageCat,'%')
       ),
       owners as 
       (
