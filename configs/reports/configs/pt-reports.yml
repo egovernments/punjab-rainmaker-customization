@@ -8658,8 +8658,8 @@ ReportDefinitions:
       from properties pt
       --inner join report_payments as rp on  rp.propertyid=pt.propertyid and rp.paymentstatus!='CANCELLED'
       --inner join report_assessments ra on split_part(ra.billid,',',1)=rp.billid and  ra.propertyid=rp.propertyid
+        inner join owners on owners.propertyid=pt.propertyid
       where 1=1 
-      inner join owners on owners.propertyid=pt.propertyid
       
       
 - reportName: PROPERTY_CATEGORY_REPORT_V2
