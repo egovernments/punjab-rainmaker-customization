@@ -7953,6 +7953,12 @@ ReportDefinitions:
     source: pt
     isMandatory: true
     searchClause: and assessments.fy not like concat('%',$fy,'%')
+  - name: localityArray
+    label: reports.pt.zoneList
+    type: boundarylist
+    source: pt
+    isMandatory: false
+    searchClause: AND props.localitycode IN ($localityArray)
   query: |
       -- Use CTE to force query plan, compute & use CTE later
       with assessments as
@@ -8084,7 +8090,13 @@ ReportDefinitions:
     pattern: 'list://NONRESIDENTIAL:NONRESIDENTIAL,MIXED:MIXED,RESIDENTIAL:RESIDENTIAL'
     source: pt
     isMandatory: true
-    searchClause: and 1=1    
+    searchClause: and 1=1
+  - name: localityArray
+    label: reports.pt.zoneList
+    type: boundarylist
+    source: pt
+    isMandatory: false
+    searchClause: AND props.localitycode IN ($localityArray)
   query: |
       -- Use CTE to force query plan, compute & use CTE later
       with properties as
