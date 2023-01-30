@@ -6422,7 +6422,7 @@ ReportDefinitions:
         pt.propertyusagetype as usagetype
       from report_properties pt
       inner join units as ru on ru.propertyid=pt.propertyid 
-        --inner join report_payments as rp on  rp.propertyid=pt.propertyid and rp.paymentstatus!='CANCELLED'
+      inner join report_payments as rp on  rp.propertyid=pt.propertyid and rp.paymentstatus!='CANCELLED'
       --inner join report_assessments ra on split_part(ra.billid,',',1)=rp.billid and  ra.propertyid=rp.propertyid
       inner join owners on owners.propertyid=pt.propertyid and propertystatus='ACTIVE'
       where pt.tenantid=$tenantid
