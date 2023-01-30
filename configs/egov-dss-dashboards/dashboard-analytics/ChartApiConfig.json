@@ -4003,9 +4003,7 @@
       "downwardIndicator" : "negative",
       "textMessage" : "$indicator$value% than last $insightInterval",
       "colorCode" : "#228B22",
-      "insightInterval" : "year",
-      "isRoundOff": true
-
+      "insightInterval" : "year"
     },
     "_comment": " "
   },
@@ -4035,8 +4033,7 @@
       "downwardIndicator" : "negative",
       "textMessage" : "$indicator$value% than last $insightInterval",
       "colorCode" : "#228B22",
-      "insightInterval" : "year",
-      "isRoundOff": true
+      "insightInterval" : "year"
     },
     "_comment": " "
   },
@@ -4065,8 +4062,7 @@
       "downwardIndicator" : "negative",
       "textMessage" : "$indicator$value% than last $insightInterval",
       "colorCode" : "#228B22",
-      "insightInterval" : "year",
-      "isRoundOff": true
+      "insightInterval" : "year"
     },
     "_comment": "FIRE NOC total collections "
   },
@@ -4095,8 +4091,7 @@
       "downwardIndicator" : "negative",
       "textMessage" : "$indicator$value% than last $insightInterval",
       "colorCode" : "#228B22",
-      "insightInterval" : "year",
-      "isRoundOff": true
+      "insightInterval" : "year"
     },
     "_comment": "FIRE NOC total nocs issued "
   }
