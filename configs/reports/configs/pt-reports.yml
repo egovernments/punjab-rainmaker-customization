@@ -8091,12 +8091,18 @@ ReportDefinitions:
     source: pt
     isMandatory: true
     searchClause: and 1=1
-  - name: localityArray
-    label: reports.pt.zoneList
-    type: boundarylist
+  - name: blockname
+    label: reports.pt.blockname
+    type: string
     source: pt
     isMandatory: false
-    searchClause: AND props.localitycode IN ($localityArray)
+    searchClause: AND upper(blockname) LIKE CONCAT('%',upper($blockname),'%')
+  - name: localityname
+    label: reports.pt.localityname
+    type: string
+    source: pt
+    isMandatory: false
+    searchClause: AND upper(localityname) LIKE CONCAT('%',upper($localityname),'%')
   query: |
       -- Use CTE to force query plan, compute & use CTE later
       with properties as
