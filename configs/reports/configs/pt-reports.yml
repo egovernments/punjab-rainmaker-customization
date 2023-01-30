@@ -8586,6 +8586,14 @@ ReportDefinitions:
     source: pt
     isMandatory: false
     searchClause: AND pt.createdtime <= $toDate
+  - name: ulb
+    label: ULB
+    type: singlevaluelist
+    pattern: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?tenantId=$tenantid&moduleName=tenant&masterName=tenants|$.MdmsRes.tenant.tenants.*.code|$.MdmsRes.tenant.tenants.*.name
+    source: pt
+    wrapper: true
+    isMandatory: false
+    searchClause: AND pt.tenantid = $ulb    
   query: |
     --S.no    Service Name	ULB    Property Tax Unique ID    Date Of Transcation    Receipt Number	Existing Property ID    Owner Name    Guardian Name    Total Area (SQ.YARD)    Covered  Area/Built Area (SQ.FEET)    Floors    Occupancy (Rented,Self /Unoccupied)    Type Of Property	Mobile Number    Transcation Mode of Payment    Payment Amount    Payment Date    Email Id	Address
     with owners as 
@@ -8596,7 +8604,7 @@ ReportDefinitions:
           split_part(string_agg(guardianname,','),',',1) as guardianname,
           split_part(string_agg(emailid,','),',',1) as emailid,			  
           propertyid
-          from report_owners where status='ACTIVE' and tenantid ='pb.jalandhar'                 
+          from report_owners where status='ACTIVE' and tenantid =$ulb                
           group by propertyid
       ),
     properties as
@@ -8609,11 +8617,7 @@ ReportDefinitions:
         split_part(string_agg(plotsize::text,'___'),'___',1) as plotsize,
         split_part(string_agg(propertyusagetype,'___'),'___',1) as usagetype
       from report_properties
-      where propertystatus='ACTIVE' 
-      and ((propertytype='BUILTUP.INDEPENDENTPROPERTY' and plotsize>=100 and propertyusagetype='RESIDENTIAL') 
-          or ( propertytype='BUILTUP.SHAREDPROPERTY' and plotsize>=750 and propertyusagetype='RESIDENTIAL') 
-          or propertyusagetype!='RESIDENTIAL')
-          and tenantid ='pb.jalandhar' and createdtime >=1564317651000 and  createdtime <=1577923191000
+      where propertystatus='ACTIVE' and tenantid =$ulb
       group by propertyid
       )
       select
@@ -8654,6 +8658,7 @@ ReportDefinitions:
       from properties pt
       --inner join report_payments as rp on  rp.propertyid=pt.propertyid and rp.paymentstatus!='CANCELLED'
       --inner join report_assessments ra on split_part(ra.billid,',',1)=rp.billid and  ra.propertyid=rp.propertyid
+      where 1=1 
       inner join owners on owners.propertyid=pt.propertyid
       
       
