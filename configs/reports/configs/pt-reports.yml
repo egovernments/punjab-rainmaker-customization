@@ -8615,7 +8615,8 @@ ReportDefinitions:
         split_part(string_agg(address,'___'),'___',1) as address,
         split_part(string_agg(localityname,'___'),'___',1) as localityname,
         split_part(string_agg(plotsize::text,'___'),'___',1) as plotsize,
-        split_part(string_agg(propertyusagetype,'___'),'___',1) as usagetype
+        split_part(string_agg(propertyusagetype,'___'),'___',1) as usagetype,
+        split_part(string_agg(createdtime::text,'___'),'___',1) as createdtime
       from report_properties
       where propertystatus='ACTIVE' and tenantid =$ulb
       group by propertyid
