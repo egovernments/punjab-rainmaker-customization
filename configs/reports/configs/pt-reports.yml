@@ -8062,11 +8062,6 @@ ReportDefinitions:
     type: string
     source: pt
     total: false
-  - name: fy
-    label: reports.pt.financialyear
-    type: string
-    source: pt
-    total: false
   - name: ownername
     label: reports.pt.ownername
     type: string
@@ -8127,7 +8122,7 @@ ReportDefinitions:
       ),
       demands as
       (
-      select  consumercode as propertyid,sum(taxamount) as demand,string_agg(distinct to_char((To_timestamp(d.taxperiodfrom/1000) at time Zone 'Asia/Kolkata'),'YYYY'),',') as fy
+      select  consumercode as propertyid,sum(taxamount) as demand,string_agg(distinct to_char((To_timestamp(d.taxperiodfrom/1000) at time Zone 'Asia/Kolkata'),'YYYY'),',') as financialyears
         from egbs_demand_v1 d
       inner join egbs_demanddetail_v1 dd on dd.demandid=d.id
       inner join properties p on p.propertyid=consumercode
