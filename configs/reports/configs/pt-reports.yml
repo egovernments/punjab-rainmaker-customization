@@ -8077,6 +8077,16 @@ ReportDefinitions:
     type: string
     source: pt
     total: false
+  - name: tentativedemand
+    label: reports.pt.tentativedemand
+    type: string
+    source: pt
+    total: false
+  - name: financialyears
+    label: reports.pt.financialyears
+    type: string
+    source: pt
+    total: false   
   searchParams:
   - name: fy
     label: Financial Year
@@ -8115,6 +8125,17 @@ ReportDefinitions:
       (
       select * from report_properties where  tenantid=$tenantid and propertystatus='ACTIVE' and propertyusagetype like concat($usageCat,'%')
       ),
+      demands as
+      (
+      select  consumercode as propertyid,sum(taxamount) as demand,string_agg(distinct to_char((To_timestamp(d.taxperiodfrom/1000) at time Zone 'Asia/Kolkata'),'YYYY'),',') as fy
+        from egbs_demand_v1 d
+      inner join egbs_demanddetail_v1 dd on dd.demandid=d.id
+      inner join properties p on p.propertyid=consumercode
+      where  businessservice='PT' and status!='CANCELLED' 
+        and ispaymentcompleted=false and d.tenantid=$tenantid 
+        and taxamount!=collectionamount
+        group by consumercode
+      ),
       owners as 
       (
       select 
@@ -8129,6 +8150,8 @@ ReportDefinitions:
         props.propertyid,
         props.oldpropertyid,
         props.propertystatus,
+        demands.demand as tentativedemand,
+        demands.financialyears as financialyears,
         firmbusinessname,
         address,
         localityname,
@@ -8141,6 +8164,7 @@ ReportDefinitions:
         owners.mobilenumber as mobileno
       from properties 
       inner join props on props.propertyid=properties.propertyid
+      inner join demands on demands.propertyid=properties.propertyid
       inner join owners on owners.propertyid=properties.propertyid
       where 1=1 
 
