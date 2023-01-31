@@ -3942,6 +3942,956 @@
           ]
         }
       ]
+    },
+    {
+      "name": "DSS_M_COLLECT_DASHBOARD",
+      "id": "mCollect",
+      "isActive": "",
+      "style": "linear",
+      "visualizations": [
+        {
+          "row": 1,
+          "name": "DSS_REVENUE",
+          "vizArray": [
+            {
+              "id": 311,
+              "name": "DSS_MCOLLECT_STATE_OVERVIEW",
+              "dimensions": {
+                "height": 350,
+                "width": 5
+              },
+              "vizType": "metric-collection",
+              "label": "DSS_MCOLLECT_STATE_OVERVIEW",
+              "noUnit": true,
+              "isCollapsible": false,
+              "charts": [
+                {
+                  "id": "mcTodaysCollection",
+                  "name": "DSS_TOTAL_COLLECTION_TODAY",
+                  "code": "",
+                  "chartType": "metric",
+                  "filter": {
+                    "title": "TODAY"
+                  },
+                  "headers": []
+                },
+                {
+                  "id": "mcTotalCollection",
+                  "name": "DSS_TOTAL_COLLECTION",
+                  "code": "",
+                  "chartType": "metric",
+                  "filter": "",
+                  "headers": []
+                },
+                {
+                  "id": "mcTotalChallans",
+                  "name": "DSS_MC_TOTAL_CHALLANS",
+                  "code": "",
+                  "chartType": "metric",
+                  "filter": "",
+                  "headers": []
+                },
+                {
+                  "id": "mcTotalReceipts",
+                  "name": "DSS_MC_TOTAL_RECEIPTS",
+                  "code": "",
+                  "chartType": "metric",
+                  "filter": "",
+                  "headers": []
+                },
+                {
+                  "id": "mcTotalCategories",
+                  "name": "DSS_MC_TOTAL_CATEGORIES",
+                  "code": "",
+                  "chartType": "metric",
+                  "filter": "",
+                  "headers": []
+                }
+              ]
+            },
+            {
+              "id": 312,
+              "name": "Total Cumulative Collection",
+              "dimensions": {
+                "height": 350,
+                "width": 7
+              },
+              "vizType": "chart",
+              "label": "",
+              "noUnit": true,
+              "isCollapsible": false,
+              "charts": [
+                {
+                  "id": "mcCumulativeCollection",
+                  "name": "Monthly",
+                  "code": "",
+                  "chartType": "line",
+                  "filter": "",
+                  "headers": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "row": 2,
+          "name": "DSS_REVENUE",
+          "vizArray": [
+            
+            {
+              "id": 234,
+              "name": "DSS_MC_RECEIPTS_BY_PAYMENTMODE",
+              "dimensions": {
+                "height": 250,
+                "width": 4
+              },
+              "vizType": "chart",
+              "noUnit": false,
+              "isCollapsible": false,
+              "charts": [
+                {
+                  "id": "mcReceiptsByPaymentMode",
+                  "name": "DSS_MC_RECEIPTS_BY_PAYMENTMODE",
+                  "code": "",
+                  "chartType": "donut",
+                  "filter": "",
+                  "headers": []
+                }
+              ]
+            },
+            {
+              "id": 323,
+              "name": "DSS_MC_COLLECTION_BY_PAYMENT_TYPE",
+              "dimensions": {
+                "height": 250,
+                "width": 4
+              },
+              "vizType": "chart",
+              "label": "",
+              "noUnit": false,
+              "isCollapsible": false,
+              "charts": [
+                {
+                  "id": "mcCollectionByPaymentType",
+                  "name": "DSS_MC_COLLECTION_BY_PAYMENT_TYPE",
+                  "code": "",
+                  "chartType": "donut",
+                  "filter": "",
+                  "headers": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "row": 3,
+          "name": "DSS_REVENUE",
+          "vizArray": [
+            
+            {
+              "id": 235,
+              "name": "DSS_MC_CHALLAN_COUNT_BY_STATUS",
+              "dimensions": {
+                "height": 250,
+                "width": 4
+              },
+              "vizType": "chart",
+              "noUnit": false,
+              "isCollapsible": false,
+              "charts": [
+                {
+                  "id": "mcChallanCountByStatus",
+                  "name": "DSS_MC_CHALLAN_COUNT_BY_STATUS",
+                  "code": "",
+                  "chartType": "donut",
+                  "filter": "",
+                  "headers": []
+                }
+              ]
+            },
+            {
+              "id": 233,
+              "name": "DSS_MC_RECEIPTS_BY_STATUS",
+              "dimensions": {
+                "height": 250,
+                "width": 4
+              },
+              "vizType": "chart",
+              "noUnit": false,
+              "isCollapsible": false,
+              "charts": [
+                {
+                  "id": "mcReceiptsByStatus",
+                  "name": "DSS_MC_RECEIPTS_BY_STATUS",
+                  "code": "",
+                  "chartType": "donut",
+                  "filter": "",
+                  "headers": []
+                }
+              ]
+            },
+            {
+              "id": 232,
+              "name": "DSS_MC_COLLECTION_BY_STATUS",
+              "dimensions": {
+                "height": 250,
+                "width": 4
+              },
+              "vizType": "chart",
+              "noUnit": false,
+              "isCollapsible": false,
+              "charts": [
+                {
+                  "id": "mcCollectionByStatus",
+                  "name": "DSS_MC_COLLECTION_BY_STATUS",
+                  "code": "",
+                  "chartType": "donut",
+                  "filter": "",
+                  "headers": []
+                }
+              ]
+            }
+          ]
+        },
+        
+        {
+          "row": 4,
+          "name": "DSS_REVENUE",
+          "vizArray": [
+            
+            {
+              "id": 123,
+              "name": "DSS_MC_COLLECTION_CATEGORY_WISE",
+              "dimensions": {
+                "height": 250,
+                "width": 4
+              },
+              "vizType": "chart",
+              "noUnit": false,
+              "isCollapsible": false,
+              "charts": [
+                {
+                  "id": "mcTotalCollectionCategoryWise",
+                  "name": "DSS_MC_COLLECTION_CATEGORY_WISE",
+                  "code": "",
+                  "chartType": "horizontalBar",
+                  "filter": "",
+                  "headers": []
+                }
+              ]
+            },
+            {
+              "id": 124,
+              "name": "DSS_MC_MONTHLY_REPORT",
+              "dimensions": {
+                "height": 250,
+                "width": 4
+              },
+              "vizType": "chart",
+              "noUnit": false,
+              "isCollapsible": false,
+              "charts": [
+                {
+                  "id": "mcMonthlyCollectionReport",
+                  "name": "DSS_MC_MONTHLY_REPORT",
+                  "code": "",
+                  "chartType": "bar",
+                  "filter": "",
+                  "headers": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "row": 5,
+          "name": "DSS_REVENUE",
+          "vizArray": [
+            
+            {
+              "id": 236,
+              "name": "DSS_MC_REPORT_BY_TENANT",
+              "dimensions": {
+                "height": 250,
+                "width": 4
+              },
+              "vizType": "chart",
+              "noUnit": false,
+              "isCollapsible": false,
+              "charts": [
+                {
+                  "id": "mcReportByDDRv2",
+                  "name": "DSS_MC_REPORT_BY_TENANT",
+                  "code": "",
+                  "chartType": "table",
+                  "filter": "",
+                  "headers": [],
+                  "tabName": "Region"
+                },
+                {
+                  "id": "mcReportByCategoryv2",
+                  "name": "DSS_MC_REPORT_BY_CATEGORY",
+                  "code": "",
+                  "chartType": "table",
+                  "filter": "",
+                  "headers": [],
+                  "tabName": "Category"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "DSS_FIRE_NOC_DASHBOARD",
+      "id": "noc",
+      "isActive": "",
+      "style": "linear",
+      "visualizations": [
+        {
+          "row": 1,
+          "name": "DSS_OVERVIEW",
+          "vizArray": [
+            {
+              "id": 341,
+              "name": "DSS_NOC_REVENUE",
+              "dimensions": {
+                "height": 400,
+                "width": 5
+              },
+              "vizType": "metric-collection",
+              "label": "DSS_NOC_REVENUE",
+              "noUnit": true,
+              "isCollapsible": false,
+              "charts": [
+                {
+                  "id": "nocTodaysCollection",
+                  "name": "DSS_NOC_TODAYS_COLLECTION",
+                  "code": "",
+                  "chartType": "metric",
+                  "filter": {
+                    "title": "TODAY"
+                  },
+                  "headers": []
+                },
+                {
+                  "id": "nocTotalCollection",
+                  "name": "DSS_NOC_TOTAL_COLLECTION",
+                  "code": "",
+                  "chartType": "metric",
+                  "filter": "",
+                  "headers": []
+                }
+              ]
+            },
+            {
+              "id": 342,
+              "name": "DSS_NOC_TOTAL_CUMULATIVE_COLLECTION",
+              "dimensions": {
+                "height": 190,
+                "width": 7
+              },
+              "vizType": "chart",
+              "label": "",
+              "noUnit": true,
+              "isCollapsible": false,
+              "charts": [
+                {
+                  "id": "nocCumulativeCollection",
+                  "name": "Monthly",
+                  "code": "",
+                  "chartType": "line",
+                  "filter": "",
+                  "headers": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "row": 2,
+          "name": "DSS_OVERVIEW",
+          "vizArray": [
+            {
+              "id": 341,
+              "name": "DSS_NOC_OVERVIEW",
+              "dimensions": {
+                "height": 400,
+                "width": 5
+              },
+              "vizType": "metric-collection",
+              "label": "DSS_NOC_OVERVIEW",
+              "noUnit": true,
+              "isCollapsible": false,
+              "charts": [
+                {
+                  "id": "nocTotalApplications",
+                  "name": "DSS_NOC_TOTAL_APPLICATIONS",
+                  "code": "",
+                  "chartType": "metric",
+                  "filter": "",
+                  "headers": []
+                },
+                {
+                  "id": "nocProvisionalIssued",
+                  "name": "DSS_NOC_PROVISIONAL_ISSUED",
+                  "code": "",
+                  "chartType": "metric",
+                  "filter": "",
+                  "headers": []
+                },
+                {
+                  "id": "nocActualIssued",
+                  "name": "DSS_NOC_ACTUAL_ISSUED",
+                  "code": "",
+                  "chartType": "metric",
+                  "filter": "",
+                  "headers": []
+                },
+                {
+                  "id": "nocSLAComplianceProvisional",
+                  "name": "DSS_NOC_SLA_COMPLIANCE_PROVISIONAL",
+                  "code": "",
+                  "chartType": "metric",
+                  "filter": "",
+                  "headers": []
+                },
+                {
+                  "id": "nocSLAComplianceActual",
+                  "name": "DSS_NOC_SLA_COMPLIANCE_ACTUAL",
+                  "code": "",
+                  "chartType": "metric",
+                  "filter": "",
+                  "headers": []
+                }
+              ]
+            },
+            {
+              "id": 343,
+              "name": "DSS_APPLICATION_VS_PROVISIONAL_VS_ACTUAL",
+              "dimensions": {
+                "height": 190,
+                "width": 7
+              },
+              "vizType": "chart",
+              "isCollapsible": false,
+              "label": "",
+              "charts": [
+                {
+                  "id": "nocApplicationVsProvisionalVsActual",
+                  "name": "Monthly",
+                  "code": "",
+                  "chartType": "line",
+                  "filter": "",
+                  "headers": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "row": 3,
+          "name": "DSS_OVERVIEW",
+          "vizArray": [
+           {
+              "id": 210,
+              "name": "DSS_NOC_COLLECTION_BY_PAYMENT_MODE",
+              "dimensions": {
+                "height": 250,
+                "width": 4
+              },
+              "vizType": "chart",
+              "label": "",
+              "noUnit": false,
+              "isCollapsible": false,
+              "charts": [
+                {
+                  "id": "nocCollectionByPaymentMode",
+                  "name": "DSS_NOC_COLLECTION_BY_PAYMENT_MODE",
+                  "code": "",
+                  "chartType": "donut",
+                  "filter": "",
+                  "headers": []
+                }
+              ]
+            },
+            {
+              "id": 211,
+              "name": "DSS_TOTAL_NOC_ISSUED_TYPE",
+              "dimensions": {
+                "height": 250,
+                "width": 4
+              },
+              "vizType": "chart",
+              "noUnit": false,
+              "isCollapsible": false,
+              "charts": [
+                {
+                  "id": "totalNocIssuedByType",
+                  "name": "DSS_TOTAL_NOC_ISSUED_TYPE",
+                  "code": "",
+                  "chartType": "donut",
+                  "filter": "",
+                  "headers": []
+                }
+              ]
+           },
+           {
+              "id": 212,
+              "name": "DSS_ACTUAL_NOC_ISSUED_USAGETYPE",
+              "dimensions": {
+                "height": 250,
+                "width": 4
+              },
+              "vizType": "chart",
+              "noUnit": false,
+              "isCollapsible": false,
+              "charts": [
+                {
+                  "id": "actualNocIssuedByUsageType",
+                  "name": "DSS_ACTUAL_NOC_ISSUED_USAGETYPE",
+                  "code": "",
+                  "chartType": "donut",
+                  "filter": "",
+                  "headers": []
+                }
+              ]
+           }
+          ]
+        },
+         {
+          "row": 4,
+          "name": "DSS_OVERVIEW",
+          "vizArray": [
+            {
+              "id": 321,
+              "name": "DSS_NOC_TOP_3_PERFORMING_ULBS",
+              "dimensions": {
+                "height": 250,
+                "width": 4
+              },
+              "vizType": "performing-metric",
+              "label": "",
+              "noUnit": false,
+              "isCollapsible": false,
+              "charts": [
+                {
+                  "id": "nocActualTopPerformingUlbs",
+                  "name": "DSS_NOC_ACTUAL_TOP_3_PERFORMING_ULBS",
+                  "code": "",
+                  "chartType": "bar",
+                  "filter": "",
+                  "headers": [],
+                  "tabName":"Actual"
+                },
+                {
+                  "id": "nocProvisionalTopPerformingUlbs",
+                  "name": "DSS_NOC_PROVISIONAL_TOP_3_PERFORMING_ULBS",
+                  "code": "",
+                  "chartType": "bar",
+                  "filter": "",
+                  "headers": [],
+                  "tabName":"Provisional"
+                }
+              ]
+            },
+            {
+              "id": 322,
+              "name": "DSS_NOC_BOTTOM_3_PERFORMING_ULBS",
+              "dimensions": {
+                "height": 250,
+                "width": 4
+              },
+              "vizType": "performing-metric",
+              "label": "",
+              "noUnit": false,
+              "isCollapsible": false,
+              "charts": [
+                {
+                  "id": "nocActualBottomPerformingUlbs",
+                  "name": "DSS_NOC_ACTUAL_BOTTOM_3_PERFORMING_ULBS",
+                  "code": "",
+                  "chartType": "bar",
+                  "filter": "",
+                  "headers": [],
+                  "tabName":"Actual"
+                },
+                {
+                  "id": "nocProvisionalBottomPerformingUlbs",
+                  "name": "DSS_NOC_PROVISIONAL_BOTTOM_3_PERFORMING_ULBS",
+                  "code": "",
+                  "chartType": "bar",
+                  "filter": "",
+                  "headers": [],
+                  "tabName":"Provisional"
+                }                
+              ]
+            }
+          ]
+        },
+        {
+          "row": 5,
+          "name": "DSS_OVERVIEW",
+          "vizArray": [
+            {
+              "id": 231,
+              "name": "Service Report",
+              "dimensions": {
+                "height": 350,
+                "width": 12
+              },
+              "vizType": "chart",
+              "noUnit": false,
+              "isCollapsible": false,
+              "charts": [
+                {
+                  "id": "nocServiceReportByRegion",
+                  "name": "DSS_NOC_SERVICE_REPORT_REGION",
+                  "code": "",
+                  "chartType": "table",
+                  "filter": "",
+                  "headers": [],
+                  "tabName": "Region"
+                },
+                {
+                  "id": "nocServiceReportByDepartment",
+                  "name": "DSS_NOC_SERVICE_REPORT_DEPARTMENT",
+                  "code": "",
+                  "chartType": "table",
+                  "filter": "",
+                  "headers": [],
+                  "tabName": "Department"
+                }
+              ]
+            }
+          ]
+        }  
+      ]
+    },
+    {
+      "name":"DSS_BUILDING_PLANNING_DASHBOARD",
+      "id":"obps",
+      "isActive":"",
+      "style":"linear",
+      "visualizations":[
+        {
+          "row": 1,
+          "name": "DSS_BUILDING_PLANNING",
+          "vizArray": [
+            {
+              "id": 111,
+              "name": "DSS_OVERVIEW_REVENUE",
+              "dimensions": {
+                "height": 350,
+                "width": 5
+              },
+              "vizType": "metric-collection",
+              "noUnit": true,
+              "isCollapsible": false,
+              "label": "DSS_OVERVIEW_REVENUE",
+              "charts": [
+                {
+                  "id": "bpaTodaysCollection",
+                  "name": "DSS_BPA_TODAYS_COLLECTION",
+                  "code": "",
+                  "chartType": "metric",
+                  "filter": "",
+                  "headers": []
+                },
+                {
+                  "id": "bpaTotalCollection",
+                  "name": "DSS_BPA_TOTAL_COLLECTION",
+                  "code": "",
+                  "chartType": "metric",
+                  "filter": "",
+                  "headers": []
+                }
+              ]
+            }
+          ,{
+              "id": 112,
+              "name": "DSS_BPA_TOTAL_CUMULATIVE_COLLECTION",
+              "dimensions": {
+                "height": 350,
+                "width": 7
+              },
+              "vizType": "chart",
+              "noUnit": true,
+              "isCollapsible": false,
+              "charts": [
+                {
+                  "id": "bpaCumulativeCollections",
+                  "name": "Monthly",
+                  "code": "",
+                  "chartType": "line",
+                  "filter": "",
+                  "headers": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "row":2,
+          "name":"DSS_BUILDING_PLANNING",
+          "vizArray":[
+            {
+              "id": 210,
+              "name": "DSS_OVERVIEW_SERVICES",
+              "dimensions": {
+                "height": 350,
+                "width": 5
+              },
+              "vizType": "metric-collection",
+              "noUnit": true,
+              "isCollapsible": false,
+              "label": "DSS_OVERVIEW_SERVICES",
+              "charts": [
+                {
+                  "id": "bpaTotalPlansScrutinized",
+                  "name": "DSS_BPA_TOTAL_PLANS_SCRUTINIZED",
+                  "code": "",
+                  "chartType": "metric",
+                  "filter": "",
+                  "headers": []
+                },
+                {
+                  "id": "bpaTotalPermitsIssued",
+                  "name": "DSS_BPA_TOTAL_PERMITS_ISSUED",
+                  "code": "",
+                  "chartType": "metric",
+                  "filter": "",
+                  "headers": []
+                },
+                {
+                  "id": "bpaTotalOCIssued",
+                  "name": "DSS_BPA_TOTAL_OC_ISSUED",
+                  "code": "",
+                  "chartType": "metric",
+                  "filter": "",
+                  "headers": []
+                },
+                {
+                  "id": "bpaTotalLandApplied",
+                  "name": "DSS_BPA_TOTAL_LAND_APPLIED",
+                  "code": "",
+                  "chartType": "metric",
+                  "filter": "",
+                  "headers": []
+                },
+                {
+                  "id": "bpaAverageDaysToIssuePermit",
+                  "name": "DSS_BPA_AVERAGE_DAYS_ISSUE_PERMIT",
+                  "code": "",
+                  "chartType": "metric",
+                  "filter": "",
+                  "headers": []
+                },
+                {
+                  "id": "bpaSLACompliance",
+                  "name": "DSS_BPA_SLA_COMPLIANCE",
+                  "code": "",
+                  "chartType": "metric",
+                  "filter": "",
+                  "headers": []
+                },
+                {
+                  "id": "bpaAverageDaysToIssueOC",
+                  "name": "DSS_BPA_AVERAGE_DAYS_ISSUE_OC",
+                  "code": "",
+                  "chartType": "metric",
+                  "filter": "",
+                  "headers": []
+                },
+                {
+                  "id": "bpaSLAComplianceOC",
+                  "name": "DSS_BPA_SLA_COMPLIANCE_OC",
+                  "code": "",
+                  "chartType": "metric",
+                  "filter": "",
+                  "headers": []
+                }
+              ]
+            },
+            {
+              "id": 211,
+              "name": "DSS_TOTAL_PERMIT_ISSUED_VS_TOTAL_OC_ISSUED_VS_TOTAL_OC_SUBMITTED",
+              "dimensions": {
+                "height": 250,
+                "width": 7
+              },
+              "vizType": "chart",
+              "isCollapsible": false,
+              "label": "",
+              "charts": [
+                {
+                  "id": "permitsandOCissued",
+                  "name": "Monthly",
+                  "code": "",
+                  "chartType": "line",
+                  "filter": "",
+                  "headers": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "row": 3,
+          "name": "DSS_BUILDING_PLANNING",
+          "vizArray": [
+            {
+              "id": 323,
+              "name": "DSS_OBPS_COLLECTION_BY_USAGE_TYPE",
+              "dimensions": {
+                "height": 250,
+                "width": 4
+              },
+              "vizType": "chart",
+              "label": "",
+              "noUnit": false,
+              "isCollapsible": false,
+              "charts": [
+                {
+                  "id": "obpsCollectionByPaymentMode",
+                  "name": "DSS_OBPS_COLLECTION_BY_PAYMENT_MODE",
+                  "code": "",
+                  "chartType": "donut",
+                  "filter": "",
+                  "headers": []
+                }
+              ]
+            },
+            {
+              "id": 321,
+              "name": "DSS_OBPS_TOP_ULB_BY_PERFORMANCE",
+              "dimensions": {
+                "height": 250,
+                "width": 3
+              },
+              "vizType": "performing-metric",
+              "label": "",
+              "noUnit": false,
+              "isCollapsible": false,
+              "charts": [
+                {
+                  "id": "obpsTopUlbByPerformance",
+                  "name": "Monthly",
+                  "code": "",
+                  "chartType": "bar",
+                  "filter": "",
+                  "headers": []
+                }
+              ]
+            },
+            {
+              "id": 322,
+              "name": "DSS_OBPS_BOTTOM_ULB_BY_PERFORMANCE",
+              "dimensions": {
+                "height": 250,
+                "width": 3
+              },
+              "vizType": "performing-metric",
+              "label": "",
+              "noUnit": false,
+              "isCollapsible": false,
+              "charts": [
+                {
+                  "id": "obpsBottomUlbByPerformance",
+                  "name": "Monthly",
+                  "code": "",
+                  "chartType": "bar",
+                  "filter": "",
+                  "headers": []
+                }
+              ]
+            }
+            
+          ]
+        },
+        {
+          "row":4,
+          "name":"DSS_BUILDING_PLANNING",
+          "vizArray":[
+            {
+              "id":311,
+              "name":"DSS_BPA_PERMIT_ISSUED_BY_RISK_TYPE",
+              "dimensions":{
+                "height":250,
+                "width":4
+              },
+              "vizType":"chart",
+              "noUnit": false,
+              "isCollapsible":false,
+              "charts":[
+                {
+                  "id":"permitIssuedByRiskType",
+                  "name":"DSS_BPA_PERMIT_ISSUED_BY_RISK_TYPE",
+                  "code":"",
+                  "chartType":"donut",
+                  "filter":"",
+                  "headers":[
+
+                  ]
+                }
+              ]
+            },
+            {
+              "id":312,
+              "name":"DSS_BPA_PERMIT_ISSUED_BY_OCCUPANCY_TYPE",
+              "dimensions":{
+                "height":250,
+                "width":4
+              },
+              "vizType":"chart",
+              "noUnit": false,
+              "isCollapsible":false,
+              "charts":[
+                {
+                  "id":"permitIssuedByOccupancyType",
+                  "name":"DSS_BPA_PERMIT_ISSUED_BY_OCCUPANCY_TYPE",
+                  "code":"",
+                  "chartType":"donut",
+                  "filter":"",
+                  "headers":[
+
+                  ]
+                }
+              ]
+            }
+
+          ]
+        },
+        {
+          "row": 5,
+          "name": "DSS_BUILDING_PLANNING",
+          "vizArray": [
+            {
+              "id": 231,
+              "name": "DSS_OBPS_SERVICE_REPORT",
+              "dimensions": {
+                "height": 350,
+                "width": 12
+              },
+              "vizType": "chart",
+              "noUnit": false,
+              "isCollapsible": false,
+              "charts": [
+                {
+                  "id": "obpsServiceReport",
+                  "name": "DSS_OBPS_SERVICE_REPORT",
+                  "code": "",
+                  "chartType": "table",
+                  "filter": "",
+                  "headers": []
+                }
+              
+              ]
+            }
+          ]
+        } 
+      ]
     }
   ]
 }
