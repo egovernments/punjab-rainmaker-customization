@@ -9106,6 +9106,12 @@ ReportDefinitions:
     source: pt
     isMandatory: false
     searchClause: and pt.propertyusagetype like concat($usageCat,'%') 
+  - name: usageSubCat
+    label: Usage Sub Category
+    type: string
+    source: pt
+    isMandatory: false
+    searchClause: and u.usagecategory like concat('%',$usageSubCat,'%') 
   - name: blockname
     label: reports.pt.blockname
     type: string
@@ -9136,4 +9142,5 @@ ReportDefinitions:
       pt.localityname as localityname
     from report_unpaid_demand d  
     left join report_properties pt on pt.propertyid=d.propertyid and pt.propertystatus!='INACTIVE'
+    inner join report_units u on u.propertyid=pt.propertyid and u.tenantid=$tenantid
     where d.tenantid=$tenantid and d.demand>0
