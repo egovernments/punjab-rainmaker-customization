@@ -9105,7 +9105,7 @@ ReportDefinitions:
     pattern: 'list://NONRESIDENTIAL:NONRESIDENTIAL,MIXED:MIXED,RESIDENTIAL:RESIDENTIAL'
     source: pt
     isMandatory: false
-    searchClause: and 1=1
+    searchClause: and pt.propertyusagetype like concat($usageCat,'%') 
   - name: blockname
     label: reports.pt.blockname
     type: string
