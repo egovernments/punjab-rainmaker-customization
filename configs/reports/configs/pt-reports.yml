@@ -9085,6 +9085,16 @@ ReportDefinitions:
     type: string
     source: pt
     total: false
+  - name: ownername
+    label: reports.pt.ownername
+    type: string
+    source: pt
+    total: false
+  - name: mobileno
+    label: reports.pt.mobileno
+    type: string
+    source: pt
+    total: false
   searchParams:
   - name: nameofbusiness
     label: reports.pt.nameofbusinness
@@ -9111,7 +9121,7 @@ ReportDefinitions:
     type: string
     source: pt
     isMandatory: false
-    searchClause: and u.usagecategory like concat('%',$usageSubCat,'%') 
+    searchClause: and u.usagecategory like concat('%',upper($usageSubCat),'%') 
   - name: blockname
     label: reports.pt.blockname
     type: string
@@ -9126,6 +9136,16 @@ ReportDefinitions:
     searchClause: AND upper(localityname) LIKE CONCAT('%',upper($localityname),'%')
   query: |
     --S.no    Service Name	ULB    Property Tax Unique ID    Date Of Transcation    Receipt Number	Existing Property ID    Owner Name    Guardian Name    Total Area (SQ.YARD)    Covered  Area/Built Area (SQ.FEET)    Floors    Occupancy (Rented,Self /Unoccupied)    Type Of Property	Mobile Number    Transcation Mode of Payment    Payment Amount    Payment Date    Email Id	Address
+    with owners as
+    ( 
+    select
+      split_part(string_agg(ownername,','),',',1) as ownername,
+      split_part(string_agg(mobilenumber,','),',',1) as mobilenumber,
+      propertyid
+    from report_owners
+    where tenantid=$tenantid  and status='ACTIVE' and propertyid in (select propertyid from report_unpaid_demand where tenantid=$tenantid)
+    group by propertyid
+    ),
     select 
       d.propertyid as propertyid, 
       pt.oldpropertyid as oldpropertyid,
@@ -9139,8 +9159,11 @@ ReportDefinitions:
       pt.ownershipcategory as ownership,
       pt.plotsize as plotsize,
       pt.firmbusinessname as businessname,
-      pt.localityname as localityname
+      pt.localityname as localityname,
+      owners.ownername as ownername,
+      owners.mobilenumber as mobileno
     from report_unpaid_demand d  
     left join report_properties pt on pt.propertyid=d.propertyid and pt.propertystatus!='INACTIVE'
     inner join report_units u on u.propertyid=pt.propertyid and u.tenantid=$tenantid
+    inner join owners on owners.propertyid=pt.propertyid
     where d.tenantid=$tenantid and d.demand>0
