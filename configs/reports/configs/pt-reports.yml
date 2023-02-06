@@ -9145,7 +9145,7 @@ ReportDefinitions:
     from report_owners
     where tenantid=$tenantid  and status='ACTIVE' and propertyid in (select propertyid from report_unpaid_demand where tenantid=$tenantid)
     group by propertyid
-    ),
+    )
     select 
       d.propertyid as propertyid, 
       pt.oldpropertyid as oldpropertyid,
