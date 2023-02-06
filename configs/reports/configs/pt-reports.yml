@@ -8003,7 +8003,7 @@ ReportDefinitions:
         left outer join owners on owners.propertyid=props.propertyid
         where props.tenantid=$tenantid and propertystatus!='INACTIVE'
 
-- reportName: DEFAULTER_REPORT_WITH_LOCALITY_UNPAID_DEMAND_OLD
+- reportName: DEFAULTER_REPORT_WITH_LOCALITY_UNPAID_DEMAND
   decryptionPathId: ULBDEFAULTERPTREPORT_V2
   summary: Occupancy Type Report
   version: 1.0.0
@@ -9014,7 +9014,7 @@ ReportDefinitions:
     where pt.status!='INACTIVE'
     
     
-- reportName: DEFAULTER_REPORT_WITH_LOCALITY_UNPAID_DEMAND
+- reportName: DEFAULTER_REPORT_WITH_LOCALITY_UNPAID_DEMAND_NEW
   decryptionPathId: ULBPTDataDumpReport_V2
   summary: ULB level report
   version: 1.0.0
@@ -9092,6 +9092,32 @@ ReportDefinitions:
     source: pt
     isMandatory: false
     searchClause: AND upper(pt.firmbusinessname) LIKE CONCAT('%',upper($nameofbusiness),'%')
+  - name: fy
+    label: Financial Year
+    type: singlevaluelist
+    pattern: 'list://2015:2015-16,2016:2016-17,2017:2017-18,2018:2018-19,2019:2019-20,2020:2020-21,2021:2021-22,2022:2022-23'
+    source: pt
+    isMandatory: false
+    searchClause: and d.fy like concat('%',$fy,'%')
+  - name: usageCat
+    label: Usage Category
+    type: singlevaluelist
+    pattern: 'list://NONRESIDENTIAL:NONRESIDENTIAL,MIXED:MIXED,RESIDENTIAL:RESIDENTIAL'
+    source: pt
+    isMandatory: false
+    searchClause: and 1=1
+  - name: blockname
+    label: reports.pt.blockname
+    type: string
+    source: pt
+    isMandatory: false
+    searchClause: AND upper(blockname) LIKE CONCAT('%',upper($blockname),'%')
+  - name: localityname
+    label: reports.pt.localityname
+    type: string
+    source: pt
+    isMandatory: false
+    searchClause: AND upper(localityname) LIKE CONCAT('%',upper($localityname),'%')
   query: |
     --S.no    Service Name	ULB    Property Tax Unique ID    Date Of Transcation    Receipt Number	Existing Property ID    Owner Name    Guardian Name    Total Area (SQ.YARD)    Covered  Area/Built Area (SQ.FEET)    Floors    Occupancy (Rented,Self /Unoccupied)    Type Of Property	Mobile Number    Transcation Mode of Payment    Payment Amount    Payment Date    Email Id	Address
     select 
