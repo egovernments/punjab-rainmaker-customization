@@ -9135,5 +9135,5 @@ ReportDefinitions:
       pt.firmbusinessname as businessname,
       pt.localityname as localityname
     from report_unpaid_demand d  
-    left join report_properties pt on pt.propertyid=d.propertyid 
-    where d.tenantid=$tenantid and pt.propertystatus!='INACTIVE'
+    left join report_properties pt on pt.propertyid=d.propertyid and pt.propertystatus!='INACTIVE'
+    where d.tenantid=$tenantid and d.demand>0
