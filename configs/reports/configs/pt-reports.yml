@@ -9121,7 +9121,7 @@ ReportDefinitions:
     type: string
     source: pt
     isMandatory: false
-    searchClause: and u.usagecategory like concat('%',upper($usageSubCat),'%') 
+    searchClause: u.unitusage like concat('%',upper($usageSubCat),'%') 
   - name: blockname
     label: reports.pt.blockname
     type: string
@@ -9145,6 +9145,10 @@ ReportDefinitions:
     from report_owners
     where tenantid=$tenantid  and status='ACTIVE' and propertyid in (select propertyid from report_unpaid_demand where tenantid=$tenantid)
     group by propertyid
+    ),
+    units as
+    (
+      select distinct propertyid as propertyid,string_agg(usagecategory,',') as unitusage from report_units where propertyid in (select propertyid from report_unpaid_demand where tenantid=$tenantid)  and active=true group by propertyid
     )
     select 
       d.propertyid as propertyid, 
@@ -9164,6 +9168,6 @@ ReportDefinitions:
       owners.mobilenumber as mobileno
     from report_unpaid_demand d  
     left join report_properties pt on pt.propertyid=d.propertyid and pt.propertystatus!='INACTIVE'
-    inner join report_units u on u.propertyid=pt.propertyid and u.tenantid=$tenantid
+    inner join units u on u.propertyid=pt.propertyid 
     inner join owners on owners.propertyid=pt.propertyid
     where d.tenantid=$tenantid and d.demand>0
