@@ -23,7 +23,7 @@
               {
                 "stack": [
                   {
-                    "text": "{{logo-header}} {{Municipal_Corporation}}",
+                    "text": "{{logo-header}}",
                     "style": "receipt-logo-header"
                   },
                   {
@@ -573,7 +573,9 @@
                   false
                 ],
                 "style": "receipt-table-value"
-              },
+              }
+              ],
+              [
               {
                 "text": "{{propertyID}}",
                 "border": [
