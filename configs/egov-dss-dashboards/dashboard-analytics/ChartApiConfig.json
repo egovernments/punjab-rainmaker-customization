@@ -4361,6 +4361,73 @@
     "insight": {
     },
     "_comment": ""
+  },
+  "nocCollectionByPaymentMode": {
+    "chartName": "DSS_NOC_COLLECTION_BY_PAYMENT_MODE",
+    "queries": [
+      {
+        "module": "FIRENOC",
+        "requestQueryMap": "{\"module\" : \"dataObject.paymentDetails.businessService.keyword\", \"tenantId\" : \"dataObject.tenantId\"}",
+        "dateRefField": "dataObject.paymentDetails.receiptDate",
+        "indexName": "dss-collection_v2",
+        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must\":[{\"terms\":{\"dataObject.paymentDetails.businessService.keyword\":[\"FIRENOC\"]}}],\"must_not\":[{\"term\":{\"dataObject.tenantId.keyword\":\"pg.testing\"}},{\"terms\":{\"dataObject.bill.status.keyword\":[\"Cancelled\"]}}]}},\"aggs\":{\"NOC Payment Mode\":{\"terms\":{\"field\":\"dataObject.paymentMode.keyword\"},\"aggs\":{\"Total Collection\":{\"sum\":{\"field\":\"dataObject.paymentDetails.totalAmountPaid\"}}}}}}}}"
+      }
+    ],
+    "chartType": "pie",
+    "valueType": "amount",
+    "action": "",
+    "documentType": "_doc",
+    "drillChart": "none",
+    "aggregationPaths": [
+      "NOC Payment Mode"
+    ],
+    "insight": {},
+    "_comment": ""
+  },"totalNocIssuedByType": {
+    "chartName": "DSS_TOTAL_NOC_ISSUED_TYPE",
+    "queries": [
+      {
+        "module": "FIRENOC",
+        "indexName": "firenoc-services",
+       "aggrQuery": "{\"aggs\":{\"FireNOC\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tenantId.keyword\":\"pg.testing\"}}]}},\"aggs\": {\"fireNOC Issued\": {\"terms\": {\"field\": \"Data.fireNOCDetails.fireNOCType.keyword\"},\"aggs\": {\"total_nocs_by_type\": {\"cardinality\": {\"field\": \"_id\"}}}}}}}}",
+        "requestQueryMap": "{\"wardId\" : \"Data.ward.name.keyword\",\"tenantId\" : \"Data.tenantId\" \r\n}",
+        "dateRefField": "Data.auditDetails.createdTime"
+      }
+    ],
+    "chartType": "pie",
+    "valueType": "number",
+    "action": "",
+    "documentType": "_doc",
+    "drillChart": "none",
+    "aggregationPaths": [
+      "fireNOC Issued"
+    ],
+    "insight": {
+    },
+    "_comment": "Total NOCs issued by Type"
+  },
+  "actualNocIssuedByUsageType": {
+    "chartName": "DSS_ACTUAL_NOC_ISSUED_USAGETYPE",
+    "queries": [
+      {
+        "module": "FIRENOC",
+        "indexName": "firenoc-services",
+        "aggrQuery": "{\"aggs\":{\"FireNOC\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tenantId.keyword\":\"pg.testing\"}}],\"must\":[{\"term\":{\"Data.fireNOCDetails.fireNOCType.keyword\":\"NEW\"}}]}},\"aggs\":{\"actualNOC Issued\":{\"terms\":{\"field\":\"Data.fireNOCDetails.buildings.usageType.keyword\"},\"aggs\":{\"actual_nocs_by_usagetype\":{\"cardinality\":{\"field\":\"_id\"}}}}}}}}",
+        "requestQueryMap": "{\"wardId\" : \"Data.ward.name.keyword\",\"tenantId\" : \"Data.tenantId\" \r\n}",
+        "dateRefField": "Data.auditDetails.createdTime"
+      }
+    ],
+    "chartType": "pie",
+    "valueType": "number",
+    "action": "",
+    "documentType": "_doc",
+    "drillChart": "none",
+    "aggregationPaths": [
+      "actualNOC Issued"
+    ],
+    "insight": {
+    },
+    "_comment": "Actual NOCs Issued by usageType."
   }
 
 }
