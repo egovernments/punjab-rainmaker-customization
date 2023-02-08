@@ -4166,6 +4166,30 @@
       
     },
     "_comment": " "
+  },
+  "mcCumulativeCollection": {
+    "chartName": "DSS_TOTAL_CUMULATIVE_COLLECTION",
+    "queries": [
+      {
+        "module": "COMMON",
+        "dateRefField": "dataObject.paymentDetails.receiptDate",
+        "requestQueryMap": "{\"wardId\" : \"domainObject.ward.name.keyword\",\r\n  \"module\" : \"dataObject.paymentDetails.businessService.keyword\", \n\"tenantId\" : \"dataObject.tenantId\"}",
+        "indexName": "dss-collection_v2",
+        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"terms\":{\"dataObject.tenantId.keyword\":[\"pg.testing\",\"pg\"]}},{\"terms\":{\"dataObject.bill.status.keyword\":[\"Cancelled\"]}},{\"terms\":{\"dataObject.paymentDetails.businessService.keyword\":[\"PT\",\"TL\",\"WS.ONE_TIME_FEE\",\"SW.ONE_TIME_FEE\",\"PT.MUTATION\",\"SW\"]}}]}},\"aggs\":{\"Collections\":{\"date_histogram\":{\"field\":\"dataObject.paymentDetails.receiptDate\",\"interval\":\"intervalvalue\"},\"aggs\":{\"Sum\":{\"sum\":{\"field\":\"dataObject.paymentDetails.totalAmountPaid\"}}}}}}}}"
+      }
+    ],
+    "chartType": "line",
+    "valueType": "amount",
+    "action": "",
+    "drillChart": "none",
+    "documentType": "_doc",
+    "aggregationPaths": [
+      "Collections"
+    ],
+    "isCumulative": true,
+    "interval": "month",
+    "insight": {},
+    "_comment": " "
   }
 
 }
