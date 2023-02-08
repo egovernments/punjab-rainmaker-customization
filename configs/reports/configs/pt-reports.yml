@@ -9012,5 +9012,162 @@ ReportDefinitions:
     inner join eg_bndry_mohalla bndry on bndry.localitycode=adr.locality
     inner join assessments on assessments.propertyid=pt.propertyid
     where pt.status!='INACTIVE'
-      
-      
+    
+    
+- reportName: DEFAULTER_REPORT_WITH_LOCALITY_UNPAID_DEMAND_NEW
+  decryptionPathId: ULBPTDataDumpReport_V2
+  summary: ULB level report
+  version: 1.0.0
+  moduleName: rainmaker-pt
+  sourceColumns:
+  - name: propertyid
+    label: reports.pt.propertyid
+    type: string
+    source: pt
+    total: false
+  - name: oldpropertyid
+    label: reports.pt.oldpropertyid
+    type: string
+    source: pt
+    total: false
+  - name: surveyid
+    label: reports.pt.surveyid
+    type: string
+    source: pt
+    total: false 
+  - name: tentativedemand
+    label: reports.pt.tentativedemand
+    type: string
+    source: pt
+    total: true
+  - name: assessmentyear
+    label: reports.pt.assessmentyear
+    type: string
+    source: pt
+    total: false
+  - name: propertytype
+    label: reports.pt.propertytype
+    type: string
+    source: pt
+    total: false
+  - name: ownership
+    label: reports.pt.ownership
+    type: string
+    source: pt
+    total: false    
+  - name: propertycategory
+    label: reports.pt.propertycategory
+    type: string
+    source: pt
+    total: false
+  - name: businessname
+    label: reports.pt.businessname
+    type: string
+    source: pt
+    total: false
+  - name: address
+    label: reports.pt.address
+    type: string
+    source: pt
+    total: false
+  - name: plotsize
+    label: reports.pt.plotsize
+    type: string
+    source: pt
+    total: false
+  - name: localityname
+    label: reports.pt.locality
+    type: string
+    source: pt
+    total: false
+  - name: blockname
+    label: reports.pt.blockname
+    type: string
+    source: pt
+    total: false
+  - name: ownername
+    label: reports.pt.ownername
+    type: string
+    source: pt
+    total: false
+  - name: mobileno
+    label: reports.pt.mobileno
+    type: string
+    source: pt
+    total: false
+  searchParams:
+  - name: nameofbusiness
+    label: reports.pt.nameofbusinness
+    type: string
+    source: pt
+    isMandatory: false
+    searchClause: AND upper(pt.firmbusinessname) LIKE CONCAT('%',upper($nameofbusiness),'%')
+  - name: fy
+    label: Financial Year
+    type: singlevaluelist
+    pattern: 'list://2015:2015-16,2016:2016-17,2017:2017-18,2018:2018-19,2019:2019-20,2020:2020-21,2021:2021-22,2022:2022-23'
+    source: pt
+    isMandatory: false
+    searchClause: and d.fy like concat('%',$fy,'%')
+  - name: usageCat
+    label: Usage Category
+    type: singlevaluelist
+    pattern: 'list://NONRESIDENTIAL:NONRESIDENTIAL,MIXED:MIXED,RESIDENTIAL:RESIDENTIAL'
+    source: pt
+    isMandatory: false
+    searchClause: and pt.propertyusagetype like concat($usageCat,'%') 
+  - name: usageSubCat
+    label: Usage Sub Category
+    type: string
+    source: pt
+    isMandatory: false
+    searchClause: u.unitusage like concat('%',upper($usageSubCat),'%') 
+  - name: blockname
+    label: reports.pt.blockname
+    type: string
+    source: pt
+    isMandatory: false
+    searchClause: AND upper(blockname) LIKE CONCAT('%',upper($blockname),'%')
+  - name: localityname
+    label: reports.pt.localityname
+    type: string
+    source: pt
+    isMandatory: false
+    searchClause: AND upper(localityname) LIKE CONCAT('%',upper($localityname),'%')
+  query: |
+    --S.no    Service Name	ULB    Property Tax Unique ID    Date Of Transcation    Receipt Number	Existing Property ID    Owner Name    Guardian Name    Total Area (SQ.YARD)    Covered  Area/Built Area (SQ.FEET)    Floors    Occupancy (Rented,Self /Unoccupied)    Type Of Property	Mobile Number    Transcation Mode of Payment    Payment Amount    Payment Date    Email Id	Address
+    with owners as
+    ( 
+    select
+      split_part(string_agg(ownername,','),',',1) as ownername,
+      split_part(string_agg(mobilenumber,','),',',1) as mobilenumber,
+      propertyid
+    from report_owners
+    where tenantid=$tenantid  and status='ACTIVE' and propertyid in (select propertyid from report_unpaid_demand where tenantid=$tenantid)
+    group by propertyid
+    ),
+    units as
+    (
+      select distinct propertyid as propertyid,string_agg(usagecategory,',') as unitusage from report_units where propertyid in (select propertyid from report_unpaid_demand where tenantid=$tenantid)  and active=true group by propertyid
+    )
+    select 
+      d.propertyid as propertyid, 
+      pt.oldpropertyid as oldpropertyid,
+      pt.surveyid as surveyid,
+      d.demand as tentativedemand, 
+      d.fy as assessmentyear, 
+      pt.address as address, 
+      pt.blockname as blockname,
+      pt.propertyusagetype as propertycategory,
+      pt.propertytype as propertytype,
+      pt.ownershipcategory as ownership,
+      pt.plotsize as plotsize,
+      pt.firmbusinessname as businessname,
+      pt.localityname as localityname,
+      owners.ownername as ownername,
+      owners.mobilenumber as mobileno
+    from report_unpaid_demand d  
+    left join report_properties pt on pt.propertyid=d.propertyid and pt.propertystatus!='INACTIVE'
+    inner join units u on u.propertyid=pt.propertyid 
+    inner join owners on owners.propertyid=pt.propertyid
+    where d.tenantid=$tenantid and d.demand>0
