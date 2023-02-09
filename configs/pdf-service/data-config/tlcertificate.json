@@ -433,7 +433,7 @@
                  }
               },
               {
-                  "variable": "trade_license_certificate",
+                  "variable": "trade_license_certifcate",
                   "value": {
                     "path": "PDF_STATIC_LABEL_CONSOLIDATED_TLCERTIFICATE_LICENSE_CERTIFICATE"
                   },
