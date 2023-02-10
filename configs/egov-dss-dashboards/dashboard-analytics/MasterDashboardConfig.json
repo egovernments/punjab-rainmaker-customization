@@ -3943,6 +3943,9 @@
         }
       ]
     },
+
+
+
     {
       "name": "DSS_M_COLLECT_DASHBOARD",
       "id": "mCollect",
@@ -4032,217 +4035,13 @@
               ]
             }
           ]
-        },
-        {
-          "row": 2,
-          "name": "DSS_REVENUE",
-          "vizArray": [
-            
-            {
-              "id": 234,
-              "name": "DSS_MC_RECEIPTS_BY_PAYMENTMODE",
-              "dimensions": {
-                "height": 250,
-                "width": 4
-              },
-              "vizType": "chart",
-              "noUnit": false,
-              "isCollapsible": false,
-              "charts": [
-                {
-                  "id": "mcReceiptsByPaymentMode",
-                  "name": "DSS_MC_RECEIPTS_BY_PAYMENTMODE",
-                  "code": "",
-                  "chartType": "donut",
-                  "filter": "",
-                  "headers": []
-                }
-              ]
-            },
-            {
-              "id": 323,
-              "name": "DSS_MC_COLLECTION_BY_PAYMENT_TYPE",
-              "dimensions": {
-                "height": 250,
-                "width": 4
-              },
-              "vizType": "chart",
-              "label": "",
-              "noUnit": false,
-              "isCollapsible": false,
-              "charts": [
-                {
-                  "id": "mcCollectionByPaymentType",
-                  "name": "DSS_MC_COLLECTION_BY_PAYMENT_TYPE",
-                  "code": "",
-                  "chartType": "donut",
-                  "filter": "",
-                  "headers": []
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "row": 3,
-          "name": "DSS_REVENUE",
-          "vizArray": [
-            
-            {
-              "id": 235,
-              "name": "DSS_MC_CHALLAN_COUNT_BY_STATUS",
-              "dimensions": {
-                "height": 250,
-                "width": 4
-              },
-              "vizType": "chart",
-              "noUnit": false,
-              "isCollapsible": false,
-              "charts": [
-                {
-                  "id": "mcChallanCountByStatus",
-                  "name": "DSS_MC_CHALLAN_COUNT_BY_STATUS",
-                  "code": "",
-                  "chartType": "donut",
-                  "filter": "",
-                  "headers": []
-                }
-              ]
-            },
-            {
-              "id": 233,
-              "name": "DSS_MC_RECEIPTS_BY_STATUS",
-              "dimensions": {
-                "height": 250,
-                "width": 4
-              },
-              "vizType": "chart",
-              "noUnit": false,
-              "isCollapsible": false,
-              "charts": [
-                {
-                  "id": "mcReceiptsByStatus",
-                  "name": "DSS_MC_RECEIPTS_BY_STATUS",
-                  "code": "",
-                  "chartType": "donut",
-                  "filter": "",
-                  "headers": []
-                }
-              ]
-            },
-            {
-              "id": 232,
-              "name": "DSS_MC_COLLECTION_BY_STATUS",
-              "dimensions": {
-                "height": 250,
-                "width": 4
-              },
-              "vizType": "chart",
-              "noUnit": false,
-              "isCollapsible": false,
-              "charts": [
-                {
-                  "id": "mcCollectionByStatus",
-                  "name": "DSS_MC_COLLECTION_BY_STATUS",
-                  "code": "",
-                  "chartType": "donut",
-                  "filter": "",
-                  "headers": []
-                }
-              ]
-            }
-          ]
-        },
-        
-        {
-          "row": 4,
-          "name": "DSS_REVENUE",
-          "vizArray": [
-            
-            {
-              "id": 123,
-              "name": "DSS_MC_COLLECTION_CATEGORY_WISE",
-              "dimensions": {
-                "height": 250,
-                "width": 4
-              },
-              "vizType": "chart",
-              "noUnit": false,
-              "isCollapsible": false,
-              "charts": [
-                {
-                  "id": "mcTotalCollectionCategoryWise",
-                  "name": "DSS_MC_COLLECTION_CATEGORY_WISE",
-                  "code": "",
-                  "chartType": "horizontalBar",
-                  "filter": "",
-                  "headers": []
-                }
-              ]
-            },
-            {
-              "id": 124,
-              "name": "DSS_MC_MONTHLY_REPORT",
-              "dimensions": {
-                "height": 250,
-                "width": 4
-              },
-              "vizType": "chart",
-              "noUnit": false,
-              "isCollapsible": false,
-              "charts": [
-                {
-                  "id": "mcMonthlyCollectionReport",
-                  "name": "DSS_MC_MONTHLY_REPORT",
-                  "code": "",
-                  "chartType": "bar",
-                  "filter": "",
-                  "headers": []
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "row": 5,
-          "name": "DSS_REVENUE",
-          "vizArray": [
-            
-            {
-              "id": 236,
-              "name": "DSS_MC_REPORT_BY_TENANT",
-              "dimensions": {
-                "height": 250,
-                "width": 4
-              },
-              "vizType": "chart",
-              "noUnit": false,
-              "isCollapsible": false,
-              "charts": [
-                {
-                  "id": "mcReportByDDRv2",
-                  "name": "DSS_MC_REPORT_BY_TENANT",
-                  "code": "",
-                  "chartType": "table",
-                  "filter": "",
-                  "headers": [],
-                  "tabName": "Region"
-                },
-                {
-                  "id": "mcReportByCategoryv2",
-                  "name": "DSS_MC_REPORT_BY_CATEGORY",
-                  "code": "",
-                  "chartType": "table",
-                  "filter": "",
-                  "headers": [],
-                  "tabName": "Category"
-                }
-              ]
-            }
-          ]
         }
       ]
     },
+
+
+
+
     {
       "name": "DSS_FIRE_NOC_DASHBOARD",
       "id": "noc",
