@@ -4532,44 +4532,8 @@
               ]
             }
           ]
-        },
-        {
-          "row": 5,
-          "name": "DSS_OVERVIEW",
-          "vizArray": [
-            {
-              "id": 231,
-              "name": "Service Report",
-              "dimensions": {
-                "height": 350,
-                "width": 12
-              },
-              "vizType": "chart",
-              "noUnit": false,
-              "isCollapsible": false,
-              "charts": [
-                {
-                  "id": "nocServiceReportByRegion",
-                  "name": "DSS_NOC_SERVICE_REPORT_REGION",
-                  "code": "",
-                  "chartType": "table",
-                  "filter": "",
-                  "headers": [],
-                  "tabName": "Region"
-                },
-                {
-                  "id": "nocServiceReportByDepartment",
-                  "name": "DSS_NOC_SERVICE_REPORT_DEPARTMENT",
-                  "code": "",
-                  "chartType": "table",
-                  "filter": "",
-                  "headers": [],
-                  "tabName": "Department"
-                }
-              ]
-            }
-          ]
-        }  
+        }
+          
       ]
     },
     {
