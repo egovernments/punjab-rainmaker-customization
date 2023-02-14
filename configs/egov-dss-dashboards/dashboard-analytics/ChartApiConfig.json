@@ -5205,6 +5205,29 @@
     "insight": {
     },
     "_comment": ""
+  },
+  "mcChallanCountByStatus": {
+    "chartName": "DSS_MC_CHALLAN_COUNT_BY_STATUS",
+    "queries": [
+      {
+        "module": "CHALLAN",
+        "dateRefField": "Data.taxPeriodFrom",
+        "requestQueryMap": "{\"module\" : \"Data.businessService\", \"tenantId\" : \"Data.tenantId\"}",
+        "indexName": "echallan-services",
+        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tenantId.keyword\":\"pg.testing\"}}]}},\"aggs\":{\"Status\":{\"terms\":{\"field\":\"Data.applicationStatus.keyword\"},\"aggs\":{\"Challan Count\":{\"cardinality\":{\"field\":\"Data.challanNo.keyword\"}}}}}}}}"
+      }
+    ],
+    "chartType": "pie",
+    "valueType": "number",
+    "action": "",
+    "drillChart": "none",
+    "documentType": "_doc",
+    "aggregationPaths": [
+      "Status"
+    ],
+    "insight": {
+    },
+    "_comment": " "
   }
   
 
