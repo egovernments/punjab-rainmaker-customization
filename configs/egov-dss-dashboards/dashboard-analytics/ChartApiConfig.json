@@ -5070,7 +5070,76 @@
     },
     "_comment": "Bottom Performing Ulbs for provisional nocs issued"
   },
-  
+  "nocServiceReportByRegion": {
+    "chartName": "DSS_NOC_SERVICE_REPORT_REGION",
+    "queries": [
+      {
+        "module": "COMMON",
+        "requestQueryMap": "{\"wardId\" : \"dataObject.ward.name.keyword\",\"module\" : \"dataObject.paymentDetails.businessService.keyword\",\"tenantId\" : \"dataObject.tenantId\", \"district\" : \"dataObject.tenantData.city.districtCode\" }",
+		"dateRefField": "dataObject.paymentDetails.receiptDate",
+        "indexName": "dss-collection_v2",
+        "aggrQuery": "{\"aggs\":{\"FireNOC\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"dataObject.tenantId.keyword\":\"pg.testing\"}},{\"terms\":{\"dataObject.bill.status.keyword\":[\"Cancelled\"]}}],\"must\":[{\"terms\":{\"dataObject.paymentDetails.businessService.keyword\":[\"FIRENOC\"]}}]}},\"aggs\":{\"firenoc_Total_Collection\":{\"sum\":{\"field\":\"dataObject.paymentDetails.totalAmountPaid\"}}}}}}"
+      },
+      {
+        "module": "COMMON",
+        "requestQueryMap": "{\"wardId\" : \"Data.ward.name.keyword\",\"tenantId\" : \"Data.tenantId\", \"district\" : \"Data.tenantData.city.districtCode\"}",
+        "dateRefField": "Data.auditDetails.createdTime",
+        "indexName": "firenoc-services",
+        "aggrQuery": "{\"aggs\":{\"FireNOC\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tenantId.keyword\":\"pg.testing\"}}]}},\"aggs\":{\"Total_Applications\":{\"value_count\":{\"field\":\"Data.tenantId.keyword\"}},\"Provisional_Fire_Nocs_issued\":{\"filter\":{\"bool\":{\"must\":[{\"term\":{\"Data.fireNOCDetails.fireNOCType.keyword\":\"PROVISIONAL\"}}]}}},\"Actual_Fire_Nocs_issued\":{\"filter\":{\"bool\":{\"must\":[{\"term\":{\"Data.fireNOCDetails.fireNOCType.keyword\":\"NEW\"}}]}}},\"Average_days_to_issue_Provisional_NOC\":{\"filter\":{\"bool\":{\"must\":[{\"term\":{\"Data.fireNOCDetails.fireNOCType.keyword\":\"PROVISIONAL\"}},{\"term\":{\"Data.fireNOCDetails.status.keyword\":\"APPROVED\"}}]}},\"aggs\":{\"average_days\":{\"avg\":{\"script\":{\"source\":\"(doc['Data.auditDetails.lastModifiedTime'].value-doc['Data.auditDetails.createdTime'].value)\/(86400*1000)\"}}}}},\"Average_days_to_issue_Actual_NOC\":{\"filter\":{\"bool\":{\"must\":[{\"term\":{\"Data.fireNOCDetails.fireNOCType.keyword\":\"NEW\"}},{\"term\":{\"Data.fireNOCDetails.status.keyword\":\"APPROVED\"}}]}},\"aggs\":{\"average_days\":{\"avg\":{\"script\":{\"source\":\"(doc['Data.auditDetails.lastModifiedTime'].value-doc['Data.auditDetails.createdTime'].value)\/(86400*1000)\"}}}}},\"SLA_Compliance(Actual_NOC)\":{\"filter\":{\"bool\":{\"must\":[{\"term\":{\"Data.fireNOCDetails.fireNOCType.keyword\":\"NEW\"}},{\"term\":{\"Data.fireNOCDetails.status.keyword\":\"APPROVED\"}},{\"script\":{\"script\":{\"source\":\"doc['Data.auditDetails.lastModifiedTime'].value-doc['Data.auditDetails.createdTime'].value<params.threshold\",\"lang\":\"painless\",\"params\":{\"threshold\":172800000}}}}]}}},\"SLA_Compliance(Provisional_NOC)\":{\"filter\":{\"bool\":{\"must\":[{\"term\":{\"Data.fireNOCDetails.fireNOCType.keyword\":\"PROVISIONAL\"}},{\"term\":{\"Data.fireNOCDetails.status.keyword\":\"APPROVED\"}},{\"script\":{\"script\":{\"source\":\"doc['Data.auditDetails.lastModifiedTime'].value-doc['Data.auditDetails.createdTime'].value<params.threshold\",\"lang\":\"painless\",\"params\":{\"threshold\":172800000}}}}]}}}}}}}"
+      }
+    ],
+    "isMdmsEnabled": true,
+    "filterKeys": [
+      {"key": "tenantId", "column": "Region"}
+    ],
+    "chartType": "xtable",
+    "valueType": "number",
+    "action": "",
+    "plotLabel": "Region",
+    "isPostResponseHandler": true,
+    "postAggregationTheory" : "repsonseToDifferenceOfDates",
+    "documentType": "_doc",
+    "drillChart": "nocServiceReportDrillDown",
+    "aggregationPaths": [
+      "firenoc_Total_Collection",
+      "Total_Applications",
+      "Provisional_Fire_Nocs_issued",
+      "Actual_Fire_Nocs_issued",
+      "Average_days_to_issue_Provisional_NOC",
+      "SLA_Compliance(Provisional_NOC)",
+      "Average_days_to_issue_Actual_NOC",
+      "SLA_Compliance(Actual_NOC)"
+    ],
+    "pathDataTypeMapping": [
+      {
+        "firenoc_Total_Collection": "amount"
+      },
+      {
+        "Total_Applications": "number"
+      },
+      {
+        "Provisional_Fire_Nocs_issued": "number"
+      },
+      {
+        "Actual_Fire_Nocs_issued": "number"
+      },
+      {
+        "Average_days_to_issue_Provisional_NOC": "number"
+      },
+      {
+        "SLA_Compliance(Provisional_NOC)": "number"
+      },
+      {
+        "Average_days_to_issue_Actual_NOC": "number"
+      },
+      {
+        "SLA_Compliance(Actual_NOC)": "number"
+      }
+    ],
+    "insight": {
+    },
+    "_comment": ""
+  },
   "nocServiceReportByDepartment": {
     "chartName": "DSS_NOC_SERVICE_REPORT_DEPARTMENT",
     "queries": [
