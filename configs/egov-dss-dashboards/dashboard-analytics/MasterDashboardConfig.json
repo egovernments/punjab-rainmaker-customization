@@ -4535,12 +4535,11 @@
         },
         {
           "row": 5,
-          "name": "DSS_REVENUE",
+          "name": "DSS_OVERVIEW",
           "vizArray": [
-            
             {
-              "id": 236,
-              "name": "DSS_MC_REPORT_BY_TENANT",
+              "id": 231,
+              "name": "Service Report",
               "dimensions": {
                 "height": 250,
                 "width": 4
@@ -4550,8 +4549,8 @@
               "isCollapsible": false,
               "charts": [
                 {
-                  "id": "mcReportByDDRv2",
-                  "name": "DSS_MC_REPORT_BY_TENANT",
+                  "id": "nocServiceReportByRegion",
+                  "name": "DSS_NOC_SERVICE_REPORT_REGION",
                   "code": "",
                   "chartType": "table",
                   "filter": "",
@@ -4559,13 +4558,13 @@
                   "tabName": "Region"
                 },
                 {
-                  "id": "mcReportByCategoryv2",
-                  "name": "DSS_MC_REPORT_BY_CATEGORY",
+                  "id": "nocServiceReportByDepartment",
+                  "name": "DSS_NOC_SERVICE_REPORT_DEPARTMENT",
                   "code": "",
                   "chartType": "table",
                   "filter": "",
                   "headers": [],
-                  "tabName": "Category"
+                  "tabName": "Department"
                 }
               ]
             }
