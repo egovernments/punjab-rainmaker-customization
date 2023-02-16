@@ -50,7 +50,7 @@
                 }
               },
               {
-                "variable": "serviceType",
+                "variable": "serviceTypeTemp",
                 "value": {
                   "path": "$.paymentDetails[0].guardianName"
                 },
