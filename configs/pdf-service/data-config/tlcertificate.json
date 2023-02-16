@@ -717,7 +717,6 @@
               "variable":"approvedBy",
               "value":"$.ProcessInstances[?(@.action == 'APPROVE')].assigner.name==null?'SYSTEM': $.ProcessInstances[?(@.action == 'APPROVE')].assigner.name"
             }
-
           ]
       }
         
