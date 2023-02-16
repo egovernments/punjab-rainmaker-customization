@@ -4541,8 +4541,8 @@
               "id": 231,
               "name": "Service Report",
               "dimensions": {
-                "height": 350,
-                "width": 12
+                "height": 150,
+                "width": 4
               },
               "vizType": "chart",
               "noUnit": false,
