@@ -496,7 +496,7 @@
                        "bold": true
                      },
                      {
-                       "text":" {{approvedBy}}=='NA'?{{approvedByNone}}:{{approvedBy}}",
+                       "text":"{{approvedBy}}",
                        "bold": false
                      }
                    ],
