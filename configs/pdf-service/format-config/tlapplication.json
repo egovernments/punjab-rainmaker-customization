@@ -23,7 +23,7 @@
              "body": [
                [
                  {
-                   "text":"{{trade_license_application}}",
+                   "text":"{{trade_license_application}} (DIGIT UAT)",
                    "style": "receipt-logo-header"
                  },
                  {

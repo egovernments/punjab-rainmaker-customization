@@ -30,7 +30,7 @@
               {
                 "stack": [
                   {
-                    "text": "{{logo_header}} {{Municipal_Corporation}}",
+                    "text": "{{logo_header}} {{Municipal_Corporation}} (DIGIT UAT)",
                     "style": "receipt-logo-header"
                   },
                   {

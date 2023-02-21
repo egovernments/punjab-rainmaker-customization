@@ -41,7 +41,7 @@
                           "stack": 
                           [
                          {
-                           "text":"{{mcGrade}},{{city}}",
+                           "text":"{{mcGrade}},{{city}} (DIGIT UAT)",
                            "style":"receipt-logo-header"
                          },
                          {

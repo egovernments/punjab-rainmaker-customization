@@ -30,7 +30,7 @@
               {
                 "stack": [
                   {
-                    "text": "{{logo-header}} {{mcGrade}}",
+                    "text": "{{logo-header}} {{mcGrade}} (DIGIT UAT)",
                     "style": "receipt-logo-header"
                   },
                   {

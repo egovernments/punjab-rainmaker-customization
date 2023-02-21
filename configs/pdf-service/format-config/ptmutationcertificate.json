@@ -37,7 +37,7 @@
                     {
                       "stack": [
                         {
-                          "text": "{{ULB_CITY}} {{municipal_corportaion}}",
+                          "text": "{{ULB_CITY}} {{municipal_corportaion}} (DIGIT UAT) ",
                           "style": "receipt-logo-header"
                         },
                         {
