@@ -61,7 +61,7 @@
                             {
                                 "stack": [
                                     {
-                                        "text": "{{cb-name}} {{mcGrade}}",
+                                        "text": "{{cb-name}} {{mcGrade}} (Digit UAT)",
                                         "alignment": "center",
                                         "style": "receipt-logo-title-name"
                                     },

@@ -4,6 +4,13 @@
         "defaultStyle": {
             "font": "Cambay"
         },
+        "watermark": {
+            "text": "DIGIT UAT DIGIT UAT",
+            "color": "gery",
+            "opacity": 0.1,
+            "bold": true,
+            "italics": false
+        },
         "content": [
             {
                 "columns": [
@@ -16,7 +23,7 @@
                     {
                         "stack": [
                             {
-                                "text": "{{tenantName}} {{Muncipal_Council}}",
+                                "text": "{{tenantName}} {{Muncipal_Council}} (Digit UAT)",
                                 "style": "header"
                             },
                             {

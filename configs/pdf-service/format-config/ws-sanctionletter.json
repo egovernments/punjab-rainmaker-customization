@@ -4,6 +4,13 @@
     "defaultStyle": {
       "font": "Cambay"
     },
+    "watermark": {
+      "text": "DIGIT UAT DIGIT UAT",
+      "color": "gery",
+      "opacity": 0.1,
+      "bold": true,
+      "italics": false
+  },
     "content": [
       {
         "style": "ws-head",
@@ -29,7 +36,7 @@
               {
                 "stack": [
                   {
-                    "text": "{{mcGrade}}",
+                    "text": "{{mcGrade}} (Digit UAT)",
                     "style": "receipt-logo-header",
                     "margin": [
                       0,
@@ -39,7 +46,7 @@
                     ]
                   },
                   {
-                    "text": "{{tenantName}}",
+                    "text": "{{tenantName}} (Digit UAT)",
                     "style": "receipt-logo-header"
                   },
                   {

@@ -23,7 +23,7 @@
                     "body": [
                         [
                             {
-                                "text": "{{letter-code}}",
+                                "text": "{{letter-code}} (Digit UAT)",
                                 "style": "receipt-logo-header"
                             },
                             {
