@@ -1,7 +1,13 @@
 {
   "key":"pt-receipt",
   "config":{
-    
+    "watermark": {
+      "text": "DIGIT UAT DIGIT UAT",
+      "color": "gery",
+      "opacity": 0.1,
+      "bold": true,
+      "italics": false
+  },
   "content":[
     {
       "style": "pt-reciept-citizen-table",
