@@ -2719,7 +2719,8 @@ ReportDefinitions:
         (case when eg_user.name is null then '30048|21Fj+c3k2ldB0X3AzIh7atXB' else eg_user.name end)  as collectorname,
         receipt_breakup.*,
         to_char((To_timestamp(pd.manualreceiptdate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY') AS g8issuedate, 
-        manualreceiptnumber as g8receiptno
+        manualreceiptnumber as g8receiptno,
+        bill.additionaldetails
       FROM egcl_paymentdetail pd Left outer join eg_user on eg_user.id = pd.createdby::INTEGER, egcl_payment payment left outer join bank_branches on bank_branches.ifsc=payment.ifsccode, receipt_breakup, egcl_bill bill
       --,(select string_agg(distinct propertyid,',') as propertyid, string_agg(distinct locality,',') as locality from eg_pt_address where tenantid=$tenantid group by propertyid ) pt_addr
       where pd.paymentid=payment.id and bill.id=pd.billid and payment.paymentstatus = 'CANCELLED' and pd.businessservice='PT' and payment.tenantid=$tenantid 
