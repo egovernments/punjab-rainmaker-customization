@@ -52,3 +52,28 @@ SearchDefinitions:
     jsonFormat: {"ResponseInfo": {}}
     outJsonPath: $.data
     responseInfoPath: $.ResponseInfo
+
+
+ - name: searchTLApplicationsEODB
+   query:
+    baseQuery: |
+      select array_to_json(array_agg(row_to_json(data))) from (
+        select 
+          tl.applicationnumber,
+          tld.additionalDetail::text,
+          tl.status,additionalDetail->>'IPIN' as iPin,
+          additionalDetail->>'APPID' as appId,
+          additionalDetail->>'mobileNo' as mobileNp 
+        from eg_tl_tradelicense tl 
+        inner join eg_tl_tradelicensedetail tld on tld.tradelicenseid=tl.id and tld.additionalDetail->>'CHANNEL'='EODB' ) data
+    groupBy:
+    orderBy:
+   searchParams:
+    condition: AND
+    params:
+
+    
+   output:
+    jsonFormat: {"ResponseInfo": {}}
+    outJsonPath: $.data
+    responseInfoPath: $.ResponseInfo
