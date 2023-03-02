@@ -2122,14 +2122,14 @@
         "requestQueryMap": "{\"tenantId\" : \"Data.tenantId.keyword\" , \"wardId\" : \"Data.ward.name.keyword\"}",
         "dateRefField": "Data.@timestamp",
         "indexName": "property-assessments",
-        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tenantId.keyword\":\"pb.testing\"}}]}},\"aggs\":{\"Ward \":{\"terms\":{\"field\":\"Data.ward.name.keyword\"},\"aggs\":{\"Fys\":{\"terms\":{\"field\":\"Data.financialYear.keyword\",\"min_doc_count\":0}}}}}}}}"
+        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tenantId.keyword\":\"pb.testing\"}}]}},\"aggs\":{\"Ward \":{\"terms\":{\"field\":\"Data.ward.locality.name.keyword\"},\"aggs\":{\"Fys\":{\"terms\":{\"field\":\"Data.financialYear.keyword\",\"min_doc_count\":0}}}}}}}}"
       },
       {
         "module": "PT",
         "requestQueryMap": "{\"tenantId\" : \"Data.tenantId.keyword\" , \"wardId\" : \"Data.ward.name.keyword\"}",
         "dateRefField": "Data.@timestamp",
         "indexName": "property-assessments",
-        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tenantId.keyword\":\"pb.testing\"}}]}},\"aggs\":{\"Ward \":{\"terms\":{\"field\":\"Data.ward.name.keyword\"},\"aggs\":{\"Total\":{\"value_count\":{\"field\":\"Data.assessmentNumber.keyword\"}}}}}}}}"
+        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tenantId.keyword\":\"pb.testing\"}}]}},\"aggs\":{\"Ward \":{\"terms\":{\"field\":\"Data.ward.locality.name.keyword\"},\"aggs\":{\"Total\":{\"value_count\":{\"field\":\"Data.assessmentNumber.keyword\"}}}}}}}}"
       }
     ],
     "filterKeys": [
