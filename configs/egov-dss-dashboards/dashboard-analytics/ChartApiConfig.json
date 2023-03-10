@@ -4162,7 +4162,7 @@
     "chartName": "DSS_MC_TOTAL_CATEGORIES",
     "queries": [
       {
-        "module": "COMMON",
+        "module": "MCOLLECT",
         "dateRefField": "dataObject.paymentDetails.receiptDate",
         "requestQueryMap": "{\"wardId\" : \"domainObject.ward.name.keyword\",\"module\" : \"dataObject.Bill.billDetails.businessService.keyword\", \"tenantId\" : \"dataObject.tenantId\", \"district\" : \"dataObject.tenantData.cityDistrictCode\"}",
         "indexName": "dss-collection_v2",
