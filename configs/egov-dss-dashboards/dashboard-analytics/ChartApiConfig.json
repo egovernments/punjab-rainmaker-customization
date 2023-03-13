@@ -4132,7 +4132,7 @@
     "chartName": "DSS_MC_TOTAL_CHALLANS",
     "queries": [
       {
-        "module": "CHALLAN",
+        "module": "MCOLLECT",
         "dateRefField": "Data.taxPeriodFrom",
         "requestQueryMap": "{\"module\" : \"Data.businessService\", \"tenantId\" : \"Data.tenantId\"}",
         "indexName": "echallan-services",
