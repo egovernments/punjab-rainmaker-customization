@@ -4617,7 +4617,7 @@
     "chartName": "DSS_MC_REPORT_BY_TENANT",
     "queries": [
       {
-        "module": "COMMON",
+        "module": "MCOLLECT",
         "requestQueryMap": "{\"tenantId\" : \"dataObject.tenantId.keyword\"}",
         "dateRefField": "dataObject.paymentDetails.receiptDate",
         "indexName": "dss-collection_v2",
@@ -4625,7 +4625,7 @@
       },
 
       {
-        "module": "CHALLAN",
+        "module": "MCOLLECT",
         "requestQueryMap": "{\"tenantId\" : \"Data.tenantId.keyword\"}",
         "dateRefField": "Data.taxPeriodFrom",
         "indexName": "echallan-services",
