@@ -4613,6 +4613,52 @@
     },
     "_comment": " "
   },
+	"mcReportByTenant": {
+    "chartName": "DSS_MC_REPORT_BY_TENANT",
+    "queries": [
+      {
+        "module": "COMMON",
+        "requestQueryMap": "{\"tenantId\" : \"dataObject.tenantId.keyword\"}",
+        "dateRefField": "dataObject.paymentDetails.receiptDate",
+        "indexName": "dss-collection_v2",
+        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"terms\":{\"dataObject.tenantId.keyword\":[\"pg.testing\",\"pg\"]}},{\"terms\":{\"dataObject.bill.status.keyword\":[\"Cancelled\"]}},{\"terms\":{\"dataObject.paymentDetails.businessService.keyword\":[\"PT\",\"TL\",\"WS.ONE_TIME_FEE\",\"SW.ONE_TIME_FEE\",\"FSM.TRIP_CHARGES\",\"PT.MUTATION\",\"SW\",\"BPA.LOW_RISK_PERMIT_FEE\",\"BPA.NC_SAN_FEE\",\"BPA.NC_APP_FEE\",\"BPA.NC_OC_APP_FEE\"]}}]}},\"aggs\":{\"ULBs\":{\"terms\":{\"field\":\"dataObject.tenantId.keyword\",\"size\":1000},\"aggs\":{\"Total_Receipts\":{\"value_count\":{\"field\":\"dataObject.paymentDetails.receiptNumber.keyword\"}},\"MC_TOTAL_COLLECTION\":{\"sum\":{\"field\":\"dataObject.paymentDetails.totalAmountPaid\"}}}}}}}}"
+      },
+
+      {
+        "module": "CHALLAN",
+        "requestQueryMap": "{\"tenantId\" : \"Data.tenantId.keyword\"}",
+        "dateRefField": "Data.taxPeriodFrom",
+        "indexName": "echallan-services",
+        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tenantId.keyword\":\"pg.testing\"}},{\"terms\":{\"Data.businessService.keyword\":[\"TL\",\"PT\"]}}]}},\"aggs\":{\"ULBs\":{\"terms\":{\"field\":\"Data.tenantId.keyword\",\"size\":1000},\"aggs\":{\"Total_Challans\":{\"value_count\":{\"field\":\"Data.challanNo.keyword\"}}}}}}}}"
+      }
+    ],
+    "filterKeys": [
+      {"key": "tenantId", "column": "ULB"}
+    ],
+    "chartType": "xtable",
+    "drillChart": "mcReportByWard",
+    "plotLabel": "ULB",
+    "aggregationPaths": [
+      "MC_TOTAL_COLLECTION",
+      "Total_Challans",
+      "Total_Receipts"
+    ],
+    "pathDataTypeMapping": [
+      {
+        "MC_TOTAL_COLLECTION": "amount"
+      },
+      {
+        "Total_Challans": "number"
+      },
+      {
+        "Total_Receipts": "number"
+      }
+    ],
+
+    "insight": {
+    },
+    "_comment": ""
+  },
   "mcReportByDDRv2": {
     "chartName": "DSS_MC_REPORT_BY_TENANT",
     "queries": [
