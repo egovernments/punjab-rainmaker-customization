@@ -869,7 +869,7 @@
       },
       {
         "style": "no-signature",
-        "text": "{{no_signature}}"
+        "text": "This is a computer generted recepit hence requires no signature."
       },
       {
         "style": "pt-disclaimer",
@@ -881,6 +881,7 @@
           },
          
           {
+            
             "ol":
             [
               "Payment received by Cheque/DD shall be subject to realization",
