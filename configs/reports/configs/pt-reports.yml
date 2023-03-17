@@ -9310,12 +9310,12 @@ ReportDefinitions:
       split_part(string_agg(mobilenumber,','),',',1) as mobilenumber,
       propertyid
     from report_owners
-    where tenantid=$tenantid  and status='ACTIVE' and propertyid in (select propertyid from report_unpaid_demand where tenantid=$tenantid)
+    where tenantid!='pb.testing'  and status='ACTIVE' and propertyid in (select propertyid from report_unpaid_demand where tenantid!='pb.testing')
     group by propertyid
     ),
     units as
     (
-      select distinct propertyid as propertyid,string_agg(usagecategory,',') as unitusage from report_units where propertyid in (select propertyid from report_unpaid_demand where tenantid=$tenantid)  and active=true group by propertyid
+      select distinct propertyid as propertyid,string_agg(usagecategory,',') as unitusage from report_units where propertyid in (select propertyid from report_unpaid_demand where tenantid!='pb.testing')  and active=true group by propertyid
     )
     select 
       d.propertyid as propertyid, 
