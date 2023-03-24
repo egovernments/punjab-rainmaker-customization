@@ -9173,6 +9173,7 @@ ReportDefinitions:
     inner join owners on owners.propertyid=pt.propertyid
     where d.tenantid=$tenantid and d.demand>0
     
+    
 - reportName: STATEDEFAULTER_REPORT_WITH_LOCALITY_UNPAID_DEMAND_NEW
   decryptionPathId: ULBPTDataDumpReport_V2
   summary: ULB level report
@@ -9338,6 +9339,52 @@ ReportDefinitions:
     inner join units u on u.propertyid=pt.propertyid 
     inner join owners on owners.propertyid=pt.propertyid
     where d.tenantid!='pb.testing' and d.demand>0
+ 
+- reportName: USERNAME_PT
+  decryptionPathId: ULBPTDataDumpReport_V2
+  summary: USERNAME_PT
+  version: 1.0.0
+  moduleName: rainmaker-pt
+  additionalConfig:
+    print:
+      pdfPageSize: "Legal"
+  sourceColumns:
+  - name: ownername
+    label: reports.pt.ownername
+    type: string
+    source: pt
+    total: false
+  - name: guardian
+    label: reports.pt.guardian
+    type: string
+    source: pt
+    total: false
+  - name: mobileno
+    label: reports.pt.mobileno
+    type: string
+    source: pt
+    total: false
+  searchParams:
+  - name: fromDate
+    label: reports.pt.fromDate
+    type: epoch
+    source: pt
+    isMandatory: true
+    searchClause: AND pt.createdtime>=$fromDate
+  - name: toDate
+    label: reports.pt.toDate
+    type: epoch
+    source: pt
+    isMandatory: true
+    searchClause: AND pt.createdtime<=$toDate
+  query: |
+      -- Use CTE to force query plan, compute & use CTE later
+      
+      SELECT 
+          name as ownername,
+          guardian,       
+          mobilenumber as  mobileno from  eg_user where lower(name) like '%gurp%'
+      
     
     
     
