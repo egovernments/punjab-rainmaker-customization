@@ -948,6 +948,18 @@
       {
         "text": "{{receivers_signature}}",
         "style": "footer-bottom"
+      },
+      {
+        "image": "{{footerLogoImage}}",
+        "width": 55,
+        "height": 61.25,
+        "margin": [
+          12,
+          10,
+          12,
+          10
+        ],
+        "alignment": "center"
       }
     ],
     "styles": {

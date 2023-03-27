@@ -298,6 +298,18 @@
         "alignment": "right",
         "width": 100,
         "height": 100
+      },
+      {
+        "image": "{{footerLogoImage}}",
+        "width": 95,
+        "height": 30,
+        "margin": [
+          12,
+          10,
+          12,
+          10
+        ],
+        "alignment": "center"
       }
     ],
     "styles": {
