@@ -9374,14 +9374,20 @@ ReportDefinitions:
     label: reports.pt.fromDate
     type: epoch
     source: pt
-    isMandatory: true
+    isMandatory: false
     searchClause: AND 1=1
   - name: toDate
     label: reports.pt.toDate
     type: epoch
     source: pt
-    isMandatory: true
+    isMandatory: false
     searchClause: AND 1=1
+  - name: nameOfOnwer
+    label: reports.pt.name
+    type: epoch
+    source: pt
+    isMandatory: true
+    searchClause: lower(name) like concat('%',$nameOfOwner,'%') 
   query: |
       -- Use CTE to force query plan, compute & use CTE later
       SELECT 
@@ -9390,8 +9396,5 @@ ReportDefinitions:
           guardian as guardianname,       
           mobilenumber as  mobileno 
       from  eg_user 
-      where lower(name) like '%gurp%'
-      
-    
-    
-    
+      where 1=1 
+
