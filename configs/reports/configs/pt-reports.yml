@@ -9387,7 +9387,7 @@ ReportDefinitions:
     type: string
     source: pt
     isMandatory: true
-    searchClause: lower(name) like concat('%',$nameOfOwner,'%') 
+    searchClause: AND lower(name) like concat('%',$nameOfOwner,'%') 
   query: |
       -- Use CTE to force query plan, compute & use CTE later
       SELECT 
