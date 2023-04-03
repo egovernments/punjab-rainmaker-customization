@@ -9354,8 +9354,13 @@ ReportDefinitions:
     type: string
     source: pt
     total: false
-  - name: guardian
-    label: reports.pt.guardian
+  - name: oname
+    label: reports.pt.ownernameenc
+    type: string
+    source: pt
+    total: false
+  - name: guardianname
+    label: reports.pt.guardianname
     type: string
     source: pt
     total: false
@@ -9381,7 +9386,8 @@ ReportDefinitions:
       -- Use CTE to force query plan, compute & use CTE later
       SELECT 
           name as ownername,
-          guardian,       
+          name as oname,
+          guardian as guardianname,       
           mobilenumber as  mobileno 
       from  eg_user 
       where lower(name) like '%gurp%'
