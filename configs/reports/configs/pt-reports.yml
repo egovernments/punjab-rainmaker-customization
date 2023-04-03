@@ -9384,7 +9384,7 @@ ReportDefinitions:
     searchClause: AND 1=1
   - name: nameOfOnwer
     label: reports.pt.name
-    type: epoch
+    type: string
     source: pt
     isMandatory: true
     searchClause: lower(name) like concat('%',$nameOfOwner,'%') 
