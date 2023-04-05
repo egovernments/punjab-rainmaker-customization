@@ -82,10 +82,11 @@ SearchDefinitions:
  - name: IFMSintegration
    query:
     baseQuery: |
-      select receiptnumber,name,mobilenumber,amountpaid,consumer_code,businessservice,pd.tenantid 
-      from egcl_paymentdetail pd
-      inner join egcl_payment p on (p.id=pd.paymentid and pd.receiptdate>= 1680028200000 and pd.receiptdate< 1680114600000)
-      left outer join eg_pg_transactions t on t.bill_id=pd.billid ) data
+      select array_to_json(array_agg(row_to_json(data))) from (
+        select receiptnumber,name,mobilenumber,amountpaid,consumer_code,businessservice,pd.tenantid 
+        from egcl_paymentdetail pd
+        inner join egcl_payment p on (p.id=pd.paymentid and pd.receiptdate>= 1680028200000 and pd.receiptdate< 1680114600000)
+        left outer join eg_pg_transactions t on t.bill_id=pd.billid ) data
     groupBy:
     orderBy:
    searchParams:
