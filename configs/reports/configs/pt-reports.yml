@@ -9375,6 +9375,12 @@ ReportDefinitions:
     source: pt
     total: false
   searchParams:
+  - name: $oname
+    label: reports.pt.name
+    type: string
+    source: pt
+    isMandatory: false
+    searchClause: AND 1=1
   query: |
       -- Use CTE to force query plan, compute & use CTE later
       SELECT 
