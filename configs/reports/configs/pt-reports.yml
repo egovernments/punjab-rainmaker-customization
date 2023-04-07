@@ -9376,7 +9376,7 @@ ReportDefinitions:
     total: false
   searchParams:
   - name: $oname
-    label: reports.pt.name
+    label: reports.pt.oname
     type: string
     source: pt
     isMandatory: false
@@ -9386,8 +9386,8 @@ ReportDefinitions:
       SELECT 
           tenantid,
           propertyid,
-          name as ownername,
-          guardian as guardianname,       
+          ownername as ownername,
+          guardianname as guardianname,       
           mobilenumber as  mobileno 
       from  report_owners
       where 1=1 
