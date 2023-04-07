@@ -9349,13 +9349,18 @@ ReportDefinitions:
     print:
       pdfPageSize: "Legal"
   sourceColumns:
-  - name: ownername
-    label: reports.pt.ownername
+  - name: tenantid
+    label: reports.pt.tenantid
     type: string
     source: pt
     total: false
-  - name: oname
-    label: reports.pt.ownernameenc
+  - name: propertyid
+    label: reports.pt.propertyid
+    type: string
+    source: pt
+    total: false
+  - name: ownername
+    label: reports.pt.ownername
     type: string
     source: pt
     total: false
@@ -9370,31 +9375,14 @@ ReportDefinitions:
     source: pt
     total: false
   searchParams:
-  - name: fromDate
-    label: reports.pt.fromDate
-    type: epoch
-    source: pt
-    isMandatory: false
-    searchClause: AND 1=1
-  - name: toDate
-    label: reports.pt.toDate
-    type: epoch
-    source: pt
-    isMandatory: false
-    searchClause: AND 1=1
-  - name: nameOfOwner
-    label: reports.pt.name
-    type: string
-    source: pt
-    isMandatory: true
-    searchClause: AND lower(name) like concat('%',$nameOfOwner,'%') 
   query: |
       -- Use CTE to force query plan, compute & use CTE later
       SELECT 
+          tenantid,
+          propertyid,
           name as ownername,
-          name as oname,
           guardian as guardianname,       
           mobilenumber as  mobileno 
-      from  eg_user 
+      from  report_owners
       where 1=1 
 
