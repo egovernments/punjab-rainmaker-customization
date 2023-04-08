@@ -10,7 +10,7 @@
         "dateRefField": "dataObject.paymentDetails.receiptDate",
         "indexName": "dss-collection_v2",
         "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must\":[{\"terms\":{\"dataObject.paymentDetails.bill.businessService.keyword\":[\"PT\",\"TL\",\"SW\",\"WS\"]}}],\"must_not\":[{\"term\":{\"dataObject.tenantId.keyword\":\"pb.testing\"}},{\"terms\":{\"dataObject.paymentDetails.bill.status.keyword\":[\"Cancelled\"]}}]}},\"aggs\":{\"Total Collection\":{\"sum\":{\"field\":\"dataObject.paymentDetails.totalAmountPaid\"}}}}}}"
-      }
+      } 
     ],
     "chartType": "metric",
     "valueType": "Amount",
@@ -104,6 +104,20 @@
         "requestQueryMap": "{\"wardId\" : \"domainObject.ward.name.keyword\",\"module\" : \"dataObject.paymentDetails.businessService.keyword\", \"tenantId\" : \"dataObject.tenantId\", \"district\" : \"dataObject.tenantData.city.districtCode\"}",
         "indexName": "dss-collection_v2",
         "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"dataObject.tenantId.keyword\":\"pb.testing\"}},{\"terms\":{\"dataObject.paymentDetails.bill.status.keyword\":[\"Cancelled\"]}}],\"must\":[{\"term\":{\"dataObject.paymentDetails.businessService.keyword\":\"TL\"}}]}},\"aggs\":{\"Total Collection\":{\"sum\":{\"field\":\"dataObject.paymentDetails.totalAmountPaid\"}}}}}}"
+      },
+      {
+        "module": "FIRENOC",
+        "indexName": "dss-collection_v2",
+        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must\":[{\"terms\":{\"dataObject.paymentDetails.businessService.keyword\":[\"FIRENOC\"]}},{\"range\":{\"dataObject.paymentDetails.receiptDate\":{\"gte\":\"now-24h\",\"lte\":\"now\"}}}],\"must_not\":[{\"term\":{\"dataObject.tenantId.keyword\":\"pg.testing\"}},{\"term\":{\"dataObject.paymentStatus.keyword\":\"Cancelled\"}}]}},\"aggs\":{\"Total Collection\":{\"sum\":{\"field\":\"dataObject.paymentDetails.totalAmountPaid\"}}}}}}",
+        "requestQueryMap": "{\"wardId\" : \"dataObject.ward.name.keyword\",\"module\" : \"dataObject.paymentDetails.businessService.keyword\",\"tenantId\" : \"dataObject.tenantId\", \"district\" : \"dataObject.tenantData.city.districtCode\" }",
+        "dateRefField": "dataObject.paymentDetails.receiptDate"
+      },
+      {
+        "module": "MCOLLECT",
+        "dateRefField": "dataObject.paymentDetails.receiptDate",
+        "requestQueryMap": "{\"wardId\" : \"domainObject.ward.name.keyword\",\"module\" : \"dataObject.paymentDetails.businessService.keyword\", \"tenantId\" : \"dataObject.tenantId\", \"district\" : \"dataObject.tenantData.city.districtCode\"}",
+        "indexName": "dss-collection_v2",
+        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"terms\":{\"dataObject.tenantId.keyword\":[\"pg.testing\",\"pg\"]}},{\"terms\":{\"dataObject.bill.status.keyword\":[\"Cancelled\"]}},{\"terms\":{\"dataObject.paymentDetails.businessService.keyword\":[\"PT\",\"TL\",\"WS.ONE_TIME_FEE\",\"SW.ONE_TIME_FEE\",\"FSM.TRIP_CHARGES\",\"PT.MUTATION\",\"SW\",\"BPA.LOW_RISK_PERMIT_FEE\",\"BPA.NC_SAN_FEE\",\"BPA.NC_APP_FEE\",\"BPA.NC_OC_APP_FEE\"]}}],\"must\":[{\"range\":{\"dataObject.paymentDetails.receiptDate\":{\"gte\":\"now-1d\",\"lte\":\"now\"}}}]}},\"aggs\":{\"Total Collection\":{\"sum\":{\"field\":\"dataObject.paymentDetails.totalAmountPaid\"}}}}}}"
       }
     ],
     "chartType": "metric",
@@ -2930,7 +2944,7 @@
         "dateRefField": "Data.@timestamp",
         "requestQueryMap": "{\"wardId\" : \"Data.complaintWard.name.keyword\", \"tenantId\" : \"Data.tenantId\"}",
         "indexName": "pgrindex-v1",
-        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tenantId.keyword\":\"pb.testing\"}}]}},\"aggs\":{\"Citizens\":{\"date_histogram\":{\"field\":\"Data.@timestamp\",\"interval\":\"intervalvalue\",\"time_zone\":\"+05:30\"},\"aggs\":{\"count\":{\"cardinality\":{\"field\":\"Data.citizen.uuid.keyword\"}}}}}}}}"
+        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tenantId.keyword\":\"pb.testing\"}}]}},\"aggs\":{\"Citizens\":{\"date_histogram\":{\"field\":\"Data.@timestamp\",\"interval\":\"intervalvalue\"},\"aggs\":{\"count\":{\"cardinality\":{\"field\":\"Data.citizen.uuid.keyword\"}}}}}}}}"
       }
     ],
     "chartType": "line",
@@ -3977,12 +3991,13 @@
     "chartName": "DSS_TOTAL_COLLECTION",
     "queries": [
       {
-        "module": "COMMON",
+        "module": "MCOLLECT",
         "dateRefField": "dataObject.paymentDetails.receiptDate",
         "requestQueryMap": "{\"wardId\" : \"domainObject.ward.name.keyword\",\"module\" : \"dataObject.paymentDetails.businessService.keyword\", \"tenantId\" : \"dataObject.tenantId\", \"district\" : \"dataObject.tenantData.city.districtCode\"}",
         "indexName": "dss-collection_v2",
-        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"terms\":{\"dataObject.tenantId.keyword\":[\"pb.testing\",\"pb\"]}},{\"terms\":{\"dataObject.bill.status.keyword\":[\"Cancelled\"]}},{\"terms\":{\"dataObject.paymentDetails.businessService.keyword\":[\"PT\",\"TL\",\"WS.ONE_TIME_FEE\",\"SW.ONE_TIME_FEE\",\"PT.MUTATION\",\"SW\"]}}]}},\"aggs\":{\"Total Collection\":{\"sum\":{\"field\":\"dataObject.paymentDetails.totalAmountPaid\"}}}}}}"
-      }
+	 "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"terms\":{\"dataObject.tenantId.keyword\":[\"pg.testing\",\"pg\"]}},{\"terms\":{\"dataObject.bill.status.keyword\":[\"Cancelled\"]}},{\"terms\":{\"dataObject.paymentDetails.businessService.keyword\":[\"PT\",\"TL\",\"WS.ONE_TIME_FEE\",\"SW.ONE_TIME_FEE\",\"FSM.TRIP_CHARGES\",\"PT.MUTATION\",\"SW\",\"BPA.LOW_RISK_PERMIT_FEE\",\"BPA.NC_SAN_FEE\",\"BPA.NC_APP_FEE\",\"BPA.NC_OC_APP_FEE\"]}}]}},\"aggs\":{\"Total Collection\":{\"sum\":{\"field\":\"dataObject.paymentDetails.totalAmountPaid\"}}}}}}"
+
+       }
     ],
     "chartType": "metric",
     "valueType": "Amount",
@@ -4007,7 +4022,7 @@
     "chartName": "DSS_MC_TOTAL_RECEIPTS",
     "queries": [
       {
-        "module": "COMMON",
+        "module":"MCOLLECT",
         "dateRefField": "dataObject.paymentDetails.receiptDate",
         "requestQueryMap": "{\"wardId\" : \"domainObject.ward.name.keyword\",\"module\" : \"dataObject.Bill.billDetails.businessService.keyword\", \"tenantId\" : \"dataObject.tenantId\", \"district\" : \"dataObject.tenantData.cityDistrictCode\"}",
         "indexName": "dss-collection_v2",
@@ -4096,10 +4111,10 @@
     "queries": [
       {
         "module": "COMMON",
-        "dateRefField": "",
+        "dateRefField": "dataObject.paymentDetails.receiptDate",
         "requestQueryMap": "{\"wardId\" : \"domainObject.ward.name.keyword\",\"module\" : \"dataObject.paymentDetails.businessService.keyword\", \"tenantId\" : \"dataObject.tenantId\", \"district\" : \"dataObject.tenantData.city.districtCode\"}",
         "indexName": "dss-collection_v2",
-        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"terms\":{\"dataObject.tenantId.keyword\":[\"pb.testing\",\"pb\"]}},{\"terms\":{\"dataObject.bill.status.keyword\":[\"Cancelled\"]}},{\"terms\":{\"dataObject.paymentDetails.businessService.keyword\":[\"PT\",\"TL\",\"WS.ONE_TIME_FEE\",\"SW.ONE_TIME_FEE\",\"PT.MUTATION\",\"SW\"]}}],\"must\":[{\"range\":{\"dataObject.paymentDetails.receiptDate\":{\"gte\":\"now-1d\",\"lte\":\"now\"}}}]}},\"aggs\":{\"Todays Collection\":{\"sum\":{\"field\":\"dataObject.paymentDetails.totalAmountPaid\"}}}}}}"
+	"aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"terms\":{\"dataObject.tenantId.keyword\":[\"pb.testing\",\"pb\"]}},{\"terms\":{\"dataObject.bill.status.keyword\":[\"Cancelled\"]}},{\"terms\":{\"dataObject.paymentDetails.businessService.keyword\":[\"PT\",\"TL\",\"WS.ONE_TIME_FEE\",\"SW.ONE_TIME_FEE\",\"PT.MUTATION\",\"SW\"]}}]}},\"aggs\":{\"Todays Collection\":{\"sum\":{\"field\":\"dataObject.paymentDetails.totalAmountPaid\"}}}}}}"
       }
     ],
     "chartType": "metric",
@@ -4117,7 +4132,7 @@
     "chartName": "DSS_MC_TOTAL_CHALLANS",
     "queries": [
       {
-        "module": "CHALLAN",
+        "module": "MCOLLECT",
         "dateRefField": "Data.taxPeriodFrom",
         "requestQueryMap": "{\"module\" : \"Data.businessService\", \"tenantId\" : \"Data.tenantId\"}",
         "indexName": "echallan-services",
@@ -4147,7 +4162,7 @@
     "chartName": "DSS_MC_TOTAL_CATEGORIES",
     "queries": [
       {
-        "module": "COMMON",
+        "module": "MCOLLECT",
         "dateRefField": "dataObject.paymentDetails.receiptDate",
         "requestQueryMap": "{\"wardId\" : \"domainObject.ward.name.keyword\",\"module\" : \"dataObject.Bill.billDetails.businessService.keyword\", \"tenantId\" : \"dataObject.tenantId\", \"district\" : \"dataObject.tenantData.cityDistrictCode\"}",
         "indexName": "dss-collection_v2",
@@ -4171,7 +4186,7 @@
     "chartName": "DSS_TOTAL_CUMULATIVE_COLLECTION",
     "queries": [
       {
-        "module": "COMMON",
+        "module": "MCOLLECT",
         "dateRefField": "dataObject.paymentDetails.receiptDate",
         "requestQueryMap": "{\"wardId\" : \"domainObject.ward.name.keyword\",\r\n  \"module\" : \"dataObject.paymentDetails.businessService.keyword\", \n\"tenantId\" : \"dataObject.tenantId\"}",
         "indexName": "dss-collection_v2",
@@ -4433,7 +4448,7 @@
     "chartName": "DSS_MC_RECEIPTS_BY_PAYMENTMODE",
     "queries": [
       {
-        "module": "COMMON",
+        "module": "MCOLLECT",
         "requestQueryMap": "{\"module\" : \"dataObject.paymentDetails.businessService.keyword\", \"tenantId\" : \"dataObject.tenantId\"}",
         "dateRefField": "dataObject.paymentDetails.receiptDate",
         "indexName": "dss-collection_v2",
@@ -4456,7 +4471,7 @@
     "chartName": "DSS_MC_COLLECTION_BY_PAYMENT_TYPE",
     "queries": [
       {
-        "module": "COMMON",
+        "module": "MCOLLECT",
         "requestQueryMap": "{\"module\" : \"dataObject.paymentDetails.businessService.keyword\", \"tenantId\" : \"dataObject.tenantId\"}",
         "dateRefField": "dataObject.paymentDetails.receiptDate",
         "indexName": "dss-collection_v2",
@@ -4478,7 +4493,7 @@
     "chartName": "DSS_MC_COLLECTION_BY_PAYMENT_TYPE",
     "queries": [
       {
-        "module": "COMMON",
+        "module": "MCOLLECT",
         "requestQueryMap": "{\"module\" : \"dataObject.paymentDetails.businessService.keyword\", \"tenantId\" : \"dataObject.tenantId\"}",
         "dateRefField": "dataObject.paymentDetails.receiptDate",
         "indexName": "dss-collection_v2",
@@ -4500,7 +4515,7 @@
     "chartName": "DSS_MC_RECEIPTS_BY_STATUS",
     "queries": [
       {
-        "module": "COMMON",
+        "module": "MCOLLECT",
         "requestQueryMap": "{\"module\" : \"dataObject.paymentDetails.businessService.keyword\", \"tenantId\" : \"dataObject.tenantId\"}",
         "dateRefField": "dataObject.paymentDetails.receiptDate",
         "indexName": "dss-collection_v2",
@@ -4523,7 +4538,7 @@
     "chartName": "DSS_MC_COLLECTION_BY_STATUS",
     "queries": [
       {
-        "module": "COMMON",
+        "module": "MCOLLECT",
         "requestQueryMap": "{\"module\" : \"dataObject.paymentDetails.businessService.keyword\", \"tenantId\" : \"dataObject.tenantId\"}",
         "dateRefField": "dataObject.paymentDetails.receiptDate",
         "indexName": "dss-collection_v2",
@@ -4546,7 +4561,7 @@
     "chartName": "DSS_MC_COLLECTION_CATEGORY_WISE",
     "queries": [
       {
-        "module": "COMMON",
+        "module": "MCOLLECT",
         "requestQueryMap": "{\"wardId\" : \"domainObject.ward.name.keyword\", \"tenantId\" : \"dataObject.tenantId\", \"district\" : \"dataObject.tenantData.cityDistrictCode\"}",
         "dateRefField": "dataObject.paymentDetails.receiptDate",
         "indexName": "dss-collection_v2",
@@ -4568,7 +4583,7 @@
     "chartName": "DSS_MC_MONTHLY_REPORT",
     "queries": [
       {
-        "module": "COMMON",
+        "module": "MCOLLECT",
         "dateRefField": "dataObject.paymentDetails.receiptDate",
         "requestQueryMap": "{\"wardId\" : \"domainObject.ward.name.keyword\",\"module\" : \"dataObject.Bill.billDetails.businessService.keyword\", \"tenantId\" : \"dataObject.tenantId\", \"district\" : \"dataObject.tenantData.cityDistrictCode\" }",
         "indexName": "dss-collection_v2",
@@ -4598,6 +4613,52 @@
     },
     "_comment": " "
   },
+	"mcReportByTenant": {
+    "chartName": "DSS_MC_REPORT_BY_TENANT",
+    "queries": [
+      {
+        "module": "COMMON",
+        "requestQueryMap": "{\"tenantId\" : \"dataObject.tenantId.keyword\"}",
+        "dateRefField": "dataObject.paymentDetails.receiptDate",
+        "indexName": "dss-collection_v2",
+        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"terms\":{\"dataObject.tenantId.keyword\":[\"pg.testing\",\"pg\"]}},{\"terms\":{\"dataObject.bill.status.keyword\":[\"Cancelled\"]}},{\"terms\":{\"dataObject.paymentDetails.businessService.keyword\":[\"PT\",\"TL\",\"WS.ONE_TIME_FEE\",\"SW.ONE_TIME_FEE\",\"FSM.TRIP_CHARGES\",\"PT.MUTATION\",\"SW\",\"BPA.LOW_RISK_PERMIT_FEE\",\"BPA.NC_SAN_FEE\",\"BPA.NC_APP_FEE\",\"BPA.NC_OC_APP_FEE\"]}}]}},\"aggs\":{\"ULBs\":{\"terms\":{\"field\":\"dataObject.tenantId.keyword\",\"size\":1000},\"aggs\":{\"Total_Receipts\":{\"value_count\":{\"field\":\"dataObject.paymentDetails.receiptNumber.keyword\"}},\"MC_TOTAL_COLLECTION\":{\"sum\":{\"field\":\"dataObject.paymentDetails.totalAmountPaid\"}}}}}}}}"
+      },
+
+      {
+        "module": "CHALLAN",
+        "requestQueryMap": "{\"tenantId\" : \"Data.tenantId.keyword\"}",
+        "dateRefField": "Data.taxPeriodFrom",
+        "indexName": "echallan-services",
+        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tenantId.keyword\":\"pg.testing\"}},{\"terms\":{\"Data.businessService.keyword\":[\"TL\",\"PT\"]}}]}},\"aggs\":{\"ULBs\":{\"terms\":{\"field\":\"Data.tenantId.keyword\",\"size\":1000},\"aggs\":{\"Total_Challans\":{\"value_count\":{\"field\":\"Data.challanNo.keyword\"}}}}}}}}"
+      }
+    ],
+    "filterKeys": [
+      {"key": "tenantId", "column": "ULB"}
+    ],
+    "chartType": "xtable",
+    "drillChart": "mcReportByWard",
+    "plotLabel": "ULB",
+    "aggregationPaths": [
+      "MC_TOTAL_COLLECTION",
+      "Total_Challans",
+      "Total_Receipts"
+    ],
+    "pathDataTypeMapping": [
+      {
+        "MC_TOTAL_COLLECTION": "amount"
+      },
+      {
+        "Total_Challans": "number"
+      },
+      {
+        "Total_Receipts": "number"
+      }
+    ],
+
+    "insight": {
+    },
+    "_comment": ""
+  },
   "mcReportByDDRv2": {
     "chartName": "DSS_MC_REPORT_BY_TENANT",
     "queries": [
@@ -4606,15 +4667,15 @@
         "requestQueryMap": "{\"tenantId\" : \"dataObject.tenantId.keyword\"}",
         "dateRefField": "dataObject.paymentDetails.receiptDate",
         "indexName": "dss-collection_v2",
-        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"terms\":{\"dataObject.tenantId.keyword\":[\"pb.testing\",\"pb\"]}},{\"terms\":{\"dataObject.bill.status.keyword\":[\"Cancelled\"]}},{\"terms\":{\"dataObject.paymentDetails.businessService.keyword\":[\"PT\",\"TL\",\"WS.ONE_TIME_FEE\",\"SW.ONE_TIME_FEE\",\"PT.MUTATION\",\"SW\"]}}]}},\"aggs\":{\"Total_Receipts\":{\"value_count\":{\"field\":\"dataObject.paymentDetails.receiptNumber.keyword\"}},\"MC_TOTAL_COLLECTION\":{\"sum\":{\"field\":\"dataObject.paymentDetails.totalAmountPaid\"}}}}}}"
+        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"terms\":{\"dataObject.tenantId.keyword\":[\"pg.testing\",\"pg\"]}},{\"terms\":{\"dataObject.bill.status.keyword\":[\"Cancelled\"]}},{\"terms\":{\"dataObject.paymentDetails.businessService.keyword\":[\"PT\",\"TL\",\"WS.ONE_TIME_FEE\",\"SW.ONE_TIME_FEE\",\"FSM.TRIP_CHARGES\",\"PT.MUTATION\",\"SW\",\"BPA.LOW_RISK_PERMIT_FEE\",\"BPA.NC_SAN_FEE\",\"BPA.NC_APP_FEE\",\"BPA.NC_OC_APP_FEE\"]}}]}},\"aggs\":{\"ULBs\":{\"terms\":{\"field\":\"dataObject.tenantId.keyword\",\"size\":1000},\"aggs\":{\"Total_Receipts\":{\"value_count\":{\"field\":\"dataObject.paymentDetails.receiptNumber.keyword\"}},\"MC_TOTAL_COLLECTION\":{\"sum\":{\"field\":\"dataObject.paymentDetails.totalAmountPaid\"}}}}}}}}"
       },
 
       {
-        "module": "CHALLAN",
+        "module": "MCOLLECT",
         "requestQueryMap": "{\"tenantId\" : \"Data.tenantId.keyword\"}",
         "dateRefField": "Data.taxPeriodFrom",
         "indexName": "echallan-services",
-        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tenantId.keyword\":\"pb.testing\"}},{\"terms\":{\"Data.businessService.keyword\":[\"TL\",\"PT\"]}}]}},\"aggs\":{\"Total_Challans\":{\"value_count\":{\"field\":\"Data.challanNo.keyword\"}}}}}}"
+        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tenantId.keyword\":\"pg.testing\"}},{\"terms\":{\"Data.businessService.keyword\":[\"TL\",\"PT\"]}}]}},\"aggs\":{\"ULBs\":{\"terms\":{\"field\":\"Data.tenantId.keyword\",\"size\":1000},\"aggs\":{\"Total_Challans\":{\"value_count\":{\"field\":\"Data.challanNo.keyword\"}}}}}}}}"
       }
     ],
     "isMdmsEnabled": true,
@@ -4651,9 +4712,9 @@
       {
         "module": "FIRENOC",
         "indexName": "dss-collection_v2",
-        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must\":[{\"terms\":{\"dataObject.paymentDetails.businessService.keyword\":[\"FIRENOC\"]}},{\"range\":{\"dataObject.paymentDetails.receiptDate\":{\"gte\":\"now-24h\",\"lte\":\"now\"}}}],\"must_not\":[{\"term\":{\"dataObject.tenantId.keyword\":\"pb.testing\"}},{\"term\":{\"dataObject.paymentStatus.keyword\":\"Cancelled\"}}]}},\"aggs\":{\"Todays Collection\":{\"sum\":{\"field\":\"dataObject.paymentDetails.totalAmountPaid\"}}}}}}",
+        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must\":[{\"terms\":{\"dataObject.paymentDetails.businessService.keyword\":[\"FIRENOC\"]}}],\"must_not\":[{\"term\":{\"dataObject.tenantId.keyword\":\"pb.testing\"}},{\"term\":{\"dataObject.paymentStatus.keyword\":\"Cancelled\"}}]}},\"aggs\":{\"Todays Collection\":{\"sum\":{\"field\":\"dataObject.paymentDetails.totalAmountPaid\"}}}}}}",
         "requestQueryMap": "{\"wardId\" : \"dataObject.ward.name.keyword\",\"module\" : \"dataObject.paymentDetails.businessService.keyword\",\"tenantId\" : \"dataObject.tenantId\", \"district\" : \"dataObject.tenantData.city.districtCode\" }",
-        "dateRefField": ""
+        "dateRefField": "dataObject.paymentDetails.receiptDate"
       }
     ],
     "chartType": "metric",
@@ -5210,7 +5271,7 @@
     "chartName": "DSS_MC_CHALLAN_COUNT_BY_STATUS",
     "queries": [
       {
-        "module": "CHALLAN",
+        "module": "MCOLLECT",
         "dateRefField": "Data.taxPeriodFrom",
         "requestQueryMap": "{\"module\" : \"Data.businessService\", \"tenantId\" : \"Data.tenantId\"}",
         "indexName": "echallan-services",
@@ -5228,7 +5289,305 @@
     "insight": {
     },
     "_comment": " "
+  },
+  "financeTotalBillsGenerated": {
+    "chartName": "DSS_FINANCE_TOTAL_BILLS_GENERATED",
+    "queries": [
+      {
+        "module": "FINANCE",
+        "dateRefField": "",
+        "requestQueryMap": "{\"region\" : \"regionname.keyword\",\"district\" : \"districtname.keyword\", \"tenantId\" : \"ulbname.keyword\"}",
+        "indexName": "financeindex-v1",
+        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[],\"must\":[]}},\"aggs\":{\"Bills Generated\":{\"sum\":{\"field\":\"numberofbills\"}}}}}}"
+      }
+    ],
+    "chartType": "metric",
+    "valueType": "number",
+    "drillChart": "none",
+    "documentType": "_doc",
+    "action": "",
+    "aggregationPaths": [
+      "Bills Generated"
+    ],
+    "insight": {
+      "chartResponseMap" : "financeTotalBillsGenerated",
+      "action" : "differenceOfNumbers",
+      "upwardIndicator" : "positive",
+      "downwardIndicator" : "negative",
+      "textMessage" : "$indicator$value% than last $insightInterval",
+      "colorCode" : "#228B22",
+      "insightInterval" : "month"
+    },
+    "_comment": " "
+  },
+  "financeTotalPayments": {
+    "chartName": "DSS_FINANCE_TOTAL_PAYMENTS",
+    "queries": [
+      {
+        "module": "FINANCE",
+        "dateRefField": "",
+        "requestQueryMap": "{\"region\" : \"regionname.keyword\",\"district\" : \"districtname.keyword\", \"tenantId\" : \"ulbname.keyword\"}",
+        "indexName": "financeindex-v1",
+        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[],\"must\":[]}},\"aggs\":{\"Total Payments\":{\"sum\":{\"field\":\"numberofpayments\"}}}}}}"
+      }
+    ],
+    "chartType": "metric",
+    "valueType": "number",
+    "drillChart": "none",
+    "documentType": "_doc",
+    "action": "",
+    "aggregationPaths": [
+      "Total Payments"
+    ],
+    "insight": {
+      "chartResponseMap" : "financeTotalPayments",
+      "action" : "differenceOfNumbers",
+      "upwardIndicator" : "positive",
+      "downwardIndicator" : "negative",
+      "textMessage" : "$indicator$value% than last $insightInterval",
+      "colorCode" : "#228B22",
+      "insightInterval" : "month"
+    },
+    "_comment": " "
+  },
+  "financeTotalBillAmount": {
+    "chartName": "DSS_FINANCE_TOTAL_BILL_AMOUNT",
+    "queries": [
+      {
+        "module": "FINANCE",
+        "dateRefField": "",
+        "requestQueryMap": "{\"region\" : \"regionname.keyword\",\"district\" : \"districtname.keyword\", \"tenantId\" : \"ulbname.keyword\"}",
+        "indexName": "financeindex-v1",
+        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[],\"must\":[]}},\"aggs\":{\"Total Bill Amount\":{\"sum\":{\"field\":\"totalbillamounts\"}}}}}}"
+      }
+    ],
+    "translateTenantCode": true,
+    "chartType": "metric",
+    "valueType": "amount",
+    "drillChart": "none",
+    "documentType": "_doc",
+    "action": "",
+    "aggregationPaths": [
+      "Total Bill Amount"
+    ],
+    "insight": {
+      "chartResponseMap" : "financeTotalBillAmount",
+      "action" : "differenceOfNumbers",
+      "upwardIndicator" : "positive",
+      "downwardIndicator" : "negative",
+      "textMessage" : "$indicator$value% than last $insightInterval",
+      "colorCode" : "#228B22",
+      "insightInterval" : "month"
+    },
+    "_comment": " "
+  },
+  "financeTotalPaidAmount": {
+    "chartName": "DSS_FINANCE_TOTAL_PAID_AMOUNT",
+    "queries": [
+      {
+        "module": "FINANCE",
+        "dateRefField": "",
+        "requestQueryMap": "{\"region\" : \"regionname.keyword\",\"district\" : \"districtname.keyword\", \"tenantId\" : \"ulbname.keyword\"}",
+        "indexName": "financeindex-v1",
+        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[],\"must\":[]}},\"aggs\":{\"Total Paid Amount\":{\"sum\":{\"field\":\"totalpaymentamounts\"}}}}}}"
+      }
+    ],
+    "translateTenantCode": true,
+    "chartType": "metric",
+    "valueType": "amount",
+    "drillChart": "none",
+    "documentType": "_doc",
+    "action": "",
+    "aggregationPaths": [
+      "Total Paid Amount"
+    ],
+    "insight": {
+      "chartResponseMap" : "financeTotalPaidAmount",
+      "action" : "differenceOfNumbers",
+      "upwardIndicator" : "positive",
+      "downwardIndicator" : "negative",
+      "textMessage" : "$indicator$value% than last $insightInterval",
+      "colorCode" : "#228B22",
+      "insightInterval" : "month"
+    },
+    "_comment": " "
+  },
+  "financeInsights": {
+    "chartName": "DSS_FINANCE_BOUNDARY",
+    "queries": [
+      {
+        "module": "FINANCE",
+        "dateRefField": "",
+        "requestQueryMap": "{\"region\" : \"regionname.keyword\",\"district\" : \"districtname.keyword\", \"tenantId\" : \"ulbname.keyword\"}",
+        "indexName": "financeindex-v1",
+        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[]}},\"aggs\":{\"City Name\":{\"terms\":{\"field\":\"ulbname.keyword\"}},\"Total Bills Generated\":{\"sum\":{\"field\":\"numberofbills\"}},\"Total Vouchers Generated\":{\"sum\":{\"field\":\"numberofvouchersforbill\"}},\"Total Billed Amount\":{\"sum\":{\"field\":\"totalbillamounts\"}},\"Bills Paid\":{\"sum\":{\"field\":\"numberofbillspaid\"}},\"Payments Done\":{\"sum\":{\"field\":\"numberofpayments\"}},\"Bill Amount Paid\":{\"sum\":{\"field\":\"billamountpaid\"}},\"Receipt Vouchers Passed\":{\"sum\":{\"field\":\"numberofreceiptvoucher\"}},\"Vendors\":{\"sum\":{\"field\":\"numberofcontractorsuppliers\"}},\"Bank Accounts\":{\"sum\":{\"field\":\"numberofbankaccounts\"}},\"Finance Collection\":{\"sum\":{\"field\":\"totalreceiptvoucheramounts\"}}}}}}"
+      }
+    ],
+    "isMdmsEnabled": true,
+    "translateTenantCode": true,
+    "filterKeys": [
+      {"key": "tenantId", "column": "DDRs"}
+    ],
+    "chartType": "xtable",
+    "valueType": "number",
+    "action": "",
+    "plotLabel": "DDRs",
+    "isPostResponseHandler": true,
+    "postAggregationTheory" : "repsonseToDifferenceOfDates",
+    "documentType": "_doc",
+    "drillChart": "financeInsightsUlbDrilldown",
+    "aggregationPaths": [
+      "Total Bills Generated",
+      "Total Vouchers Generated",
+      "Total Billed Amount",
+      "Bills Paid",
+      "Payments Done",
+      "Bill Amount Paid",
+      "Receipt Vouchers Passed",
+      "Finance Collection",
+      "Vendors",
+      "Bank Accounts"
+    ],
+    "pathDataTypeMapping": [
+      {
+        "Total Bills Generated": "number"
+      },
+      {
+        "Total Vouchers Generated": "number"
+      },
+      {
+        "Total Billed Amount": "amount"
+      },
+      {
+        "Bills Paid": "number"
+      },
+      {
+        "Payments Done": "number"
+      },
+      {
+        "Bill Amount Paid": "amount"
+      },
+      {
+        "Receipt Vouchers Passed": "number"
+      },
+      {
+        "Finance Collection": "amount"
+      },
+      {
+        "Vendors": "number"
+      },
+      {
+        "Bank Accounts": "number"
+      }
+    ],
+    "insight": {},
+    "_comment": ""
+  },
+  "financeTotalCollection": {
+    "chartName": "DSS_FINANCE_TOTAL_COLLECTION",
+    "queries": [
+      {
+        "module": "FINANCE",
+        "dateRefField": "",
+        "requestQueryMap": "{\"region\" : \"regionname.keyword\",\"district\" : \"districtname.keyword\", \"tenantId\" : \"ulbname.keyword\"}",
+        "indexName": "financeindex-v1",
+        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[],\"must\":[]}},\"aggs\":{\"Total Collection\":{\"sum\":{\"field\":\"totalreceiptvoucheramounts\"}}}}}}"
+      }
+    ],
+    "translateTenantCode": true,
+    "chartType": "metric",
+    "valueType": "amount",
+    "drillChart": "none",
+    "documentType": "_doc",
+    "action": "",
+    "aggregationPaths": [
+      "Total Collection"
+    ],
+    "insight": {
+      "chartResponseMap" : "financeTotalCollection",
+      "action" : "differenceOfNumbers",
+      "upwardIndicator" : "positive",
+      "downwardIndicator" : "negative",
+      "textMessage" : "$indicator$value% than last $insightInterval",
+      "colorCode" : "#228B22",
+      "insightInterval" : "month"
+    },
+    "_comment": " "
+  },
+  "financeInsightsUlbDrilldown": {
+    "chartName": "DSS_FINANCE_BOUNDARY_ULB_DRILLDOWN",
+    "queries": [
+      {
+        "module": "FINANCE",
+        "dateRefField": "",
+        "requestQueryMap": "{\"region\" : \"regionname.keyword\",\"district\" : \"districtname.keyword\", \"tenantId\" : \"ulbname.keyword\"}",
+        "indexName": "financeindex-v1",
+        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[]}},\"aggs\":{\"ULBs\":{\"terms\":{\"field\":\"ulbname.keyword\"},\"aggs\":{\"City Name\":{\"terms\":{\"field\":\"ulbname.keyword\"}},\"Total Bills Generated\":{\"sum\":{\"field\":\"numberofbills\"}},\"Total Vouchers Generated\":{\"sum\":{\"field\":\"numberofvouchersforbill\"}},\"Total Billed Amount\":{\"sum\":{\"field\":\"totalbillamounts\"}},\"Bills Paid\":{\"sum\":{\"field\":\"numberofbillspaid\"}},\"Payments Done\":{\"sum\":{\"field\":\"numberofpayments\"}},\"Bill Amount Paid\":{\"sum\":{\"field\":\"billamountpaid\"}},\"Receipt Vouchers Passed\":{\"sum\":{\"field\":\"numberofreceiptvoucher\"}},\"Vendors\":{\"sum\":{\"field\":\"numberofcontractorsuppliers\"}},\"Bank Accounts\":{\"sum\":{\"field\":\"numberofbankaccounts\"}},\"Finance Collection\":{\"sum\":{\"field\":\"totalreceiptvoucheramounts\"}}}}}}}}"
+      }
+    ],
+    "isMdmsEnabled": false,
+    "translateTenantCode": true,
+    "filterKeys": [
+      {"key": "tenantId", "column": "ULBs"}
+    ],
+    "chartType": "table",
+    "valueType": "number",
+    "action": "",
+    "plotLabel": "ULBs",
+    "isPostResponseHandler": true,
+    "postAggregationTheory" : "repsonseToDifferenceOfDates",
+    "documentType": "_doc",
+    "drillChart": "none",
+    "aggregationPaths": [
+      "Total Bills Generated",
+      "Total Vouchers Generated",
+      "Total Billed Amount",
+      "Bills Paid",
+      "Payments Done",
+      "Bill Amount Paid",
+      "Receipt Vouchers Passed",
+      "Finance Collection",
+      "Vendors",
+      "Bank Accounts"
+    ],
+    "pathDataTypeMapping": [
+      {
+        "Total Bills Generated": "number"
+      },
+      {
+        "Total Vouchers Generated": "number"
+      },
+      {
+        "Total Billed Amount": "amount"
+      },
+      {
+        "Bills Paid": "number"
+      },
+      {
+        "Payments Done": "number"
+      },
+      {
+        "Bill Amount Paid": "amount"
+      },
+      {
+        "Receipt Vouchers Passed": "number"
+      },
+      {
+        "Finance Collection": "amount"
+      },
+      {
+        "Vendors": "number"
+      },
+      {
+        "Bank Accounts": "number"
+      }
+    ],
+    "insight": {},
+    "_comment": ""
   }
+
+
+
   
 
 

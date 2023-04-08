@@ -310,6 +310,18 @@
                 "alignment": "center"
             },
             {
+                "image": "{{footerLogoImage}}",
+                "width": 55,
+                "height": 61.25,
+                "margin": [
+                    12,
+                    10,
+                    12,
+                    10
+                ],
+                "alignment": "center"
+            },
+            {
                 "style": "ws-table-property",
                 "table": {
                     "widths": [
@@ -534,6 +546,18 @@
             {
                 "text": "{{approved_by}}",
                 "alignment": "right"
+            },
+            {
+                "image": "{{footerLogoImage}}",
+                "width": 95,
+                "height": 30,
+                "margin": [
+                    12,
+                    10,
+                    12,
+                    10
+                ],
+                "alignment": "center"
             }
         ],
         "styles": {

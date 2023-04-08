@@ -544,6 +544,18 @@
 		{
 			"tenantCode":"pb.mamdot",
 			"tenantValue":"Mamdot"
+		},
+	       {
+			"tenantCode":"pb.zirakpur",
+			"tenantValue":"Zirakpur"
+		},
+		{
+			"tenantCode":"pb.jalandhar",
+			"tenantValue":"Jalandhar"
+		},
+		{
+			"tenantCode":"pb.patiala",
+			"tenantValue":"Patiala"
 		}
 	]
 }
