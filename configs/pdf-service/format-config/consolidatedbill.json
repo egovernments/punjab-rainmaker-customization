@@ -787,8 +787,8 @@
       },
       {
         "image": "{{footerLogoImage}}",
-        "width": 90,
-        "height": 20,
+        "width": 75,
+        "height": 10,
         "alignment": "center",
         "margin": [
           -12,
