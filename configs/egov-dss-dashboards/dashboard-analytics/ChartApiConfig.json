@@ -1397,7 +1397,7 @@
        {
         "module": "COMMON",
         "requestQueryMap": "{\"wardId\" : \"Data.ward.name.keyword\", \r\n  \"district\" : \"Data.tenantData.city.districtCode\", \r\n\"tenantId\" : \"Data.tradelicense.tenantId.keyword\" \r\n}",
-        "dateRefField": "Data.tradelicense.applicationDate"
+        "dateRefField": "Data.tradelicense.applicationDate",
         "indexName": "tlindex-v1-enriched",
         "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tradelicense.tenantId.keyword\":\"pb.testing\"}}],\"must\":[{\"match\":{\"Data.tradelicense.status.keyword\":\"APPROVED\"}}]}},\"aggs\":{\"Total Licence Issued\":{\"value_count\":{\"field\":\"Data.tradelicense.licenseNumber.keyword\"}}}}}}"
       },
