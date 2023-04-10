@@ -862,9 +862,15 @@
       },
       {
         "image": "{{footerLogoImage}}",
-        "width": 90,
-        "height": 20,
-        "alignment": "center"
+        "width": 75,
+        "height": 10,
+        "alignment": "center",
+        "margin": [
+          -12,
+          -10,
+          -230,
+          0
+        ]
       }
     ],
     "styles": {
