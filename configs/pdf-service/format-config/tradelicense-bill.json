@@ -694,15 +694,15 @@
       },
       {
         "image": "{{footerLogoImage}}",
-        "width": 55,
-        "height": 61.25,
+        "width": 75,
+        "height": 10,
+        "alignment": "center",
         "margin": [
-          12,
-          10,
-          12,
-          10
-        ],
-        "alignment": "center"
+          -12,
+          -10,
+          -230,
+          0
+        ]
       }
     ],
     "styles": {
