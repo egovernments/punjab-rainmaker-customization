@@ -9375,12 +9375,14 @@ ReportDefinitions:
     source: pt
     total: false
   searchParams:
-  - name: $oname
-    label: reports.pt.oname
-    type: string
+  - name: ulb
+    label: ULB
+    type: singlevaluelist
+    pattern: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?tenantId=$tenantid&moduleName=tenant&masterName=tenants|$.MdmsRes.tenant.tenants.*.code|$.MdmsRes.tenant.tenants.*.name
     source: pt
+    wrapper: true
     isMandatory: false
-    searchClause: AND 1=1
+    searchClause: AND report_owners.tenantid = $ulb    
   query: |
       -- Use CTE to force query plan, compute & use CTE later
       SELECT 
