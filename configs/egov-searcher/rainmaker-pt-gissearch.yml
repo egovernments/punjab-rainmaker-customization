@@ -104,9 +104,9 @@ SearchDefinitions:
    query:
     baseQuery: |
       select array_to_json(array_agg(row_to_json(data))) from (
-        select *
+        select id,tenantid,locality,issurveyidmandatory 
         from eg_tenant_config 
-        where 1=1 $where
+        $where
         ) data
     groupBy:
     orderBy:
