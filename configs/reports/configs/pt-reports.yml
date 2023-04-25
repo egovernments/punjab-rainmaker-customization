@@ -3467,7 +3467,17 @@ ReportDefinitions:
     label: reports.pt.existingpropertyid
     type: string
     source: pt
-    total: false 
+    total: false
+  - name: receiptnumber
+    label: reports.pt.receiptnumber
+    type: string
+    source: pt
+    total: false
+  - name: paymentamount
+    label: reports.pt.paymentamount
+    type: string
+    source: pt
+    total: false       
   - name: ownername
     label: reports.pt.ownername
     type: string
@@ -3548,7 +3558,7 @@ ReportDefinitions:
       initcap(split_part(payd.tenantid, '.', 2)) as "ulb",
       split_part(consumercode, ':', 1) as "propertytaxuniqueid",
     --to_char((To_timestamp(receiptdate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY')  AS  "transcationdate",
-    --receiptnumber    as "receiptnumber",
+      receiptnumber    as "receiptnumber",
       pt.oldpropertyid as "existingpropertyid",
       --concat(to_char((To_timestamp(billd.fromperiod/1000) at time Zone 'Asia/Kolkata'),'YYYY'),'-',to_char((To_timestamp(billd.toperiod/1000) at time Zone 'Asia/Kolkata'),'YY'))  AS "financialyear",
     --getfinancialyear(payd.billid) as financialyear,
@@ -3559,7 +3569,7 @@ ReportDefinitions:
     --pt.nooffloors     as "floors",
       eu.mobilenumber as "mobileno",
     --paymentmode as "transcationmode",
-    --payment.totalamountpaid as "paymentamount",
+      payment.totalamountpaid as "paymentamount",
     --to_char((To_timestamp(payment.transactiondate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY')  AS "paymentdate",
     --eu.emailid     as "emailid",
       REGEXP_REPLACE(REGEXP_REPLACE(CONCAT(pta.doorno, ',', pta.buildingname, ',',pta.street,',', pta.pincode), ',+', ','), '^,|,$', '') as "address",
