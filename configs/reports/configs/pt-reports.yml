@@ -9395,12 +9395,13 @@ ReportDefinitions:
     searchClause: AND report_owners.tenantid = $ulb    
   query: |
       -- Use CTE to force query plan, compute & use CTE later
-      SELECT 
-          d.tenantid,
-          d.propertyid,
-          d.ownername as ownername,
-          d.guardianname as guardianname,       
-          d.mobilenumber as  mobileno          
-      from  report_owners d where d.tenantid!='pb.testing'
+            SELECT 
+          tenantid,
+          propertyid,
+          ownername as ownername,
+          guardianname as guardianname,       
+          mobilenumber as  mobileno 
+      from  report_owners
+      where 1=1
      
 
