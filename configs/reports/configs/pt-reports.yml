@@ -9383,12 +9383,7 @@ ReportDefinitions:
     label: reports.pt.mobileno
     type: string
     source: pt
-    total: false
-  - name: landarea
-    label: reports.pt.landarea
-    type: string
-    source: pt
-    total: false    
+    total: false 
   searchParams:
   - name: ulb
     label: ULB
@@ -9405,9 +9400,7 @@ ReportDefinitions:
           d.propertyid,
           d.ownername as ownername,
           d.guardianname as guardianname,       
-          d.mobilenumber as  mobileno,
-          pt.landarea
-      from  report_owners d
-      inner join eg_pt_property pt on (pt.propertyid=d.propertyid  and d.tenantid!='pb.testing')
-      where 1=1 
+          d.mobilenumber as  mobileno          
+      from  report_owners d where d.tenantid!='pb.testing'
+     
 
