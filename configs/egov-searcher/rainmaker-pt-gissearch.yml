@@ -126,3 +126,26 @@ SearchDefinitions:
     jsonFormat: {"ResponseInfo": {}}
     outJsonPath: $.data
     responseInfoPath: $.ResponseInfo
+    
+ - name: GetAllowedRoles
+   query:
+    baseQuery: |
+      select array_to_json(array_agg(row_to_json(data))) from (
+        select tenantid,allowedrole,active 
+        from eg_hrms_role_control  
+        $where
+        ) data
+    groupBy:
+    orderBy:
+   searchParams:
+    condition: AND
+    params:
+    - name: hrmsrole
+      isMandatory: true
+      jsonPath: $.searchCriteria.rolecode
+      operator: =
+    
+   output:
+    jsonFormat: {"ResponseInfo": {}}
+    outJsonPath: $.data
+    responseInfoPath: $.ResponseInfo
