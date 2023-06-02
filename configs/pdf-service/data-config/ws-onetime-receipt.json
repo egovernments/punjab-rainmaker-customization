@@ -125,19 +125,6 @@
                 }
               },
               {
-                "variable": "G8ReceiptNo",
-                "value": {
-                  "path": "$.paymentDetails[0].manualReceiptNumber"
-                }
-              },
-              {
-                "variable": "G8ReceiptDate",
-                "value": {
-                  "path": "$.paymentDetails[0].manualReceiptDate"
-                },
-                "type": "date"
-              },
-              {
                 "variable": "paymentDate",
                 "value": {
                   "path": "$.transactionDate"
@@ -236,7 +223,7 @@
               {
                 "variable": "consumer_id",
                 "value": {
-                  "path": "PDF_STATIC_LABEL_CONSOLIDATED_RECEIPT_CONSUMER_NO"
+                  "path": "PDF_STATIC_LABEL_CONSOLIDATED_RECEIPT_CONSUMER_NOAPP"
                 },
                 "type": "label",
                 "localisation": {
