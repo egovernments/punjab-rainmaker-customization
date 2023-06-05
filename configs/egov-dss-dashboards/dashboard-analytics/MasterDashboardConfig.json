@@ -1546,36 +1546,6 @@
               ]
             },
             {
-              "id": 142,
-              "name": "DSS_WATER_SEWERAGE",
-              "vizType": "module",
-              "moduleLevel": "W&S",
-              "ref": {
-                "url": "ws",
-                "logoUrl": "",
-                "type": "internal"
-              },
-              "label": "",
-              "charts": [
-                {
-                  "id": "wstotalCollection",
-                  "name": "DSS_WS_TOTAL_COLLECTION",
-                  "code": "",
-                  "chartType": "metric",
-                  "filter": "",
-                  "headers": []
-                },
-                {
-                  "id": "wstotalConnection",
-                  "name": "DSS_WS_TOTAL_CONNECTIONS",
-                  "code": "",
-                  "chartType": "metric",
-                  "filter": "",
-                  "headers": []
-                }
-              ]
-            },
-            {
               "id": 329,
               "name": "DSS_MCOLLECT",
               "vizType": "module",
