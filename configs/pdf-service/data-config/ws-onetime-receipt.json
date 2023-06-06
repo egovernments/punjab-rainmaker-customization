@@ -391,7 +391,7 @@
               {
                 "variable": "no_signature",
                 "value": {
-                  "path": "PDF_STATIC_LABEL_CONSOLIDATED_RECEIPT_NO_SIGNATURE"
+                  "path": "PDF_STATIC_LABEL_CONSOLIDATED_RECEIPT_NO_SIGNATURE_WATER"
                 },
                 "type": "label",
                 "localisation": {
