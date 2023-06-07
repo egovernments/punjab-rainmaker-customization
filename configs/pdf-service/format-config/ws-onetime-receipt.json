@@ -208,7 +208,7 @@
             ],
             [
               {
-                "text": "Cheque/DD/PO/Transaction No.",
+                "text": "Chq/DD/PO/Txn Date",
                 "border": [
                   true,
                   false,
@@ -524,48 +524,6 @@
                 "style": "receipt-table-value"
               },
               {
-                "text": "{{guardianName}}",
-                "border": [
-                  false,
-                  false,
-                  false,
-                  false
-                ],
-                "style": "receipt-table-value"
-              }
-              ],
-            [
-              {
-                "text": "{{propertyID}}",
-                "border": [
-                  false,
-                  false,
-                  false,
-                  false
-                ],
-                "style": "receipt-table-value"
-              },
-              {
-                "text": "{{landMark}}",
-                "border": [
-                  false,
-                  false,
-                  false,
-                  false
-                ],
-                "style": "receipt-table-value"
-              },
-              {
-                "text": "{{communicationAddress}}",
-                "border": [
-                  false,
-                  false,
-                  false,
-                  false
-                ],
-                "style": "receipt-table-value"
-              },
-              {
                 "text": "{{payerName}}",
                 "border": [
                   false,
@@ -575,8 +533,8 @@
                 ],
                 "style": "receipt-table"
               }
-            ],
-            [
+              ],
+              [
               {
                 "text": "{{payer_contact}}",
                 "border": [
@@ -620,7 +578,7 @@
             ],
             [
               {
-                "text": "Cheque/DD/PO/Transaction No.",
+                "text": "Chq/DD/PO/Txn Date",
                 "border": [
                   true,
                   false,
