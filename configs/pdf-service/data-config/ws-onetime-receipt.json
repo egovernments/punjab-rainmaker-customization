@@ -223,7 +223,7 @@
               {
                 "variable": "consumer_id",
                 "value": {
-                  "path": "PDF_STATIC_LABEL_CONSOLIDATED_RECEIPT_CONSUMER_NOAPP"
+                  "path": "Application No"
                 },
                 "type": "label",
                 "localisation": {
@@ -391,7 +391,7 @@
               {
                 "variable": "no_signature",
                 "value": {
-                  "path": "PDF_STATIC_LABEL_CONSOLIDATED_RECEIPT_NO_SIGNATURE_WATER"
+                  "path": "This is Computer genrated eSewa. Signature is not required"
                 },
                 "type": "label",
                 "localisation": {
