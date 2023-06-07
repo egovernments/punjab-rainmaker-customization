@@ -87,7 +87,7 @@ SearchDefinitions:
         from egcl_paymentdetail pd
         inner join egcl_payment p on (p.id=pd.paymentid and pd.receiptdate>= 1680028200000 and pd.receiptdate< 1680114600000)
         left outer join eg_pg_transactions t on t.bill_id=pd.billid
-        where tenantid!='pb.testing') data
+        where pd.tenantid!='pb.testing') data
     groupBy:
     orderBy:
    searchParams:
