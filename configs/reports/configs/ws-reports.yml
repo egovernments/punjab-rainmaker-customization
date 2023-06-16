@@ -1190,7 +1190,7 @@ ReportDefinitions:
     from egcl_paymentdetail pd Left outer join eg_user on eg_user.id = pd.createdby::INTEGER
     inner join egcl_bill as bill on bill.id=pd.billid
     inner join egcl_payment as payment on payment.id=pd.paymentid and payment.paymentmode='CASH' and payment.paymentstatus!='CANCELLED'
-    where payment.tenantid=$tenantid
+    and pd.businessservice in ('WS','SW') where payment.tenantid=$tenantid
   orderby: ORDER BY pd.receiptdate DESC
   
 - reportName: CollectionsSummaryHeadwiseReport
