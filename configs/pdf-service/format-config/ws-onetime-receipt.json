@@ -728,18 +728,6 @@
       {
         "style": "no-signature",
         "text": "{{no_signature}}"
-      },
-      {
-        "image": "{{footerLogoImage}}",
-        "width": 75,
-        "height": 10,
-        "alignment": "center",
-        "margin": [
-          -12,
-          -10,
-          -230,
-          0
-        ]
       }
     ],
     "styles": {
