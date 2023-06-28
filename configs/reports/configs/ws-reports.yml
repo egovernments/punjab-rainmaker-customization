@@ -13,12 +13,7 @@ ReportDefinitions:
     label: reports.ws.receiptno
     type: string
     source: ws
-    total: false
-  - name: connectionno
-    label: reports.ws.connectionno
-    type: string
-    source: ws
-    total: false    
+    total: false   
   - name: mobileno
     label: reports.ws.mobileno
     type: string
@@ -112,8 +107,7 @@ ReportDefinitions:
   query: |
     -- Use CTE to force query plan, compute & use CTE later
     select
-      receiptnumber as receiptno,
-      wsconnection.connectionno as connectionno,
+      receiptnumber as receiptno,   
       usr.mobilenumber as mobileno,
       to_char((To_timestamp(pd.receiptdate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY') as receiptdate1,
       bill.businessservice as service,
@@ -126,10 +120,9 @@ ReportDefinitions:
       payername as ownername1
     from egcl_paymentdetail pd
     inner join egcl_bill as bill on bill.id=pd.billid    
-    inner join egcl_payment as payment on payment.id=pd.paymentid
-    inner join eg_ws_connection wsconnection on wsconnection.connectionno=bill.consumercode
+    inner join egcl_payment as payment on payment.id=pd.paymentid    
     inner join eg_user as usr on usr.id=payment.createdby::integer and payment.paymentstatus!='CANCELLED'
-    where payment.tenantid=$tenantid
+    where payment.tenantid=$tenantid and pd.businessservice in ('WS','SW')
   orderby: order by pd.receiptdate desc
 
 
