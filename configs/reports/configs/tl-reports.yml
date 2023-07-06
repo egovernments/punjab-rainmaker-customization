@@ -2919,3 +2919,61 @@ ReportDefinitions:
          name, mobilenumber,transactionnumber, instrumenttype, totalamount, g8issuedate, g8receiptno, collectorname,tenantid from tl_7to10sept2020_receipts
          where tenantid=$tenantid 
   orderby: ORDER BY receiptissuedate DESC
+
+
+- reportName: StateTradesubtype_v2
+  decryptionPathId: TradeLicenseDetailsReport_v2                   
+  summary: State Trade Subtype Collection Report
+  version: 1.0.0
+  moduleName: rainmaker-tl
+  sourceColumns:
+  - name:  tradetype
+    label: report.tl.tradetype
+    type: string
+    source: tl
+    total: false
+  - name: count
+    label: report.tl.count
+    type: string
+    source: tl
+    total: false
+  - name: collectionamount
+    label: report.tl.collectionamount
+    type: string
+    source: tl
+    total: false
+  - name: tradesubtype
+    label: report.tl.tradesubtype
+    type: string
+    source: tl
+    total: false
+  searchParams:
+  - name: fromDate
+    label: reports.tl.fromDate
+    type: epoch
+    source: tl
+    isMandatory: false
+    searchClause: AND tl.applicationdate >= $fromDate
+  - name: toDate
+    label: reports.tl.toDate
+    type: epoch
+    source: tl
+    isMandatory: false
+    searchClause: AND tl.applicationdate <= $toDate 
+  query: |
+     SELECT
+        tradetype,count(*) as count,sum(pd.amountpaid) as collectionamount,message as tradesubtype
+        from eg_tl_tradelicense tl
+        inner join eg_tl_tradelicensedetail td on td.tradelicenseid=tl.id
+        inner join eg_tl_tradeunit tu on tu.tradelicensedetailid=td.id
+        inner join egbs_billdetail_v1 bd on bd.consumercode=tl.applicationnumber
+        inner join message on message.code=replace(concat('TRADELICENSE_TRADETYPE_',replace(tradetype,'.','_')),'-','_')
+        inner join egcl_paymentdetail pd on pd.billid=bd.billid
+        where  status='APPROVED' and tl.tenantid!='pb.testing'       
+  groupby: GROUP BY tradetype,message;
+
+
+
+
+
+  
