@@ -2962,7 +2962,7 @@ ReportDefinitions:
     searchClause: AND tl.applicationdate <= $toDate 
   query: |
      SELECT
-        tradetype,count(*) as count,sum(pd.amountpaid) as collectionamount,message as tradesubtype
+        tradetype,count(*) as count,sum(pd.amountpaid) as collectionamount,message as tradesubtype,tl.workflowcode
         from eg_tl_tradelicense tl
         inner join eg_tl_tradelicensedetail td on td.tradelicenseid=tl.id
         inner join eg_tl_tradeunit tu on tu.tradelicensedetailid=td.id
@@ -2970,7 +2970,7 @@ ReportDefinitions:
         inner join message on message.code=replace(concat('TRADELICENSE_TRADETYPE_',replace(tradetype,'.','_')),'-','_')
         inner join egcl_paymentdetail pd on pd.billid=bd.billid
         where  status='APPROVED' and tl.tenantid!='pb.testing'       
-  groupby: GROUP BY tradetype,message;
+  groupby: GROUP BY tradetype,message,tl.workflowcode;
 
 
 
