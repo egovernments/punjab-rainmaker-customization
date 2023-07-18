@@ -2972,7 +2972,7 @@ ReportDefinitions:
     searchClause: AND tl.applicationdate <= $toDate 
   query: |
      SELECT
-        tradetype,count(*) as count,sum(pd.amountpaid) as collectionamount,message as tradesubtype,workflowcode
+        tradetype,count(*) as count,sum(pd.amountpaid) as collectionamount,message as tradesubtype,workflowcode,
         (case when tl.workflowcode!='NEWTL.HAZ' then 'Non Hazardeous' else 'Hazardeous' end) as category
         from eg_tl_tradelicense tl
         inner join eg_tl_tradelicensedetail td on td.tradelicenseid=tl.id
