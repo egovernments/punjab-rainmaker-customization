@@ -2951,7 +2951,12 @@ ReportDefinitions:
     label: report.tl.workflowcode
     type: string
     source: tl
-    total: false    
+    total: false
+  - name: category
+    label: report.tl.category
+    type: string
+    source: tl
+    total: false       
   searchParams:
   - name: fromDate
     label: reports.tl.fromDate
@@ -2968,6 +2973,7 @@ ReportDefinitions:
   query: |
      SELECT
         tradetype,count(*) as count,sum(pd.amountpaid) as collectionamount,message as tradesubtype,workflowcode
+        (case when tl.workflowcode!='NEWTL.HAZ' then 'Non Hazardeous' else 'Hazardeous' end) as category
         from eg_tl_tradelicense tl
         inner join eg_tl_tradelicensedetail td on td.tradelicenseid=tl.id
         inner join eg_tl_tradeunit tu on tu.tradelicensedetailid=td.id
