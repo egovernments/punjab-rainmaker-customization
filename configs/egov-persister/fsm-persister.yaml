@@ -1,8 +1,9 @@
 serviceMaps: 
+  serviceName: fsm
   mappings: 
     - 
       description: "Persists FSM Application details in eg_fsm_application  table"
-      fromTopic: save-fsm-application
+      fromTopic: save-fsm-application-1
       isTransaction: true
       queryMaps: 
         - 
@@ -43,8 +44,8 @@ serviceMaps:
             - 
               jsonPath: $.fsm.paymentPreference
             - 
-              jsonPath: $.fsm.advanceAmount
-            - 
+              jsonPath: $.fsm.advanceAmount  
+            -
               jsonPath: $.fsm.applicationType
             - 
               jsonPath: $.fsm.oldApplicationNo
@@ -56,7 +57,7 @@ serviceMaps:
               jsonPath: $.fsm.auditDetails.createdTime
             - 
               jsonPath: $.fsm.auditDetails.lastModifiedTime
-          query: "INSERT INTO  eg_fsm_application( id, applicationno, tenantid, additionaldetails, accountid, description, applicationstatus, source, sanitationtype, propertyusage, nooftrips, status, vehicle_id, vehicletype, vehicleCapacity, paymentPreference,advanceAmount, applicationType, oldApplicationNo, createdby, lastmodifiedby, createdtime, lastmodifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ? ,?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?, ?);"
+          query: "INSERT INTO  eg_fsm_application( id, applicationno, tenantid, additionaldetails, accountid, description, applicationstatus, source, sanitationtype, propertyusage, nooftrips, status, vehicle_id, vehicletype, vehicleCapacity, paymentPreference,advanceAmount, applicationType, oldApplicationNo, createdby, lastmodifiedby, createdtime, lastmodifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ? ,?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?,?, ?);"
         - 
           basePath: fsm.address
           jsonMaps: 
@@ -199,7 +200,7 @@ serviceMaps:
             - 
               jsonPath: $.fsm.paymentPreference
             - 
-              jsonPath: $.fsm.advanceAmount
+              jsonPath: $.fsm.advanceAmount 
             - 
               jsonPath: $.fsm.auditDetails.createdBy
             - 
@@ -356,7 +357,7 @@ serviceMaps:
               jsonPath: $.fsm.possibleServiceDate
             - 
               jsonPath: $.fsm.dsoId
-            - 
+            -  
               jsonPath: $.fsm.id
           query: "UPDATE eg_fsm_application SET additionaldetails=?, applicationstatus=?, vehicle_id =?, vehicletype=?, lastmodifiedby=?,  lastmodifiedtime=?, possible_srv_date=?, dso_id=? where id=?"
         - 
@@ -448,8 +449,6 @@ serviceMaps:
               jsonPath: $.plantMapping.id
           query: "UPDATE  eg_fsm_plantmapping SET  status=?, employeeuuid=?, plantcode=?, createdby=?, lastmodifiedby=?, createdtime=?, lastmodifiedtime=? where id=?"
       version: 1.0
-      serviceName: fsm
-
     -
       description: Vehicle Trip details in eg_vehicle_trip and in eg_vehicle_trip_detail table
       fromTopic: update-vehicle-trip-Details
@@ -480,4 +479,4 @@ serviceMaps:
             - jsonPath: $.vehicleTrip.*.id
           query: UPDATE eg_vehicle_trip SET  status=?, lastmodifiedby=?, lastmodifiedtime=? WHERE id=?
       version: 1.0
-      serviceName: fsm
+  

@@ -105,7 +105,7 @@ ReportDefinitions:
       - name: dsoId
         label: REPORTS_FSM_PARAM_DSONAME
         type: singlevaluelist
-        pattern: http://vendor.egov:8080/vendor/v1/_search?tenantId=$tenantid|$.vendor.*.id|$.vendor.*.name
+        pattern: http://vendor:8080/vendor/v1/_search?tenantId=$tenantid|$.vendor.*.id|$.vendor.*.name
         source: fsm
         wrapper: true
         isMandatory: false
@@ -119,15 +119,15 @@ ReportDefinitions:
     moduleName: fsm
     externalService:
       - entity: $.TenantBoundary[0].boundary
-        apiURL: http://egov-location.egov:8080/egov-location/location/v11/boundarys/_search?hierarchyTypeCode=ADMIN&boundaryType=Locality&tenantId=$tenantId
+        apiURL: http://egov-location:8080/egov-location/location/v11/boundarys/_search?hierarchyTypeCode=ADMIN&boundaryType=Locality&tenantId=$tenantId
         keyOrder: name,code
         tableName: fsm_boundary
       - entity: $.MdmsRes.FSM.PropertyType
-        apiURL: http://egov-mdms-service.egov:8080/egov-mdms-service/v1/_get?moduleName=FSM&masterName=PropertyType&tenantId=$tenantId
+        apiURL: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?moduleName=FSM&masterName=PropertyType&tenantId=$tenantId
         keyOrder: name,code
         tableName: fsm_property_type
       - entity: $.messages
-        apiURL: http://egov-localization.egov:8080/localization/messages/v1/_search?locale=en_IN&tenantId=pg&module=rainmaker-fsm&codes=CS_COMMON_FSM_PENDING_DSO_APPROVAL,CS_COMMON_FSM_CREATED,CS_COMMON_FSM_PENDING_APPL_FEE_PAYMENT,CS_COMMON_FSM_ASSING_DSO,CS_COMMON_FSM_DSO_REJECTED,CS_COMMON_FSM_DSO_INPROGRESS,CS_COMMON_FSM_PENDING_DSO_APPROVAL,CS_COMMON_FSM_COMPLETED,CS_COMMON_FSM_REJECTED,CS_COMMON_FSM_CANCELED,CS_COMMON_FSM_CITIZEN_FEEDBACK_PENDING
+        apiURL: http://egov-localization:8080/localization/messages/v1/_search?locale=en_IN&tenantId=od&module=rainmaker-fsm&codes=CS_COMMON_FSM_PENDING_DSO_APPROVAL,CS_COMMON_FSM_CREATED,CS_COMMON_FSM_PENDING_APPL_FEE_PAYMENT,CS_COMMON_FSM_ASSING_DSO,CS_COMMON_FSM_DSO_REJECTED,CS_COMMON_FSM_DSO_INPROGRESS,CS_COMMON_FSM_PENDING_DSO_APPROVAL,CS_COMMON_FSM_COMPLETED,CS_COMMON_FSM_REJECTED,CS_COMMON_FSM_CANCELED,CS_COMMON_FSM_CITIZEN_FEEDBACK_PENDING
         keyOrder: message,code
         tableName: fsm_status_keys
     sourceColumns:
@@ -184,7 +184,7 @@ ReportDefinitions:
       - name: dsoId
         label: REPORTS_FSM_PARAM_DSO_NAME
         type: singlevaluelist
-        pattern: http://vendor.egov:8080/vendor/v1/_search?offset=0&limit=-1&tenantId=$tenantid|$.vendor.*.id|$.vendor.*.name
+        pattern: http://vendor:8080/vendor/v1/_search?offset=0&limit=-1&tenantId=$tenantid|$.vendor.*.id|$.vendor.*.name
         source: fsm
         wrapper: true
         isMandatory: false
@@ -192,17 +192,15 @@ ReportDefinitions:
       - name: status
         label: REPORTS_FSM_PARAM_STATUS
         type: singlevaluelist
-        pattern: http://egov-workflow-v2.egov:8080/egov-workflow-v2/egov-wf/businessservice/_search?tenantId=$tenantid&businessServices=FSM|$.BusinessServices[0].states.[?(@.applicationStatus != null )].applicationStatus|$.BusinessServices[0].states.[?(@.applicationStatus  != null )].applicationStatus
+        pattern: 'list://CREATED:Created,CITIZEN_FEEDBACK_PENDING:Citizen feedback pending,PENDING_DSO_APPROVAL:Pending DSO Approval,REJECTED:Rejected,ASSING_DSO:Assign DSO,DSO_INPROGRESS:DSO in Progress,CANCELED:Cancelled,COMPLETED:Conpleted,PENDING_APPL_FEE_PAYMENT:Pending application fee payment'
         source: rainmaker-fsm
         wrapper: true
         isMandatory: false
-        isLocalisationRequired: true
-        localisationPrefix: CS_COMMON_FSM_
-        searchClause: AND fsm.applicationstatus = $status
+        searchClause: AND REPLACE (fsm.applicationstatus, '_', ',') = $status
       - name: locality
         label: REPORTS_FSM_PARAM_LOCALITY
         type: singlevaluelist
-        pattern: http://egov-location.egov:8080/egov-location/location/v11/boundarys/_search?hierarchyTypeCode=ADMIN&boundaryType=Locality&tenantId=$tenantid|$.TenantBoundary[0].boundary.*.code|$.TenantBoundary[0].boundary.*.name
+        pattern: http://egov-location:8080/egov-location/location/v11/boundarys/_search?hierarchyTypeCode=ADMIN&boundaryType=Locality&tenantId=$tenantid|$.TenantBoundary[0].boundary.*.code|$.TenantBoundary[0].boundary.*.name
         source: fsm
         wrapper: true
         isMandatory: false
@@ -212,7 +210,7 @@ ReportDefinitions:
       statuskeys.message as currentStatus,propertytype.name as proprtyTypeSubType,vendor.name dsoName, 
       CASE WHEN pidso.lastmodifiedtime <= 0  THEN 'NA' ELSE to_char(to_timestamp(pidso.lastmodifiedtime/1000),'DD/MM/YYYY') END  as assignedToDSoOn, 
       CASE WHEN picomplete.lastmodifiedtime <= 0  THEN 'NA' ELSE to_char(to_timestamp(picomplete.lastmodifiedtime/1000),'DD/MM/YYYY')  END as dateOfCompletion,
-      coalesce(payment.amountpaid) as amountpaid 
+      coalesce(payment.amountpaid) as amountpaid
       FROM eg_fsm_application fsm 
       JOIN eg_fsm_address address ON ( address.fsm_id = fsm.id) 
       LEFT  JOIN eg_vendor vendor ON ( vendor.id = fsm.dso_id) 
@@ -292,7 +290,7 @@ ReportDefinitions:
       - name: dsoId
         label: REPORTS_FSM_PARAM_DSONAME
         type: singlevaluelist
-        pattern: http://vendor.egov:8080/vendor/v1/_search?tenantId=$tenantid|$.vendor.*.id|$.vendor.*.name
+        pattern: http://vendor:8080/vendor/v1/_search?tenantId=$tenantid|$.vendor.*.id|$.vendor.*.name
         source: fsm
         wrapper: true
         isMandatory: false
