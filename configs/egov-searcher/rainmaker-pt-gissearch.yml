@@ -91,6 +91,8 @@ SearchDefinitions:
     groupBy:
     orderBy:
    searchParams:
+    condition: AND
+    params:
   
    output:
     jsonFormat: {"ResponseInfo": {}}
