@@ -82,53 +82,16 @@ SearchDefinitions:
  - name: IFMSintegration
    query:
     baseQuery: |
-    select array_to_json(array_agg(row_to_json(data))) from
-      (with details as
-      (
-        SELECT pd.receiptnumber,payment.paidby,bill.consumercode,pd.amountpaid,
-        pd.businessservice,
-        pd.tenantid,payment.paymentmode,payment.transactionnumber as transactionNo ,t.mobile_number,  taxheadcode ,              
-        SUM(adjustedamount) as amount
-        FROM egcl_billaccountdetail as bad
-        INNER JOIN egcl_billdetial as bd on bd.id = bad.billdetailid
-        INNER JOIN egcl_bill bill on bd.billid = bill.id
-        INNER JOIN egcl_paymentdetail as pd on pd.billid = bd.billid
-        INNER JOIN egcl_payment as payment on pd.paymentid=payment.id
-        left outer join eg_pg_transactions t on t.bill_id=pd.billid  
-        WHERE payment.paymentstatus != 'CANCELLED' 
-        $where
-        GROUP BY pd.receiptnumber,pd.businessservice,pd.amountpaid,pd.tenantid,
-        payment.paymentmode,t.mobile_number,payment.transactionnumber,bill.consumercode,payment.paidby,bad.taxheadcode
-      )
-      select receiptnumber,
-      paidby,
-      consumercode,
-      amountpaid,
-      businessservice,
-      tenantid,
-      paymentmode,
-      transactionNo ,
-      mobile_number,
-      json_agg( json_build_object('taxheadcode', taxheadcode,'amount', amount::text)) as taxheads ,
-      (case when consumercode like 'PT%' then (select usagecategory from eg_pt_property where propertyid=consumercode and status='ACTIVE') else '' end) as ptype
-      from details
-      group by receiptnumber,paidby, consumercode, amountpaid, businessservice, tenantid,paymentmode,transactionNo ,mobile_number
-      ) as data
-  
+        select array_to_json(array_agg(row_to_json(data))) from (
+        select receiptnumber,name,mobilenumber,amountpaid,consumer_code,businessservice,pd.tenantid 
+        from egcl_paymentdetail pd
+        inner join egcl_payment p on (p.id=pd.paymentid and pd.receiptdate>= 1680028200000 and pd.receiptdate< 1680114600000)
+        left outer join eg_pg_transactions t on t.bill_id=pd.billid ) data
           
     groupBy:
     orderBy:
    searchParams:
-    condition: AND
-    - name: pd.receiptdate
-      isMandatory: true
-      jsonPath: $.searchCriteria.fromDate
-      operator: GE
-    - name: pd.receiptdate
-      isMandatory: true
-      jsonPath: $.searchCriteria.toDate
-      operator: LE
-    
+  
    output:
     jsonFormat: {"ResponseInfo": {}}
     outJsonPath: $.data
