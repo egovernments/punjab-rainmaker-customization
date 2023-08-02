@@ -30,6 +30,14 @@
         },
         {
           "id": "ws"
+        },
+        {
+          "name": "Fire Noc",
+          "id": "noc"
+        },
+        {
+          "name": "Misc Collect",
+          "id": "mCollect"
         }
       ]
     },
@@ -55,8 +63,14 @@
         {
           "id": "ulb-home"
         },
-          {
+        {
           "id": "ulb-ws"
+        },
+        {
+          "id": "ulb-mCollect"
+        },
+        {
+          "id": "ulb-noc"
         }
       ]
     }
