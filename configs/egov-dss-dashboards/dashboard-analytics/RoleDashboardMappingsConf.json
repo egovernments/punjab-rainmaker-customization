@@ -38,6 +38,10 @@
         {
           "name": "Misc Collect",
           "id": "mCollect"
+        },
+        {
+          "name": "Finance",
+          "id": "finance"
         }
       ]
     },
