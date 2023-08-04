@@ -2,7 +2,7 @@ ServiceMaps:
  serviceName: fsm
  version: 1.0.0
  mappings:
-  - topic: save-fsm-application-1
+  - topic: save-fsm-application
     configKey: INDEX
     indexes:
     - name: fsm

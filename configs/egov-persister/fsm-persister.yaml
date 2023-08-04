@@ -3,7 +3,7 @@ serviceMaps:
   mappings: 
     - 
       description: "Persists FSM Application details in eg_fsm_application  table"
-      fromTopic: save-fsm-application-1
+      fromTopic: save-fsm-application
       isTransaction: true
       queryMaps: 
         - 
