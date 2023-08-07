@@ -467,7 +467,7 @@ serviceMaps:
           - jsonPath: $.FireNOCs[*][?({id} in @.fireNOCDetails.buildings.*.uoms[*].id)].auditDetails.lastModifiedTime
 
 
-       - query: INSERT INTO eg_fn_owner(uuid, tenantid, firenocdetailsuuid, isactive, isprimaryowner, ownertype, ownershippercentage, relationship, active, institutionid, createdby, createdtime, lastmodifiedby, lastmodifiedtime,useruuid) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?) ON CONFLICT ON CONSTRAINT pk_eg_fn_owner DO NOTHING;
+       - query: INSERT INTO eg_fn_owner(uuid, tenantid, firenocdetailsuuid, isactive, isprimaryowner, ownertype, ownershippercentage, relationship, active, institutionid, createdby, createdtime, lastmodifiedby, lastmodifiedtime,useruuid) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?) ON CONFLICT ON CONSTRAINT pk_eg_fn_owner DO UPDATE SET active = ?, isprimaryowner = ?, ownertype = ?, ownershippercentage = ?, relationship = ?,useruuid=?, lastmodifiedby = ?,  lastmodifiedtime = ?;
          basePath: FireNOCs.*.fireNOCDetails.applicantDetails.owners.*
          jsonMaps:
           - jsonPath: $.FireNOCs.*.fireNOCDetails.applicantDetails.owners.*.ownerUUID
