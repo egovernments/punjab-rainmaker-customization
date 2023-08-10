@@ -502,6 +502,11 @@
                     "value": "$.MdmsRes.tenant.tenants[0].emailId"
                   },
                   {
+                    "variable": "logoImage",     
+                    "value":"$.MdmsRes.tenant.tenants[0].logoId",
+                    "type":"image" 
+                  },
+                  {
                     "variable": "logo-header",
                     "value": "$.MdmsRes.tenant.tenants[0].code",
                     "localisation": {
