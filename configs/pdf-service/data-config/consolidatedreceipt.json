@@ -20,18 +20,6 @@
                 }
               },
               {
-                "variable": "PaidBy", 
-                "value": {
-                  "path": "$.paidBy"
-                }
-              },
-              {
-                "variable": "chequeDD", 
-                "value": {
-                  "path": "$.instrumentNumber"
-                }
-              },
-              {
                 "variable": "user-name", 
                 "value": {
                   "path": "$.userInfo.name"
@@ -42,6 +30,12 @@
                 "variable": "payerContact", 
                 "value": {
                   "path": "$.mobileNumber"
+                }
+              },
+              {
+                "variable": "paymentStatus", 
+                "value": {
+                  "path": "$.paymentStatus"
                 }
               },
               {
@@ -68,40 +62,11 @@
                 }
               },
               {
-                "variable": "fieldFee", 
-                "value": {
-                  "path": "$.paymentDetails[0].additionalDetails.fieldfee"
-                }
-              }, {
-                "variable": "taxAmount", 
-                "value": {
-                  "path": "$.paymentDetails[0].additionalDetails.tax"
-                }
-              }, {
-                "variable": "cgst", 
-                "value": {
-                  "path": "$.paymentDetails[0].additionalDetails.cgst"
-                }
-              }, {
-                "variable": "sgst", 
-                "value": {
-                  "path": "$.paymentDetails[0].additionalDetails.sgst"
-                }
-              },
-
-              {
                 "variable": "fromPeriod", 
                 "value": {
                   "path": "$.paymentDetails[0].bill.billDetails[0].fromPeriod"
                 },
                 "type": "date"
-              },
-                 {
-                "variable": "chequeDDDate", 
-                "value": {
-                  "path": "$.instrumentDate"
-                },
-                "type":"date"
               },
               {
                 "variable": "toPeriod", 
@@ -109,24 +74,6 @@
                   "path": "$.paymentDetails[0].bill.billDetails[0].toPeriod"
                 },
                 "type": "date"
-              },
-              {
-                "variable": "payerAddress", 
-                "value": {
-                   "path": "$.paymentDetails[0].bill.billDetails[0].additionalDetails.address"
-                }
-              },
-              {
-                "variable": "oldPayerAddress", 
-                "value": {
-                   "path": "$.payerAddress"
-                }
-              }, 
-              {
-                "variable": "oldComments", 
-                "value": {
-                   "path": "$.additionalDetails.comment"
-                }
               },
               {
                 "variable": "paymentMode", 
@@ -153,28 +100,6 @@
                 "type": "date"
               },
               {
-                "variable": "ReceiptDate",
-                "value": {
-                  "path": "$.paymentDetails[0].receiptDate"
-                },
-                "type": "date"
-              }, {
-                "variable": "bankName",
-                "value": {
-                  "path": "$.additionalDetails[0].bankName"
-                }
-              },  {
-                "variable": "branchName",
-                "value": {
-                  "path": "$.additionalDetails[0].branchName"
-                }
-              }, {
-                "variable": "ifsc",
-                "value": {
-                  "path": "$.ifscCode"
-                }
-              },
-              {
                 "variable": "paymentDate", 
                 "value": {
                   "path": "$.transactionDate"
@@ -182,15 +107,15 @@
                 "type": "date"
               },
               {
-                "variable": "transactionID", 
-                "value": {
-                  "path": "$.transactionNumber"
-                }
-              },
-              {
                 "variable": "consumerID", 
                 "value": {
                   "path": "$.paymentDetails[0].bill.consumerCode"
+                }
+              },
+              {
+                "variable": "transactionID", 
+                "value": {
+                  "path": "$.transactionNumber"
                 }
               },
               {
@@ -272,6 +197,18 @@
                }
               },
               {
+                "variable": "payment_status",
+                "value": {
+                  "path": "PDF_STATIC_LABEL_CONSOLIDATED_RECEIPT_PAYMENT_STATUS"
+                },
+                "type": "label",
+                "localisation":{
+                  "required":true,
+                  "prefix": null,
+                  "module":"rainmaker-common"
+               }
+              },
+              {
                 "variable": "service_type",
                 "value": {
                   "path": "PDF_STATIC_LABEL_CONSOLIDATED_RECEIPT_SERVICE_TYPE"
@@ -320,6 +257,18 @@
                }
               },
               {
+                "variable": "excess_amount_paid",
+                "value": {
+                  "path": "PDF_STATIC_LABEL_CONSOLIDATED_RECEIPT_EXCESS_AMOUNT_PAID"
+                },
+                "type": "label",
+                "localisation":{
+                  "required":true,
+                  "prefix": null,
+                  "module":"rainmaker-common"
+               }
+              },
+              {
                 "variable": "payment_mode",
                 "value": {
                   "path": "PDF_STATIC_LABEL_CONSOLIDATED_RECEIPT_PAYMENT_MODE"
@@ -359,18 +308,6 @@
                 "variable": "g8_receipt_date",
                 "value": {
                   "path": "PDF_STATIC_LABEL_CONSOLIDATED_RECEIPT_G8_RECEIPT_DATE"
-                },
-                "type": "label",
-                "localisation":{
-                  "required":true,
-                  "prefix": null,
-                  "module":"rainmaker-common"
-               }
-              },
-              {
-                "variable": "cheque_no",
-                "value": {
-                  "path": "PDF_STATIC_LABEL_CONSOLIDATED_RECEIPT_CHEQUE_NO"
                 },
                 "type": "label",
                 "localisation":{
@@ -466,7 +403,7 @@
               {
                 "variable": "disclamer_4",
                 "value": {
-                  "path": "PDF_STATIC_LABEL_CONSOLIDATED_RECEIPT_DISCLAIMER_FOURTH_LINE"
+                  "path": "PDF_STATIC_LABEL_CONSOLIDATED_RECEIPT_DISCLAIMER_4"
                 },
                 "type": "label",
                 "localisation":{
@@ -512,28 +449,43 @@
                }
               },
               {
-                "variable": "footerLogoImage",
-                "url": "https://pb-egov-assets.s3.ap-south-1.amazonaws.com/mseva-logo-colored.png",
-                "type": "image"
+                "variable": "total_bill_amount",
+                "value": {
+                  "path": "PDF_STATIC_LABEL_CONSOLIDATED_RECEIPT_TOTAL_BILL_AMOUNT"
+                },
+                "type": "label",
+                "localisation":{
+                  "required":true,
+                  "prefix": null,
+                  "module":"rainmaker-common"
+               }
               }
             ]
           },
           {
             "derived": [
-               {
-                  "variable": "pendingAmount",
-                  "formula": "{{dueAmount}}-{{paidAmount}}"
-               }
+              {
+                "variable": "pendingAmount",
+                "formula": "{{dueAmount}}>{{paidAmount}}?{{dueAmount}}-{{paidAmount}}:0"
+             },
+             {
+              "variable": "excessAmountPaid",
+              "formula": "{{paidAmount}}>{{dueAmount}}?{{paidAmount}}-{{dueAmount}}:0"
+           }
             ]
          },
           {
             "externalAPI": [     
               { 
-                "path": "http://localhost:8091/egov-mdms-service/v1/_get",
+                "path": "http://egov-mdms-service:8080/egov-mdms-service/v1/_get",
                 "queryParam": "moduleName=tenant&masterName=tenants&tenantId=pb&filter=%5B?(@.code=='{$.tenantId}')%5D",
                   "apiRequest": null,
                   "responseMapping":[
                     {             
+                      "variable":"ulb_grade",
+                      "value":"$.MdmsRes.tenant.tenants[0].city.ulbGrade"
+                    },
+					{             
                       "variable":"address",
                       "value":"$.MdmsRes.tenant.tenants[0].address"
                     },
@@ -546,17 +498,8 @@
                       "value":"$.MdmsRes.tenant.tenants[0].domainUrl"
                     },
                     {
-                      "variable":"mcGrade",
-                      "value":"$.MdmsRes.tenant.tenants[0].city.ulbType"
-                    },
-                    {
                       "variable":"email",
                       "value":"$.MdmsRes.tenant.tenants[0].emailId"
-                    },
-                    {
-                      "variable": "logoImage",                        
-                      "value":"$.MdmsRes.tenant.tenants[0].logoId",
-                      "type":"image"      
                     },
                     {
                       "variable": "logo-header",
@@ -570,38 +513,32 @@
                   ]
               },
               { 
-                "path": "http://localhost:8092/echallan-services/eChallan/v1/_search",
-                "queryParam": "tenantId=$.tenantId,challanNo=$.paymentDetails[0].bill.consumerCode,businessService=$.paymentDetails[0].businessService,offset=0",
-                  "apiRequest": null,
-                 "responseMapping":[
-                    {             
-                      "variable":"comments",
-                      "value":"$.challans[0].description"       
-                    },
-                    {             
-                      "variable":"consumerName",
-                      "value":"$.challans[0].citizen.name"       
-                    },
-                    {
-                      "variable": "doorHouseNo",
-                      "value": "$.challans[0].address.doorNo"
-                    },
-                    {
-                      "variable": "streetName",
-                      "value":  "$.challans[0].address.street"
-                    
-                  },
+                "path": "http://egov-mdms-service:8080/egov-mdms-service/v1/_get",
+                "queryParam": "moduleName=tenant&masterName=footer&tenantId=pb&filter=%5B?(@.code=='{$.tenantId}' %26%26 @.service=='{$.paymentDetails[0].businessService}')%5D",
+                "apiRequest": null,
+                "responseMapping":[
                   {
-                      "variable": "buildingName",
-                      "value": "$.challans[0].address.buildingName"
-                  },
-                  {
-                      "variable": "pinCode",
-                      "value":"$.challans[0].address.pincode"
-                  }
-                  ]
-              }
-
+                    "variable": "variable11",                        
+                    "value": "$.MdmsRes.tenant.footer[0].receiptFooterContent.*",
+                     "type":"array",
+                     "format":{                            
+                        "type":"string",
+                        "scema":[
+                           {
+                            "variable":"disclaimerContent",
+                            "value":"disclaimer",
+                            "type":"string",
+                            "localisation":{
+                              "required":true,
+                              "prefix": null,
+                              "module": "rainmaker-common"
+                           }
+                         }
+                        ]
+                    } 
+                 }
+                ]
+            }
             ]
           }
         ]
