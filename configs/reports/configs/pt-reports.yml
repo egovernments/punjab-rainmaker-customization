@@ -9458,5 +9458,88 @@ ReportDefinitions:
           mobilenumber as  mobileno 
       from  report_owners
       where 1=1
+
+- reportName: PropertyListReport
+  decryptionPathId: ULBPTDataDumpReport_V2
+  summary: PT Report for GIS Mapping
+  version: 1.0.0
+  moduleName: rainmaker-pt
+  sourceColumns:
+  - name: propertyid
+    label: reports.pt.propertyid
+    type: string
+    source: pt
+    total: false
+  - name: surveyid
+    label: reports.pt.surveyid
+    type: string
+    source: pt
+    total: false
+  - name: oldpropertyid
+    label: reports.pt.oldpropertyid
+    type: string
+    source: pt
+    total: false
+  - name: firmbusinessname
+    label: reports.pt.oldpropertyid
+    type: string
+    source: pt
+    total: false
+  - name: address
+    label: reports.pt.address
+    type: string
+    source: pt
+    total: false
+  - name: landarea
+    label: reports.pt.landarea
+    type: string
+    source: pt
+    total: false
+  - name: usagecategory
+    label: reports.pt.usagecategory
+    type: string
+    source: pt
+    total: false
+  - name: ownername
+    label: reports.pt.ownername
+    type: string
+    source: pt
+    total: false
+  - name: guardianname
+    label: reports.pt.guardianname
+    type: string
+    source: pt
+    total: false
+  - name: mobileno
+    label: reports.pt.mobileno
+    type: string
+    source: pt
+    total: false
+  - name: localityname
+    label: reports.pt.localityname
+    type: string
+    source: pt
+    total: false
+  - name: propertytype
+    label: reports.pt.propertytype
+    type: string
+    source: pt
+    total: false
+  - name: ownertype
+    label: reports.pt.ownertype
+    type: string
+    source: pt
+    total: false
+  searchParams:
+  query: |
+    select distinct p.propertyid,p.nooffloors,p.landarea,p.usagecategory,p.surveyid,p.oldpropertyid,u.name as ownername,
+     u.guardian as guardianname,u.mobilenumber as mobileno, a.locality,localnames.localityname as localityname
+     from eg_pt_property as p inner join eg_pt_owner as o on p.id=o.propertyid and o.tenantid=$tenantid inner join eg_user as u 
+      on o.userid=u.uuid and o.status='ACTIVE' inner join eg_pt_address as a on p.id=a.propertyid 
+      left outer join eg_bndry_mohalla as localnames on a.locality=localnames.localitycode
+      where p.tenantid=$tenantid and p.status='ACTIVE' 
+      and 
+      o.propertyid in (select id  from eg_pt_property where tenantid=$tenantid and status='ACTIVE')
+  orderby: ORDER BY p.propertyid
      
 
