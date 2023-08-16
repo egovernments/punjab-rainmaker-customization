@@ -5697,6 +5697,7 @@
     "valueType": "number",
     "action": "",
     "drillChart": "none",
+    "isRoundOff": true ,
     "aggregationPaths": [
       "Total Sludge Collection"
     ],
@@ -5842,7 +5843,7 @@
       }
     ],
     "chartType": "pie",
-    "valueType": "number",
+    "valueType": "amount",
     "action": "",
     "documentType": "_doc",
     "drillChart": "none",
@@ -5928,14 +5929,14 @@
     "queries": [
       {
         "module": "FSM",
-        "dateRefField": "Data.fsm.@timestamp",
+        "dateRefField": "Data.payments.paymentDetails.receiptDate",
         "requestQueryMap": "{\"wardId\" : \"Data.ward.name.keyword\", \"tenantId\" : \"Data.tenantData.code\" ,  \"district\" : \"Data.tenantData.city.districtCode\"}",
         "indexName": "fsm",
-        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.fsm.tenantId.keyword\":\"pb.testing\"}}]}},\"aggs\":{\"Total Collection\":{\"date_histogram\":{\"field\":\"Data.fsm.@timestamp\",\"interval\":\"intervalvalue\"},\"aggs\":{\"Count\":{\"sum\":{\"field\":\"Data.payments.paymentDetails.bill.billDetails.amountPaid\"}}}}}}}}"
+        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.fsm.tenantId.keyword\":\"pg.testing\"}}]}},\"aggs\":{\"Total Collection\":{\"date_histogram\":{\"field\":\"Data.payments.paymentDetails.receiptDate\",\"interval\":\"intervalvalue\"},\"aggs\":{\"Count\":{\"sum\":{\"field\":\"Data.payments.paymentDetails.bill.billDetails.amountPaid\"}}}}}}}}"
       }
     ],
     "chartType": "line",
-    "valueType": "number",
+    "valueType": "amount",
     "action": "",
     "drillChart": "none",
     "documentType": "_doc",
@@ -6138,11 +6139,11 @@
         "dateRefField": "Data.vehicleTrip.@timestamp",
         "requestQueryMap": "{\"wardId\" : \"Data.ward.name.keyword\", \"tenantId\" : \"Data.tenantData.code\" ,  \"district\" : \"Data.tenantData.city.districtCode\"}",
         "indexName": "vehicletrip",
-        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.vehicleTrip.tenantId.keyword\":\"pb.testing\"}}]}},\"aggs\":{\"Capacity Utilization\":{\"date_histogram\":{\"field\":\"Data.vehicleTrip.@timestamp\",\"interval\":\"intervalvalue\"},\"aggs\":{\"avg_rating\":{\"avg\":{\"field\":\"Data.vehicleTrip.volumeCarried\"}}}}}}}}"
+        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.vehicleTrip.tenantId.keyword\":\"pb.testing\"}}]}},\"aggs\":{\"Capacity Utilization\":{\"date_histogram\":{\"field\":\"Data.vehicleTrip.@timestamp\",\"interval\":\"intervalvalue\"},\"aggs\":{\"Count\":{\"sum\":{\"script\":{\"source\":\"(doc['Data.vehicleTrip.volumeCarried'].value)/1000.0\"}}}}}}}}}"
       }
     ],
     "chartType": "line",
-    "valueType": "number",
+    "valueType": "percentage",
     "action": "",
     "isRoundOff": true,
     "documentType": "_doc",
