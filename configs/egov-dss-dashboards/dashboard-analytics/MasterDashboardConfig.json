@@ -5208,28 +5208,6 @@
                   "headers": []
                 }
               ]
-            },
-            {
-              "id": 333,
-              "name": "DSS_FSM_CUSTOMER_RATINGS",
-              "dimensions": {
-                "height": 450,
-                "width": 5
-              },
-              "vizType": "chart",
-              "label": "",
-              "noUnit": true,
-              "isCollapsible": false,
-              "charts": [
-                {
-                  "id": "fsmCustomerRatings",
-                  "name": "Monthly",
-                  "code": "",
-                  "chartType": "line",
-                  "filter": "",
-                  "headers": []
-                }
-              ]
             }
           ]
         },
@@ -5254,27 +5232,7 @@
                   "name": "Monthly",
                   "code": "",
                   "chartType": "line",
-                  "filter": "",
-                  "headers": []
-                }
-              ]
-            },
-            {
-              "id": 326,
-              "name": "DSS_FSM_TOTAL_REQUESTS_BY_STATUS",
-              "dimensions": {
-                "height": 450,
-                "width": 5
-              },
-              "vizType": "chart",
-              "isCollapsible": false,
-              "label": "",
-              "charts": [
-                {
-                  "id": "fsmTotalRequestsbyStatus",
-                  "name": "",
-                  "code": "",
-                  "chartType": "bar",
+                  "variant":"fsmAreaPercentage",
                   "filter": "",
                   "headers": []
                 }
@@ -5402,6 +5360,8 @@
                 {
                   "id": "fsmVehicleLogReportByDDR",
                   "name": "DSS_FSM_VECHILE_LOG_REPORT",
+                  "showOptionalInfo": true,
+                  "optionalInfo": "DSS_FSM_VECHILE_DATA_MISMATCH_OPTIONAL_INFO",
                   "code": "",
                   "chartType": "table",
                   "filter": "",
@@ -5708,6 +5668,8 @@
                 {
                   "id": "fsmVehicleLogReportByDDR",
                   "name": "DSS_FSM_VECHILE_LOG_REPORT",
+                  "showOptionalInfo": true,
+                  "optionalInfo": "DSS_FSM_VECHILE_DATA_MISMATCH_OPTIONAL_INFO",
                   "code": "",
                   "chartType": "table",
                   "filter": "",
