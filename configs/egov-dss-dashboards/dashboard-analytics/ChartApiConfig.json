@@ -5853,6 +5853,52 @@
     "insight": {},
     "_comment": " "
   },
+  "fsmTotalApplicationsFromSource": {
+    "chartName": "DSS_FSM_TOTAL_APPLICATIONS_BY_SOURCE",
+    "queries": [
+        {
+            "module": "FSM",
+            "dateRefField": "Data.fsm.@timestamp",
+            "requestQueryMap": "{\"wardId\" : \"Data.ward.name.keyword\", \"tenantId\" : \"Data.tenantData.code\" ,  \"district\" : \"Data.tenantData.city.districtCode\"}",
+            "indexName": "fsm",
+            "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.fsm.tenantId.keyword\":\"pb.testing\"}}]}},\"aggs\":{\"Source\":{\"terms\":{\"field\":\"Data.fsm.address.additionalDetails.boundaryType.keyword\"},\"aggs\":{\"Applications by Source\":{\"value_count\":{\"field\":\"Data.fsm.id.keyword\"}}}}}}}}"
+        }
+    ],
+    "chartType": "pie",
+    "valueType": "number",
+    "action": "",
+    "documentType": "_doc",
+    "drillChart": "none",
+    "aggregationPaths": [
+        "Source"
+    ],
+    "insight": {},
+     "_comment": " "
+    }, 
+   "TotalApplicationsFromGP": {
+    "chartName": "DSS_FSM_TOTAL_REQUESTS_FROM_GP",
+    "queries": [
+        {
+            "module": "FSM",
+            "dateRefField": "Data.fsm.@timestamp",
+            "requestQueryMap": "{\"wardId\" : \"Data.ward.name.keyword\", \"tenantId\" : \"Data.tenantData.code\" ,  \"district\" : \"Data.tenantData.city.districtCode\"}",
+            "indexName": "fsm",
+            "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.fsm.tenantId.keyword\":\"pb.testing\"}}]}},\"aggs\":{\"TotalApplicationsFromGP\":{\"date_histogram\":{\"field\":\"Data.fsm.@timestamp\",\"interval\":\"month\"},\"aggs\":{\"totalApplicationsFromGP\":{\"filter\":{\"terms\":{\"Data.fsm.address.additionalDetails.boundaryType.keyword\":[\"GP\"]}},\"aggs\":{\"Count\":{\"value_count\":{\"field\":\"Data.fsm.id.keyword\"}}}}}}}}}}"
+        }
+    ],
+    "chartType": "line",
+    "valueType": "number",
+    "action": "",
+    "drillChart": "none",
+    "documentType": "_doc",
+    "aggregationPaths": [
+        "GP"
+    ],
+    "isCumulative": false,
+    "interval": "month",
+    "insight": {},
+    "_comment": " "
+  }, 
   "fsmCollectionByGender": {
     "chartName": "DSS_FSM_RESQUEST_BY_GENDER",
     "queries": [
