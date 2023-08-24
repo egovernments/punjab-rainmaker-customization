@@ -5211,21 +5211,21 @@
             },
             {
               "id": 333,
-              "name": "DSS_FSM_RESQUEST_BY_PAYMENT_PREFERENCE",
+              "name": "DSS_FSM_CUSTOMER_RATINGS",
               "dimensions": {
-                "height": 250,
-                "width": 4
+                "height": 450,
+                "width": 5
               },
               "vizType": "chart",
               "label": "",
-              "noUnit": false,
+              "noUnit": true,
               "isCollapsible": false,
               "charts": [
                 {
-                  "id": "fsmRequestByPaymentPreference",
-                  "name": "DSS_FSM_RESQUEST_BY_PAYMENT_PREFERENCE",
+                  "id": "fsmCustomerRatings",
+                  "name": "Monthly",
                   "code": "",
-                  "chartType": "donut",
+                  "chartType": "line",
                   "filter": "",
                   "headers": []
                 }
@@ -5275,28 +5275,6 @@
                   "name": "",
                   "code": "",
                   "chartType": "bar",
-                  "filter": "",
-                  "headers": []
-                }
-              ]
-            },
-            {
-              "id": 324,
-              "name": "DSS_FSM_CUSTOMER_RATINGS",
-              "dimensions": {
-                "height": 450,
-                "width": 5
-              },
-              "vizType": "chart",
-              "label": "",
-              "noUnit": true,
-              "isCollapsible": false,
-              "charts": [
-                {
-                  "id": "fsmCustomerRatings",
-                  "name": "Monthly",
-                  "code": "",
-                  "chartType": "line",
                   "filter": "",
                   "headers": []
                 }
