@@ -5259,28 +5259,6 @@
                   "headers": []
                 }
               ]
-            },
-            {
-              "id": 333,
-              "name": "DSS_FSM_RESQUEST_BY_PAYMENT_PREFERENCE",
-              "dimensions": {
-                "height": 250,
-                "width": 4
-              },
-              "vizType": "chart",
-              "label": "",
-              "noUnit": false,
-              "isCollapsible": false,
-              "charts": [
-                {
-                  "id": "fsmRequestByPaymentPreference",
-                  "name": "DSS_FSM_RESQUEST_BY_PAYMENT_PREFERENCE",
-                  "code": "",
-                  "chartType": "donut",
-                  "filter": "",
-                  "headers": []
-                }
-              ]
             }
           ]
         },
