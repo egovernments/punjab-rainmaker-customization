@@ -5184,7 +5184,18 @@
                   "chartType": "donut",
                   "filter": "",
                   "headers": [],
-                  "source": "es"
+                  "source": "es",
+                  "tabName": "Applications"
+                },
+                {
+                  "id": "fsmTotalApplicationsFromSource",
+                  "name": "DSS_FSM_TOTAL_APPLICATIONS_BY_SOURCE",
+                  "code": "",
+                  "chartType": "donut",
+                  "filter": "",
+                  "headers": [],
+                  "source": "es",
+                  "tabName": "Sludge Disposed"
                 }
               ]
             },
@@ -5206,7 +5217,18 @@
                   "chartType": "bar",
                   "filter": "",
                   "headers": [],
-                  "source": "es"
+                  "source": "es",
+                  "tabName": "Applications"
+                },
+                {
+                  "id": "fsmTotalApplicationsFromGP",
+                  "name": "DSS_FSM_TOTAL_REQUESTS_FROM_GP",
+                  "code": "",
+                  "chartType": "bar",
+                  "filter": "",
+                  "headers": [],
+                  "source": "es",
+                  "tabName": "Sludge Disposed"
                 }
               ]
             }

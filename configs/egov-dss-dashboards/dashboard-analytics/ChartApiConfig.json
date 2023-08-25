@@ -5883,7 +5883,7 @@
             "dateRefField": "Data.fsm.@timestamp",
             "requestQueryMap": "{\"wardId\" : \"Data.ward.name.keyword\", \"tenantId\" : \"Data.tenantData.code\" ,  \"district\" : \"Data.tenantData.city.districtCode\"}",
             "indexName": "fsm",
-            "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.fsm.tenantId.keyword\":\"pb.testing\"}}]}},\"aggs\":{\"TotalApplicationsFromGP\":{\"date_histogram\":{\"field\":\"Data.fsm.@timestamp\",\"interval\":\"intervalvalue\"},\"aggs\":{\"totalApplicationsFromGP\":{\"filter\":{\"terms\":{\"Data.fsm.address.additionalDetails.boundaryType.keyword\":[\"GP\"]}},\"aggs\":{\"Count\":{\"value_count\":{\"field\":\"Data.fsm.id.keyword\"}}}}}}}}}}"
+            "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.fsm.tenantId.keyword\":\"pb.testing\"}}]}},\"aggs\":{\"Total Applications From GP\":{\"date_histogram\":{\"field\":\"Data.fsm.@timestamp\",\"interval\":\"intervalvalue\"},\"aggs\":{\"totalApplicationsFromGP\":{\"filter\":{\"terms\":{\"Data.fsm.address.additionalDetails.boundaryType.keyword\":[\"GP\"]}},\"aggs\":{\"Count\":{\"value_count\":{\"field\":\"Data.fsm.id.keyword\"}}}}}}}}}}"
         }
     ],
     "chartType": "line",
@@ -5892,7 +5892,7 @@
     "drillChart": "none",
     "documentType": "_doc",
     "aggregationPaths": [
-        "TotalApplicationsFromGP"
+        "Total Applications From GP"
     ],
     "isCumulative": false,
     "interval": "month",
