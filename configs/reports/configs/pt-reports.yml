@@ -9536,12 +9536,19 @@ ReportDefinitions:
     type: boundarylist
     source: pt
     isMandatory: false
-    searchClause: AND localitycode IN ($localityArray) 
+    searchClause: AND localitycode IN ($localityArray)
+  - name: pstatus
+    label: property status
+    type: singlevaluelist
+    pattern: 'list://ACTIVE:ACTIVE,INWORKFLOW:INWORKFLOW,INACTIVE:INACTIVE'
+    source: pt
+    isMandatory: false
+    searchClause: and 1=1
   query: |
     select *,plotsize as landarea,propertyusagetype as usagecategory,mobilenumber as mobileno 
       from report_properties p
       inner join report_owners o on o.propertyid=p.propertyid
-      where p.tenantid=$tenantid and propertystatus='ACTIVE'
+      where p.tenantid=$tenantid and propertystatus=$pstatus
   orderby: ORDER BY p.propertyid
      
 
