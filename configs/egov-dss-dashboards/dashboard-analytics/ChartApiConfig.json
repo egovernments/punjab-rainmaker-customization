@@ -5892,7 +5892,7 @@
     "drillChart": "none",
     "documentType": "_doc",
     "aggregationPaths": [
-        "GP"
+        "TotalApplicationsFromGP"
     ],
     "isCumulative": false,
     "interval": "month",
