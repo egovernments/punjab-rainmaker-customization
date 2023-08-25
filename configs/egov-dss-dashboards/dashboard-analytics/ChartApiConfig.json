@@ -5870,7 +5870,7 @@
     "documentType": "_doc",
     "drillChart": "none",
     "aggregationPaths": [
-        "Source"
+        "Applications by Source"
     ],
     "insight": {},
      "_comment": " "
