@@ -5166,25 +5166,26 @@
           "name": "DSS_REVENUE",
           "vizArray": [
             {
-              "id": 340,
+              "id": 343,
               "name": "DSS_FSM_TOTAL_APPLICATIONS_BY_SOURCE",
               "dimensions": {
-                  "height": 250,
-                  "width": 4
+                "height": 250,
+                "width": 3
               },
               "vizType": "chart",
               "label": "",
               "noUnit": false,
               "isCollapsible": false,
               "charts": [
-                  {
-                      "id": "fsmTotalApplicationsBySource",
-                      "name": "DSS_FSM_TOTAL_APPLICATIONS_BY_SOURCE",
-                      "code": "",
-                      "chartType": "donut",
-                      "filter": "",
-                      "headers": []
-                  }
+                {
+                  "id": "fsmTotalApplicationsFromSource",
+                  "name": "DSS_FSM_TOTAL_APPLICATIONS_BY_SOURCE",
+                  "code": "",
+                  "chartType": "donut",
+                  "filter": "",
+                  "headers": [],
+                  "source": "es"
+                }
               ]
             },
             {
@@ -5200,7 +5201,7 @@
               "charts": [
                 {
                   "id": "fsmTotalApplicationsFromGP",
-                  "name": "",
+                  "name": "DSS_FSM_TOTAL_REQUESTS_FROM_GP",
                   "code": "",
                   "chartType": "bar",
                   "filter": "",

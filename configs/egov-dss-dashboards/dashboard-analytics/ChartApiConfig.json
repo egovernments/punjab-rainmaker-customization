@@ -5875,7 +5875,7 @@
     "insight": {},
     "_comment": " "
     }, 
-   "TotalApplicationsFromGP": {
+  "fsmTotalApplicationsFromGP": {
     "chartName": "DSS_FSM_TOTAL_REQUESTS_FROM_GP",
     "queries": [
         {
