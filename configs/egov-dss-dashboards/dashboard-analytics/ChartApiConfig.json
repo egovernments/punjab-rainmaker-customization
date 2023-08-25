@@ -5870,10 +5870,10 @@
     "documentType": "_doc",
     "drillChart": "none",
     "aggregationPaths": [
-        "Applications by Source"
+      "Source"
     ],
     "insight": {},
-     "_comment": " "
+    "_comment": " "
     }, 
    "TotalApplicationsFromGP": {
     "chartName": "DSS_FSM_TOTAL_REQUESTS_FROM_GP",

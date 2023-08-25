@@ -5183,8 +5183,7 @@
                       "code": "",
                       "chartType": "donut",
                       "filter": "",
-                      "headers": [],
-                      "source": "es"
+                      "headers": []
                   }
               ]
             },
