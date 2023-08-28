@@ -5188,8 +5188,8 @@
                   "tabName": "Applications"
                 },
                 {
-                  "id": "fsmTotalApplicationsFromSource",
-                  "name": "DSS_FSM_TOTAL_APPLICATIONS_BY_SOURCE",
+                  "id": "fsmTotalSludgeFromSource",
+                  "name": "DSS_FSM_TOTAL_SLUDGE_FROM_SOURCE",
                   "code": "",
                   "chartType": "donut",
                   "filter": "",
@@ -5221,8 +5221,8 @@
                   "tabName": "Applications"
                 },
                 {
-                  "id": "fsmTotalApplicationsFromGP",
-                  "name": "DSS_FSM_TOTAL_REQUESTS_FROM_GP",
+                  "id": "fsmsludgeDisposedFromGP",
+                  "name": "DSS_FSM_SLUDGE_DISPOSED_FROM_GP",
                   "code": "",
                   "chartType": "bar",
                   "filter": "",
