@@ -94,8 +94,7 @@ SearchDefinitions:
             INNER JOIN egcl_paymentdetail as pd on pd.billid = bd.billid
             INNER JOIN egcl_payment as payment on pd.paymentid=payment.id
             left outer join eg_pg_transactions t on t.bill_id=pd.billid
-            WHERE payment.paymentstatus != 'CANCELLED' and pd.receiptdate>= 1680028200000
-            and pd.receiptdate< 1680114600000
+            WHERE payment.paymentstatus != 'CANCELLED' $where
             GROUP BY pd.receiptnumber,pd.businessservice,pd.amountpaid,pd.tenantid,
             payment.paymentmode,t.mobile_number,payment.transactionnumber,
             bill.consumercode,payment.paidby,bad.taxheadcode
@@ -119,6 +118,14 @@ SearchDefinitions:
    searchParams:
     condition: AND
     params:
+    - name: pd.receiptdate
+      isMandatory: false
+      jsonPath: $.searchCriteria.fromDate
+      operator: GE
+    - name: pd.receiptdate
+      isMandatory: false
+      jsonPath: $.searchCriteria.toDate
+      operator: LE
     
    output:
     jsonFormat: {"ResponseInfo": {}}
