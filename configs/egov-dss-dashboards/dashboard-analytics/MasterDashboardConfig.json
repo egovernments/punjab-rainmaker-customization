@@ -5166,7 +5166,80 @@
           "name": "DSS_REVENUE",
           "vizArray": [
             {
-              "id": 331,
+              "id": 343,
+              "name": "DSS_FSM_TOTAL_APPLICATIONS_BY_SOURCE",
+              "dimensions": {
+                "height": 250,
+                "width": 3
+              },
+              "vizType": "chart",
+              "label": "",
+              "noUnit": false,
+              "isCollapsible": false,
+              "charts": [
+                {
+                  "id": "fsmTotalApplicationsFromSource",
+                  "name": "DSS_FSM_TOTAL_APPLICATIONS_BY_SOURCE",
+                  "code": "",
+                  "chartType": "donut",
+                  "filter": "",
+                  "headers": [],
+                  "source": "es",
+                  "tabName": "Applications"
+                },
+                {
+                  "id": "fsmTotalSludgeFromSource",
+                  "name": "DSS_FSM_TOTAL_SLUDGE_FROM_SOURCE",
+                  "code": "",
+                  "chartType": "donut",
+                  "filter": "",
+                  "headers": [],
+                  "source": "es",
+                  "tabName": "Sludge Disposed"
+                }
+              ]
+            },
+            {
+              "id": 344,
+              "name": "DSS_FSM_TOTAL_REQUESTS_FROM_GP",
+              "dimensions": {
+                "height": 250,
+                "width": 5
+              },
+              "vizType": "chart",
+              "isCollapsible": false,
+              "label": "",
+              "charts": [
+                {
+                  "id": "fsmTotalApplicationsFromGP",
+                  "name": "DSS_FSM_TOTAL_REQUESTS_FROM_GP",
+                  "code": "",
+                  "chartType": "bar",
+                  "filter": "",
+                  "headers": [],
+                  "source": "es",
+                  "tabName": "Applications"
+                },
+                {
+                  "id": "fsmsludgeDisposedFromGP",
+                  "name": "DSS_FSM_SLUDGE_DISPOSED_FROM_GP",
+                  "code": "",
+                  "chartType": "bar",
+                  "filter": "",
+                  "headers": [],
+                  "source": "es",
+                  "tabName": "Sludge Disposed"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "row": 4,
+          "name": "DSS_REVENUE",
+          "vizArray": [
+            {
+              "id": 321,
               "name": "DSS_FSM_COLLECTION_BY_USAGE_TYPE",
               "dimensions": {
                 "height": 250,
@@ -5212,7 +5285,7 @@
           ]
         },
         {
-          "row": 4,
+          "row": 5,
           "name": "DSS_REVENUE",
           "vizArray": [
             {
@@ -5263,7 +5336,7 @@
           ]
         },
         {
-          "row": 5,
+          "row": 6,
           "name": "DSS_REVENUE",
           "vizArray": [
             {
@@ -5313,7 +5386,7 @@
           ]
         },
         {
-          "row": 6,
+          "row": 7,
           "name": "DSS_REVENUE",
           "vizArray": [
             {
@@ -5342,7 +5415,7 @@
           ]
         },
         {
-          "row": 7,
+          "row": 8,
           "name": "DSS_REVENUE",
           "vizArray": [
             {
