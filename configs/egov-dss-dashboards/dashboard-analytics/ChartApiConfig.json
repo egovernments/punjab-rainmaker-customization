@@ -6694,9 +6694,6 @@
     ],
     "isCumulative": true,
     "interval": "month",
-    "excludedColumns": [
-      "TankCapacity"
-    ],
     "chartSpecificProperty": {
       "XtableColumnOrder": [
         "S.N.",
@@ -6760,9 +6757,6 @@
       }
     ],
     "isCumulative": true,
-    "excludedColumns": [
-      "TankCapacity"
-    ],
     "interval": "month",
     "insight": {},
     "_comment": " "
