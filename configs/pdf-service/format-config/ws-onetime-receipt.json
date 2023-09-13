@@ -4,13 +4,6 @@
     "defaultStyle": {
       "font": "Cambay"
     },
-    "watermark": {
-      "text": "DIGIT UAT DIGIT UAT",
-      "color": "gery",
-      "opacity": 0.1,
-      "bold": true,
-      "italics": false
-  },
     "content": [
       {
         "style": "noc-head",
@@ -30,7 +23,7 @@
               {
                 "stack": [
                   {
-                    "text": "{{logo-header}} (Digit UAT)",
+                    "text": "{{logo-header}}{{mcGrade}}",
                     "style": "receipt-logo-header"
                   },
                   {
@@ -215,7 +208,7 @@
             ],
             [
               {
-                "text": "Chq/DD/PO/Txn No.",
+                "text": "Chq/DD/PO/Txn Date",
                 "border": [
                   true,
                   false,
@@ -299,7 +292,7 @@
                 
               }
             ]
-            
+             
           ]
         },
         "layout": {}
@@ -531,48 +524,6 @@
                 "style": "receipt-table-value"
               },
               {
-                "text": "{{guardianName}}",
-                "border": [
-                  false,
-                  false,
-                  false,
-                  false
-                ],
-                "style": "receipt-table-value"
-              }
-              ],
-              [
-              {
-                "text": "{{propertyID}}",
-                "border": [
-                  false,
-                  false,
-                  false,
-                  false
-                ],
-                "style": "receipt-table-value"
-              },
-              {
-                "text": "{{landMark}}",
-                "border": [
-                  false,
-                  false,
-                  false,
-                  false
-                ],
-                "style": "receipt-table-value"
-              },
-              {
-                "text": "{{communicationAddress}}",
-                "border": [
-                  false,
-                  false,
-                  false,
-                  false
-                ],
-                "style": "receipt-table-value"
-              },
-              {
                 "text": "{{payerName}}",
                 "border": [
                   false,
@@ -582,8 +533,8 @@
                 ],
                 "style": "receipt-table"
               }
-            ],
-            [
+              ],
+              [
               {
                 "text": "{{payer_contact}}",
                 "border": [
@@ -627,7 +578,7 @@
             ],
             [
               {
-                "text": "Chq/DD/PO/Txn No.",
+                "text": "Chq/DD/PO/Txn Date",
                 "border": [
                   true,
                   false,
@@ -710,7 +661,8 @@
                 "style": "receipt-table"
                 
               }
-            ]             
+            ]
+            
           ]
         },
         "layout": {}
@@ -776,18 +728,6 @@
       {
         "style": "no-signature",
         "text": "{{no_signature}}"
-      },
-      {
-        "image": "{{footerLogoImage}}",
-        "width": 75,
-        "height": 10,
-        "alignment": "center",
-        "margin": [
-          -12,
-          -10,
-          -230,
-          0
-        ]
       }
     ],
     "styles": {

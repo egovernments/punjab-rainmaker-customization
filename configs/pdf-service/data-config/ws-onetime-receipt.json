@@ -50,7 +50,7 @@
                 }
               },
               {
-                "variable": "serviceType",
+                "variable": "serviceTypeTemp",
                 "value": {
                   "path": "$.paymentDetails[0].guardianName"
                 },
@@ -223,7 +223,7 @@
               {
                 "variable": "consumer_id",
                 "value": {
-                  "path": "Application No"
+                  "path": "PDF_STATIC_LABEL_CONSOLIDATED_RECEIPT_CONSUMER_NO_APP"
                 },
                 "type": "label",
                 "localisation": {
@@ -364,6 +364,7 @@
                   "module": "rainmaker-common"
                 }
               },
+             
               {
                 "variable": "generated_by",
                 "value": {
@@ -391,7 +392,7 @@
               {
                 "variable": "no_signature",
                 "value": {
-                  "path": "This is Computer genrated eSewa. Signature is not required"
+                  "path": "PDF_STATIC_LABEL_CONSOLIDATED_RECEIPT_NO_SIGNATURE_WATER"
                 },
                 "type": "label",
                 "localisation": {
@@ -495,12 +496,7 @@
                   "prefix": null,
                   "module": "rainmaker-common"
                 }
-              },
-              {
-                "variable": "footerLogoImage",
-                "url": "https://uat.digit.org/pg-egov-assets/mseva-logo-colored.png",
-                "type": "image"
-              }
+              }              
             ]
           },
           {
