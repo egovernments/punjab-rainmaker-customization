@@ -7293,7 +7293,7 @@ ReportDefinitions:
         sum(payment.totalamountpaid) as totalpaid
       FROM egcl_paymentdetail pd, egcl_payment payment ,  receipt_breakup
       where pd.paymentid=payment.id and payment.paymentstatus != 'CANCELLED' and pd.businessservice='PT' and payment.tenantid=$tenantid 
-      and receipt_breakup.pdid=pd.id  and paymentmode not in ('CHEQUE','OFFLINE_NEFT','OFFLINE_RTGS')
+      and receipt_breakup.pdid=pd.id  and paymentmode not in ('CHEQUE')
   groupby: group by instrumenttype,substring(instrumentnumber,0,position ('/' in instrumentnumber))
 
 
