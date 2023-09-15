@@ -9550,5 +9550,98 @@ ReportDefinitions:
       inner join report_owners o on o.propertyid=p.propertyid
       where p.tenantid=$tenantid and propertystatus=$pstatus
   orderby: ORDER BY p.propertyid
+
+- reportName: AccountCodeReport
+  summary: PT AccountCode Report
+  version: 1.0.0
+  moduleName: rainmaker-pt
+  sourceColumns:
+  - name: receiptdate
+    label: reports.pt.receiptdate
+    type: string
+    source: pt
+    total: false
+  - name: receiptnumber
+    label: reports.pt.receiptnumber
+    type: string
+    source: pt
+    total: false
+  - name: propertyid
+    label: reports.pt.propertyid
+    type: string
+    source: pt
+    total: false
+  - name: paymentmode
+    label: reports.pt.paymentmode
+    type: string
+    source: pt
+    total: false
+  - name: payername
+    label: reports.pt.payername
+    type: string
+    source: pt
+    total: false
+  - name: cheque_txn_number
+    label: reports.pt.cheque_txn_number
+    type: string
+    source: pt
+    total: false
+  - name: chequedate
+    label: reports.pt.chequedate
+    type: string
+    source: pt
+    total: false
+  - name: amoutpaid
+    label: reports.pt.amoutpaid
+    type: string
+    source: pt
+    total: true
+  - name: cash
+    label: reports.pt.guardianname
+    type: string
+    source: pt
+    total: true
+  - name: cdheque
+    label: reports.pt.cheque
+    type: string
+    source: pt
+    total: true
+  - name: online
+    label: reports.pt.online
+    type: string
+    source: pt
+    total: true
+  searchParams:
+  - name: fromDate
+    label: reports.pt.fromDate
+    type: epoch
+    source: pt
+    isMandatory: true
+    searchClause: AND pd.receiptdate >= $fromDate
+  - name: toDate
+    label: reports.pt.toDate
+    type: epoch
+    source: pt
+    isMandatory: true
+    searchClause: AND pd.receiptdate <= $toDate
+  query: |
+    SELECT
+      to_char((To_timestamp(pd.receiptdate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY') as receiptdate,
+      pd.receiptnumber,
+      b.consumercode as propertyid,
+      payment.paymentmode,
+      payment.payername,
+      payment.instrumentnumber as cheque_txn_number,
+      payment.instrumentdate as chequedate,
+      split_part(b.tenantid,'.',2) as ulb,
+      payment.totalamountpaid as amoutpaid,
+      (case when payment.paymentmode='CASH' then payment.totalamountpaid else 0 end) as cash,
+      (case when payment.paymentmode='CHEQUE' then payment.totalamountpaid else 0 end) as cheque,
+      (case when payment.paymentmode='ONLINE' then payment.totalamountpaid else 0 end) as online
+    FROM egcl_bill as  b
+    INNER JOIN egcl_paymentdetail as pd on pd.billid = b.id
+    INNER JOIN egcl_payment as payment on pd.paymentid=payment.id
+    WHERE b.tenantid = $tenantid  and payment.paymentstatus != 'CANCELLED' and pd.businessservice='PT'
+  orderby: ORDER BY pd.receiptdate
      
 
