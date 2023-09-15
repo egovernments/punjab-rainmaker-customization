@@ -7415,7 +7415,7 @@ ReportDefinitions:
         payment.totalamountpaid as amount
       FROM egcl_paymentdetail pd, egcl_payment payment left outer join bank_branches on bank_branches.ifsc=payment.ifsccode,  receipt_breakup
       where pd.paymentid=payment.id and payment.paymentstatus != 'CANCELLED' and pd.businessservice='PT' and payment.tenantid=$tenantid 
-      and receipt_breakup.pdid=pd.id and payment.paymentmode in ('CHEQUE','CARD','DD')
+      and receipt_breakup.pdid=pd.id and payment.paymentmode in ('CHEQUE','CARD','DD','OFFLINE_NEFT','OFFLINE_RTGS')
   orderby: ORDER BY pd.receiptdate DESC;
   
   
