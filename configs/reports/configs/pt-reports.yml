@@ -9011,7 +9011,7 @@ ReportDefinitions:
     total: false
   searchParams:
   - name: category
-    label: reports.pt.usagecategory
+    label: reports.pt.usageownercategory
     type: string
     source: pt
     isMandatory: true
@@ -9033,7 +9033,7 @@ ReportDefinitions:
     --S.no    Service Name	ULB    Property Tax Unique ID    Date Of Transcation    Receipt Number	Existing Property ID    Owner Name    Guardian Name    Total Area (SQ.YARD)    Covered  Area/Built Area (SQ.FEET)    Floors    Occupancy (Rented,Self /Unoccupied)    Type Of Property	Mobile Number    Transcation Mode of Payment    Payment Amount    Payment Date    Email Id	Address
     with properties as
     (
-      select distinct propertyid as propertyid from eg_pt_unit where tenantid=$tenantid and usagecategory LIKE CONCAT('%',upper($category),'%') --like '%EDUCATION%'
+      select distinct propertyid as propertyid from eg_pt_unit where tenantid=$tenantid and (usagecategory LIKE CONCAT('%',upper($category),'%') or ownershipcategory LIKE CONCAT('%',upper($category),'%'))--like '%EDUCATION%'
     ),
     owners as
     ( 
