@@ -9031,17 +9031,13 @@ ReportDefinitions:
     searchClause: AND 1=1
   query: |
     --S.no    Service Name	ULB    Property Tax Unique ID    Date Of Transcation    Receipt Number	Existing Property ID    Owner Name    Guardian Name    Total Area (SQ.YARD)    Covered  Area/Built Area (SQ.FEET)    Floors    Occupancy (Rented,Self /Unoccupied)    Type Of Property	Mobile Number    Transcation Mode of Payment    Payment Amount    Payment Date    Email Id	Address
-    with properties as
-    (
-      select distinct propertyid as propertyid from eg_pt_unit where tenantid=$tenantid and (usagecategory LIKE CONCAT('%',upper($category),'%') or ownershipcategory LIKE CONCAT('%',upper($category),'%'))--like '%EDUCATION%'
-    ),
-    owners as
+    with owners as
     ( 
     select
       split_part(string_agg(userid,','),',',1) as owner_userid,
       propertyid
     from eg_pt_owner
-    where tenantid=$tenantid and propertyid in (select propertyid from properties) and status='ACTIVE'
+    where tenantid=$tenantid and propertyid in (select pt_uuid from report_properties where tenantid='pb.patiala' and ownershipcategory LIKE CONCAT('%',upper($category),'%')) and status='ACTIVE'
     group by propertyid
     ),
     assessments as
@@ -9066,13 +9062,13 @@ ReportDefinitions:
       bndry.blockname as blockname,
       eg_user.name as ownername,
       eg_user.mobilenumber as mobileno,
-      $category as unitcategory,
+      --$category as unitcategory,
       (pt.additionalDetails->'legacyInfo')->>'address' as addr_survey,
       pt.additionalDetails->>'businessName' as businessname,
       $finYear as assessmentyear
     from eg_pt_property pt
     inner join eg_pt_address adr on adr.propertyid =pt.id
-    inner join properties props on props.propertyid=pt.id
+    --inner join properties props on props.propertyid=pt.id
     inner join owners on owners.propertyid=pt.id
     inner join eg_user on eg_user.uuid=owners.owner_userid
     inner join eg_bndry_mohalla bndry on bndry.localitycode=adr.locality
