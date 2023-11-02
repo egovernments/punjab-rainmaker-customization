@@ -1758,13 +1758,13 @@ ReportDefinitions:
       label: reports.ws.fromDate
       type: epoch
       source: ws
-      isMandatory: true
+      isMandatory: false
       searchClause: AND pd.receiptdate >= $fromDate
     - name: toDate
       label: reports.ws.toDate
       type: epoch
       source: ws
-      isMandatory: true
+      isMandatory: false
       searchClause: AND pd.receiptdate <= $toDate
 query: >
       -- Use CTE to force query plan, compute & use CTE later
@@ -1792,7 +1792,7 @@ query: >
                   INNER JOIN egcl_paymentdetail as pd on pd.billid = bd.billid
                   INNER JOIN egcl_payment as payment on pd.paymentid=payment.id
                   WHERE payment.tenantid =  $tenantid and payment.paymentstatus != 'CANCELLED' and  pd.businessservice='WS.ONE_TIME_FEE'
-                  AND pd.receiptdate >= $fromDate AND pd.receiptdate <= $toDate
+                 -- AND pd.receiptdate >= $fromDate AND pd.receiptdate <= $toDate
                   GROUP BY pdid
       )
 
