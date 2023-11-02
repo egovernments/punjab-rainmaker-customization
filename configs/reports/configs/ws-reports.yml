@@ -1755,13 +1755,13 @@ ReportDefinitions:
     total: false
   searchParams:
     - name: fromDate
-      label: reports.ws.fromDate
+      label: reports.pt.fromDate
       type: epoch
       source: ws
       isMandatory: false
       searchClause: AND pd.receiptdate >= $fromDate
     - name: toDate
-      label: reports.ws.toDate
+      label: reports.pt.toDate
       type: epoch
       source: ws
       isMandatory: false
