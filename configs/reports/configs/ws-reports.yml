@@ -1614,213 +1614,131 @@ ReportDefinitions:
         where swconnection.tenantid=$tenantid and swconnection.status='Active' and bill.businessservice like 'SW%'
   orderby: order by bill.billdate desc
 - reportName: estimation_charge
-  summary: Estimation Charge
+  summary: estimation charge
   version: 1.0.0
   moduleName: rainmaker-ws
+  additionalConfig:
+    print:
+      pdfPageSize: "A1"
   sourceColumns:
-  - name: receiptnumber
-    label: reports.ws.receiptNo
+  - name: receiptno
+    label: reports.ws.receiptno
     type: string
     source: ws
     total: false
-  - name: receiptdate
-    label: reports.ws.receiptDate
+  - name: connectionno
+    label: reports.ws.connectionno
+    type: string
+    source: ws
+    total: false       
+  - name: mobileno
+    label: reports.ws.mobileno
+    type: string
+    source: ws
+    total: false   
+  - name: receiptdate1
+    label: reports.ws.receiptdate
     type: string
     source: ws
     total: false
-  - name: g8issuedate
-    label: reports.ws.g8issuedate
+  - name: service
+    label: reports.ws.serive
     type: string
     source: ws
     total: false
-  - name: g8receiptno
-    label: reports.ws.g8receiptno
+  - name: billnumber
+    label: reports.ws.billnumber
     type: string
     source: ws
     total: false
-  - name: amount
-    label: reports.ws.amount
+  - name: billdate1
+    label: reports.ws.billdate
+    type: string
+    source: ws
+    total: false
+  - name: paidby
+    label: reports.ws.paidby
+    type: string
+    source: ws
+    total: false
+  - name: amountpaid
+    label: reports.ws.amountpaid
     type: string
     source: ws
     total: true
-  - name: consumercode
-    label: reports.ws.consumercode
-    type: string
-    source: ws
-    total: true
-  - name: Water Charge
-    label: reports.ws.water_charge
-    type: string
-    source: ws
-    total: true
-  - name: composition fee
-    label: reports.ws.composition_fee
-    type: string
-    source: ws
-    total: true
-  - name: connection fee
-    label: reports.ws.connection_fee
-    type: string
-    source: ws
-    total: true
-  - name: fee_round_off
-    label: reports.ws.fee_round_off
-    type: string
-    source: ws
-    total: true
-  - name: other fee
-    label: reports.ws.other_fee
-    type: string
-    source: ws
-    total: true
-  - name: road_cutting_charge
-    label: reports.ws.road_cutting_charge
-    type: string
-    source: ws
-    total: true
-  - name: water_round_off
-    label: reports.ws.water_round_off
-    type: string
-    source: ws
-    total: true
-  - name: secuirty_dep
-    label: reports.ws.secuirty_dep
-    type: string
-    source: ws
-    total: true
-  - name: supervision_charge
-    label: reports.ws.supervision_charge
-    type: string
-    source: ws
-    total: true
-  - name: tax_adjustment
-    label: reports.ws.tax_adjustment
+  - name: paymentmode
+    label: reports.ws.paymentmode
     type: string
     source: ws
     total: false
-  - name: ws_time_interest
-    label: reports.ws.ws_time_interest
+  - name: paymentstatus
+    label: reports.ws.paymentstatus
     type: string
     source: ws
     total: false
-  - name: ws_time_penalty
-    label: reports.ws.ws_time_penalty
+  - name: ownername1
+    label: reports.ws.ownername1
     type: string
     source: ws
-    total: false
-  - name: user_charge
-    label: reports.ws.user_charge
-    type: string
-    source: ws
-    total: false
-  - name: pendingamount
-    label: reports.ws.pendingamount
-    type: string
-    source: ws
-    total: true
-  - name: tenantid
-    label: reports.ws.tenantid
-    type: string
-    source: ws
-    total: false
-  - name: instrumenttype
-    label: reports.ws.paymentMode
-    type: string
-    source: ws
-    total: false
-  - name: transactionnumber
-    label: reports.ws.ddChequeTransactionNo
-    type: string
-    source: ws
-    total: false
-  - name: transactiondate
-    label: reports.ws.ddChequeTransactionDate
-    type: string
-    source: ws
-    total: false
-  - name: bankname
-    label: reports.ws.bankName
-    type: string
-    source: ws
-    total: false
-  - name: collectorname
-    label: reports.ws.collectorname
-    type: string
-    source: ws
-    total: false
-  - name: financialyear
-    label: reports.ws.financialyear
-    type: string
-    source: ws
-    total: false
+    total: false   
   searchParams:
-    - name: fromDate
-      label: reports.pt.fromDate
-      type: epoch
-      source: ws
-      isMandatory: false
-      searchClause: AND pd.receiptdate >= $fromDate
-    - name: toDate
-      label: reports.pt.toDate
-      type: epoch
-      source: ws
-      isMandatory: false
-      searchClause: AND pd.receiptdate <= $toDate
-query: >
-      -- Use CTE to force query plan, compute & use CTE later
-
-      WITH receipt_breakup AS (
-                  SELECT
-                    pd.id as pdid,
-                 SUM(CASE WHEN taxheadcode LIKE 'WS_ADVANCE_CARRYFORWARD' THEN adjustedamount ELSE 0 END) as Advance, 
-      SUM(CASE WHEN taxheadcode LIKE 'WS_CHARGE' THEN adjustedamount ELSE 0 END) as Water_Charge, 
-      SUM(CASE WHEN taxheadcode LIKE 'WS_COMPOSITION_FEE' THEN adjustedamount ELSE 0 END) as Composition_Fee, 
-      SUM(CASE WHEN taxheadcode LIKE 'WS_CONNECTION_FEE' THEN adjustedamount ELSE 0 END) as Connection_Fee, 
-      SUM(CASE WHEN taxheadcode LIKE 'WS_FEE_ROUND_OFF' THEN adjustedamount ELSE 0 END) as Fee_Round_off , 
-      SUM(CASE WHEN taxheadcode LIKE 'WS_OTHER_FEE' THEN adjustedamount ELSE 0 END) as Other_Fee, 
-      SUM(CASE WHEN taxheadcode LIKE 'WS_ROAD_CUTTING_CHARGE' THEN adjustedamount ELSE 0 END) as Road_Cutting_Charge, 
-      SUM(CASE WHEN taxheadcode LIKE 'WS_Round_Off' THEN adjustedamount ELSE 0 END) as water_round_off, 
-      SUM(CASE WHEN taxheadcode LIKE 'WS_SECURITY_DEPOSIT' THEN adjustedamount ELSE 0 END) as secuirty_dep, 
-      SUM(CASE WHEN taxheadcode LIKE 'WS_SUPERVISION_CHARGE' THEN adjustedamount ELSE 0 END) as supervision_charge, 
-      SUM(CASE WHEN taxheadcode LIKE 'WS_TAX_ADJUSTMENT' THEN adjustedamount ELSE 0 END) as tax_adjustment, 
-      SUM(CASE WHEN taxheadcode LIKE 'WS_TIME_INTEREST' THEN adjustedamount ELSE 0 END) as WS_time_interest, 
-      SUM(CASE WHEN taxheadcode LIKE 'WS_TIME_PENALTY' THEN adjustedamount ELSE 0 END) as Ws_time_penalty, 
-      SUM(CASE WHEN taxheadcode LIKE 'WS_USER_CHARGE' THEN adjustedamount ELSE 0 END) as User_Charge 
-
-                  FROM egcl_billaccountdetail as bad
-                  INNER JOIN egcl_billdetial as bd on bd.id = bad.billdetailid
-                  INNER JOIN egcl_paymentdetail as pd on pd.billid = bd.billid
-                  INNER JOIN egcl_payment as payment on pd.paymentid=payment.id
-                  WHERE payment.tenantid =  $tenantid and payment.paymentstatus != 'CANCELLED' and  pd.businessservice='WS.ONE_TIME_FEE'
-                 -- AND pd.receiptdate >= $fromDate AND pd.receiptdate <= $toDate
-                  GROUP BY pdid
-      )
-
-      SELECT 
-        pd.tenantid AS tenantid,
-        pd.id,
-        pt.applicationno as consumercode,
-        to_char((To_timestamp(pd.receiptdate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY')  AS receiptdate,
-        --payment.ifsccode AS bankname,
-        concat(bank_branches.bank_name,' ',bank_branches.branch) as bankname,
-        receiptnumber,
-        payment.totalamountpaid as amount, 
-        payment.paymentmode as instrumenttype, 
-        payment.transactionnumber,
-        concat(to_char((To_timestamp(get_fromperiod(pd.billid)/1000) at time Zone 'Asia/Kolkata'),'YYYY'),'-', to_char((To_timestamp(get_toperiod(pd.billid)/1000) at time Zone 'Asia/Kolkata'),'YY')) as financialyear, 
-        to_char((To_timestamp(payment.instrumentdate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY') AS transactiondate, 
-        payment.totaldue - payment.totalamountpaid AS pendingamount,
-        --Initcap(case when pt.usagecategory like '%.%' then split_part(pt.usagecategory,'.',2) else pt.usagecategory end) as usagetype,
-        (case when eg_user.name is null then '30048|21Fj+c3k2ldB0X3AzIh7atXB' else eg_user.name end)  as collectorname,
-        receipt_breakup.*,
-        to_char((To_timestamp(pd.manualreceiptdate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY') AS g8issuedate, 
-        manualreceiptnumber as g8receiptno
-      FROM egcl_paymentdetail pd Left outer join eg_user on eg_user.id = pd.createdby::INTEGER, egcl_payment payment left outer join bank_branches on bank_branches.ifsc=payment.ifsccode, 
-
-      (select * from (select *,(row_number() over(partition by applicationno order by lastmodifiedtime desc)) as rw from eg_ws_connection  where tenantid=$tenantid) pts where rw=1) as pt,
-
-      receipt_breakup, egcl_bill bill
-
-      where pd.paymentid=payment.id and bill.id=pd.billid and payment.paymentstatus != 'CANCELLED' and pd.businessservice='WS.ONE_TIME_FEE' and payment.tenantid=$tenantid
-
-      and pt.applicationno = bill.consumercode and receipt_breakup.pdid=pd.id 
+  - name: fromDate
+    label: reports.pt.fromDate
+    type: epoch
+    source: pt
+    isMandatory: true
+    searchClause: AND pd.receiptdate >= $fromDate
+  - name: toDate
+    label: reports.pt.toDate
+    type: epoch
+    source: pt
+    isMandatory: true
+    searchClause: AND pd.receiptdate <= $toDate
+  - name: serviceType
+    label: serviceType
+    type: singlevaluelist
+    pattern: 'list://WS%:Water,SW%:Sewerage'
+    source: pt
+    isMandatory: true
+    searchClause: AND pd.businessservice like $serviceType
+  - name: receiptNumber
+    label: receiptNumber
+    type: string
+    source: pt
+    isMandatory: false
+    searchClause: AND pd.receiptnumber like $receiptNumber
+  - name: paymentStatus
+    label: paymentStatus
+    type: singlevaluelist
+    pattern: 'list://NEW:NEW,DEPOSITED:DEPOSITED'
+    source: pt
+    isMandatory: false
+    searchClause: AND payment.paymentstatus like $paymentStatus
+  - name: paymentMode
+    label: paymentMode
+    type: singlevaluelist
+    pattern: 'list://CASH:CASH,CHEQUE:CHEQUE,DD:DD,ONLINE:ONLINE,CARD:CARD,OFFLINE_NEFT:OFFLINE NEFT'
+    source: pt
+    isMandatory: false
+    searchClause: AND payment.paymentmode like $paymentMode
+  query: |
+    -- Use CTE to force query plan, compute & use CTE later
+    select
+      receiptnumber as receiptno,
+      bill.consumercode as connectionno,
+      usr.mobilenumber as mobileno,
+      to_char((To_timestamp(pd.receiptdate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY') as receiptdate1,
+      bill.businessservice as service,
+      billnumber,
+      to_char((To_timestamp(bill.billdate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY') as billdate1,
+      paidby,
+      amountpaid,
+      paymentmode,
+      paymentstatus,      
+      payername as ownername1
+    from egcl_paymentdetail pd
+    inner join egcl_bill as bill on bill.id=pd.billid    
+    inner join egcl_payment as payment on payment.id=pd.paymentid    
+    inner join eg_user as usr on usr.id=payment.createdby::integer and payment.paymentstatus!='CANCELLED'
+    where payment.tenantid=$tenantid and pd.businessservice in ('WS','SW') and bill.status='ACTIVE'
+  orderby: order by pd.receiptdate desc
