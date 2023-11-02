@@ -1766,24 +1766,6 @@ ReportDefinitions:
       source: ws
       isMandatory: true
       searchClause: AND pd.receiptdate <= $toDate
-    - name: financialyear
-      label: Financial Year
-      type: singlevaluelist
-      pattern: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?tenantId=$tenantid&moduleName=egf-master&masterName=FinancialYear|$.MdmsRes.egf-master.FinancialYear.[?(@.module=='PT')].code|$.MdmsRes.egf-master.FinancialYear.[?(@.module=='PT')].name
-      source: ws
-      wrapper: true
-      isMandatory: false
-      searchClause: AND concat(to_char((To_timestamp(get_fromperiod(pd.billid)/1000)
-       at time Zone 'Asia/Kolkata'),'YYYY'),'-',
-       to_char((To_timestamp(get_toperiod(pd.billid)/1000) at time Zone
-       'Asia/Kolkata'),'YY')) = $financialyear
-    - name: paymentMode
-      label: Payment Mode
-      type: singlevaluelist
-      pattern: list://CARD:Card,CASH:Cash,CHEQUE:Cheque,DD:DD,OFFLINE_NEFT:NEFT,OFFLINE_RTGS:RTGS,ONLINE:Online,POSTAL_ORDER:PostalOrder
-      source: ws
-      isMandatory: false
-      searchClause: AND payment.paymentmode = $paymentMode
 query: >
       -- Use CTE to force query plan, compute & use CTE later
 
