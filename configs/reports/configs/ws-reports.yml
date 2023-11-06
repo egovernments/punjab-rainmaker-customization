@@ -1823,3 +1823,48 @@ ReportDefinitions:
           where pd.paymentid=payment.id and bill.id=pd.billid and payment.paymentstatus != 'CANCELLED' and pd.businessservice='WS.ONE_TIME_FEE' and payment.tenantid=$tenantid
     
           and pt.applicationno = bill.consumercode and receipt_breakup.pdid=pd.id 
+          
+- reportName: usageWiseReport
+  summary: Usage Wise Report
+  version: 1.0.0
+  moduleName: rainmaker-ws
+  additionalConfig:
+    print:
+      pdfPageSize: A1
+  sourceColumns:
+  - name: no_of_applications
+    label: reports.ws.no_of_applications
+    type: string
+    source: ws
+    total: false
+  - name: catergory
+    label: reports.ws.catergory
+    type: string
+    source: ws
+    total: false
+  - name: water_status
+    label: reports.ws.water_status
+    type: string
+    source: ws
+    total: false
+  searchParams:
+  - name: fromDate
+    label: reports.pt.fromDate
+    type: epoch
+    source: pt
+    isMandatory: true
+    searchClause: AND pd.receiptdate >= $fromDate
+  - name: toDate
+    label: reports.pt.toDate
+    type: epoch
+    source: pt
+    isMandatory: true
+    searchClause: AND pd.receiptdate <= $toDate
+  query: |
+    select count(*) as no_of_applications, pt.usagecategory as catergory,
+    ws.status as water_status  from eg_ws_connection ws, eg_pt_property pt  where ws.property_id=pt.propertyid
+    and ws.createdtime>=$fromDate
+    and ws.createdtime<=$toDate
+    and ws.tenantid=$tenantid
+  groupby:  group by pt.usagecategory, ws.status
+        
