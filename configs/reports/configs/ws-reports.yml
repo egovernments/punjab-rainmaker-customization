@@ -1766,27 +1766,7 @@ ReportDefinitions:
     pattern: 'list://WS%:Water,SW%:Sewerage'
     source: pt
     isMandatory: true
-    searchClause: AND pd.businessservice like $serviceType
-  - name: receiptNumber
-    label: receiptNumber
-    type: string
-    source: pt
-    isMandatory: false
-    searchClause: AND pd.receiptnumber like $receiptNumber
-  - name: paymentStatus
-    label: paymentStatus
-    type: singlevaluelist
-    pattern: 'list://NEW:NEW,DEPOSITED:DEPOSITED'
-    source: pt
-    isMandatory: false
-    searchClause: AND payment.paymentstatus like $paymentStatus
-  - name: paymentMode
-    label: paymentMode
-    type: singlevaluelist
-    pattern: 'list://CASH:CASH,CHEQUE:CHEQUE,DD:DD,ONLINE:ONLINE,CARD:CARD,OFFLINE_NEFT:OFFLINE NEFT'
-    source: pt
-    isMandatory: false
-    searchClause: AND payment.paymentmode like $paymentMode
+    searchClause: AND pd.businessservice like $serviceType  
   query: |
     -- Use CTE to force query plan, compute & use CTE later
      WITH receipt_breakup AS (
@@ -1812,7 +1792,7 @@ ReportDefinitions:
                       INNER JOIN egcl_paymentdetail as pd on pd.billid = bd.billid
                       INNER JOIN egcl_payment as payment on pd.paymentid=payment.id
                       WHERE payment.tenantid =  $tenantid and payment.paymentstatus != 'CANCELLED' and  pd.businessservice='WS.ONE_TIME_FEE'
-                    --  AND pd.receiptdate >= $fromDate AND pd.receiptdate <= $toDate
+                      AND pd.receiptdate >= $fromDate AND pd.receiptdate <= $toDate
                       GROUP BY pdid
           )
     
