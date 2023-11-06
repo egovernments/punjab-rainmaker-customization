@@ -1613,6 +1613,7 @@ ReportDefinitions:
         inner join owners on owners.propertyid=pt.propertyid
         where swconnection.tenantid=$tenantid and swconnection.status='Active' and bill.businessservice like 'SW%'
   orderby: order by bill.billdate desc
+  
 - reportName: estimation_charge
   summary: estimation charge
   version: 1.0.0
@@ -1621,131 +1622,131 @@ ReportDefinitions:
     print:
       pdfPageSize: "A1"
   sourceColumns:
-- name: receiptnumber
-  label: reports.ws.receiptnumber
-  type: string
-  source: ws
-  total: false
-- name: consumercode
-  label: reports.ws.consumercode
-  type: string
-  source: ws
-  total: false       
-- name: Advance
-  label: reports.ws.Advance
-  type: string
-  source: ws
-  total: false   
-- name: receiptdate
-  label: reports.ws.receiptdate
-  type: string
-  source: ws
-  total: false
-- name: instrumenttype
-  label: reports.ws.instrumenttype
-  type: string
-  source: ws
-  total: false
-- name: Water_Charge
-  label: reports.ws.Water_Charge
-  type: string
-  source: ws
-  total: true
-- name: Composition_Fee
-  label: reports.ws.Composition_Fee
-  type: string
-  source: ws
-  total: true
-- name: Connection_Fee
-  label: reports.ws.Connection_Fee
-  type: string
-  source: ws
-  total: true
-- name: Fee_Round_off
-  label: reports.ws.Fee_Round_off
-  type: string
-  source: ws
-  total: true
-- name: Other_Fee
-  label: reports.ws.Other_Fee
-  type: string
-  source: ws
-  total: true
-- name: Road_Cutting_Charge
-  label: reports.ws.Road_Cutting_Charge
-  type: string
-  source: ws
-  total: true
-- name: water_round_off
-  label: reports.ws.water_round_off
-  type: string
-  source: ws
-  total: true
-- name: secuirty_dep
-  label: reports.ws.secuirty_dep
-  type: string
-  source: ws
-  total: true
-- name: supervision_charge
-  label: reports.ws.supervision_charge
-  type: string
-  source: ws
-  total: true
-- name: tax_adjustment
-  label: reports.ws.tax_adjustment
-  type: string
-  source: ws
-  total: false
-- name: WS_time_interest
-  label: reports.ws.WS_time_interest
-  type: string
-  source: ws
-  total: false
-- name: Ws_time_penalty
-  label: reports.ws.Ws_time_penalty
-  type: string
-  source: ws
-  total: false
-- name: User_Charge
-  label: reports.ws.User_Charge
-  type: string
-  source: ws
-  total: false
-- name: paidby
-  label: reports.ws.paidby
-  type: string
-  source: ws
-  total: false
-- name: amount
-  label: reports.ws.amount
-  type: string
-  source: ws
-  total: true
-- name: transactionnumber
-  label: reports.ws.transactionnumber
-  type: string
-  source: ws
-  total: false
-- name: financialyear
-  label: reports.ws.financialyear
-  type: string
-  source: ws
-  total: false
-- name: g8receiptno
-  label: reports.ws.g8receiptno
-  type: string
-  source: ws
-  total: false   
-- name: pendingamount
-  label: reports.ws.pendingamount
-  type: string
-  source: ws
-  total: false 
-- name: tenantid
-  label: reports.ws.tenantid
-  type: string
-  source: ws
-  total: false    
+  - name: receiptnumber
+    label: reports.ws.receiptnumber
+    type: string
+    source: ws
+    total: false
+  - name: consumercode
+    label: reports.ws.consumercode
+    type: string
+    source: ws
+    total: false       
+  - name: Advance
+    label: reports.ws.Advance
+    type: string
+    source: ws
+    total: false   
+  - name: receiptdate
+    label: reports.ws.receiptdate
+    type: string
+    source: ws
+    total: false
+  - name: instrumenttype
+    label: reports.ws.instrumenttype
+    type: string
+    source: ws
+    total: false
+  - name: Water_Charge
+    label: reports.ws.Water_Charge
+    type: string
+    source: ws
+    total: true
+  - name: Composition_Fee
+    label: reports.ws.Composition_Fee
+    type: string
+    source: ws
+    total: true
+  - name: Connection_Fee
+    label: reports.ws.Connection_Fee
+    type: string
+    source: ws
+    total: true
+  - name: Fee_Round_off
+    label: reports.ws.Fee_Round_off
+    type: string
+    source: ws
+    total: true
+  - name: Other_Fee
+    label: reports.ws.Other_Fee
+    type: string
+    source: ws
+    total: true
+  - name: Road_Cutting_Charge
+    label: reports.ws.Road_Cutting_Charge
+    type: string
+    source: ws
+    total: true
+  - name: water_round_off
+    label: reports.ws.water_round_off
+    type: string
+    source: ws
+    total: true
+  - name: secuirty_dep
+    label: reports.ws.secuirty_dep
+    type: string
+    source: ws
+    total: true
+  - name: supervision_charge
+    label: reports.ws.supervision_charge
+    type: string
+    source: ws
+    total: true
+  - name: tax_adjustment
+    label: reports.ws.tax_adjustment
+    type: string
+    source: ws
+    total: false
+  - name: WS_time_interest
+    label: reports.ws.WS_time_interest
+    type: string
+    source: ws
+    total: false
+  - name: Ws_time_penalty
+    label: reports.ws.Ws_time_penalty
+    type: string
+    source: ws
+    total: false
+  - name: User_Charge
+    label: reports.ws.User_Charge
+    type: string
+    source: ws
+    total: false
+  - name: paidby
+    label: reports.ws.paidby
+    type: string
+    source: ws
+    total: false
+  - name: amount
+    label: reports.ws.amount
+    type: string
+    source: ws
+    total: true
+  - name: transactionnumber
+    label: reports.ws.transactionnumber
+    type: string
+    source: ws
+    total: false
+  - name: financialyear
+    label: reports.ws.financialyear
+    type: string
+    source: ws
+    total: false
+  - name: g8receiptno
+    label: reports.ws.g8receiptno
+    type: string
+    source: ws
+    total: false   
+  - name: pendingamount
+    label: reports.ws.pendingamount
+    type: string
+    source: ws
+    total: false 
+  - name: tenantid
+    label: reports.ws.tenantid
+    type: string
+    source: ws
+    total: false    
   searchParams:
   - name: fromDate
     label: reports.pt.fromDate
