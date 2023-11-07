@@ -1853,13 +1853,13 @@ ReportDefinitions:
     type: epoch
     source: pt
     isMandatory: true
-    searchClause: AND pd.receiptdate >= $fromDate
+    searchClause: AND ws.createdtime>= $fromDate
   - name: toDate
     label: reports.pt.toDate
     type: epoch
     source: pt
     isMandatory: true
-    searchClause: AND pd.receiptdate <= $toDate
+    searchClause: AND ws.createdtime<= $toDate
   query: |
     select count(*) as no_of_applications, pt.usagecategory as catergory,
     ws.status as water_status  from eg_ws_connection ws, eg_pt_property pt  where ws.property_id=pt.propertyid
