@@ -1836,7 +1836,7 @@ ReportDefinitions:
     label: reports.ws.no_of_applications
     type: string
     source: ws
-    total: false
+    total: true
   - name: catergory
     label: reports.ws.catergory
     type: string
