@@ -1907,13 +1907,14 @@ ReportDefinitions:
     type: epoch
     source: pt
     isMandatory: true
-    searchClause: AND ws.createdtime>= $fromDate
-  - name: toDate
-    label: reports.pt.toDate
-    type: epoch
+    searchClause: AND d1.taxperiodfrom>= $fromDate
+  - name: serviceType
+    label: serviceType
+    type: singlevaluelist
+    pattern: 'list://WS%:Water,SW%:Sewerage'
     source: pt
     isMandatory: true
-    searchClause: AND ws.createdtime<= $toDate
+    searchClause: AND d1.businessservice like $serviceType
   query: |
    WITH quarterly_data AS (
    SELECT
@@ -1926,7 +1927,7 @@ ReportDefinitions:
    FROM egbs_demand_v1 d1
    LEFT JOIN egbs_demanddetail_v1 AS d2 ON d1.id = d2.demandid
    LEFT JOIN eg_ws_connection AS d4 ON d4.connectionno = d1.consumercode
-   WHERE d1.businessservice = 'WS'
+   WHERE d1.businessservice = $serviceType
    AND d1.tenantid = $tenantid
    AND d1.taxperiodfrom = $fromDate
    GROUP BY d1.taxperiodfrom, d1.taxperiodto, d1.consumertype
