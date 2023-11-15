@@ -1928,7 +1928,7 @@ ReportDefinitions:
    LEFT JOIN eg_ws_connection AS d4 ON d4.connectionno = d1.consumercode
    WHERE d1.businessservice = 'WS'
    AND d1.tenantid = $tenantid
-   AND d1.taxperiodfrom = $fromdate
+   AND d1.taxperiodfrom = $fromDate
    GROUP BY d1.taxperiodfrom, d1.taxperiodto, d1.consumertype
    )
    SELECT
