@@ -1945,4 +1945,4 @@ ReportDefinitions:
    COALESCE(CAST(qd.total_collected_amount AS TEXT), 'No Collection Amount') AS total_collected_amount,
    COALESCE(CAST(qd.distinct_consumercode_count AS TEXT), '0') AS distinct_consumercode_count
    FROM quarterly_data qd
-  orderby:  ORDER BY qd.taxperiodfrom;
+ orderby:  ORDER BY qd.taxperiodfrom;
