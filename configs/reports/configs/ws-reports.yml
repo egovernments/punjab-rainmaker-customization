@@ -1907,14 +1907,14 @@ ReportDefinitions:
     type: epoch
     source: pt
     isMandatory: true
-    searchClause: AND d1.taxperiodfrom>= $fromDate
+    searchClause: and 1=1
   - name: serviceType
     label: serviceType
     type: singlevaluelist
     pattern: 'list://WS%:Water,SW%:Sewerage'
     source: pt
     isMandatory: true
-    searchClause: AND d1.businessservice like $serviceType
+    searchClause: AND 1=1
   query: |
     WITH quarterly_data AS (
     SELECT
@@ -1933,10 +1933,9 @@ ReportDefinitions:
         egbs_demand_v1 d1
         LEFT JOIN egbs_demanddetail_v1 d2 ON d1.id = d2.demandid
         LEFT JOIN eg_ws_connection d4 ON d4.connectionno = d1.consumercode
-    WHERE
-        d1.tenantid = $tenantid
-        AND d1.businessservice = $serviceType
-        AND d1.taxperiodfrom >= fromDate
+    WHERE  d1.taxperiodfrom >= $fromDate
+    AND  d1.businessservice = $serviceType
+    AND d1.tenantid = $tenantid
     GROUP BY
         year, quarter, tax_period_from_date
     )
@@ -1948,6 +1947,6 @@ ReportDefinitions:
      COALESCE(CAST(total_collected_amount AS TEXT), 'No Collection Amount') AS total_collected_amount,
      COALESCE(CAST(distinct_consumercode_count AS TEXT), '0') AS distinct_consumercode_count
     FROM
-    quarterly_data
+    quarterly_data where 1=1 
 
 
