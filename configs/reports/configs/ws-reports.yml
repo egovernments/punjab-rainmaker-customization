@@ -1939,15 +1939,15 @@ ReportDefinitions:
         AND d1.taxperiodfrom >= fromDate
     GROUP BY
         year, quarter, tax_period_from_date
-   )
+    )
 
-   SELECT
-    year || '->' || quarter AS quarter,
-    tax_period_from_date,
-    COALESCE(CAST(total_demand_amount AS TEXT), 'No Tax amount') AS total_demand_amount,
-    COALESCE(CAST(total_collected_amount AS TEXT), 'No Collection Amount') AS total_collected_amount,
-    COALESCE(CAST(distinct_consumercode_count AS TEXT), '0') AS distinct_consumercode_count
-   FROM
+    SELECT
+     year || '->' || quarter AS quarter,
+     tax_period_from_date,
+     COALESCE(CAST(total_demand_amount AS TEXT), 'No Tax amount') AS total_demand_amount,
+     COALESCE(CAST(total_collected_amount AS TEXT), 'No Collection Amount') AS total_collected_amount,
+     COALESCE(CAST(distinct_consumercode_count AS TEXT), '0') AS distinct_consumercode_count
+    FROM
     quarterly_data
 
 
