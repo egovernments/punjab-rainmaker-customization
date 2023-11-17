@@ -1911,7 +1911,7 @@ ReportDefinitions:
   - name: serviceType
     label: serviceType
     type: singlevaluelist
-    pattern: 'list://WS%:Water,SW%:Sewerage'
+    pattern: 'list://WS:Water,SW:Sewerage'
     source: pt
     isMandatory: true
     searchClause: AND 1=1
