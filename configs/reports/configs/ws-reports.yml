@@ -1880,7 +1880,7 @@ ReportDefinitions:
     label: reports.ws.quarter
     type: string
     source: ws
-    total: true
+    total: false
   - name: tax_period_from_date
     label: reports.ws.tax_period_from_date
     type: string
@@ -1890,17 +1890,17 @@ ReportDefinitions:
     label: reports.ws.total_demand_amount
     type: string
     source: ws
-    total: false
+    total: true
   - name: total_collected_amount
     label: reports.ws.total_collected_amount
     type: string
     source: ws
-    total: false
+    total: true
   - name: distinct_consumercode_count
     label: reports.ws.distinct_consumercode_count
     type: string
     source: ws
-    total: false
+    total: true
   searchParams:
   - name: fromDate
     label: reports.pt.fromDate
