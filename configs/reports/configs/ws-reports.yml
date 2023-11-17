@@ -1918,31 +1918,36 @@ ReportDefinitions:
   query: |
     WITH quarterly_data AS (
     SELECT
-    d1.taxperiodfrom,
-    d1.taxperiodto,
-    d1.consumertype,
+    EXTRACT(YEAR FROM to_timestamp(d1.taxperiodfrom / 1000)) AS year,
+    CASE
+        WHEN EXTRACT(MONTH FROM to_timestamp(d1.taxperiodfrom / 1000)) = 04 THEN 'Quarter 1'
+        WHEN EXTRACT(MONTH FROM to_timestamp(d1.taxperiodfrom / 1000)) = 07 THEN 'Quarter 2'
+        WHEN EXTRACT(MONTH FROM to_timestamp(d1.taxperiodfrom / 1000)) = 10 THEN 'Quarter 3'
+        WHEN EXTRACT(MONTH FROM to_timestamp(d1.taxperiodfrom / 1000)) = 01 THEN 'Quarter 4'
+    END AS quarter,
+    to_char(to_timestamp(d1.taxperiodfrom / 1000), 'YYYY-MM-DD') AS tax_period_from_date,
     COUNT(DISTINCT d1.consumercode) AS distinct_consumercode_count,
     SUM(d2.taxamount) AS total_demand_amount,
     SUM(d2.collectionamount) AS total_collected_amount
-    FROM egbs_demand_v1 d1
-    LEFT JOIN egbs_demanddetail_v1 AS d2 ON d1.id = d2.demandid
-    LEFT JOIN eg_ws_connection AS d4 ON d4.connectionno = d1.consumercode
-    WHERE d1.businessservice = $serviceType
-    AND d1.tenantid = $tenantid
-    AND d1.taxperiodfrom = $fromDate
-    GROUP BY d1.taxperiodfrom, d1.taxperiodto, d1.consumertype
-    )
-    SELECT
-    to_char(to_timestamp(qd.taxperiodfrom/1000), 'YYYY') || '->' || 
-    CASE
-    WHEN EXTRACT(MONTH FROM to_timestamp(qd.taxperiodfrom/1000)) = 04 THEN 'Quarter 1'
-    WHEN EXTRACT(MONTH FROM to_timestamp(qd.taxperiodfrom/1000)) = 07 THEN 'Quarter 2'
-    WHEN EXTRACT(MONTH FROM to_timestamp(qd.taxperiodfrom/1000)) = 10 THEN 'Quarter 3'
-    WHEN EXTRACT(MONTH FROM to_timestamp(qd.taxperiodfrom/1000)) = 01 THEN 'Quarter 4'
-    END AS quarter,
-    to_char(to_timestamp(qd.taxperiodfrom/1000), 'YYYY-MM-DD') AS tax_period_from_date,
-    COALESCE(CAST(qd.total_demand_amount AS TEXT), 'No Tax amount') AS total_demand_amount,
-    COALESCE(CAST(qd.total_collected_amount AS TEXT), 'No Collection Amount') AS total_collected_amount,
-    COALESCE(CAST(qd.distinct_consumercode_count AS TEXT), '0') AS distinct_consumercode_count
-    FROM quarterly_data qd where 1=1 
-  orderby:  ORDER BY qd.taxperiodfrom;
+    FROM
+        egbs_demand_v1 d1
+        LEFT JOIN egbs_demanddetail_v1 d2 ON d1.id = d2.demandid
+        LEFT JOIN eg_ws_connection d4 ON d4.connectionno = d1.consumercode
+    WHERE
+        d1.tenantid = $tenantid
+        AND d1.businessservice = $serviceType
+        AND d1.taxperiodfrom >= fromDate
+    GROUP BY
+        year, quarter, tax_period_from_date
+   )
+
+   SELECT
+    year || '->' || quarter AS quarter,
+    tax_period_from_date,
+    COALESCE(CAST(total_demand_amount AS TEXT), 'No Tax amount') AS total_demand_amount,
+    COALESCE(CAST(total_collected_amount AS TEXT), 'No Collection Amount') AS total_collected_amount,
+    COALESCE(CAST(distinct_consumercode_count AS TEXT), '0') AS distinct_consumercode_count
+   FROM
+    quarterly_data
+
+
