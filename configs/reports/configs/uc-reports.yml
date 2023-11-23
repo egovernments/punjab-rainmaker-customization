@@ -1770,12 +1770,12 @@ ReportDefinitions:
         label: reports.uc.ulb
         type: string
         source: uc
-        total: true
+        total: false
       - name: receiptnumber
         label: reports.uc.receiptnumber
         type: string
         source: uc
-        total: true
+        total: false
       - name: receiptdate
         label: reports.uc.receiptdate
         type: string
