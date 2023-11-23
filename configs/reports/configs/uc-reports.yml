@@ -1902,7 +1902,7 @@ ReportDefinitions:
         string_agg(distinct bank_branches.bank_name,',') as bankname,
         string_agg(distinct bank_branches.branch,',') as branchname,
         string_agg(distinct payment.instrumentnumber,',')  as cheque_dd_no,
-        string_agg(distinct payment.instrumentdate::text,',')  as cheque_dd_date,
+        to_char((To_timestamp(payment.instrumentdate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY') AS cheque_dd_date,
         string_agg(distinct payment.transactionnumber,',') as transactionnumber,
         string_agg(distinct payment.paymentmode,',') as paymentmode,
         SUM(CASE WHEN bad.taxheadcode LIKE '%_CGST' THEN adjustedamount ELSE 0 END) as cgst,
@@ -1915,7 +1915,7 @@ ReportDefinitions:
         from eg_echallan inner JOIN egcl_bill ON (eg_echallan.tenantid=$tenantid and eg_echallan.challanno=egcl_bill.consumercode ) inner join egcl_paymentdetail on (egcl_paymentdetail.tenantid=$tenantid and egcl_bill.id=egcl_paymentdetail.billid)
         inner JOIN eg_challan_address egchallan ON egchallan.echallanid=eg_echallan.id inner JOIN  egcl_payment as payment on (payment.tenantid=$tenantid  and egcl_paymentdetail.paymentid=payment.id) INNER JOIN egcl_billdetial as billd on billd.billid = egcl_bill.id inner join egcl_billaccountdetail as bad on bad.billdetailid=billd.id left join bank_branches on bank_branches.ifsc=payment.ifsccode inner JOIN eg_user ON payment.createdby::INTEGER=eg_user.id
         where eg_echallan.tenantid=$tenantid and egcl_bill.businessservice not in ('PT','TL','FIRENOC','WS','SW','WS.ONE_TIME_FEE')  and payment.paymentstatus != 'CANCELLED'
-    groupby: group by challanno , egcl_paymentdetail.receiptdate 
+    groupby: group by challanno , egcl_paymentdetail.receiptdate ,payment.instrumentdate
     
   - reportName: NewMiscReceiptULB_v2
     decryptionPathId: MiscReceiptULB_v2
