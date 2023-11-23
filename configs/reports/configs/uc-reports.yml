@@ -1766,78 +1766,68 @@ ReportDefinitions:
       print:
         pdfPageSize: "A3"
     sourceColumns:
-      - name: totalamount
-        label: reports.uc.totalamount
+      - name: ulb
+        label: reports.uc.ulb
         type: string
         source: uc
         total: true
-      - name: challanno
-        label: reports.uc.challanno
-        type: string
-        source: uc
-        total: false
-      - name: status
-        label: reports.uc.status
-        type: string
-        source: uc
-        total: false
-      - name: businessservice
-        label: reports.uc.businessservice
-        type: string
-        source: uc
-        total: false
-      - name: description
-        label: reports.uc.description
-        type: string
-        source: uc
-        total: false
-      - name: applicationstatus
-        label: reports.uc.applicationstatus
-        type: string
-        source: uc
-        total: false
       - name: receiptnumber
         label: reports.uc.receiptnumber
         type: string
         source: uc
-        total: false
+        total: true
       - name: receiptdate
         label: reports.uc.receiptdate
         type: string
         source: uc
         total: false
-      - name: doorno
-        label: reports.uc.doorno
+      - name: g8issuedate
+        label: reports.uc.g8issuedate
         type: string
         source: uc
         total: false
-      - name: buildingname
-        label: reports.uc.buildingname
+      - name: g8receiptno
+        label: reports.uc.g8receiptno
         type: string
         source: uc
         total: false
-      - name: street
-        label: reports.uc.street
+      - name: receiptstatus
+        label: reports.uc.receiptstatus
         type: string
         source: uc
         total: false
-      - name: mobilenumber
-        label: reports.uc.mobilenumber
+      - name: businessdetails
+        label: reports.uc.businessdetails
         type: string
         source: uc
         total: false
-      - name: manualreceiptnumber
-        label: reports.uc.manualreceiptnumber
+      - name: cgst
+        label: reports.uc.cgst
+        type: string
+        source: uc
+        total: true
+      - name: tax
+        label: reports.uc.tax
+        type: string
+        source: uc
+        total: true
+      - name: fieldcollection
+        label: reports.uc.fieldcollection
+        type: string
+        source: uc
+        total: true
+      - name: sgst
+        label: reports.uc.sgst
+        type: string
+        source: uc
+        total: true
+      - name: cheque_dd_no
+        label: reports.uc.cheque_dd_no
         type: string
         source: uc
         total: false
-      - name: manualreceiptdate
-        label: reports.uc.manualreceiptdate
-        type: string
-        source: uc
-        total: false
-      - name: ifsc
-        label: reports.uc.ifsc
+      - name: cheque_dd_date
+        label: reports.uc.cheque_dd_date
         type: string
         source: uc
         total: false
@@ -1851,41 +1841,32 @@ ReportDefinitions:
         type: string
         source: uc
         total: false
-      - name: cheque_dd_no
-        label: reports.uc.cheque_dd_no
+      - name: collectiontype
+        label: reports.uc.collectiontype
         type: string
         source: uc
-        total: false
-      - name: transactionnumber
-        label: reports.uc.transactionnumber
-        type: string
-        source: uc
-        total: false
-      - name: cgst
-        label: reports.uc.cgst
-        type: string
-        source: uc
-        total: false
-      - name: sgst
-        label: reports.uc.sgst
-        type: string
-        source: uc
-        total: false
-      - name: tax
-        label: reports.uc.tax
-        type: string
-        source: uc
-        total: false
-      - name: fieldcollection
-        label: reports.uc.fieldcollection
-        type: string
-        source: uc
-        total: false
+        total: false       
       - name: collectorname
         label: reports.uc.collectorname
         type: string
         source: uc
-        total: false           
+        total: false
+      - name: totalamount
+        label: reports.uc.totalamount
+        type: string
+        source: uc
+        total: true
+      - name: paymentmode
+        label: reports.uc.paymentmode
+        type: string
+        source: uc
+        total: false        
+      - name: comments
+        label: reports.uc.comments
+        type: string
+        source: uc
+        total: false
+ 
     searchParams:
       - name: fromDate
         label: reports.uc.fromDate
@@ -1903,29 +1884,33 @@ ReportDefinitions:
         -- Use CTE to force query plan, compute & use CTE later
         SELECT
         string_agg(distinct egcl_bill.status,',') as billstatus,
+        string_agg(distinct payment.paymentstatus,',') receiptstatus,        
+        string_agg(distinct  payment.tenantid,',') as ulb,
         string_agg(distinct egcl_bill.totalamount::text,',') as totalamount,
         eg_echallan.challanno,
-        string_agg(distinct eg_echallan.businessservice,',') as businessservice,
-        string_agg(distinct eg_echallan.description,',') as description,
+        string_agg(distinct eg_echallan.businessservice,',') as businessdetails,
+        string_agg(distinct eg_echallan.description,',') as comments,
         string_agg(distinct eg_echallan.applicationstatus,',') as status,
         string_agg(distinct egcl_paymentdetail.receiptnumber,',') as receiptnumber,
         string_agg(distinct doorno,',') as doorno,
         string_agg(distinct buildingname,',') as  buildingname,
         string_agg(distinct street,',') as street,
         string_agg(distinct payment.mobilenumber,',') as mobilenumber,
-        string_agg(distinct egcl_paymentdetail.manualreceiptnumber,',') as manualreceiptnumber,
-        string_agg(distinct egcl_paymentdetail.manualreceiptdate::text,',') as manualreceiptdate,
+        string_agg(distinct egcl_paymentdetail.manualreceiptnumber,',') as g8receiptno,
+        string_agg(distinct egcl_paymentdetail.manualreceiptdate::text,',') as g8issuedate,
         string_agg(distinct payment.ifsccode,',') as ifsc,
         string_agg(distinct bank_branches.bank_name,',') as bankname,
         string_agg(distinct bank_branches.branch,',') as branchname,
         string_agg(distinct payment.instrumentnumber,',')  as cheque_dd_no,
-        string_agg(distinct payment.instrumentdate::text,',')  as cheque_date,
+        string_agg(distinct payment.instrumentdate::text,',')  as cheque_dd_date,
         string_agg(distinct payment.transactionnumber,',') as transactionnumber,
+        string_agg(distinct payment.paymentmode,',') as paymentmode,
         SUM(CASE WHEN bad.taxheadcode LIKE '%_CGST' THEN adjustedamount ELSE 0 END) as cgst,
         SUM(CASE WHEN bad.taxheadcode LIKE '%_SGST' THEN adjustedamount ELSE 0 END) as sgst,
         SUM(CASE WHEN bad.taxheadcode LIKE '%_TAX' THEN adjustedamount ELSE 0 END) as tax,
         SUM(CASE WHEN bad.taxheadcode LIKE '%_FEE' THEN adjustedamount ELSE 0 END) as fieldcollection,
         string_agg(distinct eg_user.name,',') as collectorname,
+        'System' as collectiontype,
         To_char((To_timestamp(egcl_paymentdetail.receiptdate / 1000) at time Zone 'Asia/Kolkata'), 'DD/MM/YYYY') as receiptdate
         from eg_echallan inner JOIN egcl_bill ON (eg_echallan.tenantid=$tenantid and eg_echallan.challanno=egcl_bill.consumercode ) inner join egcl_paymentdetail on (egcl_paymentdetail.tenantid=$tenantid and egcl_bill.id=egcl_paymentdetail.billid)
         inner JOIN eg_challan_address egchallan ON egchallan.echallanid=eg_echallan.id inner JOIN  egcl_payment as payment on (payment.tenantid=$tenantid  and egcl_paymentdetail.paymentid=payment.id) INNER JOIN egcl_billdetial as billd on billd.billid = egcl_bill.id inner join egcl_billaccountdetail as bad on bad.billdetailid=billd.id left join bank_branches on bank_branches.ifsc=payment.ifsccode inner JOIN eg_user ON payment.createdby::INTEGER=eg_user.id
