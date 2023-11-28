@@ -1880,6 +1880,22 @@ ReportDefinitions:
         source: uc
         isMandatory: false
         searchClause: AND eg_echallan.createdtime <= $toDate
+      - name: businessservice
+        label: reports.uc.businessservice
+        type: singlevaluelist
+        pattern: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?moduleName=BillingService&masterName=BusinessService&tenantId=$tenantid|$.MdmsRes.BillingService.BusinessService[*].code|$.MdmsRes.BillingService.BusinessService[*].code
+        source: uc
+        wrapper: true
+        isMandatory: false
+        searchClause: AND businessservice = $businessservice
+      - name: collectorname
+        label: reports.uc.collectorname
+        type: singlevaluelist
+        pattern: http://egov-hrms:8080/egov-hrms/employees/_search?tenantId=$tenantid&roles=UC_EMP|$.Employees[*].user.id|$.Employees[*].user.name
+        source: uc
+        wrapper: true
+        isMandatory: false
+        searchClause: AND eg_user.id = $collectorname::INTEGER        
     query: |
         -- Use CTE to force query plan, compute & use CTE later
         SELECT
