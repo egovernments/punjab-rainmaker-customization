@@ -1866,6 +1866,21 @@ ReportDefinitions:
         type: string
         source: uc
         total: false
+      - name: doorno
+        label: reports.uc.doorno
+        type: string
+        source: uc
+        total: false
+      - name: buildingname
+        label: reports.uc.buildingname
+        type: string
+        source: uc
+        total: false
+      - name: street
+        label: reports.uc.street
+        type: string
+        source: uc
+        total: false            
  
     searchParams:
       - name: fromDate
