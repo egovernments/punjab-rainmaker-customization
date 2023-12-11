@@ -204,6 +204,54 @@ SearchDefinitions:
     jsonFormat: {"ResponseInfo": {}}
     outJsonPath: $.count
     responseInfoPath: $.ResponseInfo
+
+ - name: countOpen
+   query: 
+    baseQuery: select array_to_json(array_agg(row_to_json(data))) from (with complaints as(select distinct on (businesskey)  businesskey,  status,  eg_pgr_action.when as lastmodifiedtime,  tenantid from eg_pgr_action order by  businesskey,eg_pgr_action.when desc)select tenantid,count(*) from complaints where status='open' and (extract(epoch from NOW()) -  complaints.lastmodifiedtime/1000)/3600 >24 group by tenantid) data
+    groupBy:    
+    orderBy: 
+   searchParams:
+    condition: AND
+    params:
+    - name: tenantid
+      isMandatory: false
+      jsonPath: $.searchCriteria.tenantId
+      operator: LIKE
+    - name: servicerequestid
+      isMandatory: false
+      jsonPath: $.searchCriteria.serviceRequestId
+      operator: LIKE
+    - name: accountid
+      isMandatory: false
+      jsonPath: $.searchCriteria.accountId
+    - name: status
+      isMandatory: false
+      jsonPath: $.searchCriteria.status
+    - name: createdtime
+      isMandatory: false
+      operator: GE
+      jsonPath: $.searchCriteria.startDate
+    - name: createdtime
+      isMandatory: false
+      operator: LE
+      jsonPath: $.searchCriteria.endDate
+    - name: lastmodifiedtime
+      isMandatory: false
+      jsonPath: $.searchCriteria.lastUpdatedSince
+    - name: serviceCode
+      isMandatory: false
+      jsonPath: $.searchCriteria.serviceCodes
+    - name: phone
+      isMandatory: false
+      jsonPath: $.searchCriteria.phone
+    - name: active
+      isMandatory: false
+      jsonPath: $.searchCriteria.active
+      
+   output:
+    jsonFormat: {"ResponseInfo": {}}
+    outJsonPath: $.data
+    responseInfoPath: $.ResponseInfo
     
  - name: plainSearch
    query: 
