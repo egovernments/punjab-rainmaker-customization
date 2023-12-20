@@ -328,6 +328,16 @@
                         "style": "receipt-table-value2"
                       },
                       {
+                        "text": "Property ID",
+                        "border": [
+                          false,
+                          false,
+                          false,
+                          false
+                        ],
+                        "style": "receipt-table-value2"
+                      },
+                      {
                         "text": "Locality",
                         "border": [
                           false,
@@ -361,6 +371,16 @@
                       },
                       {
                         "text": "{{guardianName}}",
+                        "border": [
+                          false,
+                          false,
+                          false,
+                          false
+                        ],
+                        "style": "receipt-table2"
+                      },
+                      {
+                        "text": "{{propertyID}}",
                         "border": [
                           false,
                           false,
