@@ -23,13 +23,13 @@
               {
                 "stack": [
                   {
-                    "text": "{{logo_header}} {{mcGrade}}",
+                    "text": "{{logo_header}} {{mcGrade}} testingggg",
                     "style": "receipt-logo-header"
                   },
                   {
                     "stack": [
                       {
-                        "text": "{{address}}"
+                        "text": "{{address}} onewwwww"
                       },
                       {
                         "text": "{{phoneNumber}}"
