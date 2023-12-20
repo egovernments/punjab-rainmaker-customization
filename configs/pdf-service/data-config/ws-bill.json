@@ -457,6 +457,12 @@
                 }
               },
               {
+                "variable": "propertyID",
+                "value": {
+                  "path": "$.connection.propertyId"
+                }
+              },
+              {
                 "variable": "oldConnectionNo",
                 "value": {
                   "path": "$.connection.oldConnectionNo"
