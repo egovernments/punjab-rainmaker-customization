@@ -224,7 +224,7 @@
                         "style": "receipt-table-value2"
                       },
                       {
-                        "text": "Old Consumer No.",
+                        "text": "Property ID",
                         "border": [
                           false,
                           false,
