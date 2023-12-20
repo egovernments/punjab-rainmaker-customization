@@ -224,7 +224,7 @@
                         "style": "receipt-table-value2"
                       },
                       {
-                        "text": "Property ID",
+                        "text": "Old Consumer No.",
                         "border": [
                           false,
                           false,
@@ -266,7 +266,7 @@
                         "style": "receipt-table2"
                       },
                       {
-                        "text": "{{propertyID}}",
+                        "text": "{{oldConnectionNo}}",
                         "border": [
                           false,
                           false,
@@ -402,7 +402,7 @@
                         "style": "receipt-table-value2"
                       },
                       {
-                        "text": "Street Name/Landmark",
+                        "text": "Property ID",
                         "border": [
                           false,
                           false,
@@ -445,7 +445,7 @@
                         "style": "receipt-table2"
                       },
                       {
-                        "text":"{{streetName}}{{landmark}}",
+                        "text":"{{propertyID}}",
                         "border": [
                           false,
                           false,
