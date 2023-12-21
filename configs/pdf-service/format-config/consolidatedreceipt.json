@@ -562,7 +562,29 @@
                 ],
                 "style": "receipt-table"
               }
-            ]
+            ],
+            [{
+              "text": "Payer Address",
+              "border": [
+                false,
+                false,
+                false,
+                false
+              ],
+              "style": "receipt-table-value"
+            },
+            {
+              "text": "{{ifsc}}",
+              "border": [
+                false,
+                false,
+                true,
+                false
+              ],
+              "style": "receipt-table"
+              
+            }
+          ]
           ]
         },
         "layout": {}
