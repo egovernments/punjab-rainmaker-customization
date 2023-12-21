@@ -1,0 +1,133 @@
+SearchDefinitions:
+ moduleName: rainmaker-pt-customsearch-punjab
+ summary: Vasika number search for punjab
+ version: 1.0.0
+ definitions:
+ - name: searchPropertyIDByVasikaNo
+   query: 
+    baseQuery: |
+      select 
+        array_to_json(array_agg(row_to_json(vasika_results))) 
+      from (select propertyid from eg_pt_property
+      $where and
+        additionaldetails is not null and additionaldetails !='null'
+      ) vasika_results
+    groupBy:    
+    orderBy: 
+   searchParams:
+    condition: AND
+    params:
+    - name: tenantid
+      isMandatory: false
+      jsonPath: $.searchCriteria.tenantId
+    - name: additionaldetails->>'vasikaNo'
+      isMandatory: true
+      jsonPath: $.searchCriteria.vasikaNo
+    - name: propertyid
+      isMandatory: false
+      jsonPath: $.searchCriteria.propertyId
+
+   output:
+    jsonFormat: {"ResponseInfo": {}}
+    outJsonPath: $.services
+    responseInfoPath: $.ResponseInfo
+ - name: searchLocalitiesUsedInRevenue
+   query: 
+    baseQuery: |
+      select 
+              array_to_json(array_agg(localities)) 
+            from (
+            select distinct locality from eg_tl_address $where
+      union
+      select distinct locality from eg_pt_address $where
+      ) as localities
+    groupBy:    
+    orderBy: 
+   searchParams:
+    condition: AND
+    params:
+    - name: tenantid
+      isMandatory: true
+      jsonPath: $.searchCriteria.tenantId
+
+   output:
+    jsonFormat: {"ResponseInfo": {}}
+    outJsonPath: $.services
+    responseInfoPath: $.ResponseInfo
+ - name: searchLocalitiesUsedInAdmin
+   query: 
+    baseQuery: |
+      select 
+        array_to_json(array_agg(localities)) 
+        from (
+            select distinct eg_pgr_address.mohalla from eg_pgr_address $where
+            ) as localities
+    groupBy:    
+    orderBy: 
+   searchParams:
+    condition: AND
+    params:
+    - name: tenantid
+      isMandatory: true
+      jsonPath: $.searchCriteria.tenantId
+
+   output:
+    jsonFormat: {"ResponseInfo": {}}
+    outJsonPath: $.services
+    responseInfoPath: $.ResponseInfo
+ - name: propertyidSearch
+   query:
+    baseQuery: |
+      select array_to_json(array_agg(row_to_json(data))) from (
+        select
+          propertyid,
+          receiptnumber,
+          amountpaid,
+          getfinancialyear(bill.id)
+        from eg_pt_property as pt
+        inner join egcl_bill as bill on bill.consumercode=pt.propertyid
+        inner join egcl_paymentdetail as pd ON pd.billid=bill.id
+        $where) data
+    groupBy:
+    orderBy:
+   searchParams:
+    condition: AND
+    params:
+    - name: pt.propertyid
+      isMandatory: true
+      jsonPath: $.searchCriteria.propertyid
+      operator: =
+
+   output:
+    jsonFormat: {"ResponseInfo": {}}
+    outJsonPath: $.data
+    responseInfoPath: $.ResponseInfo
+
+
+ - name: firenocSearch
+   query:
+    baseQuery: |
+      select array_to_json(array_agg(row_to_json(data))) from (
+        select fnd.uuid,firenocuuid,applicationnumber,firenocnumber,firenoctype,firestationid,
+          to_char(to_timestamp(cast(validfrom/1000 as bigint))::date , 'dd/mm/yyyy') as validfrom,
+          to_char(to_timestamp(cast(validto/1000 as bigint))::date , 'dd/mm/yyyy') as validto,
+          status,concat(addressline1,' ',addressline2,' ',street,' ',city,' ',locality,' ',subdistrict,' ') as address,fnb.name,concat(fnb.usagetype,' ',fnb.usagesubtype)
+          from eg_fn_firenoc fn
+          inner join eg_fn_firenocdetail fnd on fnd.firenocuuid=fn.uuid
+          inner join eg_fn_address fna on fna.firenocdetailsuuid=fnd.uuid
+          inner join eg_fn_buidlings fnb on fnb.firenocdetailsuuid=fnd.uuid
+          $where) data
+    groupBy:
+    orderBy:
+   searchParams:
+    condition: AND
+    params:
+    - name: firenocnumber
+      isMandatory: true
+      jsonPath: $.searchCriteria.firenocNumber
+      operator: =
+   output:
+    jsonFormat: {"ResponseInfo": {}}
+    outJsonPath: $.data
+    responseInfoPath: $.ResponseInfo
+

@@ -1,0 +1,36 @@
+[
+  {
+    "operation": "shift",
+    "spec": {
+      "tenantId": "tenantId",
+      "id": "id",
+      "paymentMode": "paymentMode",
+      "paymentStatus": "paymentStatus",
+      "transactionNumber": "transactionNumber",
+      "paidBy": "paidBy",
+      "payer": "payer",
+      "paymentDetails": {
+        "$i": {
+          "businessService": "paymentDetails.businessService",
+          "receiptType": "paymentDetails.receiptType",
+          "totalDue": "paymentDetails.totalDue",
+          "receiptDate": "paymentDetails.receiptDate",
+          "bill": "paymentDetails.bill",
+          "totalAmountPaid": "paymentDetails.totalAmountPaid",
+          "additionalDetails": "paymentDetails.additionalDetails",
+          "manualReceiptDate": "paymentDetails.manualReceiptDate",
+          "manualReceiptNumber": "paymentDetails.manualReceiptNumber",
+          "billId": "paymentDetails.billId",
+          "auditDetails": "paymentDetails.auditDetails",
+          "tenantId": "paymentDetails.tenantId",
+          "id": "paymentDetails.id",
+          "receiptNumber": "paymentDetails.receiptNumber"
+        }
+      },
+      "auditDetails": "auditDetails",
+      "additionalDetails": "additionalDetails",
+      "tenantData": "tenantData",
+      "@timestamp": "@timestamp"
+    }
+  }
+]

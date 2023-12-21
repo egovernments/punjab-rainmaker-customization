@@ -1,0 +1,149 @@
+---
+SearchDefinitions:
+  moduleName: rainmaker-pt-gissearch
+  summary: Searcher configuration for Adhoc Requirment
+  version: 1.0.0
+  definitions:
+    - name: searchNewTaxPayments
+      query:
+        baseQuery: |
+          select array_to_json(array_agg(row_to_json(data))) from (
+            select
+               concat(pt.propertyid , '/' , pt.surveyid) as primarykey,
+               pt.oldpropertyid as oldpropertyid,
+               pt.surveyid as surveyid,
+               pd.amountpaid as amount,
+               getfinancialyearforgis(pd.billid) as financialyear,
+               bn.blockname,
+               pt.tenantid as tenantid,
+               pd.receiptnumber as receiptnumber,
+               to_char(to_timestamp(cast(pd.receiptdate/1000 as bigint))::date , 'dd/mm/yyyy') as receiptdate,
+               pt.landarea as plotarea
+            from egcl_paymentdetail AS pd
+            INNER JOIN egcl_bill on pd.billid=egcl_bill.id
+            INNER JOIN eg_pt_property AS pt ON pt.propertyid = egcl_bill.consumercode AND  ((pt.oldpropertyid IS NOT NULL
+            AND pt.oldpropertyid != '') OR pt.surveyid is not null)
+            INNER JOIN eg_pt_address As ad ON ad.propertyid=pt.id and ad.lastmodifiedtime in (select max(lastmodifiedtime) from eg_pt_address where propertyid=pt.id)
+            INNER JOIN  eg_bndry_mohalla  As bn ON ad.locality=bn.localitycode and ad.tenantid=bn.tenantid $where) data
+        groupBy: null
+        orderBy: null
+      searchParams:
+        condition: AND
+        params:
+          - name: pd.receiptdate
+            isMandatory: false
+            jsonPath: $.searchCriteria.fromDate
+            operator: GE
+          - name: pd.receiptdate
+            isMandatory: false
+            jsonPath: $.searchCriteria.toDate
+            operator: LE
+          - name: pt.tenantid
+            isMandatory: true
+            jsonPath: $.searchCriteria.tenantId
+            operator: =
+          - name: bn.blockname
+            isMandatory: false
+            jsonPath: $.searchCriteria.blockcode
+            operator: =
+      output:
+        jsonFormat:
+          ResponseInfo: {}
+        outJsonPath: $.data
+        responseInfoPath: $.ResponseInfo
+    - name: searchTLApplicationsEODB
+      query:
+        baseQuery: |
+          select array_to_json(array_agg(row_to_json(data))) from (
+            select 
+              tl.applicationnumber,
+              tld.additionalDetail::text,
+              tl.status,additionalDetail->>'IPIN' as iPin,
+              additionalDetail->>'APPID' as appId,
+              additionalDetail->>'mobileNo' as mobileNp 
+            from eg_tl_tradelicense tl 
+            inner join eg_tl_tradelicensedetail tld on tld.tradelicenseid=tl.id and tld.additionalDetail->>'CHANNEL'='EODB' ) data
+        groupBy: null
+        orderBy: null
+      searchParams:
+        condition: AND
+        params: null
+      output:
+        jsonFormat:
+          ResponseInfo: {}
+        outJsonPath: $.data
+        responseInfoPath: $.ResponseInfo
+    - name: IFMSintegration
+      query:
+        baseQuery: |
+          select array_to_json(array_agg(row_to_json(data))) from
+            (with details as
+              (
+                SELECT pd.receiptnumber,payment.paidby,bill.consumercode,pd.amountpaid,
+                pd.businessservice,
+                pd.tenantid,payment.paymentmode,payment.transactionnumber as transactionNo ,t.mobile_number,  taxheadcode ,
+                SUM(adjustedamount) as amount FROM egcl_billaccountdetail as bad
+                INNER JOIN egcl_billdetial as bd on bd.id = bad.billdetailid
+                INNER JOIN egcl_bill bill on bd.billid = bill.id
+                INNER JOIN egcl_paymentdetail as pd on pd.billid = bd.billid
+                INNER JOIN egcl_payment as payment on pd.paymentid=payment.id
+                left outer join eg_pg_transactions t on t.bill_id=pd.billid
+                $where and payment.paymentstatus != 'CANCELLED'
+                GROUP BY pd.receiptnumber,pd.businessservice,pd.amountpaid,pd.tenantid,
+                payment.paymentmode,t.mobile_number,payment.transactionnumber,
+                bill.consumercode,payment.paidby,bad.taxheadcode
+              )
+              select receiptnumber,
+               paidby,
+               consumercode,
+               amountpaid,
+               businessservice,
+               tenantid,
+               paymentmode,
+               transactionNo ,
+               mobile_number,
+               json_agg( json_build_object('taxheadcode', taxheadcode,'amount', amount::text)) as taxheads ,
+               ( case when consumercode like 'PT%' then (select usagecategory from eg_pt_property where propertyid=consumercode and status='ACTIVE') else '' end) as ptype
+                 from details 
+                 group by receiptnumber,paidby,	consumercode,	amountpaid,	businessservice, tenantid,paymentmode,transactionNo ,mobile_number
+               ) as data
+        groupBy: null
+        orderBy: null
+      searchParams:
+        condition: AND
+        params:
+          - name: pd.receiptdate
+            isMandatory: false
+            jsonPath: $.searchCriteria.fromDate
+            operator: GE
+          - name: pd.receiptdate
+            isMandatory: false
+            jsonPath: $.searchCriteria.toDate
+            operator: LE
+      output:
+        jsonFormat:
+          ResponseInfo: {}
+        outJsonPath: $.data
+        responseInfoPath: $.ResponseInfo
+    - name: GetTenantConfig
+      query:
+        baseQuery: |
+          select array_to_json(array_agg(row_to_json(data))) from (
+            select id,tenantid,locality,issurveyidmandatory 
+            from eg_tenant_config 
+            $where
+            ) data
+        groupBy: null
+        orderBy: null
+      searchParams:
+        condition: AND
+        params:
+          - name: tenantid
+            isMandatory: true
+            jsonPath: $.searchCriteria.tenantId
+            operator: =
+      output:
+        jsonFormat:
+          ResponseInfo: {}
+        outJsonPath: $.data
+        responseInfoPath: $.ResponseInfo
