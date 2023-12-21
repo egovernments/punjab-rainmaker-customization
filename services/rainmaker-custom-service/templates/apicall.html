@@ -1,0 +1,45 @@
+{{>common/header}}
+        <div id='report'>No report available for your user type</div>
+        <script>
+            var access_token = localStorage.getItem("token");
+            let strUserInfo = localStorage.getItem("user-info");
+            if (strUserInfo !== null && strUserInfo !== "") 
+            {
+                var userInfo = JSON.parse(strUserInfo);
+                var isLastMileEmployee = false;
+                for (role of userInfo.roles) {
+                    if (role.code == "EMPLOYEE")
+                        {
+                            isLastMileEmployee = true
+                            break;
+                        }
+                }
+                if (!isLastMileEmployee)
+                    document.getElementById('report').innerText = "You don't have access to this report";
+                else {
+                    document.getElementById('report').innerHTML = "<button onclick='downloadReport();'>Download report</button>";
+                }
+            }
+
+            function downloadReport() {
+                axios({
+                    url: location.href.replace("/open/", "/protected/"),
+                    method: 'POST',
+                    responseType: 'blob', // important
+                    headers: { 'Accept': 'application/vnd.ms-excel' },
+                    data: {
+                        RequestInfo: {
+                            "authToken": access_token
+                        }
+                    }
+                  }).then((response) => {
+                    const url = window.URL.createObjectURL(new Blob([response.data]));
+                    const link = document.createElement('a');
+                    link.href = url;
+                    link.setAttribute('download', 'complaints_assigned.xlsx');
+                    document.body.appendChild(link);
+                    link.click();
+                  });
+            }
+        </script>
+{{>common/body}}
