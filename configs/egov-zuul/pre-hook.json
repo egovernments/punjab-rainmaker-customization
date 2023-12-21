@@ -1,3 +1,0 @@
-{
-    "/pg-service/transaction/v1/_create": "http://rainmaker-custom-service:8000/customization/protected/punjab-pt/pre-hook/pg-service/transaction/v1/_create"
-}
