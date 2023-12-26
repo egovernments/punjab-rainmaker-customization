@@ -1065,13 +1065,13 @@ ReportDefinitions:
     type: epoch
     source: pt
     isMandatory: false
-    searchClause: AND payment.transactiondate >= $fromDate
+    searchClause: AND pd.receiptdate >= $fromDate
   - name: toDate
     label: reports.pt.toDate
     type: epoch
     source: pt
     isMandatory: false
-    searchClause: AND payment.transactiondate <= $toDate
+    searchClause: AND pd.receiptdate <= $toDate
   query: |
     -- Use CTE to force query plan, compute & use CTE later
     select 
