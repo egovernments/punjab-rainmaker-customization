@@ -23,7 +23,7 @@
               {
                 "stack": [
                   {
-                    "text": "{{logo-header}}{{mcGrade}}",
+                    "text": "{{logo-header}}=='Amritsar' ? 'TestTestone': 'testtwo' {{mcGrade}}",
                     "style": "receipt-logo-header"
                   },
                   {
