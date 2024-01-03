@@ -393,7 +393,7 @@
               {
                 "stack": [
                   {
-                    "text": "{{logo-header}} {{mcGrade}}",
+                    "text": "{{logo-header}} {{mcGradePwssb}}",
                     "style": "receipt-logo-header"
                   },
                   {
