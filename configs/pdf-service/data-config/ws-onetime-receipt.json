@@ -523,7 +523,7 @@
                     "value": "$.MdmsRes.tenant.tenants[0].address"
                   },
                   {
-                    "variable":"mcGrade",
+                    "variable":"mcGradePwssb",
                     "value":"$.MdmsRes.tenant.tenants[0].city.pwssbGrade"
                   },
                   {
