@@ -421,7 +421,7 @@
                     ],
                     [
                       {
-                        "text": "{{usageTypedddddd}}",
+                        "text": "{{usageType}}",
                         "border": [
                           false,
                           false,
@@ -432,7 +432,7 @@
                       },
                       
                       {
-                        "text": "{{mobileNodddd}}",
+                        "text": "{{mobileNo}}",
                         "border": [
                           false,
                           false,
@@ -714,7 +714,7 @@
             ],
             [
               {
-                "text": "1. Online payment can be done for {{serviceType}} charges payment.  https://mseva.lgpunjab.gov.in/{{logo_header}}{{serviceType}}",
+                "text": "1. Online payment can be done for {{serviceType}} charges payment.  https://mseva.lgpunjab.gov.in/",
                 "border": [
                   true,
                   false,
@@ -782,7 +782,7 @@
             ],
             [
               {
-                "text": "5. {{rate}}% surcharge charges will be applied after due date",
+                "text": "5. 10% surcharge charges will be applied after due date",
                 "border": [
                   true,
                   false,
@@ -799,7 +799,7 @@
             ],
             [
               {
-                "text": "6. surcharge & late payment charges calculated based on the payment date will reflect in next bill ",
+                "text": "6. surcharge with & late payment charges calculated based on the payment date will reflect in next bill ",
                 "border": [
                   true,
                   false,
