@@ -29,13 +29,16 @@
                   {
                     "stack": [
                       {
-                        "text": "{{address}}"
+                        "text": "{{address}}",
+                        "style": "receipt-logo-sub-header"
                       },                     
                       {
-                        "text": "{{website}}"
+                        "text": "{{website}}",
+                        "style": "receipt-logo-sub-header"
                       },
                       {
-                        "text": "{{email}}"
+                        "text": "{{email}}",
+                        "style": "receipt-logo-sub-header"
                       }
                     ]
                   }
@@ -1025,7 +1028,7 @@
       "receipt-logo-header": {
         "color": "#484848",
         "fontFamily": "Roboto",
-        "fontSize": 8,
+        "fontSize": 12,
         "bold": true,
         "letterSpacing": 0.74,
         "margin": [
@@ -1038,7 +1041,7 @@
       "receipt-logo-sub-header": {
         "color": "#484848",
         "fontFamily": "Roboto",
-        "fontSize": 12,
+        "fontSize": 10,
         "letterSpacing": 0.6
       },
       "noc-table": {
