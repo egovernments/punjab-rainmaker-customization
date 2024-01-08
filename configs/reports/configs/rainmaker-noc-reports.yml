@@ -651,7 +651,7 @@ ReportDefinitions:
         source: noc
         wrapper: true
         isMandatory: false
-        searchClause: AND fnoc.tenantId IN ($ulb)
+        searchClause: AND payment.tenantid =$ulb
     query: |
         -- Use CTE to force query plan, compute & use CTE later
         WITH receipt_breakup AS (
