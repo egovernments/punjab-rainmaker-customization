@@ -654,44 +654,41 @@ ReportDefinitions:
         searchClause: AND payment.tenantid =$ulb
     query: |
         -- Use CTE to force query plan, compute & use CTE later
-        WITH receipt_breakup AS (
-                    SELECT 
-                      egcl_billaccountdetail.billdetailid bill_id, 
-                      string_agg(distinct consumercode,',') as consumercode                               
-                    FROM egcl_billaccountdetail 
-                    LEFT JOIN egcl_bill as bill on bill.id = egcl_billaccountdetail.billdetailid
-                    WHERE  bill.tenantid!='pb.testing' AND businessservice='FIRENOC'
-                    GROUP BY billdetailid
-        )
         SELECT 
-          payment.tenantid as ulb,
-          paydetail.receiptnumber as receiptnumber,
-          To_char((To_timestamp(paydetail.receiptdate / 1000) at time Zone 'Asia/Kolkata'), 'DD/MM/YYYY') as receiptdate,
-          To_char((To_timestamp(paydetail.manualreceiptdate / 1000) at time Zone 'Asia/Kolkata'), 'DD/MM/YYYY') as g8issuedate,
-          paydetail.manualreceiptnumber as g8receiptno,
-          payment.paymentstatus as status,
-          paydetail.businessservice as servicecategory,
-          receipt_breakup.*,  
-          payment.totalamountpaid as totalamount, 
-          paymentmode as paymentmode,
-          (case when paymentmode like 'CASH' then '' else  transactionnumber end) as ddorchequenumber,
-          'System' as collectiontype,
-          eg_user.name as collectorname,
-          fdet.firenoctype as firenoctype,
-          build.usagetype as usagetype,
-          fad.areatype as areatype,
-          fdet.applicationnumber as applicationnumber,
-          build.name as ownername
+          payment.tenantid AS ulb,
+          paydetail.receiptnumber AS receiptnumber,
+          TO_CHAR((TO_TIMESTAMP(paydetail.receiptdate / 1000) AT TIME ZONE 'Asia/Kolkata'), 'DD/MM/YYYY') AS receiptdate,
+          TO_CHAR((TO_TIMESTAMP(paydetail.manualreceiptdate / 1000) AT TIME ZONE 'Asia/Kolkata'), 'DD/MM/YYYY') AS g8issuedate,
+          paydetail.manualreceiptnumber AS g8receiptno,
+          payment.paymentstatus AS status,
+          paydetail.businessservice AS servicecategory,
+          --receipt_breakup.*, 
+          bill.consumercode,
+          payment.totalamountpaid AS totalamount, 
+          paymentmode AS paymentmode,
+          (CASE WHEN paymentmode LIKE 'CASH' THEN '' ELSE transactionnumber END) AS ddorchequenumber,
+          'System' AS collectiontype,
+          eg_user.name AS collectorname,
+          fdet.firenoctype AS firenoctype,
+          build.usagetype AS usagetype,
+          fad.areatype AS areatype,
+          fdet.applicationnumber AS applicationnumber,
+          build.name AS ownername
         FROM egcl_payment AS payment
-        LEFT JOIN egcl_paymentdetail as paydetail on paydetail.paymentid=payment.id
-        LEFT JOIN receipt_breakup ON paydetail.billid = receipt_breakup.bill_id
-        JOIN eg_user ON payment.createdby::INTEGER=eg_user.id
-        JOIN egcl_bill as bill ON bill.id=paydetail.billid
-        JOIN eg_fn_firenocdetail AS fdet ON fdet.applicationnumber=bill.consumercode
-        JOIN eg_fn_buidlings AS build ON build.firenocdetailsuuid=fdet.uuid
-        INNER JOIN eg_fn_address as fad on fad.firenocdetailsuuid=fdet.uuid
-        WHERE  payment.tenantid!='pb.testing' AND paydetail.businessservice='FIRENOC' AND paydetail.receiptnumber NOT LIKE 'MP%' and payment.tenantid = $tenantid
-        and payment.paymentstatus!='CANCELLED'
+        inner JOIN egcl_paymentdetail AS paydetail ON paydetail.paymentid = payment.id
+        --inner JOIN receipt_breakup ON paydetail.billid = receipt_breakup.bill_id
+        inner JOIN eg_user ON payment.createdby::INTEGER = eg_user.id
+        inner JOIN egcl_bill AS bill ON bill.id = paydetail.billid
+        inner JOIN eg_fn_firenocdetail AS fdet ON fdet.applicationnumber = bill.consumercode
+        inner JOIN eg_fn_buidlings AS build ON build.firenocdetailsuuid = fdet.uuid
+        INNER JOIN eg_fn_address AS fad ON fad.firenocdetailsuuid = fdet.uuid
+        WHERE payment.tenantid != 'pb.testing' 
+          AND paydetail.businessservice = 'FIRENOC' 
+          AND paydetail.receiptnumber NOT LIKE 'MP%' 
+          AND payment.tenantid = 'pb.batala'
+          AND payment.paymentstatus != 'CANCELLED'
+          AND payment.createdtime>= 1648751400000
+          AND payment.createdtime <= 1680287399000
     orderby: ORDER BY paydetail.receiptdate DESC 
 
   - reportName: CancelledReceiptRegisterFirenocReport_V2
