@@ -637,13 +637,13 @@ ReportDefinitions:
         type: epoch
         source: noc
         isMandatory: false
-        searchClause: AND applicationdate >= $fromDate
+        searchClause: AND payment.createdtime >= $fromDate
       - name: toDate
         label: reports.noc.toDate
         type: epoch
         source: noc
         isMandatory: false
-        searchClause: AND applicationdate <= $toDate
+        searchClause: AND payment.createdtime <= $toDate
       - name: ulb
         label: reports.noc.ulb
         type: multivaluelist
@@ -685,10 +685,7 @@ ReportDefinitions:
         WHERE payment.tenantid != 'pb.testing' 
           AND paydetail.businessservice = 'FIRENOC' 
           AND paydetail.receiptnumber NOT LIKE 'MP%' 
-          AND payment.tenantid = 'pb.batala'
           AND payment.paymentstatus != 'CANCELLED'
-          AND payment.createdtime>= 1648751400000
-          AND payment.createdtime <= 1680287399000
     orderby: ORDER BY paydetail.receiptdate DESC 
 
   - reportName: CancelledReceiptRegisterFirenocReport_V2
