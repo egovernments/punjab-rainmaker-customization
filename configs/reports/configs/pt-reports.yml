@@ -6107,8 +6107,7 @@ ReportDefinitions:
             max(totalamount) as maxtotal,
             max(propertytax) as max_pt_tax
         from report_assessments 
-        where tenantid=$tenantid
-            and propertyid not in (select propertyid from report_assessments where tenantid=$tenantid and assessmentyears =$finYear)
+        where tenantid=$tenantid and propertyid not in (select propertyid from report_assessments where tenantid=$tenantid and assessmentyears =$finYear)
             group by propertyid
     ),
     owners as 
@@ -6117,7 +6116,7 @@ ReportDefinitions:
         split_part(string_agg(ownername,','),',',1) as ownername,
         split_part(string_agg(mobileNumber,','),',',1) as mobileNumber,
         propertyid
-        from report_owners
+        from report_owners where tenantid=$tenantid and status='ACTIVE'
         group by propertyid
     )
     select 
@@ -6137,7 +6136,7 @@ ReportDefinitions:
     from report_properties props
     inner join assessments on assessments.propertyid=props.propertyid
     inner join owners on owners.propertyid=props.propertyid 
-    where props.oldpropertyid not in (select concat('RID',previous_returnid) from ikon_2020_21_non_migrated_records where tenantid=$tenantid and replace(session,'-20','-')=$finYear)
+    where tenantid=$tenantid 
 
 - reportName: PT_RECEIPTREGISTER_REPORT_V2
   decryptionPathId: ReceiptRegister_V2
