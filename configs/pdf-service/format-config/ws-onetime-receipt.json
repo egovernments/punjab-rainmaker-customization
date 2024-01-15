@@ -31,7 +31,7 @@
                     "style": "receipt-logo-sub-header"
                   }
                 ],
-                "alignment": "left",
+                "alignment": "center",
                 "margin": [
                   0,
                   7,
@@ -54,7 +54,7 @@
                     "text": "{{email}}"
                   }
                 ],
-                "alignment": "right",
+                "alignment": "center",
                 "color": "#484848",
                 "margin": [
                   -100,
