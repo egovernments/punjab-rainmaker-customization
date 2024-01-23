@@ -273,7 +273,7 @@
               {
                 "variable": "Interest", 
                 "value": {
-                  "path": "$.paymentDetails[0].bill.billDetails[0].billAccountDetails[?(@.taxHeadCode=='PT_TIME_INTEREST')].amount"
+                  "path": "$.paymentDetails[0].additionalDetails.assessmentYears == '2023-2024' ? 0 : $.paymentDetails[0].bill.billDetails[0].billAccountDetails[?(@.taxHeadCode=='PT_TIME_INTEREST')].amount"
                 }
               },
               {
