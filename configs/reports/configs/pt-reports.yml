@@ -4356,7 +4356,7 @@ ReportDefinitions:
       (select * from (select *,(row_number() over(partition by propertyid order by lastmodifiedtime desc)) as rw from eg_pt_property  where tenantid=$tenantid) pts where rw=1) as pt,
       egcl_bill bill
       where pd.paymentid=payment.id and bill.id=pd.billid and payment.paymentstatus != 'CANCELLED' and pd.businessservice='PT' and payment.tenantid=$tenantid
-      and pt.propertyid = bill.consumercode --and pt.status!='INACTIVE'
+      and pt.propertyid = bill.consumercode and pt.status='ACTIVE'
   groupby: GROUP BY financialyear
   orderby: ORDER BY financialyear
 
