@@ -1911,7 +1911,7 @@ ReportDefinitions:
   - name: serviceType
     label: serviceType
     type: singlevaluelist
-    pattern: 'list://WS:Water,SW:Sewerage'
+    pattern: 'list://WS:Water'
     source: pt
     isMandatory: true
     searchClause: AND 1=1
@@ -1928,7 +1928,7 @@ ReportDefinitions:
     to_char(to_timestamp(d1.taxperiodfrom / 1000), 'YYYY-MM-DD') AS tax_period_from_date,
     COUNT(DISTINCT d1.consumercode) AS distinct_consumercode_count,
     SUM(d2.taxamount) AS total_demand_amount,
-    SUM(d2.collectionamount) AS total_collected_amount
+    SUM(d2.collectionamount) AS total_collected_amount,	d5.usagecategory AS UsageType
     FROM
         egbs_demand_v1 d1
         LEFT JOIN egbs_demanddetail_v1 d2 ON d1.id = d2.demandid
@@ -1937,7 +1937,7 @@ ReportDefinitions:
     AND  d1.businessservice = $serviceType
     AND d1.tenantid = $tenantid
     GROUP BY
-        year, quarter, tax_period_from_date
+        year, quarter, tax_period_from_date, UsageType
     )
 
     SELECT
@@ -1945,7 +1945,8 @@ ReportDefinitions:
      tax_period_from_date,
      COALESCE(CAST(total_demand_amount AS TEXT), 'No Tax amount') AS total_demand_amount,
      COALESCE(CAST(total_collected_amount AS TEXT), 'No Collection Amount') AS total_collected_amount,
-     COALESCE(CAST(distinct_consumercode_count AS TEXT), '0') AS distinct_consumercode_count
+     COALESCE(CAST(distinct_consumercode_count AS TEXT), '0') AS distinct_consumercode_count,
+     UsageType
     FROM
     quarterly_data where 1=1 
 
