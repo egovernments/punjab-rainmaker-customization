@@ -1001,7 +1001,7 @@ ReportDefinitions:
     from egcl_paymentdetail pd Left outer join eg_user on eg_user.id = pd.createdby::INTEGER
     inner join egcl_bill as bill on bill.id=pd.billid
     INNER join egcl_payment as payment on payment.id=pd.paymentid
-    where paymentmode='ONLINE' and payment.tenantid=$tenantid
+    where paymentmode='ONLINE' and pd.businessservice in ('WS','SW') and payment.tenantid=$tenantid
   orderby: ORDER BY payment.transactiondate DESC
   
 - reportName: ReceiptCollections
