@@ -1869,7 +1869,7 @@ ReportDefinitions:
   groupby:  group by pt.usagecategory, ws.status
   
 - reportName: GeneratedDemandReport
-  summary: Generated Demand Report
+  summary: Water Demand Report
   version: 1.0.0
   moduleName: rainmaker-ws
   additionalConfig:
