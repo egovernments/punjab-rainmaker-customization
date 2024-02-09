@@ -1933,6 +1933,7 @@ ReportDefinitions:
         egbs_demand_v1 d1
         LEFT JOIN egbs_demanddetail_v1 d2 ON d1.id = d2.demandid
         LEFT JOIN eg_ws_connection d4 ON d4.connectionno = d1.consumercode
+        LEFT JOIN eg_pt_property  d5 ON d4.property_id = d5.propertyid 
     WHERE  d1.taxperiodfrom >= $fromDate
     AND  d1.businessservice = $serviceType
     AND d1.tenantid = $tenantid
