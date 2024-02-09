@@ -1901,6 +1901,11 @@ ReportDefinitions:
     type: string
     source: ws
     total: true
+  - name: UsageType
+    label: reports.ws.UsageType
+    type: string
+    source: ws
+    total: false
   searchParams:
   - name: fromDate
     label: reports.pt.fromDate
