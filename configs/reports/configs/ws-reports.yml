@@ -2002,13 +2002,6 @@ ReportDefinitions:
     source: pt
     isMandatory: true
     searchClause: and 1=1
-  - name: serviceType
-    label: serviceType
-    type: singlevaluelist
-    pattern: 'list://SW:Sewerage'
-    source: pt
-    isMandatory: true
-    searchClause: AND 1=1
   query: |
     WITH quarterly_data AS (
     SELECT
@@ -2029,7 +2022,7 @@ ReportDefinitions:
         LEFT JOIN eg_sw_connection d4 ON d4.connectionno = d1.consumercode
         LEFT JOIN eg_pt_property  d5 ON d4.property_id = d5.propertyid 
     WHERE  d1.taxperiodfrom >= $fromDate
-    AND  d1.businessservice = $serviceType
+    AND  d1.businessservice = 'SW'
     AND d1.tenantid = $tenantid
     AND d1.status !='CANCELLED'
     GROUP BY
