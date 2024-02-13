@@ -9,9 +9,9 @@
         "style": "noc-head",
         "table": {
           "widths": [
-            60,
-            "*",
-            120
+            40,
+            500,
+            20
           ],
           "body": [
             [
@@ -23,47 +23,29 @@
               {
                 "stack": [
                   {
-                    "text": "{{logo-header}} {{mcGradePwssb}}",
+                    "text": "{{logo-header}} {{mcGradePwssb}} testing",
                     "style": "receipt-logo-header"
                   },
                   {
-                    "text": "{{serviceType}} {{payment_receipt}}(Employee Copy)",
-                    "style": "receipt-logo-sub-header"
-                  }
-                ],
-                "alignment": "center",
-                "margin": [
-                  0,
-                  7,
-                  0,
-                  0
-                ]
-              },
-              {
-                "stack": [
-                  {
                     "text": "{{address}}"
-                  },
-                  {
-                    "text": "{{phoneNumber}}"
-                  },
+                  },                
                   {
                     "text": "{{website}}"
                   },
                   {
-                    "text": "{{email}}"
+                    "text": "{{serviceType}} {{payment_receipt}}(Employee Copy)",
+                    "style": "receipt-logo-sub-header-ASR"
                   }
                 ],
                 "alignment": "center",
-                "color": "#484848",
                 "margin": [
-                  -100,
+                  60,
+                  7,
                   0,
-                  -25,
                   0
                 ]
               }
-            ]
+              ]
           ]
         },
         "layout": "noBorders"
@@ -379,9 +361,9 @@
         "style": "noc-head",
         "table": {
           "widths": [
-            60,
-            "*",
-            120
+            40,
+            500,
+            20
           ],
           "body": [
             [
@@ -397,40 +379,22 @@
                     "style": "receipt-logo-header"
                   },
                   {
+                    "text": "{{address}}"
+                  },                
+                  {
+                    "text": "{{website}}"
+                  },
+                  {
                     "text": "{{serviceType}} {{payment_receipt}}(Citizen Copy)",
                     "style": "receipt-logo-sub-header"
                   }
                 ],
-                "alignment": "left",
+                "alignment": "center",
                 "margin": [
                   13,
                   7,
                   0,
                   0
-                ]
-              },
-              {
-                "stack": [
-                  {
-                    "text": "{{address}}"
-                  },
-                  {
-                    "text": "{{phoneNumber}}"
-                  },
-                  {
-                    "text": "{{website}}"
-                  },
-                  {
-                    "text": "{{email}}"
-                  }
-                ],
-                "alignment": "right",
-                "color": "#484848",
-                "margin": [
-                  -100,
-                  0,
-                  -25,
-                  -3
                 ]
               }
             ]
@@ -765,6 +729,11 @@
         ]
       },
       "receipt-logo-sub-header": {
+        "color": "#000000",
+        "fontSize": 12,
+        "letterSpacing": 0.6
+      },
+      "receipt-logo-sub-header-ASR": {
         "color": "#000000",
         "fontSize": 12,
         "letterSpacing": 0.6
