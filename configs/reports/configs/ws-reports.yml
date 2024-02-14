@@ -2039,4 +2039,144 @@ ReportDefinitions:
     FROM
     quarterly_data where 1=1     
 
+- reportName: Connectioncountreport
+  summary: Connection Count  Report
+  version: 1.0.0
+  moduleName: rainmaker-ws
+  additionalConfig:
+    print:
+      pdfPageSize: A1
+  sourceColumns:
+- name: Total Water Connections
+  label: reports.ws.Total Water Connections
+  type: string
+  source: ws
+  total: false
+- name: Total Sewerage connections
+  label: reports.ws.Total Sewerage connections
+  type: string
+  source: ws
+  total: false       
+- name: Both Connection
+  label: reports.ws.Both Connection
+  type: string
+  source: ws
+  total: false   
+- name: Total Water Active
+  label: reports.ws.Total Water Active
+  type: string
+  source: ws
+  total: false
+- name: Total Sewerage Active
+  label: reports.ws.Total Sewerage Active
+  type: string
+  source: ws
+  total: false
+- name: Both ACTIVE Connection
+  label: reports.ws.Both ACTIVE Connection
+  type: string
+  source: ws
+  total: false
+- name: Total Active RESIDENTIAL in Water
+  label: reports.ws.Total Active RESIDENTIAL in Water
+  type: string
+  source: ws
+  total: false
+- name: Total Active RESIDENTIAL in Sewerage
+  label: reports.ws.Total Active RESIDENTIAL in Sewerage
+  type: string
+  source: ws
+  total: false
+- name: Total Active NON-RESIDENTIAL in Sewerage
+  label: reports.ws.Total Active NON-RESIDENTIAL in Sewerage
+  type: string
+  source: ws
+  total: false
+- name: Total Active NON-RESIDENTIAL in Water
+  label: reports.ws.Total Active NON-RESIDENTIAL in Water
+  type: string
+  source: ws
+  total: false
+- name: Total Metered Connections
+  label: reports.ws.Total Metered Connections
+  type: string
+  source: ws
+  total: false
+- name: Total Exempted in Water
+  label: reports.ws.Total Exempted in Water
+  type: string
+  source: ws
+  total: false
+- name: Total Exempted in Sewerage
+  label: reports.ws.Total Exempted in Sewerage
+  type: string
+  source: ws
+  total: false
+- name: Between 5 Marla Water
+  label: reports.ws.Between 5 Marla Water
+  type: string
+  source: ws
+  total: false
+- name: Between 5 Marla Sewerage
+  label: reports.ws.Between 5 Marla Sewerage
+  type: string
+  source: ws
+  total: false
+- name: Between 6-10 Marla Water
+  label: reports.ws.Between 6-10 Marla Water
+  type: string
+  source: ws
+  total: false
+- name: Between 6-10 Marla Sewerage
+  label: reports.ws.Between 6-10 Marla Sewerage
+  type: string
+  source: ws
+  total: false
+- name: More than 10 Marla Water
+  label: reports.ws.More than 10 Marla Water
+  type: string
+  source: ws
+  total: false
+- name: More than 10 Marla Sewerage
+  label: reports.ws.More than 10 Marla Sewerage
+  type: string
+  source: ws
+  total: false
+  searchParams:
+  - name: fromDate
+    label: reports.pt.fromDate
+    type: epoch
+    source: pt
+    isMandatory: false
+    searchClause: and 1=1
+  query: |
+     -- Use CTE to force query plan, compute & use CTE later
+
+      select  a.*, b.*,c.*, d.*,e.*,f.*,g.*,h.*,i.*, j.*,k.*,l.*,m.*, n.*,o.*,p.*,q.*,r.*,s.* from (select count (*) as "Total Water Connections" from eg_ws_connection where tenantid=$tenantid)a,
+
+      (select count (*) as "Total Sewerage connections" from eg_sw_connection where tenantid=$tenantid)b,(SELECT SUM(cnt) AS "Both Connection"FROM ( SELECT COUNT(*) AS cnt FROM eg_ws_connection where tenantid=$tenantid
+
+      UNION ALL SELECT COUNT(*) AS cnt FROM eg_sw_connection where tenantid=$tenantid) AS "Both Connection")c,(select count(*) as "Total Water Active" from eg_ws_connection where applicationstatus='CONNECTION_ACTIVATED' and tenantid=$tenantid)d,
+
+      (select count(*) as "Total Sewerage Active" from eg_sw_connection where applicationstatus='CONNECTION_ACTIVATED' and tenantid=$tenantid)e,(SELECT SUM(cnt) AS "Both ACTIVE Connection"
+
+      FROM ( SELECT COUNT(*) AS cnt FROM eg_ws_connection where tenantid=$tenantid and applicationstatus='CONNECTION_ACTIVATED' UNION ALL SELECT COUNT(*) AS cnt FROM eg_sw_connection where tenantid=$tenantid and applicationstatus='CONNECTION_ACTIVATED'
+
+      ) AS "Both ACTIVE Connection")f, (select count(*) as "Total Active RESIDENTIAL in Water" from eg_ws_connection where property_id in (select propertyid from eg_pt_property where status='ACTIVE' and usagecategory in ('RESIDENTIAL')) and applicationstatus='CONNECTION_ACTIVATED' and tenantid=$tenantid)g,
+
+      (select count(*) as "Total Active RESIDENTIAL in Sewerage" from eg_sw_connection where property_id in (select propertyid from eg_pt_property where status='ACTIVE' and usagecategory in ('RESIDENTIAL')) and applicationstatus='CONNECTION_ACTIVATED' and tenantid=$tenantid)h, (select count(*) as "Total Active NON-RESIDENTIAL in Sewerage" from eg_sw_connection where property_id in (select propertyid from eg_pt_property where status='ACTIVE' and usagecategory in ('NONRESIDENTIAL.COMMERCIAL','NONRESIDENTIAL')) and applicationstatus='CONNECTION_ACTIVATED' and tenantid=$tenantid)i,
+
+      (select count(*) as "Total Active NON-RESIDENTIAL in Water" from eg_ws_connection where property_id in (select propertyid from eg_pt_property where status='ACTIVE' and usagecategory in ('NONRESIDENTIAL.COMMERCIAL','NONRESIDENTIAL')) and applicationstatus='CONNECTION_ACTIVATED' and tenantid='pb.amritsar')j,
+
+      (select count(*) as "Total Metered Connections" from eg_ws_connection where tenantid='pb.amritsar' and additionaldetails->>'meterId' is not null)k,(select count(*) as "Total Exempted in Water" from eg_ws_connection where property_id in (select propertyid from eg_pt_property where landarea between
+
+      0 and 125 and status='ACTIVE' and usagecategory='RESIDENTIAL')and applicationstatus='CONNECTION_ACTIVATED' and tenantid='pb.amritsar')l,(select count(*) as "Total Exempted in Sewerage" from eg_sw_connection where property_id in (select propertyid from eg_pt_property where landarea between  0 and 125 and status='ACTIVE' and usagecategory='RESIDENTIAL')and applicationstatus='CONNECTION_ACTIVATED' and tenantid='pb.amritsar')m,(select count(*) as "Between 5 Marla Water" from eg_ws_connection where property_id in (select propertyid from eg_pt_property where landarea between
+
+      0 and 125 and status='ACTIVE')and applicationstatus='CONNECTION_ACTIVATED' and tenantid='pb.amritsar')n,(select count(*) as "Between 5 Marla Sewerage" from eg_sw_connection where property_id in (select propertyid from eg_pt_property where landarea between  0 and 125 and status='ACTIVE')and applicationstatus='CONNECTION_ACTIVATED' and tenantid='pb.amritsar')o,(select count(*) as "Between 6-10 Marla Water" from eg_ws_connection where property_id in (select propertyid from eg_pt_property where landarea between
+
+      126 and 250 and status='ACTIVE')and applicationstatus='CONNECTION_ACTIVATED' and tenantid='pb.amritsar')p,(select count(*) as "Between 6-10 Marla Sewerage" from eg_sw_connection where property_id in (select propertyid from eg_pt_property where landarea between  126 and 250 and status='ACTIVE')and applicationstatus='CONNECTION_ACTIVATED' and tenantid='$tenantid')q,(select count(*) as "More than 10 Marla Water" from eg_ws_connection where property_id in (select propertyid from eg_pt_property where landarea>=251
+
+      and status='ACTIVE')and applicationstatus='CONNECTION_ACTIVATED' and tenantid='pb.amritsar')r, (select count(*) as "More than 10 Marla Sewerage" from eg_sw_connection where property_id in (select propertyid from eg_pt_property where landarea>=251 and status='ACTIVE')
+
+      and applicationstatus='CONNECTION_ACTIVATED' and tenantid=$tenantid)s;
 
