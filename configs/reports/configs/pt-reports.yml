@@ -5863,7 +5863,7 @@ ReportDefinitions:
         INNER join eg_pt_propertydetail_v2 pt_detail ON pt_detail.property  = propety.propertyid
         Left outer join egcl_bill as bill on bill.consumercode = propety.propertyid
         Left outer join eg_bndry_mohalla as localnames on pta.locality=localnames.localitycode
-        WHERE propety.tenantid=$tenantid AND propety.acknowldgementnumber NOTNULL AND propety.status='ACTIVE'
+        WHERE propety.tenantid=$tenantid AND propety.acknowldgementnumber NOTNULL 
   orderby: ORDER BY propety.createdtime DESC
   
 - reportName: ULBPTData
