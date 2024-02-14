@@ -3968,7 +3968,7 @@ ReportDefinitions:
         COUNT(distinct case when payment.paymentmode='CHEQUE' then  concat(payment.paymentmode,payment.instrumentnumber,payment.ifsccode,payment.totalamountpaid)  end) as countcheque,
         sum(case when payment.paymentmode='ONLINE' then bad.adjustedamount else 0 end) as sumonline,
         (CASE WHEN payment.paymentmode!='ONLINE' THEN eg_user.name ELSE '30048|23/xn3x2FAxn8vYAN0IdplsOxaE=' END) as collectorname, --for Online collecion show None as collectorname,
-        sum(bad.amount) as totalamount
+        sum(bad.adjustedamount) as totalamount
       FROM egcl_billaccountdetail as bad
       INNER JOIN egcl_billdetial as bd on bd.id = bad.billdetailid
       INNER JOIN egcl_paymentdetail as pd on pd.billid = bd.billid
