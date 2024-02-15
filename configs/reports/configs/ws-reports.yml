@@ -2053,7 +2053,7 @@ ReportDefinitions:
     source: ws
     total: true
   - name: totalsewerageconnections
-    label: reports.ws.totalwaterconnections
+    label: reports.ws.totalsewerageconnections
     type: string
     source: ws
     total: true
