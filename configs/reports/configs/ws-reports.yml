@@ -2047,11 +2047,11 @@ ReportDefinitions:
     print:
       pdfPageSize: A1
   sourceColumns:
-- name: totalwaterconnections
-  label: reports.ws.totalwaterconnections
-  type: string
-  source: ws
-  total: true
+  - name: totalwaterconnections
+    label: reports.ws.totalwaterconnections
+    type: string
+    source: ws
+    total: true
   query: |
     -- Use CTE to force query plan, compute & use CTE later
     select  a.*, b.*,c.*, d.*,e.*,f.*,g.*,h.*,i.*, j.*,k.*,l.*,m.*,
