@@ -2052,6 +2052,86 @@ ReportDefinitions:
     type: string
     source: ws
     total: true
+  - name: totalwateractive
+    label: reports.ws.totalwateractive
+    type: string
+    source: ws
+    total: true
+  - name: totalsewerageactive
+    label: reports.ws.totalsewerageactive
+    type: string
+    source: ws
+    total: true
+  - name: bothactiveconnection
+    label: reports.ws.bothactiveconnection
+    type: string
+    source: ws
+    total: true
+  - name: totalactiveresidentialinwater
+    label: reports.ws.totalactiveresidentialinwater
+    type: string
+    source: ws
+    total: true
+  - name: totalactiveresidentialinsewerage
+    label: reports.ws.totalactiveresidentialinsewerage
+    type: string
+    source: ws
+    total: true
+  - name: totalactivenonresidentialinsewerage
+    label: reports.ws.totalactivenonresidentialinsewerage
+    type: string
+    source: ws
+    total: true
+  - name: totalactivenonresidentialinwater
+    label: reports.ws.totalactivenonresidentialinwater
+    type: string
+    source: ws
+    total: true
+  - name: totalmeteredconnections
+    label: reports.ws.totalmeteredconnections
+    type: string
+    source: ws
+    total: true
+  - name: Total_Exempted_in_Water
+    label: reports.ws.Total_Exempted_in_Water
+    type: string
+    source: ws
+    total: true
+  - name: totalexemptedinwater
+    label: reports.ws.totalexemptedinwater
+    type: string
+    source: ws
+    total: true
+  - name: betweenfivemarlawater
+    label: reports.ws.betweenfivemarlawater
+    type: string
+    source: ws
+    total: true
+  - name: betweenfivemarlasewerage
+    label: reports.ws.betweenfivemarlasewerage
+    type: string
+    source: ws
+    total: true
+  - name: betweensixmarlawater
+    label: reports.ws.betweensixmarlawater
+    type: string
+    source: ws
+    total: true
+  - name: betweensixandtenmarlasewerage
+    label: reports.ws.betweensixandtenmarlasewerage
+    type: string
+    source: ws
+    total: true
+  - name: morethantenmarlawater
+    label: reports.ws.morethantenmarlawater
+    type: string
+    source: ws
+    total: true
+  - name: morethantenmarlasewerage
+    label: reports.ws.morethantenmarlasewerage
+    type: string
+    source: ws
+    total: true   
   query: |
     -- Use CTE to force query plan, compute & use CTE later
     select  a.*, b.*,c.*, d.*,e.*,f.*,g.*,h.*,i.*, j.*,k.*,l.*,m.*,
