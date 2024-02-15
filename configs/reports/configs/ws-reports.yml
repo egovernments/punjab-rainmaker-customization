@@ -2132,32 +2132,25 @@ ReportDefinitions:
   type: string
   source: ws
   total: true
-  searchParams:
-  - name: fromDate
-    label: reports.pt.fromDate
-    type: epoch
-    source: pt
-    isMandatory: false
-    searchClause: and 1=1
   query: |
-     -- Use CTE to force query plan, compute & use CTE later
-       select  a.*, b.*,c.*, d.*,e.*,f.*,g.*,h.*,i.*, j.*,k.*,l.*,m.*,
-       n.*,o.*,p.*,q.*,r.*,s.* from (select count (*) as totalwaterconnections from eg_ws_connection where tenantid=$tenantid)a,
-       (select count (*) as totalsewerageconnections from eg_sw_connection where tenantid=$tenantid)b,
-       (SELECT SUM(cnt) AS bothconnection FROM ( SELECT COUNT(*) AS cnt FROM eg_ws_connection where tenantid=$tenantid UNION ALL SELECT COUNT(*) AS cnt FROM eg_sw_connection where tenantid=$tenantid) AS Both_Connection)c,
-       (select count(*) as totalwateractive from eg_ws_connection where applicationstatus='CONNECTION_ACTIVATED' and tenantid=$tenantid)d,
-       (select count(*) as totalsewerageactive from eg_sw_connection where applicationstatus='CONNECTION_ACTIVATED' and tenantid=$tenantid)e,
-       (SELECT SUM(cnt) AS bothactiveconnection FROM (SELECT COUNT(*) AS cnt FROM eg_ws_connection where tenantid=$tenantid  and applicationstatus='CONNECTION_ACTIVATED' UNION ALL SELECT COUNT(*) AS cnt FROM eg_sw_connection where tenantid=$tenantid  and applicationstatus='CONNECTION_ACTIVATED') AS "Both ACTIVE Connection")f,
-       (select count(*) as totalactiveresidentialinwater from eg_ws_connection where property_id in (select propertyid from eg_pt_property where status='ACTIVE' and usagecategory in ('RESIDENTIAL')) and applicationstatus='CONNECTION_ACTIVATED' and tenantid=$tenantid)g,
-       (select count(*) as totalactiveresidentialinsewerage from eg_sw_connection where property_id in (select propertyid from eg_pt_property where status='ACTIVE' and usagecategory in ('RESIDENTIAL')) and applicationstatus='CONNECTION_ACTIVATED' and tenantid=$tenantid)h,
-       (select count(*) as totalactivenonresidentialinsewerage from eg_sw_connection where property_id in (select propertyid from eg_pt_property where status='ACTIVE' and usagecategory in ('NONRESIDENTIAL.COMMERCIAL','NONRESIDENTIAL')) and applicationstatus='CONNECTION_ACTIVATED' and tenantid=$tenantid)i,
-       (select count(*) as totalactivenonresidentialinwater from eg_ws_connection where property_id in (select propertyid from eg_pt_property where status='ACTIVE' and usagecategory in ('NONRESIDENTIAL.COMMERCIAL','NONRESIDENTIAL')) and applicationstatus='CONNECTION_ACTIVATED' and tenantid=$tenantid)j,
-       (select count(*) as totalmeteredconnections from eg_ws_connection where tenantid=$tenantid  and additionaldetails->>'meterId' is not null)k,
-       (select count(*) as totalexemptedinwater from eg_ws_connection where property_id in (select propertyid from eg_pt_property where landarea between 0 and 125 and status='ACTIVE' and usagecategory='RESIDENTIAL')and applicationstatus='CONNECTION_ACTIVATED' and tenantid=$tenantid)l,
-       (select count(*) as totalexemptedinsewerage from eg_sw_connection where property_id in (select propertyid from eg_pt_property where landarea between  0 and 125 and status='ACTIVE' and usagecategory='RESIDENTIAL')and applicationstatus='CONNECTION_ACTIVATED' and tenantid=$tenantid)m,
-       (select count(*) as betweenfivemarlawater from eg_ws_connection where property_id in (select propertyid from eg_pt_property where landarea between 0 and 125 and status='ACTIVE')and applicationstatus='CONNECTION_ACTIVATED' and tenantid=$tenantid)n,
-       (select count(*) as betweenfivemarlasewerage from eg_sw_connection where property_id in (select propertyid from eg_pt_property where landarea between  0 and 125 and status='ACTIVE')and applicationstatus='CONNECTION_ACTIVATED' and tenantid=$tenantid)o,
-       (select count(*) as betweensixmarlawater from eg_ws_connection where property_id in (select propertyid from eg_pt_property where landarea between 126 and 250 and status='ACTIVE')and applicationstatus='CONNECTION_ACTIVATED' and tenantid=$tenantid)p,
-       (select count(*) as betweensixandtenmarlasewerage from eg_sw_connection where property_id in (select propertyid from eg_pt_property where landarea between  126 and 250 and status='ACTIVE')and applicationstatus='CONNECTION_ACTIVATED' and tenantid=$tenantid)q,
-       (select count(*) as morethantenmarlawater from eg_ws_connection where property_id in (select propertyid from eg_pt_property where landarea>=251 and status='ACTIVE')and applicationstatus='CONNECTION_ACTIVATED' and tenantid=$tenantid)r,
-       (select count(*) as morethantenmarlasewerage from eg_sw_connection where property_id in (select propertyid from eg_pt_property where landarea>=251 and status='ACTIVE') and applicationstatus='CONNECTION_ACTIVATED' and tenantid=$tenantid)s;
+    -- Use CTE to force query plan, compute & use CTE later
+    select  a.*, b.*,c.*, d.*,e.*,f.*,g.*,h.*,i.*, j.*,k.*,l.*,m.*,
+    n.*,o.*,p.*,q.*,r.*,s.* from (select count (*) as totalwaterconnections from eg_ws_connection where tenantid=$tenantid)a,
+    (select count (*) as totalsewerageconnections from eg_sw_connection where tenantid=$tenantid)b,
+    (SELECT SUM(cnt) AS bothconnection FROM ( SELECT COUNT(*) AS cnt FROM eg_ws_connection where tenantid=$tenantid UNION ALL SELECT COUNT(*) AS cnt FROM eg_sw_connection where tenantid=$tenantid) AS Both_Connection)c,
+    (select count(*) as totalwateractive from eg_ws_connection where applicationstatus='CONNECTION_ACTIVATED' and tenantid=$tenantid)d,
+    (select count(*) as totalsewerageactive from eg_sw_connection where applicationstatus='CONNECTION_ACTIVATED' and tenantid=$tenantid)e,
+    (SELECT SUM(cnt) AS bothactiveconnection FROM (SELECT COUNT(*) AS cnt FROM eg_ws_connection where tenantid=$tenantid  and applicationstatus='CONNECTION_ACTIVATED' UNION ALL SELECT COUNT(*) AS cnt FROM eg_sw_connection where tenantid=$tenantid  and applicationstatus='CONNECTION_ACTIVATED') AS "Both ACTIVE Connection")f,
+    (select count(*) as totalactiveresidentialinwater from eg_ws_connection where property_id in (select propertyid from eg_pt_property where status='ACTIVE' and usagecategory in ('RESIDENTIAL')) and applicationstatus='CONNECTION_ACTIVATED' and tenantid=$tenantid)g,
+    (select count(*) as totalactiveresidentialinsewerage from eg_sw_connection where property_id in (select propertyid from eg_pt_property where status='ACTIVE' and usagecategory in ('RESIDENTIAL')) and applicationstatus='CONNECTION_ACTIVATED' and tenantid=$tenantid)h,
+    (select count(*) as totalactivenonresidentialinsewerage from eg_sw_connection where property_id in (select propertyid from eg_pt_property where status='ACTIVE' and usagecategory in ('NONRESIDENTIAL.COMMERCIAL','NONRESIDENTIAL')) and applicationstatus='CONNECTION_ACTIVATED' and tenantid=$tenantid)i,
+    (select count(*) as totalactivenonresidentialinwater from eg_ws_connection where property_id in (select propertyid from eg_pt_property where status='ACTIVE' and usagecategory in ('NONRESIDENTIAL.COMMERCIAL','NONRESIDENTIAL')) and applicationstatus='CONNECTION_ACTIVATED' and tenantid=$tenantid)j,
+    (select count(*) as totalmeteredconnections from eg_ws_connection where tenantid=$tenantid  and additionaldetails->>'meterId' is not null)k,
+    (select count(*) as totalexemptedinwater from eg_ws_connection where property_id in (select propertyid from eg_pt_property where landarea between 0 and 125 and status='ACTIVE' and usagecategory='RESIDENTIAL')and applicationstatus='CONNECTION_ACTIVATED' and tenantid=$tenantid)l,
+    (select count(*) as totalexemptedinsewerage from eg_sw_connection where property_id in (select propertyid from eg_pt_property where landarea between  0 and 125 and status='ACTIVE' and usagecategory='RESIDENTIAL')and applicationstatus='CONNECTION_ACTIVATED' and tenantid=$tenantid)m,
+    (select count(*) as betweenfivemarlawater from eg_ws_connection where property_id in (select propertyid from eg_pt_property where landarea between 0 and 125 and status='ACTIVE')and applicationstatus='CONNECTION_ACTIVATED' and tenantid=$tenantid)n,
+    (select count(*) as betweenfivemarlasewerage from eg_sw_connection where property_id in (select propertyid from eg_pt_property where landarea between  0 and 125 and status='ACTIVE')and applicationstatus='CONNECTION_ACTIVATED' and tenantid=$tenantid)o,
+    (select count(*) as betweensixmarlawater from eg_ws_connection where property_id in (select propertyid from eg_pt_property where landarea between 126 and 250 and status='ACTIVE')and applicationstatus='CONNECTION_ACTIVATED' and tenantid=$tenantid)p,
+    (select count(*) as betweensixandtenmarlasewerage from eg_sw_connection where property_id in (select propertyid from eg_pt_property where landarea between  126 and 250 and status='ACTIVE')and applicationstatus='CONNECTION_ACTIVATED' and tenantid=$tenantid)q,
+    (select count(*) as morethantenmarlawater from eg_ws_connection where property_id in (select propertyid from eg_pt_property where landarea>=251 and status='ACTIVE')and applicationstatus='CONNECTION_ACTIVATED' and tenantid=$tenantid)r,
+    (select count(*) as morethantenmarlasewerage from eg_sw_connection where property_id in (select propertyid from eg_pt_property where landarea>=251 and status='ACTIVE') and applicationstatus='CONNECTION_ACTIVATED' and tenantid=$tenantid)s;
