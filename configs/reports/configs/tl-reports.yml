@@ -2408,6 +2408,19 @@ ReportDefinitions:
     type: string
     source: tl
     total: false
+  searchParams:
+  - name: fromDate
+    label: reports.tl.fromDate
+    type: epoch
+    source: tl
+    isMandatory: false
+    searchClause: AND applicationdate >= $fromDate
+  - name: toDate
+    label: reports.tl.toDate
+    type: epoch
+    source: tl
+    isMandatory: false
+    searchClause: AND applicationdate <= $toDate     
   query: |
     select 
       split_part(tenantid,'.',2) as ulb,
@@ -2427,7 +2440,7 @@ ReportDefinitions:
       group by tradelicensedetailid
     ) tlown ON tlown.tradelicensedetailid = tld.id
     where validto < extract (epoch from NOW())*1000 and licensenumber is not null and licensenumber not in (select oldlicensenumber from eg_tl_tradelicense where oldlicensenumber is not null)
-    and tenantid in ('pb.derababananak','pb.jandialaguru','pb.amargarh','pb.banur','pb.begowal','pb.bhadaur','pb.bhikhi','pb.bhuchomandi','pb.budhlada','pb.chamkaursahib','pb.chaunke','pb.dhanaula','pb.dhilwan','pb.dinanagar','pb.ferozepur','pb.guruharsahai','pb.kapurthala','pb.khemkaran','pb.kothaguru','pb.majitha','pb.mandigobindgarh','pb.mehatpur','pb.nabha','pb.nadala','pb.nakodar','pb.nurmahal','pb.payal','pb.sardulgarh','pb.abohar','pb.anandpursahib','pb.bhagtabhai','pb.bhairoopa','pb.bhulath','pb.fatehgarhchurian','pb.lehramohabbat','pb.malout','pb.nangal','pb.quadian','pb.rampuraphul','pb.talwandibhai','pb.banga','pb.jaitu','pb.malerkotla','pb.mamdot','pb.ramdass','pb.moonak','pb.dhariwal','pb.rampura','pb.kiratpur','pb.moga','pb.jalandhar','pb.bilga','pb.phagwara','pb.pathankot','pb.fatehgarhpanjtoor','pb.amritsar','pb.itpatiala','pb.mohali','pb.patiala','pb.narotjaimalsingh')
+    and tenantid! ='pb.testing'
   orderby: order by tenantid
 
 
