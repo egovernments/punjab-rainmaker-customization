@@ -1007,7 +1007,7 @@ router.post('/protected/punjab-pt/pre-hook/pg-service/transaction/v1/_create', a
 
     if (request['Transaction']['tenantId'] == 'pb.jalandhar' || request['Transaction']['tenantId'] == 'pb.testing') {
         let original_callback = request['Transaction']['callbackUrl'];
-        request['Transaction']['gateway'] = 'PAYU'
+        request['Transaction']['gateway'] = 'CCAVANUE'
         url_callback = url.parse(original_callback)
 
         url_callback.query = url_callback.query || {};
