@@ -1019,6 +1019,20 @@ router.post('/protected/punjab-pt/pre-hook/pg-service/transaction/v1/_create', a
 
         request['Transaction']['callbackUrl'] = url.format(url_callback);
     }
+else  if (request['Transaction']['tenantId'] == 'pb.amritsar' && (request['Transaction']['module']=="WS" ||  request['Transaction']['module']=="SW")) {
+        let original_callback = request['Transaction']['callbackUrl'];
+        request['Transaction']['gateway'] = 'CCAVANUE'
+        url_callback = url.parse(original_callback)
+
+        url_callback.query = url_callback.query || {};
+
+        url_callback.query['original_callback'] = url_callback.path;
+
+        url_callback.path = '/customization/open/punjab-pt/payu/confirm';
+        url_callback.pathname = '/customization/open/punjab-pt/payu/confirm';
+
+        request['Transaction']['callbackUrl'] = url.format(url_callback);
+    }
 
     res.json(request);
 })));
