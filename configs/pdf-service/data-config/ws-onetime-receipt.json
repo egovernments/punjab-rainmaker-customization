@@ -20,6 +20,24 @@
                 }
               },
               {
+                "variable": "UsageCategory",
+                "value": {
+                  "path": "$.usageCategory"
+                }
+              },
+              {
+                "variable": "ADdress",
+                "value": {
+                  "path": "$.address"
+                }
+              },
+              {
+                "variable": "LandArea",
+                "value": {
+                  "path": "$.propertyDetail.landArea"
+                }
+              },
+              {
                 "variable": "user-name",
                 "value": {
                   "path": "$.userInfo.name"
