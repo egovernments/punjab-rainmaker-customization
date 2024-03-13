@@ -291,6 +291,29 @@
                 "style": "receipt-table"
                 
               }
+            ],
+             [
+              {
+                "text": "Land Area",
+                "border": [
+                  true,
+                  false,
+                  false,
+                  false
+                ],
+                "style": "receipt-table-value"
+              },
+              {
+                "text": "{{LandArea}}",
+                "border": [
+                  false,
+                  false,
+                  false,
+                  false
+                ],
+                "style": "receipt-table"
+              }
+             
             ]
              
           ]
