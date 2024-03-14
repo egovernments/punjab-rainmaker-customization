@@ -3492,7 +3492,12 @@ ReportDefinitions:
     label: reports.pt.mobileno
     type: string
     source: pt
-    total: false  
+    total: false
+  - name: usagecategory
+    label: reports.pt.usagecategory
+    type: string
+    source: pt
+    total: false     
   - name: address
     label: reports.pt.address
     type: string
@@ -3579,6 +3584,7 @@ ReportDefinitions:
     --pot.occupancytype as occupancy,
     --pot.propertytype as propertytype,
     --pta.locality as "localitycode",
+      pt.usagecategory as usagecategory,
       localnames.localityname as localityname
     from egcl_paymentdetail as payd
     inner join egcl_payment as payment on payment.id = payd.paymentid        
