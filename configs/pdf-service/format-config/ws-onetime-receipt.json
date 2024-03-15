@@ -9,9 +9,9 @@
         "style": "noc-head",
         "table": {
           "widths": [
-            40,
-            500,
-            20
+            60,
+            "*",
+            120
           ],
           "body": [
             [
@@ -27,25 +27,33 @@
                     "style": "receipt-logo-header"
                   },
                   {
-                    "text": "{{address}}"
-                  },                
-                  {
-                    "text": "{{website}}"
-                  },
-                  {
                     "text": "{{serviceType}} {{payment_receipt}}(Employee Copy)",
-                    "style": "receipt-logo-sub-header-ASR"
+                    "style": "receipt-logo-sub-header"
                   }
                 ],
                 "alignment": "center",
                 "margin": [
-                  60,
+                  0,
                   7,
                   0,
                   0
                 ]
+              },
+              {
+                "stack": [
+                  {
+                    "text": "{{address}}",
+                    "style": "receipt-address-header"
+                  },
+                  {
+                    "text": "{{website}}",
+                    "style": "receipt-website-header"
+                  }
+                  
+                ]             
+               
               }
-              ]
+            ]
           ]
         },
         "layout": "noBorders"
@@ -230,50 +238,8 @@
                 "style": "receipt-table"
                 
               }
-            ],   
-             [
-              {
-                "text": "Usage Category",
-                "border": [
-                  true,
-                  false,
-                  false,
-                  false
-                ],
-                "style": "receipt-table-value"
-              },
-              {
-                "text": "{{UsageCategory}}",
-                "border": [
-                  false,
-                  false,
-                  false,
-                  false
-                ],
-                "style": "receipt-table"
-              },
-              {
-                "text": "Address",
-                "border": [
-                  false,
-                  false,
-                  false,
-                  false
-                ],
-                "style": "receipt-table-value"
-              },
-              {
-                "text": "{{ADdress}}",
-                "border": [
-                  false,
-                  false,
-                  true,
-                  false
-                ],
-                "style": "receipt-table"
-
-              }
-            ],
+            ],  
+          
             [
               {
                 "text": "Bank Name",
@@ -316,30 +282,8 @@
                 "style": "receipt-table"
                 
               }
-            ],
-              [
-              {
-                "text": "Land Area",
-                "border": [
-                  true,
-                  false,
-                  false,
-                  false
-                ],
-                "style": "receipt-table-value"
-              },
-              {
-                "text": "{{LandArea}}",
-                "border": [
-                  false,
-                  false,
-                  false,
-                  false
-                ],
-                "style": "receipt-table"
-              }
-             
             ]
+             
           ]
         },
         "layout": {}
@@ -426,9 +370,9 @@
         "style": "noc-head",
         "table": {
           "widths": [
-            40,
-            500,
-            20
+            60,
+            "*",
+            120
           ],
           "body": [
             [
@@ -444,22 +388,40 @@
                     "style": "receipt-logo-header"
                   },
                   {
-                    "text": "{{address}}"
-                  },                
-                  {
-                    "text": "{{website}}"
-                  },
-                  {
                     "text": "{{serviceType}} {{payment_receipt}}(Citizen Copy)",
                     "style": "receipt-logo-sub-header"
                   }
                 ],
-                "alignment": "center",
+                "alignment": "left",
                 "margin": [
                   13,
                   7,
                   0,
                   0
+                ]
+              },
+              {
+                "stack": [
+                  {
+                    "text": "{{address}}"
+                  },
+                  {
+                    "text": "{{phoneNumber}}"
+                  },
+                  {
+                    "text": "{{website}}"
+                  },
+                  {
+                    "text": "{{email}}"
+                  }
+                ],
+                "alignment": "right",
+                "color": "#484848",
+                "margin": [
+                  -100,
+                  0,
+                  -25,
+                  -3
                 ]
               }
             ]
@@ -647,50 +609,8 @@
                 "style": "receipt-table"
                 
               }
-            ],   
-             [
-              {
-                "text": "Usage Category",
-                "border": [
-                  true,
-                  false,
-                  false,
-                  false
-                ],
-                "style": "receipt-table-value"
-              },
-              {
-                "text": "{{UsageCategory}}",
-                "border": [
-                  false,
-                  false,
-                  false,
-                  false
-                ],
-                "style": "receipt-table"
-              },
-              {
-                "text": "Address",
-                "border": [
-                  false,
-                  false,
-                  false,
-                  false
-                ],
-                "style": "receipt-table-value"
-              },
-              {
-                "text": "{{ADdress}}",
-                "border": [
-                  false,
-                  false,
-                  true,
-                  false
-                ],
-                "style": "receipt-table"
-
-              }
-            ],
+            ],  
+           
             [
               {
                 "text": "Bank Name",
@@ -833,7 +753,7 @@
           0,
           0,
           0,
-          2
+          0
         ]
       },
       "receipt-logo-sub-header": {
@@ -841,10 +761,12 @@
         "fontSize": 12,
         "letterSpacing": 0.6
       },
-      "receipt-logo-sub-header-ASR": {
-        "color": "#000000",
-        "fontSize": 12,
-        "letterSpacing": 0.6
+
+      "receipt-address-header": {
+        "absolutePosition" : {
+          "x" : 500,
+          "y" : 300
+       }
       },
       "noc-table": {
         "fontSize": 12,
