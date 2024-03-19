@@ -2200,14 +2200,13 @@ ReportDefinitions:
     type: epoch
     source: pt
     isMandatory: true
-    searchClause: and 1=1
-  - name: serviceType
-    label: serviceType
-    type: singlevaluelist
-    pattern: 'list://WS:Water'
+    searchClause: AND ws.createdtime>= $fromDate
+  - name: toDate
+    label: reports.pt.toDate
+    type: epoch
     source: pt
     isMandatory: true
-    searchClause: AND 1=1
+    searchClause: AND ws.createdtime<= $toDate
   query: |
     WITH quarterly_data AS (
     SELECT
@@ -2284,14 +2283,13 @@ ReportDefinitions:
     type: epoch
     source: pt
     isMandatory: true
-    searchClause: and 1=1
-  - name: serviceType
-    label: serviceType
-    type: singlevaluelist
-    pattern: 'list://WS:Water'
+    searchClause: AND ws.createdtime>= $fromDate
+  - name: toDate
+    label: reports.pt.toDate
+    type: epoch
     source: pt
     isMandatory: true
-    searchClause: AND 1=1
+    searchClause: AND ws.createdtime<= $toDate
   query: |
     WITH quarterly_data AS (
     SELECT
