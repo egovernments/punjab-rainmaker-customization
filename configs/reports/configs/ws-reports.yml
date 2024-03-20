@@ -2199,13 +2199,13 @@ ReportDefinitions:
     label: reports.pt.fromDate
     type: epoch
     source: pt
-    isMandatory: true
+    isMandatory: false
     searchClause: AND ws.createdtime>= $fromDate
   - name: toDate
     label: reports.pt.toDate
     type: epoch
     source: pt
-    isMandatory: true
+    isMandatory: false
     searchClause: AND ws.createdtime<= $toDate
   query: |
     WITH quarterly_data AS (
@@ -2282,13 +2282,13 @@ ReportDefinitions:
     label: reports.pt.fromDate
     type: epoch
     source: pt
-    isMandatory: true
+    isMandatory: false
     searchClause: AND ws.createdtime>= $fromDate
   - name: toDate
     label: reports.pt.toDate
     type: epoch
     source: pt
-    isMandatory: true
+    isMandatory: false
     searchClause: AND ws.createdtime<= $toDate
   query: |
     WITH quarterly_data AS (
