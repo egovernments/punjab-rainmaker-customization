@@ -2187,12 +2187,12 @@ ReportDefinitions:
     label: reports.ws.arrear_usage_type
     type: string
     source: ws
-    total: true
+    total: false
   - name: current_charges_usage_type
     label: reports.ws.current_charges_usage_type
     type: string
     source: ws
-    total: true
+    total: false
     
   searchParams:
   - name: fromDate
@@ -2270,12 +2270,12 @@ ReportDefinitions:
     label: reports.ws.arrear_usage_type
     type: string
     source: ws
-    total: true
+    total: false
   - name: current_charges_usage_type
     label: reports.ws.current_charges_usage_type
     type: string
     source: ws
-    total: true
+    total: false
     
   searchParams:
   - name: fromDate
@@ -2315,9 +2315,9 @@ ReportDefinitions:
     SELECT
         consumercode,
     SUM(CASE WHEN charge_category = 'Arrear' THEN demand_amount ELSE 0 END) AS total_arrear_demand_amount,
-    MAX(CASE WHEN charge_category = 'Current Charges' THEN demand_amount END) AS current_charges_demand_amount,
-    MAX(CASE WHEN charge_category = 'Arrear' AND row_num = 1 THEN UsageType END) AS arrear_usage_type,
-    MAX(CASE WHEN charge_category = 'Current Charges' AND row_num = 1 THEN UsageType END) AS current_charges_usage_type
+    MAX(CASE WHEN charge_category = 'Current Charges' THEN demand_amount  else 0 END) AS current_charges_demand_amount,
+    MAX(CASE WHEN charge_category = 'Arrear' AND row_num = 1 THEN UsageType else 'NA' END) AS arrear_usage_type,
+    MAX(CASE WHEN charge_category = 'Current Charges' AND row_num = 1 THEN UsageType else 'NA' END) AS current_charges_usage_type
     FROM
      
     quarterly_data
