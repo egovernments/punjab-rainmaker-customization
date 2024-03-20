@@ -2251,28 +2251,28 @@ ReportDefinitions:
     print:
       pdfPageSize: A1
   sourceColumns:
-  - name: consumercode
-    label: reports.ws.consumercode
+  - name: swconsumercode
+    label: reports.ws.swconsumercode
     type: string
     source: ws
     total: false
-  - name: total_arrear_demand_amount
-    label: reports.ws.total_arrear_demand_amount
+  - name: swtotal_arrear_demand_amount
+    label: reports.ws.swtotal_arrear_demand_amount
     type: string
     source: ws
     total: false
-  - name: current_charges_demand_amount
-    label: reports.ws.current_charges_demand_amount
+  - name: swcurrent_charges_demand_amount
+    label: reports.ws.swcurrent_charges_demand_amount
     type: string
     source: ws
     total: true
-  - name: arrear_usage_type
-    label: reports.ws.arrear_usage_type
+  - name: swarrear_usage_type
+    label: reports.ws.swarrear_usage_type
     type: string
     source: ws
     total: false
-  - name: current_charges_usage_type
-    label: reports.ws.current_charges_usage_type
+  - name: swcurrent_charges_usage_type
+    label: reports.ws.swcurrent_charges_usage_type
     type: string
     source: ws
     total: false
@@ -2313,11 +2313,11 @@ ReportDefinitions:
     AND d1.tenantid = $tenantid
     AND (d2.collectionamount IS NULL OR d2.collectionamount = 0)) -- Include only pending amounts)
     SELECT
-        consumercode,
-    SUM(CASE WHEN charge_category = 'Arrear' THEN demand_amount ELSE 0 END) AS total_arrear_demand_amount,
-    MAX(CASE WHEN charge_category = 'Current Charges' THEN demand_amount else 0 END) AS current_charges_demand_amount,
-    MAX(CASE WHEN charge_category = 'Arrear' AND row_num = 1 THEN UsageType else 'NA' END) AS arrear_usage_type,
-    MAX(CASE WHEN charge_category = 'Current Charges' AND row_num = 1 THEN UsageType else 'NA' END) AS current_charges_usage_type
+        swconsumercode,
+    SUM(CASE WHEN charge_category = 'Arrear' THEN demand_amount ELSE 0 END) AS swtotal_arrear_demand_amount,
+    MAX(CASE WHEN charge_category = 'Current Charges' THEN demand_amount else 0 END) AS swcurrent_charges_demand_amount,
+    MAX(CASE WHEN charge_category = 'Arrear' AND row_num = 1 THEN UsageType else 'NA' END) AS swarrear_usage_type,
+    MAX(CASE WHEN charge_category = 'Current Charges' AND row_num = 1 THEN UsageType else 'NA' END) AS swcurrent_charges_usage_type
     FROM
      
     quarterly_data
