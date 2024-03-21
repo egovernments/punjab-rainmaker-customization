@@ -2320,8 +2320,8 @@ ReportDefinitions:
     FROM
      
     quarterly_data
-    groupby: group by consumercode   
-    orderby: order by  consumercode 
+    groupby: group by consumercode  
+  
      
     
     
