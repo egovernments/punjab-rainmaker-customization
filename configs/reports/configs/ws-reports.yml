@@ -2241,9 +2241,7 @@ ReportDefinitions:
     GROUP BY
     consumercode
     ORDER BY
-    consumercode; 
- 
-    
+    consumercode;     
 - reportName: SwDefaulterReport
   summary: Sw Defaulter Report
   version: 1.0.0
@@ -2322,7 +2320,10 @@ ReportDefinitions:
     FROM
      
     quarterly_data
-    groupby: group by consumercode  
+    GROUP BY
+    consumercode
+    ORDER BY
+    consumercode;  
   
      
     
