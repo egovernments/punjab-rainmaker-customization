@@ -2237,9 +2237,11 @@ ReportDefinitions:
     MAX(CASE WHEN charge_category = 'Current Charges' AND row_num = 1 THEN UsageType else 'NA' END) AS current_charges_usage_type
     FROM
      
-    quarterly_data
-    groupby: group by consumercode     
-    orderby: order by  consumercode
+    quarterly_data    
+    GROUP BY
+    consumercode
+    ORDER BY
+    consumercode; 
  
     
 - reportName: SwDefaulterReport
