@@ -2274,20 +2274,7 @@ ReportDefinitions:
     label: reports.ws.current_charges_usage_type
     type: string
     source: ws
-    total: false   
-  searchParams:
-  - name: fromDate
-    label: reports.pt.fromDate
-    type: epoch
-    source: pt
-    isMandatory: false
-    searchClause: AND 1=1
-  - name: toDate
-    label: reports.pt.toDate
-    type: epoch
-    source: pt
-    isMandatory: false
-    searchClause: AND 1=1
+    total: false
   query: |
     WITH quarterly_data AS (
     SELECT
