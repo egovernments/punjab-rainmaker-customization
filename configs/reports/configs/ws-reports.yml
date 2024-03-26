@@ -2274,56 +2274,47 @@ ReportDefinitions:
     label: reports.ws.current_charges_usage_type
     type: string
     source: ws
-    total: false
-    
+    total: false   
   searchParams:
   - name: fromDate
     label: reports.pt.fromDate
     type: epoch
     source: pt
     isMandatory: false
-    searchClause: AND ws.createdtime>= $fromDate
+    searchClause: AND 1=1
   - name: toDate
     label: reports.pt.toDate
     type: epoch
     source: pt
     isMandatory: false
-    searchClause: AND ws.createdtime<= $toDate
+    searchClause: AND 1=1
   query: |
     WITH quarterly_data AS (
     SELECT
-    d1.consumercode,
-    CASE
-        WHEN to_timestamp(d1.taxperiodfrom / 1000) < '2023-10-01'::timestamp THEN 'Arrear'
-        ELSE 'Current Charges'
-        END AS charge_category,
+        d1.consumercode,
+        CASE WHEN to_timestamp(d1.taxperiodfrom / 1000) < '2023-10-01'::timestamp THEN 'Arrear' ELSE 'Current Charges' END AS charge_category,
         to_char(to_timestamp(d1.taxperiodfrom / 1000), 'YYYY-MM-DD') AS tax_period_from_date,
-    d2.taxamount AS demand_amount,
-    d2.collectionamount AS collected_amount,
-    d5.usagecategory AS UsageType,
-    ROW_NUMBER() OVER (PARTITION BY d1.consumercode ORDER BY to_timestamp(d1.taxperiodfrom / 1000) DESC) AS row_num
-    FROM    
-        egbs_demand_v1 d1
-        LEFT JOIN egbs_demanddetail_v1 d2 ON d1.id = d2.demandid
-        LEFT JOIN eg_sw_connection d4 ON d4.connectionno = d1.consumercode
-        LEFT JOIN eg_pt_property  d5 ON d4.property_id = d5.propertyid 
+        d2.taxamount AS demand_amount,
+        d2.collectionamount AS collected_amount,
+        d5.usagecategory AS UsageType,
+        ROW_NUMBER() OVER (PARTITION BY d1.consumercode ORDER BY to_timestamp(d1.taxperiodfrom / 1000) DESC) AS row_num
+    FROM egbs_demand_v1 d1
+    LEFT JOIN egbs_demanddetail_v1 d2 ON d1.id = d2.demandid
+    LEFT JOIN eg_sw_connection d4 ON d4.connectionno = d1.consumercode
+    LEFT JOIN eg_pt_property  d5 ON d4.property_id = d5.propertyid 
     WHERE  d1.taxperiodfrom >= '1672531200000'
     AND  d1.businessservice = 'SW'
     AND d1.tenantid = $tenantid
     AND (d2.collectionamount IS NULL OR d2.collectionamount = 0)) -- Include only pending amounts)
     SELECT
         consumercode,
-    SUM(CASE WHEN charge_category = 'Arrear' THEN demand_amount ELSE 0 END) AS total_arrear_demand_amount,
-    MAX(CASE WHEN charge_category = 'Current Charges' THEN demand_amount else 0 END) AS current_charges_demand_amount,
-    MAX(CASE WHEN charge_category = 'Arrear' AND row_num = 1 THEN UsageType else 'NA' END) AS arrear_usage_type,
-    MAX(CASE WHEN charge_category = 'Current Charges' AND row_num = 1 THEN UsageType else 'NA' END) AS current_charges_usage_type
-    FROM
-     
-    quarterly_data
-    GROUP BY
-    consumercode
-    ORDER BY
-    consumercode;  
+        SUM(CASE WHEN charge_category = 'Arrear' THEN demand_amount ELSE 0 END) AS total_arrear_demand_amount,
+        MAX(CASE WHEN charge_category = 'Current Charges' THEN demand_amount else 0 END) AS current_charges_demand_amount,
+        MAX(CASE WHEN charge_category = 'Arrear' AND row_num = 1 THEN UsageType else 'NA' END) AS arrear_usage_type,
+        MAX(CASE WHEN charge_category = 'Current Charges' AND row_num = 1 THEN UsageType else 'NA' END) AS current_charges_usage_type
+    FROM quarterly_data
+  groupby: GROUP BY consumercode
+  orderby: ORDER BY consumercode
   
      
     
