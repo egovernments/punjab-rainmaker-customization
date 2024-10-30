@@ -54,6 +54,10 @@ public class MigrationController {
 			UserInfo userInfo = waterMigrateRequest.getRequestInfo().getUserInfo();
 			String accessToken = userService.getAccessToken(userInfo.getUserName(), userInfo.getPassword(),
 					userInfo.getTenantId());
+			
+			System.out.println("In Migration Controler tenant id="+ tenantId);
+			System.out.println("In Migration Controler request Info="+ waterMigrateRequest.getRequestInfo());
+			System.out.println("In Migration Controler boundry list="+ boundaryList);
 			if (accessToken != null) {
 				waterMigrateRequest.getRequestInfo().setAuthToken(accessToken);
 				service.migrateWtrConnection(tenantId, waterMigrateRequest.getRequestInfo(), boundaryList);
@@ -97,6 +101,9 @@ public class MigrationController {
 					userInfo.getTenantId());
 			if (accessToken != null) {
 				waterMigrateRequest.getRequestInfo().setAuthToken(accessToken);
+				System.out.println("a "+tenantId);
+				System.out.println("b "+waterMigrateRequest.getRequestInfo());
+				//System.out.println("c "+tenantId);
 				collectionService.migrateWtrCollection(tenantId, waterMigrateRequest.getRequestInfo());
 
 			} else {
@@ -147,6 +154,9 @@ public class MigrationController {
 			String accessToken = userService.getAccessToken(userInfo.getUserName(), userInfo.getPassword(),
 					userInfo.getTenantId());
 			if (accessToken != null) {
+				System.out.println("a "+tenantId);
+				System.out.println("b "+sewerageConnectionRequest.getRequestInfo());
+				//System.out.println("c "+tenantId);
 				sewerageConnectionRequest.getRequestInfo().setAuthToken(accessToken);
 				service.createSewerageConnection(tenantId, sewerageConnectionRequest.getRequestInfo(), boundaryList);
 

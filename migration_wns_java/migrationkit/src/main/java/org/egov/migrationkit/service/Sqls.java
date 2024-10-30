@@ -6,6 +6,9 @@ public class Sqls {
 
 	public static final String waterQueryold = "select json_build_object( 'actualPipeSize', (select sizeininch from egwtr_pipesize psize where conndetails.pipesize=psize.id), 'actualTaps', conndetails.nooftaps, 'proposedPipeSize', (select sizeininch from egwtr_pipesize psize where conndetails.pipesize=psize.id), 'proposedTaps', conndetails.nooftaps, 'cityname', (SELECT CASE WHEN name like '%UAT%' THEN (SELECT split_part(name,'-',1) from eg_city) ELSE (select name from eg_city) END from eg_city), 'zone', zone.name, 'consumercode', conn.consumercode, 'id', (select code from eg_city)||'-'||conndetails.id||'-WC', 'applicantname', usr.name, 'connectionstatus', conndetails.connectionstatus, 'createddate', to_char(conn.createddate::timestamp without time zone, 'YYYY-MM-DD'), 'propertytype', proptype.name, 'guardianname', usr.guardian, 'channel', CASE WHEN conndetails.source is not null THEN conndetails.source ELSE 'COUNTER' END, 'applicationtype', apptype.name, 'locality', locality.code, 'pwssb', CASE (select value from eg_appconfig_values where key_id in (select id from eg_appconfig where key_name ='IS_PWSSB_ULB')) WHEN 'YES' THEN true ELSE false END, 'block', block.name, 'citycode', (select code from eg_city), 'emailid', usr.emailid, 'connectiontype', (select contype.name from egwtr_connection_type contype where contype.id=conndetails.connectiontype), 'applicationnumber', conndetails.applicationnumber, 'disposaldate', conndetails.disposalDate, 'usage', usage.name, 'applicationdate', conndetails.applicationdate, 'districtname', (select districtname from eg_city), 'applicationstatus', status.description, 'applicantaddress.id', address.id, 'regionname', (select regionname from eg_city) , 'mobilenumber', usr.mobilenumber, 'category', wtrctgy.name, 'waterSource', (select source.code from egwtr_water_source source where source.id=conndetails.watersource), 'executiondate', (select extract(epoch from conndetails.executiondate) * 1000), 'dcb', (SELECT json_agg(dcb) FROM ( select to_char(inst.start_date, 'YYYY-MM-DD') \"from_date\", to_char(inst.end_date, 'YYYY-MM-DD') \"to_date\", inst.id \"insta_id\", d.is_history \"is_history\", drm.code \"demand_reason\", dd.amount \"amount\", dd.amt_collected \"collected_amount\", inst.financial_year \"financial_year\" from egwtr_demand_connection cdemand, eg_demand d, eg_demand_details dd, eg_installment_master inst, eg_demand_reason_master drm, eg_demand_reason dr where conndetails.id=cdemand.connectiondetails and cdemand.demand=d.id and d.id=dd.id_demand and dr.id_installment=inst.id and dd.id_demand_reason=dr.id and dr.id_demand_reason_master=drm.id and inst.id=dr.id_installment and d.is_history='N' order by inst.start_date ) dcb), 'road_category', (SELECT json_agg(road_category) FROM ( SELECT road_category.name \"road_name\", estimatedetails.area \"road_area\", estimatedetails.unitrate \"unitrate\", estimatedetails.amount \"amount\" from egwtr_estimation_details estimatedetails, egwtr_road_category road_category WHERE conndetails.id=estimatedetails.connectiondetailsid and estimatedetails.roadcategory=road_category.id ) road_category) ) from egwtr_connection conn, egwtr_connectiondetails conndetails, egwtr_application_type apptype, egwtr_usage_type usage, eg_boundary locality, eg_boundary zone, eg_boundary block, egwtr_property_type proptype, egwtr_category wtrctgy, egwtr_connection_owner_info ownerinfo, eg_user usr, eg_address address, egw_status status where conn.id=conndetails.connection and apptype.id=conndetails.applicationtype and usage.id=conndetails.usagetype and block.id=conn.block and locality.id=conn.locality and zone.id=conn.zone and conndetails.propertytype=proptype.id and conndetails.category=wtrctgy.id and ownerinfo.connection=conn.id and usr.id=ownerinfo.owner and address.id=conn.address and status.id=conndetails.statusid and conndetails.legacy=false   and consumercode not in (select erpconn from egwtr_migration where status='Saved')";
 
+	
+	
+	
 	public static final String WATER_CONNECTION_QUERY = "select json_build_object ( 'pipeSize', (select sizeininch from egwtr_pipesize psize where conndetails.pipesize=psize.id), "
 			+ "  'noOfTaps'	, conndetails.nooftaps	,	 "
 			+ "  'proposedPipeSize'	, (select sizeininch from egwtr_pipesize psize where conndetails.pipesize=psize.id), "
@@ -13,11 +16,12 @@ public class Sqls {
 			+ "  'cityname',	 (SELECT CASE WHEN name like '%UAT%' THEN (SELECT split_part(name ,'-', 1) from eg_city) ELSE (select name from eg_city) END from eg_city), "
 			+ "  'oldConnectionNo'	, conn.oldconsumernumber		, "
 			+ "  'connectionNo'	, conn.consumercode		, " + "  'id'	, conndetails.id	, "
-			+ "  'guardianrelation', ( CASE WHEN usr.guardianrelation ='Mother' THEN 'MOTHER' WHEN usr.guardianrelation ='Father' THEN 'FATHER' WHEN usr.guardianrelation='Husband' THEN 'HUSBAND' WHEN usr.guardianrelation ='Others' THEN 'OTHER' WHEN usr.guardianrelation ='Other' THEN 'OTHER' ELSE 'OTHER' END ), 'emailId',	 usr.emailid, 'applicantname'	, usr.name		, "
+			+ "  'guardianrelation', ( CASE WHEN usr.guardianrelation ='Mother' THEN 'Mother' WHEN usr.guardianrelation ='Father' THEN 'Father' WHEN usr.guardianrelation='Husband' THEN 'Husband' WHEN usr.guardianrelation ='Others' THEN 'Others' WHEN usr.guardianrelation ='Other' THEN 'Other' ELSE 'OTHER' END ), 'emailId',	 usr.emailid, 'applicantname'	, usr.name		, "
 			+ "'gender', ( SELECT CASE WHEN usr.gender = 0 THEN 'FEMALE' WHEN usr.gender = 1 THEN 'MALE' ELSE 'OTHERS' END ),\n"
 			+ "  'status',( SELECT CASE WHEN conndetails.connectionstatus ='ACTIVE' THEN 'Active' ELSE 'Inactive' END)	,	 "
 			+ "  'securityFee',	 conndetails.securitydeposit	,	 "
 			+ "  'createddate',	 to_char(conn.createddate::timestamp without time zone	, 'YYYY-MM-DD')	, "
+                        + "   'propertyId' 	, conn.propertyidentifier, "
 			+ "  'propertyType'	, proptype.name		, " + "  'guardianname',	 usr.guardian	,	 "
 			+ "  'isexempted'	, conndetails.isexempted	,	 "
 			+ "  'applicationType',	 apptype.name	,	 " + "  'billingType',	 conndetails.billingtype	,	 "
@@ -28,7 +32,7 @@ public class Sqls {
 			+ "   'meterId',mtr.meterserialnumber," + "	'meterMake',mtr.metermake ," + "	'othersFee','null', "
 			+ "	'ledgerId',conndetails.ledgernumber," + "  'locality',	 locality.code	,	 "
 			+ "  'pwssb'	, CASE (select value from eg_appconfig_values where key_id in (select id from eg_appconfig where key_name ='IS_PWSSB_ULB')) WHEN 'YES' THEN true ELSE false END	,	 "
-			+ "  'citycode'	, (select code from eg_city)	,	 " + "  'emailId',	 usr.emailid	,	 "
+			+ "  'citycode'	, (select code from eg_city)	, "
 			+ "  'connectionType'	, (select contype.name from egwtr_connection_type contype where contype.id=conndetails.connectiontype)	,	 "
 			+ "  'applicationNo'	, conndetails.applicationnumber	,	 "
 			+ "  'disposaldate'	, conndetails.disposalDate	,	 " + "  'usage',	 usage.name	,	 "
@@ -130,6 +134,7 @@ public class Sqls {
 			+ "'status', ( SELECT CASE WHEN conn.status='ACTIVE' THEN 'Active' ELSE 'Inactive' END) ,\n"
 			+ "'createddate', to_timestamp(to_char(conn.createddate::timestamp without time zone, 'YYYY-MM-DD'),'YYYY-MM-DDTHH24:MI:SSZ'),\n"
 			+ "'oldConnectionNo' , conn.oldconsumernumber ,"
+			+ "'propertyId', conndetails.propertyidentifier, "
 			+ "'autoverifieddate', (select lastmodifieddate from eg_wf_state_history statehist where statehist.state_id=appdetails.state_id and lastmodifiedby IN (select id from eg_user where username='system') LIMIT 1),\n"
 			+ "'guardianrelation', ( CASE WHEN usr.guardianrelation ='Mother' THEN 'MOTHER' WHEN usr.guardianrelation ='Father' THEN 'FATHER' WHEN usr.guardianrelation='Husband' THEN 'HUSBAND' WHEN usr.guardianrelation ='Others' THEN 'OTHER' WHEN usr.guardianrelation ='Other' THEN 'OTHER' ELSE 'OTHER' END ), 'guardianname', usr.guardian,\n"
 			+ "'plotsize', conndetails.plotsize, 'connectionExecutionDate'	, (select extract(epoch from conn.executiondate) * 1000), "

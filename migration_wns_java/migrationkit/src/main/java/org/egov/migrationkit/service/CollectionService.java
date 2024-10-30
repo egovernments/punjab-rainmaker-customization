@@ -57,23 +57,30 @@ public class CollectionService {
 		recordService.initiateCollection(tenantId);
 
 		jdbcTemplate.execute(Sqls.WATER_COLLECTION_MIGRATION_TABLE);
+		 System.out.println("11 123"+Sqls.WATER_COLLECTION_MIGRATION_TABLE);
 		long collectionCount=0l;
 
 		String digitTenantId = requestInfo.getUserInfo().getTenantId();
+		
+		System.out.println("12 123"+ requestInfo.getUserInfo().getTenantId());
+		
 		log.info("Water collectin query is: " + Sqls.WATER_COLLECTION_QUERY);
 		List<String> queryForList = jdbcTemplate.queryForList(Sqls.WATER_COLLECTION_QUERY, String.class);
-
+          System.out.println("queryForList 123"+queryForList);
 		for (String json : queryForList) {
 
 			try {
 				collectionCount++;
-
+				System.out.println("json 123"+json);
 				payment = objectMapper.readValue(json, CollectionPayment.class);
 				log.info("Water collection migrating  for " + payment.getConsumerCode());
 				payment.setTenantId(digitTenantId);
 				payment.getPaymentDetails().get(0).setTenantId(digitTenantId);
 				payment.getPaymentDetails().get(0).setTotalDue(payment.getTotalDue());
 				payment.getPaymentDetails().get(0).setManualReceiptNumber(payment.getPaymentDetails().get(0).getReceiptNumber());
+				System.out.println("payment.getPaymentMode()" +payment.getPaymentMode());
+				System.out.println("CollectionPaymentModeEnum.ONLINE" +CollectionPaymentModeEnum.ONLINE);
+				System.out.println("CollectionPaymentModeEnum.CARD" +CollectionPaymentModeEnum.CARD);
 				if (payment.getPaymentMode().equals(CollectionPaymentModeEnum.ONLINE) 
 						|| payment.getPaymentMode().equals(CollectionPaymentModeEnum.CARD)) {
 					payment.setInstrumentNumber(payment.getTransactionNumber());
@@ -84,6 +91,8 @@ public class CollectionService {
 					payment.setTransactionDate(payment.getInstrumentDate());
 				}
 				boolean isPaymentMigrated = recordService.recordWtrCollMigration(payment, tenantId);
+				System.out.println("isPaymentMigrated" +isPaymentMigrated);
+				
 				if(isPaymentMigrated) 
 					continue;
 
@@ -115,6 +124,8 @@ public class CollectionService {
 					bills = searchBill(tenantId, requestInfo, digitTenantId, payment.getBusinessService(),
 							payment.getConsumerCode(),payment.getPaymentDetails().get(0).getReceiptNumber(),
 							payment.getPaymentDetails().get(0).getBill().getBillNumber());
+					
+					System.out.println("bills" + bills);
 
 				} catch (Exception exception) {
 					log.error("Exception occurred while fetching the bills with business service:"
@@ -203,7 +214,7 @@ public class CollectionService {
 			String response = restTemplate.postForObject(url, request, String.class);
 			log.debug("Bill Request URL: " + url + "Bill RequestInfo: " + request + "Bill Response: " + response);
 			BillResponseV2 waterResponse = objectMapper.readValue(response, BillResponseV2.class);
-
+			System.out.println(waterResponse);
 			return waterResponse.getBill();
 
 		} catch (Exception ex) {

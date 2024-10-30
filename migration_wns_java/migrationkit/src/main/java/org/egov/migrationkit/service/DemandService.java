@@ -14,6 +14,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import io.swagger.client.model.Demand;
 import io.swagger.client.model.Demand.StatusEnum;
 import io.swagger.client.model.DemandCriteria;
@@ -54,17 +56,25 @@ public class DemandService {
 
 	public List<Demand> prepareDemandRequest(Map data, String businessService, String consumerCode, String tenantId, OwnerInfo owner) {
 		
-		
+
+		System.out.println("entered in dcb");
 		Map<String, List<DemandDetail>> instaWiseDemandMap = new HashMap<>();
 		List<Map> dcbDataList = (List) data.get("dcb") != null ? (List) data.get("dcb") : new ArrayList<Map>();
+		System.out.println("list in dcb"+dcbDataList);
 		List<Demand> demands = new LinkedList<>();
 		
 //		dcbDataList
 		for (Map dcbData : dcbDataList) {
 			
+			
 			String taxHeadMaster = WSConstants.WS_TAX_HEAD_MAP.get((String)dcbData.getOrDefault("demand_reason", "WS_OTHER_FEE"));
+			
 			DemandDetail dd = null;
 			if(taxHeadMaster.matches("(.*)ADVANCE(.*)")) {
+				
+				//System.out.println("from date"+WSConstants.TIME_PERIOD_MAP.get((String)dcbData.get("from_date")));
+				//System.out.println("to date"+WSConstants.TIME_PERIOD_MAP.get((String)dcbData.get("to_date")));
+				System.out.println("TaxAmount 1"+ BigDecimal.valueOf((Integer)dcbData.get("collected_amount")).negate());
 				dd = DemandDetail.builder()
 					.taxAmount(BigDecimal.valueOf((Integer)dcbData.get("collected_amount")).negate())
 					.taxHeadMasterCode(taxHeadMaster)
@@ -74,8 +84,10 @@ public class DemandService {
 					.toDate(WSConstants.TIME_PERIOD_MAP.get((String)dcbData.get("to_date")))
 					.tenantId(tenantId)
 					.build();
+				System.out.println(dd);
 				
-			} else { 
+			} else {
+				System.out.println(" Else from date"+WSConstants.TIME_PERIOD_MAP.get((String)dcbData.get("from_date")));
 				dd = DemandDetail.builder()
 					.taxAmount(BigDecimal.valueOf((Integer)dcbData.get("amount")))
 					.taxHeadMasterCode(taxHeadMaster)
@@ -95,7 +107,7 @@ public class DemandService {
 		*/	
 			Integer installmentId = (Integer)dcbData.get("insta_id");
 			if(instaWiseDemandMap.containsKey(installmentId+"ONE_TIME_FEE")  && WSConstants.ONE_TIME_TAX_HEAD_MASTERS.contains(dd.getTaxHeadMasterCode()) ) {
-
+				
 				instaWiseDemandMap.get(installmentId+"ONE_TIME_FEE").add(dd);
 				
 			} else if( instaWiseDemandMap.containsKey(installmentId+"WS") && !WSConstants.ONE_TIME_TAX_HEAD_MASTERS.contains(dd.getTaxHeadMasterCode())){
@@ -116,6 +128,7 @@ public class DemandService {
 		}
 		instaWiseDemandMap.forEach((insta_id, ddList) -> {
 			Boolean isPaymentCompleted = false;
+		
 			BigDecimal totoalTax = ddList.stream().map(DemandDetail::getTaxAmount)
 					.reduce(BigDecimal.ZERO, BigDecimal::add);
 			
@@ -148,6 +161,7 @@ public class DemandService {
 						.totalAmountPaid(totalAmountPaid)
 						.isPaymentCompleted(isPaymentCompleted)
 						.build());	
+				System.out.println("abcd"+ WSConstants.ONE_TIME_TAX_HEAD_MASTERS);
 			}else {
 				demands.add(Demand.builder()
 						.businessService(businessService)
@@ -167,10 +181,11 @@ public class DemandService {
 						.isPaymentCompleted(isPaymentCompleted)
 						.billExpiryTime(billExpiryDaysInMilliseconds)
 						.build());	
+						//System.out.println("dd list from dATE"+ ddList.get(0).getFromDate());
 			}
 				
 			});
-
+System.out.println("123456"+demands);
 		return demands;
 		
 	}
@@ -183,13 +198,31 @@ public class DemandService {
      */
 	public Boolean saveDemand(RequestInfo requestInfo, List<Demand> demands,String erpId,String tenantId,String service){
 		boolean isDemandCreated = Boolean.TRUE;
+		
+		
 
 		try{
 
 			String url = billingServiceHost + demandCreateEndPoint+requestInfo.getUserInfo().getTenantId();
+			System.out.println("ERP1:-" + url);
+		
 			DemandRequest request = new DemandRequest(requestInfo,demands);
-			log.info("Demand Create Request: " + request);
-			DemandResponse response = restTemplate.postForObject(url , request, DemandResponse.class);
+			System.out.println("requedt info " + requestInfo);
+			
+			
+			try {
+			    // Convert Demand to JSON
+				ObjectMapper objectMapper = new ObjectMapper();
+			    String json = objectMapper.writeValueAsString(demands);
+
+			    // Print the JSON
+			    
+			} catch (Exception e) {
+			    e.printStackTrace();
+			}
+			System.out.println("class- " + DemandResponse.class);
+			DemandResponse response = restTemplate.postForObject(url, request, DemandResponse.class);
+			
 
 			log.info("Demand Create Respone: " + response);
 		}
@@ -200,6 +233,7 @@ public class DemandService {
 				isDemandCreated=Boolean.FALSE;
 
 				recordService.recordError(service,tenantId, e.toString(), erpId);
+				
 				log.error("Error while Saving demands" + e.toString());
 			}
 		}
@@ -293,10 +327,10 @@ public class DemandService {
 					.payer(User.builder().uuid(owner.getUuid()).name(owner.getName()).build())
 					.tenantId(tenantId)
 //					There is no tax periods configured for all the previous year in PB QA environments as of now giving dummy configured tax period. 
-//					.taxPeriodFrom(ddList.get(0).getFromDate())
-//					.taxPeriodTo(ddList.get(0).getToDate())
-					.taxPeriodFrom(1554057000000l)
-					.taxPeriodTo(1869676199000l)
+			.taxPeriodFrom(ddList.get(0).getFromDate())
+			.taxPeriodTo(ddList.get(0).getToDate())
+		//.taxPeriodFrom(1554057000000l)
+			//		.taxPeriodTo(1869676199000l)
 					.minimumAmountPayable(BigDecimal.ZERO)
 					.consumerType("sewerageConnection")
 					.status(StatusEnum.valueOf("ACTIVE"))
@@ -313,7 +347,7 @@ public class DemandService {
 					.tenantId(tenantId)
 //					There is no tax periods configured for all the previous year in PB QA environments as of now giving dummy configured tax period. 
  					.taxPeriodFrom(ddList.get(0).getFromDate())
-  				.taxPeriodTo(ddList.get(0).getToDate())
+  				    .taxPeriodTo(ddList.get(0).getToDate())
 //					.taxPeriodFrom(1554076800000l)
 //					.taxPeriodTo(1617175799000l)
 					.minimumAmountPayable(BigDecimal.ZERO)
@@ -349,3 +383,4 @@ public class DemandService {
 	}
     
 }
+
