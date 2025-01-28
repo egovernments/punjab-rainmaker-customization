@@ -182,3 +182,22 @@ serviceMaps:
             - jsonPath: $.SurveyEntity.active
 
             - jsonPath: $.SurveyEntity.uuid
+
+    - version: 1.0
+      description: Persists categories in eg_ss_category table
+      fromTopic: save-ss-category
+      isTransaction: true
+      queryMaps:
+        - query: INSERT INTO eg_ss_category( id,label,tenantid,isactive,createdby,lastmodifiedby,createdtime,lastmodifiedtime) VALUES (?,?,?,?,?,?,?,?);
+          basePath: Categories.*
+          jsonMaps:
+            - jsonPath: $.Categories.*.id
+            - jsonPath: $.Categories.*.label
+            - jsonPath: $.Categories.*.tenantId
+            - jsonPath: $.Categories.*.isActive
+            - jsonPath: $.Categories.*.auditDetails.createdBy
+            - jsonPath: $.Categories.*.auditDetails.lastModifiedBy
+            - jsonPath: $.Categories.*.auditDetails.createdTime
+            - jsonPath: $.Categories.*.auditDetails.lastModifiedTime
+
+
