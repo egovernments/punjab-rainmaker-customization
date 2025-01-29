@@ -200,4 +200,19 @@ serviceMaps:
             - jsonPath: $.Categories.*.auditDetails.createdTime
             - jsonPath: $.Categories.*.auditDetails.lastModifiedTime
 
+    - version: 1.0
+      description: Update categories in eg_ss_category table
+      fromTopic: update-ss-category
+      isTransaction: true
+      queryMaps:
+        - query: UPDATE eg_ss_category SET label = COALESCE(?, label), isactive = COALESCE(?, isactive), lastmodifiedby = ?,lastmodifiedtime = ? WHERE id = ?;
+          basePath: Categories.*
+          jsonMaps:
+            - jsonPath: $.Categories.*.label
+            - jsonPath: $.Categories.*.isActive
+            - jsonPath: $.Categories.*.auditDetails.lastModifiedBy
+            - jsonPath: $.Categories.*.auditDetails.lastModifiedTime
+            - jsonPath: $.Categories.*.id
+
+
 
