@@ -7,7 +7,7 @@ serviceMaps:
    isTransaction: true
    queryMaps:
 
-       - query: INSERT INTO eg_fn_firenoc(uuid, tenantid, firenocnumber, provisionfirenocnumber, oldfirenocnumber, dateofapplied, createdby, lastmodifiedby, createdtime, lastmodifiedtime,islegacy) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?);
+       - query: INSERT INTO eg_fn_firenoc(uuid, tenantid, firenocnumber, provisionfirenocnumber, oldfirenocnumber, dateofapplied, createdby, lastmodifiedby, createdtime, lastmodifiedtime) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
          basePath: FireNOCs.*
          jsonMaps:
           - jsonPath: $.FireNOCs.*.id
@@ -29,8 +29,6 @@ serviceMaps:
           - jsonPath: $.FireNOCs.*.auditDetails.createdTime
 
           - jsonPath: $.FireNOCs.*.auditDetails.lastModifiedTime
-          
-          - jsonPath: $.FireNOCs.*.islegacy
 
 
        - query: INSERT INTO eg_fn_firenocdetail(uuid, firenocuuid, applicationnumber, firenoctype, firestationid, applicationdate, financialyear, issueddate, validfrom, validto, action,channel, noofbuildings, tenantid, additionaldetail, createdby, lastmodifiedby, createdtime, lastmodifiedtime, propertyid,status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?);
@@ -81,7 +79,7 @@ serviceMaps:
           - jsonPath: $.FireNOCs.*.fireNOCDetails.status
 
 
-       - query: INSERT INTO eg_fn_owner(uuid, tenantid, firenocdetailsuuid, isactive, isprimaryowner, ownertype, ownershippercentage, relationship, active, institutionid, createdby, createdtime, lastmodifiedby, lastmodifiedtime,useruuid,applicationAssignee) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?,?);
+       - query: INSERT INTO eg_fn_owner(uuid, tenantid, firenocdetailsuuid, isactive, isprimaryowner, ownertype, ownershippercentage, relationship, active, institutionid, createdby, createdtime, lastmodifiedby, lastmodifiedtime,useruuid) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?);
          basePath: FireNOCs.*.fireNOCDetails.applicantDetails.owners.*
          jsonMaps:
           - jsonPath: $.FireNOCs.*.fireNOCDetails.applicantDetails.owners.*.ownerUUID
@@ -113,8 +111,6 @@ serviceMaps:
           - jsonPath: $.FireNOCs[*][?({id} in @.fireNOCDetails.applicantDetails.owners[*].id)].auditDetails.lastModifiedTime
 
           - jsonPath: $.FireNOCs.*.fireNOCDetails.applicantDetails.owners.*.uuid
-          
-          - jsonPath: $.FireNOCs.*.fireNOCDetails.applicantDetails.owners.*.applicationAssignee
 
        - query: INSERT INTO public.eg_fn_address(uuid, tenantid, doorno, latitude, longitude, buildingname, addressid, addressnumber, type, addressline1, addressline2, landmark, street, city, locality, pincode, detail, firenocdetailsuuid, createdby, lastmodifiedby, createdtime, lastmodifiedtime,areatype,subdistrict) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?,?);
          basePath: FireNOCs.*.fireNOCDetails.propertyDetails.address
@@ -559,7 +555,7 @@ serviceMaps:
           
           - jsonPath: $.FireNOCs.*.fireNOCDetails.propertyDetails.address.subDistrict
 
-          - jsonPath: $.FireNOCs.*.fireNOCDetails.propertyDetails.id
+          - jsonPath: $.FireNOCs.*.fireNOCDetails.propertyDetails.address.id
           
          
 

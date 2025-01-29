@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="0e777a29-d6b4-4c58-a726-69c091b43fda" name="Default Changelist" comment="" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ProjectId" id="1g2NWdu9E1in3pzMSVuW823MU6s" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../sewerage" />
+    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
+  </component>
+  <component name="RunManager">
+    <configuration name="WaterDBProcess" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="ws" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/uploader" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/uploader/WaterDBProcess.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Python.WaterDBProcess" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="0e777a29-d6b4-4c58-a726-69c091b43fda" name="Default Changelist" comment="" />
+      <created>1597308759835</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1597308759835</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="WindowStateProjectService">
+    <state width="1299" height="480" key="DebuggerActiveHint" timestamp="1597656056585">
+      <screen x="65" y="24" width="1301" height="744" />
+    </state>
+    <state width="1299" height="480" key="DebuggerActiveHint/65.24.1301.744@65.24.1301.744" timestamp="1597656056585" />
+    <state x="503" y="141" key="FileChooserDialogImpl" timestamp="1597673522653">
+      <screen x="65" y="24" width="1301" height="744" />
+    </state>
+    <state x="503" y="141" key="FileChooserDialogImpl/65.24.1301.744@65.24.1301.744" timestamp="1597673522653" />
+    <state width="1278" height="168" key="GridCell.Tab.0.bottom" timestamp="1597673529493">
+      <screen x="65" y="24" width="1301" height="744" />
+    </state>
+    <state width="1278" height="168" key="GridCell.Tab.0.bottom/65.24.1301.744@65.24.1301.744" timestamp="1597673529493" />
+    <state width="1278" height="168" key="GridCell.Tab.0.center" timestamp="1597673529493">
+      <screen x="65" y="24" width="1301" height="744" />
+    </state>
+    <state width="1278" height="168" key="GridCell.Tab.0.center/65.24.1301.744@65.24.1301.744" timestamp="1597673529493" />
+    <state width="1278" height="168" key="GridCell.Tab.0.left" timestamp="1597673529492">
+      <screen x="65" y="24" width="1301" height="744" />
+    </state>
+    <state width="1278" height="168" key="GridCell.Tab.0.left/65.24.1301.744@65.24.1301.744" timestamp="1597673529492" />
+    <state width="1278" height="168" key="GridCell.Tab.0.right" timestamp="1597673529493">
+      <screen x="65" y="24" width="1301" height="744" />
+    </state>
+    <state width="1278" height="168" key="GridCell.Tab.0.right/65.24.1301.744@65.24.1301.744" timestamp="1597673529493" />
+    <state width="1278" height="168" key="GridCell.Tab.1.bottom" timestamp="1597673529495">
+      <screen x="65" y="24" width="1301" height="744" />
+    </state>
+    <state width="1278" height="168" key="GridCell.Tab.1.bottom/65.24.1301.744@65.24.1301.744" timestamp="1597673529495" />
+    <state width="1278" height="168" key="GridCell.Tab.1.center" timestamp="1597673529494">
+      <screen x="65" y="24" width="1301" height="744" />
+    </state>
+    <state width="1278" height="168" key="GridCell.Tab.1.center/65.24.1301.744@65.24.1301.744" timestamp="1597673529494" />
+    <state width="1278" height="168" key="GridCell.Tab.1.left" timestamp="1597673529494">
+      <screen x="65" y="24" width="1301" height="744" />
+    </state>
+    <state width="1278" height="168" key="GridCell.Tab.1.left/65.24.1301.744@65.24.1301.744" timestamp="1597673529494" />
+    <state width="1278" height="168" key="GridCell.Tab.1.right" timestamp="1597673529494">
+      <screen x="65" y="24" width="1301" height="744" />
+    </state>
+    <state width="1278" height="168" key="GridCell.Tab.1.right/65.24.1301.744@65.24.1301.744" timestamp="1597673529494" />
+    <state x="209" y="24" key="SettingsEditor" timestamp="1597308829692">
+      <screen x="65" y="24" width="1301" height="744" />
+    </state>
+    <state x="209" y="24" key="SettingsEditor/65.24.1301.744@65.24.1301.744" timestamp="1597308829692" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/uploader/WaterDBProcess.py</url>
+          <line>7</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/uploader/WaterDBProcess.py</url>
+          <line>12</line>
+          <option name="timeStamp" value="2" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/uploader/WaterDBProcess.py</url>
+          <line>22</line>
+          <option name="timeStamp" value="4" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/uploader/WaterDBProcess.py</url>
+          <line>46</line>
+          <option name="timeStamp" value="5" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/uploader/WaterDBProcess.py</url>
+          <line>57</line>
+          <option name="timeStamp" value="6" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/uploader/WaterDBProcess.py</url>
+          <line>68</line>
+          <option name="timeStamp" value="7" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/uploader/WaterDBProcess.py</url>
+          <line>72</line>
+          <option name="timeStamp" value="8" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+</project>
