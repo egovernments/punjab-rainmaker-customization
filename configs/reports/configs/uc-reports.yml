@@ -952,7 +952,7 @@ ReportDefinitions:
                     FROM egcl_billaccountdetail 
                     inner join egcl_billdetial as billd on billd.id=egcl_billaccountdetail.billdetailid
                     INNER JOIN egcl_bill as bill on bill.id = billd.billid
-                    WHERE  bill.tenantid!='pb.testing' AND businessservice not in ('PT','TL','FIRENOC') -- and rh.status != 'Cancelled'
+                    WHERE  bill.tenantid!='pb.testing' AND businessservice not in ('PT','TL','FIRENOC','WS','SW','WS.ONE_TIME_FEE') -- and rh.status != 'Cancelled'
                     GROUP BY billdetailid
         )
         SELECT 
@@ -973,7 +973,7 @@ ReportDefinitions:
         JOIN egcl_paymentdetail as paydetail on paydetail.paymentid=payment.id
         LEFT JOIN receipt_breakup ON paydetail.billid = receipt_breakup.bill_id
         JOIN eg_user ON payment.createdby::INTEGER=eg_user.id
-        WHERE  payment.tenantid!='pb.testing' AND businessservice not in ('PT','TL','FIRENOC')  and payment.paymentstatus != 'CANCELLED'
+        WHERE  payment.tenantid!='pb.testing' AND businessservice not in ('PT','TL','FIRENOC','WS','SW','WS.ONE_TIME_FEE')  and payment.paymentstatus != 'CANCELLED'
     orderby: ORDER BY paydetail.receiptdate DESC
 
 
