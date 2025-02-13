@@ -1397,7 +1397,7 @@ ReportDefinitions:
           sum(payment.totalamountpaid) as totalcollection
         from egcl_payment as payment
         inner join egcl_paymentdetail as paydetail on paydetail.paymentid=payment.id
-        where paydetail.businessservice not in ('PT','TL','FIRENOC') and payment.tenantid !='pb.testing'  and payment.paymentstatus != 'CANCELLED' 
+        where paydetail.businessservice not in ('PT','TL','FIRENOC','WS','SW','WS.ONE_TIME_FEE') and payment.tenantid !='pb.testing'  and payment.paymentstatus != 'CANCELLED' 
     groupby: GROUP BY payment.tenantid
     orderby: ORDER BY payment.tenantId asc
 
