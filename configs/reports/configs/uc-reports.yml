@@ -864,12 +864,12 @@ ReportDefinitions:
         type: string
         source: uc
         total: false
-      - name: status
+      - name: receiptstatus
         label: reports.uc.receiptstatus
         type: string
         source: uc
         total: false
-      - name: servicecategory
+      - name: businessdetails
         label: reports.uc.businessdetails
         type: string
         source: uc
@@ -894,8 +894,23 @@ ReportDefinitions:
         type: string
         source: uc
         total: true
-      - name: ddorchequenumber
-        label: reports.uc.ddorchequenumber
+      - name: cheque_dd_no
+        label: reports.uc.cheque_dd_no
+        type: string
+        source: uc
+        total: false
+      - name: cheque_dd_date
+        label: reports.uc.cheque_dd_date
+        type: string
+        source: uc
+        total: false
+      - name: bankname
+        label: reports.uc.bankname
+        type: string
+        source: uc
+        total: false
+      - name: branchname
+        label: reports.uc.branchname
         type: string
         source: uc
         total: false
@@ -903,7 +918,7 @@ ReportDefinitions:
         label: reports.uc.collectiontype
         type: string
         source: uc
-        total: false
+        total: false       
       - name: collectorname
         label: reports.uc.collectorname
         type: string
@@ -919,62 +934,97 @@ ReportDefinitions:
         type: string
         source: uc
         total: false
+      - name: payername
+        label: reports.uc.payername
+        type: string
+        source: uc
+        total: false        
+      - name: comments
+        label: reports.uc.comments
+        type: string
+        source: uc
+        total: false
+      - name: doorno
+        label: reports.uc.doorno
+        type: string
+        source: uc
+        total: false
+      - name: buildingname
+        label: reports.uc.buildingname
+        type: string
+        source: uc
+        total: false
+      - name: street
+        label: reports.uc.street
+        type: string
+        source: uc
+        total: false
     searchParams:
       - name: fromDate
         label: reports.uc.fromDate
         type: epoch
         source: uc
-        isMandatory: true
-        searchClause: AND paydetail.receiptdate >= $fromDate
+        isMandatory: false
+        searchClause: AND eg_echallan.createdtime >= $fromDate
       - name: toDate
         label: reports.uc.toDate
         type: epoch
         source: uc
-        isMandatory: true
-        searchClause: AND paydetail.receiptdate <= $toDate
-      - name: ulb
-        label: reports.uc.ulb
+        isMandatory: false
+        searchClause: AND eg_echallan.createdtime <= $toDate
+      - name: businessservice
+        label: reports.uc.businessservice
         type: singlevaluelist
-        pattern: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?tenantId=$tenantid&moduleName=tenant&masterName=tenants|$.MdmsRes.tenant.tenants.*.code|$.MdmsRes.tenant.tenants.*.name
+        pattern: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?moduleName=BillingService&masterName=BusinessService&tenantId=$tenantid|$.MdmsRes.BillingService.BusinessService[*].code|$.MdmsRes.BillingService.BusinessService[*].code
         source: uc
         wrapper: true
         isMandatory: false
-        searchClause: AND paydetail.tenantid = $ulb
+        searchClause: AND egcl_bill.businessservice = $businessservice
+      - name: collectorname
+        label: reports.uc.collectorname
+        type: singlevaluelist
+        pattern: http://egov-hrms:8080/egov-hrms/employees/_search?tenantId=$tenantid&roles=UC_EMP|$.Employees[*].user.id|$.Employees[*].user.name
+        source: uc
+        wrapper: true
+        isMandatory: false
+        searchClause: AND eg_user.id = $collectorname::INTEGER        
     query: |
         -- Use CTE to force query plan, compute & use CTE later
-        WITH receipt_breakup AS (
-                    SELECT 
-                      string_agg(distinct billd.billid,',') bill_id, 
-                      SUM(CASE WHEN taxheadcode LIKE '%_CGST' THEN adjustedamount ELSE 0 END) as cgst, 
-                      SUM(CASE WHEN taxheadcode LIKE '%_TAX' THEN adjustedamount ELSE 0 END) as tax, 
-                      SUM(CASE WHEN taxheadcode LIKE '%_SGST' THEN adjustedamount ELSE 0 END) as sgst, 
-                      SUM(CASE WHEN taxheadcode LIKE '%_FEE' THEN adjustedamount ELSE 0 END) as fieldcollection            
-                    FROM egcl_billaccountdetail 
-                    inner join egcl_billdetial as billd on billd.id=egcl_billaccountdetail.billdetailid
-                    INNER JOIN egcl_bill as bill on bill.id = billd.billid
-                    WHERE  bill.tenantid!='pb.testing' AND businessservice not in ('PT','TL','FIRENOC','WS','SW','WS.ONE_TIME_FEE') -- and rh.status != 'Cancelled'
-                    GROUP BY billdetailid
-        )
-        SELECT 
-          payment.tenantid as ulb,
-          paydetail.receiptnumber as receiptnumber,
-          To_char((To_timestamp(paydetail.receiptdate / 1000) at time Zone 'Asia/Kolkata'), 'DD/MM/YYYY') as receiptdate,
-          To_char((To_timestamp(paydetail.manualreceiptdate / 1000) at time Zone 'Asia/Kolkata'), 'DD/MM/YYYY') as g8issuedate,
-          paydetail.manualreceiptnumber as g8receiptno,
-          payment.paymentstatus as status,
-          businessservice as servicecategory,
-          receipt_breakup.*,  
-          payment.totalamountpaid as totalamount, 
-          paymentmode as paymentmode,
-          (case when paymentmode like 'CASH' then '' else  transactionnumber end) as ddorchequenumber,
-          'System' as collectiontype,
-          eg_user.name as collectorname
-        FROM egcl_payment AS payment
-        JOIN egcl_paymentdetail as paydetail on paydetail.paymentid=payment.id
-        LEFT JOIN receipt_breakup ON paydetail.billid = receipt_breakup.bill_id
-        JOIN eg_user ON payment.createdby::INTEGER=eg_user.id
-        WHERE  payment.tenantid!='pb.testing' AND businessservice not in ('PT','TL','FIRENOC','WS','SW','WS.ONE_TIME_FEE')  and payment.paymentstatus != 'CANCELLED'
-    orderby: ORDER BY paydetail.receiptdate DESC
+        SELECT
+        string_agg(distinct egcl_bill.status,',') as billstatus,
+        string_agg(distinct payment.paymentstatus,',') receiptstatus,        
+        string_agg(distinct  payment.tenantid,',') as ulb,
+        string_agg(distinct egcl_bill.totalamount::text,',') as totalamount,
+        eg_echallan.challanno,
+        string_agg(distinct eg_echallan.businessservice,',') as businessdetails,
+        string_agg(distinct eg_echallan.description,',') as comments,
+        string_agg(distinct eg_echallan.applicationstatus,',') as status,
+        string_agg(distinct egcl_paymentdetail.receiptnumber,',') as receiptnumber,
+        string_agg(distinct doorno,',') as doorno,
+        string_agg(distinct buildingname,',') as  buildingname,
+        string_agg(distinct street,',') as street,
+        string_agg(distinct payment.mobilenumber,',') as mobilenumber,
+        string_agg(distinct egcl_paymentdetail.manualreceiptnumber,',') as g8receiptno,
+        To_char((To_timestamp(egcl_paymentdetail.manualreceiptdate/ 1000) at time Zone 'Asia/Kolkata'), 'DD/MM/YYYY') as g8issuedate,
+        string_agg(distinct payment.ifsccode,',') as ifsc,
+        string_agg(distinct bank_branches.bank_name,',') as bankname,
+        string_agg(distinct bank_branches.branch,',') as branchname,
+        string_agg(distinct payment.instrumentnumber,',')  as cheque_dd_no,
+        to_char((To_timestamp(payment.instrumentdate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY') AS cheque_dd_date,
+        string_agg(distinct payment.transactionnumber,',') as transactionnumber,
+        string_agg(distinct payment.paymentmode,',') as paymentmode,
+        SUM(CASE WHEN bad.taxheadcode LIKE '%_CGST' THEN adjustedamount ELSE 0 END) as cgst,
+        SUM(CASE WHEN bad.taxheadcode LIKE '%_SGST' THEN adjustedamount ELSE 0 END) as sgst,
+        SUM(CASE WHEN bad.taxheadcode LIKE '%_TAX' THEN adjustedamount ELSE 0 END) as tax,
+        SUM(CASE WHEN bad.taxheadcode LIKE '%_FEE' THEN adjustedamount ELSE 0 END) as fieldcollection,
+        string_agg(distinct payment.payername,',') as payername,
+        string_agg(distinct eg_user.name,',') as collectorname,
+        'System' as collectiontype,
+        To_char((To_timestamp(egcl_paymentdetail.receiptdate / 1000) at time Zone 'Asia/Kolkata'), 'DD/MM/YYYY') as receiptdate
+        from eg_echallan inner JOIN egcl_bill ON (eg_echallan.tenantid !='pb.testing' and eg_echallan.challanno=egcl_bill.consumercode ) inner join egcl_paymentdetail on (egcl_paymentdetail.tenantid !='pb.testing' and egcl_bill.id=egcl_paymentdetail.billid)
+        inner JOIN eg_challan_address egchallan ON egchallan.echallanid=eg_echallan.id inner JOIN  egcl_payment as payment on (payment.tenantid !='pb.testing'  and egcl_paymentdetail.paymentid=payment.id) INNER JOIN egcl_billdetial as billd on billd.billid = egcl_bill.id inner join egcl_billaccountdetail as bad on bad.billdetailid=billd.id left join bank_branches on bank_branches.ifsc=payment.ifsccode inner JOIN eg_user ON payment.createdby::INTEGER=eg_user.id
+        where eg_echallan.tenantid !='pb.testing' and egcl_bill.businessservice not in ('PT','TL','FIRENOC','WS','SW','WS.ONE_TIME_FEE')  and payment.paymentstatus != 'CANCELLED'
+    groupby: group by challanno , egcl_paymentdetail.receiptdate ,payment.instrumentdate,egcl_paymentdetail.manualreceiptdate
 
 
   - reportName: MiscReceiptULB_v2
